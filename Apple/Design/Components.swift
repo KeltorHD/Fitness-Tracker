@@ -56,6 +56,7 @@ struct SessionControls: View {
             systemImage: workout.status == .paused ? "play.fill" : "pause.fill")
         }
         .buttonStyle(.glass)
+        .glassEffectID("pause", in: controls)
         if workout.completedSets > 0 {
           Button("Завершить", systemImage: "checkmark") { store.finish() }
             .buttonStyle(.glassProminent)

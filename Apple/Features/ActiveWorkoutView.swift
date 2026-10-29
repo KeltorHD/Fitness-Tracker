@@ -90,6 +90,7 @@ struct ActiveWorkoutView: View {
 }
 
 private struct SetEditor: View {
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
   @Environment(AppStore.self) private var store
   @AppStorage("weightUnit") private var unit: WeightUnit = .kilograms
   let exerciseID: UUID
@@ -147,10 +148,12 @@ private struct SetEditor: View {
       store.error = "Введите вес и число повторений."
       return
     }
-    store.mutate {
-      try WorkoutEngine.completeSet(
-        in: &$0, exerciseID: exerciseID, setID: set.id,
-        repetitions: repetitions, weightKG: unit.kilograms(from: value))
+    withAnimation(reduceMotion ? nil : .smooth) {
+      store.mutate {
+        try WorkoutEngine.completeSet(
+          in: &$0, exerciseID: exerciseID, setID: set.id,
+          repetitions: repetitions, weightKG: unit.kilograms(from: value))
+      }
     }
   }
 }
