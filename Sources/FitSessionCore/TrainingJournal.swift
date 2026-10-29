@@ -12,15 +12,25 @@ public struct TrainingCalendarDay: Identifiable, Equatable, Sendable {
   public let date: Date
   public let isInMonth: Bool
   public let hasWorkout: Bool
+  public init(date: Date, isInMonth: Bool, hasWorkout: Bool) {
+    self.date = date
+    self.isInMonth = isInMonth
+    self.hasWorkout = hasWorkout
+  }
 }
 
 public enum TrainingJournal {
   public static func weeks(
-    in workouts: [Workout], now: Date = Date(), calendar: Calendar = .current
+    in workouts: [Workout], on day: Date? = nil, now: Date = Date(), calendar: Calendar = .current
   ) -> [JournalWeek] {
     let completed = workouts.filter { $0.status == .completed && $0.startedAt <= now }
     let records = recordCounts(in: completed)
-    let grouped = Dictionary(grouping: completed) {
+    // A day filter must preserve record comparisons against the entire preceding history.
+    let visible =
+      day.map { day in
+        completed.filter { calendar.isDate($0.startedAt, inSameDayAs: day) }
+      } ?? completed
+    let grouped = Dictionary(grouping: visible) {
       calendar.dateInterval(of: .weekOfYear, for: $0.startedAt)?.start
         ?? calendar.startOfDay(for: $0.startedAt)
     }

@@ -86,6 +86,22 @@ public enum WorkoutEngine {
       name: original.name, startedAt: date, exercises: exercises, restSeconds: original.restSeconds)
   }
 
+  public static func makeTemplate(from workout: Workout) throws -> WorkoutTemplate {
+    try Validation.workout(workout)
+    guard workout.status == .completed else { throw TrainingError.invalidState }
+    let exercises = workout.exercises.compactMap { item -> TemplateExercise? in
+      let completed = item.sets.filter { $0.completedAt != nil }
+      guard let first = completed.first else { return nil }
+      return TemplateExercise(
+        exercise: item.exercise, setCount: completed.count, repetitions: first.repetitions,
+        weightKG: first.weightKG)
+    }
+    let template = WorkoutTemplate(
+      name: workout.name, exercises: exercises, restSeconds: workout.restSeconds)
+    try Validation.template(template)
+    return template
+  }
+
   public static func addExercise(_ exercise: Exercise, to workout: inout Workout) throws {
     guard workout.status == .active else { throw TrainingError.invalidState }
     try Validation.name(exercise.name)

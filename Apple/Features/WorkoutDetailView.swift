@@ -7,7 +7,7 @@ struct WorkoutDetailView: View {
   @AppStorage("weightUnit") private var unit: WeightUnit = .kilograms
   @State private var exporting = false
   @State private var editing = false
-  @State private var creatingTemplate = false
+  @State private var templateDraft: WorkoutTemplate?
   @State private var confirmDelete = false
   let workout: Workout
   var onRepeat: ((Workout) -> Void)? = nil
@@ -85,7 +85,7 @@ struct WorkoutDetailView: View {
       ToolbarItem(placement: .topBarTrailing) {
         Menu {
           Button("Изменить тренировку", systemImage: "pencil") { editing = true }
-          Button("Сохранить как шаблон", systemImage: "list.clipboard") { creatingTemplate = true }
+          Button("Сохранить как шаблон", systemImage: "list.clipboard") { createTemplate() }
           ShareLink(item: WorkoutDocument(workout: session), preview: SharePreview(session.name)) {
             Label("Поделиться", systemImage: "square.and.arrow.up")
           }
@@ -98,7 +98,7 @@ struct WorkoutDetailView: View {
     .safeAreaInset(edge: .bottom) {
       HStack {
         Button {
-          creatingTemplate = true
+          createTemplate()
         } label: {
           Image(systemName: "plus").font(.title2).frame(width: 48, height: 48).background(
             FitTheme.card, in: .circle)
@@ -125,7 +125,7 @@ struct WorkoutDetailView: View {
         FitTheme.paper)
     }
     .sheet(isPresented: $editing) { WorkoutEditorView(workout: session) }
-    .sheet(isPresented: $creatingTemplate) { TemplateEditor(template: templateDraft) }
+    .sheet(item: $templateDraft) { TemplateEditor(template: $0) }
     .confirmationDialog(
       "Удалить тренировку?", isPresented: $confirmDelete, titleVisibility: .visible
     ) {
@@ -158,16 +158,10 @@ struct WorkoutDetailView: View {
       "\(unit.display($0.weightKG).formatted(.number.precision(.fractionLength(0...1)))) \(unit.rawValue) × \($0.repetitions)"
     }.joined(separator: ", ")
   }
-  private var templateDraft: WorkoutTemplate {
-    WorkoutTemplate(
-      name: session.name,
-      exercises: session.exercises.compactMap { item in
-        let completed = item.sets.filter { $0.completedAt != nil }
-        guard let first = completed.first else { return nil }
-        return TemplateExercise(
-          exercise: item.exercise, setCount: completed.count, repetitions: first.repetitions,
-          weightKG: first.weightKG)
-      }, restSeconds: session.restSeconds)
+  private func createTemplate() {
+    do { templateDraft = try WorkoutEngine.makeTemplate(from: session) } catch {
+      store.error = error.localizedDescription
+    }
   }
 }
 

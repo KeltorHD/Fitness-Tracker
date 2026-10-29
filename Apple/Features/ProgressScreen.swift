@@ -5,35 +5,24 @@ import SwiftUI
 struct ProgressScreen: View {
   @Environment(AppStore.self) private var store
   @AppStorage("weightUnit") private var unit: WeightUnit = .kilograms
-  @State private var month = Date()
-  @State private var selectedExerciseID: UUID?
-  private var records: [PersonalRecord] {
-    TrainingStatistics.records(in: store.completed.filter { $0.startedAt <= .now })
-  }
-  private var selectedRecord: PersonalRecord? {
-    records.first { $0.id == selectedExerciseID } ?? records.first
-  }
-  private var yearSessions: [Workout] {
-    store.completed.filter {
-      Calendar.current.isDate($0.startedAt, equalTo: month, toGranularity: .year)
-        && $0.startedAt <= .now
-    }
-  }
+  @Environment(\.calendar) private var calendar
+  @Environment(\.scenePhase) private var phase
+  @State private var model = ProgressViewModel()
   var body: some View {
     NavigationStack {
       ScrollView {
         VStack(alignment: .leading, spacing: 28) {
           VStack(spacing: 14) {
             SectionHeading(title: "История", symbol: "clock")
-            TrainingMonthCard(date: $month, workouts: store.completed)
+            TrainingMonthCard(date: model.month, summary: model.report.month, move: model.moveMonth)
           }
-          if let record = selectedRecord {
+          if let record = model.selectedRecord {
             VStack(spacing: 14) {
               HStack {
                 SectionHeading(title: record.exercise.name, symbol: "dumbbell")
                 Menu {
-                  ForEach(records) { item in
-                    Button(item.exercise.name) { selectedExerciseID = item.id }
+                  ForEach(model.report.records) { item in
+                    Button(item.exercise.name) { model.selectedExerciseID = item.id }
                   }
                 } label: {
                   Image(systemName: "ellipsis").foregroundStyle(.secondary)
@@ -50,7 +39,7 @@ struct ProgressScreen: View {
                   )
                   .font(.headline).foregroundStyle(FitTheme.accent)
                 }
-                Chart(points(for: record.id)) { point in
+                Chart(model.points) { point in
                   BarMark(
                     x: .value("Дата", point.date),
                     y: .value("Объём", unit.display(point.volume))
@@ -65,7 +54,7 @@ struct ProgressScreen: View {
             SectionHeading(title: "Общий объём", symbol: "chart.bar")
             VStack(alignment: .leading, spacing: 16) {
               Text("За 26 недель, \(unit.rawValue)").font(.subheadline).foregroundStyle(.secondary)
-              Chart(TrainingStatistics.weeks(in: store.completed, count: 26)) { week in
+              Chart(model.report.weeks) { week in
                 BarMark(
                   x: .value("Неделя", week.week, unit: .weekOfYear),
                   y: .value("Объём", unit.display(week.volume))
@@ -76,12 +65,12 @@ struct ProgressScreen: View {
           }
           VStack(alignment: .leading, spacing: 14) {
             SectionHeading(title: "Личные рекорды", symbol: "trophy")
-            if records.isEmpty {
+            if model.report.records.isEmpty {
               ContentUnavailableView(
                 "Пока нет рекордов", systemImage: "trophy",
                 description: Text("Они появятся после рабочих подходов с добавленным весом."))
             }
-            ForEach(records) { record in
+            ForEach(model.report.records) { record in
               VStack(spacing: 10) {
                 Text(record.exercise.name).font(.headline).frame(
                   maxWidth: .infinity, alignment: .leading)
@@ -109,22 +98,11 @@ struct ProgressScreen: View {
         .toolbar {
           ToolbarItem(placement: .topBarLeading) {
             Menu {
-              ForEach(
-                Array(
-                  Set(
-                    store.completed.map { Calendar.current.component(.year, from: $0.startedAt) }
-                      + [Calendar.current.component(.year, from: .now)])
-                ).sorted(by: >), id: \.self
-              ) { year in
-                Button(String(year)) {
-                  var parts = Calendar.current.dateComponents([.month, .day], from: month)
-                  parts.year = year
-                  parts.day = 1
-                  month = Calendar.current.date(from: parts) ?? month
-                }
+              ForEach(model.report.years, id: \.self) { year in
+                Button(String(year)) { model.selectYear(year) }
               }
             } label: {
-              Text(String(Calendar.current.component(.year, from: month))).foregroundStyle(.primary)
+              Text(String(model.year)).foregroundStyle(.primary)
             }
           }
           ToolbarItem(placement: .topBarTrailing) {
@@ -132,38 +110,18 @@ struct ProgressScreen: View {
               .primary)
           }
         }
+        .onChange(of: store.workouts, initial: true) { refresh() }
+        .onChange(of: calendar) { refresh() }
+        .onChange(of: phase) { if phase == .active { refresh() } }
     }
   }
-  private func points(for exerciseID: UUID) -> [ExerciseVolumePoint] {
-    yearSessions.compactMap { workout in
-      let matches = workout.exercises.filter { $0.exercise.id == exerciseID }
-      guard !matches.isEmpty else { return nil }
-      return ExerciseVolumePoint(
-        id: workout.id, date: workout.startedAt,
-        volume: matches.flatMap(\.sets).reduce(0) { $0 + $1.volume })
-    }.sorted { $0.date < $1.date }
-  }
-}
-
-private struct ExerciseVolumePoint: Identifiable {
-  let id: UUID
-  let date: Date
-  let volume: Double
+  private func refresh() { model.refresh(workouts: store.workouts, calendar: calendar) }
 }
 
 struct TrainingMonthCard: View {
-  @Binding var date: Date
-  let workouts: [Workout]
-  private var days: [TrainingCalendarDay] {
-    TrainingJournal.monthDays(containing: date, workouts: workouts)
-  }
-  private var count: Int {
-    workouts.filter {
-      $0.status == .completed
-        && Calendar.current.isDate($0.startedAt, equalTo: date, toGranularity: .month)
-        && $0.startedAt <= .now
-    }.count
-  }
+  let date: Date
+  let summary: TrainingMonthSummary
+  let move: (Int) -> Void
   var body: some View {
     HStack(alignment: .top, spacing: 12) {
       VStack(spacing: 12) {
@@ -176,7 +134,7 @@ struct TrainingMonthCard: View {
         LazyVGrid(
           columns: Array(repeating: GridItem(.flexible(), spacing: 3), count: 7), spacing: 6
         ) {
-          ForEach(days) { day in
+          ForEach(summary.days) { day in
             Text(day.date, format: .dateTime.day()).font(.caption)
               .fontWeight(day.hasWorkout ? .semibold : .regular)
               .foregroundStyle(
@@ -199,14 +157,13 @@ struct TrainingMonthCard: View {
       Rectangle().fill(.gray.opacity(0.18)).frame(width: 1)
       VStack(spacing: 14) {
         Text("Всего").font(.subheadline).foregroundStyle(.secondary)
-        Text("\(count)").font(.largeTitle.weight(.medium)).monospacedDigit()
+        Text("\(summary.workoutCount)").font(.largeTitle.weight(.medium)).monospacedDigit()
         Divider()
         ZStack {
           Circle().stroke(.gray.opacity(0.15), lineWidth: 13)
           Circle().trim(
             from: 0,
-            to: Double(days.filter { $0.isInMonth && $0.hasWorkout }.count)
-              / Double(max(1, days.filter(\.isInMonth).count))
+            to: summary.trainingDayFraction
           )
           .stroke(FitTheme.accent, style: StrokeStyle(lineWidth: 13, lineCap: .round))
           .rotationEffect(.degrees(-90))
@@ -215,9 +172,5 @@ struct TrainingMonthCard: View {
       }.frame(width: 68)
     }.fixedSize(horizontal: false, vertical: true).padding(16)
       .background(FitTheme.card, in: .rect(cornerRadius: FitTheme.radius))
-  }
-  private func move(_ value: Int) {
-    let start = Calendar.current.dateInterval(of: .month, for: date)?.start ?? date
-    date = Calendar.current.date(byAdding: .month, value: value, to: start) ?? date
   }
 }

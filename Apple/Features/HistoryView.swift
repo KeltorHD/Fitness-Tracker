@@ -6,16 +6,11 @@ struct HistoryView: View {
   @AppStorage("weightUnit") private var unit: WeightUnit = .kilograms
   @State private var selected: Workout?
   @State private var repeatAfterDismiss: Workout?
-  @State private var filterDate: Date?
+  @Environment(\.calendar) private var calendar
+  @Environment(\.scenePhase) private var phase
+  @State private var model = HistoryViewModel()
   @State private var pendingDelete: Workout?
   @State private var showWeekStats = true
-  private var weeks: [JournalWeek] {
-    let sessions =
-      filterDate.map { date in
-        store.completed.filter { Calendar.current.isDate($0.startedAt, inSameDayAs: date) }
-      } ?? store.completed
-    return TrainingJournal.weeks(in: sessions)
-  }
   var body: some View {
     NavigationStack {
       ScrollView {
@@ -38,17 +33,17 @@ struct HistoryView: View {
                 .background(FitTheme.accent.opacity(0.08), in: .rect(cornerRadius: FitTheme.radius))
             }.buttonStyle(.plain).accessibilityIdentifier("resumeWorkout")
           }
-          if let filterDate {
+          if let date = model.filterDate {
             HStack {
-              Text(filterDate, format: .dateTime.day().month(.wide)).font(.headline)
+              Text(date, format: .dateTime.day().month(.wide)).font(.headline)
               Spacer()
-              Button("Вся история") { self.filterDate = nil }
+              Button("Вся история") { model.filterDate = nil }
             }
           }
-          if weeks.isEmpty {
+          if model.weeks.isEmpty {
             ContentUnavailableView {
               Label(
-                filterDate == nil ? "Начните свой дневник" : "В этот день нет тренировок",
+                model.filterDate == nil ? "Начните свой дневник" : "В этот день нет тренировок",
                 systemImage: "book.closed")
             } description: {
               Text("Завершённые тренировки появятся здесь по неделям.")
@@ -58,7 +53,7 @@ struct HistoryView: View {
                   "startEmptyWorkout")
             }
           }
-          ForEach(weeks) { week in
+          ForEach(model.weeks) { week in
             VStack(alignment: .leading, spacing: 14) {
               Text(weekTitle(week.start)).font(.title2.bold())
               if showWeekStats {
@@ -111,7 +106,7 @@ struct HistoryView: View {
         ToolbarItemGroup(placement: .topBarTrailing) {
           Menu {
             Toggle("Статистика за неделю", isOn: $showWeekStats)
-            Button("Вся история") { filterDate = nil }
+            Button("Вся история") { model.filterDate = nil }
           } label: {
             Image(systemName: "ellipsis").foregroundStyle(.primary)
           }
@@ -139,6 +134,9 @@ struct HistoryView: View {
         }
       }
       .refreshable { store.reload() }
+      .onChange(of: store.workouts, initial: true) { refresh() }
+      .onChange(of: calendar) { refresh() }
+      .onChange(of: phase) { if phase == .active { refresh() } }
       .confirmationDialog(
         "Удалить тренировку?",
         isPresented: Binding(
@@ -153,15 +151,16 @@ struct HistoryView: View {
     }
   }
 
+  private func refresh() { model.refresh(workouts: store.workouts, calendar: calendar) }
+
   private var weekStrip: some View {
     HStack(spacing: 0) {
-      ForEach(TrainingJournal.weekDays(containing: .now), id: \.self) { day in
-        let trained = store.completed.contains {
-          Calendar.current.isDate($0.startedAt, inSameDayAs: day)
-        }
-        let highlighted = Calendar.current.isDate(day, inSameDayAs: filterDate ?? .now)
+      ForEach(model.days) { item in
+        let day = item.date
+        let trained = item.hasWorkout
+        let highlighted = calendar.isDate(day, inSameDayAs: model.filterDate ?? .now)
         Button {
-          filterDate = day
+          model.filterDate = day
         } label: {
           VStack(spacing: 8) {
             Text(day, format: .dateTime.weekday(.narrow)).font(.caption).textCase(.uppercase)
@@ -182,10 +181,10 @@ struct HistoryView: View {
     }
   }
   private func weekTitle(_ start: Date) -> String {
-    if Calendar.current.isDate(start, equalTo: .now, toGranularity: .weekOfYear) {
+    if calendar.isDate(start, equalTo: .now, toGranularity: .weekOfYear) {
       return "На этой неделе"
     }
-    let end = Calendar.current.date(byAdding: .day, value: 6, to: start) ?? start
+    let end = calendar.date(byAdding: .day, value: 6, to: start) ?? start
     return "\(start.formatted(.dateTime.day()))–\(end.formatted(.dateTime.day().month(.wide)))"
   }
   private func workoutCount(_ value: Int) -> String {
@@ -195,12 +194,5 @@ struct HistoryView: View {
       : (2...4).contains(value % 10) && !(12...14).contains(value % 100)
         ? "тренировки" : "тренировок"
     return "\(value) \(suffix)"
-  }
-}
-
-extension TimeInterval {
-  var workoutDuration: String {
-    let minutes = Int(max(0, self)) / 60
-    return minutes >= 60 ? "\(minutes / 60) ч \(minutes % 60) мин" : "\(minutes) мин"
   }
 }
