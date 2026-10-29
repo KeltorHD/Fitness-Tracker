@@ -23,6 +23,9 @@ assert spec['name'] == 'FitSession'
 assert spec['packages']['FitSessionCore']['path'] == '.'
 assert set(spec['targets']) == {'FitSession', 'FitSessionWatch', 'FitSessionWidgets', 'FitSessionTests', 'FitSessionUITests'}
 assert spec['options']['deploymentTarget'] == {'iOS': '26.0', 'watchOS': '26.0'}
+assert 'FITSESSION_APP' in spec['targets']['FitSession']['settings']['base']['SWIFT_ACTIVE_COMPILATION_CONDITIONS']
+assert 'FITSESSION_APP' not in spec['targets']['FitSessionWidgets']['settings']['base'].get('SWIFT_ACTIVE_COMPILATION_CONDITIONS', '')
+assert {'package': 'FitSessionCore'} in spec['targets']['FitSessionWidgets']['dependencies']
 covered = set()
 for name, target in spec['targets'].items():
     assert target['platform'] in {'iOS', 'watchOS'}

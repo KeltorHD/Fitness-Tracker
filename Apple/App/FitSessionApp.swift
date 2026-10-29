@@ -5,7 +5,6 @@ import SwiftUI
   @UIApplicationDelegateAdaptor(AppDelegate.self) private var delegate
   @State private var store: AppStore?
   @State private var startupError: String?
-  private let isUITesting = ProcessInfo.processInfo.arguments.contains("--ui-testing")
   var body: some Scene {
     WindowGroup {
       Group {
@@ -31,21 +30,9 @@ import SwiftUI
   }
   @MainActor private func boot() {
     do {
-      let repository: any WorkoutRepository
-      if isUITesting {
-        repository = MemoryWorkoutRepository()
-      } else {
-        repository = try SwiftDataWorkoutRepository(
-          cloudEnabled: UserDefaults.standard.bool(forKey: "cloudSync"))
-      }
-      let defaults = isUITesting ? UserDefaults(suiteName: "FitSession.UITests")! : .standard
-      if isUITesting { defaults.removePersistentDomain(forName: "FitSession.UITests") }
-      defaults.register(defaults: ["weeklyGoal": 3, "liveActivities": !isUITesting])
-      let appStore = AppStore(
-        repository: repository, health: HealthKitService(), defaults: defaults,
-        platformServicesEnabled: !isUITesting)
+      let appStore = try FitSessionRuntime.store()
       appStore.seedTemplatesIfNeeded()
-      if !isUITesting { appStore.startServices() }
+      appStore.startServices()
       store = appStore
       startupError = nil
     } catch { startupError = error.localizedDescription }

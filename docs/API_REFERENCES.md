@@ -35,3 +35,11 @@ Capabilities выражены настоящими entitlement keys: [HealthKit]
 [Privacy manifest files](https://developer.apple.com/documentation/bundleresources/privacy-manifest-files) и [Required reason APIs](https://developer.apple.com/documentation/bundleresources/app-privacy-configuration/nsprivacyaccessedapitypes/nsprivacyaccessedapitype) — причины UserDefaults `CA92.1` для собственных настроек и `1C8F.1` для App Group. Manifest явно включён в resources каждого bundle target.
 
 [Swift.org Linux installation](https://www.swift.org/install/linux/) — официальный Swift toolchain; используется версия 6.2.1 для Ubuntu 24.04 x86_64, Swift language mode 6.
+
+## Интерактивная Dynamic Island и фон
+
+- [Adding interactivity to widgets and Live Activities](https://developer.apple.com/documentation/widgetkit/adding-interactivity-to-widgets-and-live-activities): LiveActivityIntent исполняется в app process, определения включаются в app target. `Button(intent:label:)` передаёт заданные параметры; сохранение/обновление должно закончиться до возврата perform.
+- [Text timerInterval/pauseTime](https://developer.apple.com/documentation/swiftui/text/init(timerinterval:pausetime:countsdown:showshours:)): системный count-up/countdown и замороженный момент паузы.
+- [Choosing Background Strategies](https://developer.apple.com/documentation/backgroundtasks/choosing-background-strategies-for-your-app): beginBackgroundTask предоставляет ограниченное время для завершения работы. [Apple DTS notes](https://developer.apple.com/forums/thread/85066/) подтверждают main-thread expiration handler; код освобождает task до возврата из handler.
+
+Оба target используют общий контракт; `FITSESSION_APP` выбирает исполнение с SwiftData только в основном процессе. Подробности проверки: [BACKGROUND_AND_DYNAMIC_ISLAND.md](BACKGROUND_AND_DYNAMIC_ISLAND.md).

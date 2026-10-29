@@ -33,14 +33,19 @@ struct RootView: View {
       Text(store.notice ?? "")
     }
     .onOpenURL { url in
-      if url.scheme == "fitsession", url.host == "workout", store.active != nil {
-        store.showSession = true
+      if url.scheme == "fitsession", url.host == "workout" {
+        let value = URLComponents(url: url, resolvingAgainstBaseURL: false)?
+          .queryItems?.first { $0.name == "id" }?.value
+        if let value, UUID(uuidString: value) == nil { return }
+        store.openWorkout(id: value.flatMap { UUID(uuidString: $0) })
       }
     }
     .onChange(of: phase) { _, phase in
       if phase == .active {
         store.reload()
         store.refreshIntegrations()
+      } else if phase == .background {
+        Task { await store.prepareForBackground() }
       }
     }
   }

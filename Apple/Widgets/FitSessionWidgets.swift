@@ -58,55 +58,6 @@ struct WeeklyWorkoutWidget: Widget {
     .supportedFamilies([.systemSmall, .systemMedium])
   }
 }
-struct WorkoutLiveActivityWidget: Widget {
-  var body: some WidgetConfiguration {
-    ActivityConfiguration(for: WorkoutActivityAttributes.self) { context in
-      VStack(alignment: .leading, spacing: 10) {
-        Label(context.attributes.name, systemImage: "dumbbell.fill").font(.headline)
-        HStack {
-          Text("\(context.state.completedSets) / \(context.state.totalSets) подходов")
-          Spacer()
-          ActivityStatus(state: context.state)
-        }.font(.subheadline)
-      }.padding().activityBackgroundTint(.black.opacity(0.8)).activitySystemActionForegroundColor(
-        .white)
-    } dynamicIsland: { context in
-      DynamicIsland {
-        DynamicIslandExpandedRegion(.leading) {
-          Image(systemName: "dumbbell.fill").foregroundStyle(.mint)
-        }
-        DynamicIslandExpandedRegion(.trailing) {
-          Text("\(context.state.completedSets)/\(context.state.totalSets)").monospacedDigit()
-        }
-        DynamicIslandExpandedRegion(.bottom) {
-          VStack {
-            Text(context.attributes.name).font(.headline)
-            ActivityStatus(state: context.state)
-          }
-        }
-      } compactLeading: {
-        Image(systemName: "dumbbell.fill").foregroundStyle(.mint)
-      } compactTrailing: {
-        Text("\(context.state.completedSets)").monospacedDigit()
-      } minimal: {
-        Image(systemName: "dumbbell.fill")
-      }
-      .widgetURL(URL(string: "fitsession://workout"))
-    }
-  }
-}
-private struct ActivityStatus: View {
-  let state: WorkoutActivityAttributes.ContentState
-  var body: some View {
-    if state.paused {
-      Text("На паузе")
-    } else if let end = state.restEndsAt, end > .now {
-      Text(timerInterval: Date.now...end, countsDown: true).monospacedDigit().frame(maxWidth: 85)
-    } else {
-      Text("Тренировка")
-    }
-  }
-}
 @main struct FitSessionWidgetBundle: WidgetBundle {
   var body: some Widget {
     WeeklyWorkoutWidget()

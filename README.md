@@ -12,7 +12,7 @@
 - Нативная стеклянная панель действий: `GlassEffectContainer`, `glassEffect`, `glassEffectID`, `glassEffectTransition`, стили `glass` / `glassProminent`.
 - SwiftData, опциональная системная синхронизация через личный CloudKit container.
 - Экспорт завершённой тренировки в HealthKit по запросу, уведомления отдыха.
-- Live Activity, Dynamic Island, недельный виджет с добровольной передачей сводки.
+- Live Activity и Dynamic Island с системными таймерами, следующим подходом и кнопками паузы/продолжения/пропуска отдыха, недельный виджет с добровольной передачей сводки.
 - Приложение watchOS: запись подходов, локальное восстановление, надёжная очередь передачи на iPhone с подтверждением сохранения.
 - StoreKit 2: проверяемая разовая покупка Pro, восстановление, обновления транзакций; Pro открывает график за 26 недель вместо 8.
 
@@ -78,6 +78,6 @@ project.yml                        # XcodeGen, пять targets
 scripts/                           # Установка, валидация и Linux-проверки
 ```
 
-[Архитектура и правила данных](docs/ARCHITECTURE.md) · [Проверенные API](docs/API_REFERENCES.md) · [Проверки на Mac](docs/XCODE_VALIDATION.md)
+[Фон и Dynamic Island](docs/BACKGROUND_AND_DYNAMIC_ISLAND.md) · [Архитектура и правила данных](docs/ARCHITECTURE.md) · [Проверенные API](docs/API_REFERENCES.md) · [Проверки на Mac](docs/XCODE_VALIDATION.md)
 
 Основной интерфейс — на русском языке. Нет аналитики, рекламы и сторонних UI-фреймворков. Системные SF Symbols и собственный геометрический значок включены в проект.

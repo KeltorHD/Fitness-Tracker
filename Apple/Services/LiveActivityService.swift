@@ -1,9 +1,23 @@
 import ActivityKit
 import FitSessionCore
 import Foundation
+import UIKit
 
 @MainActor final class LiveActivityService {
-  func update(for workout: Workout?) async throws {
+  func startIfNeeded(for workout: Workout) throws {
+    guard workout.endedAt == nil, UIApplication.shared.applicationState == .active,
+      ActivityAuthorizationInfo().areActivitiesEnabled,
+      !Activity<WorkoutActivityAttributes>.activities.contains(where: {
+        $0.attributes.workoutID == workout.id && [.active, .stale].contains($0.activityState)
+      })
+    else { return }
+    _ = try Activity.request(
+      attributes: WorkoutActivityAttributes(workoutID: workout.id, name: workout.name),
+      content: ActivityContent(state: WorkoutLiveState(workout: workout), staleDate: nil),
+      pushType: nil)
+  }
+
+  func update(for workout: Workout?, allowStart: Bool = true) async throws {
     let activities = Activity<WorkoutActivityAttributes>.activities
     for activity in activities
     where activity.attributes.workoutID != workout?.id || workout?.endedAt != nil {
@@ -11,17 +25,17 @@ import Foundation
     }
     try Task.checkCancellation()
     guard let workout, workout.endedAt == nil else { return }
-    let state = WorkoutActivityAttributes.ContentState(
-      completedSets: workout.completedSets,
-      totalSets: workout.totalSets, paused: workout.status == .paused,
-      restEndsAt: workout.restEndsAt)
-    let content = ActivityContent(state: state, staleDate: Date().addingTimeInterval(3600))
-    if let activity = activities.first(where: { $0.attributes.workoutID == workout.id }) {
+    let state = WorkoutLiveState(workout: workout)
+    let content = ActivityContent(state: state, staleDate: nil)
+    let matching = activities.filter {
+      $0.attributes.workoutID == workout.id && [.active, .stale].contains($0.activityState)
+    }
+    // Reconcile system activities after relaunch; ended/dismissed instances cannot be updated.
+    for duplicate in matching.dropFirst() { await duplicate.end(nil, dismissalPolicy: .immediate) }
+    if let activity = matching.first {
       await activity.update(content)
-    } else if ActivityAuthorizationInfo().areActivitiesEnabled {
-      _ = try Activity.request(
-        attributes: WorkoutActivityAttributes(workoutID: workout.id, name: workout.name),
-        content: content, pushType: nil)
+    } else if allowStart {
+      try startIfNeeded(for: workout)
     }
   }
 }

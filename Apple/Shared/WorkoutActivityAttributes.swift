@@ -1,13 +1,11 @@
 import ActivityKit
+import FitSessionCore
 import Foundation
 
 struct WorkoutActivityAttributes: ActivityAttributes, Sendable {
-  struct ContentState: Codable, Hashable, Sendable {
-    var completedSets: Int
-    var totalSets: Int
-    var paused: Bool
-    var restEndsAt: Date?
-  }
+  typealias ContentState = WorkoutLiveState
   var workoutID: UUID
   var name: String
+
+  var workoutURL: URL? { URL(string: "fitsession://workout?id=\(workoutID.uuidString)") }
 }

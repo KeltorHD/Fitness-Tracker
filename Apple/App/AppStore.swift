@@ -1,6 +1,7 @@
 import FitSessionCore
 import Foundation
 import Observation
+import UIKit
 import WidgetKit
 
 @MainActor @Observable final class AppStore {
@@ -17,6 +18,7 @@ import WidgetKit
   @ObservationIgnored private let liveActivity = LiveActivityService()
   @ObservationIgnored private let watch = PhoneWatchBridge()
   @ObservationIgnored private var integrationTask: Task<Void, Never>?
+  @ObservationIgnored private var servicesStarted = false
   @ObservationIgnored private let platformServicesEnabled: Bool
   @ObservationIgnored private let defaults: UserDefaults
 
@@ -33,7 +35,8 @@ import WidgetKit
     reload()
   }
   func startServices() {
-    guard platformServicesEnabled else { return }
+    guard platformServicesEnabled, !servicesStarted else { return }
+    servicesStarted = true
     purchases.start()
     watch.activate()
     refreshIntegrations()
@@ -44,7 +47,8 @@ import WidgetKit
       let routines = try repository.templates()
       workouts = loaded
       templates = routines
-      active = loaded.first { [.active, .paused].contains($0.status) }
+      let unfinished = loaded.filter { [.active, .paused].contains($0.status) }
+      active = unfinished.first { $0.id == active?.id } ?? unfinished.first
     } catch { self.error = "Не удалось прочитать данные: \(error.localizedDescription)" }
   }
   func seedTemplatesIfNeeded() {
@@ -66,6 +70,12 @@ import WidgetKit
       try repository.save(workout)
       reload()
       showSession = true
+      if platformServicesEnabled, defaults.object(forKey: "liveActivities") as? Bool != false {
+        // Request synchronously while foregrounded, before notification/widget async work.
+        do { try liveActivity.startIfNeeded(for: workout) } catch {
+          self.error = "Live Activity: \(error.localizedDescription)"
+        }
+      }
       refreshIntegrations()
     } catch { self.error = error.localizedDescription }
   }
@@ -136,21 +146,81 @@ import WidgetKit
       return false
     }
   }
-  func refreshIntegrations() {
+  /// Intents use the same context as the UI, even when the system cold-launches the process.
+  func performLiveAction(_ action: WorkoutLiveAction, workoutID: UUID) async throws {
+    do {
+      guard var workout = try repository.workouts().first(where: { $0.id == workoutID }) else {
+        throw TrainingError.invalidState
+      }
+      if try action.apply(to: &workout, expectedWorkoutID: workoutID) {
+        try repository.save(workout)
+      }
+      active = workout
+      reload()
+    } catch {
+      self.error = error.localizedDescription
+      reload()
+      refreshIntegrations(allowStart: false)
+      await integrationTask?.value
+      throw error
+    }
+    // ActivityKit updates must finish before perform() returns to the system.
+    refreshIntegrations(allowStart: false)
+    await integrationTask?.value
+  }
+
+  func prepareForBackground() async {
     guard platformServicesEnabled else { return }
-    integrationTask?.cancel()
+    refreshIntegrations(allowStart: false)
+    let pending = integrationTask
+    let lease = BackgroundTaskLease()
+    lease.begin { pending?.cancel() }
+    defer { lease.end() }
+    await pending?.value
+  }
+
+  func openWorkout(id: UUID?) {
+    reload()
+    if let id {
+      guard
+        let workout = workouts.first(where: {
+          $0.id == id && [.active, .paused].contains($0.status)
+        })
+      else {
+        notice = "Эта тренировка уже завершена или удалена."
+        return
+      }
+      active = workout
+    }
+    showSession = active != nil
+  }
+
+  func refreshIntegrations(allowStart: Bool? = nil) {
+    guard platformServicesEnabled else { return }
+    let previous = integrationTask
+    previous?.cancel()
     let workout = active
+    let canStart = allowStart ?? (UIApplication.shared.applicationState == .active)
     integrationTask = Task {
+      // Await the old operation so a late completion cannot overwrite the newest state.
+      await previous?.value
+      guard !Task.isCancelled else { return }
+      var firstError: (any Error)?
       do {
         if defaults.bool(forKey: "restNotifications") {
           try await notifications.schedule(until: workout?.restEndsAt)
         } else {
           notifications.cancel()
         }
-        guard !Task.isCancelled else { return }
+      } catch { firstError = error }
+      guard !Task.isCancelled else { return }
+      do {
         try await liveActivity.update(
-          for: defaults.object(forKey: "liveActivities") as? Bool == false ? nil : workout)
-        guard !Task.isCancelled else { return }
+          for: defaults.object(forKey: "liveActivities") as? Bool == false ? nil : workout,
+          allowStart: canStart)
+      } catch { if firstError == nil { firstError = error } }
+      guard !Task.isCancelled else { return }
+      do {
         if defaults.bool(forKey: "widgetSharing") {
           let week = TrainingStatistics.weeks(in: workouts, count: 1).first
           try WidgetSnapshot(
@@ -161,10 +231,9 @@ import WidgetKit
           WidgetSnapshot.clear()
         }
         WidgetCenter.shared.reloadAllTimelines()
-      } catch {
-        if !Task.isCancelled {
-          self.error = "Дополнительная функция: \(error.localizedDescription)"
-        }
+      } catch { if firstError == nil { firstError = error } }
+      if let firstError, !Task.isCancelled {
+        self.error = "Дополнительная функция: \(firstError.localizedDescription)"
       }
     }
   }

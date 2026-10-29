@@ -26,7 +26,7 @@
 | HistoryView / WorkoutDetailView | Empty state, удаление с подтверждением, JSON ShareLink, прогресс export и alerts |
 | ProgressScreen / Charts | Пустые данные, восемь/26 недель, VoiceOver и unit conversion |
 | SettingsView / ProView | Opt-ins, отсутствие автоматического HealthKit-запроса, purchase states и restore |
-| Live Activity / Dynamic Island | Compact/minimal/expanded, paused state, rest countdown, долгие имена и завершение |
+| Live Activity / Dynamic Island | Compact/minimal/expanded и Lock Screen; активное время с pauseTime, отдых до нуля, следующий подход; кнопки pause/resume/skip-rest, cold-launch intent и UUID deep link |
 | WeeklyWidgetView | Small/medium, отсутствие opt-in, обновление и смена недели, privacy redaction |
 | WatchWorkoutView | Маленький экран, Crown/Stepper, timer при suspension, pause и offline queue |
 
@@ -44,3 +44,17 @@
 - [ ] Watch: offline recording, relaunch, transfer failure/retry, idempotent import и acknowledgement после save.
 
 Детали настройки: [MAC_BUILD_GUIDE.md](../MAC_BUILD_GUIDE.md).
+
+## Дополнительно: фон и интерактивная Dynamic Island
+
+- [ ] Перегенерировать проект: FitSessionCore связан с widget extension, FITSESSION_APP определён только для main app.
+- [ ] Проверить App Intents metadata extraction обоих targets и dispatch LiveActivityIntent в main app.
+- [ ] Начать тренировку и немедленно свернуть: Activity.request не откладывается за async notification work.
+- [ ] На настоящем iPhone: секундомер и countdown продолжаются при suspension, countdown останавливается на нуле.
+- [ ] Pause/resume из Island сохраняют интервалы; возврат в UI показывает те же данные.
+- [ ] Холодное выполнение intent открывает единственный SwiftData context, не сбрасывает workout и не создаёт новый план.
+- [ ] Повторный pause/resume и старая skip-rest кнопка не портят новую запись.
+- [ ] Expiration background task отменяет pending работу и вызывает endBackgroundTask; тренировка уже сохранена.
+- [ ] Ограничения locked device, пользовательского запрета Live Activities, force quit/reboot и системного лимита проверены.
+
+Сценарии и границы обещаний: [BACKGROUND_AND_DYNAMIC_ISLAND.md](BACKGROUND_AND_DYNAMIC_ISLAND.md).

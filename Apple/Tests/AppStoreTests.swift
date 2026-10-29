@@ -43,4 +43,52 @@ import XCTest
     store.start()
     XCTAssertEqual(try repository.workouts().count, 1)
   }
+
+  func testLiveActionPersistsAndCanResumeAfterProcessRecreation() async throws {
+    let repository = MemoryWorkoutRepository()
+    let workout = try ExerciseCatalog.starterTemplates[0].start(at: Date().addingTimeInterval(-300))
+    try repository.save(workout)
+    let first = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    try await first.performLiveAction(.pause, workoutID: workout.id)
+    XCTAssertEqual(try repository.workouts().first?.status, .paused)
+    let pausedAt = try XCTUnwrap(first.active?.pausedAt)
+    try await first.performLiveAction(.pause, workoutID: workout.id)
+    XCTAssertEqual(first.active?.pausedAt, pausedAt)
+
+    let restored = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    try await restored.performLiveAction(.resume, workoutID: workout.id)
+    XCTAssertEqual(restored.active?.status, .active)
+    XCTAssertEqual(restored.active?.pauses.count, 1)
+    XCTAssertFalse(restored.showSession)
+  }
+
+  func testStaleLiveActionDoesNotChangeAnotherSession() async throws {
+    let repository = MemoryWorkoutRepository()
+    let workout = try ExerciseCatalog.starterTemplates[0].start()
+    try repository.save(workout)
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    do {
+      try await store.performLiveAction(.pause, workoutID: UUID())
+      XCTFail("An unknown Live Activity ID must fail")
+    } catch { XCTAssertEqual(error as? TrainingError, .invalidState) }
+    XCTAssertEqual(try repository.workouts(), [workout])
+    XCTAssertEqual(store.active, workout)
+  }
+
+  func testDeepLinkOpensSpecifiedUnfinishedSession() throws {
+    let repository = MemoryWorkoutRepository()
+    let older = try ExerciseCatalog.starterTemplates[0].start(at: Date().addingTimeInterval(-60))
+    let newer = try ExerciseCatalog.starterTemplates[1].start()
+    try repository.save(older)
+    try repository.save(newer)
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    store.openWorkout(id: older.id)
+    store.reload()
+    XCTAssertEqual(store.active?.id, older.id)
+    XCTAssertTrue(store.showSession)
+  }
 }
