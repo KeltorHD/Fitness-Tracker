@@ -14,7 +14,7 @@
 - Экспорт завершённой тренировки в HealthKit по запросу, уведомления отдыха.
 - Live Activity и Dynamic Island с системными таймерами, следующим подходом и кнопками паузы/продолжения/пропуска отдыха, недельный виджет с добровольной передачей сводки.
 - Приложение watchOS: запись подходов, локальное восстановление, надёжная очередь передачи на iPhone с подтверждением сохранения.
-- StoreKit 2: проверяемая разовая покупка Pro, восстановление, обновления транзакций; Pro открывает график за 26 недель вместо 8.
+- Все функции бесплатны, включая график прогресса за 26 недель.
 
 Это исходники приложения, подготовленные для первой компиляции на Mac. **Успешной iOS/watchOS-сборки ещё не было.** Apple unit/UI tests написаны, но на Linux не запускались. Статусы и ограничения каждого модуля: [IMPLEMENTATION_STATUS.md](docs/IMPLEMENTATION_STATUS.md).
 
@@ -67,13 +67,13 @@ Apple/App/                         # DI, точка входа, состояни
 Apple/Design/                      # Liquid Glass и общие компоненты
 Apple/Features/                    # SwiftUI-экраны
 Apple/Persistence/                 # SwiftData repository
-Apple/Services/                    # HealthKit, CloudKit, ActivityKit, StoreKit, WCSession
+Apple/Services/                    # HealthKit, CloudKit, ActivityKit, WCSession
 Apple/Shared/                      # Контракт Live Activity и сводка виджета
 Apple/Widgets/                     # WidgetKit extension + Dynamic Island
 Apple/Watch/                       # Отдельное приложение watchOS
 Apple/Tests/                       # iOS unit tests
 Apple/UITests/                     # XCTest UI flows
-Config/                            # Info.plist, entitlements, xcconfig, StoreKit
+Config/                            # Info.plist, entitlements, xcconfig
 Resources/                         # iOS/watchOS assets, privacy manifest
 project.yml                        # XcodeGen, пять targets
 scripts/                           # Установка, валидация и Linux-проверки

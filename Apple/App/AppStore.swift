@@ -11,7 +11,6 @@ import WidgetKit
   var error: String?
   var notice: String?
   var showSession = false
-  let purchases = PurchaseStore()
   @ObservationIgnored private let repository: any WorkoutRepository
   @ObservationIgnored private let health: any HealthWorkoutExporting
   @ObservationIgnored private let notifications = RestNotificationService()
@@ -37,7 +36,6 @@ import WidgetKit
   func startServices() {
     guard platformServicesEnabled, !servicesStarted else { return }
     servicesStarted = true
-    purchases.start()
     watch.activate()
     refreshIntegrations()
   }

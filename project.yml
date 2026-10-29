@@ -34,7 +34,6 @@ schemes:
         FitSession: all
     run:
       config: Debug
-      storeKitConfiguration: Config/FitSession.storekit
     test:
       config: Debug
       targets:

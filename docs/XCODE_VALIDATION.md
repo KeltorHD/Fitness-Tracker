@@ -24,8 +24,8 @@
 | ExercisePicker / CustomExerciseView | Поиск, длинные названия, свой exercise, вложенные sheets |
 | TemplatesView / TemplateEditor | Binding коллекций, добавление/удаление exercise, диапазоны и сообщения validation |
 | HistoryView / WorkoutDetailView | Empty state, удаление с подтверждением, JSON ShareLink, прогресс export и alerts |
-| ProgressScreen / Charts | Пустые данные, восемь/26 недель, VoiceOver и unit conversion |
-| SettingsView / ProView | Opt-ins, отсутствие автоматического HealthKit-запроса, purchase states и restore |
+| ProgressScreen / Charts | Пустые данные, бесплатный график за 26 недель, VoiceOver и unit conversion |
+| SettingsView | Opt-ins, отсутствие автоматического HealthKit-запроса, все функции доступны бесплатно |
 | Live Activity / Dynamic Island | Compact/minimal/expanded и Lock Screen; активное время с pauseTime, отдых до нуля, следующий подход; кнопки pause/resume/skip-rest, cold-launch intent и UUID deep link |
 | WeeklyWidgetView | Small/medium, отсутствие opt-in, обновление и смена недели, privacy redaction |
 | WatchWorkoutView | Маленький экран, Crown/Stepper, timer при suspension, pause и offline queue |
@@ -40,7 +40,6 @@
 - [ ] Notifications: grant/deny, locked-screen rest, pause/finish/skip cancel.
 - [ ] Live Activity: отключена пользователем, восстановление после перезапуска, окончание и системные лимиты длительности.
 - [ ] Widget App Group: opt-in/off, актуальность после foreground refresh, week rollover.
-- [ ] StoreKit: verified/unverified, cancel/pending/restore/revoke, доступ Pro обновляется.
 - [ ] Watch: offline recording, relaunch, transfer failure/retry, idempotent import и acknowledgement после save.
 
 Детали настройки: [MAC_BUILD_GUIDE.md](../MAC_BUILD_GUIDE.md).

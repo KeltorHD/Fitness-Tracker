@@ -96,7 +96,6 @@ xcodebuild -project FitSession.xcodeproj -scheme FitSession \
 - **SwiftData macro / CloudKit schema:** проверьте defaults всех полей `StoredRecord`, отсутствие unique constraints, container ID и signed entitlements. Не стирайте хранилище как первый способ исправления.
 - **Watch embedding/install:** проверьте companion ID и тип watchOS application. В XcodeGen зарегистрирована [проблема embedding для некоторых Xcode 26.x](https://github.com/yonaskolb/XcodeGen/issues/1613). Сначала обновите XcodeGen и сравните с watchOS target, созданным вашим Xcode; не применяйте слепую замену путей в pbxproj.
 - **App Icon:** откройте оба catalogs, проверьте universal 1024×1024 для iOS/watchOS. При требованиях конкретной версии `actool` обновите Contents.json через редактор Asset Catalog и сохраните изменения.
-- **StoreKit configuration:** откройте `Config/FitSession.storekit` в редакторе Xcode и дайте ему обновить формат, если требуется. Подтвердите выбор файла в Edit Scheme → Run → Options.
 
 ## 4. Визуальная проверка Liquid Glass
 
@@ -113,7 +112,6 @@ xcodebuild -project FitSession.xcodeproj -scheme FitSession \
 5. **Live Activity / Dynamic Island:** проверьте старт, подход, активное время и отдых после блокировки, pause/resume/skip-rest кнопки, cold-launch intent, переход по UUID, восстановление после перезапуска и завершение на поддерживающем устройстве. После изменений обязательно перегенерируйте project: shared intents собираются в main app с FITSESSION_APP и в widget extension без этого флага. Поведение при выключенных Live Activities должно сохранять обычную тренировку.
 6. **Widget:** включите передачу сводки, добавьте виджет, завершите тренировку. Проверьте недельную цель, смену недели, отключение передачи и скрытие чувствительных данных.
 7. **Watch:** установите приложение на paired Watch. Запишите несколько подходов офлайн, перезапустите Watch app, завершите. После соединения проверьте запись на iPhone и уменьшение очереди Watch только после подтверждения сохранения. Повторная передача не создаёт дубликат. Watch не зеркалирует текущую iPhone-сессию и не собирает пульс; он ведёт отдельную тренировку «Всё тело A».
-8. **StoreKit 2:** тестовый файл содержит Non-Consumable `com.example.fitsession.pro.lifetime`. Проверьте покупку, отмену, pending, restore, revoke и переход графика 8 → 26 недель. Для App Store Connect зарегистрируйте свой продукт, замените ID в `PurchaseStore.swift` и `.storekit`; в схеме выберите None для локального StoreKit-файла при проверке Sandbox/TestFlight.
 
 ## 6. Перед публикацией
 

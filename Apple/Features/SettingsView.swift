@@ -10,7 +10,6 @@ struct SettingsView: View {
   @AppStorage("liveActivities") private var liveActivities = true
   @AppStorage("restNotifications") private var notifications = false
   @State private var cloudStatus = ""
-  @State private var showPro = false
   var body: some View {
     NavigationStack {
       Form {
@@ -65,13 +64,10 @@ struct SettingsView: View {
         Section("FitSession") {
           NavigationLink("Библиотека упражнений") { ExerciseLibraryView() }
           NavigationLink("Источники упражнений и фотографий") { ExerciseCreditsView() }
-          Button(store.purchases.isPro ? "FitSession Pro активен" : "FitSession Pro") {
-            showPro = true
-          }
-          Text("SwiftUI · iOS 26 · Native Liquid Glass").font(.footnote).foregroundStyle(.secondary)
+          Text("Все функции доступны бесплатно.").font(.footnote).foregroundStyle(.secondary)
         }
       }
-      .navigationTitle("Настройки").sheet(isPresented: $showPro) { ProView() }
+      .navigationTitle("Настройки")
       .onChange(of: goal) { store.refreshIntegrations() }
       .onChange(of: widgetSharing) { store.refreshIntegrations() }
       .onChange(of: liveActivities) { store.refreshIntegrations() }

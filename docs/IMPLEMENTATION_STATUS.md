@@ -11,7 +11,7 @@
 | State machine, валидация, паузы, отдых | Да | Да | Поведение UI отдельно | Нет |
 | Volume, 1ПМ, records, недели, streak | Да | Да | Charts отдельно | Нет |
 | Repository protocols и Memory repository | Да | Да | Нет для Core | Нет |
-| SwiftUI: Today, Plans/editor, Session, History/detail, Progress, Settings/Pro | Да | Нет, только syntax parse | Да | Signing для устройства |
+| SwiftUI: Today, Plans/editor, Session, History/detail, Progress, Settings | Да | Нет, только syntax parse | Да | Signing для устройства |
 | Liquid Glass: container, effect, ID, transition, glass buttons | Да | Нет, только syntax parse | Да, включая rendering/accessibility | Signing для устройства |
 | SwiftData repository и восстановление сессии | Да | Нет, Apple unit tests не запускались | Да, macro expansion/round-trip/ошибки | Нет для локального store |
 | CloudKit через SwiftData, проверка аккаунта | Да | Нет | Да, два устройства и production schema | Да, iCloud container, Push, profiles |
@@ -19,7 +19,6 @@
 | Rest notifications | Да | Нет | Да, permissions/background delivery | Обычный signing, разрешение пользователя |
 | Live Activity / Dynamic Island / App Intents | Да: таймеры, следующий подход, pause/resume/skip, cold-launch runtime | Core projection/actions — да; Apple API — нет | Да, lifecycle, intents dispatch, layouts и background expiration | Обычный signing, локальные updates без ActivityKit push |
 | WidgetKit weekly summary / privacy opt-in | Да | Нет | Да, timeline/App Group/privacy | Да, App Group |
-| StoreKit 2 lifetime Pro | Да | Нет | Да, локальный StoreKit/Sandbox/revoke | Да для продаж, App Store Connect product |
 | watchOS set logger, recovery и acknowledged outbox | Да | Нет | Да, paired Watch/iPhone, offline queue | Signing paired targets |
 | iOS unit tests | Написаны | Не запускались | Да | Simulator без платных сервисов |
 | iOS UI tests | Написаны | Не запускались | Да | Simulator без платных сервисов |
@@ -40,7 +39,7 @@
 
 ## Границы текущей реализации
 
-Watch записывает отдельный стартовый план и передаёт готовую тренировку на iPhone; live mirroring и датчики HealthKit не реализованы. HealthKit экспортирует workout без вымышленных калорий/пульса. CloudKit использует системную eventual sync без собственного экрана прогресса загрузки и без поэлементного conflict merge. Pro — разовая покупка расширенного диапазона графика. Экспорт JSON реализован для отдельной тренировки, импорт архива через UI не реализован.
+Watch записывает отдельный стартовый план и передаёт готовую тренировку на iPhone; live mirroring и датчики HealthKit не реализованы. HealthKit экспортирует workout без вымышленных калорий/пульса. CloudKit использует системную eventual sync без собственного экрана прогресса загрузки и без поэлементного conflict merge. Все функции бесплатны; график за 26 недель доступен без дополнительных условий. Экспорт JSON реализован для отдельной тренировки, импорт архива через UI не реализован.
 
 Дальнейшие исправления после первой сборки на Mac должны сопровождаться обновлением этой таблицы и [Xcode validation checklist](XCODE_VALIDATION.md). Нельзя менять статус Apple-модуля на Linux-tested по результату parser/linter.
 

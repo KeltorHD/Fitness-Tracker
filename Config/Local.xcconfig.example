@@ -2,4 +2,3 @@
 DEVELOPMENT_TEAM = YOURTEAMID
 FITSESSION_BUNDLE_ID = com.yourcompany.fitsession
 // Register the derived App Group and CloudKit container in the Developer portal.
-// Change PurchaseStore.proID and the StoreKit configuration to match App Store Connect.

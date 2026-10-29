@@ -30,7 +30,7 @@ CloudKit отключён по умолчанию. Переключение ре
 
 ## Apple-сервисы
 
-HealthKit запрашивает только запись workout по действию пользователя. Builder передаёт реальные даты и pause/resume events, стабильный sync identifier/version. Не создаёт фиктивные calorie/heart-rate samples. Чтение HealthKit не требуется. StoreKit предоставляет разовую Pro-покупку; доступ выдаётся по verified current entitlements, включая отзыв. Периодика подписок не используется.
+HealthKit запрашивает только запись workout по действию пользователя. Builder передаёт реальные даты и pause/resume events, стабильный sync identifier/version. Не создаёт фиктивные calorie/heart-rate samples. Чтение HealthKit не требуется. Все функции бесплатны; график объёма за 26 недель доступен каждому пользователю.
 
 ActivityKit использует локальные request/update/end без push token и восстанавливает доступные activities через `Activity.activities`. Dynamic Island и Lock Screen получают Core-проекцию WorkoutLiveState с системными таймерами и следующим подходом. LiveActivityIntent выполняет pause/resume/skip-rest в основном процессе через общий FitSessionRuntime; UI и intents используют один AppStore/ModelContext. Запись происходит до await обновлений. Live Activities имеют системные ограничения длительности. При сворачивании ограниченный beginBackgroundTask завершает pending updates с обработкой expiration; постоянный background service не запрашивается. Уведомления отдыха отдельны и включаются пользователем.
 
@@ -44,7 +44,7 @@ Watch — автономный журнал подходов по начальн
 
 ## Проверяемость
 
-Linux проверяет Core compilation/tests, ресурсы/конфигурационные связи, Swift formatting и синтаксис Apple-файлов. Только Xcode сможет проверить SDK availability, SwiftUI overload resolution, SwiftData macro expansion, signing, extension embedding, rendering, WCSession, CloudKit и покупки. Положительный Linux-результат не повышает Apple-модуль до статуса полностью протестированного.
+Linux проверяет Core compilation/tests, ресурсы/конфигурационные связи, Swift formatting и синтаксис Apple-файлов. Только Xcode сможет проверить SDK availability, SwiftUI overload resolution, SwiftData macro expansion, signing, extension embedding, rendering, WCSession и CloudKit. Положительный Linux-результат не повышает Apple-модуль до статуса полностью протестированного.
 
 Подробности: [фон и Dynamic Island](BACKGROUND_AND_DYNAMIC_ISLAND.md).
 
