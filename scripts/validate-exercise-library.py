@@ -11,12 +11,20 @@ root = Path(__file__).resolve().parent.parent
 vendor = root / 'ThirdParty/free-exercise-db'
 manifest = json.loads((vendor / 'manifest.json').read_text())
 document = json.loads((root / 'Sources/FitSessionCore/Resources/ExerciseLibrary.ru.json').read_text())
+english_resource = root / 'Sources/FitSessionCore/Resources/ExerciseLibrary.en.json'
+english = json.loads(english_resource.read_text())
 source = {item['id']: item for item in json.loads((vendor / 'exercises.selected.json').read_text())}
 assert hashlib.sha256((vendor / 'exercises.selected.json').read_bytes()).hexdigest() == manifest['selectedDataSHA256']
 assert hashlib.sha256((vendor / 'LICENSE.md').read_bytes()).hexdigest() == manifest['licenseSHA256']
 assert document['source']['revision'] == manifest['revision']
 assert document['source']['licenseText'] == (vendor / 'LICENSE.md').read_text()
 assert len(document['entries']) == manifest['selectedExerciseCount'] == 100
+assert english['locale'] == 'en' and len(english['entries']) == 100
+assert english['source'] == document['source']
+for ru, en in zip(document['entries'], english['entries']):
+    original = source[en['sourceID']]
+    assert ru['id'] == en['id'] and ru['images'] == en['images']
+    assert en['name'] == original['name'] and en['steps'] == original['instructions']
 assert len(manifest['images']) == 200
 expected = {image for entry in document['entries'] for image in entry['images']}
 assert expected == {item['path'] for item in manifest['images']}
@@ -36,6 +44,8 @@ for index, entry in enumerate(document['entries']):
     if index < 8: assert entry['id'] == f'10000000-0000-0000-0000-{index + 1:012d}'
 resource = root / 'Sources/FitSessionCore/Resources/ExerciseLibrary.ru.json'
 original = resource.read_bytes()
+original_english = english_resource.read_bytes()
 subprocess.run([sys.executable, str(root / 'scripts/import-exercise-library.py')], check=True, stdout=subprocess.DEVNULL)
 assert resource.read_bytes() == original, 'Generated resource differs from checked-in Russian translations'
+assert english_resource.read_bytes() == original_english, 'English resource differs from pinned source'
 print('Exercise library: 100 Russian entries, 200 original JPEGs, SHA-256 and reproducible offline generation: OK.')

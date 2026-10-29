@@ -19,6 +19,7 @@ BASE = f'https://raw.githubusercontent.com/yuhonas/free-exercise-db/{REVISION}/'
 VENDOR = ROOT / 'ThirdParty/free-exercise-db'
 MEDIA = ROOT / 'Resources/ExerciseMedia'
 RESOURCE = ROOT / 'Sources/FitSessionCore/Resources/ExerciseLibrary.ru.json'
+ENGLISH_RESOURCE = ROOT / 'Sources/FitSessionCore/Resources/ExerciseLibrary.en.json'
 MUSCLES = {
     'abdominals': 'Мышцы живота', 'abductors': 'Отводящие мышцы бедра',
     'adductors': 'Приводящие мышцы бедра', 'biceps': 'Бицепс', 'calves': 'Икроножные мышцы',
@@ -109,6 +110,14 @@ def generate():
                                     'repositoryURL': 'https://github.com/yuhonas/free-exercise-db',
                                     'revision': REVISION, 'licenseName': 'Unlicense',
                                     'licenseText': (VENDOR / 'LICENSE.md').read_text()}, 'entries': entries})
+    english_entries = []
+    for entry in entries:
+        item = source[entry['sourceID']]
+        english_entries.append({**entry, 'name': item['name'],
+            'primaryMuscles': item['primaryMuscles'], 'secondaryMuscles': item['secondaryMuscles'],
+            'steps': item['instructions']})
+    russian = json.loads(RESOURCE.read_text())
+    write_json(ENGLISH_RESOURCE, {**russian, 'locale': 'en', 'entries': english_entries})
     print(f'Generated {len(entries)} fully Russian exercise entries at {RESOURCE.relative_to(ROOT)}.')
 
 if __name__ == '__main__':
