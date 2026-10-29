@@ -49,6 +49,8 @@
 	<string>$(FITSESSION_APP_GROUP)</string>
 	<key>FitSessionCloudContainer</key>
 	<string>$(FITSESSION_CLOUD_CONTAINER)</string>
+	<key>FitSessionCloudSyncAvailable</key>
+	<string>$(FITSESSION_CLOUD_SYNC_AVAILABLE)</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>

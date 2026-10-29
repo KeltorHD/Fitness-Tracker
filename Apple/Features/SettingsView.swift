@@ -70,28 +70,38 @@ struct SettingsView: View {
           }
         }
         Section {
-          Toggle(isOn: $cloud) { SettingsLabel(title: "Синхронизация iCloud", symbol: "icloud") }
+          if AppCapabilities.current.supportsCloudSync {
+            Toggle(isOn: $cloud) { SettingsLabel(title: "Синхронизация iCloud", symbol: "icloud") }
+          }
           Button {
             store.archiveTransfer.present()
           } label: {
             SettingsLabel(title: "Импорт и экспорт", symbol: "arrow.up.arrow.down")
           }.accessibilityIdentifier("openArchiveTransfer")
-          Button {
-            cloudRequest += 1
-          } label: {
-            SettingsLabel(title: "Проверить учётную запись", symbol: "person.crop.circle")
-          }.disabled(model.cloudState == .loading)
-          if model.cloudState == .loading { ProgressView("Проверка iCloud…") }
-          if let message = model.cloudState.message {
-            Text(message).font(.footnote).foregroundStyle(.secondary)
+          if AppCapabilities.current.supportsCloudSync {
+            Button {
+              cloudRequest += 1
+            } label: {
+              SettingsLabel(title: "Проверить учётную запись", symbol: "person.crop.circle")
+            }.disabled(model.cloudState == .loading)
+            if model.cloudState == .loading { ProgressView("Проверка iCloud…") }
+            if let message = model.cloudState.message {
+              Text(message).font(.footnote).foregroundStyle(.secondary)
+            }
+            if model.cloudState == .failed { Button("Повторить") { cloudRequest += 1 } }
           }
-          if model.cloudState == .failed { Button("Повторить") { cloudRequest += 1 } }
         } header: {
           Text("Данные")
         } footer: {
-          Text(
-            "Изменение синхронизации вступит в силу после перезапуска. История хранится на устройстве и, по вашему выбору, в личном iCloud."
-          )
+          if AppCapabilities.current.supportsCloudSync {
+            Text(
+              "Изменение синхронизации вступит в силу после перезапуска. История хранится на устройстве и, по вашему выбору, в личном iCloud."
+            )
+          } else {
+            Text(
+              "История хранится на этом устройстве. Для переноса используйте импорт и экспорт файлов."
+            )
+          }
         }
         Section {
           Toggle(isOn: $widgetSharing) {
@@ -127,7 +137,9 @@ struct SettingsView: View {
       .scrollContentBackground(.hidden).background(FitTheme.grouped).navigationTitle("Настройки")
       .tint(FitTheme.accent)
       .task(id: cloudRequest) {
-        if cloudRequest > 0 { await model.checkCloudAccount() }
+        if cloudRequest > 0 && AppCapabilities.current.supportsCloudSync {
+          await model.checkCloudAccount()
+        }
       }
       .task(id: notificationsRequested) {
         guard notificationsRequested else { return }

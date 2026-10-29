@@ -5,7 +5,8 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
   ) -> Bool {
-    if UserDefaults.standard.bool(forKey: "cloudSync"),
+    if AppCapabilities.current.supportsCloudSync,
+      UserDefaults.standard.bool(forKey: "cloudSync"),
       !ProcessInfo.processInfo.arguments.contains("--ui-testing")
     {
       application.registerForRemoteNotifications()

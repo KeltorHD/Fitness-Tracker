@@ -6,6 +6,8 @@
 
 - [ ] `xcodegen generate`: spec, local SPM dependency, пять targets и schemes.
 - [ ] FitSession Debug/Release compilation: SwiftUI overloads, SwiftData macros, Swift 6 concurrency.
+- [ ] FitSession Personal: PersonalDebug/PersonalRelease используют PersonalTeam.entitlements без CloudKit/APNs; установлены и запускаются с Personal Team, включая widgets/watch.
+- [ ] Personal build с сохранённым cloudSync=true всё равно открывает локальный store и не регистрирует APNs; предпочтение не стирается. Полная схема возвращает iCloud controls.
 - [ ] FitSessionWidgets: extension-safe API, shared attributes, assets и Info.plist.
 - [ ] FitSessionWatch: single-target application, icon, deployment, companion ID, embedding.
 - [ ] iOS unit tests: SwiftData upsert/delete/validation и AppStore DI/export behavior.

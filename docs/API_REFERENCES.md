@@ -27,6 +27,8 @@
 
 ## XcodeGen, capabilities и privacy
 
+[Supported capabilities (iOS)](https://developer.apple.com/help/account/reference/supported-capabilities-ios) — матрица программ: iCloud/Push недоступны бесплатному Apple Developer account; HealthKit и App Groups отмечены доступными. По ней подготовлена отдельная схема FitSession Personal; runtime/signing на Personal Team ещё требуют проверки в Xcode.
+
 [Официальный Project Spec XcodeGen](https://github.com/yonaskolb/XcodeGen/blob/master/Docs/ProjectSpec.md) подтверждает `application`, `app-extension`, `bundle.unit-test`, `bundle.ui-testing`, платформы `iOS`/`watchOS`, local package `path`, `configFiles`, `sources.buildPhase`, `dependencies.embed`. Используется поддерживаемый формат `xcode16_0`, а не предполагаемый `xcode26_0`. Info.plist и entitlements хранятся в репозитории и привязаны документированными Xcode build settings.
 
 Capabilities выражены настоящими entitlement keys: [HealthKit](https://developer.apple.com/documentation/bundleresources/entitlements/com.apple.developer.healthkit), [iCloud container identifiers](https://developer.apple.com/documentation/bundleresources/entitlements/com.apple.developer.icloud-container-identifiers), [iCloud services](https://developer.apple.com/documentation/bundleresources/entitlements/com.apple.developer.icloud-services), [App Groups](https://developer.apple.com/documentation/bundleresources/entitlements/com.apple.security.application-groups), [APNs environment](https://developer.apple.com/documentation/bundleresources/entitlements/aps-environment). Регистрация ресурсов и provisioning выполняются на Mac.

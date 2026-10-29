@@ -13,7 +13,8 @@ import Foundation
       repository = MemoryWorkoutRepository()
     } else {
       repository = try SwiftDataWorkoutRepository(
-        cloudEnabled: UserDefaults.standard.bool(forKey: "cloudSync"))
+        cloudEnabled: AppCapabilities.current.supportsCloudSync
+          && UserDefaults.standard.bool(forKey: "cloudSync"))
     }
     let defaults: UserDefaults
     if testing {

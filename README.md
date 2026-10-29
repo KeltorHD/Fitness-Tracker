@@ -58,6 +58,8 @@ open FitSession.xcodeproj
 
 Понадобятся полный Xcode 26+ с iOS/watchOS 26 SDK и XcodeGen 2.44+. Скрипт устанавливает XcodeGen через имеющийся Homebrew, создаёт локальную конфигурацию, проверяет пакет и выполняет `xcodegen generate`. Signing, Apple Developer resources и первая сборка описаны в [MAC_BUILD_GUIDE.md](MAC_BUILD_GUIDE.md).
 
+Для бесплатной **Personal Team** выберите схему **FitSession Personal**: iCloud/Push отключены, история хранится локально. Полная схема **FitSession** сохраняет эти capabilities для Apple Developer Program. Укажите свою Team во вложенных targets и уникальный Bundle ID в Config/Local.xcconfig; не оставляйте `com.yourcompany.fitsession`.
+
 ## Структура
 
 ```text

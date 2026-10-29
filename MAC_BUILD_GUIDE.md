@@ -33,6 +33,18 @@ open FitSession.xcodeproj
 
 ## 2. Идентификаторы и Signing
 
+Для **бесплатной Personal Team** используйте схему **FitSession Personal**. Она выбирает PersonalDebug/PersonalRelease и Config/PersonalTeam.entitlements без iCloud и Push Notifications. История сохраняется в локальной SwiftData; JSON/.fitsession, Liquid Glass, HealthKit, локальные уведомления, Live Activity/Dynamic Island, WidgetKit/App Groups и Watch сохраняются. Доступность HealthKit и App Groups для бесплатного Apple Developer account указана в [таблице Apple](https://developer.apple.com/help/account/reference/supported-capabilities-ios); фактический provisioning следует проверить на устройстве.
+
+Схема **FitSession** сохраняет полный набор capabilities и требует подходящей команды Apple Developer Program для iCloud/Push. Это различие конфигураций сборки, платных функций внутри приложения нет.
+
+Если Xcode сообщает `Personal development teams ... do not support Push Notifications and iCloud`:
+
+1. Обновите репозиторий и выполните `xcodegen generate` в его корне, затем `open FitSession.xcodeproj`.
+2. Выберите **FitSession Personal → ваш iPhone**.
+3. Укажите Personal Team для FitSession, FitSessionWidgets и FitSessionWatch в Signing & Capabilities с Automatically manage signing.
+4. Замените `com.yourcompany.fitsession` в Config/Local.xcconfig на свой уникальный FITSESSION_BUNDLE_ID, например `com.alexanderproshchenkov.fitsession`. App Group и IDs вложенных targets выводятся из него автоматически. Для сохранения Team после следующей генерации внесите реальный Team ID в DEVELOPMENT_TEAM локального файла.
+5. Нажмите ⌘R. Не удаляйте capabilities из Config/App.entitlements: они используются полной схемой.
+
 Заполните `Config/Local.xcconfig`:
 
 ```xcconfig
@@ -73,7 +85,7 @@ xcodegen generate
 open FitSession.xcodeproj
 ```
 
-Выберите схему **FitSession**, затем iPhone Simulator с iOS 26+. Выполните Product → Build (`⌘B`), затем Run (`⌘R`). Схемы **FitSessionWatch** и **FitSessionWidgets** предусмотрены отдельно.
+Выберите схему **FitSession Personal** для Personal Team либо **FitSession** для полной конфигурации, затем iPhone Simulator с iOS 26+ или свой iPhone. Выполните Product → Build (`⌘B`), затем Run (`⌘R`). Схемы **FitSessionWatch** и **FitSessionWidgets** предусмотрены отдельно.
 
 CLI после установки Simulator runtimes:
 

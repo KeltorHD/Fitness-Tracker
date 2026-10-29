@@ -27,7 +27,8 @@ import SwiftData
     let configuration = ModelConfiguration(
       "FitSession", schema: schema, isStoredInMemoryOnly: inMemory,
       groupContainer: .none,
-      cloudKitDatabase: cloudEnabled && !inMemory ? .private(cloudID) : .none)
+      cloudKitDatabase: cloudEnabled && !inMemory && AppCapabilities.current.supportsCloudSync
+        ? .private(cloudID) : .none)
     container = try ModelContainer(for: schema, configurations: [configuration])
     context = ModelContext(container)
     context.autosaveEnabled = false

@@ -27,6 +27,15 @@ assert {'path': 'Resources/ExerciseMedia', 'type': 'folder', 'buildPhase': 'reso
 assert 'FITSESSION_APP' in spec['targets']['FitSession']['settings']['base']['SWIFT_ACTIVE_COMPILATION_CONDITIONS']
 assert 'FITSESSION_APP' not in spec['targets']['FitSessionWidgets']['settings']['base'].get('SWIFT_ACTIVE_COMPILATION_CONDITIONS', '')
 assert {'package': 'FitSessionCore'} in spec['targets']['FitSessionWidgets']['dependencies']
+assert spec['configs']['PersonalDebug'] == 'debug'
+assert spec['configs']['PersonalRelease'] == 'release'
+assert spec['schemes']['FitSession Personal']['run']['config'] == 'PersonalDebug'
+assert spec['schemes']['FitSession Personal']['archive']['config'] == 'PersonalRelease'
+assert spec['settings']['base']['FITSESSION_CLOUD_SYNC_AVAILABLE'] == 'YES'
+for config in ['PersonalDebug', 'PersonalRelease']:
+    assert spec['settings']['configs'][config]['FITSESSION_CLOUD_SYNC_AVAILABLE'] == 'NO'
+    assert spec['targets']['FitSession']['settings']['configs'][config]['CODE_SIGN_ENTITLEMENTS'] == 'Config/PersonalTeam.entitlements'
+for path in spec['configFiles'].values(): assert (root / path).is_file()
 covered = set()
 for name, target in spec['targets'].items():
     assert target['platform'] in {'iOS', 'watchOS'}
@@ -68,6 +77,7 @@ app = plists['App-Info.plist']
 assert app['NSSupportsLiveActivities'] is True
 assert 'remote-notification' in app['UIBackgroundModes']
 assert app['NSHealthUpdateUsageDescription']
+assert app['FitSessionCloudSyncAvailable'] == '$(FITSESSION_CLOUD_SYNC_AVAILABLE)'
 archive_type = next(item for item in app['UTExportedTypeDeclarations']
                     if item['UTTypeIdentifier'] == 'com.fitsession.archive')
 assert archive_type['UTTypeConformsTo'] == ['public.json']
@@ -86,6 +96,10 @@ assert entitlements['com.apple.developer.healthkit'] is True
 assert entitlements['com.apple.developer.icloud-services'] == ['CloudKit']
 assert entitlements['com.apple.security.application-groups'] == plists['Widgets.entitlements']['com.apple.security.application-groups']
 assert 'aps-environment' in entitlements
+personal = plists['PersonalTeam.entitlements']
+assert personal['com.apple.developer.healthkit'] is True
+assert personal['com.apple.security.application-groups'] == entitlements['com.apple.security.application-groups']
+assert not any(key.startswith('com.apple.developer.icloud') or key == 'aps-environment' for key in personal)
 ui = '\n'.join(p.read_text() for p in (root / 'Apple').rglob('*.swift'))
 for api in ['GlassEffectContainer', '.glassEffect()', '.glassEffectID(', '.glassEffectTransition(', '.buttonStyle(.glass)', '.buttonStyle(.glassProminent)']:
     assert api in ui, f'Missing required Liquid Glass API: {api}'

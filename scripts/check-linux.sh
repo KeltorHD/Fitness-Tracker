@@ -26,7 +26,8 @@ bin_path="$("$swift_bin" build "${flags[@]}" --show-bin-path)"
   -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -typecheck -I "$bin_path/Modules" \
   Apple/Features/ProgressViewModel.swift Apple/Features/HistoryViewModel.swift \
   Apple/Features/ExerciseLibraryViewModel.swift Apple/Services/ExerciseImageLoader.swift \
-  Apple/Services/CloudAccountChecking.swift Apple/Shared/WidgetSnapshot.swift
+  Apple/Services/CloudAccountChecking.swift Apple/Shared/WidgetSnapshot.swift \
+  Apple/Services/AppCapabilities.swift
 echo 'Portable presentation/data subset: Swift 6 type check passed (no Apple SDK).'
 python3 scripts/parse-apple.py "$swiftc_bin"
 if "$swift_bin" format --help >/dev/null 2>&1; then
