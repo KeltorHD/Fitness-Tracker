@@ -121,10 +121,14 @@ struct ActiveWorkoutView: View {
         ContentUnavailableView("Нет активной тренировки", systemImage: "dumbbell")
       }
     }
+    .archiveTransferPresenter(when: !pickingExercise && !renaming && !confirmCancel)
     .alert(
       "Ошибка",
       isPresented: Binding(
-        get: { store.error != nil && !pickingExercise && !renaming && !confirmCancel },
+        get: {
+          store.error != nil && !pickingExercise && !renaming && !confirmCancel
+            && !store.archiveTransfer.isPresented
+        },
         set: { if !$0 { store.error = nil } })
     ) {
       Button("Понятно", role: .cancel) { store.error = nil }

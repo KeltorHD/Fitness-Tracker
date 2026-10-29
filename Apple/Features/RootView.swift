@@ -22,10 +22,17 @@ struct RootView: View {
     .sheet(isPresented: $store.showSession) {
       ActiveWorkoutView().environment(store).tint(FitTheme.accent).interactiveDismissDisabled()
     }
+    .archiveTransferPresenter(
+      when: !store.showSession && !store.showingWorkoutDetail && !store.showingTemplateEditor
+    )
     .alert(
       "FitSession",
       isPresented: Binding(
-        get: { store.error != nil && !store.showSession && !store.showingWorkoutDetail },
+        get: {
+          store.error != nil && !store.showSession && !store.showingWorkoutDetail
+            && !store.showingTemplateEditor
+            && !store.archiveTransfer.isPresented
+        },
         set: { if !$0 { store.error = nil } })
     ) {
       Button("Понятно", role: .cancel) { store.error = nil }
@@ -37,7 +44,8 @@ struct RootView: View {
       isPresented: Binding(
         get: {
           store.notice != nil && store.error == nil && !store.showSession
-            && !store.showingWorkoutDetail
+            && !store.showingWorkoutDetail && !store.showingTemplateEditor
+            && !store.archiveTransfer.isPresented
         }, set: { if !$0 { store.notice = nil } })
     ) {
       Button("Хорошо", role: .cancel) { store.notice = nil }

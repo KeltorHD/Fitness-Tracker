@@ -13,6 +13,7 @@ import WidgetKit
   var notice: String?
   var showSession = false
   var showingWorkoutDetail = false
+  var showingTemplateEditor = false
   let settings: SettingsViewModel
   @ObservationIgnored let exerciseImages: any ExerciseImageLoading
   @ObservationIgnored private let repository: any WorkoutRepository
@@ -24,13 +25,32 @@ import WidgetKit
   @ObservationIgnored private var servicesStarted = false
   @ObservationIgnored private let platformServicesEnabled: Bool
   @ObservationIgnored private let defaults: UserDefaults
+  @ObservationIgnored private let archiveFiles: any ArchiveFileHandling
+  @ObservationIgnored lazy var archiveTransfer = ArchiveTransferViewModel(
+    files: archiveFiles,
+    snapshot: { [weak self] in
+      guard let self else { throw ArchiveFileError.unreadable }
+      return try self.archiveSnapshot()
+    },
+    plan: { [weak self] archive in
+      guard let self else { throw ArchiveFileError.unreadable }
+      return try ArchiveImportPlan(
+        archive: archive, existingWorkouts: self.repository.workouts(),
+        existingTemplates: self.repository.templates()
+      ).summary
+    },
+    commit: { [weak self] archive in
+      guard let self else { throw ArchiveFileError.unreadable }
+      return try self.importArchive(archive)
+    })
 
   init(
     repository: any WorkoutRepository, health: any HealthWorkoutExporting,
     defaults: UserDefaults = .standard, platformServicesEnabled: Bool = true,
     notifications: any RestNotificationServing = RestNotificationService(),
     cloud: any CloudAccountChecking = CloudKitService(),
-    exerciseImages: any ExerciseImageLoading = ExerciseImageLoader()
+    exerciseImages: any ExerciseImageLoading = ExerciseImageLoader(),
+    archiveFiles: any ArchiveFileHandling = ArchiveFileService()
   ) {
     self.repository = repository
     self.health = health
@@ -39,6 +59,7 @@ import WidgetKit
     self.notifications = notifications
     self.settings = SettingsViewModel(cloud: cloud, notifications: notifications)
     self.exerciseImages = exerciseImages
+    self.archiveFiles = archiveFiles
     watch.receive = { [weak self] workout in self?.importWatch(workout) ?? false }
     watch.failure = { [weak self] error in
       self?.report(
@@ -69,6 +90,18 @@ import WidgetKit
     templates = routines
     let unfinished = loaded.filter { [.active, .paused].contains($0.status) }
     active = unfinished.first { $0.id == active?.id } ?? unfinished.first
+  }
+
+  private func archiveSnapshot() throws -> WorkoutArchive {
+    WorkoutArchive(workouts: try repository.workouts(), templates: try repository.templates())
+  }
+
+  private func importArchive(_ archive: WorkoutArchive) throws -> ArchiveImportSummary {
+    let result = try repository.importArchive(archive)
+    // Once the transaction commits, a later read failure is reported separately by reload().
+    reload()
+    refreshIntegrations()
+    return result
   }
   func seedTemplatesIfNeeded() {
     // An explicit flag prevents deleted defaults from returning on every launch.

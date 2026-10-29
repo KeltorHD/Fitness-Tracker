@@ -124,3 +124,7 @@ xcodebuild -project FitSession.xcodeproj -scheme FitSession \
 ## Локальная библиотека и фотографии
 
 После `xcodegen generate` убедитесь, что `ExerciseMedia` копируется как folder reference в главный target, а `ExerciseLibrary.ru.json` включён в SPM resource bundle. Проверьте первый запуск в авиарежиме: каталог, русские шаги и обе фотографии должны работать без сети. Сценарии: [EXERCISE_LIBRARY.md](docs/EXERCISE_LIBRARY.md). PNG/SVG в `docs/previews` — макеты, не скриншоты запуска.
+
+## Импорт и экспорт файлов
+
+После установки приложения проверьте **Настройки → Данные → Импорт и экспорт**: сохранить архив в `.json` и `.fitsession`, открыть его из «Файлов», подтвердить preview и повторить импорт без дублей. Проверьте export одной тренировки из меню карточки, iCloud Drive, cold launch и передачу через Share/AirDrop. Регистрация UTI находится в App-Info.plist; дополнительных entitlements для этих диалогов не требуется. Код рассчитан на iOS 26, без document APIs iOS 27. Правила формата и ограничения: [IMPORT_EXPORT.md](docs/IMPORT_EXPORT.md), сценарии: [XCODE_VALIDATION.md](docs/XCODE_VALIDATION.md).

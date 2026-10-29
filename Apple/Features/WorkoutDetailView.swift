@@ -82,7 +82,10 @@ struct WorkoutDetailView: View {
           Button("Изменить тренировку", systemImage: "pencil") { editing = true }
           Button("Сохранить как шаблон", systemImage: "list.clipboard") { createTemplate() }
           ShareLink(item: WorkoutDocument(workout: session), preview: SharePreview(session.name)) {
-            Label("Поделиться", systemImage: "square.and.arrow.up")
+            Label("Поделиться JSON", systemImage: "square.and.arrow.up")
+          }
+          Button("Экспорт файла", systemImage: "doc.badge.arrow.up") {
+            store.archiveTransfer.present(workout: session)
           }
           Button("Удалить", systemImage: "trash", role: .destructive) { confirmDelete = true }
         } label: {
@@ -125,7 +128,10 @@ struct WorkoutDetailView: View {
       exporting = false
     }
     .sheet(isPresented: $editing) { WorkoutEditorView(workout: session) }
-    .sheet(item: $templateDraft) { TemplateEditor(template: $0) }
+    .sheet(item: $templateDraft, onDismiss: { store.showingTemplateEditor = false }) {
+      TemplateEditor(template: $0).onAppear { store.showingTemplateEditor = true }
+    }
+    .archiveTransferPresenter(when: !editing && templateDraft == nil && !confirmDelete)
     .confirmationDialog(
       "Удалить тренировку?", isPresented: $confirmDelete, titleVisibility: .visible
     ) {
@@ -137,7 +143,10 @@ struct WorkoutDetailView: View {
     .alert(
       "FitSession",
       isPresented: Binding(
-        get: { !editing && templateDraft == nil && (store.error != nil || store.notice != nil) },
+        get: {
+          !editing && templateDraft == nil && !store.archiveTransfer.isPresented
+            && (store.error != nil || store.notice != nil)
+        },
         set: {
           if !$0 {
             store.error = nil
@@ -201,6 +210,7 @@ struct WorkoutEditorView: View {
           }
         }
       }
+      .archiveTransferPresenter(when: true)
     }.tint(FitTheme.accent)
   }
 }

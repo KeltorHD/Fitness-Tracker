@@ -68,6 +68,15 @@ app = plists['App-Info.plist']
 assert app['NSSupportsLiveActivities'] is True
 assert 'remote-notification' in app['UIBackgroundModes']
 assert app['NSHealthUpdateUsageDescription']
+archive_type = next(item for item in app['UTExportedTypeDeclarations']
+                    if item['UTTypeIdentifier'] == 'com.fitsession.archive')
+assert archive_type['UTTypeConformsTo'] == ['public.json']
+assert archive_type['UTTypeTagSpecification']['public.filename-extension'] == ['fitsession']
+document_types = {tuple(item['LSItemContentTypes']): item for item in app['CFBundleDocumentTypes']}
+assert document_types[('com.fitsession.archive',)]['LSHandlerRank'] == 'Owner'
+assert document_types[('com.fitsession.archive',)]['CFBundleTypeRole'] == 'Viewer'
+assert document_types[('public.json',)]['LSHandlerRank'] == 'Alternate'
+assert app['LSSupportsOpeningDocumentsInPlace'] is True
 assert not app.get('UIDesignRequiresCompatibility', False), 'Native Liquid Glass must stay enabled'
 assert plists['Watch-Info.plist']['WKCompanionAppBundleIdentifier'] == '$(FITSESSION_BUNDLE_ID)'
 assert plists['Watch-Info.plist']['WKApplication'] is True

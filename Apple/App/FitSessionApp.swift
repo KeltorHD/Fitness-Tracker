@@ -5,6 +5,7 @@ import SwiftUI
   @UIApplicationDelegateAdaptor(AppDelegate.self) private var delegate
   @State private var store: AppStore?
   @State private var startupError: String?
+  @State private var pendingFileURL: URL?
   @AppStorage("appearance") private var appearance = "auto"
   var body: some Scene {
     WindowGroup {
@@ -29,6 +30,10 @@ import SwiftUI
       .tint(FitTheme.accent)
       .preferredColorScheme(appearance == "light" ? .light : appearance == "dark" ? .dark : nil)
       .task { if store == nil && startupError == nil { boot() } }
+      .onOpenURL { url in
+        guard url.isFileURL else { return }
+        if let store { store.archiveTransfer.openFile(url) } else { pendingFileURL = url }
+      }
     }
   }
   @MainActor private func boot() {
@@ -38,6 +43,10 @@ import SwiftUI
       appStore.startServices()
       store = appStore
       startupError = nil
+      if let url = pendingFileURL {
+        pendingFileURL = nil
+        appStore.archiveTransfer.openFile(url)
+      }
     } catch {
       startupError = AppErrorReporter.message(
         for: error, operation: "openStore", fallback: "Не удалось открыть историю тренировок.")

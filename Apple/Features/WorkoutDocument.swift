@@ -7,10 +7,7 @@ struct WorkoutDocument: Transferable {
   let workout: Workout
   static var transferRepresentation: some TransferRepresentation {
     DataRepresentation(exportedContentType: .json) { document in
-      let encoder = JSONEncoder()
-      encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-      encoder.dateEncodingStrategy = .iso8601
-      return try encoder.encode(document.workout)
+      try WorkoutArchiveCodec.encode(WorkoutArchive(workouts: [document.workout], templates: []))
     }
     .suggestedFileName("FitSession-workout.json")
   }

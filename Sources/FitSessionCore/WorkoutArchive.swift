@@ -26,7 +26,7 @@ public enum WorkoutArchiveError: Error, Equatable, LocalizedError, Sendable {
     switch self {
     case .invalidFile: "Файл повреждён или не содержит данные FitSession."
     case .unsupportedVersion:
-      "Этот файл создан в более новой версии FitSession. Обновите приложение."
+      "Версия формата файла не поддерживается. Попробуйте обновить FitSession."
     case .tooLarge: "Файл превышает допустимый размер 20 МБ."
     case .tooManyRecords: "В одном файле допускается до 10 000 тренировок и 1 000 планов."
     case .duplicateID: "В файле обнаружены повторяющиеся записи. Импорт не выполнен."

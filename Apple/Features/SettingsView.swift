@@ -72,6 +72,11 @@ struct SettingsView: View {
         Section {
           Toggle(isOn: $cloud) { SettingsLabel(title: "Синхронизация iCloud", symbol: "icloud") }
           Button {
+            store.archiveTransfer.present()
+          } label: {
+            SettingsLabel(title: "Импорт и экспорт", symbol: "arrow.up.arrow.down")
+          }.accessibilityIdentifier("openArchiveTransfer")
+          Button {
             cloudRequest += 1
           } label: {
             SettingsLabel(title: "Проверить учётную запись", symbol: "person.crop.circle")

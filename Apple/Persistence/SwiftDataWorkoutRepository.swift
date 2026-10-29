@@ -58,7 +58,7 @@ import SwiftData
   func deleteTemplate(id: UUID) throws { try remove(id: id, kind: "template") }
   func importArchive(_ archive: WorkoutArchive) throws -> ArchiveImportSummary {
     let plan = try ArchiveImportPlan(
-      archive: archive, existingWorkouts: workouts(), existingTemplates: templates())
+      archive: archive, existingWorkouts: self.workouts(), existingTemplates: self.templates())
     // Encode everything before changing the context. One save commits the entire import.
     let workouts = try plan.workouts.map { ($0.id, try JSONEncoder().encode($0)) }
     let templates = try plan.templates.map { ($0.id, try JSONEncoder().encode($0)) }

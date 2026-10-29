@@ -1,6 +1,19 @@
 import XCTest
 
 final class FitSessionUITests: XCTestCase {
+  @MainActor func testArchiveToolsAreAvailableFromSettings() {
+    let app = launch()
+    let settings = app.tabBars.buttons["Настройки"]
+    XCTAssertTrue(settings.waitForExistence(timeout: 10))
+    settings.tap()
+    let tools = app.buttons["openArchiveTransfer"]
+    XCTAssertTrue(tools.waitForExistence(timeout: 10))
+    tools.tap()
+    XCTAssertTrue(app.buttons["chooseArchive"].waitForExistence(timeout: 5))
+    XCTAssertTrue(app.buttons["exportArchive"].exists)
+    app.buttons["Готово"].tap()
+    XCTAssertTrue(tools.waitForExistence(timeout: 5))
+  }
   @MainActor private func launch() -> XCUIApplication {
     let app = XCUIApplication()
     app.launchArguments = ["--ui-testing", "-AppleLanguages", "(ru)", "-AppleLocale", "ru_RU"]

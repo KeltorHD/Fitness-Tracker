@@ -15,6 +15,8 @@ enum AppErrorReporter {
     record(error, operation: operation)
     if let error = error as? TrainingError { return error.localizedDescription }
     if let error = error as? ServiceError { return error.localizedDescription }
+    if let error = error as? WorkoutArchiveError { return error.localizedDescription }
+    if let error = error as? ArchiveFileError { return error.localizedDescription }
     return fallback
   }
 }

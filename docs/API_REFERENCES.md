@@ -42,3 +42,13 @@ Capabilities выражены настоящими entitlement keys: [HealthKit]
 - [Choosing Background Strategies](https://developer.apple.com/documentation/backgroundtasks/choosing-background-strategies-for-your-app): beginBackgroundTask предоставляет ограниченное время для завершения работы. [Apple DTS notes](https://developer.apple.com/forums/thread/85066/) подтверждают main-thread expiration handler; код освобождает task до возврата из handler.
 
 Оба target используют общий контракт; `FITSESSION_APP` выбирает исполнение с SwiftData только в основном процессе. Подробности проверки: [BACKGROUND_AND_DYNAMIC_ISLAND.md](BACKGROUND_AND_DYNAMIC_ISLAND.md).
+
+## JSON / .fitsession
+
+- [fileImporter](https://developer.apple.com/documentation/swiftui/view/fileimporter(ispresented:allowedcontenttypes:oncompletion:)) — системный single-file picker; доступ к URL балансируется startAccessingSecurityScopedResource/stopAccessingSecurityScopedResource.
+- [fileExporter для Transferable](https://developer.apple.com/documentation/swiftui/view/fileexporter(ispresented:item:contenttypes:defaultfilename:oncompletion:oncancellation:)) — параметр item, contentTypes, defaultFilename и отдельная отмена; официальный DocC указывает iOS 17+, подходит iOS 26 target.
+- [exportingCondition](https://developer.apple.com/documentation/coretransferable/transferrepresentation/exportingcondition(_:)) — `@Sendable (Self.Item) -> Bool`, iOS 16+. Ограничивает representation выбранным JSON/FitSession, поскольку пользовательский UTI сам conforms to JSON.
+- [Defining file and data types](https://developer.apple.com/documentation/uniformtypeidentifiers/defining-file-and-data-types-for-your-app), [CFBundleDocumentTypes](https://developer.apple.com/documentation/bundleresources/information-property-list/cfbundledocumenttypes), [LSSupportsOpeningDocumentsInPlace](https://developer.apple.com/documentation/bundleresources/information-property-list/lssupportsopeningdocumentsinplace) — UTI com.fitsession.archive, расширение fitsession, JSON conformance, Viewer/Owner и отдельный JSON Alternate.
+- [NSFileCoordinator coordinated read](https://developer.apple.com/documentation/foundation/nsfilecoordinator/coordinate(readingitemat:options:error:byaccessor:)) — синхронное coordinated чтение на worker actor, используется переданный accessor URL. Данные ограничиваются до 20 МиБ. Отмена проверяется перед/после coordination и между блоками чтения; ожидание file provider может завершиться позже отмены UI.
+
+Новые document APIs iOS 27 не требуются. File association и фактическое поведение диалогов остаются в Xcode validation checklist.

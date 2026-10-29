@@ -53,8 +53,9 @@ struct TemplatesView: View {
             .primary)
         }
       }
-      .sheet(isPresented: $creating) {
+      .sheet(isPresented: $creating, onDismiss: { store.showingTemplateEditor = false }) {
         TemplateEditor(template: WorkoutTemplate(name: "Новая тренировка", exercises: []))
+          .onAppear { store.showingTemplateEditor = true }
       }
     }
   }
@@ -115,7 +116,9 @@ struct TemplateOverviewView: View {
         Button("Начать тренировку", systemImage: "play.fill") { store.start(template: current) }
           .font(.headline).buttonStyle(.glassProminent).controlSize(.large).padding()
       }
-      .sheet(isPresented: $editing) { TemplateEditor(template: current) }
+      .sheet(isPresented: $editing, onDismiss: { store.showingTemplateEditor = false }) {
+        TemplateEditor(template: current).onAppear { store.showingTemplateEditor = true }
+      }
       .confirmationDialog("Удалить шаблон?", isPresented: $confirmDelete, titleVisibility: .visible)
     {
       Button("Удалить", role: .destructive) {
@@ -175,6 +178,7 @@ struct TemplateEditor: View {
       .sheet(isPresented: $picking) {
         ExercisePicker { template.exercises.append(TemplateExercise(exercise: $0)) }
       }
+      .archiveTransferPresenter(when: store.showingTemplateEditor && !picking)
     }
   }
 }

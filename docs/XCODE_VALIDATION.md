@@ -91,3 +91,18 @@
 - [ ] Повреждённая сводка виджета показывает состояние ошибки без удаления данных; открытие приложения восстанавливает сводку либо очищает её после opt-out.
 
 Показатели калорий, веса и замеров из скриншотов не подставляются как данные пользователя. Фото/GIF оригинального приложения не извлекаются. Полная карта: [REFERENCE_DESIGN.md](REFERENCE_DESIGN.md).
+
+## JSON и .fitsession
+
+- [ ] После генерации проверить Info.plist: exported UTI com.fitsession.archive → public.json, extension fitsession, Viewer/Owner; public.json → Alternate; open-in-place enabled.
+- [ ] Сохранить полный архив и отдельную тренировку в обоих форматах. Фактические расширения `.json` и `.fitsession` соответствуют выбору; UTF-8, русский текст, дробные даты и IDs сохраняются.
+- [ ] Импорт из локальных «Файлов», iCloud Drive и стороннего file provider; старый JSON одной тренировки также читается.
+- [ ] Open in FitSession/AirDrop: foreground, background и cold launch; startup store failure → retry не теряет URL.
+- [ ] Внешний файл во время active session, detail, создания/редактирования плана, editor/picker: один preview без потери черновиков и активной тренировки.
+- [ ] До подтверждения база не меняется. Отмена picker/read/preview не импортирует данные; отказ save оставляет preview для явного retry.
+- [ ] Повторный импорт, совпадающий UUID с другими данными, новая активная сессия при существующей: сводка и фактически пропущенные записи совпадают с правилами.
+- [ ] Malformed/oversized/unsupported-version file, неизвестное расширение, недоступный iCloud файл, пропавший security-scoped URL: понятная ошибка, исходные данные сохранены.
+- [ ] SwiftData: всё одним save, rollback при storage failure; на втором устройстве CloudKit не создаёт дубликатов при повторном импорте.
+- [ ] Запустить ArchiveTransferTests, PersistenceTests и новый UI flow настроек; проверить Dynamic Type/VoiceOver, busy states и повтор после отмены.
+
+[Формат и правила переноса](IMPORT_EXPORT.md).
