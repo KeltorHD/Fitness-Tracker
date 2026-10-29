@@ -4,6 +4,7 @@ import SwiftUI
 struct ActiveWorkoutView: View {
   @Environment(AppStore.self) private var store
   @Environment(\.dismiss) private var dismiss
+  @AppStorage("weightUnit") private var unit: WeightUnit = .kilograms
   @State private var pickingExercise = false
   @State private var confirmCancel = false
   @State private var renaming = false
@@ -37,7 +38,7 @@ struct ActiveWorkoutView: View {
               RestPill(end: end)
               Button("Пропустить отдых") {
                 store.mutate {
-                  _ = try WorkoutLiveAction.skipRest(expectedEndDate: end).apply(
+                  _ = try WorkoutLiveAction.skipRest(expectedEnd: end).apply(
                     to: &$0, expectedWorkoutID: workout.id)
                 }
               }

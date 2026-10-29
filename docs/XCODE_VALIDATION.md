@@ -6,6 +6,7 @@
 
 - [ ] `xcodegen generate`: spec, local SPM dependency, пять targets и schemes.
 - [ ] FitSession Debug/Release compilation: SwiftUI overloads, SwiftData macros, Swift 6 concurrency.
+- [ ] ActiveWorkoutView: Section/TimelineView компилируются с @AppStorage weightUnit; смена кг/фунтов обновляет сводку, skip-rest вызывает Core action с expectedEnd и не сбрасывает новый отдых.
 - [ ] FitSession Personal: PersonalDebug/PersonalRelease используют PersonalTeam.entitlements без CloudKit/APNs; установлены и запускаются с Personal Team, включая widgets/watch.
 - [ ] Personal build с сохранённым cloudSync=true всё равно открывает локальный store и не регистрирует APNs; предпочтение не стирается. Полная схема возвращает iCloud controls.
 - [ ] FitSessionWidgets: extension-safe API, shared attributes, assets и Info.plist.
