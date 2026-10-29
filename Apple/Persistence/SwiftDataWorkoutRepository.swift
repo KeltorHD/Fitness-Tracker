@@ -56,6 +56,27 @@ import SwiftData
   }
   func deleteWorkout(id: UUID) throws { try remove(id: id, kind: "workout") }
   func deleteTemplate(id: UUID) throws { try remove(id: id, kind: "template") }
+  func importArchive(_ archive: WorkoutArchive) throws -> ArchiveImportSummary {
+    let plan = try ArchiveImportPlan(
+      archive: archive, existingWorkouts: workouts(), existingTemplates: templates())
+    // Encode everything before changing the context. One save commits the entire import.
+    let workouts = try plan.workouts.map { ($0.id, try JSONEncoder().encode($0)) }
+    let templates = try plan.templates.map { ($0.id, try JSONEncoder().encode($0)) }
+    guard plan.summary.hasChanges else { return plan.summary }
+    do {
+      for (id, data) in workouts {
+        context.insert(StoredRecord(id: id, kind: "workout", payload: data))
+      }
+      for (id, data) in templates {
+        context.insert(StoredRecord(id: id, kind: "template", payload: data))
+      }
+      try context.save()
+      return plan.summary
+    } catch {
+      context.rollback()
+      throw error
+    }
+  }
   private func allRecords(kind: String) throws -> [StoredRecord] {
     try context.fetch(
       FetchDescriptor<StoredRecord>(

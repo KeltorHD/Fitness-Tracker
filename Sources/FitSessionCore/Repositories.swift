@@ -7,6 +7,8 @@ import Foundation
   func templates() throws -> [WorkoutTemplate]
   func saveTemplate(_ template: WorkoutTemplate) throws
   func deleteTemplate(id: UUID) throws
+  /// Validate the complete archive, then add new records in a single transaction or change nothing.
+  func importArchive(_ archive: WorkoutArchive) throws -> ArchiveImportSummary
 }
 
 @MainActor public protocol HealthWorkoutExporting {
@@ -34,4 +36,15 @@ import Foundation
     routines[template.id] = template
   }
   public func deleteTemplate(id: UUID) throws { routines[id] = nil }
+  public func importArchive(_ archive: WorkoutArchive) throws -> ArchiveImportSummary {
+    let plan = try ArchiveImportPlan(
+      archive: archive, existingWorkouts: workouts(), existingTemplates: templates())
+    var nextSessions = sessions
+    var nextRoutines = routines
+    for workout in plan.workouts { nextSessions[workout.id] = workout }
+    for template in plan.templates { nextRoutines[template.id] = template }
+    sessions = nextSessions
+    routines = nextRoutines
+    return plan.summary
+  }
 }
