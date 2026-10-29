@@ -32,11 +32,16 @@
 | Дизайн по 11 референсам, четыре вкладки, темы, автоблокировка | Да | Только syntax parse и lint | Да, SwiftUI/Glass/presentation/idle timer | Обычный signing |
 | TrainingReport, сводка месяца, преобразование истории в шаблон | Да | Да, 6 новых тестов, включая ЛР при фильтре дня | UI отдельно | Нет |
 | HistoryViewModel / ProgressViewModel: подготовленные данные вне body | Да | Core-проекции — да; Apple models — нет | Да, обновление после редактирования/смены периода | Нет |
+| ExerciseLibraryViewModel, SettingsViewModel, DI сервисов и cancellation | Да | Только type-check переносимой части; Apple tests не запускались | Да, permissions, retry, устаревшие ответы, sheet/alert | iCloud для проверки аккаунта |
+| ExerciseImageLoader actor и ExercisePhotoViewModel | Да | Type-check файлового сервиса; UIKit/Apple tests не запускались | Да, загрузка/ошибка/retry и cache при прокрутке | Нет |
+| Warmup/skip-rest через Core; ошибка сохранения не показывает успех | Да | Warmup и LiveAction rules — да; AppStore tests не запускались | Да, ошибки repository и восстановление UI | Нет |
+| WidgetSnapshot: явная ошибка чтения, проверка данных, сохранение повреждённого payload | Да | Только type-check; Apple unit tests не запускались | Да, shared defaults и восстановление сводки | App Group |
 
 ## Фактические проверки
 
 - `swift build`: прошёл для FitSessionCore на Linux.
-- `swift test`: прошли 53 Swift Testing tests, включая parameterized cases. Стандартный XCTest runner также печатает «0 tests» — Core использует отдельный Swift Testing runner, его итоговая строка содержит 53 tests.
+- `swift test`: прошли 55 Swift Testing tests, включая parameterized cases. Стандартный XCTest runner также печатает «0 tests» — Core использует отдельный Swift Testing runner, его итоговая строка содержит 55 tests.
+- Отдельный Swift 6 strict-concurrency type-check без Apple SDK: HistoryViewModel, ProgressViewModel, ExerciseLibraryViewModel, ExerciseImageLoader, CloudAccountChecking, WidgetSnapshot. Это проверка типов указанной переносимой части, не функциональный тест и не сборка iOS target.
 - Swift formatting/lint, синтаксический разбор Apple Swift, структура/конфигурационные связи, plist/JSON, PNG и наличие ресурсов: прошли в `bash scripts/check-linux.sh`. Для Dynamic Island parser проверяет обе ветви shared intents: основной target с FITSESSION_APP и widget extension без него.
 - В текущей рабочей сессии Swift установлен в `/tmp/fitsession-toolchain/swift-6.2.1-RELEASE-ubuntu24.04`; для постоянной установки предусмотрен `setup-linux.sh`, toolchain не хранится в git.
 - XcodeGen generation, iOS/watchOS compilation, linking, Simulator, SwiftUI rendering и реальные Apple-сервисы **не проверены**. Linux CI не заменяет эти проверки.

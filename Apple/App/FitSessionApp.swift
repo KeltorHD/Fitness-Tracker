@@ -11,6 +11,7 @@ import SwiftUI
       Group {
         if let store {
           RootView().environment(store)
+            .environment(\.exerciseImageLoader, store.exerciseImages)
         } else if let startupError {
           ContentUnavailableView {
             Label("Хранилище недоступно", systemImage: "externaldrive.badge.exclamationmark")
@@ -18,7 +19,7 @@ import SwiftUI
             Text(startupError)
           } actions: {
             Button("Повторить") { boot() }.buttonStyle(.glassProminent)
-            Text("Данные не удалены. Если включён iCloud, проверьте Signing & Capabilities.")
+            Text("Данные не удалены. Попробуйте открыть приложение ещё раз позже.")
               .font(.footnote).padding()
           }
         } else {
@@ -37,6 +38,9 @@ import SwiftUI
       appStore.startServices()
       store = appStore
       startupError = nil
-    } catch { startupError = error.localizedDescription }
+    } catch {
+      startupError = AppErrorReporter.message(
+        for: error, operation: "openStore", fallback: "Не удалось открыть историю тренировок.")
+    }
   }
 }

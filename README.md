@@ -46,7 +46,7 @@ python3 scripts/parse-apple.py
 swift format lint --strict --recursive Sources Tests Apple Package.swift
 ```
 
-`check-linux.sh` перенаправляет кэши в `.build`, собирает пакет, запускает тесты, проверяет ресурсы и выполняет **только синтаксический разбор** Apple-файлов. Это не проверка типов SwiftUI, макросов SwiftData, linking, signing или runtime. GitHub Actions повторяет Linux-проверки.
+`check-linux.sh` перенаправляет кэши в `.build`, собирает пакет, запускает тесты, проверяет ресурсы и синтаксис Apple-файлов. Переносимые модели дневника/результатов/поиска, файловый сервис и контракты дополнительно проходят Swift 6 type-check без Apple SDK; явный список находится в скрипте. Это не проверка типов SwiftUI, макросов SwiftData, linking, signing или runtime. GitHub Actions повторяет Linux-проверки.
 
 ## Mac
 
@@ -65,7 +65,7 @@ Sources/FitSessionCore/             # Модели, state machine, расчёт�
 Tests/FitSessionCoreTests/          # Linux/macOS Swift Testing
 Apple/App/                         # DI, точка входа, состояние приложения
 Apple/Design/                      # Liquid Glass и общие компоненты
-Apple/Features/                    # SwiftUI-экраны
+Apple/Features/                    # SwiftUI-экраны и presentation models
 Apple/Persistence/                 # SwiftData repository
 Apple/Services/                    # HealthKit, CloudKit, ActivityKit, WCSession
 Apple/Shared/                      # Контракт Live Activity и сводка виджета

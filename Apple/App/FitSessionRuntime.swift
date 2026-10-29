@@ -15,7 +15,15 @@ import Foundation
       repository = try SwiftDataWorkoutRepository(
         cloudEnabled: UserDefaults.standard.bool(forKey: "cloudSync"))
     }
-    let defaults = testing ? UserDefaults(suiteName: "FitSession.UITests")! : .standard
+    let defaults: UserDefaults
+    if testing {
+      guard let testDefaults = UserDefaults(suiteName: "FitSession.UITests") else {
+        throw ServiceError.unavailable("Не удалось открыть настройки тестового запуска.")
+      }
+      defaults = testDefaults
+    } else {
+      defaults = .standard
+    }
     if testing { defaults.removePersistentDomain(forName: "FitSession.UITests") }
     defaults.register(defaults: ["weeklyGoal": 3, "liveActivities": !testing])
     let store = AppStore(

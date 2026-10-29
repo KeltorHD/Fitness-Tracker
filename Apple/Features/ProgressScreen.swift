@@ -47,7 +47,7 @@ struct ProgressScreen: View {
                   .foregroundStyle(FitTheme.accent).cornerRadius(3)
                 }.frame(height: 215).chartYAxis { AxisMarks(position: .trailing) }
                   .accessibilityLabel("Объём упражнения по тренировкам")
-              }.padding(16).background(FitTheme.card, in: .rect(cornerRadius: FitTheme.radius))
+              }.fitCard()
             }
           }
           VStack(spacing: 14) {
@@ -61,7 +61,7 @@ struct ProgressScreen: View {
                 )
                 .foregroundStyle(FitTheme.accent).cornerRadius(3)
               }.frame(height: 180).chartYAxis { AxisMarks(position: .trailing) }
-            }.padding(16).background(FitTheme.card, in: .rect(cornerRadius: FitTheme.radius))
+            }.fitCard()
           }
           VStack(alignment: .leading, spacing: 14) {
             SectionHeading(title: "Личные рекорды", symbol: "trophy")
@@ -86,7 +86,7 @@ struct ProgressScreen: View {
                       "\(unit.display(record.estimatedOneRepMax).formatted(.number.precision(.fractionLength(0...1)))) \(unit.rawValue)"
                   )
                 }
-              }.padding(16).background(FitTheme.card, in: .rect(cornerRadius: FitTheme.radius))
+              }.fitCard()
             }
             Text(
               "1ПМ — оценка по формуле Эпли для 1–12 повторений. Собственный вес не включается в объём внешнего отягощения."
@@ -116,61 +116,4 @@ struct ProgressScreen: View {
     }
   }
   private func refresh() { model.refresh(workouts: store.workouts, calendar: calendar) }
-}
-
-struct TrainingMonthCard: View {
-  let date: Date
-  let summary: TrainingMonthSummary
-  let move: (Int) -> Void
-  var body: some View {
-    HStack(alignment: .top, spacing: 12) {
-      VStack(spacing: 12) {
-        HStack {
-          Button("Предыдущий месяц", systemImage: "chevron.left") { move(-1) }.labelStyle(.iconOnly)
-          Text(date, format: .dateTime.month(.wide)).font(.subheadline).foregroundStyle(.secondary)
-            .frame(maxWidth: .infinity, alignment: .leading)
-          Button("Следующий месяц", systemImage: "chevron.right") { move(1) }.labelStyle(.iconOnly)
-        }.font(.caption).foregroundStyle(.secondary)
-        LazyVGrid(
-          columns: Array(repeating: GridItem(.flexible(), spacing: 3), count: 7), spacing: 6
-        ) {
-          ForEach(summary.days) { day in
-            Text(day.date, format: .dateTime.day()).font(.caption)
-              .fontWeight(day.hasWorkout ? .semibold : .regular)
-              .foregroundStyle(
-                day.hasWorkout
-                  ? Color.white : day.isInMonth ? Color.primary : Color.secondary.opacity(0.5)
-              )
-              .frame(maxWidth: .infinity).aspectRatio(1, contentMode: .fit)
-              .background(day.hasWorkout ? FitTheme.accent : .clear, in: .circle)
-              .overlay(
-                Circle().stroke(
-                  day.isInMonth && !day.hasWorkout ? Color.gray.opacity(0.25) : .clear, lineWidth: 1
-                )
-              )
-              .accessibilityLabel(
-                "\(day.date.formatted(date: .complete, time: .omitted))\(day.hasWorkout ? ", была тренировка" : "")"
-              )
-          }
-        }
-      }
-      Rectangle().fill(.gray.opacity(0.18)).frame(width: 1)
-      VStack(spacing: 14) {
-        Text("Всего").font(.subheadline).foregroundStyle(.secondary)
-        Text("\(summary.workoutCount)").font(.largeTitle.weight(.medium)).monospacedDigit()
-        Divider()
-        ZStack {
-          Circle().stroke(.gray.opacity(0.15), lineWidth: 13)
-          Circle().trim(
-            from: 0,
-            to: summary.trainingDayFraction
-          )
-          .stroke(FitTheme.accent, style: StrokeStyle(lineWidth: 13, lineCap: .round))
-          .rotationEffect(.degrees(-90))
-        }.frame(width: 48, height: 48).padding(.top, 5).accessibilityLabel(
-          "Дни с тренировками в выбранном месяце")
-      }.frame(width: 68)
-    }.fixedSize(horizontal: false, vertical: true).padding(16)
-      .background(FitTheme.card, in: .rect(cornerRadius: FitTheme.radius))
-  }
 }

@@ -1,7 +1,13 @@
 import Foundation
 import UserNotifications
 
-@MainActor final class RestNotificationService {
+@MainActor protocol RestNotificationServing {
+  func authorize() async throws -> Bool
+  func schedule(until date: Date?) async throws
+  func cancel()
+}
+
+@MainActor final class RestNotificationService: RestNotificationServing {
   private let center = UNUserNotificationCenter.current()
   func authorize() async throws -> Bool {
     try await center.requestAuthorization(options: [.alert, .sound])

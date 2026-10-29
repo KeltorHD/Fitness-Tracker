@@ -14,7 +14,9 @@ struct RootView: View {
       Tab("Результаты", systemImage: "chart.bar", value: 2) {
         ProgressScreen().tint(FitTheme.accent)
       }
-      Tab("Настройки", systemImage: "gearshape", value: 3) { SettingsView().tint(FitTheme.accent) }
+      Tab("Настройки", systemImage: "gearshape", value: 3) {
+        SettingsView(model: store.settings).tint(FitTheme.accent)
+      }
     }
     .tint(.primary)
     .sheet(isPresented: $store.showSession) {
@@ -23,7 +25,8 @@ struct RootView: View {
     .alert(
       "FitSession",
       isPresented: Binding(
-        get: { store.error != nil && !store.showSession }, set: { if !$0 { store.error = nil } })
+        get: { store.error != nil && !store.showSession && !store.showingWorkoutDetail },
+        set: { if !$0 { store.error = nil } })
     ) {
       Button("Понятно", role: .cancel) { store.error = nil }
     } message: {
@@ -31,7 +34,11 @@ struct RootView: View {
     }
     .alert(
       "Готово",
-      isPresented: Binding(get: { store.notice != nil }, set: { if !$0 { store.notice = nil } })
+      isPresented: Binding(
+        get: {
+          store.notice != nil && store.error == nil && !store.showSession
+            && !store.showingWorkoutDetail
+        }, set: { if !$0 { store.notice = nil } })
     ) {
       Button("Хорошо", role: .cancel) { store.notice = nil }
     } message: {
@@ -49,13 +56,13 @@ struct RootView: View {
     }
     .onChange(of: keepScreenAwake) { updateIdleTimer() }
     .onChange(of: store.active?.status) { updateIdleTimer() }
-    .onChange(of: phase) { _, phase in
-      updateIdleTimer()
+    .onChange(of: phase, initial: true) { updateIdleTimer() }
+    .task(id: phase) {
       if phase == .active {
         store.reload()
         store.refreshIntegrations()
       } else if phase == .background {
-        Task { await store.prepareForBackground() }
+        await store.prepareForBackground()
       }
     }
   }

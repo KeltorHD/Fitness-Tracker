@@ -6,14 +6,18 @@ import WidgetKit
 
 @MainActor @Observable final class AppStore {
   private(set) var workouts: [Workout] = []
+  private(set) var completed: [Workout] = []
   private(set) var templates: [WorkoutTemplate] = []
   private(set) var active: Workout?
   var error: String?
   var notice: String?
   var showSession = false
+  var showingWorkoutDetail = false
+  let settings: SettingsViewModel
+  @ObservationIgnored let exerciseImages: any ExerciseImageLoading
   @ObservationIgnored private let repository: any WorkoutRepository
   @ObservationIgnored private let health: any HealthWorkoutExporting
-  @ObservationIgnored private let notifications = RestNotificationService()
+  @ObservationIgnored private let notifications: any RestNotificationServing
   @ObservationIgnored private let liveActivity = LiveActivityService()
   @ObservationIgnored private let watch = PhoneWatchBridge()
   @ObservationIgnored private var integrationTask: Task<Void, Never>?
@@ -23,14 +27,24 @@ import WidgetKit
 
   init(
     repository: any WorkoutRepository, health: any HealthWorkoutExporting,
-    defaults: UserDefaults = .standard, platformServicesEnabled: Bool = true
+    defaults: UserDefaults = .standard, platformServicesEnabled: Bool = true,
+    notifications: any RestNotificationServing = RestNotificationService(),
+    cloud: any CloudAccountChecking = CloudKitService(),
+    exerciseImages: any ExerciseImageLoading = ExerciseImageLoader()
   ) {
     self.repository = repository
     self.health = health
     self.defaults = defaults
     self.platformServicesEnabled = platformServicesEnabled
+    self.notifications = notifications
+    self.settings = SettingsViewModel(cloud: cloud, notifications: notifications)
+    self.exerciseImages = exerciseImages
     watch.receive = { [weak self] workout in self?.importWatch(workout) ?? false }
-    watch.failure = { [weak self] message in self?.error = message }
+    watch.failure = { [weak self] error in
+      self?.report(
+        error, operation: "watchConnection",
+        message: "Не удалось обменяться данными с Apple Watch. Попробуйте ещё раз.")
+    }
     reload()
   }
   func startServices() {
@@ -40,14 +54,21 @@ import WidgetKit
     refreshIntegrations()
   }
   func reload() {
-    do {
-      let loaded = try repository.workouts()
-      let routines = try repository.templates()
-      workouts = loaded
-      templates = routines
-      let unfinished = loaded.filter { [.active, .paused].contains($0.status) }
-      active = unfinished.first { $0.id == active?.id } ?? unfinished.first
-    } catch { self.error = "Не удалось прочитать данные: \(error.localizedDescription)" }
+    do { try loadRepository() } catch {
+      report(
+        error, operation: "reload",
+        message: "Не удалось прочитать историю. Попробуйте открыть приложение ещё раз.")
+    }
+  }
+  private func loadRepository() throws {
+    // Commit the UI snapshot only when both reads succeed; a partial read preserves the previous state.
+    let loaded = try repository.workouts()
+    let routines = try repository.templates()
+    workouts = loaded
+    completed = loaded.filter { $0.status == .completed }
+    templates = routines
+    let unfinished = loaded.filter { [.active, .paused].contains($0.status) }
+    active = unfinished.first { $0.id == active?.id } ?? unfinished.first
   }
   func seedTemplatesIfNeeded() {
     // An explicit flag prevents deleted defaults from returning on every launch.
@@ -55,8 +76,12 @@ import WidgetKit
     do {
       for template in ExerciseCatalog.starterTemplates { try repository.saveTemplate(template) }
       defaults.set(true, forKey: "seededTemplates")
-      reload()
-    } catch { self.error = error.localizedDescription }
+      try loadRepository()
+    } catch {
+      report(
+        error, operation: "seedTemplates",
+        message: "Не удалось сохранить стартовые планы. Попробуйте ещё раз.")
+    }
   }
   func start(template: WorkoutTemplate? = nil) {
     guard active == nil else {
@@ -66,16 +91,24 @@ import WidgetKit
     do {
       let workout = try template?.start() ?? Workout(name: "Свободная тренировка")
       try activate(workout)
-    } catch { self.error = error.localizedDescription }
+    } catch {
+      report(
+        error, operation: "startWorkout",
+        message: "Не удалось начать тренировку. Попробуйте ещё раз.")
+    }
   }
   private func activate(_ workout: Workout) throws {
     try repository.save(workout)
-    reload()
+    try loadRepository()
     showSession = true
     if platformServicesEnabled, defaults.object(forKey: "liveActivities") as? Bool != false {
       // Request synchronously while foregrounded, before notification/widget async work.
       do { try liveActivity.startIfNeeded(for: workout) } catch {
-        self.error = "Live Activity: \(error.localizedDescription)"
+        report(
+          error, operation: "startLiveActivity",
+          message:
+            "Не удалось показать тренировку на экране блокировки. Тренировка сохранена в приложении."
+        )
       }
     }
     refreshIntegrations()
@@ -86,7 +119,9 @@ import WidgetKit
       return
     }
     do { try activate(WorkoutEngine.repeatWorkout(original)) } catch {
-      error = error.localizedDescription
+      report(
+        error, operation: "repeatWorkout",
+        message: "Не удалось повторить тренировку. Попробуйте ещё раз.")
     }
   }
   func updateCompleted(_ workout: Workout) -> Bool {
@@ -98,78 +133,100 @@ import WidgetKit
         throw TrainingError.invalidState
       }
       try repository.save(workout)
-      reload()
+      try loadRepository()
       refreshIntegrations()
       return true
     } catch {
-      self.error = error.localizedDescription
+      report(
+        error, operation: "updateCompleted",
+        message: "Не удалось сохранить изменения тренировки. Попробуйте ещё раз.")
       return false
     }
   }
-  func mutate(_ action: (inout Workout) throws -> Void) {
-    guard var workout = active else { return }
+  @discardableResult func mutate(_ action: (inout Workout) throws -> Void) -> Bool {
+    guard var workout = active else { return false }
     do {
       try action(&workout)
       try repository.save(workout)
-      reload()
+      try loadRepository()
       refreshIntegrations()
-    } catch { self.error = error.localizedDescription }
+      return true
+    } catch {
+      report(
+        error, operation: "updateWorkout",
+        message: "Не удалось сохранить изменения тренировки. Попробуйте ещё раз.")
+      return false
+    }
   }
   func finish() {
-    mutate { try WorkoutEngine.finish(&$0) }
+    guard mutate({ try WorkoutEngine.finish(&$0) }) else { return }
     if active == nil {
       showSession = false
       notice = "Тренировка сохранена. Отличная работа."
     }
   }
   func cancel() {
-    mutate { try WorkoutEngine.cancel(&$0) }
+    guard mutate({ try WorkoutEngine.cancel(&$0) }) else { return }
     if active == nil { showSession = false }
   }
   func save(template: WorkoutTemplate) -> Bool {
     do {
       try repository.saveTemplate(template)
-      reload()
+      try loadRepository()
       return true
     } catch {
-      self.error = error.localizedDescription
+      report(
+        error, operation: "saveTemplate", message: "Не удалось сохранить план. Попробуйте ещё раз.")
       return false
     }
   }
   func delete(template: WorkoutTemplate) {
     do {
       try repository.deleteTemplate(id: template.id)
-      reload()
-    } catch { self.error = error.localizedDescription }
+      try loadRepository()
+    } catch {
+      report(
+        error, operation: "deleteTemplate", message: "Не удалось удалить план. Попробуйте ещё раз.")
+    }
   }
   func delete(workout: Workout) {
     do {
       try repository.deleteWorkout(id: workout.id)
-      reload()
+      try loadRepository()
       refreshIntegrations()
-    } catch { self.error = error.localizedDescription }
+    } catch {
+      report(
+        error, operation: "deleteWorkout",
+        message: "Не удалось удалить тренировку. Попробуйте ещё раз.")
+    }
   }
   func exportHealth(_ workout: Workout) async {
     do {
+      try Task.checkCancellation()
       try await health.requestAuthorization()
+      try Task.checkCancellation()
       try await health.export(workout)
+      try Task.checkCancellation()
       notice = "Тренировка отправлена в «Здоровье»."
-    } catch { self.error = error.localizedDescription }
-  }
-  func enableNotifications() async -> Bool {
-    do { return try await notifications.authorize() } catch {
-      self.error = error.localizedDescription
-      return false
+    } catch {
+      guard !Task.isCancelled, !(error is CancellationError) else { return }
+      report(
+        error, operation: "exportHealth",
+        message:
+          "Не удалось отправить тренировку в «Здоровье». Проверьте разрешение на запись и попробуйте ещё раз."
+      )
     }
   }
   private func importWatch(_ workout: Workout) -> Bool {
     do {
       try repository.save(workout)
-      reload()
+      try loadRepository()
       refreshIntegrations()
       return true
     } catch {
-      self.error = "Тренировка с Watch не сохранена: \(error.localizedDescription)"
+      report(
+        error, operation: "importWatch",
+        message: "Не удалось сохранить тренировку с Apple Watch. Часы повторят отправку.")
       return false
     }
   }
@@ -183,9 +240,11 @@ import WidgetKit
         try repository.save(workout)
       }
       active = workout
-      reload()
+      try loadRepository()
     } catch {
-      self.error = error.localizedDescription
+      report(
+        error, operation: "liveAction",
+        message: "Не удалось изменить тренировку. Откройте FitSession и повторите действие.")
       reload()
       refreshIntegrations(allowStart: false)
       await integrationTask?.value
@@ -245,7 +304,13 @@ import WidgetKit
         try await liveActivity.update(
           for: defaults.object(forKey: "liveActivities") as? Bool == false ? nil : workout,
           allowStart: canStart)
-      } catch { if firstError == nil { firstError = error } }
+      } catch {
+        if firstError == nil {
+          firstError = error
+        } else {
+          AppErrorReporter.record(error, operation: "updateLiveActivity")
+        }
+      }
       guard !Task.isCancelled else { return }
       do {
         if defaults.bool(forKey: "widgetSharing") {
@@ -255,14 +320,26 @@ import WidgetKit
             weeklyGoal: max(1, defaults.integer(forKey: "weeklyGoal")), updatedAt: .now
           ).write()
         } else {
-          WidgetSnapshot.clear()
+          try WidgetSnapshot.clear()
         }
         WidgetCenter.shared.reloadAllTimelines()
-      } catch { if firstError == nil { firstError = error } }
+      } catch {
+        if firstError == nil {
+          firstError = error
+        } else {
+          AppErrorReporter.record(error, operation: "publishWidget")
+        }
+      }
       if let firstError, !Task.isCancelled {
-        self.error = "Дополнительная функция: \(firstError.localizedDescription)"
+        report(
+          firstError, operation: "refreshIntegrations",
+          message:
+            "Не удалось обновить уведомления или виджеты. Откройте приложение ещё раз, чтобы повторить обновление."
+        )
       }
     }
   }
-  var completed: [Workout] { workouts.filter { $0.status == .completed } }
+  private func report(_ error: any Error, operation: String, message: String) {
+    self.error = AppErrorReporter.message(for: error, operation: operation, fallback: message)
+  }
 }

@@ -1,54 +1,47 @@
 import FitSessionCore
 import SwiftUI
-import UIKit
 
 struct ExerciseLibraryView: View {
   var onSelect: ((Exercise) -> Void)? = nil
-  @State private var search = ""
-  @State private var group: MuscleGroup?
-  @State private var equipment: ExerciseEquipment?
-
-  private var results: [ExerciseLibraryEntry] {
-    ExerciseLibrary.search(search, group: group, equipment: equipment)
-  }
+  @State private var model = ExerciseLibraryViewModel()
   var body: some View {
+    @Bindable var model = model
     List {
       Section {
         HStack {
           Menu {
-            Button("Все мышцы") { group = nil }
+            Button("Все мышцы") { model.group = nil }
             ForEach(MuscleGroup.allCases, id: \.self) { value in
-              Button(value.title) { group = value }
+              Button(value.title) { model.group = value }
             }
           } label: {
-            Label(group?.title ?? "Все мышцы", systemImage: "figure.strengthtraining.traditional")
+            Label(
+              model.group?.title ?? "Все мышцы", systemImage: "figure.strengthtraining.traditional")
           }
           Spacer()
           Menu {
-            Button("Весь инвентарь") { equipment = nil }
+            Button("Весь инвентарь") { model.equipment = nil }
             ForEach(ExerciseEquipment.allCases, id: \.self) { value in
-              Button(value.title) { equipment = value }
+              Button(value.title) { model.equipment = value }
             }
           } label: {
-            Label(equipment?.title ?? "Инвентарь", systemImage: "line.3.horizontal.decrease")
+            Label(model.equipment?.title ?? "Инвентарь", systemImage: "line.3.horizontal.decrease")
           }
         }.font(.subheadline)
       } footer: {
-        Text("Найдено: \(results.count) · Фото и инструкции доступны без интернета")
+        Text("Найдено: \(model.results.count) · Фото и инструкции доступны без интернета")
       }
-      if let error = ExerciseLibrary.loadingError {
+      if let error = model.loadingError {
         ContentUnavailableView(
           "Библиотека недоступна", systemImage: "exclamationmark.triangle", description: Text(error)
         )
-      } else if results.isEmpty {
-        ContentUnavailableView.search(text: search)
+      } else if model.results.isEmpty {
+        ContentUnavailableView.search(text: model.search)
         Button("Сбросить поиск и фильтры") {
-          search = ""
-          group = nil
-          equipment = nil
+          model.reset()
         }
       }
-      ForEach(results) { entry in
+      ForEach(model.results) { entry in
         NavigationLink {
           ExerciseDetailView(exercise: entry.exercise, onSelect: onSelect)
         } label: {
@@ -72,7 +65,7 @@ struct ExerciseLibraryView: View {
       }
     }
     .navigationTitle("Упражнения")
-    .searchable(text: $search, prompt: "Название, мышца или инвентарь")
+    .searchable(text: $model.search, prompt: "Название, мышца или инвентарь")
     .accessibilityIdentifier("exerciseLibrary")
   }
 }
@@ -157,37 +150,6 @@ struct ExerciseDetailView: View {
           .accessibilityIdentifier("selectLibraryExercise")
       }
     }
-  }
-}
-
-struct ExercisePhoto: View {
-  let path: String
-  var body: some View {
-    if let image = ExercisePhotoCache.image(path: path) {
-      Image(uiImage: image).resizable().scaledToFit()
-    } else {
-      ContentUnavailableView("Фото недоступно", systemImage: "photo")
-    }
-  }
-}
-
-@MainActor private enum ExercisePhotoCache {
-  private static let cache: NSCache<NSString, UIImage> = {
-    let cache = NSCache<NSString, UIImage>()
-    cache.countLimit = 40
-    cache.totalCostLimit = 32 * 1024 * 1024
-    return cache
-  }()
-  static func image(path: String) -> UIImage? {
-    if let image = cache.object(forKey: path as NSString) { return image }
-    guard !path.contains(".."), !path.hasPrefix("/"),
-      let url = Bundle.main.resourceURL?.appendingPathComponent("ExerciseMedia")
-        .appendingPathComponent(path),
-      let image = UIImage(contentsOfFile: url.path)
-    else { return nil }
-    cache.setObject(
-      image, forKey: path as NSString, cost: Int(image.size.width * image.size.height * 4))
-    return image
   }
 }
 

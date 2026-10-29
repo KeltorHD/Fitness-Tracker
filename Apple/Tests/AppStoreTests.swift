@@ -10,11 +10,70 @@ import XCTest
   func export(_ workout: Workout) async throws { exported.append(workout) }
 }
 
+@MainActor private final class FailingWorkoutRepository: WorkoutRepository {
+  let memory = MemoryWorkoutRepository()
+  var failSaves = false
+  var failTemplateReads = false
+  private var failure: NSError {
+    NSError(domain: "Test", code: 1, userInfo: [NSLocalizedDescriptionKey: "private diagnostic"])
+  }
+  func workouts() throws -> [Workout] { try memory.workouts() }
+  func templates() throws -> [WorkoutTemplate] {
+    if failTemplateReads { throw failure }
+    return try memory.templates()
+  }
+  func save(_ workout: Workout) throws {
+    if failSaves { throw failure }
+    try memory.save(workout)
+  }
+  func saveTemplate(_ template: WorkoutTemplate) throws { try memory.saveTemplate(template) }
+  func deleteWorkout(id: UUID) throws { try memory.deleteWorkout(id: id) }
+  func deleteTemplate(id: UUID) throws { try memory.deleteTemplate(id: id) }
+}
+
 @MainActor final class AppStoreTests: XCTestCase {
+  func testFailedSavePreservesActiveSessionAndDoesNotAnnounceSuccess() throws {
+    let repository = FailingWorkoutRepository()
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    store.finish()
+    XCTAssertNil(store.notice)
+    store.start(template: ExerciseCatalog.starterTemplates[0])
+    let workout = try XCTUnwrap(store.active)
+    repository.failSaves = true
+    let saved = store.mutate {
+      try WorkoutEngine.completeSet(
+        in: &$0, exerciseID: workout.exercises[0].id, setID: workout.exercises[0].sets[0].id,
+        repetitions: 8, weightKG: 40)
+    }
+    XCTAssertFalse(saved)
+    XCTAssertEqual(store.active, workout)
+    XCTAssertEqual(try repository.workouts(), [workout])
+    XCTAssertNotNil(store.error)
+    XCTAssertFalse(store.error?.contains("private diagnostic") ?? true)
+    XCTAssertNil(store.notice)
+  }
+
+  func testFailedReloadKeepsTheEntirePreviousSnapshot() throws {
+    let repository = FailingWorkoutRepository()
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    store.start(template: ExerciseCatalog.starterTemplates[0])
+    let original = store.workouts
+    try repository.save(ExerciseCatalog.starterTemplates[1].start())
+    repository.failTemplateReads = true
+    store.reload()
+    XCTAssertEqual(store.workouts, original)
+    XCTAssertEqual(store.active?.id, original.first?.id)
+    XCTAssertNotNil(store.error)
+    repository.failTemplateReads = false
+    store.reload()
+    XCTAssertEqual(store.workouts.count, 2)
+  }
   func testCompletedWorkoutIsPersistedAndExportRequiresExplicitAction() async throws {
     let repository = MemoryWorkoutRepository()
     let health = RecordingHealthExporter()
-    let defaults = UserDefaults(suiteName: "FitSession.UnitTests")!
+    let defaults = try XCTUnwrap(UserDefaults(suiteName: "FitSession.UnitTests"))
     defer { defaults.removePersistentDomain(forName: "FitSession.UnitTests") }
     let store = AppStore(
       repository: repository, health: health, defaults: defaults, platformServicesEnabled: false)

@@ -1,28 +1,38 @@
-import ActivityKit
+import OSLog
 import SwiftUI
 import WidgetKit
 
 private struct WeeklyEntry: TimelineEntry {
   var date: Date
   var snapshot: WidgetSnapshot?
+  var loadFailed = false
 }
 private struct WeeklyProvider: TimelineProvider {
   func placeholder(in context: Context) -> WeeklyEntry { WeeklyEntry(date: .now, snapshot: .empty) }
   func getSnapshot(in context: Context, completion: @escaping (WeeklyEntry) -> Void) {
-    completion(
-      WeeklyEntry(date: .now, snapshot: context.isPreview ? .empty : WidgetSnapshot.read()))
+    completion(context.isPreview ? placeholder(in: context) : loadEntry(at: .now))
   }
   func getTimeline(in context: Context, completion: @escaping (Timeline<WeeklyEntry>) -> Void) {
     let now = Date()
-    let snapshot = WidgetSnapshot.read()
+    let entry = loadEntry(at: now)
+    let calendar = Calendar.current
     let nextWeek =
-      Calendar.current.dateInterval(of: .weekOfYear, for: now)?.end ?? now.addingTimeInterval(86400)
+      calendar.dateInterval(of: .weekOfYear, for: now)?.end
+      ?? calendar.date(byAdding: .day, value: 1, to: now) ?? now.addingTimeInterval(3600)
     completion(
       Timeline(
         entries: [
-          WeeklyEntry(date: now, snapshot: snapshot),
-          WeeklyEntry(date: nextWeek, snapshot: snapshot),
+          entry,
+          WeeklyEntry(date: nextWeek, snapshot: entry.snapshot, loadFailed: entry.loadFailed),
         ], policy: .atEnd))
+  }
+  private func loadEntry(at date: Date) -> WeeklyEntry {
+    do { return WeeklyEntry(date: date, snapshot: try WidgetSnapshot.read()) } catch {
+      let diagnostic = error as NSError
+      Logger(subsystem: "FitSession", category: "Widget").error(
+        "Snapshot unavailable: \(diagnostic.domain, privacy: .public), code \(diagnostic.code)")
+      return WeeklyEntry(date: date, snapshot: nil, loadFailed: true)
+    }
   }
 }
 private struct WeeklyWidgetView: View {
@@ -41,7 +51,11 @@ private struct WeeklyWidgetView: View {
           .tint(Color.accentColor)
       } else {
         Text("Ваша неделя").font(.headline)
-        Text("Включите сводку виджета в настройках FitSession.").font(.caption).foregroundStyle(
+        Text(
+          entry.loadFailed
+            ? "Откройте FitSession, чтобы обновить сводку."
+            : "Включите сводку виджета в настройках FitSession."
+        ).font(.caption).foregroundStyle(
           .secondary)
       }
     }

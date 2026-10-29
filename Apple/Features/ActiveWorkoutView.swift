@@ -4,7 +4,6 @@ import SwiftUI
 struct ActiveWorkoutView: View {
   @Environment(AppStore.self) private var store
   @Environment(\.dismiss) private var dismiss
-  @AppStorage("weightUnit") private var unit: WeightUnit = .kilograms
   @State private var pickingExercise = false
   @State private var confirmCancel = false
   @State private var renaming = false
@@ -36,7 +35,12 @@ struct ActiveWorkoutView: View {
             }
             if let end = workout.restEndsAt, end > .now {
               RestPill(end: end)
-              Button("Пропустить отдых") { store.mutate { $0.restEndsAt = nil } }
+              Button("Пропустить отдых") {
+                store.mutate {
+                  _ = try WorkoutLiveAction.skipRest(expectedEndDate: end).apply(
+                    to: &$0, expectedWorkoutID: workout.id)
+                }
+              }
             }
           }
           ForEach(workout.exercises) { exercise in
@@ -119,7 +123,9 @@ struct ActiveWorkoutView: View {
     }
     .alert(
       "Ошибка",
-      isPresented: Binding(get: { store.error != nil }, set: { if !$0 { store.error = nil } })
+      isPresented: Binding(
+        get: { store.error != nil && !pickingExercise && !renaming && !confirmCancel },
+        set: { if !$0 { store.error = nil } })
     ) {
       Button("Понятно", role: .cancel) { store.error = nil }
     } message: {
@@ -162,10 +168,8 @@ private struct SetEditor: View {
             get: { set.isWarmup },
             set: { warmup in
               store.mutate { workout in
-                guard let e = workout.exercises.firstIndex(where: { $0.id == exerciseID }),
-                  let s = workout.exercises[e].sets.firstIndex(where: { $0.id == set.id })
-                else { return }
-                workout.exercises[e].sets[s].isWarmup = warmup
+                try WorkoutEngine.setWarmup(
+                  warmup, in: &workout, exerciseID: exerciseID, setID: set.id)
               }
             })
         ).font(.caption).disabled(disabled)
@@ -188,7 +192,7 @@ private struct SetEditor: View {
       return
     }
     withAnimation(reduceMotion ? nil : .smooth) {
-      store.mutate {
+      _ = store.mutate {
         try WorkoutEngine.completeSet(
           in: &$0, exerciseID: exerciseID, setID: set.id,
           repetitions: repetitions, weightKG: unit.kilograms(from: value))

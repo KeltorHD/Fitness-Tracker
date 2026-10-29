@@ -5,15 +5,35 @@ struct WidgetSnapshot: Codable, Sendable {
   var weeklyGoal: Int
   var updatedAt: Date
   static let empty = WidgetSnapshot(workoutsThisWeek: 0, weeklyGoal: 3, updatedAt: .now)
-  static var defaults: UserDefaults? {
-    guard let group = Bundle.main.object(forInfoDictionaryKey: "FitSessionAppGroup") as? String
-    else { return nil }
-    return UserDefaults(suiteName: group)
+  private static func sharedDefaults() throws -> UserDefaults {
+    guard let group = Bundle.main.object(forInfoDictionaryKey: "FitSessionAppGroup") as? String,
+      !group.isEmpty, !group.contains("$("), let defaults = UserDefaults(suiteName: group)
+    else { throw WidgetSnapshotError.unavailable }
+    return defaults
   }
-  static func read() -> WidgetSnapshot? {
-    guard let data = defaults?.data(forKey: "weeklySnapshot") else { return nil }
-    return try? JSONDecoder().decode(Self.self, from: data)
+  static func read(from defaults: UserDefaults? = nil) throws -> WidgetSnapshot? {
+    let storage = try defaults ?? sharedDefaults()
+    guard let data = storage.data(forKey: "weeklySnapshot") else { return nil }
+    let snapshot = try JSONDecoder().decode(Self.self, from: data)
+    try snapshot.validate()
+    return snapshot
   }
-  func write() throws { defaults?.set(try JSONEncoder().encode(self), forKey: "weeklySnapshot") }
-  static func clear() { defaults?.removeObject(forKey: "weeklySnapshot") }
+  func write(to defaults: UserDefaults? = nil) throws {
+    try validate()
+    let storage = try defaults ?? Self.sharedDefaults()
+    storage.set(try JSONEncoder().encode(self), forKey: "weeklySnapshot")
+  }
+  static func clear(from defaults: UserDefaults? = nil) throws {
+    let storage = try defaults ?? sharedDefaults()
+    storage.removeObject(forKey: "weeklySnapshot")
+  }
+  private func validate() throws {
+    guard workoutsThisWeek >= 0, (1...7).contains(weeklyGoal),
+      updatedAt.timeIntervalSince1970.isFinite
+    else { throw WidgetSnapshotError.invalidData }
+  }
+}
+
+enum WidgetSnapshotError: Error {
+  case unavailable, invalidData
 }

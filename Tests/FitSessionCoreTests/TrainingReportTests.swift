@@ -109,3 +109,36 @@ private func reportWorkout(_ date: Date, weight: Double = 40) throws -> Workout 
   workout.exercises[0].sets[0].weightKG = .nan
   #expect(throws: TrainingError.invalidWeight) { try WorkoutEngine.makeTemplate(from: workout) }
 }
+
+@Test func warmupClassificationIsValidatedBeforeChangingAnActiveSet() throws {
+  let date = try reportDate(2026, 10, 20)
+  var workout = try ExerciseCatalog.starterTemplates[0].start(at: date)
+  let exerciseID = workout.exercises[0].id
+  let setID = workout.exercises[0].sets[0].id
+  try WorkoutEngine.setWarmup(true, in: &workout, exerciseID: exerciseID, setID: setID)
+  try WorkoutEngine.completeSet(
+    in: &workout, exerciseID: exerciseID, setID: setID, repetitions: 8, weightKG: 40, at: date)
+  #expect(workout.volume == 0)
+  let completed = workout
+  #expect(throws: TrainingError.invalidState) {
+    try WorkoutEngine.setWarmup(false, in: &workout, exerciseID: exerciseID, setID: setID)
+  }
+  #expect(workout == completed)
+}
+
+@Test func warmupChangesRejectPausedSessionsAndMissingSets() throws {
+  var workout = try ExerciseCatalog.starterTemplates[0].start(at: reportDate(2026, 10, 20))
+  let exerciseID = workout.exercises[0].id
+  let setID = workout.exercises[0].sets[0].id
+  #expect(throws: TrainingError.missingSet) {
+    try WorkoutEngine.setWarmup(true, in: &workout, exerciseID: exerciseID, setID: UUID())
+  }
+  #expect(throws: TrainingError.missingExercise) {
+    try WorkoutEngine.setWarmup(true, in: &workout, exerciseID: UUID(), setID: setID)
+  }
+  try WorkoutEngine.pause(&workout, at: workout.startedAt)
+  #expect(throws: TrainingError.invalidState) {
+    try WorkoutEngine.setWarmup(true, in: &workout, exerciseID: exerciseID, setID: setID)
+  }
+  #expect(!workout.exercises[0].sets[0].isWarmup)
+}

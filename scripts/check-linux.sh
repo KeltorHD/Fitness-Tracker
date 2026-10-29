@@ -19,6 +19,15 @@ flags=(--cache-path "$PWD/.build/cache" --config-path "$PWD/.build/config" --sec
 python3 scripts/validate-project.py
 python3 scripts/validate-exercise-library.py
 swiftc_bin="$(dirname "$(command -v "$swift_bin")")/swiftc"
+bin_path="$("$swift_bin" build "${flags[@]}" --show-bin-path)"
+# These presentation/data types use only Foundation/Observation. This is a real Swift 6
+# type check of this explicit subset; it does not compile SwiftUI or Apple integrations.
+"$swiftc_bin" -swift-version 6 -strict-concurrency=complete \
+  -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -typecheck -I "$bin_path/Modules" \
+  Apple/Features/ProgressViewModel.swift Apple/Features/HistoryViewModel.swift \
+  Apple/Features/ExerciseLibraryViewModel.swift Apple/Services/ExerciseImageLoader.swift \
+  Apple/Services/CloudAccountChecking.swift Apple/Shared/WidgetSnapshot.swift
+echo 'Portable presentation/data subset: Swift 6 type check passed (no Apple SDK).'
 python3 scripts/parse-apple.py "$swiftc_bin"
 if "$swift_bin" format --help >/dev/null 2>&1; then
   "$swift_bin" format lint --strict --recursive Sources Tests Apple Package.swift

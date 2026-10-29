@@ -11,6 +11,14 @@ enum FitTheme {
     colors: [Color(red: 1, green: 0.36, blue: 0.22), Color(red: 1, green: 0.18, blue: 0.10)],
     startPoint: .top, endPoint: .bottom)
   static let radius: CGFloat = 25
+  static let cardPadding: CGFloat = 16
+}
+
+extension View {
+  func fitCard() -> some View {
+    padding(FitTheme.cardPadding)
+      .background(FitTheme.card, in: .rect(cornerRadius: FitTheme.radius))
+  }
 }
 
 struct SummaryChip: View {

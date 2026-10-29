@@ -4,7 +4,13 @@
 
 SPM собирает только `Sources/FitSessionCore` и `Tests/FitSessionCoreTests`. Core зависит от Foundation, использует Swift 6 value types, Codable/Sendable и Swift Testing. Apple SDK не подменяется заглушками. Apple-файлы принадлежат XcodeGen targets и не входят в Linux package. Поэтому `#if canImport(SwiftUI)` вокруг целых экранов не требуется: разделение обеспечивается составом targets.
 
-`AppStore` получает `WorkoutRepository` и `HealthWorkoutExporting` через initializer. `SwiftDataWorkoutRepository` и `HealthKitService` реализуют протоколы Core. `MemoryWorkoutRepository` используется в тестах. Все repository-операции изолированы MainActor; SwiftData `ModelContext` не пересекает actor boundaries. WCSession callbacks передают только Sendable `Data`/строки в MainActor.
+`AppStore` получает repository, HealthKit exporter, notification service, cloud account checker и image loader через initializer. `SwiftDataWorkoutRepository` и `HealthKitService` реализуют протоколы Core. `MemoryWorkoutRepository` используется в тестах. Все repository-операции изолированы MainActor; SwiftData `ModelContext` не пересекает actor boundaries. WCSession callbacks передают Sendable Data/ошибки в MainActor, сохраняя acknowledgement после записи.
+
+Feature models `HistoryViewModel`, `ProgressViewModel`, `ExerciseLibraryViewModel` и `SettingsViewModel` используют `@Observable`/MainActor. Core TrainingReport подготавливает графики и календарь; запросы, сортировка и сводки обновляются при изменении входных данных, а не при каждом вызове View.body. Фильтр дня сравнивает ЛР со всей предшествующей историей. WorkoutEngine создаёт шаблон из выполненных подходов и проверяет изменение warmup. Общие карточки и форматирование длительности находятся в Apple/Design.
+
+SwiftUI `.task` управляет загрузкой фото, проверкой iCloud, запросом уведомлений, экспортом и реакцией на scene phase. SettingsViewModel отбрасывает устаревшие ответы; отмена не превращается в ошибку. ExerciseImageLoader читает локальные файлы и хранит ограниченный cache Data на отдельном actor; только Data пересекает границу с UIKit. Loader создаётся через DI, глобального image singleton нет.
+
+AppStore публикует новый snapshot только после успешного чтения workouts и templates. Отказ сохранения не изменяет UI-модель и не сообщает об успехе. AppErrorReporter показывает локализованные доменные ошибки либо понятное сообщение операции; диагностические логи содержат только operation/domain/code. WidgetSnapshot сообщает об ошибках чтения, сохраняет повреждённые данные и восстанавливается при следующей публикации.
 
 ## Правила тренировки
 
@@ -44,7 +50,7 @@ Watch — автономный журнал подходов по начальн
 
 ## Проверяемость
 
-Linux проверяет Core compilation/tests, ресурсы/конфигурационные связи, Swift formatting и синтаксис Apple-файлов. Только Xcode сможет проверить SDK availability, SwiftUI overload resolution, SwiftData macro expansion, signing, extension embedding, rendering, WCSession и CloudKit. Положительный Linux-результат не повышает Apple-модуль до статуса полностью протестированного.
+Linux проверяет Core compilation/tests, ресурсы/конфигурационные связи, Swift formatting и синтаксис Apple-файлов. Явно выбранные Foundation/Observation модели и файловые контракты дополнительно проходят Swift 6 strict-concurrency type-check без Apple SDK и без заглушек. Только Xcode сможет проверить SDK availability, SwiftUI overload resolution, SwiftData macro expansion, signing, extension embedding, rendering, WCSession и CloudKit. Положительный Linux-результат не повышает Apple-модуль до статуса полностью протестированного.
 
 Подробности: [фон и Dynamic Island](BACKGROUND_AND_DYNAMIC_ISLAND.md).
 

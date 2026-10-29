@@ -63,39 +63,11 @@ struct HistoryView: View {
                 }
               }
               ForEach(week.workouts) { workout in
-                HStack(alignment: .top, spacing: 12) {
-                  VStack(spacing: 6) {
-                    Circle().fill(.gray.opacity(0.55)).frame(width: 7, height: 7)
-                    Rectangle().fill(FitTheme.card).frame(width: 3, height: 14)
-                    Image(systemName: "figure.strengthtraining.traditional").font(.title3)
-                      .foregroundStyle(FitTheme.accent)
-                    Rectangle().fill(FitTheme.card).frame(width: 3).frame(minHeight: 30)
-                  }.frame(width: 26)
-                  VStack(alignment: .leading, spacing: 8) {
-                    Text(workout.startedAt.formatted(.dateTime.weekday(.wide)).localizedCapitalized)
-                      .font(.subheadline)
-                    Button {
-                      selected = workout
-                    } label: {
-                      VStack(alignment: .leading, spacing: 7) {
-                        Text(workout.name).font(.title3.weight(.semibold)).foregroundStyle(.primary)
-                        Text(
-                          "\(workout.duration().workoutDuration)  \(unit.display(workout.volume).formatted(.number.precision(.fractionLength(0)))) \(unit.rawValue)  · \(workout.completedSets) подх."
-                        )
-                        .font(.subheadline).foregroundStyle(.primary)
-                      }.frame(maxWidth: .infinity, alignment: .leading).padding(16)
-                        .background(FitTheme.card, in: .rect(cornerRadius: FitTheme.radius))
-                    }.buttonStyle(.plain)
-                      .contextMenu {
-                        Button("Повторить", systemImage: "arrow.counterclockwise") {
-                          store.repeatWorkout(workout)
-                        }
-                        Button("Удалить", systemImage: "trash", role: .destructive) {
-                          pendingDelete = workout
-                        }
-                      }
-                  }
-                }.fixedSize(horizontal: false, vertical: true)
+                HistoryWorkoutRow(
+                  workout: workout, unit: unit,
+                  onSelect: { selected = workout },
+                  onRepeat: { store.repeatWorkout(workout) },
+                  onDelete: { pendingDelete = workout })
               }
             }
           }
@@ -117,6 +89,7 @@ struct HistoryView: View {
       .sheet(
         item: $selected,
         onDismiss: {
+          store.showingWorkoutDetail = false
           if let workout = repeatAfterDismiss {
             repeatAfterDismiss = nil
             store.repeatWorkout(workout)
@@ -131,6 +104,7 @@ struct HistoryView: View {
               selected = nil
             }
           ).tint(FitTheme.accent)
+            .onAppear { store.showingWorkoutDetail = true }
         }
       }
       .refreshable { store.reload() }

@@ -4,7 +4,7 @@ import WatchConnectivity
 
 @MainActor final class PhoneWatchBridge: NSObject, WCSessionDelegate {
   var receive: ((Workout) -> Bool)?
-  var failure: ((String) -> Void)?
+  var failure: ((any Error) -> Void)?
   func activate() {
     guard WCSession.isSupported() else { return }
     WCSession.default.delegate = self
@@ -14,7 +14,7 @@ import WatchConnectivity
     _ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState,
     error: Error?
   ) {
-    if let message = error?.localizedDescription { Task { @MainActor in self.failure?(message) } }
+    if let error { Task { @MainActor in self.failure?(error) } }
   }
   nonisolated func sessionDidBecomeInactive(_ session: WCSession) {}
   nonisolated func sessionDidDeactivate(_ session: WCSession) { session.activate() }
@@ -28,7 +28,7 @@ import WatchConnectivity
         if self.receive?(workout) == true {
           WCSession.default.transferUserInfo(["ack": workout.id.uuidString])
         }
-      } catch { self.failure?(error.localizedDescription) }
+      } catch { self.failure?(error) }
     }
   }
 }

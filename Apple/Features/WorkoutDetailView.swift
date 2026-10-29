@@ -56,15 +56,10 @@ struct WorkoutDetailView: View {
             VStack(alignment: .leading, spacing: 8) {
               Text("Заметка").font(.headline)
               Text(session.notes)
-            }.frame(maxWidth: .infinity, alignment: .leading).padding(16)
-              .background(FitTheme.card, in: .rect(cornerRadius: FitTheme.radius))
+            }.frame(maxWidth: .infinity, alignment: .leading).fitCard()
           }
           Button("Экспорт в «Здоровье»", systemImage: "heart") {
             exporting = true
-            Task {
-              await store.exportHealth(session)
-              exporting = false
-            }
           }.disabled(exporting).frame(maxWidth: .infinity, alignment: .leading)
           Text(
             "Калории и пульс не рассчитываются из веса снарядов. В «Здоровье» передаются тип, длительность и паузы тренировки."
@@ -124,6 +119,11 @@ struct WorkoutDetailView: View {
       }.buttonStyle(.plain).padding(.horizontal, 16).padding(.vertical, 10).background(
         FitTheme.paper)
     }
+    .task(id: exporting) {
+      guard exporting else { return }
+      await store.exportHealth(session)
+      exporting = false
+    }
     .sheet(isPresented: $editing) { WorkoutEditorView(workout: session) }
     .sheet(item: $templateDraft) { TemplateEditor(template: $0) }
     .confirmationDialog(
@@ -137,7 +137,7 @@ struct WorkoutDetailView: View {
     .alert(
       "FitSession",
       isPresented: Binding(
-        get: { store.error != nil || store.notice != nil },
+        get: { !editing && templateDraft == nil && (store.error != nil || store.notice != nil) },
         set: {
           if !$0 {
             store.error = nil

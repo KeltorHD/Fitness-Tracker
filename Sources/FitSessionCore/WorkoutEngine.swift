@@ -2,6 +2,22 @@ import Foundation
 
 /// Value-based state machine. Callers persist a new value only after a successful mutation.
 public enum WorkoutEngine {
+  public static func setWarmup(
+    _ warmup: Bool, in workout: inout Workout, exerciseID: UUID, setID: UUID
+  ) throws {
+    guard workout.status == .active else { throw TrainingError.invalidState }
+    guard let exercise = workout.exercises.firstIndex(where: { $0.id == exerciseID }) else {
+      throw TrainingError.missingExercise
+    }
+    guard let set = workout.exercises[exercise].sets.firstIndex(where: { $0.id == setID }) else {
+      throw TrainingError.missingSet
+    }
+    guard workout.exercises[exercise].sets[set].completedAt == nil else {
+      throw TrainingError.invalidState
+    }
+    workout.exercises[exercise].sets[set].isWarmup = warmup
+  }
+
   public static func completeSet(
     in workout: inout Workout, exerciseID: UUID, setID: UUID,
     repetitions: Int, weightKG: Double, at date: Date = Date()

@@ -11,7 +11,9 @@ struct SettingsView: View {
   @AppStorage("widgetSharing") private var widgetSharing = false
   @AppStorage("liveActivities") private var liveActivities = true
   @AppStorage("restNotifications") private var notifications = false
-  @State private var cloudStatus = ""
+  let model: SettingsViewModel
+  @State private var cloudRequest = 0
+  @State private var notificationsRequested = false
   var body: some View {
     NavigationStack {
       Form {
@@ -21,16 +23,18 @@ struct SettingsView: View {
               get: { notifications },
               set: { enabled in
                 if enabled {
-                  Task {
-                    notifications = await store.enableNotifications()
-                    store.refreshIntegrations()
-                  }
+                  notificationsRequested = true
                 } else {
                   notifications = false
                   store.refreshIntegrations()
                 }
               })
           ) { SettingsLabel(title: "Уведомления", symbol: "bell") }
+          .disabled(model.requestingNotifications)
+          if model.requestingNotifications { ProgressView("Запрос разрешения…") }
+          if let message = model.notificationMessage {
+            Text(message).font(.footnote).foregroundStyle(.secondary)
+          }
           Toggle(isOn: $keepScreenAwake) {
             SettingsLabel(title: "Отключить автоблокировку", symbol: "lock.iphone")
           }
@@ -68,15 +72,15 @@ struct SettingsView: View {
         Section {
           Toggle(isOn: $cloud) { SettingsLabel(title: "Синхронизация iCloud", symbol: "icloud") }
           Button {
-            Task {
-              do { cloudStatus = try await CloudKitService.accountDescription() } catch {
-                cloudStatus = error.localizedDescription
-              }
-            }
+            cloudRequest += 1
           } label: {
             SettingsLabel(title: "Проверить учётную запись", symbol: "person.crop.circle")
+          }.disabled(model.cloudState == .loading)
+          if model.cloudState == .loading { ProgressView("Проверка iCloud…") }
+          if let message = model.cloudState.message {
+            Text(message).font(.footnote).foregroundStyle(.secondary)
           }
-          if !cloudStatus.isEmpty { Text(cloudStatus).font(.footnote).foregroundStyle(.secondary) }
+          if model.cloudState == .failed { Button("Повторить") { cloudRequest += 1 } }
         } header: {
           Text("Данные")
         } footer: {
@@ -117,6 +121,17 @@ struct SettingsView: View {
       }
       .scrollContentBackground(.hidden).background(FitTheme.grouped).navigationTitle("Настройки")
       .tint(FitTheme.accent)
+      .task(id: cloudRequest) {
+        if cloudRequest > 0 { await model.checkCloudAccount() }
+      }
+      .task(id: notificationsRequested) {
+        guard notificationsRequested else { return }
+        if let allowed = await model.authorizeNotifications() {
+          notifications = allowed
+          store.refreshIntegrations()
+        }
+        notificationsRequested = false
+      }
       .onChange(of: goal) { store.refreshIntegrations() }
       .onChange(of: widgetSharing) { store.refreshIntegrations() }
       .onChange(of: liveActivities) { store.refreshIntegrations() }

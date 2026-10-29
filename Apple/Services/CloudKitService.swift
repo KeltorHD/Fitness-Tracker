@@ -1,17 +1,22 @@
 import CloudKit
 import Foundation
 
-@MainActor enum CloudKitService {
-  static func accountDescription() async throws -> String {
-    let id = Bundle.main.object(forInfoDictionaryKey: "FitSessionCloudContainer") as? String ?? ""
+@MainActor struct CloudKitService: CloudAccountChecking {
+  var containerIdentifier: String? =
+    Bundle.main.object(
+      forInfoDictionaryKey: "FitSessionCloudContainer") as? String
+
+  func accountStatus() async throws -> CloudAccountStatus {
+    guard let id = containerIdentifier, !id.isEmpty, !id.contains("$(") else {
+      throw ServiceError.unavailable("Проверка iCloud сейчас недоступна.")
+    }
     let status = try await CKContainer(identifier: id).accountStatus()
     switch status {
-    case .available:
-      return "Учётная запись iCloud доступна. Синхронизация SwiftData выполняется системой."
-    case .noAccount: return "Войдите в iCloud в настройках устройства."
-    case .restricted: return "Доступ к iCloud ограничен."
-    case .temporarilyUnavailable: return "iCloud временно недоступен."
-    default: return "Не удалось определить состояние iCloud."
+    case .available: return .available
+    case .noAccount: return .noAccount
+    case .restricted: return .restricted
+    case .temporarilyUnavailable: return .temporarilyUnavailable
+    default: return .unknown
     }
   }
 }
