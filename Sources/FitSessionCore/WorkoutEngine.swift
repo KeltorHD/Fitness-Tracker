@@ -70,6 +70,22 @@ public enum WorkoutEngine {
       workout.exercises.flatMap(\.sets).compactMap(\.completedAt).max() ?? workout.startedAt,
       workout.pauses.last?.endedAt ?? workout.startedAt)
   }
+  public static func repeatWorkout(_ original: Workout, at date: Date = Date()) throws -> Workout {
+    try Validation.workout(original)
+    guard original.status == .completed else { throw TrainingError.invalidState }
+    let exercises = original.exercises.compactMap { item -> WorkoutExercise? in
+      let completed = item.sets.filter { $0.completedAt != nil }
+      guard !completed.isEmpty else { return nil }
+      return WorkoutExercise(
+        exercise: item.exercise,
+        sets: completed.map {
+          WorkoutSet(repetitions: $0.repetitions, weightKG: $0.weightKG, isWarmup: $0.isWarmup)
+        })
+    }
+    return Workout(
+      name: original.name, startedAt: date, exercises: exercises, restSeconds: original.restSeconds)
+  }
+
   public static func addExercise(_ exercise: Exercise, to workout: inout Workout) throws {
     guard workout.status == .active else { throw TrainingError.invalidState }
     try Validation.name(exercise.name)
