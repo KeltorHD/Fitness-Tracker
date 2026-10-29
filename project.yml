@@ -85,6 +85,10 @@ targets:
       - Apple/Persistence
       - Apple/Services
       - Apple/Shared
+      - path: Resources/Localizable.xcstrings
+        buildPhase: resources
+      - path: Resources/InfoPlist.xcstrings
+        buildPhase: resources
       - path: Resources/ExerciseMedia
         type: folder
         buildPhase: resources
@@ -118,6 +122,8 @@ targets:
     sources:
       - Apple/Widgets
       - Apple/Shared
+      - path: Resources/Localizable.xcstrings
+        buildPhase: resources
       - path: Resources/Assets.xcassets
       - path: Resources/PrivacyInfo.xcprivacy
         buildPhase: resources
@@ -136,6 +142,9 @@ targets:
     platform: watchOS
     sources:
       - Apple/Watch
+      - Apple/Shared/L10n.swift
+      - path: Resources/Localizable.xcstrings
+        buildPhase: resources
       - path: Resources/WatchAssets.xcassets
       - path: Resources/PrivacyInfo.xcprivacy
         buildPhase: resources

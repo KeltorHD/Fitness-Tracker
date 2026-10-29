@@ -2,6 +2,7 @@ import FitSessionCore
 import SwiftUI
 
 struct HistoryView: View {
+  @Environment(\.locale) private var locale
   @Environment(AppStore.self) private var store
   @AppStorage("weightUnit") private var unit: WeightUnit = .kilograms
   @State private var selected: Workout?
@@ -24,8 +25,12 @@ struct HistoryView: View {
                 Image(systemName: "play.circle.fill").font(.title2)
                 VStack(alignment: .leading, spacing: 4) {
                   Text(active.name).font(.headline)
-                  Text(active.status == .paused ? "На паузе · продолжить" : "Продолжить тренировку")
-                    .font(.subheadline)
+                  Text(
+                    active.status == .paused
+                      ? L10n.text("На паузе · продолжить", locale: locale)
+                      : L10n.text("Продолжить тренировку", locale: locale)
+                  )
+                  .font(.subheadline)
                 }
                 Spacer()
                 Image(systemName: "chevron.right")
@@ -37,20 +42,24 @@ struct HistoryView: View {
             HStack {
               Text(date, format: .dateTime.day().month(.wide)).font(.headline)
               Spacer()
-              Button("Вся история") { model.filterDate = nil }
+              Button(L10n.text("Вся история", locale: locale)) { model.filterDate = nil }
             }
           }
           if model.weeks.isEmpty {
             ContentUnavailableView {
               Label(
-                model.filterDate == nil ? "Начните свой дневник" : "В этот день нет тренировок",
+                model.filterDate == nil
+                  ? L10n.text("Начните свой дневник", locale: locale)
+                  : L10n.text("В этот день нет тренировок", locale: locale),
                 systemImage: "book.closed")
             } description: {
-              Text("Завершённые тренировки появятся здесь по неделям.")
+              Text(L10n.text("Завершённые тренировки появятся здесь по неделям.", locale: locale))
             } actions: {
-              Button("Начать тренировку", systemImage: "plus") { store.start() }
-                .buttonStyle(.glassProminent).controlSize(.large).accessibilityIdentifier(
-                  "startEmptyWorkout")
+              Button(L10n.text("Начать тренировку", locale: locale), systemImage: "plus") {
+                store.start()
+              }
+              .buttonStyle(.glassProminent).controlSize(.large).accessibilityIdentifier(
+                "startEmptyWorkout")
             }
           }
           ForEach(model.weeks) { week in
@@ -58,7 +67,9 @@ struct HistoryView: View {
               Text(weekTitle(week.start)).font(.title2.bold())
               if showWeekStats {
                 HStack {
-                  SummaryChip(text: "\(week.personalRecords) ЛР", symbol: "trophy")
+                  SummaryChip(
+                    text: L10n.countText(week.personalRecords, kind: "record", locale: locale),
+                    symbol: "trophy")
                   SummaryChip(text: workoutCount(week.workouts.count))
                 }
               }
@@ -73,17 +84,19 @@ struct HistoryView: View {
           }
         }.padding(.horizontal, 16).padding(.top, 12).padding(.bottom, 24)
       }
-      .background(FitTheme.paper).navigationTitle("Дневник")
+      .background(FitTheme.paper).navigationTitle(L10n.text("Дневник", locale: locale))
       .toolbar {
         ToolbarItemGroup(placement: .topBarTrailing) {
           Menu {
-            Toggle("Статистика за неделю", isOn: $showWeekStats)
-            Button("Вся история") { model.filterDate = nil }
+            Toggle(L10n.text("Статистика за неделю", locale: locale), isOn: $showWeekStats)
+            Button(L10n.text("Вся история", locale: locale)) { model.filterDate = nil }
           } label: {
             Image(systemName: "ellipsis").foregroundStyle(.primary)
           }
-          Button("Начать тренировку", systemImage: "plus") { store.start() }
-            .foregroundStyle(.primary).accessibilityIdentifier("startWorkout")
+          Button(L10n.text("Начать тренировку", locale: locale), systemImage: "plus") {
+            store.start()
+          }
+          .foregroundStyle(.primary).accessibilityIdentifier("startWorkout")
         }
       }
       .sheet(
@@ -112,12 +125,12 @@ struct HistoryView: View {
       .onChange(of: calendar) { refresh() }
       .onChange(of: phase) { if phase == .active { refresh() } }
       .confirmationDialog(
-        "Удалить тренировку?",
+        L10n.text("Удалить тренировку?", locale: locale),
         isPresented: Binding(
           get: { pendingDelete != nil }, set: { if !$0 { pendingDelete = nil } }),
         titleVisibility: .visible
       ) {
-        Button("Удалить", role: .destructive) {
+        Button(L10n.text("Удалить", locale: locale), role: .destructive) {
           if let pendingDelete { store.delete(workout: pendingDelete) }
           pendingDelete = nil
         }
@@ -150,23 +163,18 @@ struct HistoryView: View {
           }.foregroundStyle(highlighted ? FitTheme.accent : FitTheme.muted)
             .frame(maxWidth: .infinity).padding(.vertical, 10)
             .background(highlighted ? FitTheme.accent.opacity(0.12) : .clear, in: .capsule)
-        }.buttonStyle(.plain).accessibilityLabel(day.formatted(date: .complete, time: .omitted))
+        }.buttonStyle(.plain).accessibilityLabel(
+          day.formatted(.dateTime.locale(locale).weekday(.wide).day().month(.wide).year()))
       }
     }
   }
   private func weekTitle(_ start: Date) -> String {
     if calendar.isDate(start, equalTo: .now, toGranularity: .weekOfYear) {
-      return "На этой неделе"
+      return L10n.text("На этой неделе", locale: locale)
     }
     let end = calendar.date(byAdding: .day, value: 6, to: start) ?? start
-    return "\(start.formatted(.dateTime.day()))–\(end.formatted(.dateTime.day().month(.wide)))"
+    return
+      "\(start.formatted(.dateTime.locale(locale).day()))–\(end.formatted(.dateTime.locale(locale).day().month(.wide)))"
   }
-  private func workoutCount(_ value: Int) -> String {
-    let suffix =
-      value % 10 == 1 && value % 100 != 11
-      ? "тренировка"
-      : (2...4).contains(value % 10) && !(12...14).contains(value % 100)
-        ? "тренировки" : "тренировок"
-    return "\(value) \(suffix)"
-  }
+  private func workoutCount(_ value: Int) -> String { L10n.workoutCount(value, locale: locale) }
 }

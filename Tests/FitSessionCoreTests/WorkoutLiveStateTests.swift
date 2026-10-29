@@ -104,6 +104,19 @@ private func liveWorkout() throws -> Workout {
   #expect(!String(decoding: data, as: UTF8.self).contains("private notes"))
 }
 
+@Test func liveStateLanguageRemainsCompatibleWithExistingActivities() throws {
+  let workout = try liveWorkout()
+  let state = WorkoutLiveState(workout: workout, at: start, languageCode: "en")
+  let data = try JSONEncoder().encode(state)
+  #expect(try JSONDecoder().decode(WorkoutLiveState.self, from: data) == state)
+  var legacy = try #require(JSONSerialization.jsonObject(with: data) as? [String: Any])
+  legacy.removeValue(forKey: "languageCode")
+  let restored = try JSONDecoder().decode(
+    WorkoutLiveState.self, from: JSONSerialization.data(withJSONObject: legacy))
+  #expect(restored.languageCode == nil)
+  #expect(restored == WorkoutLiveState(workout: workout, at: start))
+}
+
 @Test func emptyAndFullyCompletedSessionsHaveNoNextExercise() throws {
   let empty = WorkoutLiveState(workout: Workout(name: "Empty", startedAt: start), at: start)
   #expect(empty.progress == 0)

@@ -2,6 +2,7 @@ import FitSessionCore
 import SwiftUI
 
 struct ActiveWorkoutView: View {
+  @Environment(\.locale) private var locale
   @Environment(AppStore.self) private var store
   @Environment(\.dismiss) private var dismiss
   @AppStorage("weightUnit") private var unit: WeightUnit = .kilograms
@@ -19,24 +20,25 @@ struct ActiveWorkoutView: View {
             TimelineView(.periodic(from: .now, by: 1)) { timeline in
               HStack(spacing: 8) {
                 SummaryMetric(
-                  title: "Время",
+                  title: L10n.text("Время", locale: locale),
                   value: Duration.seconds(workout.duration(at: timeline.date)).formatted(
                     .time(pattern: .hourMinuteSecond)))
                 SummaryMetric(
-                  title: "Объём",
+                  title: L10n.text("Объём", locale: locale),
                   value:
-                    "\(unit.display(workout.volume).formatted(.number.precision(.fractionLength(0)))) \(unit.rawValue)"
+                    "\(unit.display(workout.volume).formatted(.number.locale(L10n.numberLocale).precision(.fractionLength(0)))) \(L10n.text(unit.rawValue, locale: locale))"
                 )
                 SummaryMetric(
-                  title: "Подходы", value: "\(workout.completedSets)/\(workout.totalSets)")
+                  title: L10n.text("Подходы", locale: locale),
+                  value: "\(workout.completedSets)/\(workout.totalSets)")
               }
             }
             if workout.status == .paused {
-              Label("Тренировка на паузе", systemImage: "pause.circle")
+              Label(L10n.text("Тренировка на паузе", locale: locale), systemImage: "pause.circle")
             }
             if let end = workout.restEndsAt, end > .now {
               RestPill(end: end)
-              Button("Пропустить отдых") {
+              Button(L10n.text("Пропустить отдых", locale: locale)) {
                 store.mutate {
                   _ = try WorkoutLiveAction.skipRest(expectedEnd: end).apply(
                     to: &$0, expectedWorkoutID: workout.id)
@@ -49,29 +51,35 @@ struct ActiveWorkoutView: View {
               NavigationLink {
                 ExerciseDetailView(exercise: exercise.exercise)
               } label: {
-                Label("Техника выполнения", systemImage: "figure.strengthtraining.traditional")
+                Label(
+                  L10n.text("Техника выполнения", locale: locale),
+                  systemImage: "figure.strengthtraining.traditional")
               }
               ForEach(exercise.sets) { set in
                 SetEditor(exerciseID: exercise.id, set: set, disabled: workout.status != .active)
               }
-              Button("Добавить подход", systemImage: "plus") {
+              Button(L10n.text("Добавить подход", locale: locale), systemImage: "plus") {
                 store.mutate { try WorkoutEngine.addSet(exerciseID: exercise.id, to: &$0) }
               }.disabled(workout.status != .active)
             } header: {
-              Text(exercise.exercise.name)
+              Text(L10n.exerciseName(exercise.exercise, locale: locale))
             }
           }
           Section {
-            Button("Добавить упражнение", systemImage: "plus.circle") { pickingExercise = true }
-              .disabled(workout.status != .active).accessibilityIdentifier("addExercise")
+            Button(L10n.text("Добавить упражнение", locale: locale), systemImage: "plus.circle") {
+              pickingExercise = true
+            }
+            .disabled(workout.status != .active).accessibilityIdentifier("addExercise")
             TextField(
-              "Заметка о тренировке",
+              L10n.text("Заметка о тренировке", locale: locale),
               text: Binding(
                 get: { store.active?.notes ?? "" },
                 set: { text in store.mutate { $0.notes = text } }), axis: .vertical)
           }
           Section {
-            Button("Отменить тренировку", role: .destructive) { confirmCancel = true }
+            Button(L10n.text("Отменить тренировку", locale: locale), role: .destructive) {
+              confirmCancel = true
+            }
           }
         }
         .listStyle(.plain).scrollContentBackground(.hidden).background(FitTheme.paper)
@@ -83,18 +91,23 @@ struct ActiveWorkoutView: View {
         .safeAreaInset(edge: .bottom) { SessionControls(workout: workout) }
         .toolbar {
           ToolbarItem(placement: .topBarLeading) {
-            Button("Свернуть", systemImage: "chevron.down") { dismiss() }
+            Button(L10n.text("Свернуть", locale: locale), systemImage: "chevron.down") { dismiss() }
           }
         }
         .toolbar {
           ToolbarItem(placement: .topBarTrailing) {
             Menu {
-              Button("Изменить название", systemImage: "textformat") {
+              Button(L10n.text("Изменить название", locale: locale), systemImage: "textformat") {
                 workoutName = workout.name
                 renaming = true
               }
-              Button("Добавить упражнение", systemImage: "plus") { pickingExercise = true }
-              Button("Отменить тренировку", systemImage: "trash", role: .destructive) {
+              Button(L10n.text("Добавить упражнение", locale: locale), systemImage: "plus") {
+                pickingExercise = true
+              }
+              Button(
+                L10n.text("Отменить тренировку", locale: locale), systemImage: "trash",
+                role: .destructive
+              ) {
                 confirmCancel = true
               }
             } label: {
@@ -102,10 +115,10 @@ struct ActiveWorkoutView: View {
             }
           }
         }
-        .alert("Название тренировки", isPresented: $renaming) {
-          TextField("Название", text: $workoutName)
-          Button("Сохранить") { store.mutate { $0.name = workoutName } }
-          Button("Отмена", role: .cancel) {}
+        .alert(L10n.text("Название тренировки", locale: locale), isPresented: $renaming) {
+          TextField(L10n.text("Название", locale: locale), text: $workoutName)
+          Button(L10n.text("Сохранить", locale: locale)) { store.mutate { $0.name = workoutName } }
+          Button(L10n.text("Отмена", locale: locale), role: .cancel) {}
         }
         .sheet(isPresented: $pickingExercise) {
           ExercisePicker { exercise in
@@ -113,18 +126,22 @@ struct ActiveWorkoutView: View {
           }
         }
         .confirmationDialog(
-          "Отменить тренировку? Выполненные подходы не попадут в статистику.",
+          L10n.text(
+            "Отменить тренировку? Выполненные подходы не попадут в статистику.", locale: locale),
           isPresented: $confirmCancel, titleVisibility: .visible
         ) {
-          Button("Отменить тренировку", role: .destructive) { store.cancel() }
+          Button(L10n.text("Отменить тренировку", locale: locale), role: .destructive) {
+            store.cancel()
+          }
         }
       } else {
-        ContentUnavailableView("Нет активной тренировки", systemImage: "dumbbell")
+        ContentUnavailableView(
+          L10n.text("Нет активной тренировки", locale: locale), systemImage: "dumbbell")
       }
     }
     .archiveTransferPresenter(when: !pickingExercise && !renaming && !confirmCancel)
     .alert(
-      "Ошибка",
+      L10n.text("Ошибка", locale: locale),
       isPresented: Binding(
         get: {
           store.error != nil && !pickingExercise && !renaming && !confirmCancel
@@ -132,14 +149,15 @@ struct ActiveWorkoutView: View {
         },
         set: { if !$0 { store.error = nil } })
     ) {
-      Button("Понятно", role: .cancel) { store.error = nil }
+      Button(L10n.text("Понятно", locale: locale), role: .cancel) { store.error = nil }
     } message: {
-      Text(store.error ?? "")
+      Text(L10n.text(store.error ?? "", locale: locale))
     }
   }
 }
 
 private struct SetEditor: View {
+  @Environment(\.locale) private var locale
   @Environment(\.accessibilityReduceMotion) private var reduceMotion
   @Environment(AppStore.self) private var store
   @AppStorage("weightUnit") private var unit: WeightUnit = .kilograms
@@ -151,10 +169,14 @@ private struct SetEditor: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 8) {
       HStack {
-        TextField(unit.rawValue, text: $weight).keyboardType(.decimalPad)
-          .accessibilityLabel("Вес в \(unit.rawValue)")
-        Text(unit.rawValue).foregroundStyle(.secondary)
-        TextField("Повторы", text: $reps).keyboardType(.numberPad).accessibilityLabel("Повторения")
+        TextField(L10n.text(unit.rawValue, locale: locale), text: $weight).keyboardType(.decimalPad)
+          .accessibilityLabel(
+            L10n.format(
+              "Вес в %@", String(L10n.text(unit.rawValue, locale: locale)),
+              locale: locale))
+        Text(L10n.text(unit.rawValue, locale: locale)).foregroundStyle(.secondary)
+        TextField(L10n.text("Повторы", locale: locale), text: $reps).keyboardType(.numberPad)
+          .accessibilityLabel(L10n.text("Повторения", locale: locale))
         Button {
           complete()
         } label: {
@@ -162,13 +184,17 @@ private struct SetEditor: View {
             .title2)
         }
         .buttonStyle(.borderless).disabled(disabled || set.completedAt != nil)
-        .accessibilityLabel(set.completedAt == nil ? "Выполнить подход" : "Подход выполнен")
+        .accessibilityLabel(
+          set.completedAt == nil
+            ? L10n.text("Выполнить подход", locale: locale)
+            : L10n.text("Подход выполнен", locale: locale)
+        )
         .accessibilityIdentifier("completeSet")
       }
       .disabled(set.completedAt != nil)
       if set.completedAt == nil {
         Toggle(
-          "Разминочный подход",
+          L10n.text("Разминочный подход", locale: locale),
           isOn: Binding(
             get: { set.isWarmup },
             set: { warmup in
@@ -179,21 +205,23 @@ private struct SetEditor: View {
             })
         ).font(.caption).disabled(disabled)
       } else if set.isWarmup {
-        Text("Разминочный подход").font(.caption).foregroundStyle(.secondary)
+        Text(L10n.text("Разминочный подход", locale: locale)).font(.caption).foregroundStyle(
+          .secondary)
       }
     }
     .onAppear {
-      weight = unit.display(set.weightKG).formatted(.number.precision(.fractionLength(0...2)))
+      weight = unit.display(set.weightKG).formatted(
+        .number.locale(L10n.numberLocale).precision(.fractionLength(0...2)))
       reps = String(set.repetitions)
     }
   }
   private func complete() {
     let formatter = NumberFormatter()
-    formatter.locale = .current
+    formatter.locale = L10n.numberLocale
     formatter.numberStyle = .decimal
     guard let value = formatter.number(from: weight)?.doubleValue, let repetitions = Int(reps)
     else {
-      store.error = "Введите вес и число повторений."
+      store.error = L10n.text("Введите вес и число повторений.", locale: locale)
       return
     }
     withAnimation(reduceMotion ? nil : .smooth) {
@@ -207,6 +235,7 @@ private struct SetEditor: View {
 }
 
 struct ExercisePicker: View {
+  @Environment(\.locale) private var locale
   @Environment(\.dismiss) private var dismiss
   @State private var custom = false
   let select: (Exercise) -> Void
@@ -217,9 +246,13 @@ struct ExercisePicker: View {
         dismiss()
       }
       .toolbar {
-        ToolbarItem(placement: .cancellationAction) { Button("Закрыть") { dismiss() } }
+        ToolbarItem(placement: .cancellationAction) {
+          Button(L10n.text("Закрыть", locale: locale)) { dismiss() }
+        }
         ToolbarItem(placement: .primaryAction) {
-          Button("Своё упражнение", systemImage: "plus") { custom = true }
+          Button(L10n.text("Своё упражнение", locale: locale), systemImage: "plus") {
+            custom = true
+          }
         }
       }
       .sheet(isPresented: $custom) {
@@ -233,6 +266,7 @@ struct ExercisePicker: View {
 }
 
 private struct CustomExerciseView: View {
+  @Environment(\.locale) private var locale
   @Environment(\.dismiss) private var dismiss
   @State private var name = ""
   @State private var muscle: MuscleGroup = .fullBody
@@ -241,16 +275,18 @@ private struct CustomExerciseView: View {
   var body: some View {
     NavigationStack {
       Form {
-        TextField("Название", text: $name)
-        Picker("Группа мышц", selection: $muscle) {
+        TextField(L10n.text("Название", locale: locale), text: $name)
+        Picker(L10n.text("Группа мышц", locale: locale), selection: $muscle) {
           ForEach(MuscleGroup.allCases, id: \.self) { Text($0.title).tag($0) }
         }
-        if let message { Text(message).foregroundStyle(.red) }
-      }.navigationTitle("Своё упражнение")
+        if let message { Text(L10n.text(message, locale: locale)).foregroundStyle(.red) }
+      }.navigationTitle(L10n.text("Своё упражнение", locale: locale))
         .toolbar {
-          ToolbarItem(placement: .cancellationAction) { Button("Отмена") { dismiss() } }
+          ToolbarItem(placement: .cancellationAction) {
+            Button(L10n.text("Отмена", locale: locale)) { dismiss() }
+          }
           ToolbarItem(placement: .confirmationAction) {
-            Button("Добавить") {
+            Button(L10n.text("Добавить", locale: locale)) {
               do {
                 try Validation.name(name)
                 select(Exercise(name: name, muscle: muscle))

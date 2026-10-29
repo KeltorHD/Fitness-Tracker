@@ -27,5 +27,10 @@
 	</dict>
 	<key>FitSessionAppGroup</key>
 	<string>$(FITSESSION_APP_GROUP)</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>ru</string>
+		<string>en</string>
+	</array>
 </dict>
 </plist>

@@ -2,6 +2,7 @@ import SwiftUI
 import UIKit
 
 struct RootView: View {
+  @Environment(\.locale) private var locale
   @Environment(AppStore.self) private var store
   @Environment(\.scenePhase) private var phase
   @State private var tab = 0
@@ -9,12 +10,16 @@ struct RootView: View {
   var body: some View {
     @Bindable var store = store
     TabView(selection: $tab) {
-      Tab("Дневник", systemImage: "book.closed", value: 0) { DashboardView().tint(FitTheme.accent) }
-      Tab("Каталог", systemImage: "dumbbell", value: 1) { TemplatesView().tint(FitTheme.accent) }
-      Tab("Результаты", systemImage: "chart.bar", value: 2) {
+      Tab(L10n.text("Дневник", locale: locale), systemImage: "book.closed", value: 0) {
+        DashboardView().tint(FitTheme.accent)
+      }
+      Tab(L10n.text("Каталог", locale: locale), systemImage: "dumbbell", value: 1) {
+        TemplatesView().tint(FitTheme.accent)
+      }
+      Tab(L10n.text("Результаты", locale: locale), systemImage: "chart.bar", value: 2) {
         ProgressScreen().tint(FitTheme.accent)
       }
-      Tab("Настройки", systemImage: "gearshape", value: 3) {
+      Tab(L10n.text("Настройки", locale: locale), systemImage: "gearshape", value: 3) {
         SettingsView(model: store.settings).tint(FitTheme.accent)
       }
     }
@@ -35,12 +40,12 @@ struct RootView: View {
         },
         set: { if !$0 { store.error = nil } })
     ) {
-      Button("Понятно", role: .cancel) { store.error = nil }
+      Button(L10n.text("Понятно", locale: locale), role: .cancel) { store.error = nil }
     } message: {
-      Text(store.error ?? "")
+      Text(L10n.text(store.error ?? "", locale: locale))
     }
     .alert(
-      "Готово",
+      L10n.text("Готово", locale: locale),
       isPresented: Binding(
         get: {
           store.notice != nil && store.error == nil && !store.showSession
@@ -48,9 +53,9 @@ struct RootView: View {
             && !store.archiveTransfer.isPresented
         }, set: { if !$0 { store.notice = nil } })
     ) {
-      Button("Хорошо", role: .cancel) { store.notice = nil }
+      Button(L10n.text("Хорошо", locale: locale), role: .cancel) { store.notice = nil }
     } message: {
-      Text(store.notice ?? "")
+      Text(L10n.text(store.notice ?? "", locale: locale))
     }
     .onOpenURL { url in
       if url.scheme == "fitsession", url.host == "today" { tab = 0 }

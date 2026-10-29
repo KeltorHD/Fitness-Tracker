@@ -10,6 +10,7 @@ import Foundation
     let testing = ProcessInfo.processInfo.arguments.contains("--ui-testing")
     let repository: any WorkoutRepository
     if testing {
+      UserDefaults.standard.removeObject(forKey: "appLanguage")
       repository = MemoryWorkoutRepository()
     } else {
       repository = try SwiftDataWorkoutRepository(

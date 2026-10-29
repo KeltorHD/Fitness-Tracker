@@ -60,8 +60,8 @@ enum WorkoutIntentError: LocalizedError {
   case invalidWorkout, requiresAppProcess
   var errorDescription: String? {
     switch self {
-    case .invalidWorkout: "Эта тренировка больше недоступна. Откройте FitSession."
-    case .requiresAppProcess: "Действие должно выполняться в приложении FitSession."
+    case .invalidWorkout: L10n.text("Эта тренировка больше недоступна. Откройте FitSession.")
+    case .requiresAppProcess: L10n.text("Действие должно выполняться в приложении FitSession.")
     }
   }
 }

@@ -56,6 +56,7 @@ struct SectionHeading: View {
 }
 
 struct WorkoutHero: View {
+  @Environment(\.locale) private var locale
   let title: String
   var date: Date? = nil
   var body: some View {
@@ -64,7 +65,7 @@ struct WorkoutHero: View {
         if let date {
           Text(date, format: .dateTime.weekday(.wide).hour().minute())
         } else {
-          Text("Шаблон тренировки")
+          Text(L10n.text("Шаблон тренировки", locale: locale))
         }
       }.font(.subheadline).textCase(.uppercase).frame(maxWidth: .infinity)
       Rectangle().fill(.white.opacity(0.25)).frame(height: 0.5)

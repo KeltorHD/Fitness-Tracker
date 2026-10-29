@@ -3,6 +3,7 @@ import FitSessionCore
 import SwiftUI
 
 struct ProgressScreen: View {
+  @Environment(\.locale) private var locale
   @Environment(AppStore.self) private var store
   @AppStorage("weightUnit") private var unit: WeightUnit = .kilograms
   @Environment(\.calendar) private var calendar
@@ -13,16 +14,19 @@ struct ProgressScreen: View {
       ScrollView {
         VStack(alignment: .leading, spacing: 28) {
           VStack(spacing: 14) {
-            SectionHeading(title: "История", symbol: "clock")
+            SectionHeading(title: L10n.text("История", locale: locale), symbol: "clock")
             TrainingMonthCard(date: model.month, summary: model.report.month, move: model.moveMonth)
           }
           if let record = model.selectedRecord {
             VStack(spacing: 14) {
               HStack {
-                SectionHeading(title: record.exercise.name, symbol: "dumbbell")
+                SectionHeading(
+                  title: L10n.exerciseName(record.exercise, locale: locale), symbol: "dumbbell")
                 Menu {
                   ForEach(model.report.records) { item in
-                    Button(item.exercise.name) { model.selectedExerciseID = item.id }
+                    Button(L10n.exerciseName(item.exercise, locale: locale)) {
+                      model.selectedExerciseID = item.id
+                    }
                   }
                 } label: {
                   Image(systemName: "ellipsis").foregroundStyle(.secondary)
@@ -30,71 +34,84 @@ struct ProgressScreen: View {
               }
               VStack(alignment: .leading, spacing: 14) {
                 HStack(alignment: .top) {
-                  Text("Объём за тренировку, \(unit.rawValue)").font(.subheadline).foregroundStyle(
+                  Text(
+                    L10n.format(
+                      "Объём за тренировку, %@",
+                      String(L10n.text(unit.rawValue, locale: locale)), locale: locale
+                    )
+                  ).font(.subheadline).foregroundStyle(
                     .secondary)
                   Spacer()
                   Label(
-                    "\(unit.display(record.weightKG).formatted(.number.precision(.fractionLength(0...1)))) \(unit.rawValue)",
+                    "\(unit.display(record.weightKG).formatted(.number.locale(L10n.numberLocale).precision(.fractionLength(0...1)))) \(L10n.text(unit.rawValue, locale: locale))",
                     systemImage: "trophy.fill"
                   )
                   .font(.headline).foregroundStyle(FitTheme.accent)
                 }
                 Chart(model.points) { point in
                   BarMark(
-                    x: .value("Дата", point.date),
-                    y: .value("Объём", unit.display(point.volume))
+                    x: .value(L10n.text("Дата", locale: locale), point.date),
+                    y: .value(L10n.text("Объём", locale: locale), unit.display(point.volume))
                   )
                   .foregroundStyle(FitTheme.accent).cornerRadius(3)
                 }.frame(height: 215).chartYAxis { AxisMarks(position: .trailing) }
-                  .accessibilityLabel("Объём упражнения по тренировкам")
+                  .accessibilityLabel(L10n.text("Объём упражнения по тренировкам", locale: locale))
               }.fitCard()
             }
           }
           VStack(spacing: 14) {
-            SectionHeading(title: "Общий объём", symbol: "chart.bar")
+            SectionHeading(title: L10n.text("Общий объём", locale: locale), symbol: "chart.bar")
             VStack(alignment: .leading, spacing: 16) {
-              Text("За 26 недель, \(unit.rawValue)").font(.subheadline).foregroundStyle(.secondary)
+              Text(
+                L10n.format(
+                  "За 26 недель, %@",
+                  String(L10n.text(unit.rawValue, locale: locale)), locale: locale)
+              ).font(.subheadline).foregroundStyle(.secondary)
               Chart(model.report.weeks) { week in
                 BarMark(
-                  x: .value("Неделя", week.week, unit: .weekOfYear),
-                  y: .value("Объём", unit.display(week.volume))
+                  x: .value(L10n.text("Неделя", locale: locale), week.week, unit: .weekOfYear),
+                  y: .value(L10n.text("Объём", locale: locale), unit.display(week.volume))
                 )
                 .foregroundStyle(FitTheme.accent).cornerRadius(3)
               }.frame(height: 180).chartYAxis { AxisMarks(position: .trailing) }
             }.fitCard()
           }
           VStack(alignment: .leading, spacing: 14) {
-            SectionHeading(title: "Личные рекорды", symbol: "trophy")
+            SectionHeading(title: L10n.text("Личные рекорды", locale: locale), symbol: "trophy")
             if model.report.records.isEmpty {
               ContentUnavailableView(
-                "Пока нет рекордов", systemImage: "trophy",
-                description: Text("Они появятся после рабочих подходов с добавленным весом."))
+                L10n.text("Пока нет рекордов", locale: locale), systemImage: "trophy",
+                description: Text(
+                  L10n.text(
+                    "Они появятся после рабочих подходов с добавленным весом.", locale: locale)))
             }
             ForEach(model.report.records) { record in
               VStack(spacing: 10) {
-                Text(record.exercise.name).font(.headline).frame(
+                Text(L10n.exerciseName(record.exercise, locale: locale)).font(.headline).frame(
                   maxWidth: .infinity, alignment: .leading)
                 LabeledContent(
-                  "Максимальный вес",
+                  L10n.text("Максимальный вес", locale: locale),
                   value:
-                    "\(unit.display(record.weightKG).formatted(.number.precision(.fractionLength(0...1)))) \(unit.rawValue)"
+                    "\(unit.display(record.weightKG).formatted(.number.locale(L10n.numberLocale).precision(.fractionLength(0...1)))) \(L10n.text(unit.rawValue, locale: locale))"
                 )
                 if record.estimatedOneRepMax > 0 {
                   LabeledContent(
-                    "Расчётный 1ПМ",
+                    L10n.text("Расчётный 1ПМ", locale: locale),
                     value:
-                      "\(unit.display(record.estimatedOneRepMax).formatted(.number.precision(.fractionLength(0...1)))) \(unit.rawValue)"
+                      "\(unit.display(record.estimatedOneRepMax).formatted(.number.locale(L10n.numberLocale).precision(.fractionLength(0...1)))) \(L10n.text(unit.rawValue, locale: locale))"
                   )
                 }
               }.fitCard()
             }
             Text(
-              "1ПМ — оценка по формуле Эпли для 1–12 повторений. Собственный вес не включается в объём внешнего отягощения."
+              L10n.text(
+                "1ПМ — оценка по формуле Эпли для 1–12 повторений. Собственный вес не включается в объём внешнего отягощения.",
+                locale: locale)
             )
             .font(.caption).foregroundStyle(.secondary)
           }
         }.padding(.horizontal, 16).padding(.top, 12).padding(.bottom, 24)
-      }.background(FitTheme.paper).navigationTitle("Результаты")
+      }.background(FitTheme.paper).navigationTitle(L10n.text("Результаты", locale: locale))
         .toolbar {
           ToolbarItem(placement: .topBarLeading) {
             Menu {
@@ -106,7 +123,9 @@ struct ProgressScreen: View {
             }
           }
           ToolbarItem(placement: .topBarTrailing) {
-            Button("Начать тренировку", systemImage: "plus") { store.start() }.foregroundStyle(
+            Button(L10n.text("Начать тренировку", locale: locale), systemImage: "plus") {
+              store.start()
+            }.foregroundStyle(
               .primary)
           }
         }

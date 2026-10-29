@@ -9,12 +9,14 @@ struct WorkoutLiveActivityWidget: Widget {
       VStack(alignment: .leading, spacing: 8) {
         Label(context.attributes.name, systemImage: "dumbbell.fill").font(.headline).lineLimit(1)
         HStack {
-          WorkoutElapsedTime(state: context.state)
+          WorkoutElapsedTime(state: context.state).environment(
+            \.locale, context.state.presentationLocale)
           Spacer()
-          SetProgress(state: context.state)
+          SetProgress(state: context.state).environment(\.locale, context.state.presentationLocale)
         }.font(.subheadline)
-        NextWorkoutSet(state: context.state)
-        WorkoutActivityControls(context: context)
+        NextWorkoutSet(state: context.state).environment(\.locale, context.state.presentationLocale)
+        WorkoutActivityControls(context: context).environment(
+          \.locale, context.state.presentationLocale)
       }
       .padding(12)
       .activityBackgroundTint(.black.opacity(0.85))
@@ -25,36 +27,51 @@ struct WorkoutLiveActivityWidget: Widget {
       DynamicIsland {
         DynamicIslandExpandedRegion(.leading) {
           Label(
-            context.state.paused ? "Пауза" : "Тренировка",
+            context.state.paused
+              ? L10n.text("Пауза", locale: context.state.presentationLocale)
+              : L10n.text("Тренировка", locale: context.state.presentationLocale),
             systemImage: context.state.paused ? "pause.fill" : "dumbbell.fill"
           )
           .font(.caption).foregroundStyle(Color.accentColor)
         }
-        DynamicIslandExpandedRegion(.trailing) { SetProgress(state: context.state).font(.caption) }
+        DynamicIslandExpandedRegion(.trailing) {
+          SetProgress(state: context.state).environment(\.locale, context.state.presentationLocale)
+            .font(.caption)
+        }
         DynamicIslandExpandedRegion(.bottom) {
           VStack(alignment: .leading, spacing: 8) {
             HStack {
-              NextWorkoutSet(state: context.state)
+              NextWorkoutSet(state: context.state).environment(
+                \.locale, context.state.presentationLocale)
               Spacer(minLength: 8)
-              WorkoutElapsedTime(state: context.state).font(.caption)
+              WorkoutElapsedTime(state: context.state).environment(
+                \.locale, context.state.presentationLocale
+              ).font(.caption)
             }
-            WorkoutActivityControls(context: context)
+            WorkoutActivityControls(context: context).environment(
+              \.locale, context.state.presentationLocale)
           }
         }
       } compactLeading: {
         Image(systemName: context.state.paused ? "pause.fill" : "dumbbell.fill")
           .foregroundStyle(Color.accentColor).accessibilityLabel(
-            context.state.paused ? "На паузе" : "Тренировка")
+            context.state.paused
+              ? L10n.text("На паузе", locale: context.state.presentationLocale)
+              : L10n.text("Тренировка", locale: context.state.presentationLocale))
       } compactTrailing: {
         if context.state.restEndsAt != nil {
-          WorkoutRestTime(state: context.state).frame(width: 46)
+          WorkoutRestTime(state: context.state).environment(
+            \.locale, context.state.presentationLocale
+          ).frame(width: 46)
         } else {
-          WorkoutElapsedTime(state: context.state).frame(width: 60)
+          WorkoutElapsedTime(state: context.state).environment(
+            \.locale, context.state.presentationLocale
+          ).frame(width: 60)
         }
       } minimal: {
         if context.state.paused {
           Image(systemName: "pause.fill").foregroundStyle(Color.accentColor).accessibilityLabel(
-            "На паузе")
+            L10n.text("На паузе", locale: context.state.presentationLocale))
         } else {
           ZStack {
             Circle().stroke(Color.accentColor.opacity(0.25), lineWidth: 2)
@@ -63,7 +80,10 @@ struct WorkoutLiveActivityWidget: Widget {
               .rotationEffect(.degrees(-90))
             Image(systemName: "dumbbell.fill").font(.system(size: 10))
           }.padding(3).accessibilityLabel(
-            "Выполнено \(context.state.completedSets) из \(context.state.totalSets) подходов")
+            L10n.format(
+              "Выполнено %@ из %@ подходов", String(context.state.completedSets),
+              String(context.state.totalSets),
+              locale: context.state.presentationLocale))
         }
       }
       .widgetURL(context.attributes.workoutURL)
@@ -73,6 +93,7 @@ struct WorkoutLiveActivityWidget: Widget {
 }
 
 private struct WorkoutElapsedTime: View {
+  @Environment(\.locale) private var locale
   let state: WorkoutLiveState
   var body: some View {
     // The system ticks this archived Text while the containing app is suspended.
@@ -80,46 +101,63 @@ private struct WorkoutElapsedTime: View {
       timerInterval: state.timerStart...state.timerEnd,
       pauseTime: state.timerPausedAt, countsDown: false, showsHours: false
     )
-    .monospacedDigit().accessibilityLabel("Активное время тренировки")
+    .monospacedDigit().accessibilityLabel(L10n.text("Активное время тренировки", locale: locale))
   }
 }
 
 private struct WorkoutRestTime: View {
+  @Environment(\.locale) private var locale
   let state: WorkoutLiveState
   var body: some View {
     if let start = state.restStartsAt, let end = state.restEndsAt {
       // Stable endpoints: stops at zero; never starts counting upwards after rest.
       Text(timerInterval: start...end, countsDown: true, showsHours: false)
-        .monospacedDigit().accessibilityLabel("Осталось отдыхать")
+        .monospacedDigit().accessibilityLabel(L10n.text("Осталось отдыхать", locale: locale))
     }
   }
 }
 
 private struct SetProgress: View {
+  @Environment(\.locale) private var locale
   let state: WorkoutLiveState
   var body: some View {
-    Text("\(state.completedSets)/\(state.totalSets) подходов")
-      .monospacedDigit().contentTransition(.numericText())
-      .accessibilityLabel("Выполнено \(state.completedSets) из \(state.totalSets) подходов")
+    Text(
+      L10n.format(
+        "%@/%@ подходов", String(state.completedSets),
+        String(state.totalSets), locale: locale)
+    )
+    .monospacedDigit().contentTransition(.numericText())
+    .accessibilityLabel(
+      L10n.format(
+        "Выполнено %@ из %@ подходов", String(state.completedSets),
+        String(state.totalSets), locale: locale))
   }
 }
 
 private struct NextWorkoutSet: View {
+  @Environment(\.locale) private var locale
   let state: WorkoutLiveState
   var body: some View {
     VStack(alignment: .leading, spacing: 2) {
       if let name = state.nextExerciseName, let number = state.nextSetNumber {
         Text(name).font(.subheadline.bold()).lineLimit(1)
-        Text("Далее: подход \(number)").font(.caption).foregroundStyle(.secondary)
+        Text(L10n.format("Далее: подход %@", String(number), locale: locale)).font(
+          .caption
+        ).foregroundStyle(.secondary)
       } else {
-        Text(state.totalSets == 0 ? "Добавьте упражнения в FitSession" : "Все подходы записаны")
-          .font(.caption).lineLimit(1)
+        Text(
+          state.totalSets == 0
+            ? L10n.text("Добавьте упражнения в FitSession", locale: locale)
+            : L10n.text("Все подходы записаны", locale: locale)
+        )
+        .font(.caption).lineLimit(1)
       }
     }
   }
 }
 
 private struct WorkoutActivityControls: View {
+  @Environment(\.locale) private var locale
   let context: ActivityViewContext<WorkoutActivityAttributes>
   var body: some View {
     HStack(spacing: 8) {
@@ -128,7 +166,8 @@ private struct WorkoutActivityControls: View {
           workoutID: context.attributes.workoutID, paused: !context.state.paused)
       ) {
         Label(
-          context.state.paused ? "Продолжить" : "Пауза",
+          context.state.paused
+            ? L10n.text("Продолжить", locale: locale) : L10n.text("Пауза", locale: locale),
           systemImage: context.state.paused ? "play.fill" : "pause.fill")
       }
       if let restEnd = context.state.restEndsAt, !context.state.paused {
@@ -141,7 +180,7 @@ private struct WorkoutActivityControls: View {
             workoutID: context.attributes.workoutID, restEndsAt: restEnd)
         ) {
           Image(systemName: "forward.end.fill")
-        }.accessibilityLabel("Пропустить отдых")
+        }.accessibilityLabel(L10n.text("Пропустить отдых", locale: locale))
       }
       Spacer(minLength: 0)
     }

@@ -6,22 +6,35 @@ import Observation
   var search = "" { didSet { refresh() } }
   var group: MuscleGroup? { didSet { refresh() } }
   var equipment: ExerciseEquipment? { didSet { refresh() } }
+  var language: AppLanguage = .russian { didSet { refresh() } }
   private(set) var results: [ExerciseLibraryEntry]
-  let loadingError = ExerciseLibrary.loadingError
+  private(set) var loadingError = ExerciseLibrary.loadingError
   @ObservationIgnored private let find:
-    (String, MuscleGroup?, ExerciseEquipment?) -> [ExerciseLibraryEntry]
+    (String, MuscleGroup?, ExerciseEquipment?, AppLanguage) -> [ExerciseLibraryEntry]
 
   init(
-    find: @escaping (String, MuscleGroup?, ExerciseEquipment?) -> [ExerciseLibraryEntry] =
-      ExerciseLibrary.search
+    find:
+      @escaping (String, MuscleGroup?, ExerciseEquipment?, AppLanguage) -> [ExerciseLibraryEntry] =
+      {
+        ExerciseLibrary.search($0, group: $1, equipment: $2, language: $3)
+      }
   ) {
     self.find = find
-    results = find("", nil, nil)
+    results = find("", nil, nil, .russian)
   }
   func reset() {
     search = ""
     group = nil
     equipment = nil
   }
-  private func refresh() { results = find(search, group, equipment) }
+  private func refresh() {
+    do {
+      _ = try ExerciseLibrary.document(language: language)
+      loadingError = nil
+      results = find(search, group, equipment, language)
+    } catch {
+      loadingError = error.localizedDescription
+      results = []
+    }
+  }
 }

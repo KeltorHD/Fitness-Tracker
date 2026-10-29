@@ -4,13 +4,13 @@ import SwiftUI
 extension MuscleGroup {
   var title: String {
     switch self {
-    case .chest: "Грудь"
-    case .back: "Спина"
-    case .legs: "Ноги"
-    case .shoulders: "Плечи"
-    case .arms: "Руки"
-    case .core: "Пресс"
-    case .fullBody: "Всё тело"
+    case .chest: L10n.text("Грудь")
+    case .back: L10n.text("Спина")
+    case .legs: L10n.text("Ноги")
+    case .shoulders: L10n.text("Плечи")
+    case .arms: L10n.text("Руки")
+    case .core: L10n.text("Пресс")
+    case .fullBody: L10n.text("Всё тело")
     }
   }
 }
@@ -32,6 +32,7 @@ struct MetricView: View {
 }
 
 struct SessionControls: View {
+  @Environment(\.locale) private var locale
   @Environment(AppStore.self) private var store
   @Environment(\.accessibilityReduceMotion) private var reduceMotion
   @Namespace private var controls
@@ -52,17 +53,20 @@ struct SessionControls: View {
           }
         } label: {
           Label(
-            workout.status == .paused ? "Продолжить" : "Пауза",
+            workout.status == .paused
+              ? L10n.text("Продолжить", locale: locale) : L10n.text("Пауза", locale: locale),
             systemImage: workout.status == .paused ? "play.fill" : "pause.fill")
         }
         .buttonStyle(.glass)
         .glassEffectID("pause", in: controls)
         if workout.completedSets > 0 {
-          Button("Завершить", systemImage: "checkmark") { store.finish() }
-            .buttonStyle(.glassProminent)
-            .glassEffectID("finish", in: controls)
-            .glassEffectTransition(.matchedGeometry)
-            .accessibilityIdentifier("finishWorkout")
+          Button(L10n.text("Завершить", locale: locale), systemImage: "checkmark") {
+            store.finish()
+          }
+          .buttonStyle(.glassProminent)
+          .glassEffectID("finish", in: controls)
+          .glassEffectTransition(.matchedGeometry)
+          .accessibilityIdentifier("finishWorkout")
         }
       }
       .controlSize(.large)
@@ -72,15 +76,16 @@ struct SessionControls: View {
 }
 
 struct RestPill: View {
+  @Environment(\.locale) private var locale
   let end: Date
   var body: some View {
     HStack {
       Image(systemName: "timer")
-      Text("Отдых")
+      Text(L10n.text("Отдых", locale: locale))
       Text(timerInterval: Date.now...max(.now, end), countsDown: true).monospacedDigit()
     }
     .font(.headline).padding(.horizontal, 20).padding(.vertical, 12)
     .glassEffect()
-    .accessibilityLabel("Таймер отдыха")
+    .accessibilityLabel(L10n.text("Таймер отдыха", locale: locale))
   }
 }

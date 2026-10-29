@@ -2,6 +2,7 @@ import FitSessionCore
 import SwiftUI
 
 struct TemplatesView: View {
+  @Environment(\.locale) private var locale
   @Environment(AppStore.self) private var store
   @State private var creating = false
   var body: some View {
@@ -10,8 +11,9 @@ struct TemplatesView: View {
         LazyVStack(spacing: 15) {
           if store.templates.isEmpty {
             ContentUnavailableView(
-              "Создайте тренировку", systemImage: "dumbbell",
-              description: Text("Добавьте упражнения и сохраните свой шаблон."))
+              L10n.text("Создайте тренировку", locale: locale), systemImage: "dumbbell",
+              description: Text(
+                L10n.text("Добавьте упражнения и сохраните свой шаблон.", locale: locale)))
           }
           ForEach(store.templates) { template in
             NavigationLink {
@@ -29,39 +31,47 @@ struct TemplatesView: View {
           }
         }.padding(.horizontal, 16).padding(.top, 12).padding(.bottom, 24)
       }
-      .background(FitTheme.paper).navigationTitle("Тренировки")
+      .background(FitTheme.paper).navigationTitle(L10n.text("Тренировки", locale: locale))
       .toolbar {
         ToolbarItem(placement: .topBarLeading) {
           NavigationLink {
             ExerciseLibraryView()
           } label: {
-            Text("Упражнения").foregroundStyle(.primary)
+            Text(L10n.text("Упражнения", locale: locale)).foregroundStyle(.primary)
           }
         }
         ToolbarItemGroup(placement: .topBarTrailing) {
           Menu {
-            Button("Создать тренировку", systemImage: "plus") { creating = true }
+            Button(L10n.text("Создать тренировку", locale: locale), systemImage: "plus") {
+              creating = true
+            }
             NavigationLink {
               ExerciseLibraryView()
             } label: {
-              Label("Упражнения", systemImage: "dumbbell")
+              Label(L10n.text("Упражнения", locale: locale), systemImage: "dumbbell")
             }
           } label: {
             Image(systemName: "ellipsis").foregroundStyle(.primary)
           }
-          Button("Создать тренировку", systemImage: "plus") { creating = true }.foregroundStyle(
+          Button(L10n.text("Создать тренировку", locale: locale), systemImage: "plus") {
+            creating = true
+          }.foregroundStyle(
             .primary)
         }
       }
       .sheet(isPresented: $creating, onDismiss: { store.showingTemplateEditor = false }) {
-        TemplateEditor(template: WorkoutTemplate(name: "Новая тренировка", exercises: []))
-          .onAppear { store.showingTemplateEditor = true }
+        TemplateEditor(
+          template: WorkoutTemplate(
+            name: L10n.text("Новая тренировка", locale: locale), exercises: [])
+        )
+        .onAppear { store.showingTemplateEditor = true }
       }
     }
   }
 }
 
 struct TemplateOverviewView: View {
+  @Environment(\.locale) private var locale
   @Environment(AppStore.self) private var store
   @Environment(\.dismiss) private var dismiss
   @State private var editing = false
@@ -76,10 +86,14 @@ struct TemplateOverviewView: View {
         WorkoutHero(title: current.name)
         VStack(spacing: 20) {
           HStack(spacing: 8) {
-            SummaryMetric(title: "Упражнения", value: "\(current.exercises.count)")
             SummaryMetric(
-              title: "Подходы", value: "\(current.exercises.reduce(0) { $0 + $1.setCount })")
-            SummaryMetric(title: "Отдых", value: "\(current.restSeconds) с")
+              title: L10n.text("Упражнения", locale: locale), value: "\(current.exercises.count)")
+            SummaryMetric(
+              title: L10n.text("Подходы", locale: locale),
+              value: "\(current.exercises.reduce(0) { $0 + $1.setCount })")
+            SummaryMetric(
+              title: L10n.text("Отдых", locale: locale),
+              value: L10n.format("%@ с", String(current.restSeconds), locale: locale))
           }
           ForEach(Array(current.exercises.enumerated()), id: \.element.id) { index, item in
             NavigationLink {
@@ -88,8 +102,13 @@ struct TemplateOverviewView: View {
               HStack(alignment: .top, spacing: 14) {
                 Text("\(index + 1)")
                 VStack(alignment: .leading, spacing: 6) {
-                  Text(item.exercise.name).font(.title3.weight(.medium))
-                  Text("\(item.setCount) × \(item.repetitions) повторений").font(.subheadline)
+                  Text(L10n.exerciseName(item.exercise, locale: locale)).font(
+                    .title3.weight(.medium))
+                  Text(
+                    L10n.format(
+                      "%@ × %@ повторений", String(item.setCount),
+                      String(item.repetitions), locale: locale)
+                  ).font(.subheadline)
                 }.frame(maxWidth: .infinity, alignment: .leading)
                 if let entry = ExerciseLibrary.entry(for: item.exercise.id) {
                   ExercisePhoto(path: entry.images[0]).frame(width: 48, height: 48).clipShape(
@@ -105,31 +124,38 @@ struct TemplateOverviewView: View {
       .toolbar {
         ToolbarItem(placement: .topBarTrailing) {
           Menu {
-            Button("Изменить", systemImage: "pencil") { editing = true }
-            Button("Удалить", systemImage: "trash", role: .destructive) { confirmDelete = true }
+            Button(L10n.text("Изменить", locale: locale), systemImage: "pencil") { editing = true }
+            Button(L10n.text("Удалить", locale: locale), systemImage: "trash", role: .destructive) {
+              confirmDelete = true
+            }
           } label: {
             Image(systemName: "ellipsis")
           }
         }
       }
       .safeAreaInset(edge: .bottom) {
-        Button("Начать тренировку", systemImage: "play.fill") { store.start(template: current) }
-          .font(.headline).buttonStyle(.glassProminent).controlSize(.large).padding()
+        Button(L10n.text("Начать тренировку", locale: locale), systemImage: "play.fill") {
+          store.start(template: current)
+        }
+        .font(.headline).buttonStyle(.glassProminent).controlSize(.large).padding()
       }
       .sheet(isPresented: $editing, onDismiss: { store.showingTemplateEditor = false }) {
         TemplateEditor(template: current).onAppear { store.showingTemplateEditor = true }
       }
-      .confirmationDialog("Удалить шаблон?", isPresented: $confirmDelete, titleVisibility: .visible)
-    {
-      Button("Удалить", role: .destructive) {
-        store.delete(template: current)
-        if store.error == nil { dismiss() }
+      .confirmationDialog(
+        L10n.text("Удалить шаблон?", locale: locale), isPresented: $confirmDelete,
+        titleVisibility: .visible
+      ) {
+        Button(L10n.text("Удалить", locale: locale), role: .destructive) {
+          store.delete(template: current)
+          if store.error == nil { dismiss() }
+        }
       }
-    }
   }
 }
 
 struct TemplateEditor: View {
+  @Environment(\.locale) private var locale
   @Environment(AppStore.self) private var store
   @Environment(\.dismiss) private var dismiss
   @State var template: WorkoutTemplate
@@ -138,32 +164,52 @@ struct TemplateEditor: View {
   var body: some View {
     NavigationStack {
       Form {
-        Section("Название") { TextField("Название плана", text: $template.name) }
-        Section("Отдых между подходами") {
+        Section(L10n.text("Название", locale: locale)) {
+          TextField(L10n.text("Название плана", locale: locale), text: $template.name)
+        }
+        Section(L10n.text("Отдых между подходами", locale: locale)) {
           Stepper(
-            "\(template.restSeconds) секунд", value: $template.restSeconds, in: 0...3600, step: 15)
+            L10n.format("%@ секунд", String(template.restSeconds), locale: locale),
+            value: $template.restSeconds, in: 0...3600, step: 15)
         }
         ForEach($template.exercises) { $exercise in
-          Section(exercise.exercise.name) {
-            NavigationLink("Техника выполнения") { ExerciseDetailView(exercise: exercise.exercise) }
-            Stepper("Подходы: \(exercise.setCount)", value: $exercise.setCount, in: 1...30)
+          Section(L10n.exerciseName(exercise.exercise, locale: locale)) {
+            NavigationLink(L10n.text("Техника выполнения", locale: locale)) {
+              ExerciseDetailView(exercise: exercise.exercise)
+            }
             Stepper(
-              "Повторения: \(exercise.repetitions)", value: $exercise.repetitions, in: 1...1000)
-            TextField("Добавленный вес, кг", value: $exercise.weightKG, format: .number)
-              .keyboardType(.decimalPad)
-            Button("Убрать упражнение", role: .destructive) {
+              L10n.format("Подходы: %@", String(exercise.setCount), locale: locale),
+              value: $exercise.setCount, in: 1...30)
+            Stepper(
+              L10n.format(
+                "Повторения: %@", String(exercise.repetitions), locale: locale),
+              value: $exercise.repetitions, in: 1...1000)
+            TextField(
+              L10n.text("Добавленный вес, кг", locale: locale), value: $exercise.weightKG,
+              format: .number
+            )
+            .keyboardType(.decimalPad)
+            Button(L10n.text("Убрать упражнение", locale: locale), role: .destructive) {
               template.exercises.removeAll { $0.id == exercise.id }
             }
           }
         }
-        Button("Добавить упражнение", systemImage: "plus") { picking = true }
-        if let validationMessage { Text(validationMessage).foregroundStyle(.red) }
+        Button(L10n.text("Добавить упражнение", locale: locale), systemImage: "plus") {
+          picking = true
+        }
+        if let validationMessage {
+          Text(L10n.text(validationMessage, locale: locale)).foregroundStyle(.red)
+        }
       }
-      .navigationTitle("План тренировки").navigationBarTitleDisplayMode(.inline)
+      .navigationTitle(L10n.text("План тренировки", locale: locale)).navigationBarTitleDisplayMode(
+        .inline
+      )
       .toolbar {
-        ToolbarItem(placement: .cancellationAction) { Button("Отмена") { dismiss() } }
+        ToolbarItem(placement: .cancellationAction) {
+          Button(L10n.text("Отмена", locale: locale)) { dismiss() }
+        }
         ToolbarItem(placement: .confirmationAction) {
-          Button("Сохранить") {
+          Button(L10n.text("Сохранить", locale: locale)) {
             do {
               try Validation.template(template)
               if store.save(template: template) {

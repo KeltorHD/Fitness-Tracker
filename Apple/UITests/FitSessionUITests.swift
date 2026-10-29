@@ -1,6 +1,24 @@
 import XCTest
 
 final class FitSessionUITests: XCTestCase {
+  @MainActor func testLanguageCanBeChangedWithoutRelaunchingTheApp() {
+    let app = launch()
+    let settings = app.tabBars.buttons["Настройки"]
+    XCTAssertTrue(settings.waitForExistence(timeout: 10))
+    settings.tap()
+    let language = app.buttons["appLanguagePicker"]
+    if !language.isHittable { app.swipeUp() }
+    XCTAssertTrue(language.waitForExistence(timeout: 5))
+    language.tap()
+    app.buttons["English"].tap()
+    XCTAssertTrue(app.tabBars.buttons["Settings"].waitForExistence(timeout: 5))
+    XCTAssertTrue(app.tabBars.buttons["Journal"].exists)
+    let selectedLanguage = app.buttons["appLanguagePicker"]
+    selectedLanguage.tap()
+    app.buttons["Русский"].tap()
+    XCTAssertTrue(app.tabBars.buttons["Настройки"].waitForExistence(timeout: 5))
+  }
+
   @MainActor func testArchiveToolsAreAvailableFromSettings() {
     let app = launch()
     let settings = app.tabBars.buttons["Настройки"]

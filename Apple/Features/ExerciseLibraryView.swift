@@ -2,6 +2,7 @@ import FitSessionCore
 import SwiftUI
 
 struct ExerciseLibraryView: View {
+  @Environment(\.locale) private var locale
   var onSelect: ((Exercise) -> Void)? = nil
   @State private var model = ExerciseLibraryViewModel()
   var body: some View {
@@ -10,34 +11,43 @@ struct ExerciseLibraryView: View {
       Section {
         HStack {
           Menu {
-            Button("Все мышцы") { model.group = nil }
+            Button(L10n.text("Все мышцы", locale: locale)) { model.group = nil }
             ForEach(MuscleGroup.allCases, id: \.self) { value in
               Button(value.title) { model.group = value }
             }
           } label: {
             Label(
-              model.group?.title ?? "Все мышцы", systemImage: "figure.strengthtraining.traditional")
+              model.group?.title ?? L10n.text("Все мышцы", locale: locale),
+              systemImage: "figure.strengthtraining.traditional")
           }
           Spacer()
           Menu {
-            Button("Весь инвентарь") { model.equipment = nil }
+            Button(L10n.text("Весь инвентарь", locale: locale)) { model.equipment = nil }
             ForEach(ExerciseEquipment.allCases, id: \.self) { value in
-              Button(value.title) { model.equipment = value }
+              Button(L10n.text(value.title, locale: locale)) { model.equipment = value }
             }
           } label: {
-            Label(model.equipment?.title ?? "Инвентарь", systemImage: "line.3.horizontal.decrease")
+            Label(
+              model.equipment.map { L10n.text($0.title, locale: locale) }
+                ?? L10n.text("Инвентарь", locale: locale), systemImage: "line.3.horizontal.decrease"
+            )
           }
         }.font(.subheadline)
       } footer: {
-        Text("Найдено: \(model.results.count) · Фото и инструкции доступны без интернета")
+        Text(
+          L10n.format(
+            "Найдено: %@ · Фото и инструкции доступны без интернета",
+            String(model.results.count), locale: locale))
       }
       if let error = model.loadingError {
         ContentUnavailableView(
-          "Библиотека недоступна", systemImage: "exclamationmark.triangle", description: Text(error)
+          L10n.text("Библиотека недоступна", locale: locale),
+          systemImage: "exclamationmark.triangle",
+          description: Text(L10n.text(error, locale: locale))
         )
       } else if model.results.isEmpty {
         ContentUnavailableView.search(text: model.search)
-        Button("Сбросить поиск и фильтры") {
+        Button(L10n.text("Сбросить поиск и фильтры", locale: locale)) {
           model.reset()
         }
       }
@@ -50,8 +60,10 @@ struct ExerciseLibraryView: View {
               .clipShape(.rect(cornerRadius: 12)).accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 5) {
               Text(entry.name).font(.headline).foregroundStyle(.primary)
-              Text("\(entry.group.title) · \(entry.equipment.title)")
-                .font(.caption).foregroundStyle(.secondary)
+              Text(
+                "\(L10n.text(entry.group.title, locale: locale)) · \(L10n.text(entry.equipment.title, locale: locale))"
+              )
+              .font(.caption).foregroundStyle(.secondary)
             }
           }.padding(.vertical, 4)
         }
@@ -60,21 +72,32 @@ struct ExerciseLibraryView: View {
         NavigationLink {
           ExerciseCreditsView()
         } label: {
-          Label("Источник данных и фотографии", systemImage: "info.circle")
+          Label(
+            L10n.text("Источник данных и фотографии", locale: locale), systemImage: "info.circle")
         }
       }
     }
-    .navigationTitle("Упражнения")
-    .searchable(text: $model.search, prompt: "Название, мышца или инвентарь")
+    .navigationTitle(L10n.text("Упражнения", locale: locale))
+    .searchable(
+      text: $model.search, prompt: L10n.text("Название, мышца или инвентарь", locale: locale)
+    )
     .accessibilityIdentifier("exerciseLibrary")
+    .onChange(of: locale, initial: true) {
+      model.language = AppLanguage.system.resolved(preferredLanguages: [locale.identifier])
+    }
   }
 }
 
 struct ExerciseDetailView: View {
+  @Environment(\.locale) private var locale
   let exercise: Exercise
   var onSelect: ((Exercise) -> Void)? = nil
   @State private var photo = 0
-  private var entry: ExerciseLibraryEntry? { ExerciseLibrary.entry(for: exercise.id) }
+  private var entry: ExerciseLibraryEntry? {
+    ExerciseLibrary.entry(
+      for: exercise.id,
+      language: AppLanguage.system.resolved(preferredLanguages: [locale.identifier]))
+  }
 
   var body: some View {
     ScrollView {
@@ -84,37 +107,54 @@ struct ExerciseDetailView: View {
             TabView(selection: $photo) {
               ForEach(Array(entry.images.enumerated()), id: \.offset) { index, path in
                 ExercisePhoto(path: path).tag(index)
-                  .accessibilityLabel("Фото \(index + 1) из \(entry.images.count): \(entry.name)")
+                  .accessibilityLabel(
+                    L10n.format(
+                      "Фото %@ из %@: %@", String(index + 1),
+                      String(entry.images.count), String(entry.name),
+                      locale: locale))
               }
             }
             .tabViewStyle(.page(indexDisplayMode: .never)).frame(height: 270)
             .background(Color(.secondarySystemGroupedBackground), in: .rect(cornerRadius: 20))
             HStack {
-              Button("Предыдущее фото", systemImage: "chevron.left") { photo = max(0, photo - 1) }
-                .labelStyle(.iconOnly).disabled(photo == 0)
+              Button(L10n.text("Предыдущее фото", locale: locale), systemImage: "chevron.left") {
+                photo = max(0, photo - 1)
+              }
+              .labelStyle(.iconOnly).disabled(photo == 0)
               Spacer()
-              Text("Положение \(photo + 1) из \(entry.images.count)").font(.caption)
+              Text(
+                L10n.format(
+                  "Положение %@ из %@", String(photo + 1),
+                  String(entry.images.count), locale: locale)
+              ).font(.caption)
                 .foregroundStyle(.secondary)
               Spacer()
-              Button("Следующее фото", systemImage: "chevron.right") {
+              Button(L10n.text("Следующее фото", locale: locale), systemImage: "chevron.right") {
                 photo = min(entry.images.count - 1, photo + 1)
               }
               .labelStyle(.iconOnly).disabled(photo == entry.images.count - 1)
             }.buttonStyle(.glass)
           }
           HStack(alignment: .top, spacing: 12) {
-            MetricView(value: entry.equipment.title, title: "инвентарь", symbol: "dumbbell")
-            MetricView(value: entry.level.title, title: "уровень", symbol: "chart.bar")
+            MetricView(
+              value: L10n.text(entry.equipment.title, locale: locale),
+              title: L10n.text("инвентарь", locale: locale), symbol: "dumbbell")
+            MetricView(
+              value: L10n.text(entry.level.title, locale: locale),
+              title: L10n.text("уровень", locale: locale), symbol: "chart.bar")
           }
           VStack(alignment: .leading, spacing: 8) {
-            Text("Работающие мышцы").font(.title2.bold())
+            Text(L10n.text("Работающие мышцы", locale: locale)).font(.title2.bold())
             Text(entry.primaryMuscles.joined(separator: ", "))
             if !entry.secondaryMuscles.isEmpty {
-              Text("Дополнительно: " + entry.secondaryMuscles.joined(separator: ", "))
-                .font(.subheadline).foregroundStyle(.secondary)
+              Text(
+                L10n.text("Дополнительно: ", locale: locale)
+                  + entry.secondaryMuscles.joined(separator: ", ")
+              )
+              .font(.subheadline).foregroundStyle(.secondary)
             }
           }
-          Text("Техника выполнения").font(.title2.bold())
+          Text(L10n.text("Техника выполнения", locale: locale)).font(.title2.bold())
           ForEach(Array(entry.steps.enumerated()), id: \.offset) { index, text in
             HStack(alignment: .top, spacing: 12) {
               Text("\(index + 1)").font(.headline).foregroundStyle(.tint)
@@ -124,19 +164,25 @@ struct ExerciseDetailView: View {
             }.accessibilityElement(children: .combine)
           }
           Text(
-            "Русская адаптация инструкций free-exercise-db. Показаны фотографии отдельных положений, а не видеозапись движения."
+            L10n.text(
+              "Русская адаптация инструкций free-exercise-db. Показаны фотографии отдельных положений, а не видеозапись движения.",
+              locale: locale)
           )
           .font(.caption).foregroundStyle(.secondary)
           NavigationLink {
             ExerciseCreditsView()
           } label: {
-            Label("Источник и лицензия", systemImage: "info.circle")
+            Label(L10n.text("Источник и лицензия", locale: locale), systemImage: "info.circle")
           }
         } else {
-          Label(exercise.muscle.title, systemImage: "figure.strengthtraining.traditional")
+          Label(
+            L10n.text(exercise.muscle.title, locale: locale),
+            systemImage: "figure.strengthtraining.traditional")
           Text(
             exercise.instructions.isEmpty
-              ? "Для собственного упражнения можно сохранить технику в заметках тренировки."
+              ? L10n.text(
+                "Для собственного упражнения можно сохранить технику в заметках тренировки.",
+                locale: locale)
               : exercise.instructions)
         }
       }.padding(20)
@@ -145,35 +191,44 @@ struct ExerciseDetailView: View {
     .navigationTitle(entry?.name ?? exercise.name).navigationBarTitleDisplayMode(.inline)
     .safeAreaInset(edge: .bottom) {
       if let onSelect {
-        Button("Добавить упражнение", systemImage: "plus") { onSelect(entry?.exercise ?? exercise) }
-          .buttonStyle(.glassProminent).controlSize(.large).padding()
-          .accessibilityIdentifier("selectLibraryExercise")
+        Button(L10n.text("Добавить упражнение", locale: locale), systemImage: "plus") {
+          onSelect(entry?.exercise ?? exercise)
+        }
+        .buttonStyle(.glassProminent).controlSize(.large).padding()
+        .accessibilityIdentifier("selectLibraryExercise")
       }
     }
   }
 }
 
 struct ExerciseCreditsView: View {
+  @Environment(\.locale) private var locale
   var body: some View {
     List {
-      Section("Библиотека FitSession") {
-        Text("100 силовых упражнений и 200 фотографий, встроенных в приложение.")
+      Section(L10n.text("Библиотека FitSession", locale: locale)) {
         Text(
-          "Названия, мышцы, оборудование и сокращённые пошаговые инструкции переведены и адаптированы на русский язык для FitSession."
+          L10n.text(
+            "100 силовых упражнений и 200 фотографий, встроенных в приложение.", locale: locale))
+        Text(
+          L10n.text(
+            "Названия, мышцы, оборудование и сокращённые пошаговые инструкции переведены и адаптированы на русский язык для FitSession.",
+            locale: locale)
         )
       }
       if let source = ExerciseLibrary.document?.source {
-        Section("Источник") {
+        Section(L10n.text("Источник", locale: locale)) {
           if let url = URL(string: source.repositoryURL) { Link(source.name, destination: url) }
           Text(
-            "Исходная база: yuhonas/free-exercise-db; первоначальные данные — Ollie Jennings / exercises.json."
+            L10n.text(
+              "Исходная база: yuhonas/free-exercise-db; первоначальные данные — Ollie Jennings / exercises.json.",
+              locale: locale)
           )
-          LabeledContent("Лицензия", value: source.licenseName)
+          LabeledContent(L10n.text("Лицензия", locale: locale), value: source.licenseName)
         }
-        Section("Текст лицензии источника") {
+        Section(L10n.text("Текст лицензии источника", locale: locale)) {
           Text(source.licenseText).font(.footnote).textSelection(.enabled)
         }
       }
-    }.navigationTitle("Источники").navigationBarTitleDisplayMode(.inline)
+    }.navigationTitle(L10n.text("Источники", locale: locale)).navigationBarTitleDisplayMode(.inline)
   }
 }

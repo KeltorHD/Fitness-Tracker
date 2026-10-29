@@ -33,7 +33,9 @@ private struct WatchArchive: Codable {
     } catch {
       archiveReadable = false
       self.error =
-        "Не удалось открыть запись Watch: \(error.localizedDescription). Файл сохранён; новые записи заблокированы до восстановления."
+        L10n.format(
+          "Не удалось открыть запись Watch: %@. Файл сохранён; новые записи заблокированы до восстановления.",
+          String(error.localizedDescription))
     }
     if WCSession.isSupported() {
       WCSession.default.delegate = self

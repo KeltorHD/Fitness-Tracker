@@ -60,7 +60,7 @@ for file in root.rglob('*'):
     if any(part in {'.git', '.build', '.toolchains', '.venv'} for part in file.parts): continue
     if file.suffix in {'.plist', '.entitlements', '.xcprivacy'}:
         plists[file.name] = plistlib.loads(file.read_bytes())
-    elif file.suffix in {'.json', '.storekit'}:
+    elif file.suffix in {'.json', '.storekit', '.xcstrings'}:
         data = json.loads(file.read_text())
         if file.name == 'Contents.json':
             for image in data.get('images', []):

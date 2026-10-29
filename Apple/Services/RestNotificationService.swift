@@ -19,8 +19,8 @@ import UserNotifications
     try Task.checkCancellation()
     guard [.authorized, .provisional].contains(settings.authorizationStatus) else { return }
     let content = UNMutableNotificationContent()
-    content.title = "Отдых завершён"
-    content.body = "Следующий подход ждёт вас."
+    content.title = L10n.text("Отдых завершён")
+    content.body = L10n.text("Следующий подход ждёт вас.")
     content.sound = .default
     let trigger = UNTimeIntervalNotificationTrigger(
       timeInterval: max(1, date.timeIntervalSinceNow), repeats: false)

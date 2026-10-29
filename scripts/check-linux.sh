@@ -18,6 +18,7 @@ flags=(--cache-path "$PWD/.build/cache" --config-path "$PWD/.build/config" --sec
 "$swift_bin" test "${flags[@]}"
 python3 scripts/validate-project.py
 python3 scripts/validate-exercise-library.py
+python3 scripts/validate-localizations.py
 swiftc_bin="$(dirname "$(command -v "$swift_bin")")/swiftc"
 bin_path="$("$swift_bin" build "${flags[@]}" --show-bin-path)"
 # These presentation/data types use only Foundation/Observation. This is a real Swift 6
@@ -27,7 +28,8 @@ bin_path="$("$swift_bin" build "${flags[@]}" --show-bin-path)"
   Apple/Features/ProgressViewModel.swift Apple/Features/HistoryViewModel.swift \
   Apple/Features/ExerciseLibraryViewModel.swift Apple/Services/ExerciseImageLoader.swift \
   Apple/Services/CloudAccountChecking.swift Apple/Shared/WidgetSnapshot.swift \
-  Apple/Services/AppCapabilities.swift
+  Apple/Services/AppCapabilities.swift Apple/Shared/L10n.swift \
+  Apple/Design/WorkoutFormatting.swift
 echo 'Portable presentation/data subset: Swift 6 type check passed (no Apple SDK).'
 python3 scripts/parse-apple.py "$swiftc_bin"
 if "$swift_bin" format --help >/dev/null 2>&1; then

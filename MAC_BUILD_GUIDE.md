@@ -135,7 +135,13 @@ xcodebuild -project FitSession.xcodeproj -scheme FitSession \
 
 ## Локальная библиотека и фотографии
 
-После `xcodegen generate` убедитесь, что `ExerciseMedia` копируется как folder reference в главный target, а `ExerciseLibrary.ru.json` включён в SPM resource bundle. Проверьте первый запуск в авиарежиме: каталог, русские шаги и обе фотографии должны работать без сети. Сценарии: [EXERCISE_LIBRARY.md](docs/EXERCISE_LIBRARY.md). PNG/SVG в `docs/previews` — макеты, не скриншоты запуска.
+После `xcodegen generate` убедитесь, что `ExerciseMedia` копируется как folder reference в главный target, а `ExerciseLibrary.ru.json` и `ExerciseLibrary.en.json` включены в SPM resource bundle. Проверьте первый запуск в авиарежиме: каталог, инструкции RU/EN и обе фотографии должны работать без сети. Сценарии: [EXERCISE_LIBRARY.md](docs/EXERCISE_LIBRARY.md). PNG/SVG в `docs/previews` — макеты, не скриншоты запуска.
+
+## Локализация RU/EN
+
+После обновления исходников снова выполните `xcodegen generate`: String Catalogs должны быть в Resources приложения, виджетов и Watch. Xcode компилирует `.xcstrings` в языковые bundles; Linux-проверка проверяет только входные каталоги.
+
+В приложении откройте **Настройки → Основные → Язык приложения**. Проверьте переключение без перезапуска и после повторного запуска; «Как на устройстве» учитывает приоритет языков iOS. Запустите L10nTests, WidgetSnapshotTests и UI-тест переключения языка. Проверьте обе локали в каталоге, истории, файловых диалогах, уведомлениях, виджете и Dynamic Island; Watch использует свой системный язык. Разрешения HealthKit и системные подписи App Intents следуют системному/назначенному в iOS языку приложения. Полные сценарии: [LOCALIZATION.md](docs/LOCALIZATION.md), [XCODE_VALIDATION.md](docs/XCODE_VALIDATION.md).
 
 ## Импорт и экспорт файлов
 

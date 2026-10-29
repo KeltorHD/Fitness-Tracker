@@ -122,7 +122,7 @@ import WidgetKit
       return
     }
     do {
-      let workout = try template?.start() ?? Workout(name: "Свободная тренировка")
+      let workout = try template?.start() ?? Workout(name: L10n.text("Свободная тренировка"))
       try activate(workout)
     } catch {
       report(

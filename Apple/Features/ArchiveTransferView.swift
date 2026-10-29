@@ -3,78 +3,99 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct ArchiveTransferView: View {
+  @Environment(\.locale) private var locale
   @Environment(\.dismiss) private var dismiss
   @Bindable var model: ArchiveTransferViewModel
 
   var body: some View {
     NavigationStack {
       Form {
-        Section("Экспорт") {
+        Section(L10n.text("Экспорт", locale: locale)) {
           if let workout = model.workout {
             Text(workout.name).font(.headline)
           } else {
-            Text("Вся история тренировок и планы")
+            Text(L10n.text("Вся история тренировок и планы", locale: locale))
           }
-          Picker("Формат", selection: $model.format) {
+          Picker(L10n.text("Формат", locale: locale), selection: $model.format) {
             ForEach(ArchiveExportFormat.allCases) { format in
               Text(format.title).tag(format)
             }
           }
-          Button("Сохранить файл", systemImage: "square.and.arrow.up") { model.prepareExport() }
-            .disabled(model.isLoading || model.isSaving).accessibilityIdentifier("exportArchive")
+          Button(L10n.text("Сохранить файл", locale: locale), systemImage: "square.and.arrow.up") {
+            model.prepareExport()
+          }
+          .disabled(model.isLoading || model.isSaving).accessibilityIdentifier("exportArchive")
         }
         Section {
-          Button("Выбрать файл", systemImage: "square.and.arrow.down") {
+          Button(L10n.text("Выбрать файл", locale: locale), systemImage: "square.and.arrow.down") {
             model.showingImporter = true
           }
           .disabled(model.isLoading || model.isSaving).accessibilityIdentifier("chooseArchive")
           if model.isLoading {
-            ProgressView("Чтение файла…")
-            Button("Отменить чтение") { model.cancelReading() }
+            ProgressView(L10n.text("Чтение файла…", locale: locale))
+            Button(L10n.text("Отменить чтение", locale: locale)) { model.cancelReading() }
           }
         } header: {
-          Text("Импорт")
+          Text(L10n.text("Импорт", locale: locale))
         } footer: {
           Text(
-            "Поддерживаются .fitsession и .json. Можно выбрать архив или прежний JSON одной тренировки."
+            L10n.text(
+              "Поддерживаются .fitsession и .json. Можно выбрать архив или прежний JSON одной тренировки.",
+              locale: locale)
           )
         }
         if let preview = model.preview {
           Section {
             Text(preview.fileName).font(.headline)
-            LabeledContent("Новых тренировок", value: "\(preview.summary.addedWorkouts)")
-            LabeledContent("Новых планов", value: "\(preview.summary.addedTemplates)")
-            LabeledContent("Уже есть в приложении", value: "\(preview.summary.skippedExisting)")
+            LabeledContent(
+              L10n.text("Новых тренировок", locale: locale),
+              value: "\(preview.summary.addedWorkouts)")
+            LabeledContent(
+              L10n.text("Новых планов", locale: locale), value: "\(preview.summary.addedTemplates)")
+            LabeledContent(
+              L10n.text("Уже есть в приложении", locale: locale),
+              value: "\(preview.summary.skippedExisting)")
             if preview.summary.skippedUnfinished > 0 {
               Text(
-                "Незавершённых тренировок пропущено: \(preview.summary.skippedUnfinished). Одновременно можно восстановить одну сессию. Остальные остаются в исходном файле."
+                L10n.format(
+                  "Незавершённых тренировок пропущено: %@. Одновременно можно восстановить одну сессию. Остальные остаются в исходном файле.",
+                  String(preview.summary.skippedUnfinished), locale: locale)
               )
               .font(.footnote).foregroundStyle(.secondary)
             }
             if preview.summary.hasChanges {
-              Button("Импортировать", systemImage: "square.and.arrow.down") {
+              Button(
+                L10n.text("Импортировать", locale: locale), systemImage: "square.and.arrow.down"
+              ) {
                 model.requestImport()
               }
               .buttonStyle(.glassProminent).disabled(model.isSaving)
               .accessibilityIdentifier("confirmArchiveImport")
             } else {
-              Text("Нет новых записей для импорта.").foregroundStyle(.secondary)
+              Text(L10n.text("Нет новых записей для импорта.", locale: locale)).foregroundStyle(
+                .secondary)
             }
-            Button("Отменить") { model.cancelReading() }.disabled(model.isSaving)
+            Button(L10n.text("Отменить", locale: locale)) { model.cancelReading() }.disabled(
+              model.isSaving)
           } header: {
-            Text("Перед импортом")
+            Text(L10n.text("Перед импортом", locale: locale))
           } footer: {
             Text(
-              "Существующие записи сохранятся. Повторные UUID пропускаются, даже если содержимое отличается."
+              L10n.text(
+                "Существующие записи сохранятся. Повторные UUID пропускаются, даже если содержимое отличается.",
+                locale: locale)
             )
           }
         }
-        if model.isSaving { Section { ProgressView("Сохранение…") } }
+        if model.isSaving { Section { ProgressView(L10n.text("Сохранение…", locale: locale)) } }
         if let message = model.errorMessage {
           Section {
-            Label(message, systemImage: "exclamationmark.triangle").foregroundStyle(.red)
+            Label(L10n.text(message, locale: locale), systemImage: "exclamationmark.triangle")
+              .foregroundStyle(.red)
             if let request = model.request, model.preview == nil, !model.isLoading {
-              Button("Повторить чтение") { model.selectFile(request.url) }
+              Button(L10n.text("Повторить чтение", locale: locale)) {
+                model.selectFile(request.url)
+              }
             }
           }
         }
@@ -85,10 +106,12 @@ struct ArchiveTransferView: View {
           }
         }
       }
-      .navigationTitle("Импорт и экспорт").navigationBarTitleDisplayMode(.inline)
+      .navigationTitle(L10n.text("Импорт и экспорт", locale: locale)).navigationBarTitleDisplayMode(
+        .inline
+      )
       .toolbar {
         ToolbarItem(placement: .confirmationAction) {
-          Button("Готово") { dismiss() }.disabled(model.isSaving)
+          Button(L10n.text("Готово", locale: locale)) { dismiss() }.disabled(model.isSaving)
         }
       }
       .fileImporter(isPresented: $model.showingImporter, allowedContentTypes: [.fitSession, .json])

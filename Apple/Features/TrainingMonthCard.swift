@@ -2,6 +2,7 @@ import FitSessionCore
 import SwiftUI
 
 struct TrainingMonthCard: View {
+  @Environment(\.locale) private var locale
   let date: Date
   let summary: TrainingMonthSummary
   let move: (Int) -> Void
@@ -9,10 +10,14 @@ struct TrainingMonthCard: View {
     HStack(alignment: .top, spacing: 12) {
       VStack(spacing: 12) {
         HStack {
-          Button("Предыдущий месяц", systemImage: "chevron.left") { move(-1) }.labelStyle(.iconOnly)
+          Button(L10n.text("Предыдущий месяц", locale: locale), systemImage: "chevron.left") {
+            move(-1)
+          }.labelStyle(.iconOnly)
           Text(date, format: .dateTime.month(.wide)).font(.subheadline).foregroundStyle(.secondary)
             .frame(maxWidth: .infinity, alignment: .leading)
-          Button("Следующий месяц", systemImage: "chevron.right") { move(1) }.labelStyle(.iconOnly)
+          Button(L10n.text("Следующий месяц", locale: locale), systemImage: "chevron.right") {
+            move(1)
+          }.labelStyle(.iconOnly)
         }.font(.caption).foregroundStyle(.secondary)
         LazyVGrid(
           columns: Array(repeating: GridItem(.flexible(), spacing: 3), count: 7), spacing: 6
@@ -32,14 +37,14 @@ struct TrainingMonthCard: View {
                 )
               )
               .accessibilityLabel(
-                "\(day.date.formatted(date: .complete, time: .omitted))\(day.hasWorkout ? ", была тренировка" : "")"
+                "\(day.date.formatted(.dateTime.locale(locale).weekday(.wide).day().month(.wide).year()))\(day.hasWorkout ? ", " + L10n.text("calendar.trained", locale: locale) : "")"
               )
           }
         }
       }
       Rectangle().fill(.gray.opacity(0.18)).frame(width: 1)
       VStack(spacing: 14) {
-        Text("Всего").font(.subheadline).foregroundStyle(.secondary)
+        Text(L10n.text("Всего", locale: locale)).font(.subheadline).foregroundStyle(.secondary)
         Text("\(summary.workoutCount)").font(.largeTitle.weight(.medium)).monospacedDigit()
         Divider()
         ZStack {
@@ -51,7 +56,7 @@ struct TrainingMonthCard: View {
           .stroke(FitTheme.accent, style: StrokeStyle(lineWidth: 13, lineCap: .round))
           .rotationEffect(.degrees(-90))
         }.frame(width: 48, height: 48).padding(.top, 5).accessibilityLabel(
-          "Дни с тренировками в выбранном месяце")
+          L10n.text("Дни с тренировками в выбранном месяце", locale: locale))
       }.frame(width: 68)
     }.fixedSize(horizontal: false, vertical: true).fitCard()
   }

@@ -2,10 +2,12 @@ import FitSessionCore
 import SwiftUI
 
 struct SettingsView: View {
+  @Environment(\.locale) private var locale
   @Environment(AppStore.self) private var store
   @AppStorage("weightUnit") private var unit: WeightUnit = .kilograms
   @AppStorage("weeklyGoal") private var goal = 3
   @AppStorage("appearance") private var appearance = "auto"
+  @AppStorage("appLanguage") private var language: AppLanguage = .system
   @AppStorage("keepScreenAwake") private var keepScreenAwake = false
   @AppStorage("cloudSync") private var cloud = false
   @AppStorage("widgetSharing") private var widgetSharing = false
@@ -17,7 +19,7 @@ struct SettingsView: View {
   var body: some View {
     NavigationStack {
       Form {
-        Section("Тренировка") {
+        Section(L10n.text("Тренировка", locale: locale)) {
           Toggle(
             isOn: Binding(
               get: { notifications },
@@ -29,112 +31,154 @@ struct SettingsView: View {
                   store.refreshIntegrations()
                 }
               })
-          ) { SettingsLabel(title: "Уведомления", symbol: "bell") }
+          ) { SettingsLabel(title: L10n.text("Уведомления", locale: locale), symbol: "bell") }
           .disabled(model.requestingNotifications)
-          if model.requestingNotifications { ProgressView("Запрос разрешения…") }
+          if model.requestingNotifications {
+            ProgressView(L10n.text("Запрос разрешения…", locale: locale))
+          }
           if let message = model.notificationMessage {
-            Text(message).font(.footnote).foregroundStyle(.secondary)
+            Text(L10n.text(message, locale: locale)).font(.footnote).foregroundStyle(.secondary)
           }
           Toggle(isOn: $keepScreenAwake) {
-            SettingsLabel(title: "Отключить автоблокировку", symbol: "lock.iphone")
+            SettingsLabel(
+              title: L10n.text("Отключить автоблокировку", locale: locale), symbol: "lock.iphone")
           }
           Toggle(isOn: $liveActivities) { SettingsLabel(title: "Live Activities", symbol: "timer") }
           Stepper(value: $goal, in: 1...7) {
-            SettingsLabel(title: "Цель на неделю: \(goal)", symbol: "calendar")
+            SettingsLabel(
+              title: L10n.format("Цель на неделю: %@", String(goal), locale: locale),
+              symbol: "calendar")
           }
         }
-        Section("Основные") {
+        Section(L10n.text("Основные", locale: locale)) {
+          Picker(L10n.text("Язык приложения", locale: locale), selection: $language) {
+            Text(L10n.text("Как на устройстве", locale: locale)).tag(AppLanguage.system)
+            Text("Русский").tag(AppLanguage.russian)
+            Text("English").tag(AppLanguage.english)
+          }.pickerStyle(.menu).accessibilityIdentifier("appLanguagePicker")
+          Text(L10n.text("Системные диалоги используют язык iOS.", locale: locale))
+            .font(.footnote).foregroundStyle(.secondary)
           Picker(selection: $appearance) {
-            Text("Авто").tag("auto")
-            Text("Светлая").tag("light")
-            Text("Тёмная").tag("dark")
+            Text(L10n.text("Авто", locale: locale)).tag("auto")
+            Text(L10n.text("Светлая", locale: locale)).tag("light")
+            Text(L10n.text("Тёмная", locale: locale)).tag("dark")
           } label: {
-            SettingsLabel(title: "Тема", symbol: "circle.lefthalf.filled")
+            SettingsLabel(
+              title: L10n.text("Тема", locale: locale), symbol: "circle.lefthalf.filled")
           }
           Picker(selection: $unit) {
-            ForEach(WeightUnit.allCases, id: \.self) { Text($0.rawValue).tag($0) }
+            ForEach(WeightUnit.allCases, id: \.self) {
+              Text(L10n.text($0.rawValue, locale: locale)).tag($0)
+            }
           } label: {
-            SettingsLabel(title: "Единицы измерения", symbol: "scalemass")
+            SettingsLabel(
+              title: L10n.text("Единицы измерения", locale: locale), symbol: "scalemass")
           }
           NavigationLink {
             List {
               Text(
-                "Откройте завершённую тренировку в дневнике и выберите «Экспорт в Здоровье». FitSession запросит разрешение на запись."
+                L10n.text(
+                  "Откройте завершённую тренировку в дневнике и выберите «Экспорт в Здоровье». FitSession запросит разрешение на запись.",
+                  locale: locale)
               )
               Text(
-                "Передаются тип, длительность и интервалы пауз. Данные пульса и калорий не генерируются."
+                L10n.text(
+                  "Передаются тип, длительность и интервалы пауз. Данные пульса и калорий не генерируются.",
+                  locale: locale)
               )
-            }.navigationTitle("Здоровье")
+            }.navigationTitle(L10n.text("Здоровье", locale: locale))
           } label: {
-            SettingsLabel(title: "Здоровье", symbol: "heart.fill", color: .pink)
+            SettingsLabel(
+              title: L10n.text("Здоровье", locale: locale), symbol: "heart.fill", color: .pink)
           }
         }
         Section {
           if AppCapabilities.current.supportsCloudSync {
-            Toggle(isOn: $cloud) { SettingsLabel(title: "Синхронизация iCloud", symbol: "icloud") }
+            Toggle(isOn: $cloud) {
+              SettingsLabel(
+                title: L10n.text("Синхронизация iCloud", locale: locale), symbol: "icloud")
+            }
           }
           Button {
             store.archiveTransfer.present()
           } label: {
-            SettingsLabel(title: "Импорт и экспорт", symbol: "arrow.up.arrow.down")
+            SettingsLabel(
+              title: L10n.text("Импорт и экспорт", locale: locale), symbol: "arrow.up.arrow.down")
           }.accessibilityIdentifier("openArchiveTransfer")
           if AppCapabilities.current.supportsCloudSync {
             Button {
               cloudRequest += 1
             } label: {
-              SettingsLabel(title: "Проверить учётную запись", symbol: "person.crop.circle")
+              SettingsLabel(
+                title: L10n.text("Проверить учётную запись", locale: locale),
+                symbol: "person.crop.circle")
             }.disabled(model.cloudState == .loading)
-            if model.cloudState == .loading { ProgressView("Проверка iCloud…") }
-            if let message = model.cloudState.message {
-              Text(message).font(.footnote).foregroundStyle(.secondary)
+            if model.cloudState == .loading {
+              ProgressView(L10n.text("Проверка iCloud…", locale: locale))
             }
-            if model.cloudState == .failed { Button("Повторить") { cloudRequest += 1 } }
+            if let message = model.cloudState.message {
+              Text(L10n.text(message, locale: locale)).font(.footnote).foregroundStyle(.secondary)
+            }
+            if model.cloudState == .failed {
+              Button(L10n.text("Повторить", locale: locale)) { cloudRequest += 1 }
+            }
           }
         } header: {
-          Text("Данные")
+          Text(L10n.text("Данные", locale: locale))
         } footer: {
           if AppCapabilities.current.supportsCloudSync {
             Text(
-              "Изменение синхронизации вступит в силу после перезапуска. История хранится на устройстве и, по вашему выбору, в личном iCloud."
+              L10n.text(
+                "Изменение синхронизации вступит в силу после перезапуска. История хранится на устройстве и, по вашему выбору, в личном iCloud.",
+                locale: locale)
             )
           } else {
             Text(
-              "История хранится на этом устройстве. Для переноса используйте импорт и экспорт файлов."
+              L10n.text(
+                "История хранится на этом устройстве. Для переноса используйте импорт и экспорт файлов.",
+                locale: locale)
             )
           }
         }
         Section {
           Toggle(isOn: $widgetSharing) {
-            SettingsLabel(title: "Сводка для виджета", symbol: "square.grid.2x2")
+            SettingsLabel(
+              title: L10n.text("Сводка для виджета", locale: locale), symbol: "square.grid.2x2")
           }
         } footer: {
           Text(
-            "Виджет получает только число тренировок и недельную цель. Эта сводка может быть видна на экране блокировки."
+            L10n.text(
+              "Виджет получает только число тренировок и недельную цель. Эта сводка может быть видна на экране блокировки.",
+              locale: locale)
           )
         }
         Section {
           NavigationLink {
             ExerciseLibraryView()
           } label: {
-            SettingsLabel(title: "Библиотека упражнений", symbol: "dumbbell")
+            SettingsLabel(
+              title: L10n.text("Библиотека упражнений", locale: locale), symbol: "dumbbell")
           }
           NavigationLink {
             ExerciseCreditsView()
           } label: {
-            SettingsLabel(title: "Источники и фотографии", symbol: "info.circle")
+            SettingsLabel(
+              title: L10n.text("Источники и фотографии", locale: locale), symbol: "info.circle")
           }
           LabeledContent {
             Text(
               Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
                 ?? "1.0")
           } label: {
-            SettingsLabel(title: "Версия", symbol: "app")
+            SettingsLabel(title: L10n.text("Версия", locale: locale), symbol: "app")
           }
         } footer: {
-          Text("Все функции FitSession доступны бесплатно.")
+          Text(L10n.text("Все функции FitSession доступны бесплатно.", locale: locale))
         }
       }
-      .scrollContentBackground(.hidden).background(FitTheme.grouped).navigationTitle("Настройки")
+      .scrollContentBackground(.hidden).background(FitTheme.grouped).navigationTitle(
+        L10n.text("Настройки", locale: locale)
+      )
       .tint(FitTheme.accent)
       .task(id: cloudRequest) {
         if cloudRequest > 0 && AppCapabilities.current.supportsCloudSync {

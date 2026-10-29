@@ -13,7 +13,7 @@ import UIKit
     else { return }
     _ = try Activity.request(
       attributes: WorkoutActivityAttributes(workoutID: workout.id, name: workout.name),
-      content: ActivityContent(state: WorkoutLiveState(workout: workout), staleDate: nil),
+      content: ActivityContent(state: localizedState(for: workout), staleDate: nil),
       pushType: nil)
   }
 
@@ -32,7 +32,7 @@ import UIKit
     }
     try Task.checkCancellation()
     guard let workout, workout.endedAt == nil else { return }
-    let state = WorkoutLiveState(workout: workout)
+    let state = localizedState(for: workout)
     let matching = activities.filter {
       $0.workoutID == workout.id && $0.canUpdate
     }
@@ -50,6 +50,14 @@ import UIKit
     if allowStart {
       try startIfNeeded(for: workout)
     }
+  }
+
+  private func localizedState(for workout: Workout) -> WorkoutLiveState {
+    var display = workout
+    for index in display.exercises.indices {
+      display.exercises[index].exercise.name = L10n.exerciseName(display.exercises[index].exercise)
+    }
+    return WorkoutLiveState(workout: display, languageCode: L10n.language.rawValue)
   }
 
   // @concurrent keeps SDK handles on the generic executor, including with Swift 6.2's

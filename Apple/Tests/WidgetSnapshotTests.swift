@@ -1,8 +1,20 @@
+import FitSessionCore
 import XCTest
 
 @testable import FitSession
 
 final class WidgetSnapshotTests: XCTestCase {
+  func testLanguageCanBeSharedWithoutPublishingWorkoutData() throws {
+    let suite = "FitSession.LanguageTests.\(UUID().uuidString)"
+    let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
+    defer { defaults.removePersistentDomain(forName: suite) }
+    try WidgetSnapshot.publishLanguage(.english, to: defaults)
+    XCTAssertEqual(defaults.string(forKey: "appLanguage"), "en")
+    XCTAssertNil(try WidgetSnapshot.read(from: defaults))
+    try WidgetSnapshot.clear(from: defaults)
+    XCTAssertEqual(defaults.string(forKey: "appLanguage"), "en")
+  }
+
   func testCorruptSnapshotIsReportedAndPreserved() throws {
     let suite = "FitSession.SnapshotTests.\(UUID().uuidString)"
     let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))

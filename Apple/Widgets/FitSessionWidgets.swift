@@ -36,6 +36,7 @@ private struct WeeklyProvider: TimelineProvider {
   }
 }
 private struct WeeklyWidgetView: View {
+  @Environment(\.locale) private var locale
   let entry: WeeklyEntry
   var body: some View {
     VStack(alignment: .leading, spacing: 10) {
@@ -46,15 +47,16 @@ private struct WeeklyWidgetView: View {
             snapshot.updatedAt) == true
         let count = sameWeek ? snapshot.workoutsThisWeek : 0
         Text("\(count) / \(snapshot.weeklyGoal)").font(.largeTitle.bold()).privacySensitive()
-        Text("тренировок за неделю").font(.caption).foregroundStyle(.secondary)
+        Text(L10n.text("тренировок за неделю", locale: locale)).font(.caption).foregroundStyle(
+          .secondary)
         ProgressView(value: Double(count), total: Double(max(count, snapshot.weeklyGoal)))
           .tint(Color.accentColor)
       } else {
-        Text("Ваша неделя").font(.headline)
+        Text(L10n.text("Ваша неделя", locale: locale)).font(.headline)
         Text(
           entry.loadFailed
-            ? "Откройте FitSession, чтобы обновить сводку."
-            : "Включите сводку виджета в настройках FitSession."
+            ? L10n.text("Откройте FitSession, чтобы обновить сводку.", locale: locale)
+            : L10n.text("Включите сводку виджета в настройках FitSession.", locale: locale)
         ).font(.caption).foregroundStyle(
           .secondary)
       }
@@ -66,7 +68,7 @@ private struct WeeklyWidgetView: View {
 struct WeeklyWorkoutWidget: Widget {
   var body: some WidgetConfiguration {
     StaticConfiguration(kind: "FitSession.Weekly", provider: WeeklyProvider()) {
-      WeeklyWidgetView(entry: $0)
+      WeeklyWidgetView(entry: $0).environment(\.locale, L10n.locale)
     }
     .configurationDisplayName("Ваша неделя").description("Прогресс к недельной цели.")
     .supportedFamilies([.systemSmall, .systemMedium])

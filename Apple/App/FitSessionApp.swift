@@ -1,5 +1,6 @@
 import FitSessionCore
 import SwiftUI
+import WidgetKit
 
 @main struct FitSessionApp: App {
   @UIApplicationDelegateAdaptor(AppDelegate.self) private var delegate
@@ -7,6 +8,7 @@ import SwiftUI
   @State private var startupError: String?
   @State private var pendingFileURL: URL?
   @AppStorage("appearance") private var appearance = "auto"
+  @AppStorage("appLanguage") private var language: AppLanguage = .system
   var body: some Scene {
     WindowGroup {
       Group {
@@ -17,7 +19,7 @@ import SwiftUI
           ContentUnavailableView {
             Label("Хранилище недоступно", systemImage: "externaldrive.badge.exclamationmark")
           } description: {
-            Text(startupError)
+            Text(L10n.text(startupError, locale: language.locale()))
           } actions: {
             Button("Повторить") { boot() }.buttonStyle(.glassProminent)
             Text("Данные не удалены. Попробуйте открыть приложение ещё раз позже.")
@@ -28,13 +30,27 @@ import SwiftUI
         }
       }
       .tint(FitTheme.accent)
+      .environment(\.locale, language.locale())
+      .environment(\.calendar, presentationCalendar)
       .preferredColorScheme(appearance == "light" ? .light : appearance == "dark" ? .dark : nil)
       .task { if store == nil && startupError == nil { boot() } }
       .onOpenURL { url in
         guard url.isFileURL else { return }
         if let store { store.archiveTransfer.openFile(url) } else { pendingFileURL = url }
       }
+      .onChange(of: language, initial: true) {
+        do { try WidgetSnapshot.publishLanguage(language) } catch {
+          AppErrorReporter.record(error, operation: "shareLanguagePreference")
+        }
+        WidgetCenter.shared.reloadAllTimelines()
+        store?.refreshIntegrations()
+      }
     }
+  }
+  private var presentationCalendar: Calendar {
+    var calendar = Calendar.autoupdatingCurrent
+    calendar.locale = language.locale()
+    return calendar
   }
   @MainActor private func boot() {
     do {

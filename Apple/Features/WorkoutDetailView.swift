@@ -2,6 +2,7 @@ import FitSessionCore
 import SwiftUI
 
 struct WorkoutDetailView: View {
+  @Environment(\.locale) private var locale
   @Environment(AppStore.self) private var store
   @Environment(\.dismiss) private var dismiss
   @AppStorage("weightUnit") private var unit: WeightUnit = .kilograms
@@ -19,13 +20,16 @@ struct WorkoutDetailView: View {
         WorkoutHero(title: session.name, date: session.startedAt)
         VStack(spacing: 20) {
           HStack(spacing: 8) {
-            SummaryMetric(title: "Время", value: session.duration().workoutDuration)
             SummaryMetric(
-              title: "Объём",
+              title: L10n.text("Время", locale: locale),
+              value: session.duration().formattedWorkoutDuration(locale: locale))
+            SummaryMetric(
+              title: L10n.text("Объём", locale: locale),
               value:
-                "\(unit.display(session.volume).formatted(.number.precision(.fractionLength(0)))) \(unit.rawValue)"
+                "\(unit.display(session.volume).formatted(.number.locale(L10n.numberLocale).precision(.fractionLength(0)))) \(L10n.text(unit.rawValue, locale: locale))"
             )
-            SummaryMetric(title: "Подходы", value: "\(session.completedSets)")
+            SummaryMetric(
+              title: L10n.text("Подходы", locale: locale), value: "\(session.completedSets)")
           }
           ForEach(Array(session.exercises.enumerated()), id: \.element.id) { index, exercise in
             VStack(spacing: 16) {
@@ -35,7 +39,8 @@ struct WorkoutDetailView: View {
                 HStack(alignment: .top, spacing: 14) {
                   Text("\(index + 1)").font(.subheadline).frame(width: 16)
                   VStack(alignment: .leading, spacing: 7) {
-                    Text(exercise.exercise.name).font(.title3.weight(.medium))
+                    Text(L10n.exerciseName(exercise.exercise, locale: locale)).font(
+                      .title3.weight(.medium))
                     Text(setSummary(exercise)).font(.subheadline)
                   }.frame(maxWidth: .infinity, alignment: .leading)
                   if let entry = ExerciseLibrary.entry(for: exercise.exercise.id) {
@@ -54,15 +59,17 @@ struct WorkoutDetailView: View {
           }
           if !session.notes.isEmpty {
             VStack(alignment: .leading, spacing: 8) {
-              Text("Заметка").font(.headline)
+              Text(L10n.text("Заметка", locale: locale)).font(.headline)
               Text(session.notes)
             }.frame(maxWidth: .infinity, alignment: .leading).fitCard()
           }
-          Button("Экспорт в «Здоровье»", systemImage: "heart") {
+          Button(L10n.text("Экспорт в «Здоровье»", locale: locale), systemImage: "heart") {
             exporting = true
           }.disabled(exporting).frame(maxWidth: .infinity, alignment: .leading)
           Text(
-            "Калории и пульс не рассчитываются из веса снарядов. В «Здоровье» передаются тип, длительность и паузы тренировки."
+            L10n.text(
+              "Калории и пульс не рассчитываются из веса снарядов. В «Здоровье» передаются тип, длительность и паузы тренировки.",
+              locale: locale)
           )
           .font(.caption).foregroundStyle(.secondary)
         }.padding(16)
@@ -75,19 +82,26 @@ struct WorkoutDetailView: View {
     .toolbarColorScheme(.dark, for: .navigationBar)
     .toolbar {
       ToolbarItem(placement: .topBarLeading) {
-        Button("Закрыть", systemImage: "chevron.down") { dismiss() }.foregroundStyle(.white)
+        Button(L10n.text("Закрыть", locale: locale), systemImage: "chevron.down") { dismiss() }
+          .foregroundStyle(.white)
       }
       ToolbarItem(placement: .topBarTrailing) {
         Menu {
-          Button("Изменить тренировку", systemImage: "pencil") { editing = true }
-          Button("Сохранить как шаблон", systemImage: "list.clipboard") { createTemplate() }
-          ShareLink(item: WorkoutDocument(workout: session), preview: SharePreview(session.name)) {
-            Label("Поделиться JSON", systemImage: "square.and.arrow.up")
+          Button(L10n.text("Изменить тренировку", locale: locale), systemImage: "pencil") {
+            editing = true
           }
-          Button("Экспорт файла", systemImage: "doc.badge.arrow.up") {
+          Button(L10n.text("Сохранить как шаблон", locale: locale), systemImage: "list.clipboard") {
+            createTemplate()
+          }
+          ShareLink(item: WorkoutDocument(workout: session), preview: SharePreview(session.name)) {
+            Label(L10n.text("Поделиться JSON", locale: locale), systemImage: "square.and.arrow.up")
+          }
+          Button(L10n.text("Экспорт файла", locale: locale), systemImage: "doc.badge.arrow.up") {
             store.archiveTransfer.present(workout: session)
           }
-          Button("Удалить", systemImage: "trash", role: .destructive) { confirmDelete = true }
+          Button(L10n.text("Удалить", locale: locale), systemImage: "trash", role: .destructive) {
+            confirmDelete = true
+          }
         } label: {
           Image(systemName: "ellipsis.circle.fill").foregroundStyle(.white)
         }
@@ -101,9 +115,9 @@ struct WorkoutDetailView: View {
           Image(systemName: "plus").font(.title2).frame(width: 48, height: 48).background(
             FitTheme.card, in: .circle)
         }
-        .accessibilityLabel("Сохранить как шаблон")
+        .accessibilityLabel(L10n.text("Сохранить как шаблон", locale: locale))
         Spacer()
-        Button("Повторить") {
+        Button(L10n.text("Повторить", locale: locale)) {
           if let onRepeat {
             onRepeat(session)
           } else {
@@ -118,7 +132,7 @@ struct WorkoutDetailView: View {
           Image(systemName: "pencil").font(.title2).frame(width: 48, height: 48).background(
             FitTheme.card, in: .circle)
         }
-        .accessibilityLabel("Изменить тренировку")
+        .accessibilityLabel(L10n.text("Изменить тренировку", locale: locale))
       }.buttonStyle(.plain).padding(.horizontal, 16).padding(.vertical, 10).background(
         FitTheme.paper)
     }
@@ -133,9 +147,10 @@ struct WorkoutDetailView: View {
     }
     .archiveTransferPresenter(when: !editing && templateDraft == nil && !confirmDelete)
     .confirmationDialog(
-      "Удалить тренировку?", isPresented: $confirmDelete, titleVisibility: .visible
+      L10n.text("Удалить тренировку?", locale: locale), isPresented: $confirmDelete,
+      titleVisibility: .visible
     ) {
-      Button("Удалить", role: .destructive) {
+      Button(L10n.text("Удалить", locale: locale), role: .destructive) {
         store.delete(workout: session)
         if store.error == nil { dismiss() }
       }
@@ -154,17 +169,17 @@ struct WorkoutDetailView: View {
           }
         })
     ) {
-      Button("Понятно") {
+      Button(L10n.text("Понятно", locale: locale)) {
         store.error = nil
         store.notice = nil
       }
     } message: {
-      Text(store.error ?? store.notice ?? "")
+      Text(L10n.text(store.error ?? store.notice ?? "", locale: locale))
     }
   }
   private func setSummary(_ exercise: WorkoutExercise) -> String {
     exercise.sets.filter { $0.completedAt != nil }.map {
-      "\(unit.display($0.weightKG).formatted(.number.precision(.fractionLength(0...1)))) \(unit.rawValue) × \($0.repetitions)"
+      "\(unit.display($0.weightKG).formatted(.number.locale(L10n.numberLocale).precision(.fractionLength(0...1)))) \(L10n.text(unit.rawValue, locale: locale)) × \($0.repetitions)"
     }.joined(separator: ", ")
   }
   private func createTemplate() {
@@ -175,6 +190,7 @@ struct WorkoutDetailView: View {
 }
 
 struct WorkoutEditorView: View {
+  @Environment(\.locale) private var locale
   @Environment(AppStore.self) private var store
   @Environment(\.dismiss) private var dismiss
   @State var workout: Workout
@@ -182,15 +198,19 @@ struct WorkoutEditorView: View {
   var body: some View {
     NavigationStack {
       List {
-        Section("Название и заметка") {
-          TextField("Название", text: $workout.name)
-          TextField("Заметка", text: $workout.notes, axis: .vertical)
+        Section(L10n.text("Название и заметка", locale: locale)) {
+          TextField(L10n.text("Название", locale: locale), text: $workout.name)
+          TextField(L10n.text("Заметка", locale: locale), text: $workout.notes, axis: .vertical)
         }
-        Section("Упражнения") {
+        Section(L10n.text("Упражнения", locale: locale)) {
           ForEach(workout.exercises) { item in
             VStack(alignment: .leading, spacing: 5) {
-              Text(item.exercise.name).font(.headline)
-              Text("\(item.sets.filter { $0.completedAt != nil }.count) выполненных подходов").font(
+              Text(L10n.exerciseName(item.exercise, locale: locale)).font(.headline)
+              Text(
+                L10n.countText(
+                  item.sets.filter { $0.completedAt != nil }.count, kind: "completed.set",
+                  locale: locale)
+              ).font(
                 .subheadline
               ).foregroundStyle(.secondary)
             }
@@ -198,14 +218,17 @@ struct WorkoutEditorView: View {
           .onMove { workout.exercises.move(fromOffsets: $0, toOffset: $1) }
           .onDelete { workout.exercises.remove(atOffsets: $0) }
         }
-        if let message { Text(message).foregroundStyle(.red) }
+        if let message { Text(L10n.text(message, locale: locale)).foregroundStyle(.red) }
       }
-      .navigationTitle("Изменить тренировку").navigationBarTitleDisplayMode(.inline)
+      .navigationTitle(L10n.text("Изменить тренировку", locale: locale))
+      .navigationBarTitleDisplayMode(.inline)
       .toolbar {
-        ToolbarItem(placement: .cancellationAction) { Button("Отмена") { dismiss() } }
+        ToolbarItem(placement: .cancellationAction) {
+          Button(L10n.text("Отмена", locale: locale)) { dismiss() }
+        }
         ToolbarItem(placement: .primaryAction) { EditButton() }
         ToolbarItem(placement: .confirmationAction) {
-          Button("Готово") {
+          Button(L10n.text("Готово", locale: locale)) {
             if store.updateCompleted(workout) { dismiss() } else { message = store.error }
           }
         }

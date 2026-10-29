@@ -26,7 +26,16 @@ struct ArchiveImportPreview {
   private(set) var isLoading = false
   private(set) var isSaving = false
   private(set) var errorMessage: String?
-  private(set) var notice: String?
+  private var importResult: ArchiveImportSummary?
+  private var exported = false
+  var notice: String? {
+    if let result = importResult {
+      return L10n.format(
+        "Добавлено тренировок: %@, планов: %@. Пропущено: %@.", String(result.addedWorkouts),
+        String(result.addedTemplates), String(result.skippedExisting + result.skippedUnfinished))
+    }
+    return exported ? L10n.text("Файл сохранён.") : nil
+  }
   @ObservationIgnored private let files: any ArchiveFileHandling
   @ObservationIgnored private let snapshot: () throws -> WorkoutArchive
   @ObservationIgnored private let plan: (WorkoutArchive) throws -> ArchiveImportSummary
@@ -50,7 +59,8 @@ struct ArchiveImportPreview {
     cancelReading()
     self.workout = workout
     self.format = format
-    notice = nil
+    importResult = nil
+    exported = false
     errorMessage = nil
     isPresented = true
   }
@@ -69,7 +79,8 @@ struct ArchiveImportPreview {
     guard !isSaving else { return }
     preview = nil
     commitRequestID = nil
-    notice = nil
+    importResult = nil
+    exported = false
     errorMessage = nil
     request = ArchiveReadRequest(url: url)
     isLoading = true
@@ -126,8 +137,7 @@ struct ArchiveImportPreview {
       let result = try commit(preview.archive)
       self.preview = nil
       request = nil
-      notice =
-        "Добавлено тренировок: \(result.addedWorkouts), планов: \(result.addedTemplates). Пропущено: \(result.skippedExisting + result.skippedUnfinished)."
+      importResult = result
     } catch {
       fail(
         error, operation: "importArchive",
@@ -138,7 +148,8 @@ struct ArchiveImportPreview {
   func prepareExport() {
     guard !isSaving, !isLoading else { return }
     errorMessage = nil
-    notice = nil
+    importResult = nil
+    exported = false
     do {
       let archive = try workout.map { WorkoutArchive(workouts: [$0], templates: []) } ?? snapshot()
       try WorkoutArchiveCodec.validate(archive)
@@ -154,7 +165,7 @@ struct ArchiveImportPreview {
   func exportCompleted(_ result: Result<URL, any Error>) {
     exportDocument = nil
     switch result {
-    case .success: notice = "Файл сохранён."
+    case .success: exported = true
     case .failure(let error):
       if (error as NSError).domain == NSCocoaErrorDomain
         && (error as NSError).code == NSUserCancelledError

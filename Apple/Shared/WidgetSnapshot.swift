@@ -1,3 +1,4 @@
+import FitSessionCore
 import Foundation
 
 struct WidgetSnapshot: Codable, Sendable {
@@ -26,6 +27,10 @@ struct WidgetSnapshot: Codable, Sendable {
   static func clear(from defaults: UserDefaults? = nil) throws {
     let storage = try defaults ?? sharedDefaults()
     storage.removeObject(forKey: "weeklySnapshot")
+  }
+  static func publishLanguage(_ language: AppLanguage, to defaults: UserDefaults? = nil) throws {
+    let storage = try defaults ?? sharedDefaults()
+    storage.set(language.rawValue, forKey: "appLanguage")
   }
   private func validate() throws {
     guard workoutsThisWeek >= 0, (1...7).contains(weeklyGoal),

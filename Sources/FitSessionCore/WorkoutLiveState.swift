@@ -12,8 +12,10 @@ public struct WorkoutLiveState: Codable, Hashable, Sendable {
   public let restEndsAt: Date?
   public let nextExerciseName: String?
   public let nextSetNumber: Int?
+  public let languageCode: String?
 
-  public init(workout: Workout, at date: Date = Date()) {
+  public init(workout: Workout, at date: Date = Date(), languageCode: String? = nil) {
+    self.languageCode = languageCode
     completedSets = workout.completedSets
     totalSets = workout.totalSets
     paused = workout.status == .paused

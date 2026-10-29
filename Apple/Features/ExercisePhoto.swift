@@ -13,6 +13,7 @@ extension EnvironmentValues {
 }
 
 struct ExercisePhoto: View {
+  @Environment(\.locale) private var locale
   let path: String
   @Environment(\.exerciseImageLoader) private var loader
   @State private var model: ExercisePhotoViewModel?
@@ -29,11 +30,13 @@ struct ExercisePhoto: View {
       } else if model?.failed == true {
         VStack(spacing: 8) {
           Image(systemName: "photo.badge.exclamationmark").foregroundStyle(.secondary)
-          Button("Повторить загрузку фото", systemImage: "arrow.clockwise") { attempt += 1 }
-            .labelStyle(.iconOnly)
-        }.accessibilityLabel("Фото недоступно")
+          Button(
+            L10n.text("Повторить загрузку фото", locale: locale), systemImage: "arrow.clockwise"
+          ) { attempt += 1 }
+          .labelStyle(.iconOnly)
+        }.accessibilityLabel(L10n.text("Фото недоступно", locale: locale))
       } else {
-        ProgressView().accessibilityLabel("Загрузка фото")
+        ProgressView().accessibilityLabel(L10n.text("Загрузка фото", locale: locale))
       }
     }
     .task(id: Request(path: path, attempt: attempt)) {
