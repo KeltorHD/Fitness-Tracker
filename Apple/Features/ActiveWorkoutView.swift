@@ -4,21 +4,32 @@ import SwiftUI
 struct ActiveWorkoutView: View {
   @Environment(AppStore.self) private var store
   @Environment(\.dismiss) private var dismiss
+  @AppStorage("weightUnit") private var unit: WeightUnit = .kilograms
   @State private var pickingExercise = false
   @State private var confirmCancel = false
+  @State private var renaming = false
+  @State private var workoutName = ""
   var body: some View {
     NavigationStack {
       if let workout = store.active {
         List {
+          WorkoutHero(title: workout.name, date: workout.startedAt)
+            .listRowInsets(EdgeInsets()).listRowSeparator(.hidden)
           Section {
             TimelineView(.periodic(from: .now, by: 1)) { timeline in
-              HStack {
-                Label(
-                  Duration.seconds(workout.duration(at: timeline.date)).formatted(
-                    .time(pattern: .hourMinuteSecond)), systemImage: "stopwatch")
-                Spacer()
-                Text("\(workout.completedSets)/\(workout.totalSets)").monospacedDigit()
-              }.font(.headline)
+              HStack(spacing: 8) {
+                SummaryMetric(
+                  title: "Время",
+                  value: Duration.seconds(workout.duration(at: timeline.date)).formatted(
+                    .time(pattern: .hourMinuteSecond)))
+                SummaryMetric(
+                  title: "Объём",
+                  value:
+                    "\(unit.display(workout.volume).formatted(.number.precision(.fractionLength(0)))) \(unit.rawValue)"
+                )
+                SummaryMetric(
+                  title: "Подходы", value: "\(workout.completedSets)/\(workout.totalSets)")
+              }
             }
             if workout.status == .paused {
               Label("Тренировка на паузе", systemImage: "pause.circle")
@@ -58,12 +69,38 @@ struct ActiveWorkoutView: View {
             Button("Отменить тренировку", role: .destructive) { confirmCancel = true }
           }
         }
-        .navigationTitle(workout.name).navigationBarTitleDisplayMode(.inline)
+        .listStyle(.plain).scrollContentBackground(.hidden).background(FitTheme.paper)
+        .navigationTitle("").navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(FitTheme.accent, for: .navigationBar).toolbarBackground(
+          .visible, for: .navigationBar
+        )
+        .toolbarColorScheme(.dark, for: .navigationBar)
         .safeAreaInset(edge: .bottom) { SessionControls(workout: workout) }
         .toolbar {
           ToolbarItem(placement: .topBarLeading) {
             Button("Свернуть", systemImage: "chevron.down") { dismiss() }
           }
+        }
+        .toolbar {
+          ToolbarItem(placement: .topBarTrailing) {
+            Menu {
+              Button("Изменить название", systemImage: "textformat") {
+                workoutName = workout.name
+                renaming = true
+              }
+              Button("Добавить упражнение", systemImage: "plus") { pickingExercise = true }
+              Button("Отменить тренировку", systemImage: "trash", role: .destructive) {
+                confirmCancel = true
+              }
+            } label: {
+              Image(systemName: "ellipsis.circle.fill").foregroundStyle(.white)
+            }
+          }
+        }
+        .alert("Название тренировки", isPresented: $renaming) {
+          TextField("Название", text: $workoutName)
+          Button("Сохранить") { store.mutate { $0.name = workoutName } }
+          Button("Отмена", role: .cancel) {}
         }
         .sheet(isPresented: $pickingExercise) {
           ExercisePicker { exercise in

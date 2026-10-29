@@ -63,7 +63,7 @@ struct WatchWorkoutView: View {
             Button("Завершить") { store.finish() }.disabled(workout.completedSets == 0)
             Button("Отменить", role: .destructive) { cancel = true }
           } else {
-            Image(systemName: "dumbbell.fill").font(.largeTitle).foregroundStyle(.mint)
+            Image(systemName: "dumbbell.fill").font(.largeTitle).foregroundStyle(Color.accentColor)
             Text("Ваш следующий подход").font(.headline)
             Button("Начать · Всё тело A") { store.start() }.buttonStyle(.glassProminent)
             Text("\(store.pending.count) ожидают передачи на iPhone").font(.caption)

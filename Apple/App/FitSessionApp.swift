@@ -5,6 +5,7 @@ import SwiftUI
   @UIApplicationDelegateAdaptor(AppDelegate.self) private var delegate
   @State private var store: AppStore?
   @State private var startupError: String?
+  @AppStorage("appearance") private var appearance = "auto"
   var body: some Scene {
     WindowGroup {
       Group {
@@ -24,7 +25,8 @@ import SwiftUI
           ProgressView("FitSession")
         }
       }
-      .tint(Color.accentColor)
+      .tint(FitTheme.accent)
+      .preferredColorScheme(appearance == "light" ? .light : appearance == "dark" ? .dark : nil)
       .task { if store == nil && startupError == nil { boot() } }
     }
   }

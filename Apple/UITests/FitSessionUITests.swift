@@ -29,7 +29,7 @@ final class FitSessionUITests: XCTestCase {
     finish.tap()
     let alert = app.alerts["Готово"]
     if alert.waitForExistence(timeout: 3) { alert.buttons["Хорошо"].tap() }
-    app.tabBars.buttons["История"].tap()
+    app.tabBars.buttons["Дневник"].tap()
     XCTAssertTrue(app.staticTexts["Свободная тренировка"].waitForExistence(timeout: 5))
   }
   @MainActor func testMinimizedSessionCanBeResumed() {

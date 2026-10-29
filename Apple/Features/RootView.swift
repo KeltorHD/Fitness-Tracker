@@ -1,19 +1,24 @@
 import SwiftUI
+import UIKit
 
 struct RootView: View {
   @Environment(AppStore.self) private var store
   @Environment(\.scenePhase) private var phase
+  @State private var tab = 0
+  @AppStorage("keepScreenAwake") private var keepScreenAwake = false
   var body: some View {
     @Bindable var store = store
-    TabView {
-      Tab("Сегодня", systemImage: "figure.strengthtraining.traditional") { DashboardView() }
-      Tab("Планы", systemImage: "square.grid.2x2") { TemplatesView() }
-      Tab("История", systemImage: "clock.arrow.circlepath") { HistoryView() }
-      Tab("Прогресс", systemImage: "chart.xyaxis.line") { ProgressScreen() }
-      Tab("Настройки", systemImage: "gearshape") { SettingsView() }
+    TabView(selection: $tab) {
+      Tab("Дневник", systemImage: "book.closed", value: 0) { DashboardView().tint(FitTheme.accent) }
+      Tab("Каталог", systemImage: "dumbbell", value: 1) { TemplatesView().tint(FitTheme.accent) }
+      Tab("Результаты", systemImage: "chart.bar", value: 2) {
+        ProgressScreen().tint(FitTheme.accent)
+      }
+      Tab("Настройки", systemImage: "gearshape", value: 3) { SettingsView().tint(FitTheme.accent) }
     }
+    .tint(.primary)
     .sheet(isPresented: $store.showSession) {
-      ActiveWorkoutView().environment(store).interactiveDismissDisabled()
+      ActiveWorkoutView().environment(store).tint(FitTheme.accent).interactiveDismissDisabled()
     }
     .alert(
       "FitSession",
@@ -33,14 +38,19 @@ struct RootView: View {
       Text(store.notice ?? "")
     }
     .onOpenURL { url in
+      if url.scheme == "fitsession", url.host == "today" { tab = 0 }
       if url.scheme == "fitsession", url.host == "workout" {
+        tab = 0
         let value = URLComponents(url: url, resolvingAgainstBaseURL: false)?
           .queryItems?.first { $0.name == "id" }?.value
         if let value, UUID(uuidString: value) == nil { return }
         store.openWorkout(id: value.flatMap { UUID(uuidString: $0) })
       }
     }
+    .onChange(of: keepScreenAwake) { updateIdleTimer() }
+    .onChange(of: store.active?.status) { updateIdleTimer() }
     .onChange(of: phase) { _, phase in
+      updateIdleTimer()
       if phase == .active {
         store.reload()
         store.refreshIntegrations()
@@ -48,5 +58,9 @@ struct RootView: View {
         Task { await store.prepareForBackground() }
       }
     }
+  }
+  private func updateIdleTimer() {
+    UIApplication.shared.isIdleTimerDisabled =
+      keepScreenAwake && phase == .active && store.active?.status == .active
   }
 }

@@ -65,17 +65,46 @@ import WidgetKit
     }
     do {
       let workout = try template?.start() ?? Workout(name: "Свободная тренировка")
+      try activate(workout)
+    } catch { self.error = error.localizedDescription }
+  }
+  private func activate(_ workout: Workout) throws {
+    try repository.save(workout)
+    reload()
+    showSession = true
+    if platformServicesEnabled, defaults.object(forKey: "liveActivities") as? Bool != false {
+      // Request synchronously while foregrounded, before notification/widget async work.
+      do { try liveActivity.startIfNeeded(for: workout) } catch {
+        self.error = "Live Activity: \(error.localizedDescription)"
+      }
+    }
+    refreshIntegrations()
+  }
+  func repeatWorkout(_ original: Workout) {
+    guard active == nil else {
+      showSession = true
+      return
+    }
+    do { try activate(WorkoutEngine.repeatWorkout(original)) } catch {
+      error = error.localizedDescription
+    }
+  }
+  func updateCompleted(_ workout: Workout) -> Bool {
+    do {
+      guard workout.status == .completed,
+        try repository.workouts().contains(where: { $0.id == workout.id && $0.status == .completed }
+        )
+      else {
+        throw TrainingError.invalidState
+      }
       try repository.save(workout)
       reload()
-      showSession = true
-      if platformServicesEnabled, defaults.object(forKey: "liveActivities") as? Bool != false {
-        // Request synchronously while foregrounded, before notification/widget async work.
-        do { try liveActivity.startIfNeeded(for: workout) } catch {
-          self.error = "Live Activity: \(error.localizedDescription)"
-        }
-      }
       refreshIntegrations()
-    } catch { self.error = error.localizedDescription }
+      return true
+    } catch {
+      self.error = error.localizedDescription
+      return false
+    }
   }
   func mutate(_ action: (inout Workout) throws -> Void) {
     guard var workout = active else { return }

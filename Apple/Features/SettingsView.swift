@@ -5,6 +5,8 @@ struct SettingsView: View {
   @Environment(AppStore.self) private var store
   @AppStorage("weightUnit") private var unit: WeightUnit = .kilograms
   @AppStorage("weeklyGoal") private var goal = 3
+  @AppStorage("appearance") private var appearance = "auto"
+  @AppStorage("keepScreenAwake") private var keepScreenAwake = false
   @AppStorage("cloudSync") private var cloud = false
   @AppStorage("widgetSharing") private var widgetSharing = false
   @AppStorage("liveActivities") private var liveActivities = true
@@ -13,13 +15,8 @@ struct SettingsView: View {
   var body: some View {
     NavigationStack {
       Form {
-        Section("Тренировки") {
-          Picker("Единицы веса", selection: $unit) {
-            ForEach(WeightUnit.allCases, id: \.self) { Text($0.rawValue).tag($0) }
-          }
-          Stepper("Цель: \(goal) тренировок в неделю", value: $goal, in: 1...7)
+        Section("Тренировка") {
           Toggle(
-            "Уведомление об окончании отдыха",
             isOn: Binding(
               get: { notifications },
               set: { enabled in
@@ -32,45 +29,110 @@ struct SettingsView: View {
                   notifications = false
                   store.refreshIntegrations()
                 }
-              }))
-          Toggle("Live Activities", isOn: $liveActivities)
+              })
+          ) { SettingsLabel(title: "Уведомления", symbol: "bell") }
+          Toggle(isOn: $keepScreenAwake) {
+            SettingsLabel(title: "Отключить автоблокировку", symbol: "lock.iphone")
+          }
+          Toggle(isOn: $liveActivities) { SettingsLabel(title: "Live Activities", symbol: "timer") }
+          Stepper(value: $goal, in: 1...7) {
+            SettingsLabel(title: "Цель на неделю: \(goal)", symbol: "calendar")
+          }
+        }
+        Section("Основные") {
+          Picker(selection: $appearance) {
+            Text("Авто").tag("auto")
+            Text("Светлая").tag("light")
+            Text("Тёмная").tag("dark")
+          } label: {
+            SettingsLabel(title: "Тема", symbol: "circle.lefthalf.filled")
+          }
+          Picker(selection: $unit) {
+            ForEach(WeightUnit.allCases, id: \.self) { Text($0.rawValue).tag($0) }
+          } label: {
+            SettingsLabel(title: "Единицы измерения", symbol: "scalemass")
+          }
+          NavigationLink {
+            List {
+              Text(
+                "Откройте завершённую тренировку в дневнике и выберите «Экспорт в Здоровье». FitSession запросит разрешение на запись."
+              )
+              Text(
+                "Передаются тип, длительность и интервалы пауз. Данные пульса и калорий не генерируются."
+              )
+            }.navigationTitle("Здоровье")
+          } label: {
+            SettingsLabel(title: "Здоровье", symbol: "heart.fill", color: .pink)
+          }
         }
         Section {
-          Toggle("Синхронизация iCloud", isOn: $cloud)
-          Button("Проверить учётную запись") {
+          Toggle(isOn: $cloud) { SettingsLabel(title: "Синхронизация iCloud", symbol: "icloud") }
+          Button {
             Task {
               do { cloudStatus = try await CloudKitService.accountDescription() } catch {
                 cloudStatus = error.localizedDescription
               }
             }
+          } label: {
+            SettingsLabel(title: "Проверить учётную запись", symbol: "person.crop.circle")
           }
-          if !cloudStatus.isEmpty { Text(cloudStatus).font(.footnote) }
+          if !cloudStatus.isEmpty { Text(cloudStatus).font(.footnote).foregroundStyle(.secondary) }
         } header: {
-          Text("iCloud")
+          Text("Данные")
         } footer: {
           Text(
-            "Изменение вступит в силу после перезапуска приложения. Требуются настроенный CloudKit container и вход в iCloud. Одновременные изменения одной тренировки объединяются по принципу последней записи. Статус учётной записи не подтверждает завершение синхронизации."
+            "Изменение синхронизации вступит в силу после перезапуска. История хранится на устройстве и, по вашему выбору, в личном iCloud."
           )
         }
         Section {
-          Toggle("Передавать сводку виджету", isOn: $widgetSharing)
-        } header: {
-          Text("Конфиденциальность")
+          Toggle(isOn: $widgetSharing) {
+            SettingsLabel(title: "Сводка для виджета", symbol: "square.grid.2x2")
+          }
         } footer: {
           Text(
-            "Виджет получает только количество тренировок за неделю и цель. Он может быть виден на экране блокировки. История хранится на устройстве и, по вашему выбору, в личном iCloud. Данные не отправляются в аналитику или рекламу."
+            "Виджет получает только число тренировок и недельную цель. Эта сводка может быть видна на экране блокировки."
           )
         }
-        Section("FitSession") {
-          NavigationLink("Библиотека упражнений") { ExerciseLibraryView() }
-          NavigationLink("Источники упражнений и фотографий") { ExerciseCreditsView() }
-          Text("Все функции доступны бесплатно.").font(.footnote).foregroundStyle(.secondary)
+        Section {
+          NavigationLink {
+            ExerciseLibraryView()
+          } label: {
+            SettingsLabel(title: "Библиотека упражнений", symbol: "dumbbell")
+          }
+          NavigationLink {
+            ExerciseCreditsView()
+          } label: {
+            SettingsLabel(title: "Источники и фотографии", symbol: "info.circle")
+          }
+          LabeledContent {
+            Text(
+              Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
+                ?? "1.0")
+          } label: {
+            SettingsLabel(title: "Версия", symbol: "app")
+          }
+        } footer: {
+          Text("Все функции FitSession доступны бесплатно.")
         }
       }
-      .navigationTitle("Настройки")
+      .scrollContentBackground(.hidden).background(FitTheme.grouped).navigationTitle("Настройки")
+      .tint(FitTheme.accent)
       .onChange(of: goal) { store.refreshIntegrations() }
       .onChange(of: widgetSharing) { store.refreshIntegrations() }
       .onChange(of: liveActivities) { store.refreshIntegrations() }
+    }
+  }
+}
+
+private struct SettingsLabel: View {
+  let title: String
+  let symbol: String
+  var color: Color = .gray
+  var body: some View {
+    HStack(spacing: 10) {
+      Image(systemName: symbol).font(.system(size: 16)).foregroundStyle(.white)
+        .frame(width: 28, height: 28).background(color, in: .rect(cornerRadius: 7))
+      Text(title).foregroundStyle(.primary)
     }
   }
 }

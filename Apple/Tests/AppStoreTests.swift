@@ -91,4 +91,40 @@ import XCTest
     XCTAssertEqual(store.active?.id, older.id)
     XCTAssertTrue(store.showSession)
   }
+  func testRepeatCreatesANewSessionWithoutChangingTheOriginal() throws {
+    let repository = MemoryWorkoutRepository()
+    var source = try ExerciseCatalog.starterTemplates[0].start(at: Date().addingTimeInterval(-120))
+    try WorkoutEngine.completeSet(
+      in: &source, exerciseID: source.exercises[0].id,
+      setID: source.exercises[0].sets[0].id, repetitions: 8, weightKG: 40, at: source.startedAt)
+    try WorkoutEngine.finish(&source, at: source.startedAt.addingTimeInterval(60))
+    try repository.save(source)
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    store.repeatWorkout(source)
+    XCTAssertNotEqual(store.active?.id, source.id)
+    XCTAssertEqual(store.active?.completedSets, 0)
+    XCTAssertEqual(store.completed, [source])
+  }
+
+  func testCompletedWorkoutEditsPreserveHistoryAndRejectEmptyTraining() throws {
+    let repository = MemoryWorkoutRepository()
+    var source = try ExerciseCatalog.starterTemplates[0].start(at: Date().addingTimeInterval(-120))
+    try WorkoutEngine.completeSet(
+      in: &source, exerciseID: source.exercises[0].id,
+      setID: source.exercises[0].sets[0].id, repetitions: 8, weightKG: 40, at: source.startedAt)
+    try WorkoutEngine.finish(&source, at: source.startedAt.addingTimeInterval(60))
+    try repository.save(source)
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    var draft = source
+    draft.name = "Грудь и бицепс"
+    draft.notes = "После изменения"
+    XCTAssertTrue(store.updateCompleted(draft))
+    XCTAssertEqual(try repository.workouts().first?.name, draft.name)
+    draft.exercises = []
+    XCTAssertFalse(store.updateCompleted(draft))
+    XCTAssertEqual(try repository.workouts().first?.completedSets, 1)
+  }
+
 }

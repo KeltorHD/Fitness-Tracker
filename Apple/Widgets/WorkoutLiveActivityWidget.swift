@@ -28,7 +28,7 @@ struct WorkoutLiveActivityWidget: Widget {
             context.state.paused ? "Пауза" : "Тренировка",
             systemImage: context.state.paused ? "pause.fill" : "dumbbell.fill"
           )
-          .font(.caption).foregroundStyle(.mint)
+          .font(.caption).foregroundStyle(Color.accentColor)
         }
         DynamicIslandExpandedRegion(.trailing) { SetProgress(state: context.state).font(.caption) }
         DynamicIslandExpandedRegion(.bottom) {
@@ -43,7 +43,7 @@ struct WorkoutLiveActivityWidget: Widget {
         }
       } compactLeading: {
         Image(systemName: context.state.paused ? "pause.fill" : "dumbbell.fill")
-          .foregroundStyle(.mint).accessibilityLabel(
+          .foregroundStyle(Color.accentColor).accessibilityLabel(
             context.state.paused ? "На паузе" : "Тренировка")
       } compactTrailing: {
         if context.state.restEndsAt != nil {
@@ -53,12 +53,13 @@ struct WorkoutLiveActivityWidget: Widget {
         }
       } minimal: {
         if context.state.paused {
-          Image(systemName: "pause.fill").foregroundStyle(.mint).accessibilityLabel("На паузе")
+          Image(systemName: "pause.fill").foregroundStyle(Color.accentColor).accessibilityLabel(
+            "На паузе")
         } else {
           ZStack {
-            Circle().stroke(.mint.opacity(0.25), lineWidth: 2)
+            Circle().stroke(Color.accentColor.opacity(0.25), lineWidth: 2)
             Circle().trim(from: 0, to: context.state.progress)
-              .stroke(.mint, style: StrokeStyle(lineWidth: 2, lineCap: .round))
+              .stroke(Color.accentColor, style: StrokeStyle(lineWidth: 2, lineCap: .round))
               .rotationEffect(.degrees(-90))
             Image(systemName: "dumbbell.fill").font(.system(size: 10))
           }.padding(3).accessibilityLabel(
@@ -66,7 +67,7 @@ struct WorkoutLiveActivityWidget: Widget {
         }
       }
       .widgetURL(context.attributes.workoutURL)
-      .keylineTint(.mint)
+      .keylineTint(Color.accentColor)
     }
   }
 }
@@ -144,6 +145,6 @@ private struct WorkoutActivityControls: View {
       }
       Spacer(minLength: 0)
     }
-    .buttonStyle(.bordered).controlSize(.small).tint(.mint)
+    .buttonStyle(.bordered).controlSize(.small).tint(Color.accentColor)
   }
 }

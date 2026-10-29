@@ -51,3 +51,7 @@ Linux проверяет Core compilation/tests, ресурсы/конфигур
 ## Библиотека упражнений
 
 ExerciseLibraryEntry хранит дополнительные данные отдельно от Exercise, поэтому прежний JSON тренировок не меняется. SPM resource содержит русские записи и источник, iOS-only folder — оригинальные фотографии; Watch/widgets не получают 13 МБ media. Восемь прежних UUID сопоставлены с source IDs явно, остальные получены детерминированным UUID v5. Подробности импорта и проверок: [EXERCISE_LIBRARY.md](EXERCISE_LIBRARY.md).
+
+## Дневник и оформление по референсам
+
+TrainingJournal в Core группирует completed sessions по неделям, строит календарь без предположения о 24-часовых сутках и считает улучшения рабочего веса. Repeat создаёт новые session/exercise-row/set UUID, сохраняя identity упражнений. AppStore поддерживает сохранение правок completed workouts с прежней валидацией. FitTheme централизует оранжевую палитру; RootView содержит четыре системные вкладки. Смена темы и idle timer принадлежат Apple layer. Подробности: [REFERENCE_DESIGN.md](REFERENCE_DESIGN.md).

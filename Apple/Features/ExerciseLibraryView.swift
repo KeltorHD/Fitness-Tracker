@@ -160,7 +160,7 @@ struct ExerciseDetailView: View {
   }
 }
 
-private struct ExercisePhoto: View {
+struct ExercisePhoto: View {
   let path: String
   var body: some View {
     if let image = ExercisePhotoCache.image(path: path) {
