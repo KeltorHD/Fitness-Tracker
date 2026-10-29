@@ -2,7 +2,7 @@ import Foundation
 
 public enum ExerciseCatalog {
   // Stable IDs preserve record continuity across devices and releases.
-  public static let all: [Exercise] = [
+  private static let legacy: [Exercise] = [
     Exercise(
       id: UUID(uuidString: "10000000-0000-0000-0000-000000000001")!, name: "Приседания",
       muscle: .legs,
@@ -32,6 +32,12 @@ public enum ExerciseCatalog {
       id: UUID(uuidString: "10000000-0000-0000-0000-000000000008")!, name: "Скручивания",
       muscle: .core),
   ]
+  // Keep the first eight stable IDs and order for existing workouts and starter plans.
+  public static let all: [Exercise] = {
+    let enriched = legacy.map { ExerciseLibrary.entry(for: $0.id)?.exercise ?? $0 }
+    let legacyIDs = Set(legacy.map(\.id))
+    return enriched + ExerciseLibrary.entries.filter { !legacyIDs.contains($0.id) }.map(\.exercise)
+  }()
   public static let starterTemplates: [WorkoutTemplate] = [
     WorkoutTemplate(
       id: UUID(uuidString: "20000000-0000-0000-0000-000000000001")!, name: "Всё тело · A",

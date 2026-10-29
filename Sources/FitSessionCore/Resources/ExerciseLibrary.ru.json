@@ -1,0 +1,2726 @@
+{
+  "schemaVersion": 1,
+  "locale": "ru",
+  "source": {
+    "name": "free-exercise-db",
+    "repositoryURL": "https://github.com/yuhonas/free-exercise-db",
+    "revision": "f00c92c7dcf1216a928a52c3706c7ce8e2f71ed5",
+    "licenseName": "Unlicense",
+    "licenseText": "This is free and unencumbered software released into the public domain.\n\nAnyone is free to copy, modify, publish, use, compile, sell, or\ndistribute this software, either in source code form or as a compiled\nbinary, for any purpose, commercial or non-commercial, and by any\nmeans.\n\nIn jurisdictions that recognize copyright laws, the author or authors\nof this software dedicate any and all copyright interest in the\nsoftware to the public domain. We make this dedication for the benefit\nof the public at large and to the detriment of our heirs and\nsuccessors. We intend this dedication to be an overt act of\nrelinquishment in perpetuity of all present and future rights to this\nsoftware under copyright law.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND,\nEXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.\nIN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR\nOTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,\nARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR\nOTHER DEALINGS IN THE SOFTWARE.\n\nFor more information, please refer to <https://unlicense.org>\n"
+  },
+  "entries": [
+    {
+      "id": "10000000-0000-0000-0000-000000000001",
+      "sourceID": "Barbell_Squat",
+      "name": "Приседания",
+      "englishName": "Barbell Squat",
+      "aliases": [
+        "Присед со штангой",
+        "Приседания со штангой"
+      ],
+      "group": "legs",
+      "equipment": "barbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Квадрицепс"
+      ],
+      "secondaryMuscles": [
+        "Икроножные мышцы",
+        "Ягодичные мышцы",
+        "Задняя поверхность бедра",
+        "Разгибатели спины"
+      ],
+      "steps": [
+        "Установите штангу в стойках. Разместите гриф на верхней части спины и снимите его со стоек.",
+        "Поставьте стопы примерно на ширине плеч. Сгибая колени и тазобедренные суставы, плавно опуститесь в присед.",
+        "Сохраняйте опору всей стопой и устойчивый корпус. Разогните ноги и вернитесь в исходное положение."
+      ],
+      "images": [
+        "Barbell_Squat/0.jpg",
+        "Barbell_Squat/1.jpg"
+      ]
+    },
+    {
+      "id": "10000000-0000-0000-0000-000000000002",
+      "sourceID": "Barbell_Bench_Press_-_Medium_Grip",
+      "name": "Жим лёжа",
+      "englishName": "Barbell Bench Press - Medium Grip",
+      "aliases": [
+        "Жим штанги лёжа",
+        "Жим лежа"
+      ],
+      "group": "chest",
+      "equipment": "barbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Грудные мышцы"
+      ],
+      "secondaryMuscles": [
+        "Дельтовидные мышцы",
+        "Трицепс"
+      ],
+      "steps": [
+        "Лягте на горизонтальную скамью, поставьте стопы на пол и возьмите штангу средним хватом.",
+        "Снимите штангу со стоек и плавно опустите её к средней части груди, контролируя движение.",
+        "Выжмите штангу вверх. Закончив подход, верните её на стойки; при необходимости используйте страховку."
+      ],
+      "images": [
+        "Barbell_Bench_Press_-_Medium_Grip/0.jpg",
+        "Barbell_Bench_Press_-_Medium_Grip/1.jpg"
+      ]
+    },
+    {
+      "id": "10000000-0000-0000-0000-000000000003",
+      "sourceID": "Bent_Over_Barbell_Row",
+      "name": "Тяга в наклоне",
+      "englishName": "Bent Over Barbell Row",
+      "aliases": [
+        "Тяга штанги к поясу"
+      ],
+      "group": "back",
+      "equipment": "barbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Средняя часть спины"
+      ],
+      "secondaryMuscles": [
+        "Бицепс",
+        "Широчайшие мышцы спины",
+        "Дельтовидные мышцы"
+      ],
+      "steps": [
+        "Возьмите штангу прямым хватом. Слегка согните колени и наклоните корпус, сохраняя спину ровной.",
+        "Не меняя наклона корпуса, подтяните штангу к поясу и направьте локти назад.",
+        "Ненадолго сведите лопатки и плавно опустите штангу до выпрямления рук без раскачивания."
+      ],
+      "images": [
+        "Bent_Over_Barbell_Row/0.jpg",
+        "Bent_Over_Barbell_Row/1.jpg"
+      ]
+    },
+    {
+      "id": "10000000-0000-0000-0000-000000000004",
+      "sourceID": "Standing_Military_Press",
+      "name": "Жим над головой",
+      "englishName": "Standing Military Press",
+      "aliases": [
+        "Армейский жим",
+        "Жим штанги стоя"
+      ],
+      "group": "shoulders",
+      "equipment": "barbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Дельтовидные мышцы"
+      ],
+      "secondaryMuscles": [
+        "Трицепс"
+      ],
+      "steps": [
+        "Снимите штангу со стоек на уровне груди. Возьмите гриф чуть шире плеч и устойчиво поставьте стопы.",
+        "Из положения у ключиц выжмите штангу над головой, сохраняя напряжение корпуса.",
+        "Плавно опустите гриф к верхней части груди. Не помогайте движению ногами и не отклоняйтесь назад."
+      ],
+      "images": [
+        "Standing_Military_Press/0.jpg",
+        "Standing_Military_Press/1.jpg"
+      ]
+    },
+    {
+      "id": "10000000-0000-0000-0000-000000000005",
+      "sourceID": "Romanian_Deadlift",
+      "name": "Румынская тяга",
+      "englishName": "Romanian Deadlift",
+      "aliases": [
+        "Тяга на прямых ногах"
+      ],
+      "group": "legs",
+      "equipment": "barbell",
+      "level": "intermediate",
+      "primaryMuscles": [
+        "Задняя поверхность бедра"
+      ],
+      "secondaryMuscles": [
+        "Икроножные мышцы",
+        "Ягодичные мышцы",
+        "Разгибатели спины"
+      ],
+      "steps": [
+        "Встаньте со штангой в руках, слегка согните колени и держите гриф близко к ногам.",
+        "Отводите таз назад и наклоняйтесь с ровной спиной, опуская штангу вдоль ног.",
+        "В комфортной нижней точке разверните движение и выпрямитесь за счёт разгибания таза."
+      ],
+      "images": [
+        "Romanian_Deadlift/0.jpg",
+        "Romanian_Deadlift/1.jpg"
+      ]
+    },
+    {
+      "id": "10000000-0000-0000-0000-000000000006",
+      "sourceID": "Pullups",
+      "name": "Подтягивания",
+      "englishName": "Pullups",
+      "aliases": [
+        "Подтягивания прямым хватом"
+      ],
+      "group": "back",
+      "equipment": "body only",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Широчайшие мышцы спины"
+      ],
+      "secondaryMuscles": [
+        "Бицепс",
+        "Средняя часть спины"
+      ],
+      "steps": [
+        "Возьмитесь за перекладину прямым хватом и примите устойчивое положение в висе.",
+        "Направляя локти вниз и назад, подтяните корпус к перекладине без рывка ногами.",
+        "Плавно опуститесь до исходного положения, сохраняя контроль плеч и корпуса."
+      ],
+      "images": [
+        "Pullups/0.jpg",
+        "Pullups/1.jpg"
+      ]
+    },
+    {
+      "id": "10000000-0000-0000-0000-000000000007",
+      "sourceID": "Dumbbell_Bicep_Curl",
+      "name": "Сгибания на бицепс",
+      "englishName": "Dumbbell Bicep Curl",
+      "aliases": [
+        "Сгибания рук с гантелями"
+      ],
+      "group": "arms",
+      "equipment": "dumbbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Бицепс"
+      ],
+      "secondaryMuscles": [
+        "Мышцы предплечья"
+      ],
+      "steps": [
+        "Встаньте прямо с гантелями в опущенных руках. Разверните ладони вперёд, локти держите у корпуса.",
+        "Сгибайте руки в локтях, поднимая гантели к плечам; плечи и корпус сохраняйте неподвижными.",
+        "После короткой паузы плавно опустите гантели. Не раскачивайтесь и не бросайте вес вниз."
+      ],
+      "images": [
+        "Dumbbell_Bicep_Curl/0.jpg",
+        "Dumbbell_Bicep_Curl/1.jpg"
+      ]
+    },
+    {
+      "id": "10000000-0000-0000-0000-000000000008",
+      "sourceID": "Crunches",
+      "name": "Скручивания",
+      "englishName": "Crunches",
+      "aliases": [
+        "Скручивания на пресс"
+      ],
+      "group": "core",
+      "equipment": "body only",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Мышцы живота"
+      ],
+      "secondaryMuscles": [],
+      "steps": [
+        "Лягте на спину, согните колени и поставьте стопы на пол. Руки расположите у головы без давления на шею.",
+        "Напрягите мышцы живота и плавно приподнимите плечи, сохраняя поясницу на полу.",
+        "На мгновение задержитесь в верхней точке и медленно опустите плечи в исходное положение."
+      ],
+      "images": [
+        "Crunches/0.jpg",
+        "Crunches/1.jpg"
+      ]
+    },
+    {
+      "id": "7ab4f873-94ed-5a90-b7ba-4e1a6deb4f81",
+      "sourceID": "Bodyweight_Squat",
+      "name": "Приседания без отягощения",
+      "englishName": "Bodyweight Squat",
+      "aliases": [
+        "Воздушные приседания"
+      ],
+      "group": "legs",
+      "equipment": "body only",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Квадрицепс"
+      ],
+      "secondaryMuscles": [
+        "Ягодичные мышцы",
+        "Задняя поверхность бедра"
+      ],
+      "steps": [
+        "Встаньте со стопами на ширине плеч. Поднимите грудь и сохраняйте устойчивую опору.",
+        "Сгибайте колени и отводите таз назад, опускаясь в доступную контролируемую глубину.",
+        "Разогните ноги и вернитесь в стойку, не заваливая корпус и не отрывая стопы от пола."
+      ],
+      "images": [
+        "Bodyweight_Squat/0.jpg",
+        "Bodyweight_Squat/1.jpg"
+      ]
+    },
+    {
+      "id": "3c067a0d-d946-56d2-92ec-45f1d24c646e",
+      "sourceID": "Front_Barbell_Squat",
+      "name": "Фронтальные приседания",
+      "englishName": "Front Barbell Squat",
+      "aliases": [
+        "Присед со штангой на груди"
+      ],
+      "group": "legs",
+      "equipment": "barbell",
+      "level": "expert",
+      "primaryMuscles": [
+        "Квадрицепс"
+      ],
+      "secondaryMuscles": [
+        "Икроножные мышцы",
+        "Ягодичные мышцы",
+        "Задняя поверхность бедра"
+      ],
+      "steps": [
+        "В стойках разместите штангу на передней части плеч, скрестите руки на грифе и поднимите локти.",
+        "Снимите штангу и поставьте стопы примерно на ширине плеч. Плавно опуститесь, удерживая грудь поднятой.",
+        "Разогните ноги и вернитесь вверх, сохраняя положение локтей и равновесие всей стопой."
+      ],
+      "images": [
+        "Front_Barbell_Squat/0.jpg",
+        "Front_Barbell_Squat/1.jpg"
+      ]
+    },
+    {
+      "id": "ed465484-107c-5708-8ff8-382a6b70ee00",
+      "sourceID": "Goblet_Squat",
+      "name": "Гоблет-приседания",
+      "englishName": "Goblet Squat",
+      "aliases": [
+        "Приседания с гирей у груди"
+      ],
+      "group": "legs",
+      "equipment": "kettlebells",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Квадрицепс"
+      ],
+      "secondaryMuscles": [
+        "Икроножные мышцы",
+        "Ягодичные мышцы",
+        "Задняя поверхность бедра",
+        "Дельтовидные мышцы"
+      ],
+      "steps": [
+        "Возьмите гирю за дужки и удерживайте её перед грудью. Поставьте стопы в устойчивую позицию.",
+        "Сохраняя ровную спину, опускайтесь между бёдрами в контролируемый присед.",
+        "Коротко задержитесь в нижней точке и встаньте, удерживая гирю близко к груди."
+      ],
+      "images": [
+        "Goblet_Squat/0.jpg",
+        "Goblet_Squat/1.jpg"
+      ]
+    },
+    {
+      "id": "71c5940f-ac06-5fe8-814c-c14b85d33466",
+      "sourceID": "Dumbbell_Squat",
+      "name": "Приседания с гантелями",
+      "englishName": "Dumbbell Squat",
+      "aliases": [
+        "Присед с гантелями"
+      ],
+      "group": "legs",
+      "equipment": "dumbbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Квадрицепс"
+      ],
+      "secondaryMuscles": [
+        "Икроножные мышцы",
+        "Ягодичные мышцы",
+        "Задняя поверхность бедра",
+        "Разгибатели спины"
+      ],
+      "steps": [
+        "Встаньте прямо с гантелями по бокам, ладони направьте к ногам, стопы поставьте на ширине плеч.",
+        "Сгибайте ноги и опускайте таз, сохраняя ровную спину и устойчивое положение гантелей.",
+        "Оттолкнитесь стопами от пола и выпрямите ноги, возвращаясь в исходную стойку."
+      ],
+      "images": [
+        "Dumbbell_Squat/0.jpg",
+        "Dumbbell_Squat/1.jpg"
+      ]
+    },
+    {
+      "id": "10ffe19b-f657-564c-80ae-6537b9176cbb",
+      "sourceID": "Barbell_Lunge",
+      "name": "Выпады со штангой",
+      "englishName": "Barbell Lunge",
+      "aliases": [
+        "Выпад со штангой"
+      ],
+      "group": "legs",
+      "equipment": "barbell",
+      "level": "intermediate",
+      "primaryMuscles": [
+        "Квадрицепс"
+      ],
+      "secondaryMuscles": [
+        "Икроножные мышцы",
+        "Ягодичные мышцы",
+        "Задняя поверхность бедра"
+      ],
+      "steps": [
+        "Разместите штангу на верхней части спины, снимите её со стоек и примите устойчивую стойку.",
+        "Сделайте шаг вперёд и опустите таз, сгибая обе ноги и сохраняя корпус вертикальным.",
+        "Оттолкнитесь передней стопой и вернитесь назад. Выполните движение другой ногой."
+      ],
+      "images": [
+        "Barbell_Lunge/0.jpg",
+        "Barbell_Lunge/1.jpg"
+      ]
+    },
+    {
+      "id": "19b0b1dd-64b6-5d0e-958d-2dee667a7894",
+      "sourceID": "Dumbbell_Lunges",
+      "name": "Выпады с гантелями",
+      "englishName": "Dumbbell Lunges",
+      "aliases": [
+        "Выпад с гантелями"
+      ],
+      "group": "legs",
+      "equipment": "dumbbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Квадрицепс"
+      ],
+      "secondaryMuscles": [
+        "Икроножные мышцы",
+        "Ягодичные мышцы",
+        "Задняя поверхность бедра"
+      ],
+      "steps": [
+        "Возьмите гантели и встаньте прямо, удерживая руки вдоль корпуса.",
+        "Шагните вперёд и плавно опустите таз, сохраняя равновесие и направление колена по стопе.",
+        "Оттолкнитесь передней стопой и вернитесь в стойку. Повторите для другой ноги."
+      ],
+      "images": [
+        "Dumbbell_Lunges/0.jpg",
+        "Dumbbell_Lunges/1.jpg"
+      ]
+    },
+    {
+      "id": "9eea4575-be29-53cb-9bd5-c728edef5a13",
+      "sourceID": "Dumbbell_Rear_Lunge",
+      "name": "Обратные выпады с гантелями",
+      "englishName": "Dumbbell Rear Lunge",
+      "aliases": [
+        "Выпады назад"
+      ],
+      "group": "legs",
+      "equipment": "dumbbell",
+      "level": "intermediate",
+      "primaryMuscles": [
+        "Квадрицепс"
+      ],
+      "secondaryMuscles": [
+        "Икроножные мышцы",
+        "Ягодичные мышцы",
+        "Задняя поверхность бедра"
+      ],
+      "steps": [
+        "Встаньте прямо с гантелями по бокам и поставьте стопы в устойчивую позицию.",
+        "Сделайте шаг назад одной ногой и плавно опуститесь, сгибая обе ноги и удерживая корпус.",
+        "Вернитесь в исходную стойку и повторите движение другой ногой без раскачивания."
+      ],
+      "images": [
+        "Dumbbell_Rear_Lunge/0.jpg",
+        "Dumbbell_Rear_Lunge/1.jpg"
+      ]
+    },
+    {
+      "id": "25c70770-0592-5a41-b61c-f1eabd03aeef",
+      "sourceID": "Split_Squat_with_Dumbbells",
+      "name": "Болгарские сплит-приседания с гантелями",
+      "englishName": "Split Squat with Dumbbells",
+      "aliases": [
+        "Разножка",
+        "Приседания с задней ногой на скамье"
+      ],
+      "group": "legs",
+      "equipment": "dumbbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Квадрицепс"
+      ],
+      "secondaryMuscles": [
+        "Ягодичные мышцы",
+        "Задняя поверхность бедра"
+      ],
+      "steps": [
+        "Держа гантели по бокам, поставьте заднюю стопу на устойчивую скамью, а переднюю — впереди.",
+        "Сгибайте переднюю ногу и опускайте таз вниз, сохраняя баланс и направление колена по стопе.",
+        "Разогните переднюю ногу и поднимитесь обратно. Выполните подход и смените сторону."
+      ],
+      "images": [
+        "Split_Squat_with_Dumbbells/0.jpg",
+        "Split_Squat_with_Dumbbells/1.jpg"
+      ]
+    },
+    {
+      "id": "5a59b3cc-f6e2-5a4b-94c7-7d11d08bc7b2",
+      "sourceID": "Dumbbell_Step_Ups",
+      "name": "Зашагивания с гантелями",
+      "englishName": "Dumbbell Step Ups",
+      "aliases": [
+        "Подъёмы на платформу"
+      ],
+      "group": "legs",
+      "equipment": "dumbbell",
+      "level": "intermediate",
+      "primaryMuscles": [
+        "Квадрицепс"
+      ],
+      "secondaryMuscles": [
+        "Икроножные мышцы",
+        "Ягодичные мышцы",
+        "Задняя поверхность бедра"
+      ],
+      "steps": [
+        "Встаньте перед устойчивой платформой с гантелями в руках. Поставьте на неё всю правую стопу.",
+        "Разогните правую ногу и поднимитесь на платформу, затем поставьте рядом левую стопу.",
+        "Контролируемо спуститесь в обратном порядке. После повторений смените ведущую ногу."
+      ],
+      "images": [
+        "Dumbbell_Step_Ups/0.jpg",
+        "Dumbbell_Step_Ups/1.jpg"
+      ]
+    },
+    {
+      "id": "69e24aea-c818-5ce4-ba9f-9c4adb7d2798",
+      "sourceID": "Leg_Press",
+      "name": "Жим ногами",
+      "englishName": "Leg Press",
+      "aliases": [
+        "Жим платформы ногами"
+      ],
+      "group": "legs",
+      "equipment": "machine",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Квадрицепс"
+      ],
+      "secondaryMuscles": [
+        "Икроножные мышцы",
+        "Ягодичные мышцы",
+        "Задняя поверхность бедра"
+      ],
+      "steps": [
+        "Сядьте в тренажёр, прижмите спину к опоре и поставьте стопы на платформу примерно на ширине плеч.",
+        "Снимите ограничители и плавно опускайте платформу, сгибая ноги без отрыва таза от опоры.",
+        "Выжмите платформу, не ударяя коленями в замок. В конце подхода надёжно установите ограничители."
+      ],
+      "images": [
+        "Leg_Press/0.jpg",
+        "Leg_Press/1.jpg"
+      ]
+    },
+    {
+      "id": "2f498ecf-4776-5b8f-99e2-438726bda696",
+      "sourceID": "Leg_Extensions",
+      "name": "Разгибание ног в тренажёре",
+      "englishName": "Leg Extensions",
+      "aliases": [
+        "Разгибания ног сидя"
+      ],
+      "group": "legs",
+      "equipment": "machine",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Квадрицепс"
+      ],
+      "secondaryMuscles": [],
+      "steps": [
+        "Настройте сиденье и валик над стопами. Сядьте, прижмите спину к опоре и возьмитесь за рукояти.",
+        "Разгибайте ноги в коленях, поднимая валик; остальную часть тела удерживайте неподвижно.",
+        "Коротко задержитесь наверху и плавно опустите вес в исходное положение без удара плит."
+      ],
+      "images": [
+        "Leg_Extensions/0.jpg",
+        "Leg_Extensions/1.jpg"
+      ]
+    },
+    {
+      "id": "5e911f6c-3710-5b1a-843d-86373e826908",
+      "sourceID": "Lying_Leg_Curls",
+      "name": "Сгибание ног лёжа",
+      "englishName": "Lying Leg Curls",
+      "aliases": [
+        "Сгибания ног лежа"
+      ],
+      "group": "legs",
+      "equipment": "machine",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Задняя поверхность бедра"
+      ],
+      "secondaryMuscles": [],
+      "steps": [
+        "Отрегулируйте тренажёр и лягте на живот так, чтобы валик находился над пятками. Держитесь за рукояти.",
+        "Сгибайте ноги, направляя пятки к ягодицам и не отрывая таз и бёдра от скамьи.",
+        "После короткой паузы медленно разогните ноги, сохраняя контроль над весом."
+      ],
+      "images": [
+        "Lying_Leg_Curls/0.jpg",
+        "Lying_Leg_Curls/1.jpg"
+      ]
+    },
+    {
+      "id": "5f33d757-dd11-5715-9929-c8d8391a86ba",
+      "sourceID": "Seated_Leg_Curl",
+      "name": "Сгибание ног сидя",
+      "englishName": "Seated Leg Curl",
+      "aliases": [
+        "Тренажёр для задней поверхности бедра"
+      ],
+      "group": "legs",
+      "equipment": "machine",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Задняя поверхность бедра"
+      ],
+      "secondaryMuscles": [],
+      "steps": [
+        "Сядьте в тренажёр, установите нижний валик под голенями и зафиксируйте бёдра верхней подушкой.",
+        "Сгибайте ноги в коленях, подтягивая валик под сиденье; корпус и бёдра оставляйте неподвижными.",
+        "Задержитесь в согнутом положении и плавно верните голени в исходную позицию."
+      ],
+      "images": [
+        "Seated_Leg_Curl/0.jpg",
+        "Seated_Leg_Curl/1.jpg"
+      ]
+    },
+    {
+      "id": "60a5a10a-940e-57a3-b83b-9d8d51dc4bf3",
+      "sourceID": "Barbell_Deadlift",
+      "name": "Становая тяга",
+      "englishName": "Barbell Deadlift",
+      "aliases": [
+        "Классическая становая тяга"
+      ],
+      "group": "back",
+      "equipment": "barbell",
+      "level": "intermediate",
+      "primaryMuscles": [
+        "Разгибатели спины"
+      ],
+      "secondaryMuscles": [
+        "Икроножные мышцы",
+        "Мышцы предплечья",
+        "Ягодичные мышцы",
+        "Задняя поверхность бедра",
+        "Широчайшие мышцы спины",
+        "Средняя часть спины",
+        "Квадрицепс",
+        "Трапециевидные мышцы"
+      ],
+      "steps": [
+        "Подойдите к штанге на полу, согните ноги и возьмитесь за гриф примерно на ширине плеч.",
+        "Удерживая спину ровной и гриф близко к ногам, разогните колени и таз и поднимитесь в стойку.",
+        "Отведите таз назад, затем согните ноги и контролируемо верните штангу на пол."
+      ],
+      "images": [
+        "Barbell_Deadlift/0.jpg",
+        "Barbell_Deadlift/1.jpg"
+      ]
+    },
+    {
+      "id": "ad946ce7-1a7d-55a8-83d9-91b593c1991a",
+      "sourceID": "Sumo_Deadlift",
+      "name": "Становая тяга сумо",
+      "englishName": "Sumo Deadlift",
+      "aliases": [
+        "Тяга сумо"
+      ],
+      "group": "legs",
+      "equipment": "barbell",
+      "level": "intermediate",
+      "primaryMuscles": [
+        "Задняя поверхность бедра"
+      ],
+      "secondaryMuscles": [
+        "Приводящие мышцы бедра",
+        "Мышцы предплечья",
+        "Ягодичные мышцы",
+        "Разгибатели спины",
+        "Средняя часть спины",
+        "Квадрицепс",
+        "Трапециевидные мышцы"
+      ],
+      "steps": [
+        "Встаньте перед штангой с широкой постановкой стоп. Возьмите гриф руками между ногами.",
+        "Сохраняя устойчивый корпус, оттолкнитесь стопами от пола и разогните колени и таз.",
+        "Верните штангу на пол, отводя таз назад и сгибая ноги. Не бросайте вес и не переразгибайте спину."
+      ],
+      "images": [
+        "Sumo_Deadlift/0.jpg",
+        "Sumo_Deadlift/1.jpg"
+      ]
+    },
+    {
+      "id": "5e3e91da-a533-5fd2-bfd1-ea1f2e76b88a",
+      "sourceID": "Stiff-Legged_Dumbbell_Deadlift",
+      "name": "Тяга с гантелями на прямых ногах",
+      "englishName": "Stiff-Legged Dumbbell Deadlift",
+      "aliases": [
+        "Румынская тяга с гантелями"
+      ],
+      "group": "legs",
+      "equipment": "dumbbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Задняя поверхность бедра"
+      ],
+      "secondaryMuscles": [
+        "Ягодичные мышцы",
+        "Разгибатели спины"
+      ],
+      "steps": [
+        "Встаньте с гантелями в руках, стопы поставьте на ширине плеч, колени оставьте слегка согнутыми.",
+        "Наклоняйтесь за счёт движения таза назад, опуская гантели вдоль ног с ровной спиной.",
+        "При ощутимом натяжении задней поверхности бедра разверните движение и плавно выпрямитесь."
+      ],
+      "images": [
+        "Stiff-Legged_Dumbbell_Deadlift/0.jpg",
+        "Stiff-Legged_Dumbbell_Deadlift/1.jpg"
+      ]
+    },
+    {
+      "id": "d81e0a08-b853-524c-b049-6b4bc7eb2908",
+      "sourceID": "Barbell_Glute_Bridge",
+      "name": "Ягодичный мост со штангой",
+      "englishName": "Barbell Glute Bridge",
+      "aliases": [
+        "Мост для ягодиц"
+      ],
+      "group": "legs",
+      "equipment": "barbell",
+      "level": "intermediate",
+      "primaryMuscles": [
+        "Ягодичные мышцы"
+      ],
+      "secondaryMuscles": [
+        "Икроножные мышцы",
+        "Задняя поверхность бедра"
+      ],
+      "steps": [
+        "Сядьте на пол, расположите штангу с мягкой накладкой над тазом и лягте на спину, согнув ноги.",
+        "Опираясь на стопы и верхнюю часть спины, поднимите таз и удерживайте штангу руками.",
+        "Сократите ягодичные мышцы и плавно опустите таз на пол, не запрокидывая корпус назад."
+      ],
+      "images": [
+        "Barbell_Glute_Bridge/0.jpg",
+        "Barbell_Glute_Bridge/1.jpg"
+      ]
+    },
+    {
+      "id": "fbf2f80a-ad4d-554e-80f4-75fa60e708ff",
+      "sourceID": "Barbell_Hip_Thrust",
+      "name": "Подъём таза со штангой с опорой на скамью",
+      "englishName": "Barbell Hip Thrust",
+      "aliases": [
+        "Хип-траст"
+      ],
+      "group": "legs",
+      "equipment": "barbell",
+      "level": "intermediate",
+      "primaryMuscles": [
+        "Ягодичные мышцы"
+      ],
+      "secondaryMuscles": [
+        "Икроножные мышцы",
+        "Задняя поверхность бедра"
+      ],
+      "steps": [
+        "Сядьте перед устойчивой скамьёй. Обоприте верх спины на её край, штангу с накладкой разместите над тазом.",
+        "Упираясь стопами в пол, поднимите таз, сохраняя штангу под контролем рук.",
+        "Ненадолго сократите ягодичные мышцы и плавно опустите таз в исходное положение."
+      ],
+      "images": [
+        "Barbell_Hip_Thrust/0.jpg",
+        "Barbell_Hip_Thrust/1.jpg"
+      ]
+    },
+    {
+      "id": "c36ea3c1-1fc4-5c88-a87b-8c1c9c072fdc",
+      "sourceID": "Butt_Lift_Bridge",
+      "name": "Ягодичный мост",
+      "englishName": "Butt Lift (Bridge)",
+      "aliases": [
+        "Мост без отягощения"
+      ],
+      "group": "legs",
+      "equipment": "body only",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Ягодичные мышцы"
+      ],
+      "secondaryMuscles": [
+        "Задняя поверхность бедра"
+      ],
+      "steps": [
+        "Лягте на спину, согните колени и поставьте стопы примерно на ширине плеч. Руки положите вдоль тела.",
+        "Опираясь на стопы, поднимите таз, напрягая ягодичные мышцы и удерживая корпус устойчивым.",
+        "Коротко задержитесь наверху и плавно опустите таз обратно на пол."
+      ],
+      "images": [
+        "Butt_Lift_Bridge/0.jpg",
+        "Butt_Lift_Bridge/1.jpg"
+      ]
+    },
+    {
+      "id": "31527337-22cf-5a8a-8602-c36cde9b3fc0",
+      "sourceID": "Single_Leg_Glute_Bridge",
+      "name": "Ягодичный мост на одной ноге",
+      "englishName": "Single Leg Glute Bridge",
+      "aliases": [
+        "Одноногий мост"
+      ],
+      "group": "legs",
+      "equipment": "body only",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Ягодичные мышцы"
+      ],
+      "secondaryMuscles": [
+        "Задняя поверхность бедра"
+      ],
+      "steps": [
+        "Лягте на спину и согните колени. Подтяните одну ногу к груди, оставив вторую стопу на полу.",
+        "Опираясь на оставшуюся стопу, поднимите таз и сохраняйте его ровное положение.",
+        "После короткой паузы опустите таз. Выполните повторения и смените опорную ногу."
+      ],
+      "images": [
+        "Single_Leg_Glute_Bridge/0.jpg",
+        "Single_Leg_Glute_Bridge/1.jpg"
+      ]
+    },
+    {
+      "id": "5535b57a-8686-5a59-95a8-c950089708f0",
+      "sourceID": "Thigh_Abductor",
+      "name": "Разведение ног в тренажёре",
+      "englishName": "Thigh Abductor",
+      "aliases": [
+        "Отведение бёдер"
+      ],
+      "group": "legs",
+      "equipment": "machine",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Отводящие мышцы бедра"
+      ],
+      "secondaryMuscles": [
+        "Ягодичные мышцы"
+      ],
+      "steps": [
+        "Настройте тренажёр для разведения ног и сядьте с ровным корпусом. Удерживайте боковые рукояти.",
+        "Плавно разводите бёдра, преодолевая сопротивление подушек, не помогая движению корпусом.",
+        "Коротко задержитесь и контролируемо сведите ноги в исходное положение."
+      ],
+      "images": [
+        "Thigh_Abductor/0.jpg",
+        "Thigh_Abductor/1.jpg"
+      ]
+    },
+    {
+      "id": "d8cf4152-006b-53c1-a0a7-299a2cc39c70",
+      "sourceID": "Thigh_Adductor",
+      "name": "Сведение ног в тренажёре",
+      "englishName": "Thigh Adductor",
+      "aliases": [
+        "Приведение бёдер"
+      ],
+      "group": "legs",
+      "equipment": "machine",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Приводящие мышцы бедра"
+      ],
+      "secondaryMuscles": [
+        "Ягодичные мышцы",
+        "Задняя поверхность бедра"
+      ],
+      "steps": [
+        "Сядьте в тренажёр для сведения ног и расположите бёдра на подушках. Удерживайте рукояти.",
+        "Плавно сведите ноги, сохраняя спину на опоре и не раскачивая верхнюю часть тела.",
+        "Задержитесь в сведённом положении и медленно разведите ноги обратно под контролем веса."
+      ],
+      "images": [
+        "Thigh_Adductor/0.jpg",
+        "Thigh_Adductor/1.jpg"
+      ]
+    },
+    {
+      "id": "5d7df1f0-31a1-55bf-85fe-fd59c2060c3c",
+      "sourceID": "Standing_Calf_Raises",
+      "name": "Подъёмы на носки стоя",
+      "englishName": "Standing Calf Raises",
+      "aliases": [
+        "Икры стоя"
+      ],
+      "group": "legs",
+      "equipment": "machine",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Икроножные мышцы"
+      ],
+      "secondaryMuscles": [],
+      "steps": [
+        "Отрегулируйте плечевые подушки и встаньте передней частью стоп на платформу, оставив пятки свободными.",
+        "Поднимите пятки, разгибая голеностопы. Сохраняйте положение коленей и устойчивый корпус.",
+        "После короткой паузы медленно опустите пятки в доступную амплитуду без пружинящих движений."
+      ],
+      "images": [
+        "Standing_Calf_Raises/0.jpg",
+        "Standing_Calf_Raises/1.jpg"
+      ]
+    },
+    {
+      "id": "4c0bcab5-3c05-5181-b003-cdff750e36f1",
+      "sourceID": "Seated_Calf_Raise",
+      "name": "Подъёмы на носки сидя",
+      "englishName": "Seated Calf Raise",
+      "aliases": [
+        "Икры сидя"
+      ],
+      "group": "legs",
+      "equipment": "machine",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Икроножные мышцы"
+      ],
+      "secondaryMuscles": [],
+      "steps": [
+        "Сядьте в тренажёр, поставьте переднюю часть стоп на платформу и разместите бёдра под валиком.",
+        "Немного поднимите пятки и уберите фиксатор. Плавно опустите пятки, затем поднимитесь на носки.",
+        "Повторяйте движение за счёт голеностопов, удерживая колени под валиком; в конце верните фиксатор."
+      ],
+      "images": [
+        "Seated_Calf_Raise/0.jpg",
+        "Seated_Calf_Raise/1.jpg"
+      ]
+    },
+    {
+      "id": "435c922b-38b6-502f-b2b1-83f3101e9e5f",
+      "sourceID": "Calf_Press_On_The_Leg_Press_Machine",
+      "name": "Подъёмы на носки в жиме ногами",
+      "englishName": "Calf Press On The Leg Press Machine",
+      "aliases": [
+        "Икры на платформе"
+      ],
+      "group": "legs",
+      "equipment": "machine",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Икроножные мышцы"
+      ],
+      "secondaryMuscles": [],
+      "steps": [
+        "Сядьте в жим ногами и установите переднюю часть стоп на нижний край платформы, оставив пятки свободными.",
+        "Сохраняя положение коленей, разгибайте голеностопы и выталкивайте платформу носками.",
+        "Медленно опускайте пятки в доступную амплитуду. Сохраняйте надёжную опору стоп и используйте ограничители."
+      ],
+      "images": [
+        "Calf_Press_On_The_Leg_Press_Machine/0.jpg",
+        "Calf_Press_On_The_Leg_Press_Machine/1.jpg"
+      ]
+    },
+    {
+      "id": "4925d85c-1a3f-5c48-a177-3dff5b1de9a9",
+      "sourceID": "Chin-Up",
+      "name": "Подтягивания обратным хватом",
+      "englishName": "Chin-Up",
+      "aliases": [
+        "Подтягивания на бицепс"
+      ],
+      "group": "back",
+      "equipment": "body only",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Широчайшие мышцы спины"
+      ],
+      "secondaryMuscles": [
+        "Бицепс",
+        "Мышцы предплечья",
+        "Средняя часть спины"
+      ],
+      "steps": [
+        "Возьмитесь за перекладину обратным хватом, ладонями к себе, и примите положение в висе.",
+        "Сгибая руки и направляя локти вниз, плавно подтяните корпус к перекладине без раскачивания.",
+        "После короткой паузы контролируемо опуститесь до исходного положения."
+      ],
+      "images": [
+        "Chin-Up/0.jpg",
+        "Chin-Up/1.jpg"
+      ]
+    },
+    {
+      "id": "9737759b-d324-5076-9931-a7dba7779f2f",
+      "sourceID": "Wide-Grip_Lat_Pulldown",
+      "name": "Тяга верхнего блока широким хватом",
+      "englishName": "Wide-Grip Lat Pulldown",
+      "aliases": [
+        "Вертикальная тяга"
+      ],
+      "group": "back",
+      "equipment": "cable",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Широчайшие мышцы спины"
+      ],
+      "secondaryMuscles": [
+        "Бицепс",
+        "Средняя часть спины",
+        "Дельтовидные мышцы"
+      ],
+      "steps": [
+        "Сядьте у верхнего блока, зафиксируйте бёдра валиком и возьмитесь за рукоять широким прямым хватом.",
+        "Слегка отклоните корпус и тяните рукоять к верхней части груди, направляя локти вниз.",
+        "Коротко задержитесь и плавно разогните руки, не отрываясь от сиденья и не раскачиваясь."
+      ],
+      "images": [
+        "Wide-Grip_Lat_Pulldown/0.jpg",
+        "Wide-Grip_Lat_Pulldown/1.jpg"
+      ]
+    },
+    {
+      "id": "c6221067-76d0-588e-aca1-5876cf3f5dc8",
+      "sourceID": "Close-Grip_Front_Lat_Pulldown",
+      "name": "Тяга верхнего блока узким хватом",
+      "englishName": "Close-Grip Front Lat Pulldown",
+      "aliases": [
+        "Узкая вертикальная тяга"
+      ],
+      "group": "back",
+      "equipment": "cable",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Широчайшие мышцы спины"
+      ],
+      "secondaryMuscles": [
+        "Бицепс",
+        "Средняя часть спины",
+        "Дельтовидные мышцы"
+      ],
+      "steps": [
+        "Сядьте в тренажёр, зафиксируйте бёдра и возьмитесь за верхнюю рукоять узким прямым хватом.",
+        "Плавно потяните рукоять к верхней части груди, опуская локти и сохраняя положение корпуса.",
+        "После короткой паузы верните рукоять вверх и контролируйте выпрямление рук."
+      ],
+      "images": [
+        "Close-Grip_Front_Lat_Pulldown/0.jpg",
+        "Close-Grip_Front_Lat_Pulldown/1.jpg"
+      ]
+    },
+    {
+      "id": "537e6599-4ef1-545a-b31d-891526416088",
+      "sourceID": "Underhand_Cable_Pulldowns",
+      "name": "Тяга верхнего блока обратным хватом",
+      "englishName": "Underhand Cable Pulldowns",
+      "aliases": [
+        "Вертикальная тяга обратным хватом"
+      ],
+      "group": "back",
+      "equipment": "cable",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Широчайшие мышцы спины"
+      ],
+      "secondaryMuscles": [
+        "Бицепс",
+        "Средняя часть спины",
+        "Дельтовидные мышцы"
+      ],
+      "steps": [
+        "Зафиксируйте бёдра в тренажёре и возьмитесь за рукоять обратным хватом, ладонями к себе.",
+        "Тяните рукоять к верхней части груди, направляя локти вниз и назад без рывка корпуса.",
+        "На мгновение сведите лопатки и плавно верните руки в исходное верхнее положение."
+      ],
+      "images": [
+        "Underhand_Cable_Pulldowns/0.jpg",
+        "Underhand_Cable_Pulldowns/1.jpg"
+      ]
+    },
+    {
+      "id": "cf73d3b0-1291-565b-bcb3-37b52071d5da",
+      "sourceID": "Seated_Cable_Rows",
+      "name": "Тяга горизонтального блока",
+      "englishName": "Seated Cable Rows",
+      "aliases": [
+        "Горизонтальная тяга сидя"
+      ],
+      "group": "back",
+      "equipment": "cable",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Средняя часть спины"
+      ],
+      "secondaryMuscles": [
+        "Бицепс",
+        "Широчайшие мышцы спины",
+        "Дельтовидные мышцы"
+      ],
+      "steps": [
+        "Сядьте перед нижним блоком, поставьте стопы на упоры и возьмитесь за рукоять, слегка согнув колени.",
+        "С ровной спиной подтяните рукоять к поясу, направляя локти назад и сводя лопатки.",
+        "Плавно выпрямите руки. Не округляйте спину и не превращайте движение в раскачивание корпуса."
+      ],
+      "images": [
+        "Seated_Cable_Rows/0.jpg",
+        "Seated_Cable_Rows/1.jpg"
+      ]
+    },
+    {
+      "id": "09b8d89d-34d3-5a3d-8e6b-b04cb3807bb7",
+      "sourceID": "One-Arm_Dumbbell_Row",
+      "name": "Тяга гантели одной рукой",
+      "englishName": "One-Arm Dumbbell Row",
+      "aliases": [
+        "Тяга гантели к поясу"
+      ],
+      "group": "back",
+      "equipment": "dumbbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Средняя часть спины"
+      ],
+      "secondaryMuscles": [
+        "Бицепс",
+        "Широчайшие мышцы спины",
+        "Дельтовидные мышцы"
+      ],
+      "steps": [
+        "Обопритесь одной рукой и коленом на скамью. В свободной руке держите гантель под плечом.",
+        "Не разворачивая корпус, подтяните гантель к поясу и направьте локоть назад.",
+        "Медленно опустите гантель, сохраняя ровную спину. После подхода смените сторону."
+      ],
+      "images": [
+        "One-Arm_Dumbbell_Row/0.jpg",
+        "One-Arm_Dumbbell_Row/1.jpg"
+      ]
+    },
+    {
+      "id": "a23a71eb-91df-5f3c-84e4-4dbf1624678a",
+      "sourceID": "Bent_Over_Two-Dumbbell_Row",
+      "name": "Тяга двух гантелей в наклоне",
+      "englishName": "Bent Over Two-Dumbbell Row",
+      "aliases": [
+        "Тяга гантелей к поясу"
+      ],
+      "group": "back",
+      "equipment": "dumbbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Средняя часть спины"
+      ],
+      "secondaryMuscles": [
+        "Бицепс",
+        "Широчайшие мышцы спины",
+        "Дельтовидные мышцы"
+      ],
+      "steps": [
+        "Возьмите гантели, слегка согните колени и наклоните корпус с ровной спиной. Руки опустите вниз.",
+        "Плавно подтяните обе гантели к поясу, направляя локти назад и сохраняя наклон корпуса.",
+        "После короткой паузы опустите гантели и выпрямите руки без раскачивания."
+      ],
+      "images": [
+        "Bent_Over_Two-Dumbbell_Row/0.jpg",
+        "Bent_Over_Two-Dumbbell_Row/1.jpg"
+      ]
+    },
+    {
+      "id": "4f98c5cf-83a1-5ffa-bae5-fd96e0039b2c",
+      "sourceID": "Dumbbell_Incline_Row",
+      "name": "Тяга гантелей с опорой грудью",
+      "englishName": "Dumbbell Incline Row",
+      "aliases": [
+        "Тяга на наклонной скамье"
+      ],
+      "group": "back",
+      "equipment": "dumbbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Средняя часть спины"
+      ],
+      "secondaryMuscles": [
+        "Бицепс",
+        "Мышцы предплечья",
+        "Широчайшие мышцы спины",
+        "Дельтовидные мышцы"
+      ],
+      "steps": [
+        "Лягте грудью на наклонную скамью, устойчиво поставьте стопы и опустите руки с гантелями.",
+        "Подтяните гантели к бокам корпуса, сгибая локти и сводя лопатки, не отрывая грудь от опоры.",
+        "Коротко задержитесь и плавно опустите гантели до исходного положения."
+      ],
+      "images": [
+        "Dumbbell_Incline_Row/0.jpg",
+        "Dumbbell_Incline_Row/1.jpg"
+      ]
+    },
+    {
+      "id": "3efa47cf-4d76-5133-8686-ba128078829f",
+      "sourceID": "T-Bar_Row_with_Handle",
+      "name": "Тяга Т-грифа",
+      "englishName": "T-Bar Row with Handle",
+      "aliases": [
+        "Тяга т-грифа к поясу"
+      ],
+      "group": "back",
+      "equipment": "barbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Средняя часть спины"
+      ],
+      "secondaryMuscles": [
+        "Бицепс",
+        "Широчайшие мышцы спины"
+      ],
+      "steps": [
+        "Закрепите один конец грифа, встаньте над ним и возьмитесь за установленную под грифом рукоять.",
+        "Слегка согните колени, наклонитесь с ровной спиной и подтяните рукоять к корпусу.",
+        "Сведите лопатки и медленно опустите вес, сохраняя устойчивый наклон корпуса."
+      ],
+      "images": [
+        "T-Bar_Row_with_Handle/0.jpg",
+        "T-Bar_Row_with_Handle/1.jpg"
+      ]
+    },
+    {
+      "id": "43c5d9b4-9d40-5375-ba81-6be4873632fa",
+      "sourceID": "Straight-Arm_Pulldown",
+      "name": "Тяга верхнего блока прямыми руками",
+      "englishName": "Straight-Arm Pulldown",
+      "aliases": [
+        "Пуловер на блоке"
+      ],
+      "group": "back",
+      "equipment": "cable",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Широчайшие мышцы спины"
+      ],
+      "secondaryMuscles": [],
+      "steps": [
+        "Встаньте перед верхним блоком, возьмитесь за прямую рукоять и слегка наклоните корпус.",
+        "Почти прямыми руками опустите рукоять по дуге к бёдрам, сохраняя небольшой сгиб локтей.",
+        "Плавно верните рукоять вверх, не раскачивая корпус и не меняя положение поясницы."
+      ],
+      "images": [
+        "Straight-Arm_Pulldown/0.jpg",
+        "Straight-Arm_Pulldown/1.jpg"
+      ]
+    },
+    {
+      "id": "225fb098-7905-5995-867e-09d8512d70fd",
+      "sourceID": "Hyperextensions_Back_Extensions",
+      "name": "Гиперэкстензия",
+      "englishName": "Hyperextensions (Back Extensions)",
+      "aliases": [
+        "Разгибание спины"
+      ],
+      "group": "back",
+      "equipment": "other",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Разгибатели спины"
+      ],
+      "secondaryMuscles": [
+        "Ягодичные мышцы",
+        "Задняя поверхность бедра"
+      ],
+      "steps": [
+        "Настройте опору под бёдра и зафиксируйте стопы в тренажёре. Сложите руки перед грудью.",
+        "Плавно наклоняйте корпус вперёд за счёт тазобедренных суставов в доступной амплитуде.",
+        "Поднимите корпус до одной линии с ногами. Не переразгибайте спину в верхней точке."
+      ],
+      "images": [
+        "Hyperextensions_Back_Extensions/0.jpg",
+        "Hyperextensions_Back_Extensions/1.jpg"
+      ]
+    },
+    {
+      "id": "5c71cd1c-0595-516e-b7bc-79c91466ef38",
+      "sourceID": "Barbell_Shrug",
+      "name": "Шраги со штангой",
+      "englishName": "Barbell Shrug",
+      "aliases": [
+        "Подъём плеч со штангой"
+      ],
+      "group": "back",
+      "equipment": "barbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Трапециевидные мышцы"
+      ],
+      "secondaryMuscles": [],
+      "steps": [
+        "Встаньте прямо и держите штангу перед бёдрами прямым хватом. Руки оставляйте выпрямленными.",
+        "Поднимите плечи вверх, сохраняя корпус неподвижным и не сгибая локти.",
+        "Коротко задержитесь и плавно опустите плечи. Не вращайте ими и не помогайте рывком ног."
+      ],
+      "images": [
+        "Barbell_Shrug/0.jpg",
+        "Barbell_Shrug/1.jpg"
+      ]
+    },
+    {
+      "id": "a27dbdf1-867c-5e63-b7c1-11fa230aa47f",
+      "sourceID": "Dumbbell_Shrug",
+      "name": "Шраги с гантелями",
+      "englishName": "Dumbbell Shrug",
+      "aliases": [
+        "Подъём плеч с гантелями"
+      ],
+      "group": "back",
+      "equipment": "dumbbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Трапециевидные мышцы"
+      ],
+      "secondaryMuscles": [],
+      "steps": [
+        "Встаньте прямо с гантелями по бокам, ладони направьте к корпусу и выпрямите руки.",
+        "Поднимите плечи вверх, не сгибая локти и не меняя положение головы и корпуса.",
+        "После короткой паузы плавно опустите плечи и повторите без вращения плечами."
+      ],
+      "images": [
+        "Dumbbell_Shrug/0.jpg",
+        "Dumbbell_Shrug/1.jpg"
+      ]
+    },
+    {
+      "id": "df15f938-2c8b-505f-9bd4-e45783def49b",
+      "sourceID": "Dumbbell_Bench_Press",
+      "name": "Жим гантелей лёжа",
+      "englishName": "Dumbbell Bench Press",
+      "aliases": [
+        "Жим гантелей лежа"
+      ],
+      "group": "chest",
+      "equipment": "dumbbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Грудные мышцы"
+      ],
+      "secondaryMuscles": [
+        "Дельтовидные мышцы",
+        "Трицепс"
+      ],
+      "steps": [
+        "Лягте на горизонтальную скамью и поднимите гантели над грудью. Стопы устойчиво поставьте на пол.",
+        "Сгибая локти, плавно опустите гантели к бокам груди, сохраняя контроль плеч.",
+        "Выжмите гантели вверх по той же траектории. В конце подхода безопасно опустите их."
+      ],
+      "images": [
+        "Dumbbell_Bench_Press/0.jpg",
+        "Dumbbell_Bench_Press/1.jpg"
+      ]
+    },
+    {
+      "id": "afd0d1c7-849d-5faa-85e7-765757ad8759",
+      "sourceID": "Barbell_Incline_Bench_Press_-_Medium_Grip",
+      "name": "Жим штанги на наклонной скамье",
+      "englishName": "Barbell Incline Bench Press - Medium Grip",
+      "aliases": [
+        "Наклонный жим штанги"
+      ],
+      "group": "chest",
+      "equipment": "barbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Грудные мышцы"
+      ],
+      "secondaryMuscles": [
+        "Дельтовидные мышцы",
+        "Трицепс"
+      ],
+      "steps": [
+        "Лягте на наклонную скамью, поставьте стопы на пол и снимите штангу средним хватом.",
+        "Плавно опускайте гриф к верхней части груди, сохраняя спину и лопатки на опоре.",
+        "Выжмите штангу вверх. После подхода верните её на стойки; при необходимости используйте страховку."
+      ],
+      "images": [
+        "Barbell_Incline_Bench_Press_-_Medium_Grip/0.jpg",
+        "Barbell_Incline_Bench_Press_-_Medium_Grip/1.jpg"
+      ]
+    },
+    {
+      "id": "e8bc138e-2642-570b-aee7-07ec627b5e97",
+      "sourceID": "Incline_Dumbbell_Press",
+      "name": "Жим гантелей на наклонной скамье",
+      "englishName": "Incline Dumbbell Press",
+      "aliases": [
+        "Наклонный жим гантелей"
+      ],
+      "group": "chest",
+      "equipment": "dumbbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Грудные мышцы"
+      ],
+      "secondaryMuscles": [
+        "Дельтовидные мышцы",
+        "Трицепс"
+      ],
+      "steps": [
+        "Сядьте на наклонную скамью, затем лягте и выведите гантели к плечам ладонями вперёд.",
+        "Выжмите гантели над грудью, сохраняя стопы на полу и корпус на спинке скамьи.",
+        "Медленно опустите гантели к исходному положению, не бросая вес и не ударяя гантели друг о друга."
+      ],
+      "images": [
+        "Incline_Dumbbell_Press/0.jpg",
+        "Incline_Dumbbell_Press/1.jpg"
+      ]
+    },
+    {
+      "id": "075e9828-6384-53f6-a998-edfffb5b470f",
+      "sourceID": "Decline_Barbell_Bench_Press",
+      "name": "Жим штанги на скамье с наклоном вниз",
+      "englishName": "Decline Barbell Bench Press",
+      "aliases": [
+        "Жим вниз головой"
+      ],
+      "group": "chest",
+      "equipment": "barbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Грудные мышцы"
+      ],
+      "secondaryMuscles": [
+        "Дельтовидные мышцы",
+        "Трицепс"
+      ],
+      "steps": [
+        "Зафиксируйте ноги на скамье с наклоном вниз, лягте и снимите штангу с помощью страхующего при необходимости.",
+        "Плавно опустите гриф к нижней части груди, сохраняя устойчивое положение корпуса.",
+        "Выжмите штангу обратно вверх и после подхода надёжно верните её на стойки."
+      ],
+      "images": [
+        "Decline_Barbell_Bench_Press/0.jpg",
+        "Decline_Barbell_Bench_Press/1.jpg"
+      ]
+    },
+    {
+      "id": "211142bc-4f62-5a01-b894-0609979a67e7",
+      "sourceID": "Decline_Dumbbell_Bench_Press",
+      "name": "Жим гантелей на скамье с наклоном вниз",
+      "englishName": "Decline Dumbbell Bench Press",
+      "aliases": [
+        "Нижний жим гантелей"
+      ],
+      "group": "chest",
+      "equipment": "dumbbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Грудные мышцы"
+      ],
+      "secondaryMuscles": [
+        "Дельтовидные мышцы",
+        "Трицепс"
+      ],
+      "steps": [
+        "Зафиксируйте ноги на скамье с наклоном вниз и безопасно выведите гантели над грудью.",
+        "Плавно опускайте гантели к бокам груди, сгибая локти и сохраняя положение плеч.",
+        "Выжмите гантели вверх по той же траектории; для завершения подхода при необходимости попросите помощь."
+      ],
+      "images": [
+        "Decline_Dumbbell_Bench_Press/0.jpg",
+        "Decline_Dumbbell_Bench_Press/1.jpg"
+      ]
+    },
+    {
+      "id": "e99de1f3-c80d-5d18-86df-f1fd3959c2d2",
+      "sourceID": "Dumbbell_Flyes",
+      "name": "Разведение гантелей лёжа",
+      "englishName": "Dumbbell Flyes",
+      "aliases": [
+        "Разводка гантелей"
+      ],
+      "group": "chest",
+      "equipment": "dumbbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Грудные мышцы"
+      ],
+      "secondaryMuscles": [],
+      "steps": [
+        "Лягте на горизонтальную скамью и держите гантели над грудью ладонями друг к другу.",
+        "Слегка согните локти и разводите руки по широкой дуге до комфортного растяжения груди.",
+        "Сведите руки над грудью по той же дуге, сохраняя угол в локтях и не ударяя гантели."
+      ],
+      "images": [
+        "Dumbbell_Flyes/0.jpg",
+        "Dumbbell_Flyes/1.jpg"
+      ]
+    },
+    {
+      "id": "66dc7b09-9ad5-59af-9769-f2a5dc8e1d2c",
+      "sourceID": "Incline_Dumbbell_Flyes",
+      "name": "Разведение гантелей на наклонной скамье",
+      "englishName": "Incline Dumbbell Flyes",
+      "aliases": [
+        "Наклонная разводка"
+      ],
+      "group": "chest",
+      "equipment": "dumbbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Грудные мышцы"
+      ],
+      "secondaryMuscles": [
+        "Дельтовидные мышцы"
+      ],
+      "steps": [
+        "Лягте на наклонную скамью и удерживайте гантели над грудью ладонями друг к другу.",
+        "С небольшим постоянным сгибом локтей разводите руки в стороны до комфортной нижней точки.",
+        "Плавно сведите гантели над грудью по той же дуге, не превращая движение в жим."
+      ],
+      "images": [
+        "Incline_Dumbbell_Flyes/0.jpg",
+        "Incline_Dumbbell_Flyes/1.jpg"
+      ]
+    },
+    {
+      "id": "0dee0627-e8c5-5372-b47f-89adcf61dfa8",
+      "sourceID": "Cable_Crossover",
+      "name": "Сведение рук в кроссовере",
+      "englishName": "Cable Crossover",
+      "aliases": [
+        "Кроссовер на грудь"
+      ],
+      "group": "chest",
+      "equipment": "cable",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Грудные мышцы"
+      ],
+      "secondaryMuscles": [
+        "Дельтовидные мышцы"
+      ],
+      "steps": [
+        "Установите рукояти верхних блоков, возьмите их и сделайте небольшой шаг вперёд, слегка наклонив корпус.",
+        "Сохраняя небольшой сгиб локтей, сведите руки перед собой по дуге и сократите грудные мышцы.",
+        "Плавно разведите руки обратно, не теряя устойчивость и не позволяя весу резко растягивать плечи."
+      ],
+      "images": [
+        "Cable_Crossover/0.jpg",
+        "Cable_Crossover/1.jpg"
+      ]
+    },
+    {
+      "id": "facb412b-7748-553d-9b54-5f61185a3cc6",
+      "sourceID": "Butterfly",
+      "name": "Сведение рук в тренажёре",
+      "englishName": "Butterfly",
+      "aliases": [
+        "Бабочка",
+        "Пек-дек"
+      ],
+      "group": "chest",
+      "equipment": "machine",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Грудные мышцы"
+      ],
+      "secondaryMuscles": [],
+      "steps": [
+        "Настройте высоту сиденья так, чтобы рукояти находились примерно на уровне плеч. Прижмите спину к опоре.",
+        "Плавно сведите рукояти перед грудью, сохраняя положение корпуса и сокращая грудные мышцы.",
+        "После короткой паузы верните рукояти в стороны под контролем сопротивления тренажёра."
+      ],
+      "images": [
+        "Butterfly/0.jpg",
+        "Butterfly/1.jpg"
+      ]
+    },
+    {
+      "id": "ae5c7154-d37a-515d-89a0-4559daa94acc",
+      "sourceID": "Pushups",
+      "name": "Отжимания",
+      "englishName": "Pushups",
+      "aliases": [
+        "Отжимания от пола"
+      ],
+      "group": "chest",
+      "equipment": "body only",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Грудные мышцы"
+      ],
+      "secondaryMuscles": [
+        "Дельтовидные мышцы",
+        "Трицепс"
+      ],
+      "steps": [
+        "Примите упор лёжа на ладонях и носках. Поставьте руки чуть шире плеч и удерживайте корпус прямым.",
+        "Сгибайте локти и плавно опускайте грудь к полу, не проваливая таз и не запрокидывая голову.",
+        "Оттолкнитесь ладонями и вернитесь в исходное положение, сохраняя одну линию тела."
+      ],
+      "images": [
+        "Pushups/0.jpg",
+        "Pushups/1.jpg"
+      ]
+    },
+    {
+      "id": "d8b52366-d691-53b6-b7e0-6094db238a60",
+      "sourceID": "Push-Ups_With_Feet_Elevated",
+      "name": "Отжимания с ногами на возвышении",
+      "englishName": "Push-Ups With Feet Elevated",
+      "aliases": [
+        "Отжимания с ногами на скамье"
+      ],
+      "group": "chest",
+      "equipment": "body only",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Грудные мышцы"
+      ],
+      "secondaryMuscles": [
+        "Дельтовидные мышцы",
+        "Трицепс"
+      ],
+      "steps": [
+        "Поставьте носки на устойчивую скамью, а ладони — на пол немного шире плеч. Удерживайте корпус прямым.",
+        "Плавно опускайте грудь к полу, сгибая локти и сохраняя положение таза и плеч.",
+        "Разогните руки и вернитесь вверх без прогиба в пояснице и отталкивания ногами."
+      ],
+      "images": [
+        "Push-Ups_With_Feet_Elevated/0.jpg",
+        "Push-Ups_With_Feet_Elevated/1.jpg"
+      ]
+    },
+    {
+      "id": "7603f146-3f9f-5ec0-8cfe-90c5a2158747",
+      "sourceID": "Incline_Push-Up",
+      "name": "Отжимания с руками на возвышении",
+      "englishName": "Incline Push-Up",
+      "aliases": [
+        "Отжимания от опоры"
+      ],
+      "group": "chest",
+      "equipment": "body only",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Грудные мышцы"
+      ],
+      "secondaryMuscles": [
+        "Дельтовидные мышцы",
+        "Трицепс"
+      ],
+      "steps": [
+        "Встаньте перед устойчивой скамьёй или платформой и поставьте ладони на её край чуть шире плеч.",
+        "Отведите стопы назад, выпрямите корпус и согните локти, приближая грудь к опоре.",
+        "Оттолкнитесь руками и вернитесь в исходный упор, сохраняя тело прямым."
+      ],
+      "images": [
+        "Incline_Push-Up/0.jpg",
+        "Incline_Push-Up/1.jpg"
+      ]
+    },
+    {
+      "id": "b1918380-05ba-5b28-b917-eba3ba751a0e",
+      "sourceID": "Dips_-_Chest_Version",
+      "name": "Отжимания на брусьях на грудь",
+      "englishName": "Dips - Chest Version",
+      "aliases": [
+        "Брусья с наклоном корпуса"
+      ],
+      "group": "chest",
+      "equipment": "other",
+      "level": "intermediate",
+      "primaryMuscles": [
+        "Грудные мышцы"
+      ],
+      "secondaryMuscles": [
+        "Дельтовидные мышцы",
+        "Трицепс"
+      ],
+      "steps": [
+        "Примите упор на брусьях, удерживая тело на руках. Слегка наклоните корпус вперёд.",
+        "Плавно опускайтесь, сгибая локти и сохраняя контроль плеч в доступной амплитуде.",
+        "Разогните руки и вернитесь в упор, не раскачивая ноги и не проваливая плечи."
+      ],
+      "images": [
+        "Dips_-_Chest_Version/0.jpg",
+        "Dips_-_Chest_Version/1.jpg"
+      ]
+    },
+    {
+      "id": "07709428-f691-562f-8f24-5754cdea6c07",
+      "sourceID": "Straight-Arm_Dumbbell_Pullover",
+      "name": "Пуловер с гантелью",
+      "englishName": "Straight-Arm Dumbbell Pullover",
+      "aliases": [
+        "Пуловер лёжа"
+      ],
+      "group": "chest",
+      "equipment": "dumbbell",
+      "level": "intermediate",
+      "primaryMuscles": [
+        "Грудные мышцы"
+      ],
+      "secondaryMuscles": [
+        "Широчайшие мышцы спины",
+        "Дельтовидные мышцы",
+        "Трицепс"
+      ],
+      "steps": [
+        "Обопритесь верхней частью спины поперёк скамьи, поставьте стопы на пол и удерживайте над грудью надёжно собранную гантель.",
+        "Сохраняя небольшой сгиб локтей, плавно опустите гантель по дуге за голову до комфортной точки.",
+        "Верните гантель над грудью по той же дуге. Удерживайте её обеими руками и контролируйте положение корпуса."
+      ],
+      "images": [
+        "Straight-Arm_Dumbbell_Pullover/0.jpg",
+        "Straight-Arm_Dumbbell_Pullover/1.jpg"
+      ]
+    },
+    {
+      "id": "4d261748-ded9-5bb1-b2ef-0ee8c1f6b6c9",
+      "sourceID": "Dumbbell_Shoulder_Press",
+      "name": "Жим гантелей сидя",
+      "englishName": "Dumbbell Shoulder Press",
+      "aliases": [
+        "Жим гантелей на плечи"
+      ],
+      "group": "shoulders",
+      "equipment": "dumbbell",
+      "level": "intermediate",
+      "primaryMuscles": [
+        "Дельтовидные мышцы"
+      ],
+      "secondaryMuscles": [
+        "Трицепс"
+      ],
+      "steps": [
+        "Сядьте на скамью с опорой для спины и выведите гантели к плечам ладонями вперёд.",
+        "Выжмите обе гантели над головой, не отрывая спину от опоры и не отклоняясь назад.",
+        "После короткой паузы плавно опустите гантели к плечам в исходное положение."
+      ],
+      "images": [
+        "Dumbbell_Shoulder_Press/0.jpg",
+        "Dumbbell_Shoulder_Press/1.jpg"
+      ]
+    },
+    {
+      "id": "a53d6212-fcba-5d19-ad1d-1b56e34a8396",
+      "sourceID": "Arnold_Dumbbell_Press",
+      "name": "Жим Арнольда",
+      "englishName": "Arnold Dumbbell Press",
+      "aliases": [
+        "Жим гантелей с разворотом"
+      ],
+      "group": "shoulders",
+      "equipment": "dumbbell",
+      "level": "intermediate",
+      "primaryMuscles": [
+        "Дельтовидные мышцы"
+      ],
+      "secondaryMuscles": [
+        "Трицепс"
+      ],
+      "steps": [
+        "Сядьте с опорой для спины. Держите гантели перед верхней частью груди, ладонями к себе.",
+        "Поднимайте гантели вверх, постепенно разворачивая ладони вперёд, до выпрямления рук над головой.",
+        "Плавно опустите гантели, выполняя обратный разворот ладоней в исходную позицию."
+      ],
+      "images": [
+        "Arnold_Dumbbell_Press/0.jpg",
+        "Arnold_Dumbbell_Press/1.jpg"
+      ]
+    },
+    {
+      "id": "451e9781-7faa-52a4-af90-cc64f957ddec",
+      "sourceID": "Standing_Dumbbell_Press",
+      "name": "Жим гантелей стоя",
+      "englishName": "Standing Dumbbell Press",
+      "aliases": [
+        "Жим над головой с гантелями"
+      ],
+      "group": "shoulders",
+      "equipment": "dumbbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Дельтовидные мышцы"
+      ],
+      "secondaryMuscles": [
+        "Трицепс"
+      ],
+      "steps": [
+        "Встаньте со стопами на ширине плеч и поднимите гантели к уровню головы, направив локти в стороны.",
+        "Выжмите гантели вверх, сохраняя неподвижный корпус и не помогая толчком ног.",
+        "Коротко задержитесь и плавно верните гантели к плечам, не прогибаясь в пояснице."
+      ],
+      "images": [
+        "Standing_Dumbbell_Press/0.jpg",
+        "Standing_Dumbbell_Press/1.jpg"
+      ]
+    },
+    {
+      "id": "18506dde-bb5a-5a3d-869e-64052b31aa57",
+      "sourceID": "Side_Lateral_Raise",
+      "name": "Подъёмы гантелей через стороны",
+      "englishName": "Side Lateral Raise",
+      "aliases": [
+        "Махи в стороны"
+      ],
+      "group": "shoulders",
+      "equipment": "dumbbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Дельтовидные мышцы"
+      ],
+      "secondaryMuscles": [],
+      "steps": [
+        "Встаньте прямо с гантелями по бокам и слегка согните локти. Сохраняйте корпус устойчивым.",
+        "Поднимайте руки через стороны примерно до уровня плеч, не раскачиваясь и не поднимая плечи к ушам.",
+        "Коротко задержитесь и плавно опустите гантели, сохраняя небольшой сгиб локтей."
+      ],
+      "images": [
+        "Side_Lateral_Raise/0.jpg",
+        "Side_Lateral_Raise/1.jpg"
+      ]
+    },
+    {
+      "id": "4e12da0a-d453-5215-83f6-f87b5205bf6c",
+      "sourceID": "Seated_Side_Lateral_Raise",
+      "name": "Подъёмы гантелей через стороны сидя",
+      "englishName": "Seated Side Lateral Raise",
+      "aliases": [
+        "Махи в стороны сидя"
+      ],
+      "group": "shoulders",
+      "equipment": "dumbbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Дельтовидные мышцы"
+      ],
+      "secondaryMuscles": [],
+      "steps": [
+        "Сядьте на край скамьи, поставьте стопы на пол и держите гантели в опущенных руках по бокам.",
+        "Слегка согните локти и поднимите гантели через стороны примерно до уровня плеч.",
+        "Плавно опустите руки, сохраняя корпус неподвижным и не помогая движению раскачиванием."
+      ],
+      "images": [
+        "Seated_Side_Lateral_Raise/0.jpg",
+        "Seated_Side_Lateral_Raise/1.jpg"
+      ]
+    },
+    {
+      "id": "2cd25084-d696-5ddc-80ca-5dc9e60d5930",
+      "sourceID": "Front_Dumbbell_Raise",
+      "name": "Подъёмы гантелей перед собой",
+      "englishName": "Front Dumbbell Raise",
+      "aliases": [
+        "Передние махи"
+      ],
+      "group": "shoulders",
+      "equipment": "dumbbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Дельтовидные мышцы"
+      ],
+      "secondaryMuscles": [],
+      "steps": [
+        "Встаньте прямо с гантелями перед бёдрами, ладонями к ногам. Локти оставьте слегка согнутыми.",
+        "Поднимите одну гантель перед собой примерно до уровня плеч без отклонения корпуса назад.",
+        "Плавно опустите её и выполните движение другой рукой, чередуя стороны."
+      ],
+      "images": [
+        "Front_Dumbbell_Raise/0.jpg",
+        "Front_Dumbbell_Raise/1.jpg"
+      ]
+    },
+    {
+      "id": "db28531e-fe10-5e1b-b377-f5eae9db95a9",
+      "sourceID": "Seated_Bent-Over_Rear_Delt_Raise",
+      "name": "Разведение гантелей в наклоне сидя",
+      "englishName": "Seated Bent-Over Rear Delt Raise",
+      "aliases": [
+        "Задняя дельта"
+      ],
+      "group": "shoulders",
+      "equipment": "dumbbell",
+      "level": "intermediate",
+      "primaryMuscles": [
+        "Дельтовидные мышцы"
+      ],
+      "secondaryMuscles": [],
+      "steps": [
+        "Сядьте на край скамьи и наклонитесь с ровной спиной. Опустите руки с гантелями под голени.",
+        "Слегка согнув локти, разведите руки в стороны, сохраняя корпус неподвижным.",
+        "Коротко задержитесь наверху и плавно опустите гантели обратно, не отводя руки далеко назад."
+      ],
+      "images": [
+        "Seated_Bent-Over_Rear_Delt_Raise/0.jpg",
+        "Seated_Bent-Over_Rear_Delt_Raise/1.jpg"
+      ]
+    },
+    {
+      "id": "a6d85d61-c001-5765-a5e0-534499d120a6",
+      "sourceID": "Reverse_Machine_Flyes",
+      "name": "Обратное разведение в тренажёре",
+      "englishName": "Reverse Machine Flyes",
+      "aliases": [
+        "Обратная бабочка"
+      ],
+      "group": "shoulders",
+      "equipment": "machine",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Дельтовидные мышцы"
+      ],
+      "secondaryMuscles": [],
+      "steps": [
+        "Настройте тренажёр и сядьте лицом к опоре так, чтобы рукояти находились на уровне плеч.",
+        "Со слегка согнутыми локтями разведите руки в стороны и назад, сокращая заднюю часть плеч.",
+        "Коротко задержитесь и контролируемо верните рукояти вперёд, сохраняя корпус на опоре."
+      ],
+      "images": [
+        "Reverse_Machine_Flyes/0.jpg",
+        "Reverse_Machine_Flyes/1.jpg"
+      ]
+    },
+    {
+      "id": "3880eac8-8b0a-5cbd-9605-1b8fdd4062fc",
+      "sourceID": "Face_Pull",
+      "name": "Тяга каната к лицу",
+      "englishName": "Face Pull",
+      "aliases": [
+        "Фейс-пул"
+      ],
+      "group": "shoulders",
+      "equipment": "cable",
+      "level": "intermediate",
+      "primaryMuscles": [
+        "Дельтовидные мышцы"
+      ],
+      "secondaryMuscles": [
+        "Средняя часть спины"
+      ],
+      "steps": [
+        "Встаньте лицом к верхнему блоку с канатом, возьмитесь за его концы и примите устойчивую стойку.",
+        "Тяните канат к лицу, разводя кисти в стороны и удерживая верхние части рук примерно параллельно полу.",
+        "Плавно выпрямите руки и верните канат к блоку, не помогая движению корпусом."
+      ],
+      "images": [
+        "Face_Pull/0.jpg",
+        "Face_Pull/1.jpg"
+      ]
+    },
+    {
+      "id": "a33f61be-8fb1-5828-8512-1fa0f29e41ee",
+      "sourceID": "Standing_Low-Pulley_Deltoid_Raise",
+      "name": "Отведение руки на нижнем блоке",
+      "englishName": "Standing Low-Pulley Deltoid Raise",
+      "aliases": [
+        "Махи на блоке"
+      ],
+      "group": "shoulders",
+      "equipment": "cable",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Дельтовидные мышцы"
+      ],
+      "secondaryMuscles": [
+        "Мышцы предплечья"
+      ],
+      "steps": [
+        "Встаньте боком к нижнему блоку. Дальней рукой возьмитесь за рукоять перед корпусом, ближней держитесь за опору.",
+        "Поднимайте рабочую руку через сторону примерно до уровня плеч, сохраняя ровный корпус.",
+        "Медленно опустите рукоять в исходное положение. После повторений смените сторону."
+      ],
+      "images": [
+        "Standing_Low-Pulley_Deltoid_Raise/0.jpg",
+        "Standing_Low-Pulley_Deltoid_Raise/1.jpg"
+      ]
+    },
+    {
+      "id": "e54658d0-7a9d-5ac3-9f61-4bd22c4dedb8",
+      "sourceID": "Barbell_Curl",
+      "name": "Сгибания рук со штангой",
+      "englishName": "Barbell Curl",
+      "aliases": [
+        "Подъём штанги на бицепс"
+      ],
+      "group": "arms",
+      "equipment": "barbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Бицепс"
+      ],
+      "secondaryMuscles": [
+        "Мышцы предплечья"
+      ],
+      "steps": [
+        "Встаньте прямо со штангой в руках, возьмитесь за гриф на ширине плеч ладонями вперёд.",
+        "Сгибайте локти и поднимайте гриф к плечам, сохраняя верхние части рук возле корпуса.",
+        "Коротко сократите бицепсы и плавно опустите штангу без раскачивания корпуса."
+      ],
+      "images": [
+        "Barbell_Curl/0.jpg",
+        "Barbell_Curl/1.jpg"
+      ]
+    },
+    {
+      "id": "4983e50f-edbe-549d-926f-92252e3a3bf8",
+      "sourceID": "EZ-Bar_Curl",
+      "name": "Сгибания рук с EZ-грифом",
+      "englishName": "EZ-Bar Curl",
+      "aliases": [
+        "Подъём EZ-штанги на бицепс"
+      ],
+      "group": "arms",
+      "equipment": "e-z curl bar",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Бицепс"
+      ],
+      "secondaryMuscles": [],
+      "steps": [
+        "Возьмите EZ-гриф за внешние изгибы ладонями вперёд и слегка внутрь. Встаньте прямо, локти прижмите к корпусу.",
+        "Согните руки в локтях и поднимите гриф к плечам, не двигая плечами и не помогая корпусом.",
+        "После короткой паузы плавно опустите гриф до исходного положения."
+      ],
+      "images": [
+        "EZ-Bar_Curl/0.jpg",
+        "EZ-Bar_Curl/1.jpg"
+      ]
+    },
+    {
+      "id": "fd8689e0-08f2-5f5c-8f04-b10f35fdd7cd",
+      "sourceID": "Alternate_Hammer_Curl",
+      "name": "Попеременные молотковые сгибания",
+      "englishName": "Alternate Hammer Curl",
+      "aliases": [
+        "Молотки",
+        "Молотковый подъём"
+      ],
+      "group": "arms",
+      "equipment": "dumbbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Бицепс"
+      ],
+      "secondaryMuscles": [
+        "Мышцы предплечья"
+      ],
+      "steps": [
+        "Встаньте с гантелями по бокам, направив ладони друг к другу. Локти удерживайте у корпуса.",
+        "Согните одну руку и поднимите гантель к плечу без разворота кисти и движения плечом.",
+        "Плавно опустите гантель и повторите другой рукой, чередуя стороны без раскачивания."
+      ],
+      "images": [
+        "Alternate_Hammer_Curl/0.jpg",
+        "Alternate_Hammer_Curl/1.jpg"
+      ]
+    },
+    {
+      "id": "f3991dd6-1c65-5f95-ac35-b3c59a492abc",
+      "sourceID": "Incline_Dumbbell_Curl",
+      "name": "Сгибания рук на наклонной скамье",
+      "englishName": "Incline Dumbbell Curl",
+      "aliases": [
+        "Бицепс на наклонной скамье"
+      ],
+      "group": "arms",
+      "equipment": "dumbbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Бицепс"
+      ],
+      "secondaryMuscles": [],
+      "steps": [
+        "Лягте спиной на наклонную скамью и опустите руки с гантелями вдоль корпуса, ладонями вперёд.",
+        "Сгибайте локти и поднимайте гантели к плечам, сохраняя верхние части рук неподвижными.",
+        "После короткой паузы медленно опустите гантели в исходное положение."
+      ],
+      "images": [
+        "Incline_Dumbbell_Curl/0.jpg",
+        "Incline_Dumbbell_Curl/1.jpg"
+      ]
+    },
+    {
+      "id": "691675fe-2053-5df4-809a-f84f044940ec",
+      "sourceID": "Concentration_Curls",
+      "name": "Концентрированные сгибания",
+      "englishName": "Concentration Curls",
+      "aliases": [
+        "Сгибания с упором локтя"
+      ],
+      "group": "arms",
+      "equipment": "dumbbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Бицепс"
+      ],
+      "secondaryMuscles": [
+        "Мышцы предплечья"
+      ],
+      "steps": [
+        "Сядьте на скамью, широко поставьте стопы и обоприте заднюю часть плеча рабочей руки о внутреннюю часть бедра.",
+        "Удерживая гантель ладонью вперёд, согните локоть и поднимите вес к плечу без раскачивания.",
+        "Плавно разогните руку. Выполнив повторения, переставьте гантель и смените сторону."
+      ],
+      "images": [
+        "Concentration_Curls/0.jpg",
+        "Concentration_Curls/1.jpg"
+      ]
+    },
+    {
+      "id": "4b498274-bf05-5850-87b1-ddccd604c40a",
+      "sourceID": "Preacher_Curl",
+      "name": "Сгибания рук на скамье Скотта",
+      "englishName": "Preacher Curl",
+      "aliases": [
+        "Бицепс на скамье Скотта"
+      ],
+      "group": "arms",
+      "equipment": "barbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Бицепс"
+      ],
+      "secondaryMuscles": [],
+      "steps": [
+        "Сядьте на скамью Скотта и положите верхние части рук на подушку. Возьмите EZ-гриф за внутренние изгибы.",
+        "Плавно разогните локти, опуская гриф и сохраняя плечи на опоре.",
+        "Согните руки и поднимите гриф к плечам, затем повторите без рывков и отрыва рук от подушки."
+      ],
+      "images": [
+        "Preacher_Curl/0.jpg",
+        "Preacher_Curl/1.jpg"
+      ]
+    },
+    {
+      "id": "0eb7172b-3f36-59b1-a06f-0395a7121845",
+      "sourceID": "Standing_Biceps_Cable_Curl",
+      "name": "Сгибания рук на нижнем блоке",
+      "englishName": "Standing Biceps Cable Curl",
+      "aliases": [
+        "Бицепс на блоке"
+      ],
+      "group": "arms",
+      "equipment": "cable",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Бицепс"
+      ],
+      "secondaryMuscles": [],
+      "steps": [
+        "Прикрепите рукоять к нижнему блоку и встаньте прямо, удерживая её ладонями вверх примерно на ширине плеч.",
+        "Согните локти и подтяните рукоять к плечам, не двигая верхними частями рук и корпусом.",
+        "Коротко задержитесь и плавно опустите рукоять, сохраняя натяжение троса."
+      ],
+      "images": [
+        "Standing_Biceps_Cable_Curl/0.jpg",
+        "Standing_Biceps_Cable_Curl/1.jpg"
+      ]
+    },
+    {
+      "id": "b03e86b4-84aa-51d6-a063-0968fe074110",
+      "sourceID": "Reverse_Barbell_Curl",
+      "name": "Сгибания со штангой обратным хватом",
+      "englishName": "Reverse Barbell Curl",
+      "aliases": [
+        "Обратные сгибания"
+      ],
+      "group": "arms",
+      "equipment": "barbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Бицепс"
+      ],
+      "secondaryMuscles": [
+        "Мышцы предплечья"
+      ],
+      "steps": [
+        "Встаньте прямо со штангой и возьмите гриф прямым хватом, ладонями вниз, примерно на ширине плеч.",
+        "Сгибайте локти и поднимайте штангу к плечам, удерживая верхние части рук возле корпуса.",
+        "Медленно опустите штангу в исходное положение, не раскачиваясь и сохраняя положение кистей."
+      ],
+      "images": [
+        "Reverse_Barbell_Curl/0.jpg",
+        "Reverse_Barbell_Curl/1.jpg"
+      ]
+    },
+    {
+      "id": "523c01f8-5df1-52f1-b9de-5bda5638709c",
+      "sourceID": "Close-Grip_Barbell_Bench_Press",
+      "name": "Жим штанги узким хватом",
+      "englishName": "Close-Grip Barbell Bench Press",
+      "aliases": [
+        "Узкий жим на трицепс"
+      ],
+      "group": "arms",
+      "equipment": "barbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Трицепс"
+      ],
+      "secondaryMuscles": [
+        "Грудные мышцы",
+        "Дельтовидные мышцы"
+      ],
+      "steps": [
+        "Лягте на горизонтальную скамью и снимите штангу хватом примерно на ширине плеч. Стопы поставьте на пол.",
+        "Плавно опустите гриф к середине груди, удерживая локти ближе к корпусу.",
+        "Выжмите штангу вверх без рывка и в конце подхода безопасно верните её на стойки."
+      ],
+      "images": [
+        "Close-Grip_Barbell_Bench_Press/0.jpg",
+        "Close-Grip_Barbell_Bench_Press/1.jpg"
+      ]
+    },
+    {
+      "id": "7c8dcb45-8f9a-5835-bad3-c9f6fcbbc01b",
+      "sourceID": "EZ-Bar_Skullcrusher",
+      "name": "Французский жим с EZ-грифом лёжа",
+      "englishName": "EZ-Bar Skullcrusher",
+      "aliases": [
+        "Разгибание рук лёжа"
+      ],
+      "group": "arms",
+      "equipment": "e-z curl bar",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Трицепс"
+      ],
+      "secondaryMuscles": [
+        "Мышцы предплечья"
+      ],
+      "steps": [
+        "Лягте на скамью и удерживайте EZ-гриф над плечами узким хватом. Локти направьте вверх.",
+        "Сохраняя верхние части рук неподвижными, сгибайте локти и плавно опускайте гриф ко лбу.",
+        "Разогните локти и верните гриф вверх, не разводя их в стороны и не выполняя движение рывком."
+      ],
+      "images": [
+        "EZ-Bar_Skullcrusher/0.jpg",
+        "EZ-Bar_Skullcrusher/1.jpg"
+      ]
+    },
+    {
+      "id": "384723df-3a8f-5119-99ed-644811e9c17c",
+      "sourceID": "Seated_Triceps_Press",
+      "name": "Разгибание рук с гантелью из-за головы сидя",
+      "englishName": "Seated Triceps Press",
+      "aliases": [
+        "Французский жим сидя"
+      ],
+      "group": "arms",
+      "equipment": "dumbbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Трицепс"
+      ],
+      "secondaryMuscles": [],
+      "steps": [
+        "Сядьте на скамью с опорой для спины и надёжно удерживайте одну гантель обеими руками над головой.",
+        "Удерживая локти возле головы, плавно согните руки и опустите гантель за голову.",
+        "Разогните локти и поднимите гантель обратно, сохраняя неподвижными плечи и корпус."
+      ],
+      "images": [
+        "Seated_Triceps_Press/0.jpg",
+        "Seated_Triceps_Press/1.jpg"
+      ]
+    },
+    {
+      "id": "fab97bee-59c5-5466-9042-a521f43f3845",
+      "sourceID": "Triceps_Pushdown",
+      "name": "Разгибание рук на верхнем блоке",
+      "englishName": "Triceps Pushdown",
+      "aliases": [
+        "Трицепс на блоке"
+      ],
+      "group": "arms",
+      "equipment": "cable",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Трицепс"
+      ],
+      "secondaryMuscles": [],
+      "steps": [
+        "Возьмитесь за прямую рукоять верхнего блока ладонями вниз и встаньте устойчиво с локтями возле корпуса.",
+        "Разгибайте руки в локтях и опускайте рукоять к бёдрам, сохраняя плечи неподвижными.",
+        "Коротко задержитесь внизу и плавно верните предплечья вверх без раскачивания корпуса."
+      ],
+      "images": [
+        "Triceps_Pushdown/0.jpg",
+        "Triceps_Pushdown/1.jpg"
+      ]
+    },
+    {
+      "id": "5bb15a5e-ff03-5b25-a9c4-a1b69e3bde99",
+      "sourceID": "Triceps_Pushdown_-_Rope_Attachment",
+      "name": "Разгибание рук с канатом на блоке",
+      "englishName": "Triceps Pushdown - Rope Attachment",
+      "aliases": [
+        "Трицепс с канатной рукоятью"
+      ],
+      "group": "arms",
+      "equipment": "cable",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Трицепс"
+      ],
+      "secondaryMuscles": [],
+      "steps": [
+        "Возьмите канат верхнего блока нейтральным хватом и удерживайте локти возле корпуса.",
+        "Разогните руки, опуская концы каната к бокам бёдер и не меняя положение верхних частей рук.",
+        "После короткой паузы медленно согните локти и верните канат вверх под контролем веса."
+      ],
+      "images": [
+        "Triceps_Pushdown_-_Rope_Attachment/0.jpg",
+        "Triceps_Pushdown_-_Rope_Attachment/1.jpg"
+      ]
+    },
+    {
+      "id": "18876255-6141-5510-8664-cc21e78464b8",
+      "sourceID": "Cable_Rope_Overhead_Triceps_Extension",
+      "name": "Разгибание рук с канатом из-за головы",
+      "englishName": "Cable Rope Overhead Triceps Extension",
+      "aliases": [
+        "Французский жим на блоке"
+      ],
+      "group": "arms",
+      "equipment": "cable",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Трицепс"
+      ],
+      "secondaryMuscles": [],
+      "steps": [
+        "Прикрепите канат к нижнему блоку, повернитесь спиной к нему и удерживайте концы над головой.",
+        "Сохраняя локти рядом с головой и плечи неподвижными, плавно опустите кисти за голову.",
+        "Разогните локти и выведите руки над головой, удерживая корпус устойчивым."
+      ],
+      "images": [
+        "Cable_Rope_Overhead_Triceps_Extension/0.jpg",
+        "Cable_Rope_Overhead_Triceps_Extension/1.jpg"
+      ]
+    },
+    {
+      "id": "e8e181c4-2ab6-5b73-9bd3-46507b15aa7b",
+      "sourceID": "Tricep_Dumbbell_Kickback",
+      "name": "Разгибание руки с гантелью в наклоне",
+      "englishName": "Tricep Dumbbell Kickback",
+      "aliases": [
+        "Кикбэк на трицепс"
+      ],
+      "group": "arms",
+      "equipment": "dumbbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Трицепс"
+      ],
+      "secondaryMuscles": [],
+      "steps": [
+        "Возьмите гантели, слегка согните колени и наклоните корпус. Прижмите плечи к бокам и согните локти.",
+        "Удерживая верхние части рук параллельно полу, разогните локти и отведите гантели назад.",
+        "После короткой паузы плавно согните руки, не двигая плечами и не раскачивая корпус."
+      ],
+      "images": [
+        "Tricep_Dumbbell_Kickback/0.jpg",
+        "Tricep_Dumbbell_Kickback/1.jpg"
+      ]
+    },
+    {
+      "id": "a8d345bd-29c4-5f39-a443-cfc03e438453",
+      "sourceID": "Dips_-_Triceps_Version",
+      "name": "Отжимания на брусьях на трицепс",
+      "englishName": "Dips - Triceps Version",
+      "aliases": [
+        "Брусья с прямым корпусом"
+      ],
+      "group": "arms",
+      "equipment": "body only",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Трицепс"
+      ],
+      "secondaryMuscles": [
+        "Грудные мышцы",
+        "Дельтовидные мышцы"
+      ],
+      "steps": [
+        "Примите устойчивый упор на брусьях, удерживая корпус ближе к вертикальному положению.",
+        "Плавно сгибайте локти, направляя их назад и ближе к телу, до доступной контролируемой глубины.",
+        "Разогните руки и вернитесь в упор без рывка ногами и проваливания плеч."
+      ],
+      "images": [
+        "Dips_-_Triceps_Version/0.jpg",
+        "Dips_-_Triceps_Version/1.jpg"
+      ]
+    },
+    {
+      "id": "c985db11-e322-5f99-bce9-f017453b325f",
+      "sourceID": "Bench_Dips",
+      "name": "Обратные отжимания от скамьи",
+      "englishName": "Bench Dips",
+      "aliases": [
+        "Трицепс от скамьи"
+      ],
+      "group": "arms",
+      "equipment": "body only",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Трицепс"
+      ],
+      "secondaryMuscles": [
+        "Грудные мышцы",
+        "Дельтовидные мышцы"
+      ],
+      "steps": [
+        "Поставьте ладони на край устойчивой скамьи за спиной. Вытяните ноги вперёд и удерживайте таз рядом с краем.",
+        "Сгибая локти назад, плавно опускайте корпус в комфортной амплитуде и не уводите плечи далеко за спину.",
+        "Разогните руки и поднимитесь обратно, удерживая локти ближе друг к другу и не раскачивая тело."
+      ],
+      "images": [
+        "Bench_Dips/0.jpg",
+        "Bench_Dips/1.jpg"
+      ]
+    },
+    {
+      "id": "fd0fa3a9-0ca0-5524-ab18-323d3a3829f5",
+      "sourceID": "Seated_Palm-Up_Barbell_Wrist_Curl",
+      "name": "Сгибание кистей со штангой",
+      "englishName": "Seated Palm-Up Barbell Wrist Curl",
+      "aliases": [
+        "Предплечья ладонями вверх"
+      ],
+      "group": "arms",
+      "equipment": "barbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Мышцы предплечья"
+      ],
+      "secondaryMuscles": [],
+      "steps": [
+        "Сядьте, возьмите штангу ладонями вверх и положите предплечья на бёдра так, чтобы кисти оставались свободными.",
+        "Удерживая гриф, плавно опустите кисти вниз, не двигая предплечьями и локтями.",
+        "Согните кисти вверх, ненадолго задержитесь и снова контролируемо опустите гриф."
+      ],
+      "images": [
+        "Seated_Palm-Up_Barbell_Wrist_Curl/0.jpg",
+        "Seated_Palm-Up_Barbell_Wrist_Curl/1.jpg"
+      ]
+    },
+    {
+      "id": "7ca34fb6-135c-5e98-9e22-0603dd4c9243",
+      "sourceID": "Seated_Palms-Down_Barbell_Wrist_Curl",
+      "name": "Разгибание кистей со штангой",
+      "englishName": "Seated Palms-Down Barbell Wrist Curl",
+      "aliases": [
+        "Предплечья ладонями вниз"
+      ],
+      "group": "arms",
+      "equipment": "barbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Мышцы предплечья"
+      ],
+      "secondaryMuscles": [],
+      "steps": [
+        "Сядьте, возьмите штангу ладонями вниз и обоприте предплечья о бёдра, оставив кисти свободными.",
+        "Плавно опустите кисти, сохраняя хват и неподвижное положение предплечий.",
+        "Разогните кисти вверх, коротко задержитесь и медленно вернитесь в исходное положение."
+      ],
+      "images": [
+        "Seated_Palms-Down_Barbell_Wrist_Curl/0.jpg",
+        "Seated_Palms-Down_Barbell_Wrist_Curl/1.jpg"
+      ]
+    },
+    {
+      "id": "a3e9e78d-38f3-5144-9066-3af46cf7627f",
+      "sourceID": "Air_Bike",
+      "name": "Велосипед на пресс",
+      "englishName": "Air Bike",
+      "aliases": [
+        "Велосипед лёжа"
+      ],
+      "group": "core",
+      "equipment": "body only",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Мышцы живота"
+      ],
+      "secondaryMuscles": [],
+      "steps": [
+        "Лягте на спину, приподнимите плечи и согните ноги. Руки расположите у головы без давления на шею.",
+        "Выпрямляйте одну ногу и одновременно поворачивайте корпус противоположным локтем к согнутому колену.",
+        "Вернитесь через середину и смените сторону, выполняя плавное попеременное движение без рывков."
+      ],
+      "images": [
+        "Air_Bike/0.jpg",
+        "Air_Bike/1.jpg"
+      ]
+    },
+    {
+      "id": "f4c55e35-d616-540e-b21a-98c2d4b68ca7",
+      "sourceID": "Reverse_Crunch",
+      "name": "Обратные скручивания",
+      "englishName": "Reverse Crunch",
+      "aliases": [
+        "Подъём таза на пресс"
+      ],
+      "group": "core",
+      "equipment": "body only",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Мышцы живота"
+      ],
+      "secondaryMuscles": [],
+      "steps": [
+        "Лягте на спину, положите руки вдоль тела и поднимите согнутые ноги, удерживая бёдра вертикально.",
+        "Напрягая живот, подкрутите таз и слегка приподнимите его от пола, приближая колени к груди.",
+        "Коротко задержитесь и плавно верните таз на пол без маха ногами."
+      ],
+      "images": [
+        "Reverse_Crunch/0.jpg",
+        "Reverse_Crunch/1.jpg"
+      ]
+    },
+    {
+      "id": "cdada155-858a-5678-bf19-ead8fb8849e3",
+      "sourceID": "Hanging_Leg_Raise",
+      "name": "Подъём ног в висе",
+      "englishName": "Hanging Leg Raise",
+      "aliases": [
+        "Пресс на перекладине"
+      ],
+      "group": "core",
+      "equipment": "body only",
+      "level": "expert",
+      "primaryMuscles": [
+        "Мышцы живота"
+      ],
+      "secondaryMuscles": [],
+      "steps": [
+        "Возьмитесь за перекладину и примите устойчивое положение в висе с опущенными ногами.",
+        "Не раскачиваясь, поднимите ноги перед собой примерно до прямого угла с корпусом.",
+        "Коротко задержитесь и медленно опустите ноги в исходное положение, сохраняя контроль таза."
+      ],
+      "images": [
+        "Hanging_Leg_Raise/0.jpg",
+        "Hanging_Leg_Raise/1.jpg"
+      ]
+    },
+    {
+      "id": "411d38b7-9823-50fc-a29f-b49b77afe2f1",
+      "sourceID": "Flat_Bench_Lying_Leg_Raise",
+      "name": "Подъём ног лёжа на скамье",
+      "englishName": "Flat Bench Lying Leg Raise",
+      "aliases": [
+        "Пресс на скамье"
+      ],
+      "group": "core",
+      "equipment": "body only",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Мышцы живота"
+      ],
+      "secondaryMuscles": [],
+      "steps": [
+        "Лягте спиной на скамью, выведите ноги за край и держитесь руками за края скамьи.",
+        "С небольшим сгибом коленей поднимите ноги примерно до вертикального положения.",
+        "Плавно опустите ноги обратно, сохраняя контроль поясницы и не делая резких махов."
+      ],
+      "images": [
+        "Flat_Bench_Lying_Leg_Raise/0.jpg",
+        "Flat_Bench_Lying_Leg_Raise/1.jpg"
+      ]
+    },
+    {
+      "id": "91dd1c45-b68a-5360-8e1a-9e7730544d7f",
+      "sourceID": "Cable_Crunch",
+      "name": "Скручивания на верхнем блоке",
+      "englishName": "Cable Crunch",
+      "aliases": [
+        "Молитва на пресс"
+      ],
+      "group": "core",
+      "equipment": "cable",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Мышцы живота"
+      ],
+      "secondaryMuscles": [],
+      "steps": [
+        "Встаньте на колени перед верхним блоком с канатом и удерживайте его концы рядом с лицом.",
+        "Сохраняя положение таза, скрутите корпус за счёт мышц живота, направляя локти к середине бёдер.",
+        "Коротко задержитесь и плавно разверните корпус в исходное положение, не поднимая вес руками."
+      ],
+      "images": [
+        "Cable_Crunch/0.jpg",
+        "Cable_Crunch/1.jpg"
+      ]
+    },
+    {
+      "id": "bd4bebd1-e58e-5f90-8126-a24884067711",
+      "sourceID": "Russian_Twist",
+      "name": "Русские скручивания",
+      "englishName": "Russian Twist",
+      "aliases": [
+        "Повороты корпуса сидя"
+      ],
+      "group": "core",
+      "equipment": "body only",
+      "level": "intermediate",
+      "primaryMuscles": [
+        "Мышцы живота"
+      ],
+      "secondaryMuscles": [
+        "Разгибатели спины"
+      ],
+      "steps": [
+        "Сядьте на пол, согните ноги и устойчиво зафиксируйте стопы. Отклоните корпус и вытяните руки перед собой.",
+        "Поверните корпус вправо, сохраняя положение таза и контроль мышц живота.",
+        "Вернитесь через середину и повернитесь влево, чередуя стороны без рывков."
+      ],
+      "images": [
+        "Russian_Twist/0.jpg",
+        "Russian_Twist/1.jpg"
+      ]
+    },
+    {
+      "id": "a3710600-1084-5a61-a2f4-cb156963a90c",
+      "sourceID": "Dead_Bug",
+      "name": "Мёртвый жук",
+      "englishName": "Dead Bug",
+      "aliases": [
+        "Попеременное разгибание ног лёжа"
+      ],
+      "group": "core",
+      "equipment": "body only",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Мышцы живота"
+      ],
+      "secondaryMuscles": [],
+      "steps": [
+        "Лягте на спину, вытяните руки к потолку и поднимите согнутые ноги так, чтобы колени и таз образовали прямые углы.",
+        "Напрягите живот и плавно выпрямляйте одну ногу над полом, сохраняя поясницу прижатой и руки поднятыми.",
+        "Верните ногу в исходное положение и повторите другой стороной, не прогибаясь в пояснице."
+      ],
+      "images": [
+        "Dead_Bug/0.jpg",
+        "Dead_Bug/1.jpg"
+      ]
+    },
+    {
+      "id": "52eafb22-b1a0-5b65-80f5-871d89901916",
+      "sourceID": "Alternate_Heel_Touchers",
+      "name": "Касания пяток лёжа",
+      "englishName": "Alternate Heel Touchers",
+      "aliases": [
+        "Боковые скручивания к пяткам"
+      ],
+      "group": "core",
+      "equipment": "body only",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Мышцы живота"
+      ],
+      "secondaryMuscles": [],
+      "steps": [
+        "Лягте на спину, согните колени и поставьте стопы на пол. Руки вытяните вдоль тела.",
+        "Слегка приподнимите плечи и наклоните корпус вправо, приближая правую кисть к правой пятке.",
+        "Вернитесь через середину и потянитесь левой кистью к левой пятке, чередуя стороны плавно."
+      ],
+      "images": [
+        "Alternate_Heel_Touchers/0.jpg",
+        "Alternate_Heel_Touchers/1.jpg"
+      ]
+    },
+    {
+      "id": "2f3a52ca-c293-54ad-99b8-a856101eb704",
+      "sourceID": "Ab_Roller",
+      "name": "Выкаты с роликом",
+      "englishName": "Ab Roller",
+      "aliases": [
+        "Ролик для пресса"
+      ],
+      "group": "core",
+      "equipment": "other",
+      "level": "intermediate",
+      "primaryMuscles": [
+        "Мышцы живота"
+      ],
+      "secondaryMuscles": [
+        "Дельтовидные мышцы"
+      ],
+      "steps": [
+        "Встаньте на колени и возьмитесь за ручки ролика, поставив его на пол перед собой.",
+        "Напрягите живот и медленно катите ролик вперёд только в той амплитуде, где можете удержать корпус.",
+        "Верните ролик к коленям за счёт мышц живота, не проваливая поясницу и не дёргая руками."
+      ],
+      "images": [
+        "Ab_Roller/0.jpg",
+        "Ab_Roller/1.jpg"
+      ]
+    },
+    {
+      "id": "401823d2-66ae-501d-8bc6-e97b7f610668",
+      "sourceID": "Barbell_Side_Bend",
+      "name": "Наклоны в сторону со штангой",
+      "englishName": "Barbell Side Bend",
+      "aliases": [
+        "Боковые наклоны"
+      ],
+      "group": "core",
+      "equipment": "barbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Мышцы живота"
+      ],
+      "secondaryMuscles": [
+        "Разгибатели спины"
+      ],
+      "steps": [
+        "Встаньте прямо и разместите лёгкую штангу на верхней части спины. Поставьте стопы примерно на ширине плеч.",
+        "Плавно наклоните корпус в сторону, не поворачивая таз и не отклоняясь вперёд или назад.",
+        "Вернитесь в вертикальное положение и повторите в другую сторону в комфортной амплитуде."
+      ],
+      "images": [
+        "Barbell_Side_Bend/0.jpg",
+        "Barbell_Side_Bend/1.jpg"
+      ]
+    },
+    {
+      "id": "3ec4bf86-a4be-5b79-9f61-08a52cd3291b",
+      "sourceID": "Dumbbell_Side_Bend",
+      "name": "Наклоны в сторону с гантелью",
+      "englishName": "Dumbbell Side Bend",
+      "aliases": [
+        "Боковые наклоны с гантелью"
+      ],
+      "group": "core",
+      "equipment": "dumbbell",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Мышцы живота"
+      ],
+      "secondaryMuscles": [],
+      "steps": [
+        "Встаньте прямо с гантелью в одной руке. Вторую руку положите на пояс, стопы поставьте на ширине плеч.",
+        "Плавно наклоняйте корпус в сторону, сохраняя неподвижный таз и не разворачивая плечи.",
+        "Вернитесь в вертикальное положение. Выполните движения в обе стороны, затем смените руку с гантелью."
+      ],
+      "images": [
+        "Dumbbell_Side_Bend/0.jpg",
+        "Dumbbell_Side_Bend/1.jpg"
+      ]
+    }
+  ]
+}
