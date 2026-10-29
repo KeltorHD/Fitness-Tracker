@@ -41,6 +41,7 @@
 - [ ] CloudKit: valid signing, iCloud account, restart после toggle, два устройства, offline edits/delete, production schema.
 - [ ] Notifications: grant/deny, locked-screen rest, pause/finish/skip cancel.
 - [ ] Live Activity: отключена пользователем, восстановление после перезапуска, окончание и системные лимиты длительности.
+- [ ] LiveActivityService: Swift 6.2 compile без `Sending 'duplicate/activity' risks causing data races`; ID snapshots и @concurrent helpers для end/update. Проверить удаление дублей, пропавший keeper и отмену перед повторным request.
 - [ ] Widget App Group: opt-in/off, актуальность после foreground refresh, week rollover.
 - [ ] Watch: offline recording, relaunch, transfer failure/retry, idempotent import и acknowledgement после save.
 

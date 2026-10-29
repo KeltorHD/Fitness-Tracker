@@ -18,24 +18,61 @@ import UIKit
   }
 
   func update(for workout: Workout?, allowStart: Bool = true) async throws {
-    let activities = Activity<WorkoutActivityAttributes>.activities
+    // Keep SDK reference objects out of actor crossings; reconciliation uses value snapshots.
+    let activities = Activity<WorkoutActivityAttributes>.activities.map {
+      (
+        id: $0.id, workoutID: $0.attributes.workoutID,
+        canUpdate: [.active, .stale].contains($0.activityState)
+      )
+    }
     for activity in activities
-    where activity.attributes.workoutID != workout?.id || workout?.endedAt != nil {
-      await activity.end(nil, dismissalPolicy: .immediate)
+    where activity.workoutID != workout?.id || workout?.endedAt != nil {
+      try Task.checkCancellation()
+      await Self.endActivity(id: activity.id)
     }
     try Task.checkCancellation()
     guard let workout, workout.endedAt == nil else { return }
     let state = WorkoutLiveState(workout: workout)
-    let content = ActivityContent(state: state, staleDate: nil)
     let matching = activities.filter {
-      $0.attributes.workoutID == workout.id && [.active, .stale].contains($0.activityState)
+      $0.workoutID == workout.id && $0.canUpdate
     }
     // Reconcile system activities after relaunch; ended/dismissed instances cannot be updated.
-    for duplicate in matching.dropFirst() { await duplicate.end(nil, dismissalPolicy: .immediate) }
+    for duplicate in matching.dropFirst() {
+      try Task.checkCancellation()
+      await Self.endActivity(id: duplicate.id)
+    }
+    try Task.checkCancellation()
     if let activity = matching.first {
-      await activity.update(content)
-    } else if allowStart {
+      let updated = await Self.updateActivity(id: activity.id, state: state)
+      try Task.checkCancellation()
+      if updated { return }
+    }
+    if allowStart {
       try startIfNeeded(for: workout)
     }
+  }
+
+  // @concurrent keeps SDK handles on the generic executor, including with Swift 6.2's
+  // NonisolatedNonsendingByDefault. Only Sendable IDs/state cross back to MainActor.
+  @concurrent nonisolated private static func endActivity(id: String) async {
+    guard !Task.isCancelled else { return }
+    guard
+      let activity = Activity<WorkoutActivityAttributes>.activities.first(where: { $0.id == id })
+    else {
+      return
+    }
+    await activity.end(nil, dismissalPolicy: .immediate)
+  }
+
+  @concurrent nonisolated private static func updateActivity(id: String, state: WorkoutLiveState)
+    async -> Bool
+  {
+    guard !Task.isCancelled,
+      let activity = Activity<WorkoutActivityAttributes>.activities.first(where: {
+        $0.id == id && [.active, .stale].contains($0.activityState)
+      })
+    else { return false }
+    await activity.update(ActivityContent(state: state, staleDate: nil))
+    return true
   }
 }

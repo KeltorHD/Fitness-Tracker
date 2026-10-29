@@ -45,6 +45,8 @@ Capabilities выражены настоящими entitlement keys: [HealthKit]
 
 Оба target используют общий контракт; `FITSESSION_APP` выбирает исполнение с SwiftData только в основном процессе. Подробности проверки: [BACKGROUND_AND_DYNAMIC_ISLAND.md](BACKGROUND_AND_DYNAMIC_ISLAND.md).
 
+[Swift 6.2 nonisolated async / @concurrent](https://docs.swift.org/latest/documentation/diagnostics/nonisolated-nonsending-by-default/) — @concurrent явно выбирает generic executor. LiveActivityService передаёт только IDs и WorkoutLiveState; end/update получают SDK handle внутри nonisolated helper и не отправляют Activity из MainActor. Никакие @unchecked Sendable/@preconcurrency или отключения diagnostics не добавлены; Apple SDK compilation проверяется отдельно на Mac.
+
 ## JSON / .fitsession
 
 - [fileImporter](https://developer.apple.com/documentation/swiftui/view/fileimporter(ispresented:allowedcontenttypes:oncompletion:)) — системный single-file picker; доступ к URL балансируется startAccessingSecurityScopedResource/stopAccessingSecurityScopedResource.

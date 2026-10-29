@@ -40,6 +40,7 @@
 | ArchiveFileService, Transferable, fileImporter/fileExporter и file URL handling | Да | Синтаксис/ресурсы; Apple tests не запускались | Да, Files/iCloud Drive, UTI, cancellation, cold launch, sheets | Обычный signing, дополнительных capabilities нет |
 | ArchiveTransferViewModel, preview/confirmation/retry и экспорт одной/всех тренировок с планами | Да | Core rules — да; Apple models/tests — нет | Да, UI, batch save, повторный импорт и активная сессия | Нет |
 | FitSession Personal: отдельные signing configs без iCloud/APNs, локальная SwiftData и guards | Да | Структура/entitlements и type-check AppCapabilities; Apple tests не запускались | Да, generation/signing/run на Personal Team | Бесплатный Apple account, уникальные IDs и разрешения устройства |
+| ActivityKit concurrency: end/update по ID через @concurrent helpers, без передачи SDK handles из MainActor | Да | Синтаксис/форматирование; Apple SDK недоступен | Да, устранение compiler diagnostic и lifecycle на устройстве | Как для Live Activity выше |
 
 ## Фактические проверки
 
