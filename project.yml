@@ -1,0 +1,137 @@
+name: FitSession
+options:
+  minimumXcodeGenVersion: 2.44.0
+  xcodeVersion: '26.0'
+  projectFormat: xcode16_0
+  developmentLanguage: ru
+  deploymentTarget:
+    iOS: '26.0'
+    watchOS: '26.0'
+settings:
+  configs:
+    Debug:
+      FITSESSION_APS_ENVIRONMENT: development
+    Release:
+      FITSESSION_APS_ENVIRONMENT: production
+configs:
+  Debug: debug
+  Release: release
+configFiles:
+  Debug: Config/Base.xcconfig
+  Release: Config/Base.xcconfig
+packages:
+  FitSessionCore:
+    path: .
+fileGroups:
+  - README.md
+  - MAC_BUILD_GUIDE.md
+  - docs
+  - Config
+schemes:
+  FitSession:
+    build:
+      targets:
+        FitSession: all
+    run:
+      config: Debug
+      storeKitConfiguration: Config/FitSession.storekit
+    test:
+      config: Debug
+      targets:
+        - FitSessionTests
+        - FitSessionUITests
+  FitSessionWatch:
+    build:
+      targets:
+        FitSessionWatch: all
+    run:
+      config: Debug
+  FitSessionWidgets:
+    build:
+      targets:
+        FitSessionWidgets: all
+targets:
+  FitSession:
+    type: application
+    platform: iOS
+    sources:
+      - Apple/App
+      - Apple/Design
+      - Apple/Features
+      - Apple/Persistence
+      - Apple/Services
+      - Apple/Shared
+      - path: Resources/Assets.xcassets
+      - path: Resources/PrivacyInfo.xcprivacy
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(FITSESSION_BUNDLE_ID)
+        INFOPLIST_FILE: Config/App-Info.plist
+        CODE_SIGN_ENTITLEMENTS: Config/App.entitlements
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        TARGETED_DEVICE_FAMILY: '1,2'
+        SUPPORTS_MACCATALYST: NO
+    dependencies:
+      - package: FitSessionCore
+      - target: FitSessionWidgets
+        embed: true
+      - target: FitSessionWatch
+        embed: true
+    # Capabilities are declared in real entitlements, not invented XcodeGen keys.
+  FitSessionWidgets:
+    type: app-extension
+    platform: iOS
+    sources:
+      - Apple/Widgets
+      - Apple/Shared
+      - path: Resources/Assets.xcassets
+      - path: Resources/PrivacyInfo.xcprivacy
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(FITSESSION_BUNDLE_ID).widgets
+        INFOPLIST_FILE: Config/Widgets-Info.plist
+        CODE_SIGN_ENTITLEMENTS: Config/Widgets.entitlements
+        APPLICATION_EXTENSION_API_ONLY: YES
+        SKIP_INSTALL: YES
+        ASSETCATALOG_COMPILER_APPICON_NAME: ''
+  FitSessionWatch:
+    type: application
+    platform: watchOS
+    sources:
+      - Apple/Watch
+      - path: Resources/WatchAssets.xcassets
+      - path: Resources/PrivacyInfo.xcprivacy
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(FITSESSION_BUNDLE_ID).watchkitapp
+        INFOPLIST_FILE: Config/Watch-Info.plist
+        CODE_SIGN_ENTITLEMENTS: Config/Watch.entitlements
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        SDKROOT: watchos
+        SKIP_INSTALL: YES
+    dependencies:
+      - package: FitSessionCore
+  FitSessionTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [Apple/Tests]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(FITSESSION_BUNDLE_ID).tests
+        GENERATE_INFOPLIST_FILE: YES
+    dependencies:
+      - target: FitSession
+      - package: FitSessionCore
+  FitSessionUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources: [Apple/UITests]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(FITSESSION_BUNDLE_ID).uitests
+        GENERATE_INFOPLIST_FILE: YES
+    dependencies:
+      - target: FitSession
