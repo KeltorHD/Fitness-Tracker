@@ -5,7 +5,7 @@
 
 ## Что реализовано
 
-- Свободная тренировка и редактируемые планы, каталог и собственные упражнения.
+- Свободная тренировка и редактируемые планы; 100 упражнений с русскими названиями и техникой, 200 локальных фотографий, поиск и фильтры, собственные упражнения.
 - Вес в кг/фунтах, повторения, разминка, добавление подходов, пауза, отдых, заметки.
 - Сохранение каждого изменения, восстановление активной тренировки, история и экспорт JSON.
 - Недельный объём, серия тренировочных недель, личные рекорды, оценка 1ПМ.
@@ -41,6 +41,7 @@ bash scripts/check-linux.sh
 swift build
 swift test
 python3 scripts/validate-project.py
+python3 scripts/validate-exercise-library.py
 python3 scripts/parse-apple.py
 swift format lint --strict --recursive Sources Tests Apple Package.swift
 ```
@@ -78,6 +79,8 @@ project.yml                        # XcodeGen, пять targets
 scripts/                           # Установка, валидация и Linux-проверки
 ```
 
-[Фон и Dynamic Island](docs/BACKGROUND_AND_DYNAMIC_ISLAND.md) · [Архитектура и правила данных](docs/ARCHITECTURE.md) · [Проверенные API](docs/API_REFERENCES.md) · [Проверки на Mac](docs/XCODE_VALIDATION.md)
+[Библиотека упражнений](docs/EXERCISE_LIBRARY.md) · [Макеты экранов](docs/previews/README.md) · [Фон и Dynamic Island](docs/BACKGROUND_AND_DYNAMIC_ISLAND.md) · [Архитектура и правила данных](docs/ARCHITECTURE.md) · [Проверенные API](docs/API_REFERENCES.md) · [Проверки на Mac](docs/XCODE_VALIDATION.md)
 
 Основной интерфейс — на русском языке. Нет аналитики, рекламы и сторонних UI-фреймворков. Системные SF Symbols и собственный геометрический значок включены в проект.
+
+Источник упражнений: [free-exercise-db](https://github.com/yuhonas/free-exercise-db), Unlicense; включена подборка 100 записей и сокращённая русская адаптация. Подробности и hashes — в `ThirdParty/free-exercise-db`.

@@ -44,6 +44,13 @@ struct DashboardView: View {
             LinearGradient(
               colors: [Color.accentColor.opacity(0.18), Color(.secondarySystemGroupedBackground)],
               startPoint: .topLeading, endPoint: .bottomTrailing), in: .rect(cornerRadius: 28))
+          NavigationLink {
+            ExerciseLibraryView()
+          } label: {
+            Label("Библиотека упражнений", systemImage: "books.vertical").font(.headline)
+              .frame(maxWidth: .infinity, alignment: .leading).padding(20)
+              .background(Color(.secondarySystemGroupedBackground), in: .rect(cornerRadius: 22))
+          }.buttonStyle(.plain)
           Text("Ваши планы").font(.title2.bold())
           ForEach(store.templates.prefix(2)) { template in
             Button {

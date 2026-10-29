@@ -33,6 +33,10 @@ GROUPS = {**dict.fromkeys(['abductors', 'adductors', 'calves', 'glutes', 'hamstr
           **dict.fromkeys(['biceps', 'forearms', 'triceps'], 'arms'),
           'abdominals': 'core', 'chest': 'chest', 'shoulders': 'shoulders'}
 
+LEGACY_SOURCE_IDS = ['Barbell_Squat', 'Barbell_Bench_Press_-_Medium_Grip', 'Bent_Over_Barbell_Row',
+                     'Standing_Military_Press', 'Romanian_Deadlift', 'Pullups', 'Dumbbell_Bicep_Curl', 'Crunches']
+LEGACY_IDS = {source_id: f'10000000-0000-0000-0000-{index + 1:012d}' for index, source_id in enumerate(LEGACY_SOURCE_IDS)}
+
 def write_json(path, value):
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n')
@@ -93,8 +97,7 @@ def generate():
         assert 0 < len(name) <= 80 and re.search('[А-Яа-яЁё]', name)
         steps = translations[source_id]
         assert all(len(s) >= 20 and re.search('[А-Яа-яЁё]', s) for s in steps)
-        stable_id = (f'10000000-0000-0000-0000-{index + 1:012d}' if index < 8
-                     else str(uuid.uuid5(uuid.NAMESPACE_URL, 'https://github.com/yuhonas/free-exercise-db/' + source_id)))
+        stable_id = LEGACY_IDS.get(source_id) or str(uuid.uuid5(uuid.NAMESPACE_URL, 'https://github.com/yuhonas/free-exercise-db/' + source_id))
         entries.append({'id': stable_id, 'sourceID': source_id, 'name': name,
                         'englishName': item['name'], 'aliases': aliases.split(';'),
                         'group': GROUPS[item['primaryMuscles'][0]], 'equipment': item['equipment'],

@@ -30,8 +30,10 @@ struct ActiveWorkoutView: View {
           }
           ForEach(workout.exercises) { exercise in
             Section {
-              if !exercise.exercise.instructions.isEmpty {
-                Text(exercise.exercise.instructions).font(.caption).foregroundStyle(.secondary)
+              NavigationLink {
+                ExerciseDetailView(exercise: exercise.exercise)
+              } label: {
+                Label("Техника выполнения", systemImage: "figure.strengthtraining.traditional")
               }
               ForEach(exercise.sets) { set in
                 SetEditor(exerciseID: exercise.id, set: set, disabled: workout.status != .active)
@@ -160,27 +162,14 @@ private struct SetEditor: View {
 
 struct ExercisePicker: View {
   @Environment(\.dismiss) private var dismiss
-  @State private var search = ""
   @State private var custom = false
   let select: (Exercise) -> Void
   var body: some View {
     NavigationStack {
-      List(
-        ExerciseCatalog.all.filter {
-          search.isEmpty || $0.name.localizedCaseInsensitiveContains(search)
-        }
-      ) { exercise in
-        Button {
-          select(exercise)
-          dismiss()
-        } label: {
-          VStack(alignment: .leading, spacing: 4) {
-            Text(exercise.name).foregroundStyle(.primary)
-            Text(exercise.muscle.title).font(.caption).foregroundStyle(.secondary)
-          }
-        }
+      ExerciseLibraryView { exercise in
+        select(exercise)
+        dismiss()
       }
-      .searchable(text: $search, prompt: "Найти упражнение").navigationTitle("Упражнения")
       .toolbar {
         ToolbarItem(placement: .cancellationAction) { Button("Закрыть") { dismiss() } }
         ToolbarItem(placement: .primaryAction) {

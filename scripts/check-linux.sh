@@ -17,6 +17,7 @@ flags=(--cache-path "$PWD/.build/cache" --config-path "$PWD/.build/config" --sec
 "$swift_bin" build "${flags[@]}"
 "$swift_bin" test "${flags[@]}"
 python3 scripts/validate-project.py
+python3 scripts/validate-exercise-library.py
 swiftc_bin="$(dirname "$(command -v "$swift_bin")")/swiftc"
 python3 scripts/parse-apple.py "$swiftc_bin"
 if "$swift_bin" format --help >/dev/null 2>&1; then

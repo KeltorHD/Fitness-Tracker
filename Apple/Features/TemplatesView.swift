@@ -55,6 +55,7 @@ struct TemplateEditor: View {
         }
         ForEach($template.exercises) { $exercise in
           Section(exercise.exercise.name) {
+            NavigationLink("Техника выполнения") { ExerciseDetailView(exercise: exercise.exercise) }
             Stepper("Подходы: \(exercise.setCount)", value: $exercise.setCount, in: 1...30)
             Stepper(
               "Повторения: \(exercise.repetitions)", value: $exercise.repetitions, in: 1...1000)

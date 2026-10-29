@@ -23,6 +23,7 @@ assert spec['name'] == 'FitSession'
 assert spec['packages']['FitSessionCore']['path'] == '.'
 assert set(spec['targets']) == {'FitSession', 'FitSessionWatch', 'FitSessionWidgets', 'FitSessionTests', 'FitSessionUITests'}
 assert spec['options']['deploymentTarget'] == {'iOS': '26.0', 'watchOS': '26.0'}
+assert {'path': 'Resources/ExerciseMedia', 'type': 'folder', 'buildPhase': 'resources'} in spec['targets']['FitSession']['sources']
 assert 'FITSESSION_APP' in spec['targets']['FitSession']['settings']['base']['SWIFT_ACTIVE_COMPILATION_CONDITIONS']
 assert 'FITSESSION_APP' not in spec['targets']['FitSessionWidgets']['settings']['base'].get('SWIFT_ACTIVE_COMPILATION_CONDITIONS', '')
 assert {'package': 'FitSessionCore'} in spec['targets']['FitSessionWidgets']['dependencies']
@@ -59,7 +60,10 @@ for file in root.rglob('*'):
         png = file.read_bytes()
         assert png[:8] == b'\x89PNG\r\n\x1a\n'
         width, height, depth, color = struct.unpack('>IIBB', png[16:26])
-        assert (width, height, depth, color) == (1024, 1024, 8, 2), f'Icon must be opaque RGB 1024x1024: {file}'
+        if file.parent.suffix == '.appiconset':
+            assert (width, height, depth, color) == (1024, 1024, 8, 2), f'Icon must be opaque RGB 1024x1024: {file}'
+        else:
+            assert width > 0 and height > 0, f'Empty PNG: {file}'
 app = plists['App-Info.plist']
 assert app['NSSupportsLiveActivities'] is True
 assert 'remote-notification' in app['UIBackgroundModes']

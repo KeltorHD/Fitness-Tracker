@@ -47,3 +47,7 @@ Watch — автономный журнал подходов по начальн
 Linux проверяет Core compilation/tests, ресурсы/конфигурационные связи, Swift formatting и синтаксис Apple-файлов. Только Xcode сможет проверить SDK availability, SwiftUI overload resolution, SwiftData macro expansion, signing, extension embedding, rendering, WCSession, CloudKit и покупки. Положительный Linux-результат не повышает Apple-модуль до статуса полностью протестированного.
 
 Подробности: [фон и Dynamic Island](BACKGROUND_AND_DYNAMIC_ISLAND.md).
+
+## Библиотека упражнений
+
+ExerciseLibraryEntry хранит дополнительные данные отдельно от Exercise, поэтому прежний JSON тренировок не меняется. SPM resource содержит русские записи и источник, iOS-only folder — оригинальные фотографии; Watch/widgets не получают 13 МБ media. Восемь прежних UUID сопоставлены с source IDs явно, остальные получены детерминированным UUID v5. Подробности импорта и проверок: [EXERCISE_LIBRARY.md](EXERCISE_LIBRARY.md).

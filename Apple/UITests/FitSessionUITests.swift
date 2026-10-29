@@ -13,9 +13,14 @@ final class FitSessionUITests: XCTestCase {
     XCTAssertTrue(start.waitForExistence(timeout: 10))
     start.tap()
     app.buttons["addExercise"].tap()
+    app.searchFields.firstMatch.tap()
+    app.searchFields.firstMatch.typeText("Приседания")
     let squat = app.buttons.containing(.staticText, identifier: "Приседания").firstMatch
     XCTAssertTrue(squat.waitForExistence(timeout: 5))
     squat.tap()
+    let select = app.buttons["selectLibraryExercise"]
+    XCTAssertTrue(select.waitForExistence(timeout: 5))
+    select.tap()
     let complete = app.buttons["completeSet"].firstMatch
     XCTAssertTrue(complete.waitForExistence(timeout: 5))
     complete.tap()

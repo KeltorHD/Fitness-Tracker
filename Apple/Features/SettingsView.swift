@@ -63,6 +63,8 @@ struct SettingsView: View {
           )
         }
         Section("FitSession") {
+          NavigationLink("Библиотека упражнений") { ExerciseLibraryView() }
+          NavigationLink("Источники упражнений и фотографий") { ExerciseCreditsView() }
           Button(store.purchases.isPro ? "FitSession Pro активен" : "FitSession Pro") {
             showPro = true
           }

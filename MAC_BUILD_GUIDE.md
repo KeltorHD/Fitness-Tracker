@@ -122,3 +122,7 @@ xcodebuild -project FitSession.xcodeproj -scheme FitSession \
 Репозиторий не был собран или опубликован через Xcode в Linux-сессии.
 
 Описание фонового поведения: [BACKGROUND_AND_DYNAMIC_ISLAND.md](docs/BACKGROUND_AND_DYNAMIC_ISLAND.md).
+
+## Локальная библиотека и фотографии
+
+После `xcodegen generate` убедитесь, что `ExerciseMedia` копируется как folder reference в главный target, а `ExerciseLibrary.ru.json` включён в SPM resource bundle. Проверьте первый запуск в авиарежиме: каталог, русские шаги и обе фотографии должны работать без сети. Сценарии: [EXERCISE_LIBRARY.md](docs/EXERCISE_LIBRARY.md). PNG/SVG в `docs/previews` — макеты, не скриншоты запуска.

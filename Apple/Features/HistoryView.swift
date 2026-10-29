@@ -65,6 +65,7 @@ struct WorkoutDetailView: View {
       }
       ForEach(workout.exercises) { exercise in
         Section(exercise.exercise.name) {
+          NavigationLink("Техника выполнения") { ExerciseDetailView(exercise: exercise.exercise) }
           ForEach(exercise.sets.filter { $0.completedAt != nil }) { set in
             LabeledContent(
               set.isWarmup ? "Разминка" : "Подход",
