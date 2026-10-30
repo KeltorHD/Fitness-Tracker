@@ -11,11 +11,20 @@ import Observation
   private(set) var hasRequestedHealth = false
   private(set) var recording: HeartRateRecording?
   private(set) var preparingRecording = false
+  private(set) var live = LiveHeartRateSnapshot()
+  private(set) var startingLive = false
+  private(set) var attachedWorkoutStatus: WorkoutStatus?
+  var hasLiveSession: Bool { [.starting, .running, .paused].contains(live.state) }
+  var canStartLive: Bool {
+    liveSource != nil && mode == .appleHealth && deviceProfile == .airPodsPro3
+      && attachedWorkoutStatus == .active && !preparingRecording && !startingLive && !hasLiveSession
+  }
   var error: String?
   var hasPendingSaves: Bool { !pendingSaves.isEmpty }
   var canRetryRecordingLoad: Bool { workout != nil && recording == nil && !preparingRecording }
   @ObservationIgnored private let health: any HealthMetricsReading
   @ObservationIgnored private let sensor: any HeartRateBluetooth
+  @ObservationIgnored private let liveSource: (any LiveHeartRateServing)?
   @ObservationIgnored private let recordings: any HeartRateRecordingRepository
   @ObservationIgnored private let defaults: UserDefaults
   @ObservationIgnored private let errorMessage: (any Error, String, String) -> String
@@ -27,15 +36,19 @@ import Observation
   @ObservationIgnored private var healthRequest: UUID?
   @ObservationIgnored private var lastQueuedAt: Date?
   @ObservationIgnored private var backgroundWorkCancelled = false
+  @ObservationIgnored private var liveRequest: UUID?
+  @ObservationIgnored private var liveWorkoutID: UUID?
 
   init(
     health: any HealthMetricsReading, sensor: any HeartRateBluetooth,
+    liveSource: (any LiveHeartRateServing)? = nil,
     recordings: any HeartRateRecordingRepository, defaults: UserDefaults = .standard,
     errorMessage: @escaping (any Error, String, String) -> String,
     now: @escaping () -> Date = Date.init
   ) {
     self.health = health
     self.sensor = sensor
+    self.liveSource = liveSource
     self.recordings = recordings
     self.defaults = defaults
     self.errorMessage = errorMessage
@@ -45,10 +58,12 @@ import Observation
       TrackerDeviceProfile(rawValue: defaults.string(forKey: "trackerDeviceProfile") ?? "")
       ?? .xiaomiSmartBand10
     sensor.onChange = { [weak self] snapshot in self?.receive(snapshot) }
+    liveSource?.onChange = { [weak self] snapshot in self?.receiveLive(snapshot) }
   }
   func selectMode(_ mode: TrackerMode) {
     guard mode != self.mode else { return }
     queueSave()
+    stopLiveSession()
     sensor.disconnect()
     healthRequest = nil
     loadingHealth = false
@@ -57,6 +72,10 @@ import Observation
     error = nil
   }
   func selectDeviceProfile(_ profile: TrackerDeviceProfile) {
+    if profile != .airPodsPro3, liveRequest != nil {
+      queueSave()
+      stopLiveSession()
+    }
     deviceProfile = profile
     defaults.set(profile.rawValue, forKey: "trackerDeviceProfile")
   }
@@ -69,6 +88,7 @@ import Observation
   func connect(_ id: UUID) { if mode == .bluetooth { sensor.connect(id) } }
   func disconnect() {
     queueSave()
+    stopLiveSession()
     sensor.disconnect()
   }
   func leaveScreen() {
@@ -78,12 +98,24 @@ import Observation
 
   func retryRecordingLoad() { attach(workout, reload: true) }
   func attach(_ workout: Workout?, reload: Bool = false) {
+    attachedWorkoutStatus = workout?.status
     if workout?.id == self.workout?.id && !reload {
-      if workout?.status != self.workout?.status { queueSave() }
+      if workout?.status != self.workout?.status {
+        queueSave()
+        self.workout = workout
+        if workout?.status == .paused {
+          if startingLive { stopLiveSession() } else { liveSource?.pause() }
+        } else if workout?.status == .active {
+          liveSource?.resume()
+        } else {
+          stopLiveSession()
+        }
+      }
       self.workout = workout
       return
     }
     queueSave()
+    stopLiveSession()
     if self.workout != nil { sensor.disconnect() }
     loadTask?.cancel()
     self.workout = workout
@@ -118,8 +150,14 @@ import Observation
   private func receive(_ snapshot: HeartRateBluetoothSnapshot) {
     bluetooth = snapshot
     guard mode == .bluetooth, let reading = snapshot.reading, reading.isFresh(at: now()),
-      let workout, !preparingRecording, var recording, recording.mode == .bluetooth
+      let workout, !preparingRecording, let recording, recording.mode == .bluetooth
     else { return }
+    append(reading, to: workout, recording: recording)
+  }
+  private func append(
+    _ reading: HeartRateReading, to workout: Workout, recording original: HeartRateRecording
+  ) {
+    var recording = original
     do {
       if try recording.append(reading, to: workout) {
         self.recording = recording
@@ -134,6 +172,86 @@ import Observation
         error, operation: "recordHeartRate",
         fallback: "Достигнут предел записи пульса для этой тренировки.")
     }
+  }
+
+  func startLiveHeartRate() async {
+    guard !startingLive, !hasLiveSession else { return }
+    guard mode == .appleHealth, deviceProfile == .airPodsPro3, let workout,
+      workout.status == .active, let liveSource
+    else {
+      error = "Начните тренировку и выберите AirPods Pro 3 в режиме Apple «Здоровье»."
+      return
+    }
+    let request = UUID()
+    liveRequest = request
+    liveWorkoutID = workout.id
+    startingLive = true
+    error = nil
+    defer { if liveRequest == request { startingLive = false } }
+    do {
+      await loadTask?.value
+      try Task.checkCancellation()
+      guard liveRequest == request, self.workout?.id == workout.id,
+        self.workout?.status == .active
+      else { throw CancellationError() }
+      guard let recording, !preparingRecording else {
+        throw ServiceError.unavailable(
+          "Сначала загрузите запись пульса. Повторите загрузку в разделе «Трекер».")
+      }
+      guard recording.readings.isEmpty || recording.origin == .liveHealthKit else {
+        throw ServiceError.unavailable(
+          "В этой тренировке уже есть пульс другого источника. Он не будет заменён новой записью.")
+      }
+      if recording.readings.isEmpty {
+        self.recording = try HeartRateRecording(
+          workoutID: workout.id, mode: .appleHealth, origin: .liveHealthKit)
+      }
+      try await liveSource.start(sessionID: request)
+      try Task.checkCancellation()
+      guard liveRequest == request, self.workout?.id == workout.id,
+        self.workout?.status == .active
+      else { throw CancellationError() }
+    } catch {
+      guard liveRequest == request else { return }
+      stopLiveSession()
+      guard !Task.isCancelled, !(error is CancellationError) else { return }
+      report(
+        error, operation: "startLiveHeartRate",
+        fallback: "Не удалось начать приём пульса. Проверьте AirPods и доступ к «Здоровью».")
+    }
+  }
+  func stopLiveHeartRate() {
+    queueSave()
+    stopLiveSession()
+  }
+  private func stopLiveSession() {
+    liveRequest = nil
+    liveWorkoutID = nil
+    startingLive = false
+    liveSource?.stop()
+    live = LiveHeartRateSnapshot(state: .stopped)
+  }
+  private func receiveLive(_ snapshot: LiveHeartRateSnapshot) {
+    guard snapshot.sessionID == liveRequest, liveRequest != nil else { return }
+    if snapshot.state == .running, workout?.status != .active { return }
+    live = snapshot
+    if snapshot.state == .failed || snapshot.state == .stopped {
+      queueSave()
+      liveRequest = nil
+      liveWorkoutID = nil
+      startingLive = false
+      if snapshot.state == .failed {
+        error = "Приём пульса остановлен. Проверьте подключение AirPods и начните снова."
+        liveSource?.stop()
+      }
+      return
+    }
+    guard snapshot.state == .running, mode == .appleHealth, deviceProfile == .airPodsPro3,
+      let workout, workout.id == liveWorkoutID, let reading = snapshot.reading,
+      reading.isFresh(at: now()), !preparingRecording, let recording,
+      recording.origin == .liveHealthKit
+    else { return }
+    append(reading, to: workout, recording: recording)
   }
   private func queueSave() {
     guard let recording, !recording.readings.isEmpty else { return }
@@ -222,6 +340,11 @@ import Observation
     if let existing = try await recording(for: workout.id), existing.mode == .bluetooth {
       throw ServiceError.unavailable(
         "Пульс Bluetooth уже сохранён. Он не будет заменён данными из «Здоровья».")
+    }
+    if let existing = try await recording(for: workout.id), existing.origin == .liveHealthKit {
+      throw ServiceError.unavailable(
+        "Пульс этой тренировки уже записан в реальном времени. Он не будет заменён импортом из «Здоровья»."
+      )
     }
     try await health.requestHeartRateAuthorization()
     try Task.checkCancellation()

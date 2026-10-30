@@ -233,3 +233,20 @@
 - [ ] RU/EN errors и подсказки, VoiceOver, длинные имена, sheet/alert routing; запустить новые ArchiveTransferTests и AppStoreTests. На Linux эти Apple-тесты не выполнялись.
 
 [Документация CSV](CSV_IMPORT.md).
+
+## AirPods Pro 3 / живой пульс HealthKit
+
+- [ ] После xcodegen generate собрать AirPodsHeartRateService с настоящим iOS 26 SDK и Swift 6 strict concurrency: session/builder/dataSource, statistics timestamp, SDK delegates, cancellation и ownership. Linux parser не проверяет эти API.
+- [ ] На чистой установке выбор AirPods и экраны «Трекер»/тренировки не вызывают запросов разрешений. Без active workout кнопка отключена. Запустить testAirPodsSetupRequiresAnExplicitActiveWorkout; этот тест на Linux не запускался.
+- [ ] iPhone iOS 26+ и AirPods Pro 3: подключение, датчик включён, корректная посадка одного/двух наушников. После явной кнопки запрашиваются только heartRate + workout read и workout write. Steps/sleep/energy permissions не запрашиваются.
+- [ ] Отказ/отмена/частичные read permissions, запрет workout write, отзыв во время записи: понятная ошибка/нет свежего измерения, без вымышленного пульса и без ложного определения отказа read permissions.
+- [ ] Пульс появляется по реальным событиям и использует timestamp измерения; старше 15 секунд — «Нет свежего измерения». Снятие/разряд/отключение AirPods не оставляют старый пульс актуальным.
+- [ ] Пауза/продолжение, отдых, завершение/отмена и явный stop: исключены измерения пауз, график с разрывами. Уход на другой экран сохраняет уже запущенную сессию. Смена модели/режима/workout ID закрывает её.
+- [ ] Нажать stop/сменить режим/поставить паузу при открытом Health permissions UI: поздний ответ не запускает старую сессию. Повторный старт и callbacks прежнего builder/session не влияют на текущий.
+- [ ] Блокировка/разблокировка, переход в фон, внешняя системная тренировка, ошибка session, force quit/relaunch: нет дубликатов/утечки системной сессии. Автоматический recovery HK session не реализован; новый явный старт корректен, журнал и сохранённые точки остаются.
+- [ ] Builder отбрасывается без finishWorkout. После stop/finish/cancel нет автоматически сохранённого HKWorkout; сами системные HR samples могут сохраняться HealthKit. Явный экспорт из истории сохраняет одну тренировку и остаётся идемпотентным.
+- [ ] При AirPods + Apple Watch iOS выбирает источник: интерфейс не обещает эксклюзивный AirPods source. Старые AirPods без HR sensors не показывают фиктивных данных.
+- [ ] График истории сохраняет origin; кнопка позднего импорта скрыта для live records. Новый запуск не заменяет существующую запись Bluetooth/исторического Health. Старые sidecars без origin читаются.
+- [ ] RU/EN, VoiceOver, Dynamic Type, реальные Health permission purpose strings; демо-профиль не запускает HealthKit. Пульс не попадает в CloudKit/JSON/widgets FitnessTracker; синхронизация Health управляется iOS отдельно.
+
+Статусы и официальные источники: [AIRPODS.md](AIRPODS.md).

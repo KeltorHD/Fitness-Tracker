@@ -36,9 +36,9 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>NSHealthShareUsageDescription</key>
-	<string>Показывать шаги, активную энергию, сон и пульс из «Здоровья» и загружать измерения пульса для вашей тренировки по вашему запросу.</string>
+	<string>Читать показатели из «Здоровья», а по вашему запросу — пульс и данные тренировки для приёма измерений AirPods Pro 3 во время тренировки.</string>
 	<key>NSHealthUpdateUsageDescription</key>
-	<string>Сохранять завершённые силовые тренировки в «Здоровье» по вашему запросу.</string>
+	<string>Включать системную тренировку для получения пульса AirPods Pro 3 по вашему запросу. Завершённая тренировка сохраняется в «Здоровье» только при отдельном экспорте.</string>
 	<key>NSSupportsLiveActivities</key>
 	<true/>
 	<key>UIBackgroundModes</key>

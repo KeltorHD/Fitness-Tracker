@@ -32,7 +32,41 @@ struct TrackerView: View {
           Text(L10n.text("Bluetooth-пульс", locale: locale)).tag(TrackerMode.bluetooth)
         }.pickerStyle(.menu).accessibilityIdentifier("trackerModePicker")
       }
-      if model.mode == .appleHealth { healthSections } else { bluetoothSections }
+      if model.mode == .appleHealth {
+        if model.deviceProfile == .airPodsPro3 {
+          Section {
+            Text(L10n.text(model.deviceProfile.healthSetupKey, locale: locale))
+              .accessibilityIdentifier("trackerAirPodsSetup")
+            Text(
+              L10n.text(
+                "Этот режим предназначен для AirPods Pro 3 с датчиком пульса. iOS выбирает доступный источник; вместе с AirPods может использоваться Apple Watch.",
+                locale: locale)
+            )
+            .font(.footnote).foregroundStyle(.secondary)
+            LiveWorkoutHeartRateControls(model: model)
+            if let url = model.deviceProfile.supportURL {
+              Link(L10n.text("Инструкция производителя", locale: locale), destination: url)
+            }
+          } header: {
+            Text(L10n.text("Пульс во время тренировки", locale: locale))
+          } footer: {
+            Text(
+              L10n.text(
+                "Для приёма нужен доступ к пульсу и тренировкам в «Здоровье». Запись тренировки в «Здоровье» остаётся отдельным действием.",
+                locale: locale))
+          }
+        }
+        healthSections
+      } else if model.deviceProfile == .airPodsPro3 {
+        Section {
+          Text(L10n.text(model.deviceProfile.bluetoothSetupKey, locale: locale))
+          Button(L10n.text("Выбрать Apple «Здоровье»", locale: locale)) {
+            model.selectMode(.appleHealth)
+          }
+        }
+      } else {
+        bluetoothSections
+      }
       if let error = model.error {
         Section {
           Text(L10n.text(error, locale: locale)).foregroundStyle(.red)
@@ -49,7 +83,7 @@ struct TrackerView: View {
       Section {
         Text(
           L10n.text(
-            "Пульс сохраняется только на этом iPhone и не включается в iCloud, виджеты и файлы экспорта.",
+            "Копия пульса в FitnessTracker хранится на этом iPhone и не включается в iCloud, виджеты и файлы экспорта. Данные Apple «Здоровье» и их синхронизацию контролирует iOS.",
             locale: locale)
         )
         .font(.footnote).foregroundStyle(.secondary)
@@ -68,8 +102,10 @@ struct TrackerView: View {
   private var healthSections: some View {
     Group {
       Section {
-        Text(L10n.text(model.deviceProfile.healthSetupKey, locale: locale))
-          .accessibilityIdentifier("trackerHealthSetup")
+        if model.deviceProfile != .airPodsPro3 {
+          Text(L10n.text(model.deviceProfile.healthSetupKey, locale: locale))
+            .accessibilityIdentifier("trackerHealthSetup")
+        }
         DatePicker(
           L10n.text("День", locale: locale), selection: $day, in: ...Date(),
           displayedComponents: .date)
@@ -197,13 +233,21 @@ extension HeartRateConnection {
 }
 
 struct LiveHeartRateValue: View {
-  @Environment(\.locale) private var locale
   let snapshot: HeartRateBluetoothSnapshot
+  var body: some View {
+    FreshHeartRateValue(reading: snapshot.reading, isActive: snapshot.connection == .connected)
+  }
+}
+
+struct FreshHeartRateValue: View {
+  @Environment(\.locale) private var locale
+  let reading: HeartRateReading?
+  let isActive: Bool
   var body: some View {
     TimelineView(.periodic(from: .now, by: 5)) { timeline in
       HStack {
         Image(systemName: "heart.fill").foregroundStyle(.red).accessibilityHidden(true)
-        if snapshot.connection == .connected, let reading = snapshot.reading,
+        if isActive, let reading,
           reading.isFresh(at: timeline.date)
         {
           Text(reading.beatsPerMinute, format: .number.precision(.fractionLength(0)))
@@ -227,6 +271,8 @@ struct WorkoutTrackerCard: View {
         Text(L10n.text(tracker.bluetooth.connection.message, locale: locale)).font(.caption)
           .foregroundStyle(.secondary)
         if tracker.preparingRecording { ProgressView() }
+      } else if tracker.deviceProfile == .airPodsPro3 {
+        LiveWorkoutHeartRateControls(model: tracker)
       } else {
         Text(
           L10n.text(

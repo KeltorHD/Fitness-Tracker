@@ -1208,6 +1208,23 @@
         }
       }
     },
+    "В этой тренировке уже есть пульс другого источника. Он не будет заменён новой записью.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "В этой тренировке уже есть пульс другого источника. Он не будет заменён новой записью."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This workout already has heart rate data from another source. The new recording will not replace it."
+          }
+        }
+      }
+    },
     "В этот день нет тренировок": {
       "extractionState": "manual",
       "localizations": {
@@ -1633,6 +1650,23 @@
         }
       }
     },
+    "Включить приём пульса": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Включить приём пульса"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enable heart rate recording"
+          }
+        }
+      }
+    },
     "Войдите в iCloud в настройках устройства.": {
       "extractionState": "manual",
       "localizations": {
@@ -1952,6 +1986,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Choose a .fitnesstracker, .json or .csv file."
+          }
+        }
+      }
+    },
+    "Выбрать Apple «Здоровье»": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выбрать Apple «Здоровье»"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose Apple Health"
           }
         }
       }
@@ -2479,6 +2530,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mark at least one set as completed to finish the workout."
+          }
+        }
+      }
+    },
+    "Для приёма нужен доступ к пульсу и тренировкам в «Здоровье». Запись тренировки в «Здоровье» остаётся отдельным действием.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Для приёма нужен доступ к пульсу и тренировкам в «Здоровье». Запись тренировки в «Здоровье» остаётся отдельным действием."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate recording requires access to heart rate and workouts in Health. Saving the workout to Health remains a separate action."
+          }
+        }
+      }
+    },
+    "Для пульса AirPods Pro 3 выберите режим Apple «Здоровье». Отдельный поиск Bluetooth-пульсометра для них не нужен.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Для пульса AirPods Pro 3 выберите режим Apple «Здоровье». Отдельный поиск Bluetooth-пульсометра для них не нужен."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For AirPods Pro 3 heart rate, choose Apple Health mode. You do not need to scan for them as a Bluetooth heart rate monitor."
           }
         }
       }
@@ -3571,6 +3656,23 @@
         }
       }
     },
+    "Источник: пульс во время тренировки": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Источник: пульс во время тренировки"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Source: live workout heart rate"
+          }
+        }
+      }
+    },
     "Источники": {
       "extractionState": "manual",
       "localizations": {
@@ -3720,6 +3822,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Control the movement and maintain a stable base. Use a comfortable range of motion."
+          }
+        }
+      }
+    },
+    "Копия пульса в FitnessTracker хранится на этом iPhone и не включается в iCloud, виджеты и файлы экспорта. Данные Apple «Здоровье» и их синхронизацию контролирует iOS.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Копия пульса в FitnessTracker хранится на этом iPhone и не включается в iCloud, виджеты и файлы экспорта. Данные Apple «Здоровье» и их синхронизацию контролирует iOS."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The heart rate copy in FitnessTracker stays on this iPhone and is excluded from iCloud, widgets and export files. iOS manages Apple Health data and its synchronization."
           }
         }
       }
@@ -3962,6 +4081,23 @@
         }
       }
     },
+    "Наденьте AirPods Pro 3 и подключите их к iPhone. В настройках iOS → AirPods → Пульс включите измерение. Затем начните тренировку в FitnessTracker и включите приём пульса.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Наденьте AirPods Pro 3 и подключите их к iPhone. В настройках iOS → AirPods → Пульс включите измерение. Затем начните тренировку в FitnessTracker и включите приём пульса."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wear your AirPods Pro 3 and connect them to your iPhone. Enable heart rate sensing in iOS Settings → AirPods → Heart Rate. Then start a workout in FitnessTracker and enable heart rate recording."
+          }
+        }
+      }
+    },
     "Название": {
       "extractionState": "manual",
       "localizations": {
@@ -4200,6 +4336,23 @@
         }
       }
     },
+    "Начните тренировку и выберите AirPods Pro 3 в режиме Apple «Здоровье».": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Начните тренировку и выберите AirPods Pro 3 в режиме Apple «Здоровье»."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start a workout and select AirPods Pro 3 in Apple Health mode."
+          }
+        }
+      }
+    },
     "Не найден файл библиотеки упражнений.": {
       "extractionState": "manual",
       "localizations": {
@@ -4281,6 +4434,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Couldn’t change the workout. Open FitnessTracker and try again."
+          }
+        }
+      }
+    },
+    "Не удалось начать приём пульса. Проверьте AirPods и доступ к «Здоровью».": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось начать приём пульса. Проверьте AirPods и доступ к «Здоровью»."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not start heart rate recording. Check your AirPods and Health permissions."
           }
         }
       }
@@ -4536,6 +4706,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Couldn’t show the workout on your Lock Screen. It is saved in the app."
+          }
+        }
+      }
+    },
+    "Не удалось получить пульс. Проверьте AirPods и разрешения, затем повторите.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось получить пульс. Проверьте AirPods и разрешения, затем повторите."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not receive heart rate data. Check your AirPods and permissions, then try again."
           }
         }
       }
@@ -5305,6 +5492,23 @@
         }
       }
     },
+    "Остановить приём пульса": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Остановить приём пульса"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stop heart rate recording"
+          }
+        }
+      }
+    },
     "Отдых": {
       "extractionState": "manual",
       "localizations": {
@@ -5985,6 +6189,23 @@
         }
       }
     },
+    "Подготовка приёма пульса…": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Подготовка приёма пульса…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preparing heart rate recording…"
+          }
+        }
+      }
+    },
     "Поддерживаются .fitnesstracker и .json. Можно выбрать архив или прежний JSON одной тренировки.": {
       "extractionState": "manual",
       "localizations": {
@@ -6325,6 +6546,74 @@
         }
       }
     },
+    "Приём пульса включён. Если измерения нет, проверьте посадку AirPods и доступ к пульсу.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Приём пульса включён. Если измерения нет, проверьте посадку AirPods и доступ к пульсу."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate recording is on. If no measurement appears, check your AirPods fit and heart rate permissions."
+          }
+        }
+      }
+    },
+    "Приём пульса выключен.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Приём пульса выключен."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate recording is off."
+          }
+        }
+      }
+    },
+    "Приём пульса на паузе.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Приём пульса на паузе."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate recording is paused."
+          }
+        }
+      }
+    },
+    "Приём пульса остановлен. Проверьте подключение AirPods и начните снова.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Приём пульса остановлен. Проверьте подключение AirPods и начните снова."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate recording stopped. Check the AirPods connection and start again."
+          }
+        }
+      }
+    },
     "Проверить учётную запись": {
       "extractionState": "manual",
       "localizations": {
@@ -6457,6 +6746,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Advanced"
+          }
+        }
+      }
+    },
+    "Продолжите тренировку, чтобы записывать пульс.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Продолжите тренировку, чтобы записывать пульс."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resume the workout to record heart rate."
           }
         }
       }
@@ -6614,6 +6920,23 @@
         }
       }
     },
+    "Пульс этой тренировки уже записан в реальном времени. Он не будет заменён импортом из «Здоровья».": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пульс этой тренировки уже записан в реальном времени. Он не будет заменён импортом из «Здоровья»."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate for this workout was recorded live. Importing from Health will not replace it."
+          }
+        }
+      }
+    },
     "Пульсометр": {
       "extractionState": "manual",
       "localizations": {
@@ -6746,6 +7069,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Allow FitnessTracker to use Bluetooth in iOS settings."
+          }
+        }
+      }
+    },
+    "Разрешите доступ к тренировкам в «Здоровье», чтобы получать пульс AirPods.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Разрешите доступ к тренировкам в «Здоровье», чтобы получать пульс AirPods."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow workout access in Health to receive AirPods heart rate data."
           }
         }
       }
@@ -7205,6 +7545,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Your next set is waiting."
+          }
+        }
+      }
+    },
+    "Сначала загрузите запись пульса. Повторите загрузку в разделе «Трекер».": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сначала загрузите запись пульса. Повторите загрузку в разделе «Трекер»."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Load the heart rate recording first. Retry loading in Tracker."
+          }
+        }
+      }
+    },
+    "Сначала начните тренировку в FitnessTracker.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сначала начните тренировку в FitnessTracker."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start a workout in FitnessTracker first."
           }
         }
       }
@@ -8361,6 +8735,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "This workout has already finished or been deleted."
+          }
+        }
+      }
+    },
+    "Этот режим предназначен для AirPods Pro 3 с датчиком пульса. iOS выбирает доступный источник; вместе с AirPods может использоваться Apple Watch.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Этот режим предназначен для AirPods Pro 3 с датчиком пульса. iOS выбирает доступный источник; вместе с AirPods может использоваться Apple Watch."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This mode is for AirPods Pro 3 with heart rate sensors. iOS chooses the available source and may also use Apple Watch."
           }
         }
       }

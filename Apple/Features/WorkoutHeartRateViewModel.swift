@@ -36,7 +36,8 @@ struct HeartRateChartPoint: Identifiable {
         $0.date >= workout.startedAt && $0.date <= (workout.endedAt ?? .now)
       }
       recording = try value.map {
-        try HeartRateRecording(workoutID: $0.workoutID, mode: $0.mode, readings: readings)
+        try HeartRateRecording(
+          workoutID: $0.workoutID, mode: $0.mode, readings: readings, origin: $0.origin)
       }
       var previous: Date?
       var segment = 0

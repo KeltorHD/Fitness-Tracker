@@ -173,6 +173,28 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(app.staticTexts["trackerBluetoothSetup"].label.contains("Share HR"))
     XCTAssertEqual(app.alerts.count, 0)
   }
+  @MainActor func testAirPodsSetupRequiresAnExplicitActiveWorkout() {
+    let app = launch()
+    app.tabBars.buttons["Настройки"].tap()
+    let tracker = app.buttons["openTracker"]
+    reveal(tracker, in: app)
+    tracker.tap()
+    app.buttons["trackerDevicePicker"].tap()
+    app.buttons["AirPods Pro 3"].tap()
+    XCTAssertTrue(app.staticTexts["trackerAirPodsSetup"].waitForExistence(timeout: 5))
+    let start = app.buttons["startLiveHeartRate"]
+    XCTAssertTrue(start.waitForExistence(timeout: 5))
+    XCTAssertFalse(start.isEnabled)
+    XCTAssertEqual(app.alerts.count, 0)
+    app.buttons["trackerModePicker"].tap()
+    app.buttons["Bluetooth-пульс"].tap()
+    XCTAssertFalse(app.buttons["scanHeartRate"].exists)
+    app.buttons["Выбрать Apple «Здоровье»"].tap()
+    XCTAssertTrue(start.waitForExistence(timeout: 5))
+    XCTAssertFalse(start.isEnabled)
+    XCTAssertEqual(app.alerts.count, 0)
+  }
+
   @MainActor func testLanguageCanBeChangedWithoutRelaunchingTheApp() {
     let app = launch()
     let settings = app.tabBars.buttons["Настройки"]

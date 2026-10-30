@@ -43,8 +43,10 @@ struct WorkoutHeartRateView: View {
           L10n.text("Пульс во время тренировки", locale: locale))
         Text(
           L10n.text(
-            record.mode == .bluetooth
-              ? "Источник: Bluetooth-пульсометр" : "Источник: Apple «Здоровье»", locale: locale)
+            record.origin == .liveHealthKit
+              ? "Источник: пульс во время тренировки"
+              : record.mode == .bluetooth
+                ? "Источник: Bluetooth-пульсометр" : "Источник: Apple «Здоровье»", locale: locale)
         )
         .font(.caption).foregroundStyle(.secondary)
       } else if !model.loading {
@@ -55,7 +57,7 @@ struct WorkoutHeartRateView: View {
         Text(L10n.text(error, locale: locale)).foregroundStyle(.red)
         Button(L10n.text("Повторить", locale: locale)) { request += 1 }.disabled(model.loading)
       }
-      if model.recording?.mode != .bluetooth {
+      if model.recording?.isLiveSensorRecording != true {
         Button(L10n.text("Загрузить пульс из «Здоровья»", locale: locale)) {
           importHealth = true
           request += 1

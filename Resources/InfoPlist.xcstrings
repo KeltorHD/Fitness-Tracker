@@ -41,13 +41,13 @@
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Показывать шаги, активную энергию, сон и пульс из «Здоровья» и загружать измерения пульса для вашей тренировки по вашему запросу."
+            "value": "Читать показатели из «Здоровья», а по вашему запросу — пульс и данные тренировки для приёма измерений AirPods Pro 3 во время тренировки."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Show steps, active energy, sleep and heart rate from Health, and load heart rate measurements for your workout when you request it."
+            "value": "Read metrics from Health and, when you request it, heart rate and workout data to receive AirPods Pro 3 measurements during your workout."
           }
         }
       }
@@ -58,13 +58,13 @@
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Сохранять завершённые силовые тренировки в «Здоровье» по вашему запросу."
+            "value": "Включать системную тренировку для получения пульса AirPods Pro 3 по вашему запросу. Завершённая тренировка сохраняется в «Здоровье» только при отдельном экспорте."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Save completed strength workouts to Health when you request it."
+            "value": "Start a system workout to receive AirPods Pro 3 heart rate when you request it. The completed workout is saved to Health only through a separate export."
           }
         }
       }

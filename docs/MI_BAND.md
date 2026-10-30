@@ -58,3 +58,7 @@ HUAWEI документирует HR Data Broadcasts для совместимы
 - **Requires Apple Developer configuration:** обычный signing и существующий HealthKit capability; отдельная платная capability для Bluetooth не нужна. Для Personal Team используйте схему FitnessTracker Personal. Проверка датчика требует физического iPhone и браслета.
 
 Официальная основа: [Xiaomi Smart Band 10 / Share HR](https://www.mi.com/global/support/faq/details/KA-579104/), [Mi Fitness → Apple Health](https://www.mi.com/uk/support/faq/details/KA-592800/), [Bluetooth SIG Heart Rate Service](https://www.bluetooth.com/wp-content/uploads/Files/Specification/HTML/HRS_v1.0/out/en/index-en.html), [Apple HealthKit queries](https://developer.apple.com/documentation/healthkit/queries), [Core Bluetooth background](https://developer.apple.com/library/archive/documentation/NetworkingInternetWeb/Conceptual/CoreBluetooth_concepts/CoreBluetoothBackgroundProcessingForIOSApps/PerformingTasksWhileYourAppIsInTheBackground.html).
+
+## AirPods Pro 3
+
+Два существующих режима сохранены. В режиме Apple «Здоровье» добавлен профиль AirPods Pro 3 и явный приём пульса через тренировочную сессию HealthKit. Для него не используется BLE-поиск 180D/2A37. При смене профиля с AirPods активная системная сессия останавливается, накопленные данные сохраняются. [Подключение, разрешения и проверки](AIRPODS.md).

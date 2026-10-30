@@ -61,24 +61,27 @@
 | Результаты по новым референсам: квадратные дни календаря, крупные карточки, нейтральные поверхности и контурные tabs | Да | Только syntax parse/resources/lint; визуальной проверки не было | Да, узкий экран, 4–6 рядов, Dynamic Type, dark mode, TabView symbols и сравнение с референсом | Обычный signing |
 | FitSession CSV: parser, обе схемы, UUID v5, zero reps, multiplier и archive v3/v1/v2 migration | Да | Да, 13 новых Core tests и полная проверка обоих пользовательских CSV в Memory repository | Нет для Core | Нет |
 | CSV picker/Files, preview, локализованные ошибки и неизвестная длительность | Да | PortableCSVChecks проверяет decode/round-trip/reimport/форматирование; Apple sources — только parser/lint/resources | Да, document types, iCloud Drive, SwiftData и написанные Apple unit tests | Обычный signing; новых capabilities нет |
+| AirPods Pro 3: origin совместим со старым sidecar, live session state и защита записей | Да | Да, 2 новых Core tests и PortableAirPodsChecks с реальными TrackerViewModel/DI | Нет для Core; SDK/UI отдельно | Нет для Core |
+| AirPodsHeartRateService / явные live controls RU/EN / HealthKit usage strings | Да | Только parser/lint/resources для SDK/SwiftUI; переносимая модель исполнена с fake source | Да, iPhone + AirPods Pro 3, HealthKit concurrency, права, блокировка, отсутствие лишних HKWorkout и UI test | Существующий HealthKit capability/signing, новых entitlements нет |
 
 
 ## Фактические проверки
 
 - `swift build`: прошёл для FitnessTrackerCore на Linux.
-- `swift test`: прошли 112 Swift Testing tests, включая parameterized cases. Стандартный XCTest runner также печатает «0 tests» — Core использует отдельный Swift Testing runner, его итоговая строка содержит 112 tests.
+- `swift test`: прошли 114 Swift Testing tests, включая parameterized cases. Стандартный XCTest runner также печатает «0 tests» — Core использует отдельный Swift Testing runner, его итоговая строка содержит 114 tests.
 - Отдельный Swift 6 strict-concurrency type-check без Apple SDK: HistoryViewModel, ProgressViewModel, ExerciseProgressViewModel, BodyWeightViewModel/BodyWeightEditorModel, ExerciseLibraryViewModel, ExerciseImageLoader, CloudAccountChecking, WidgetSnapshot, AppCapabilities, L10n и WorkoutFormatting. Это проверка типов указанной переносимой части, не функциональный тест и не сборка iOS target.
 - Swift formatting/lint, синтаксический разбор Apple Swift, структура/конфигурационные связи, plist/JSON, PNG и наличие ресурсов: прошли в `bash scripts/check-linux.sh`. Для Dynamic Island parser проверяет обе ветви shared intents: основной target с FITNESS_TRACKER_APP и widget extension без него.
-- Локализация: 503 ключа RU/EN и четыре InfoPlist-строки, placeholders, формы счётчиков, покрытие русских ключей, target resources и повторяемость генерации — прошли. Компиляция `.xcstrings` в Xcode не проверена; сценарии — [LOCALIZATION.md](LOCALIZATION.md).
+- Локализация: 526 ключей RU/EN и четыре InfoPlist-строки, placeholders, формы счётчиков, покрытие русских ключей, target resources и повторяемость генерации — прошли. Компиляция `.xcstrings` в Xcode не проверена; сценарии — [LOCALIZATION.md](LOCALIZATION.md).
 - В сессии использован внешний Swift 6.2.1 через SWIFT_BIN; для постоянной установки предусмотрен `setup-linux.sh`, toolchain не хранится в git.
 - Переносимая tracker-подсистема дополнительно исполнена в `Tests/PortableTrackerChecks/main.swift`: recording/pause, save failure/retry, mode race, минимальные permissions, history, real file round-trip/corruption/delete. Это не тест HealthKit/CoreBluetooth.
 - Исполнен `Tests/PortableProgressChecks/main.swift`: выбор упражнения/точки, периоды, bodyweight, удаление, точный workout UUID при совпадающей дате и связь с ProgressViewModel. Это не тест SwiftUI/Charts.
 - Исполнен `Tests/PortableWeightChecks/main.swift`: локализованный и строгий ввод, кг/фунты, точность при правке даты, источники веса, редактирование и смена workspace. Это не SwiftUI/SwiftData test.
+- Исполнен `Tests/PortableAirPodsChecks/main.swift`: явный запуск, свежесть/паузы, provenance, сохранение, защита от импорта, поздние callbacks, смена режима/тренировки, отмена, отказ и ошибки загрузки. Источник подставной; HealthKit и AirPods не тестировались.
 - XcodeGen generation, iOS/watchOS compilation, linking, Simulator, SwiftUI rendering и реальные Apple-сервисы **не проверены**. Linux CI не заменяет эти проверки.
 
 ## Границы текущей реализации
 
-Watch записывает отдельный стартовый план и передаёт готовую тренировку на iPhone; live mirroring и датчики HealthKit не реализованы. HealthKit экспортирует workout без вымышленных калорий/пульса. CloudKit использует системную eventual sync без собственного экрана прогресса загрузки и без поэлементного conflict merge. Все функции бесплатны; график за 26 недель доступен без дополнительных условий. Импорт/экспорт JSON и `.fitnesstracker` реализованы для одной тренировки и полного архива с планами; merge добавляет новые записи без перезаписи существующих. Настройки/permissions и фотографии не включаются в архив.
+Watch записывает отдельный стартовый план и передаёт готовую тренировку на iPhone; live mirroring и датчики HealthKit на Watch не реализованы. На iPhone добавлен явный живой приём через HealthKit для AirPods Pro 3; проверка SDK и реального устройства ещё требуется, автоматическое восстановление системной сессии после завершения процесса не реализовано. [Подключение](AIRPODS.md). HealthKit экспортирует workout без вымышленных калорий/пульса. CloudKit использует системную eventual sync без собственного экрана прогресса загрузки и без поэлементного conflict merge. Все функции бесплатны; график за 26 недель доступен без дополнительных условий. Импорт/экспорт JSON и `.fitnesstracker` реализованы для одной тренировки и полного архива с планами; merge добавляет новые записи без перезаписи существующих. Настройки/permissions и фотографии не включаются в архив.
 
 Дальнейшие исправления после первой сборки на Mac должны сопровождаться обновлением этой таблицы и [Xcode validation checklist](XCODE_VALIDATION.md). Нельзя менять статус Apple-модуля на Linux-tested по результату parser/linter.
 

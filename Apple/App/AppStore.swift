@@ -72,6 +72,7 @@ import WidgetKit
       tracker
       ?? TrackerViewModel(
         health: HealthMetricsReader(), sensor: BluetoothHeartRateService(),
+        liveSource: AirPodsHeartRateService(),
         recordings: LocalHeartRateRepository(), defaults: defaults,
         errorMessage: { AppErrorReporter.message(for: $0, operation: $1, fallback: $2) })
     watch.receive = { [weak self] workout in self?.importWatch(workout) ?? false }

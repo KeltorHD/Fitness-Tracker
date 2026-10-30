@@ -33,7 +33,7 @@ bin_path="$("$swift_bin" build "${flags[@]}" --show-bin-path)"
   Apple/Services/CloudAccountChecking.swift Apple/Shared/WidgetSnapshot.swift \
   Apple/Services/AppCapabilities.swift Apple/Shared/L10n.swift \
   Apple/Design/WorkoutFormatting.swift Apple/Services/LocalHeartRateRepository.swift \
-  Apple/Services/HeartRateBluetooth.swift Apple/Services/ServiceError.swift \
+  Apple/Services/HeartRateBluetooth.swift Apple/Services/LiveHeartRate.swift Apple/Services/ServiceError.swift \
   Apple/Features/TrackerViewModel.swift Apple/Features/WorkoutHeartRateViewModel.swift \
   Apple/Features/TrackerDeviceProfile.swift Apple/Shared/AppCompatibility.swift
 echo 'Portable presentation/data subset: Swift 6 type check passed (no Apple SDK).'
@@ -60,13 +60,21 @@ echo 'Portable presentation/data subset: Swift 6 type check passed (no Apple SDK
 "$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
   -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \
   "$bin_path"/FitnessTrackerCore.build/*.swift.o \
-  Apple/Services/LocalHeartRateRepository.swift Apple/Services/HeartRateBluetooth.swift \
+  Apple/Services/LocalHeartRateRepository.swift Apple/Services/HeartRateBluetooth.swift Apple/Services/LiveHeartRate.swift \
   Apple/Services/ServiceError.swift Apple/Features/TrackerViewModel.swift \
   Apple/Features/WorkoutHeartRateViewModel.swift Apple/Features/TrackerDeviceProfile.swift \
   Apple/Shared/AppCompatibility.swift \
   Tests/PortableTrackerChecks/main.swift \
   -o "$bin_path/portable-tracker-checks"
 "$bin_path/portable-tracker-checks"
+"$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
+  -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \
+  "$bin_path"/FitnessTrackerCore.build/*.swift.o \
+  Apple/Services/LocalHeartRateRepository.swift Apple/Services/HeartRateBluetooth.swift Apple/Services/LiveHeartRate.swift \
+  Apple/Services/ServiceError.swift Apple/Features/TrackerViewModel.swift \
+  Apple/Features/TrackerDeviceProfile.swift Apple/Shared/AppCompatibility.swift \
+  Tests/PortableAirPodsChecks/main.swift -o "$bin_path/portable-airpods-checks"
+"$bin_path/portable-airpods-checks"
 python3 scripts/parse-apple.py "$swiftc_bin"
 if "$swift_bin" format --help >/dev/null 2>&1; then
   "$swift_bin" format lint --strict --recursive Sources Tests Apple Package.swift
