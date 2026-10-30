@@ -146,3 +146,7 @@ xcodebuild -project FitSession.xcodeproj -scheme FitSession \
 ## Импорт и экспорт файлов
 
 После установки приложения проверьте **Настройки → Данные → Импорт и экспорт**: сохранить архив в `.json` и `.fitsession`, открыть его из «Файлов», подтвердить preview и повторить импорт без дублей. Проверьте export одной тренировки из меню карточки, iCloud Drive, cold launch и передачу через Share/AirDrop. Регистрация UTI находится в App-Info.plist; дополнительных entitlements для этих диалогов не требуется. Код рассчитан на iOS 26, без document APIs iOS 27. Правила формата и ограничения: [IMPORT_EXPORT.md](docs/IMPORT_EXPORT.md), сценарии: [XCODE_VALIDATION.md](docs/XCODE_VALIDATION.md).
+
+## Mi Band / два режима трекера
+
+После `git pull --ff-only` снова выполните `xcodegen generate`: добавлены Swift-файлы сервисов, экранов и Bluetooth purpose string. Запустите схему **FitSession Personal** на физическом iPhone. В «Настройки → Основные → Трекер» проверьте Apple «Здоровье» после синхронизации Mi Fitness; для Bluetooth сначала начните тренировку и включите **Share HR** на браслете, затем найдите пульсометр в FitSession. Права HealthKit и Bluetooth выдаются отдельно по действию пользователя. Проверьте блокировку, паузу, потерю связи и график после завершения. Сборка и соединение с Mi Band на Linux не проверялись. Полная инструкция: [MI_BAND.md](docs/MI_BAND.md), checklist: [XCODE_VALIDATION.md](docs/XCODE_VALIDATION.md).

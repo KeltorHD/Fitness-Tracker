@@ -15,6 +15,7 @@ import WidgetKit
   var showingWorkoutDetail = false
   var showingTemplateEditor = false
   let settings: SettingsViewModel
+  let tracker: TrackerViewModel
   @ObservationIgnored let exerciseImages: any ExerciseImageLoading
   @ObservationIgnored private let repository: any WorkoutRepository
   @ObservationIgnored private let health: any HealthWorkoutExporting
@@ -50,7 +51,8 @@ import WidgetKit
     notifications: any RestNotificationServing = RestNotificationService(),
     cloud: any CloudAccountChecking = CloudKitService(),
     exerciseImages: any ExerciseImageLoading = ExerciseImageLoader(),
-    archiveFiles: any ArchiveFileHandling = ArchiveFileService()
+    archiveFiles: any ArchiveFileHandling = ArchiveFileService(),
+    tracker: TrackerViewModel? = nil
   ) {
     self.repository = repository
     self.health = health
@@ -60,6 +62,12 @@ import WidgetKit
     self.settings = SettingsViewModel(cloud: cloud, notifications: notifications)
     self.exerciseImages = exerciseImages
     self.archiveFiles = archiveFiles
+    self.tracker =
+      tracker
+      ?? TrackerViewModel(
+        health: HealthMetricsReader(), sensor: BluetoothHeartRateService(),
+        recordings: LocalHeartRateRepository(), defaults: defaults,
+        errorMessage: { AppErrorReporter.message(for: $0, operation: $1, fallback: $2) })
     watch.receive = { [weak self] workout in self?.importWatch(workout) ?? false }
     watch.failure = { [weak self] error in
       self?.report(
@@ -90,6 +98,7 @@ import WidgetKit
     templates = routines
     let unfinished = loaded.filter { [.active, .paused].contains($0.status) }
     active = unfinished.first { $0.id == active?.id } ?? unfinished.first
+    tracker.attach(active)
   }
 
   private func archiveSnapshot() throws -> WorkoutArchive {
@@ -199,8 +208,12 @@ import WidgetKit
     }
   }
   func cancel() {
+    let cancelledID = active?.id
     guard mutate({ try WorkoutEngine.cancel(&$0) }) else { return }
-    if active == nil { showSession = false }
+    if active == nil {
+      showSession = false
+      if let cancelledID { tracker.removeRecording(for: cancelledID) }
+    }
   }
   func save(template: WorkoutTemplate) -> Bool {
     do {
@@ -225,6 +238,7 @@ import WidgetKit
   func delete(workout: Workout) {
     do {
       try repository.deleteWorkout(id: workout.id)
+      tracker.removeRecording(for: workout.id)
       try loadRepository()
       refreshIntegrations()
     } catch {
@@ -293,8 +307,13 @@ import WidgetKit
     refreshIntegrations(allowStart: false)
     let pending = integrationTask
     let lease = BackgroundTaskLease()
-    lease.begin { pending?.cancel() }
+    let tracker = tracker
+    lease.begin {
+      pending?.cancel()
+      tracker.cancelPendingWork()
+    }
     defer { lease.end() }
+    await tracker.flush()
     await pending?.value
   }
 

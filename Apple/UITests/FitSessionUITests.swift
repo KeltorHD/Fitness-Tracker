@@ -1,6 +1,21 @@
 import XCTest
 
 final class FitSessionUITests: XCTestCase {
+  @MainActor func testTrackerOffersBothModesWithoutRequestingPermissionsOnOpen() {
+    let app = launch()
+    let settings = app.tabBars.buttons["Настройки"]
+    XCTAssertTrue(settings.waitForExistence(timeout: 10))
+    settings.tap()
+    let tracker = app.buttons["openTracker"]
+    if !tracker.isHittable { app.swipeUp() }
+    XCTAssertTrue(tracker.waitForExistence(timeout: 5))
+    tracker.tap()
+    XCTAssertTrue(app.buttons["readTrackerHealth"].waitForExistence(timeout: 5))
+    app.buttons["trackerModePicker"].tap()
+    app.buttons["Bluetooth-пульс"].tap()
+    XCTAssertTrue(app.buttons["scanHeartRate"].waitForExistence(timeout: 5))
+    XCTAssertEqual(app.alerts.count, 0)
+  }
   @MainActor func testLanguageCanBeChangedWithoutRelaunchingTheApp() {
     let app = launch()
     let settings = app.tabBars.buttons["Настройки"]

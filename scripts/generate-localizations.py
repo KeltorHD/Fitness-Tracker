@@ -20,8 +20,9 @@ def generate():
     pairs={key:(russian.get(key,key),en) for key,en in values.items()}
     write(ROOT/'Resources/Localizable.xcstrings',catalog(pairs))
     info={
-      'NSHealthShareUsageDescription':('FitSession запрашивает доступ к тренировкам только для функций «Здоровья». Чтение данных сейчас не используется.','FitSession requests workout access only for Health features. Reading health data is not currently used.'),
+      'NSHealthShareUsageDescription':('Показывать шаги, активную энергию, сон и пульс из «Здоровья» и загружать измерения пульса для вашей тренировки по вашему запросу.','Show steps, active energy, sleep and heart rate from Health, and load heart rate measurements for your workout when you request it.'),
       'NSHealthUpdateUsageDescription':('Сохранять завершённые силовые тренировки в «Здоровье» по вашему запросу.','Save completed strength workouts to Health when you request it.'),
+      'NSBluetoothAlwaysUsageDescription':('Подключать пульсометр, например Mi Band в режиме Share HR, и записывать пульс во время тренировки.','Connect a heart rate monitor, such as a Mi Band in Share HR mode, and record heart rate during your workout.'),
       'CFBundleDisplayName':('FitSession','FitSession')
     }
     write(ROOT/'Resources/InfoPlist.xcstrings',catalog(info))

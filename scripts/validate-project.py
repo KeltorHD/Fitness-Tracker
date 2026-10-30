@@ -77,6 +77,8 @@ app = plists['App-Info.plist']
 assert app['NSSupportsLiveActivities'] is True
 assert 'remote-notification' in app['UIBackgroundModes']
 assert app['NSHealthUpdateUsageDescription']
+assert app['NSBluetoothAlwaysUsageDescription']
+assert 'bluetooth-central' in app['UIBackgroundModes']
 assert app['FitSessionCloudSyncAvailable'] == '$(FITSESSION_CLOUD_SYNC_AVAILABLE)'
 archive_type = next(item for item in app['UTExportedTypeDeclarations']
                     if item['UTTypeIdentifier'] == 'com.fitsession.archive')

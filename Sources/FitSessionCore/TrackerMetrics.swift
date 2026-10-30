@@ -17,7 +17,8 @@ public struct HeartRateReading: Codable, Hashable, Sendable, Identifiable {
       && (1...300).contains(beatsPerMinute)
   }
   public func isFresh(at date: Date, maximumAge: TimeInterval = 15) -> Bool {
-    isValid && (0...maximumAge).contains(date.timeIntervalSince(self.date))
+    guard maximumAge.isFinite, maximumAge >= 0 else { return false }
+    return isValid && (0...maximumAge).contains(date.timeIntervalSince(self.date))
   }
 }
 
@@ -127,6 +128,7 @@ public protocol HeartRateRecordingRepository: Sendable {
 
 @MainActor public protocol HealthMetricsReading {
   func requestReadAuthorization() async throws
+  func requestHeartRateAuthorization() async throws
   func daySummary(for day: Date, calendar: Calendar) async throws -> HealthDaySummary
   func heartRate(for workout: Workout) async throws -> HeartRateRecording
 }

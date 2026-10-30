@@ -51,6 +51,11 @@ struct SettingsView: View {
           }
         }
         Section(L10n.text("Основные", locale: locale)) {
+          NavigationLink {
+            TrackerView(model: store.tracker)
+          } label: {
+            SettingsLabel(title: L10n.text("Трекер", locale: locale), symbol: "heart.circle")
+          }.accessibilityIdentifier("openTracker")
           Picker(L10n.text("Язык приложения", locale: locale), selection: $language) {
             Text(L10n.text("Как на устройстве", locale: locale)).tag(AppLanguage.system)
             Text("Русский").tag(AppLanguage.russian)

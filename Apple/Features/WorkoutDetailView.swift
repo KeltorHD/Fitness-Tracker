@@ -63,6 +63,7 @@ struct WorkoutDetailView: View {
               Text(session.notes)
             }.frame(maxWidth: .infinity, alignment: .leading).fitCard()
           }
+          WorkoutHeartRateView(workout: session, tracker: store.tracker)
           Button(L10n.text("Экспорт в «Здоровье»", locale: locale), systemImage: "heart") {
             exporting = true
           }.disabled(exporting).frame(maxWidth: .infinity, alignment: .leading)

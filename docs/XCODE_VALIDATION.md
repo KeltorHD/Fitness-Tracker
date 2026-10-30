@@ -19,7 +19,25 @@
 
 Устройство и границы переключателя: [LOCALIZATION.md](LOCALIZATION.md).
 
-## Сборка и тесты
+## Mi Band / HealthKit и Bluetooth
+
+- [ ] После `xcodegen generate` собираются HealthMetricsReader, BluetoothHeartRateService, TrackerView и график истории; проверить Swift 6 SDK actor annotations у delegate/queries.
+- [ ] При первом открытии «Трекер» permissions не запрашиваются. Read permissions появляются по кнопке; Bluetooth — по поиску. Выбор режима сохраняется, обе локали RU/EN проверены.
+- [ ] Health: Mi Fitness → «Здоровье» → FitSession, шаги/энергия/сон/пульс, реальные source names, дата/часовой пояс/DST, частичные права и пустые данные без ложного диагноза «доступ запрещён».
+- [ ] Импорт пульса завершённой тренировки: только heart-rate permission, временные границы/паузы, empty/retry/cancellation; существующая Bluetooth-запись не заменяется.
+- [ ] Mi Band 10 с включённым Share HR обнаруживается как Heart Rate Service, подключается и присылает notifications 2A37. Проверить другую Bluetooth HR модель при наличии.
+- [ ] Bluetooth denied/off/unsupported, timeout поиска/подключения, contact loss, отключение и явное повторное подключение; старые callbacks от прошлого peripheral не изменяют текущее подключение.
+- [ ] Сессия: реальные свежие измерения, отдых записывается, пауза не записывается; после 15 секунд отсутствия пакетов старое число не показывается как текущее.
+- [ ] Заблокировать iPhone, проверить уведомления BLE и запись в фоне. Force quit/reboot не обещают продолжение; после открытия checkpoints доступны, подключение восстанавливается вручную.
+- [ ] Checkpoint/finish/background expiration: ограниченная работа, отмена pending tasks; ошибка сохранения видна, повтор сохраняет последние точки.
+- [ ] История: график со средним/максимумом и разрывами, длительная запись, Dynamic Type, VoiceOver и смена темы. Пройденный UI-тест не заменяет проверку радио.
+- [ ] Локальные файлы исключены из backup/CloudKit/App Group и защищены на iOS; JSON/.fitsession, widgets/Live Activity/Watch не содержат новых sensor payloads.
+- [ ] Отмена/удаление тренировки удаляет локальный sidecar; повреждённая запись сохраняется с ошибкой, отказ сохранения/чтения не создаёт пустую базу.
+- [ ] Запустить `testTrackerOffersBothModesWithoutRequestingPermissionsOnOpen` и весь существующий UI suite. На Linux UI-тест не запускался.
+
+Инструкция и точные ограничения: [MI_BAND.md](MI_BAND.md).
+
+## Сборка и тесты (общие сценарии)
 
 - [ ] `xcodegen generate`: spec, local SPM dependency, пять targets и schemes.
 - [ ] FitSession Debug/Release compilation: SwiftUI overloads, SwiftData macros, Swift 6 concurrency.

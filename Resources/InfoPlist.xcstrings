@@ -18,19 +18,36 @@
         }
       }
     },
+    "NSBluetoothAlwaysUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Подключать пульсометр, например Mi Band в режиме Share HR, и записывать пульс во время тренировки."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connect a heart rate monitor, such as a Mi Band in Share HR mode, and record heart rate during your workout."
+          }
+        }
+      }
+    },
     "NSHealthShareUsageDescription": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "FitSession запрашивает доступ к тренировкам только для функций «Здоровья». Чтение данных сейчас не используется."
+            "value": "Показывать шаги, активную энергию, сон и пульс из «Здоровья» и загружать измерения пульса для вашей тренировки по вашему запросу."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "FitSession requests workout access only for Health features. Reading health data is not currently used."
+            "value": "Show steps, active energy, sleep and heart rate from Health, and load heart rate measurements for your workout when you request it."
           }
         }
       }

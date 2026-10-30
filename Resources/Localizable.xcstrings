@@ -222,6 +222,57 @@
         }
       }
     },
+    "Apple «Здоровье»": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple «Здоровье»"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Health"
+          }
+        }
+      }
+    },
+    "Bluetooth-пульс": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bluetooth-пульс"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bluetooth heart rate"
+          }
+        }
+      }
+    },
+    "Bluetooth-пульсометр не поддерживается на этом устройстве.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bluetooth-пульсометр не поддерживается на этом устройстве."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bluetooth heart rate monitors are unavailable on this device."
+          }
+        }
+      }
+    },
     "EZ-гриф": {
       "extractionState": "manual",
       "localizations": {
@@ -715,6 +766,23 @@
         }
       }
     },
+    "Активная энергия, ккал": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Активная энергия, ккал"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active energy, kcal"
+          }
+        }
+      }
+    },
     "Активное время тренировки": {
       "extractionState": "manual",
       "localizations": {
@@ -1021,6 +1089,23 @@
         }
       }
     },
+    "Включите Bluetooth на iPhone.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Включите Bluetooth на iPhone."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turn on Bluetooth on your iPhone."
+          }
+        }
+      }
+    },
     "Включите сводку виджета в настройках FitSession.": {
       "extractionState": "manual",
       "localizations": {
@@ -1221,6 +1306,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Full body · B"
+          }
+        }
+      }
+    },
+    "Выберите пульсометр из списка или начните поиск.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выберите пульсометр из списка или начните поиск."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a heart rate monitor from the list or start scanning."
           }
         }
       }
@@ -1429,6 +1531,23 @@
         }
       }
     },
+    "Данные могут поступать с задержкой. Доступны только показатели, переданные в «Здоровье» и разрешённые для FitSession.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Данные могут поступать с задержкой. Доступны только показатели, переданные в «Здоровье» и разрешённые для FitSession."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data may arrive with a delay. Only measurements shared with Health and authorized for FitSession are available."
+          }
+        }
+      }
+    },
     "Данные не удалены. Попробуйте открыть приложение ещё раз позже.": {
       "extractionState": "manual",
       "localizations": {
@@ -1493,6 +1612,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "This action is unavailable in the workout’s current state."
+          }
+        }
+      }
+    },
+    "День": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "День"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Day"
+          }
+        }
+      }
+    },
+    "Для Mi Band включите в Mi Fitness: Профиль → Данные сторонних приложений → Здоровье. Разрешите передачу нужных показателей.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Для Mi Band включите в Mi Fitness: Профиль → Данные сторонних приложений → Здоровье. Разрешите передачу нужных показателей."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For Mi Band, open Mi Fitness: Profile → Third-party data → Health. Allow sharing the measurements you want to use."
           }
         }
       }
@@ -1701,6 +1854,23 @@
         }
       }
     },
+    "Достигнут предел записи пульса для этой тренировки.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Достигнут предел записи пульса для этой тренировки."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The heart rate recording limit for this workout has been reached."
+          }
+        }
+      }
+    },
     "Доступ к iCloud ограничен.": {
       "extractionState": "manual",
       "localizations": {
@@ -1837,6 +2007,23 @@
         }
       }
     },
+    "Загрузить пульс из «Здоровья»": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Загрузить пульс из «Здоровья»"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Load heart rate from Health"
+          }
+        }
+      }
+    },
     "Загрузка фото": {
       "extractionState": "manual",
       "localizations": {
@@ -1901,6 +2088,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Workout notes"
+          }
+        }
+      }
+    },
+    "Запись идёт только во время активной тренировки, включая отдых между подходами. Пауза приостанавливает запись. Поддерживаются Bluetooth-пульсометры с передачей пульса.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Запись идёт только во время активной тренировки, включая отдых между подходами. Пауза приостанавливает запись. Поддерживаются Bluetooth-пульсометры с передачей пульса."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording runs only during an active workout, including rest between sets. Pausing suspends recording. Bluetooth monitors with heart rate broadcasting are supported."
           }
         }
       }
@@ -2160,6 +2364,57 @@
         }
       }
     },
+    "Источник пульса": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Источник пульса"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate source"
+          }
+        }
+      }
+    },
+    "Источник: Apple «Здоровье»": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Источник: Apple «Здоровье»"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Source: Apple Health"
+          }
+        }
+      }
+    },
+    "Источник: Bluetooth-пульсометр": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Источник: Bluetooth-пульсометр"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Source: Bluetooth heart rate monitor"
+          }
+        }
+      }
+    },
     "Источники": {
       "extractionState": "manual",
       "localizations": {
@@ -2326,6 +2581,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Maximum weight"
+          }
+        }
+      }
+    },
+    "Максимум: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Максимум: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maximum: %@"
+          }
+        }
+      }
+    },
+    "На Mi Band 10 откройте Настройки → Share HR и включите передачу пульса. Держите браслет рядом с iPhone.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "На Mi Band 10 откройте Настройки → Share HR и включите передачу пульса. Держите браслет рядом с iPhone."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On Mi Band 10, open Settings → Share HR and turn on heart rate sharing. Keep the band near your iPhone."
           }
         }
       }
@@ -2500,6 +2789,23 @@
         }
       }
     },
+    "Найти пульсометр": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Найти пульсометр"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Find heart rate monitor"
+          }
+        }
+      }
+    },
     "Настройки": {
       "extractionState": "manual",
       "localizations": {
@@ -2615,6 +2921,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Couldn’t enable notifications. Try again."
+          }
+        }
+      }
+    },
+    "Не удалось загрузить пульс. Проверьте доступ и попробуйте ещё раз.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось загрузить пульс. Проверьте доступ и попробуйте ещё раз."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn’t load heart rate. Check access and try again."
           }
         }
       }
@@ -2738,6 +3061,23 @@
         }
       }
     },
+    "Не удалось открыть запись пульса. Данные не удалены.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось открыть запись пульса. Данные не удалены."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn’t open the heart rate recording. Your data has not been deleted."
+          }
+        }
+      }
+    },
     "Не удалось открыть историю тренировок.": {
       "extractionState": "manual",
       "localizations": {
@@ -2823,6 +3163,23 @@
         }
       }
     },
+    "Не удалось подключить пульсометр. Проверьте Share HR и повторите поиск.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось подключить пульсометр. Проверьте Share HR и повторите поиск."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn’t connect to the heart rate monitor. Check Share HR and scan again."
+          }
+        }
+      }
+    },
     "Не удалось показать тренировку на экране блокировки. Тренировка сохранена в приложении.": {
       "extractionState": "manual",
       "localizations": {
@@ -2870,6 +3227,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Couldn’t read history. Try reopening the app."
+          }
+        }
+      }
+    },
+    "Не удалось прочитать показатели. Проверьте доступ к «Здоровью» и повторите.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось прочитать показатели. Проверьте доступ к «Здоровью» и повторите."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn’t read measurements. Check Health access and try again."
           }
         }
       }
@@ -2959,6 +3333,23 @@
         }
       }
     },
+    "Не удалось сохранить пульс. Повторите сохранение в разделе «Трекер».": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось сохранить пульс. Повторите сохранение в разделе «Трекер»."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn’t save heart rate. Retry saving in the Tracker section."
+          }
+        }
+      }
+    },
     "Не удалось сохранить стартовые планы. Попробуйте ещё раз.": {
       "extractionState": "manual",
       "localizations": {
@@ -3006,6 +3397,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Couldn’t save the file. Choose another location or try again."
+          }
+        }
+      }
+    },
+    "Не удалось удалить запись пульса. Повторите действие.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось удалить запись пульса. Повторите действие."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn’t delete the heart rate recording. Try again."
           }
         }
       }
@@ -3112,6 +3520,40 @@
         }
       }
     },
+    "Нет доступных данных. Проверьте синхронизацию Mi Fitness и разрешения FitSession в «Здоровье».": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нет доступных данных. Проверьте синхронизацию Mi Fitness и разрешения FitSession в «Здоровье»."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No data is available. Check Mi Fitness sync and FitSession permissions in Health."
+          }
+        }
+      }
+    },
+    "Нет записанных измерений пульса.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нет записанных измерений пульса."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No heart rate measurements have been recorded."
+          }
+        }
+      }
+    },
     "Нет новых записей для импорта.": {
       "extractionState": "manual",
       "localizations": {
@@ -3125,6 +3567,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "No new records to import."
+          }
+        }
+      }
+    },
+    "Нет свежего измерения": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нет свежего измерения"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No recent measurement"
           }
         }
       }
@@ -3350,6 +3809,23 @@
         }
       }
     },
+    "Остановить поиск": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Остановить поиск"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stop scanning"
+          }
+        }
+      }
+    },
     "Отдых": {
       "extractionState": "manual",
       "localizations": {
@@ -3435,6 +3911,23 @@
         }
       }
     },
+    "Отключить пульсометр": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Отключить пульсометр"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Disconnect heart rate monitor"
+          }
+        }
+      }
+    },
     "Откройте FitSession, чтобы обновить сводку.": {
       "extractionState": "manual",
       "localizations": {
@@ -3465,6 +3958,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Open a completed workout in your journal and choose Export to Health. FitSession will request write permission."
+          }
+        }
+      }
+    },
+    "Открыть настройки iOS": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Открыть настройки iOS"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open iOS settings"
           }
         }
       }
@@ -3758,6 +4268,23 @@
         }
       }
     },
+    "Повторить загрузку записи пульса": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Повторить загрузку записи пульса"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retry loading heart rate recording"
+          }
+        }
+      }
+    },
     "Повторить загрузку фото": {
       "extractionState": "manual",
       "localizations": {
@@ -3788,6 +4315,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Retry sync"
+          }
+        }
+      }
+    },
+    "Повторить сохранение": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Повторить сохранение"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retry saving"
           }
         }
       }
@@ -3856,6 +4400,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Share JSON"
+          }
+        }
+      }
+    },
+    "Подключение к пульсометру…": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Подключение к пульсометру…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connecting to heart rate monitor…"
           }
         }
       }
@@ -3945,6 +4506,23 @@
         }
       }
     },
+    "Поиск пульсометров…": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Поиск пульсометров…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scanning for heart rate monitors…"
+          }
+        }
+      }
+    },
     "Пока нет рекордов": {
       "extractionState": "manual",
       "localizations": {
@@ -3992,6 +4570,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "OK"
+          }
+        }
+      }
+    },
+    "Последний пульс": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Последний пульс"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Latest heart rate"
           }
         }
       }
@@ -4200,6 +4795,142 @@
         }
       }
     },
+    "Прочитать показатели": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Прочитать показатели"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Read measurements"
+          }
+        }
+      }
+    },
+    "Пульс": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пульс"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate"
+          }
+        }
+      }
+    },
+    "Пульс Bluetooth уже сохранён. Он не будет заменён данными из «Здоровья».": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пульс Bluetooth уже сохранён. Он не будет заменён данными из «Здоровья»."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bluetooth heart rate is already saved. It will not be replaced with Health data."
+          }
+        }
+      }
+    },
+    "Пульс во время тренировки": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пульс во время тренировки"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workout heart rate"
+          }
+        }
+      }
+    },
+    "Пульс из «Здоровья» можно загрузить после завершения тренировки.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пульс из «Здоровья» можно загрузить после завершения тренировки."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You can load heart rate from Health after finishing the workout."
+          }
+        }
+      }
+    },
+    "Пульс сохраняется только на этом iPhone и не включается в iCloud, виджеты и файлы экспорта.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пульс сохраняется только на этом iPhone и не включается в iCloud, виджеты и файлы экспорта."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate is stored only on this iPhone and is not included in iCloud, widgets or exported files."
+          }
+        }
+      }
+    },
+    "Пульсометр": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пульсометр"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate monitor"
+          }
+        }
+      }
+    },
+    "Пульсометр подключён": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пульсометр подключён"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate monitor connected"
+          }
+        }
+      }
+    },
     "Работающие мышцы": {
       "extractionState": "manual",
       "localizations": {
@@ -4230,6 +4961,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Warm-up set"
+          }
+        }
+      }
+    },
+    "Разрешите FitSession доступ к Bluetooth в настройках iOS.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Разрешите FitSession доступ к Bluetooth в настройках iOS."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow FitSession to use Bluetooth in iOS settings."
           }
         }
       }
@@ -4268,6 +5016,23 @@
         }
       }
     },
+    "Разрывы графика означают отсутствие измерений. Средний пульс рассчитан по сохранённым точкам.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Разрывы графика означают отсутствие измерений. Средний пульс рассчитан по сохранённым точкам."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gaps in the chart indicate missing measurements. Average heart rate is calculated from saved samples."
+          }
+        }
+      }
+    },
     "Расчётный 1ПМ": {
       "extractionState": "manual",
       "localizations": {
@@ -4281,6 +5046,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Estimated 1RM"
+          }
+        }
+      }
+    },
+    "Режим трекера": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Режим трекера"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tracker mode"
           }
         }
       }
@@ -4455,6 +5237,40 @@
         }
       }
     },
+    "Сводка за день": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сводка за день"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daily summary"
+          }
+        }
+      }
+    },
+    "Сводка учитывает доступные источники Apple «Здоровье», а не только браслет. Сон — между полуднем предыдущего и выбранного дня.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сводка учитывает доступные источники Apple «Здоровье», а не только браслет. Сон — между полуднем предыдущего и выбранного дня."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The summary includes available Apple Health sources, including devices other than your band. Sleep covers noon on the previous day to noon on the selected day."
+          }
+        }
+      }
+    },
     "Своё упражнение": {
       "extractionState": "manual",
       "localizations": {
@@ -4468,6 +5284,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Custom exercise"
+          }
+        }
+      }
+    },
+    "Связь с пульсометром потеряна. Повторите подключение.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Связь с пульсометром потеряна. Повторите подключение."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The heart rate monitor disconnected. Connect again."
           }
         }
       }
@@ -4659,6 +5492,23 @@
         }
       }
     },
+    "Сон за ночь": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сон за ночь"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Night’s sleep"
+          }
+        }
+      }
+    },
     "Сохранение…": {
       "extractionState": "manual",
       "localizations": {
@@ -4761,6 +5611,23 @@
         }
       }
     },
+    "Средний: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Средний: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Average: %@"
+          }
+        }
+      }
+    },
     "Статистика за неделю": {
       "extractionState": "manual",
       "localizations": {
@@ -4859,6 +5726,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Exercise technique"
+          }
+        }
+      }
+    },
+    "Трекер": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Трекер"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tracker"
           }
         }
       }
@@ -5339,6 +6223,23 @@
         }
       }
     },
+    "Чтение показателей…": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Чтение показателей…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reading measurements…"
+          }
+        }
+      }
+    },
     "Чтение файла…": {
       "extractionState": "manual",
       "localizations": {
@@ -5369,6 +6270,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Workout template"
+          }
+        }
+      }
+    },
+    "Шаги": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Шаги"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Steps"
           }
         }
       }
@@ -5590,6 +6508,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "workouts this week"
+          }
+        }
+      }
+    },
+    "уд/мин": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "уд/мин"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "bpm"
           }
         }
       }

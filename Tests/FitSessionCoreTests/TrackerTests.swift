@@ -55,6 +55,8 @@ func truncatedOrMalformedHeartRatePacketsAreRejected(_ data: Data) {
   #expect(reading.isFresh(at: date.addingTimeInterval(15)))
   #expect(!reading.isFresh(at: date.addingTimeInterval(16)))
   #expect(!reading.isFresh(at: date.addingTimeInterval(-1)))
+  #expect(!reading.isFresh(at: date, maximumAge: -1))
+  #expect(!reading.isFresh(at: date, maximumAge: .nan))
   #expect(throws: TrackerDataError.invalidRecording) {
     try HeartRateRecording(workoutID: UUID(), mode: .appleHealth, readings: [reading, reading])
   }

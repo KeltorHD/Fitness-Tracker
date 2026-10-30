@@ -36,7 +36,7 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>NSHealthShareUsageDescription</key>
-	<string>FitSession запрашивает доступ к тренировкам только для функций «Здоровья». Чтение данных сейчас не используется.</string>
+	<string>Показывать шаги, активную энергию, сон и пульс из «Здоровья» и загружать измерения пульса для вашей тренировки по вашему запросу.</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>Сохранять завершённые силовые тренировки в «Здоровье» по вашему запросу.</string>
 	<key>NSSupportsLiveActivities</key>
@@ -44,6 +44,7 @@
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
+		<string>bluetooth-central</string>
 	</array>
 	<key>FitSessionAppGroup</key>
 	<string>$(FITSESSION_APP_GROUP)</string>
@@ -120,5 +121,7 @@
 		<string>ru</string>
 		<string>en</string>
 	</array>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Подключать пульсометр, например Mi Band в режиме Share HR, и записывать пульс во время тренировки.</string>
 </dict>
 </plist>
