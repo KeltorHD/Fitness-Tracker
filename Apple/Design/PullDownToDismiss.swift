@@ -12,7 +12,6 @@ private struct PullDownToDismissModifier: ViewModifier {
 
   func body(content: Content) -> some View {
     content
-      .environment(\.refresh, nil)
       .scrollBounceBehavior(.always, axes: .vertical)
       .onScrollPhaseChange { oldPhase, newPhase, context in
         guard oldPhase == .interacting, newPhase != .interacting else { return }
