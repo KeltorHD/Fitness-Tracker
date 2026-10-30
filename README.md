@@ -1,14 +1,16 @@
-# FitSession
+# FitnessTracker
 
 Нативный журнал силовых тренировок: **Swift 6, SwiftUI, iOS 26+, Apple Liquid Glass**.
 Разработка ведётся на Linux. Сборка, запуск и проверка Apple-интеграций выполняются на Mac в Xcode.
+
+После обновления переименованного проекта выполните `xcodegen generate`, откройте **FitnessTracker.xcodeproj** и выберите **FitnessTracker Personal**. Существующий `Config/Local.xcconfig` и зарегистрированные идентификаторы сохраняйте. [Переименование и совместимость](docs/RENAME.md).
 
 ## Что реализовано
 
 - Свободная тренировка и редактируемые планы; 100 упражнений с русскими названиями и техникой, 200 локальных фотографий, поиск и фильтры, собственные упражнения.
 - Вес в кг/фунтах, повторения, разминка, добавление подходов, пауза, отдых, заметки.
 - Сохранение выполненных подходов и изменений, восстановление активной тренировки, недельный дневник, повтор завершённой тренировки.
-- Импорт и экспорт JSON / `.fitsession`: отдельная тренировка или вся история с планами, открытие из «Файлов», сводка перед импортом и защита от повторных записей.
+- Импорт и экспорт JSON / `.fitnesstracker`: отдельная тренировка или вся история с планами, открытие из «Файлов», сводка перед импортом и защита от повторных записей.
 - Недельный объём, серия тренировочных недель, личные рекорды, оценка 1ПМ.
 - Нативная стеклянная панель действий: `GlassEffectContainer`, `glassEffect`, `glassEffectID`, `glassEffectTransition`, стили `glass` / `glassProminent`.
 - SwiftData, опциональная системная синхронизация через личный CloudKit container.
@@ -56,19 +58,19 @@ swift format lint --strict --recursive Sources Tests Apple Package.swift
 
 ```bash
 bash scripts/setup-macos.sh
-open FitSession.xcodeproj
+open FitnessTracker.xcodeproj
 ```
 
 Понадобятся полный Xcode 26+ с iOS/watchOS 26 SDK и XcodeGen 2.44+. Скрипт устанавливает XcodeGen через имеющийся Homebrew, создаёт локальную конфигурацию, проверяет пакет и выполняет `xcodegen generate`. Signing, Apple Developer resources и первая сборка описаны в [MAC_BUILD_GUIDE.md](MAC_BUILD_GUIDE.md).
 
-Для бесплатной **Personal Team** выберите схему **FitSession Personal**: iCloud/Push отключены, история хранится локально. Полная схема **FitSession** сохраняет эти capabilities для Apple Developer Program. Укажите свою Team во вложенных targets и уникальный Bundle ID в Config/Local.xcconfig; не оставляйте `com.yourcompany.fitsession`.
+Для бесплатной **Personal Team** выберите схему **FitnessTracker Personal**: iCloud/Push отключены, история хранится локально. Полная схема **FitnessTracker** сохраняет эти capabilities для Apple Developer Program. Укажите свою Team во вложенных targets и уникальный Bundle ID в Config/Local.xcconfig; не оставляйте `com.yourcompany.fitnesstracker`.
 
 ## Структура
 
 ```text
 Package.swift                      # Только Foundation/Core, Swift 6
-Sources/FitSessionCore/             # Модели, state machine, расчёты, протоколы
-Tests/FitSessionCoreTests/          # Linux/macOS Swift Testing
+Sources/FitnessTrackerCore/             # Модели, state machine, расчёты, протоколы
+Tests/FitnessTrackerCoreTests/          # Linux/macOS Swift Testing
 Tests/PortableTrackerChecks/        # Исполняемые проверки Foundation/Observation с fakes
 Apple/App/                         # DI, точка входа, состояние приложения
 Apple/Design/                      # Liquid Glass и общие компоненты

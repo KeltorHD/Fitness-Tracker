@@ -1,4 +1,6 @@
-# FitSession: первая сборка на macOS
+# FitnessTracker: первая сборка на macOS
+
+После переименования закройте прежний проект, выполните `git pull --ff-only` и `xcodegen generate`, затем откройте **FitnessTracker.xcodeproj**. Выберите **FitnessTracker Personal**. Сохраняйте значения Team, Bundle ID, App Group и CloudKit из существующего `Config/Local.xcconfig`: прежние переменные поддержаны aliases. Не удаляйте приложение/store. [Правила обновления](docs/RENAME.md).
 
 ## 1. Инструменты
 
@@ -28,39 +30,39 @@ cp Config/Local.xcconfig.example Config/Local.xcconfig  # только если 
 swift build
 swift test
 xcodegen generate
-open FitSession.xcodeproj
+open FitnessTracker.xcodeproj
 ```
 
 ## 2. Идентификаторы и Signing
 
-Для **бесплатной Personal Team** используйте схему **FitSession Personal**. Она выбирает PersonalDebug/PersonalRelease и Config/PersonalTeam.entitlements без iCloud и Push Notifications. История сохраняется в локальной SwiftData; JSON/.fitsession, Liquid Glass, HealthKit, локальные уведомления, Live Activity/Dynamic Island, WidgetKit/App Groups и Watch сохраняются. Доступность HealthKit и App Groups для бесплатного Apple Developer account указана в [таблице Apple](https://developer.apple.com/help/account/reference/supported-capabilities-ios); фактический provisioning следует проверить на устройстве.
+Для **бесплатной Personal Team** используйте схему **FitnessTracker Personal**. Она выбирает PersonalDebug/PersonalRelease и Config/PersonalTeam.entitlements без iCloud и Push Notifications. История сохраняется в локальной SwiftData; JSON/.fitnesstracker, Liquid Glass, HealthKit, локальные уведомления, Live Activity/Dynamic Island, WidgetKit/App Groups и Watch сохраняются. Доступность HealthKit и App Groups для бесплатного Apple Developer account указана в [таблице Apple](https://developer.apple.com/help/account/reference/supported-capabilities-ios); фактический provisioning следует проверить на устройстве.
 
-Схема **FitSession** сохраняет полный набор capabilities и требует подходящей команды Apple Developer Program для iCloud/Push. Это различие конфигураций сборки, платных функций внутри приложения нет.
+Схема **FitnessTracker** сохраняет полный набор capabilities и требует подходящей команды Apple Developer Program для iCloud/Push. Это различие конфигураций сборки, платных функций внутри приложения нет.
 
 Если Xcode сообщает `Personal development teams ... do not support Push Notifications and iCloud`:
 
-1. Обновите репозиторий и выполните `xcodegen generate` в его корне, затем `open FitSession.xcodeproj`.
-2. Выберите **FitSession Personal → ваш iPhone**.
-3. Укажите Personal Team для FitSession, FitSessionWidgets и FitSessionWatch в Signing & Capabilities с Automatically manage signing.
-4. Замените `com.yourcompany.fitsession` в Config/Local.xcconfig на свой уникальный FITSESSION_BUNDLE_ID, например `com.alexanderproshchenkov.fitsession`. App Group и IDs вложенных targets выводятся из него автоматически. Для сохранения Team после следующей генерации внесите реальный Team ID в DEVELOPMENT_TEAM локального файла.
+1. Обновите репозиторий и выполните `xcodegen generate` в его корне, затем `open FitnessTracker.xcodeproj`.
+2. Выберите **FitnessTracker Personal → ваш iPhone**.
+3. Укажите Personal Team для FitnessTracker, FitnessTrackerWidgets и FitnessTrackerWatch в Signing & Capabilities с Automatically manage signing.
+4. Замените `com.yourcompany.fitnesstracker` в Config/Local.xcconfig на свой уникальный FITNESS_TRACKER_BUNDLE_ID, например `com.alexanderproshchenkov.fitnesstracker`. App Group и IDs вложенных targets выводятся из него автоматически. Для сохранения Team после следующей генерации внесите реальный Team ID в DEVELOPMENT_TEAM локального файла.
 5. Нажмите ⌘R. Не удаляйте capabilities из Config/App.entitlements: они используются полной схемой.
 
 Заполните `Config/Local.xcconfig`:
 
 ```xcconfig
 DEVELOPMENT_TEAM = YOURTEAMID
-FITSESSION_BUNDLE_ID = com.yourcompany.fitsession
+FITNESS_TRACKER_BUNDLE_ID = com.yourcompany.fitnesstracker
 ```
 
 App Group и CloudKit ID автоматически выводятся из Bundle ID:
 
 | Назначение | Значение |
 | --- | --- |
-| iPhone | `com.yourcompany.fitsession` |
-| Widget extension | `com.yourcompany.fitsession.widgets` |
-| Watch | `com.yourcompany.fitsession.watchkitapp` |
-| App Group | `group.com.yourcompany.fitsession` |
-| CloudKit container | `iCloud.com.yourcompany.fitsession` |
+| iPhone | `com.yourcompany.fitnesstracker` |
+| Widget extension | `com.yourcompany.fitnesstracker.widgets` |
+| Watch | `com.yourcompany.fitnesstracker.watchkitapp` |
+| App Group | `group.com.yourcompany.fitnesstracker` |
+| CloudKit container | `iCloud.com.yourcompany.fitnesstracker` |
 
 Укажите свою Team во всех targets, включая unit/UI tests. Оставьте Automatically manage signing. Локальная конфигурация исключена из git; секреты и provisioning profiles не коммитьте.
 
@@ -68,13 +70,13 @@ App Group и CloudKit ID автоматически выводятся из Bund
 
 | Target | Capability / настройка |
 | --- | --- |
-| FitSession | HealthKit; iCloud → CloudKit с вашим container; App Groups с вашей группой; Push Notifications; Background Modes → Remote notifications |
-| FitSessionWidgets | Та же App Group |
-| FitSessionWatch | Обычный signing, companion Bundle ID совпадает с iPhone. HealthKit и workout-processing здесь не нужны: это журнал подходов без фонового сбора датчиков |
+| FitnessTracker | HealthKit; iCloud → CloudKit с вашим container; App Groups с вашей группой; Push Notifications; Background Modes → Remote notifications |
+| FitnessTrackerWidgets | Та же App Group |
+| FitnessTrackerWatch | Обычный signing, companion Bundle ID совпадает с iPhone. HealthKit и workout-processing здесь не нужны: это журнал подходов без фонового сбора датчиков |
 
 Платные сервисы требуют соответствующего членства Apple Developer и ресурсов в портале. Simulator signing обычно не нужен, но включённые entitlements могут потребовать настроить Team или отдельные profiles перед запуском на устройстве. Не удаляйте реальные capability-файлы, чтобы скрыть ошибки provisioning.
 
-`aps-environment` задаётся через `FITSESSION_APS_ENVIRONMENT`: Debug → development, Release → production; финальные значения проверьте в подписанном архиве. Live Activities обновляются локально, не требуют ActivityKit push token. Push capability используется для системной синхронизации CloudKit.
+`aps-environment` задаётся через `FITNESS_TRACKER_APS_ENVIRONMENT`: Debug → development, Release → production; финальные значения проверьте в подписанном архиве. Live Activities обновляются локально, не требуют ActivityKit push token. Push capability используется для системной синхронизации CloudKit.
 
 ## 3. Генерация, Simulator и первая сборка
 
@@ -82,20 +84,20 @@ App Group и CloudKit ID автоматически выводятся из Bund
 
 ```bash
 xcodegen generate
-open FitSession.xcodeproj
+open FitnessTracker.xcodeproj
 ```
 
-Выберите схему **FitSession Personal** для Personal Team либо **FitSession** для полной конфигурации, затем iPhone Simulator с iOS 26+ или свой iPhone. Выполните Product → Build (`⌘B`), затем Run (`⌘R`). Схемы **FitSessionWatch** и **FitSessionWidgets** предусмотрены отдельно.
+Выберите схему **FitnessTracker Personal** для Personal Team либо **FitnessTracker** для полной конфигурации, затем iPhone Simulator с iOS 26+ или свой iPhone. Выполните Product → Build (`⌘B`), затем Run (`⌘R`). Схемы **FitnessTrackerWatch** и **FitnessTrackerWidgets** предусмотрены отдельно.
 
 CLI после установки Simulator runtimes:
 
 ```bash
-xcodebuild -list -project FitSession.xcodeproj
-xcodebuild -showdestinations -project FitSession.xcodeproj -scheme FitSession
+xcodebuild -list -project FitnessTracker.xcodeproj
+xcodebuild -showdestinations -project FitnessTracker.xcodeproj -scheme FitnessTracker
 # Подставьте существующий Simulator UDID из предыдущего вывода:
-xcodebuild -project FitSession.xcodeproj -scheme FitSession \
+xcodebuild -project FitnessTracker.xcodeproj -scheme FitnessTracker \
   -destination 'platform=iOS Simulator,id=YOUR-SIMULATOR-UDID' build
-xcodebuild -project FitSession.xcodeproj -scheme FitSession \
+xcodebuild -project FitnessTracker.xcodeproj -scheme FitnessTracker \
   -destination 'platform=iOS Simulator,id=YOUR-SIMULATOR-UDID' test
 ```
 
@@ -121,7 +123,7 @@ xcodebuild -project FitSession.xcodeproj -scheme FitSession \
 2. **HealthKit:** откройте завершённую тренировку → Экспорт в «Здоровье». Проверьте разрешение/отказ, длительность и паузы, повторный экспорт с тем же sync identifier. Калории и пульс не выдумываются и не экспортируются. Удаление из истории не удаляет запись HealthKit.
 3. **CloudKit:** сначала соберите с подписанными ресурсами. Включите синхронизацию в настройках, полностью перезапустите приложение. На двух устройствах с одним Apple ID проверьте создание, изменение и удаление записей, offline → online. Система выполняет eventual sync, проверка учётной записи не является индикатором завершения. Перед распространением инициализируйте development schema при необходимости через CloudKit Console и разверните её в production; debug-only schema initialization не включено в обычный запуск.
 4. **Notifications:** включите уведомления, подтвердите разрешение, выполните подход и заблокируйте iPhone. Проверьте отмену уведомления при паузе, пропуске отдыха и завершении тренировки.
-5. **Live Activity / Dynamic Island:** проверьте старт, подход, активное время и отдых после блокировки, pause/resume/skip-rest кнопки, cold-launch intent, переход по UUID, восстановление после перезапуска и завершение на поддерживающем устройстве. После изменений обязательно перегенерируйте project: shared intents собираются в main app с FITSESSION_APP и в widget extension без этого флага. Поведение при выключенных Live Activities должно сохранять обычную тренировку.
+5. **Live Activity / Dynamic Island:** проверьте старт, подход, активное время и отдых после блокировки, pause/resume/skip-rest кнопки, cold-launch intent, переход по UUID, восстановление после перезапуска и завершение на поддерживающем устройстве. После изменений обязательно перегенерируйте project: shared intents собираются в main app с FITNESS_TRACKER_APP и в widget extension без этого флага. Поведение при выключенных Live Activities должно сохранять обычную тренировку.
 6. **Widget:** включите передачу сводки, добавьте виджет, завершите тренировку. Проверьте недельную цель, смену недели, отключение передачи и скрытие чувствительных данных.
 7. **Watch:** установите приложение на paired Watch. Запишите несколько подходов офлайн, перезапустите Watch app, завершите. После соединения проверьте запись на iPhone и уменьшение очереди Watch только после подтверждения сохранения. Повторная передача не создаёт дубликат. Watch не зеркалирует текущую iPhone-сессию и не собирает пульс; он ведёт отдельную тренировку «Всё тело A».
 
@@ -145,10 +147,10 @@ xcodebuild -project FitSession.xcodeproj -scheme FitSession \
 
 ## Импорт и экспорт файлов
 
-После установки приложения проверьте **Настройки → Данные → Импорт и экспорт**: сохранить архив в `.json` и `.fitsession`, открыть его из «Файлов», подтвердить preview и повторить импорт без дублей. Проверьте export одной тренировки из меню карточки, iCloud Drive, cold launch и передачу через Share/AirDrop. Регистрация UTI находится в App-Info.plist; дополнительных entitlements для этих диалогов не требуется. Код рассчитан на iOS 26, без document APIs iOS 27. Правила формата и ограничения: [IMPORT_EXPORT.md](docs/IMPORT_EXPORT.md), сценарии: [XCODE_VALIDATION.md](docs/XCODE_VALIDATION.md).
+После установки приложения проверьте **Настройки → Данные → Импорт и экспорт**: сохранить архив в `.json` и `.fitnesstracker`, открыть его из «Файлов», подтвердить preview и повторить импорт без дублей. Проверьте export одной тренировки из меню карточки, iCloud Drive, cold launch и передачу через Share/AirDrop. Регистрация UTI находится в App-Info.plist; дополнительных entitlements для этих диалогов не требуется. Код рассчитан на iOS 26, без document APIs iOS 27. Правила формата и ограничения: [IMPORT_EXPORT.md](docs/IMPORT_EXPORT.md), сценарии: [XCODE_VALIDATION.md](docs/XCODE_VALIDATION.md).
 
 ## Mi Band / два режима трекера
 
-После `git pull --ff-only` снова выполните `xcodegen generate`: добавлены Swift-файлы сервисов, экранов и Bluetooth purpose string. Запустите схему **FitSession Personal** на физическом iPhone. В «Настройки → Основные → Трекер» проверьте Apple «Здоровье» после синхронизации Mi Fitness; для Bluetooth сначала начните тренировку и включите **Share HR** на браслете, затем найдите пульсометр в FitSession. Права HealthKit и Bluetooth выдаются отдельно по действию пользователя. Проверьте блокировку, паузу, потерю связи и график после завершения. Сборка и соединение с Mi Band на Linux не проверялись. Полная инструкция: [MI_BAND.md](docs/MI_BAND.md), checklist: [XCODE_VALIDATION.md](docs/XCODE_VALIDATION.md).
+После `git pull --ff-only` снова выполните `xcodegen generate`: добавлены Swift-файлы сервисов, экранов и Bluetooth purpose string. Запустите схему **FitnessTracker Personal** на физическом iPhone. В «Настройки → Основные → Трекер» проверьте Apple «Здоровье» после синхронизации Mi Fitness; для Bluetooth сначала начните тренировку и включите **Share HR** на браслете, затем найдите пульсометр в FitnessTracker. Права HealthKit и Bluetooth выдаются отдельно по действию пользователя. Проверьте блокировку, паузу, потерю связи и график после завершения. Сборка и соединение с Mi Band на Linux не проверялись. Полная инструкция: [MI_BAND.md](docs/MI_BAND.md), checklist: [XCODE_VALIDATION.md](docs/XCODE_VALIDATION.md).
 
-Для **HUAWEI WATCH GT 6 Pro** в этом же разделе выберите **Модель трекера → HUAWEI WATCH GT 6 Pro**. Для истории сначала проверьте HUAWEI Health → Apple «Здоровье»; для пульса включите **HR Data Broadcasts** на часах и запустите поиск в FitSession. Отсутствие этого пункта и набор передаваемых показателей зависят от прошивки/региона. Реальное соединение с GT 6 Pro не проверялось на Linux. Полные шаги и ссылки производителя — в [MI_BAND.md](docs/MI_BAND.md).
+Для **HUAWEI WATCH GT 6 Pro** в этом же разделе выберите **Модель трекера → HUAWEI WATCH GT 6 Pro**. Для истории сначала проверьте HUAWEI Health → Apple «Здоровье»; для пульса включите **HR Data Broadcasts** на часах и запустите поиск в FitnessTracker. Отсутствие этого пункта и набор передаваемых показателей зависят от прошивки/региона. Реальное соединение с GT 6 Pro не проверялось на Linux. Полные шаги и ссылки производителя — в [MI_BAND.md](docs/MI_BAND.md).

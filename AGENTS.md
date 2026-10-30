@@ -1,10 +1,10 @@
-# AGENTS.md — FitSession
+# AGENTS.md — FitnessTracker
 
 Эти правила действуют для всего репозитория. Выполняй конкретные инструкции пользователя и сохраняй ранее согласованные требования проекта. Не меняй стек, архитектуру или продуктовые решения без причины, связанной с текущей задачей.
 
 ## 1. Роль и ответственность
 
-Ты — senior iOS engineer, разрабатывающий нативный журнал силовых тренировок FitSession.
+Ты — senior iOS engineer, разрабатывающий нативный журнал силовых тренировок FitnessTracker.
 
 - Пиши понятный, поддерживаемый и тестируемый Swift-код.
 - Следуй Apple Human Interface Guidelines и используй нативные Apple API.
@@ -28,6 +28,8 @@
 
 Все функции приложения бесплатны. Не возвращай Pro, paywall, покупки, подписки или StoreKit без нового явного требования пользователя. Основной интерфейс — на русском языке.
 
+Название продукта — FitnessTracker. Прежние storage/wire identifiers в AppCompatibility, legacy archive IDs и aliases Config/Base.xcconfig сохраняются только для совместимости установленных данных; не переименовывай их без явной миграции. Правила — в docs/RENAME.md.
+
 ## 3. Окружение: Linux сначала, macOS позже
 
 В начале работы определи текущую ОС и доступные инструменты.
@@ -37,7 +39,7 @@
 - Продолжай писать полноценные SwiftUI `.swift`-файлы.
 - Не пытайся запускать Xcode или iOS Simulator.
 - Не заменяй интерфейс на Flutter, React Native, WebView или другой UI-фреймворк.
-- Собирай и тестируй FitSessionCore через SPM.
+- Собирай и тестируй FitnessTrackerCore через SPM.
 - Проверяй структуру, ресурсы, форматирование и синтаксис Apple-файлов.
 - Не называй эти проверки успешной iOS/watchOS-компиляцией или проверкой интерфейса.
 
@@ -49,9 +51,9 @@
 
 ```text
 Package.swift
-Sources/FitSessionCore/             # Domain, правила, расчёты, repository protocols
-Sources/FitSessionCore/Resources/   # Небольшие SPM resources библиотеки упражнений
-Tests/FitSessionCoreTests/          # Swift Testing на Linux/macOS
+Sources/FitnessTrackerCore/             # Domain, правила, расчёты, repository protocols
+Sources/FitnessTrackerCore/Resources/   # Небольшие SPM resources библиотеки упражнений
+Tests/FitnessTrackerCoreTests/          # Swift Testing на Linux/macOS
 Apple/App/                         # App entry, DI, AppStore, runtime
 Apple/Design/                      # FitTheme, общие компоненты, Liquid Glass
 Apple/Features/                    # SwiftUI-экраны и presentation logic
@@ -102,7 +104,7 @@ MVVM — предпочтительный способ организации н
 - Предпочитай initializer-based DI.
 - Вводи протоколы ради тестирования, замены реализации или отделения внешнего сервиса, а не для каждого класса.
 - Не добавляй глобальные изменяемые singleton-объекты.
-- Существующий FitSessionRuntime обеспечивает один AppStore/ModelContext в app process, включая холодный запуск LiveActivityIntent. Сохраняй это поведение; не создавай конкурирующий context из intent или View.
+- Существующий FitnessTrackerRuntime обеспечивает один AppStore/ModelContext в app process, включая холодный запуск LiveActivityIntent. Сохраняй это поведение; не создавай конкурирующий context из intent или View.
 
 ## 8. Swift coding standards
 
@@ -167,7 +169,7 @@ MVVM — предпочтительный способ организации н
 - BackgroundTaskLease предоставляет ограниченное время завершения обновлений; expiration handler должен отменить работу и освободить task.
 - Не создавай Live Activity произвольно из background; сохраняй ограничения ActivityKit и настройки пользователя.
 - LiveActivityIntent сохраняет изменения и ожидает необходимые updates до возврата из perform().
-- FITSESSION_APP определён только для главного app target; shared intents не должны открывать SwiftData из widget extension.
+- FITNESS_TRACKER_APP определён только для главного app target; shared intents не должны открывать SwiftData из widget extension.
 - Повторные и устаревшие действия должны быть безопасны: pause/resume идемпотентны, старый skip-rest не сбрасывает новый отдых.
 - Watch outbox удаляет запись только после подтверждения успешного сохранения на iPhone. Повторная доставка не создаёт дубликаты.
 
@@ -295,20 +297,20 @@ Python-зависимости — в requirements-dev.txt. Полный check sc
 
 ```bash
 xcodegen generate
-xcodebuild -list -project FitSession.xcodeproj
-xcodebuild -showdestinations -project FitSession.xcodeproj -scheme FitSession
+xcodebuild -list -project FitnessTracker.xcodeproj
+xcodebuild -showdestinations -project FitnessTracker.xcodeproj -scheme FitnessTracker
 ```
 
 Затем собери и протестируй реальную схему на доступном Simulator. Подставь найденный UDID вместо примера:
 
 ```bash
-xcodebuild -project FitSession.xcodeproj -scheme FitSession \
+xcodebuild -project FitnessTracker.xcodeproj -scheme FitnessTracker \
   -destination 'platform=iOS Simulator,id=AVAILABLE-SIMULATOR-UDID' build
-xcodebuild -project FitSession.xcodeproj -scheme FitSession \
+xcodebuild -project FitnessTracker.xcodeproj -scheme FitnessTracker \
   -destination 'platform=iOS Simulator,id=AVAILABLE-SIMULATOR-UDID' test
 ```
 
-Существующие Apple test targets — FitSessionTests и FitSessionUITests; отдельные схемы — FitSessionWatch и FitSessionWidgets. Для capabilities следуй MAC_BUILD_GUIDE.md. При отсутствии SDK/Simulator честно укажи, что соответствующая проверка не выполнена.
+Существующие Apple test targets — FitnessTrackerTests и FitnessTrackerUITests; отдельные схемы — FitnessTrackerWatch и FitnessTrackerWidgets. Для capabilities следуй MAC_BUILD_GUIDE.md. При отсутствии SDK/Simulator честно укажи, что соответствующая проверка не выполнена.
 
 Для правок только документации достаточно проверить содержание, пути и git diff --check; не запускай несвязанные сборки без причины. После успешных релевантных проверок не повторяй их без новых изменений или выявленного риска.
 

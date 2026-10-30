@@ -14,7 +14,7 @@ import textwrap
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / 'docs/previews'
-DATA = json.loads((ROOT / 'Sources/FitSessionCore/Resources/ExerciseLibrary.ru.json').read_text())
+DATA = json.loads((ROOT / 'Sources/FitnessTrackerCore/Resources/ExerciseLibrary.ru.json').read_text())
 ENTRIES = {item['sourceID']: item for item in DATA['entries']}
 INK, MUTED, ACCENT, BG = '#191919', '#8e8e93', '#ff4f33', '#ffffff'
 
@@ -262,7 +262,7 @@ if __name__ == '__main__':
     for name, selected in [('overview', [diary(), catalogue(), detail()]),
                            ('results-overview', [results(), workout(), settings()])]:
         board = rect(0, 0, 1270, 1020, '#ebebeb')
-        board += text(30, 38, 'FitSession · дизайн по вашим референсам', 25, INK, 700)
+        board += text(30, 38, 'FitnessTracker · дизайн по вашим референсам', 25, INK, 700)
         board += text(30, 63, 'Демонстрационные данные. Это макеты, не скриншоты Xcode; Liquid Glass проверяется на Mac.', 12, MUTED)
         for i, content in enumerate(selected):
             board += f'<svg x="{30 + i * 410}" y="85" width="390" height="900" viewBox="0 0 390 900">{content}</svg>'

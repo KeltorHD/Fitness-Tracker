@@ -27,7 +27,7 @@
 - [ ] В Bluetooth показывается имя реально выбранного устройства, а не название профиля; GT 6 Pro и Mi Band остаются доступны без whitelist по имени.
 - [ ] После `xcodegen generate` собираются HealthMetricsReader, BluetoothHeartRateService, TrackerView и график истории; проверить Swift 6 SDK actor annotations у delegate/queries.
 - [ ] При первом открытии «Трекер» permissions не запрашиваются. Read permissions появляются по кнопке; Bluetooth — по поиску. Выбор режима сохраняется, обе локали RU/EN проверены.
-- [ ] Health: Mi Fitness → «Здоровье» → FitSession, шаги/энергия/сон/пульс, реальные source names, дата/часовой пояс/DST, частичные права и пустые данные без ложного диагноза «доступ запрещён».
+- [ ] Health: Mi Fitness → «Здоровье» → FitnessTracker, шаги/энергия/сон/пульс, реальные source names, дата/часовой пояс/DST, частичные права и пустые данные без ложного диагноза «доступ запрещён».
 - [ ] Импорт пульса завершённой тренировки: только heart-rate permission, временные границы/паузы, empty/retry/cancellation; существующая Bluetooth-запись не заменяется.
 - [ ] Mi Band 10 с включённым Share HR обнаруживается как Heart Rate Service, подключается и присылает notifications 2A37. Проверить другую Bluetooth HR модель при наличии.
 - [ ] Bluetooth denied/off/unsupported, timeout поиска/подключения, contact loss, отключение и явное повторное подключение; старые callbacks от прошлого peripheral не изменяют текущее подключение.
@@ -35,21 +35,33 @@
 - [ ] Заблокировать iPhone, проверить уведомления BLE и запись в фоне. Force quit/reboot не обещают продолжение; после открытия checkpoints доступны, подключение восстанавливается вручную.
 - [ ] Checkpoint/finish/background expiration: ограниченная работа, отмена pending tasks; ошибка сохранения видна, повтор сохраняет последние точки.
 - [ ] История: график со средним/максимумом и разрывами, длительная запись, Dynamic Type, VoiceOver и смена темы. Пройденный UI-тест не заменяет проверку радио.
-- [ ] Локальные файлы исключены из backup/CloudKit/App Group и защищены на iOS; JSON/.fitsession, widgets/Live Activity/Watch не содержат новых sensor payloads.
+- [ ] Локальные файлы исключены из backup/CloudKit/App Group и защищены на iOS; JSON/.fitnesstracker, widgets/Live Activity/Watch не содержат новых sensor payloads.
 - [ ] Отмена/удаление тренировки удаляет локальный sidecar; повреждённая запись сохраняется с ошибкой, отказ сохранения/чтения не создаёт пустую базу.
 - [ ] Запустить `testTrackerOffersBothModesWithoutRequestingPermissionsOnOpen` и весь существующий UI suite. На Linux UI-тест не запускался.
 
 Инструкция и точные ограничения: [MI_BAND.md](MI_BAND.md).
 
+## Переименование в FitnessTracker
+
+- [ ] `xcodegen generate` создаёт FitnessTracker.xcodeproj со схемами FitnessTracker Personal / FitnessTracker / FitnessTrackerWatch / FitnessTrackerWidgets; package FitnessTrackerCore и все test targets разрешаются.
+- [ ] Обновление поверх прежней установки с теми же Team/Bundle ID/App Group/CloudKit сохраняет историю, настройки, активную сессию, локальный пульс и Watch outbox; store не удаляется и не создаётся пустым при ошибке.
+- [ ] Имя FitnessTracker видно на iPhone/Watch, в widgets, permissions, меню и обоих языках.
+- [ ] Установленный виджет обновляется с прежним kind; проверить Live Activity до/после обновления и legacy deep links.
+- [ ] `.fitnesstracker` / `.json` экспортируют новый brand и metadata, старые `.fitsession` и JSON version 1 открываются через Files/AirDrop без изменения данных и новых дубликатов.
+- [ ] Health export существующей тренировки не создаёт дубликат после переименования.
+- [ ] Старые и новые переменные Local.xcconfig дают те же реальные signing identifiers; новых профилей из-за имени продукта не требуется.
+
+Порядок обновления: [RENAME.md](RENAME.md).
+
 ## Сборка и тесты (общие сценарии)
 
 - [ ] `xcodegen generate`: spec, local SPM dependency, пять targets и schemes.
-- [ ] FitSession Debug/Release compilation: SwiftUI overloads, SwiftData macros, Swift 6 concurrency.
+- [ ] FitnessTracker Debug/Release compilation: SwiftUI overloads, SwiftData macros, Swift 6 concurrency.
 - [ ] ActiveWorkoutView: Section/TimelineView компилируются с @AppStorage weightUnit; смена кг/фунтов обновляет сводку, skip-rest вызывает Core action с expectedEnd и не сбрасывает новый отдых.
-- [ ] FitSession Personal: PersonalDebug/PersonalRelease используют PersonalTeam.entitlements без CloudKit/APNs; установлены и запускаются с Personal Team, включая widgets/watch.
+- [ ] FitnessTracker Personal: PersonalDebug/PersonalRelease используют PersonalTeam.entitlements без CloudKit/APNs; установлены и запускаются с Personal Team, включая widgets/watch.
 - [ ] Personal build с сохранённым cloudSync=true всё равно открывает локальный store и не регистрирует APNs; предпочтение не стирается. Полная схема возвращает iCloud controls.
-- [ ] FitSessionWidgets: extension-safe API, shared attributes, assets и Info.plist.
-- [ ] FitSessionWatch: single-target application, icon, deployment, companion ID, embedding.
+- [ ] FitnessTrackerWidgets: extension-safe API, shared attributes, assets и Info.plist.
+- [ ] FitnessTrackerWatch: single-target application, icon, deployment, companion ID, embedding.
 - [ ] iOS unit tests: SwiftData upsert/delete/validation и AppStore DI/export behavior.
 - [ ] UI tests: свободная тренировка → упражнение → подход → завершение → история; сворачивание и продолжение.
 - [ ] Archive, entitlements и privacy report проверены перед распространением.
@@ -89,7 +101,7 @@
 
 ## Дополнительно: фон и интерактивная Dynamic Island
 
-- [ ] Перегенерировать проект: FitSessionCore связан с widget extension, FITSESSION_APP определён только для main app.
+- [ ] Перегенерировать проект: FitnessTrackerCore связан с widget extension, FITNESS_TRACKER_APP определён только для main app.
 - [ ] Проверить App Intents metadata extraction обоих targets и dispatch LiveActivityIntent в main app.
 - [ ] Начать тренировку и немедленно свернуть: Activity.request не откладывается за async notification work.
 - [ ] На настоящем iPhone: секундомер и countdown продолжаются при suspension, countdown останавливается на нуле.
@@ -135,12 +147,12 @@
 
 Показатели калорий, веса и замеров из скриншотов не подставляются как данные пользователя. Фото/GIF оригинального приложения не извлекаются. Полная карта: [REFERENCE_DESIGN.md](REFERENCE_DESIGN.md).
 
-## JSON и .fitsession
+## JSON и .fitnesstracker
 
-- [ ] После генерации проверить Info.plist: exported UTI com.fitsession.archive → public.json, extension fitsession, Viewer/Owner; public.json → Alternate; open-in-place enabled.
-- [ ] Сохранить полный архив и отдельную тренировку в обоих форматах. Фактические расширения `.json` и `.fitsession` соответствуют выбору; UTF-8, русский текст, дробные даты и IDs сохраняются.
+- [ ] После генерации проверить Info.plist: exported UTI com.fitnesstracker.archive → public.json, extension fitnesstracker, Viewer/Owner; public.json → Alternate; open-in-place enabled.
+- [ ] Сохранить полный архив и отдельную тренировку в обоих форматах. Фактические расширения `.json` и `.fitnesstracker` соответствуют выбору; UTF-8, русский текст, дробные даты и IDs сохраняются.
 - [ ] Импорт из локальных «Файлов», iCloud Drive и стороннего file provider; старый JSON одной тренировки также читается.
-- [ ] Open in FitSession/AirDrop: foreground, background и cold launch; startup store failure → retry не теряет URL.
+- [ ] Open in FitnessTracker/AirDrop: foreground, background и cold launch; startup store failure → retry не теряет URL.
 - [ ] Внешний файл во время active session, detail, создания/редактирования плана, editor/picker: один preview без потери черновиков и активной тренировки.
 - [ ] До подтверждения база не меняется. Отмена picker/read/preview не импортирует данные; отказ save оставляет preview для явного retry.
 - [ ] Повторный импорт, совпадающий UUID с другими данными, новая активная сессия при существующей: сводка и фактически пропущенные записи совпадают с правилами.

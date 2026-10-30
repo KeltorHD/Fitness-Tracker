@@ -27,7 +27,7 @@
 
 ## XcodeGen, capabilities и privacy
 
-[Supported capabilities (iOS)](https://developer.apple.com/help/account/reference/supported-capabilities-ios) — матрица программ: iCloud/Push недоступны бесплатному Apple Developer account; HealthKit и App Groups отмечены доступными. По ней подготовлена отдельная схема FitSession Personal; runtime/signing на Personal Team ещё требуют проверки в Xcode.
+[Supported capabilities (iOS)](https://developer.apple.com/help/account/reference/supported-capabilities-ios) — матрица программ: iCloud/Push недоступны бесплатному Apple Developer account; HealthKit и App Groups отмечены доступными. По ней подготовлена отдельная схема FitnessTracker Personal; runtime/signing на Personal Team ещё требуют проверки в Xcode.
 
 [Официальный Project Spec XcodeGen](https://github.com/yonaskolb/XcodeGen/blob/master/Docs/ProjectSpec.md) подтверждает `application`, `app-extension`, `bundle.unit-test`, `bundle.ui-testing`, платформы `iOS`/`watchOS`, local package `path`, `configFiles`, `sources.buildPhase`, `dependencies.embed`. Используется поддерживаемый формат `xcode16_0`, а не предполагаемый `xcode26_0`. Info.plist и entitlements хранятся в репозитории и привязаны документированными Xcode build settings.
 
@@ -43,16 +43,16 @@ Capabilities выражены настоящими entitlement keys: [HealthKit]
 - [Text timerInterval/pauseTime](https://developer.apple.com/documentation/swiftui/text/init(timerinterval:pausetime:countsdown:showshours:)): системный count-up/countdown и замороженный момент паузы.
 - [Choosing Background Strategies](https://developer.apple.com/documentation/backgroundtasks/choosing-background-strategies-for-your-app): beginBackgroundTask предоставляет ограниченное время для завершения работы. [Apple DTS notes](https://developer.apple.com/forums/thread/85066/) подтверждают main-thread expiration handler; код освобождает task до возврата из handler.
 
-Оба target используют общий контракт; `FITSESSION_APP` выбирает исполнение с SwiftData только в основном процессе. Подробности проверки: [BACKGROUND_AND_DYNAMIC_ISLAND.md](BACKGROUND_AND_DYNAMIC_ISLAND.md).
+Оба target используют общий контракт; `FITNESS_TRACKER_APP` выбирает исполнение с SwiftData только в основном процессе. Подробности проверки: [BACKGROUND_AND_DYNAMIC_ISLAND.md](BACKGROUND_AND_DYNAMIC_ISLAND.md).
 
 [Swift 6.2 nonisolated async / @concurrent](https://docs.swift.org/latest/documentation/diagnostics/nonisolated-nonsending-by-default/) — @concurrent явно выбирает generic executor. LiveActivityService передаёт только IDs и WorkoutLiveState; end/update получают SDK handle внутри nonisolated helper и не отправляют Activity из MainActor. Никакие @unchecked Sendable/@preconcurrency или отключения diagnostics не добавлены; Apple SDK compilation проверяется отдельно на Mac.
 
-## JSON / .fitsession
+## JSON / .fitnesstracker
 
 - [fileImporter](https://developer.apple.com/documentation/swiftui/view/fileimporter(ispresented:allowedcontenttypes:oncompletion:)) — системный single-file picker; доступ к URL балансируется startAccessingSecurityScopedResource/stopAccessingSecurityScopedResource.
 - [fileExporter для Transferable](https://developer.apple.com/documentation/swiftui/view/fileexporter(ispresented:item:contenttypes:defaultfilename:oncompletion:oncancellation:)) — параметр item, contentTypes, defaultFilename и отдельная отмена; официальный DocC указывает iOS 17+, подходит iOS 26 target.
-- [exportingCondition](https://developer.apple.com/documentation/coretransferable/transferrepresentation/exportingcondition(_:)) — `@Sendable (Self.Item) -> Bool`, iOS 16+. Ограничивает representation выбранным JSON/FitSession, поскольку пользовательский UTI сам conforms to JSON.
-- [Defining file and data types](https://developer.apple.com/documentation/uniformtypeidentifiers/defining-file-and-data-types-for-your-app), [CFBundleDocumentTypes](https://developer.apple.com/documentation/bundleresources/information-property-list/cfbundledocumenttypes), [LSSupportsOpeningDocumentsInPlace](https://developer.apple.com/documentation/bundleresources/information-property-list/lssupportsopeningdocumentsinplace) — UTI com.fitsession.archive, расширение fitsession, JSON conformance, Viewer/Owner и отдельный JSON Alternate.
+- [exportingCondition](https://developer.apple.com/documentation/coretransferable/transferrepresentation/exportingcondition(_:)) — `@Sendable (Self.Item) -> Bool`, iOS 16+. Ограничивает representation выбранным JSON/FitnessTracker, поскольку пользовательский UTI сам conforms to JSON.
+- [Defining file and data types](https://developer.apple.com/documentation/uniformtypeidentifiers/defining-file-and-data-types-for-your-app), [CFBundleDocumentTypes](https://developer.apple.com/documentation/bundleresources/information-property-list/cfbundledocumenttypes), [LSSupportsOpeningDocumentsInPlace](https://developer.apple.com/documentation/bundleresources/information-property-list/lssupportsopeningdocumentsinplace) — UTI com.fitnesstracker.archive, расширение fitnesstracker, JSON conformance, Viewer/Owner и отдельный JSON Alternate.
 - [NSFileCoordinator coordinated read](https://developer.apple.com/documentation/foundation/nsfilecoordinator/coordinate(readingitemat:options:error:byaccessor:)) — синхронное coordinated чтение на worker actor, используется переданный accessor URL. Данные ограничиваются до 20 МиБ. Отмена проверяется перед/после coordination и между блоками чтения; ожидание file provider может завершиться позже отмены UI.
 
 Новые document APIs iOS 27 не требуются. File association и фактическое поведение диалогов остаются в Xcode validation checklist.
