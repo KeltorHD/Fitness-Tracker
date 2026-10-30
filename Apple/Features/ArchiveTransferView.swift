@@ -41,13 +41,37 @@ struct ArchiveTransferView: View {
         } footer: {
           Text(
             L10n.text(
-              "Поддерживаются .fitnesstracker и .json. Можно выбрать архив или прежний JSON одной тренировки.",
+              "Поддерживаются .fitnesstracker, .json и CSV-журнал тренировок. Можно выбрать файл из другого приложения.",
               locale: locale)
           )
         }
         if let preview = model.preview {
           Section {
             Text(preview.fileName).font(.headline)
+            if preview.fileName.lowercased().hasSuffix(".csv") {
+              Text(
+                L10n.format(
+                  "Даты CSV прочитаны в часовом поясе %@.", TimeZone.current.identifier,
+                  locale: locale)
+              )
+              .font(.footnote).foregroundStyle(.secondary)
+            }
+            if preview.unknownDurationCount > 0 {
+              Text(
+                L10n.format(
+                  "Без длительности: %@. В истории будет «—».",
+                  String(preview.unknownDurationCount), locale: locale)
+              )
+              .font(.footnote).foregroundStyle(.secondary)
+            }
+            if preview.cancelledCount > 0 {
+              Text(
+                L10n.format(
+                  "Без выполненных подходов: %@. Сессии сохранятся как отменённые.",
+                  String(preview.cancelledCount), locale: locale)
+              )
+              .font(.footnote).foregroundStyle(.secondary)
+            }
             LabeledContent(
               L10n.text("Новых тренировок", locale: locale),
               value: "\(preview.summary.addedWorkouts)")
@@ -121,7 +145,7 @@ struct ArchiveTransferView: View {
       }
       .fileImporter(
         isPresented: $model.showingImporter,
-        allowedContentTypes: [.fitnessTracker, .legacyWorkoutArchive, .json]
+        allowedContentTypes: [.fitnessTracker, .legacyWorkoutArchive, .json, .commaSeparatedText]
       ) { result in
         switch result {
         case .success(let url): model.selectFile(url)

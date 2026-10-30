@@ -31,6 +31,32 @@ private struct ArchiveFileStub: ArchiveFileHandling {
 }
 
 @MainActor final class ArchiveTransferTests: XCTestCase {
+  func testCSVFileHasPreviewAndRequiresConfirmationBeforeSaving() async throws {
+    let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+    try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+    addTeardownBlock { try FileManager.default.removeItem(at: directory) }
+    let url = directory.appendingPathComponent("fixture.csv")
+    let header = FitSessionCSVColumn.allCases.map(\.header).joined(separator: ";")
+    try Data((header + "\n29.10.26;18:30;CSV fixture;Custom;;10;2;;8;;;").utf8).write(to: url)
+    let repository = MemoryWorkoutRepository()
+    let model = ArchiveTransferViewModel(
+      files: ArchiveFileService(), snapshot: { WorkoutArchive(workouts: [], templates: []) },
+      plan: {
+        try ArchiveImportPlan(
+          archive: $0, existingWorkouts: repository.workouts(), existingTemplates: []
+        ).summary
+      },
+      commit: { try repository.importArchive($0) })
+    model.selectFile(url)
+    await model.load(try XCTUnwrap(model.request))
+    XCTAssertEqual(model.preview?.unknownDurationCount, 1)
+    XCTAssertEqual(model.preview?.summary.addedWorkouts, 1)
+    XCTAssertTrue(try repository.workouts().isEmpty)
+    model.requestImport()
+    await model.confirmImport()
+    XCTAssertEqual(try repository.workouts().first?.volume, 160)
+    XCTAssertEqual(try repository.workouts().first?.durationIsKnown, false)
+  }
   private func makeArchive() -> WorkoutArchive {
     WorkoutArchive(
       workouts: [Workout(name: "Импорт", startedAt: Date(timeIntervalSince1970: 100))],

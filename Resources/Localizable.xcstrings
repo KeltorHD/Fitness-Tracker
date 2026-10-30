@@ -1,6 +1,23 @@
 {
   "sourceLanguage": "ru",
   "strings": {
+    "%@ · множитель %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · множитель %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · multiplier %@"
+          }
+        }
+      }
+    },
     "%@ × %@ повторений": {
       "extractionState": "manual",
       "localizations": {
@@ -354,6 +371,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bluetooth heart rate monitors are unavailable on this device."
+          }
+        }
+      }
+    },
+    "CSV содержит больше 100 000 строк. Разделите экспорт на несколько файлов.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CSV содержит больше 100 000 строк. Разделите экспорт на несколько файлов."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The CSV contains more than 100,000 rows. Split the export into smaller files."
+          }
+        }
+      }
+    },
+    "CSV содержит подход с дистанцией или временем. Этот тип подхода пока не поддерживается.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CSV содержит подход с дистанцией или временем. Этот тип подхода пока не поддерживается."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The CSV contains a distance or timed set. This set type is not supported yet."
           }
         }
       }
@@ -919,6 +970,40 @@
         }
       }
     },
+    "Без выполненных подходов: %@. Сессии сохранятся как отменённые.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Без выполненных подходов: %@. Сессии сохранятся как отменённые."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Without completed sets: %@. These sessions will be saved as cancelled."
+          }
+        }
+      }
+    },
+    "Без длительности: %@. В истории будет «—».": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Без длительности: %@. В истории будет «—»."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Without a duration: %@. History will show a dash."
+          }
+        }
+      }
+    },
     "Библиотека FitnessTracker": {
       "extractionState": "manual",
       "localizations": {
@@ -987,6 +1072,57 @@
         }
       }
     },
+    "В CSV нет тренировок для импорта.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "В CSV нет тренировок для импорта."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The CSV contains no workouts to import."
+          }
+        }
+      }
+    },
+    "В CSV отсутствуют необходимые столбцы журнала тренировок.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "В CSV отсутствуют необходимые столбцы журнала тренировок."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The CSV is missing required workout log columns."
+          }
+        }
+      }
+    },
+    "В исходном файле нет длительности тренировки. Экспорт в «Здоровье» недоступен.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "В исходном файле нет длительности тренировки. Экспорт в «Здоровье» недоступен."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The source file has no workout duration. Export to Health is unavailable."
+          }
+        }
+      }
+    },
     "В одном файле допускается до 10 000 тренировок и 1 000 планов.": {
       "extractionState": "manual",
       "localizations": {
@@ -1038,6 +1174,23 @@
         }
       }
     },
+    "В строке CSV указано некорректное значение.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "В строке CSV указано некорректное значение."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A CSV row contains an invalid value."
+          }
+        }
+      }
+    },
     "В файле обнаружены повторяющиеся записи. Импорт не выполнен.": {
       "extractionState": "manual",
       "localizations": {
@@ -1068,6 +1221,57 @@
           "stringUnit": {
             "state": "translated",
             "value": "No workouts on this day"
+          }
+        }
+      }
+    },
+    "ВЕС КГ": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ВЕС КГ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "WEIGHT KG"
+          }
+        }
+      }
+    },
+    "ВРЕМЯ": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ВРЕМЯ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TIME"
+          }
+        }
+      }
+    },
+    "ВРЕМЯ С": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ВРЕМЯ С"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TIME S"
           }
         }
       }
@@ -1735,6 +1939,23 @@
         }
       }
     },
+    "Выберите файл .fitnesstracker, .json или .csv.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выберите файл .fitnesstracker, .json или .csv."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a .fitnesstracker, .json or .csv file."
+          }
+        }
+      }
+    },
     "Выбрать файл": {
       "extractionState": "manual",
       "localizations": {
@@ -1888,6 +2109,23 @@
         }
       }
     },
+    "ДАТА": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ДАТА"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "DATE"
+          }
+        }
+      }
+    },
     "ДЕМО · ": {
       "extractionState": "manual",
       "localizations": {
@@ -1901,6 +2139,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "DEMO · "
+          }
+        }
+      }
+    },
+    "ДИСТАНЦИЯ КМ": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ДИСТАНЦИЯ КМ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "DISTANCE KM"
           }
         }
       }
@@ -2003,6 +2258,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Weigh-in date"
+          }
+        }
+      }
+    },
+    "Даты CSV прочитаны в часовом поясе %@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Даты CSV прочитаны в часовом поясе %@."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CSV dates were read in the %@ time zone."
           }
         }
       }
@@ -2598,6 +2870,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Overhead press"
+          }
+        }
+      }
+    },
+    "ЗАМЕТКА": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ЗАМЕТКА"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "NOTE"
           }
         }
       }
@@ -3469,6 +3758,23 @@
         }
       }
     },
+    "МНОЖИТЕЛЬ": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "МНОЖИТЕЛЬ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MULTIPLIER"
+          }
+        }
+      }
+    },
     "Максимальный вес": {
       "extractionState": "manual",
       "localizations": {
@@ -3516,6 +3822,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Maximum: %@"
+          }
+        }
+      }
+    },
+    "Множитель веса должен быть от 1 до 10.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Множитель веса должен быть от 1 до 10."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The load multiplier must be between 1 and 10."
+          }
+        }
+      }
+    },
+    "Множитель веса: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Множитель веса: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Load multiplier: %@"
           }
         }
       }
@@ -3754,6 +4094,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Find heart rate monitor"
+          }
+        }
+      }
+    },
+    "Нарушен формат CSV: проверьте разделители и кавычки.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нарушен формат CSV: проверьте разделители и кавычки."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The CSV is malformed. Check separators and quotation marks."
           }
         }
       }
@@ -4213,6 +4570,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Couldn’t read history. Try reopening the app."
+          }
+        }
+      }
+    },
+    "Не удалось прочитать кодировку CSV. Сохраните файл в UTF-8.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось прочитать кодировку CSV. Сохраните файл в UTF-8."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not read the CSV encoding. Save the file as UTF-8."
           }
         }
       }
@@ -4744,6 +5118,23 @@
         }
       }
     },
+    "ОТДЫХ С": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ОТДЫХ С"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "REST S"
+          }
+        }
+      }
+    },
     "Обнаружены повторяющиеся идентификаторы.": {
       "extractionState": "manual",
       "localizations": {
@@ -5203,6 +5594,57 @@
         }
       }
     },
+    "ПОВТОРЕНИЯ": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ПОВТОРЕНИЯ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "REPS"
+          }
+        }
+      }
+    },
+    "ПРОПУЩЕН": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ПРОПУЩЕН"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SKIPPED"
+          }
+        }
+      }
+    },
+    "ПРОПУЩЕННЫЙ": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ПРОПУЩЕННЫЙ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SKIPPED"
+          }
+        }
+      }
+    },
     "Пауза": {
       "extractionState": "manual",
       "localizations": {
@@ -5556,6 +5998,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Supports .fitnesstracker and .json, including the original single-workout JSON export."
+          }
+        }
+      }
+    },
+    "Поддерживаются .fitnesstracker, .json и CSV-журнал тренировок. Можно выбрать файл из другого приложения.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Поддерживаются .fitnesstracker, .json и CSV-журнал тренировок. Можно выбрать файл из другого приложения."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supports .fitnesstracker, .json and workout log CSV files. You can choose a file exported by another app."
           }
         }
       }
@@ -6954,6 +7413,57 @@
         }
       }
     },
+    "Строка %@: нарушен формат CSV. Проверьте кавычки и разделители.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Строка %@: нарушен формат CSV. Проверьте кавычки и разделители."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Row %@: malformed CSV. Check quotation marks and separators."
+          }
+        }
+      }
+    },
+    "Строка %@: подходы с дистанцией или временем пока не поддерживаются.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Строка %@: подходы с дистанцией или временем пока не поддерживаются."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Row %@: distance and timed sets are not supported yet."
+          }
+        }
+      }
+    },
+    "Строка %@: проверьте поле «%@».": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Строка %@: проверьте поле «%@»."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Row %@: check the “%@” field."
+          }
+        }
+      }
+    },
     "Существующие записи сохранятся. Повторные UUID пропускаются, даже если содержимое отличается.": {
       "extractionState": "manual",
       "localizations": {
@@ -6967,6 +7477,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Existing records will be kept. Duplicate UUIDs are skipped even when their contents differ."
+          }
+        }
+      }
+    },
+    "ТРЕНИРОВКА": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ТРЕНИРОВКА"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "WORKOUT"
           }
         }
       }
@@ -7205,6 +7732,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dark"
+          }
+        }
+      }
+    },
+    "УПРАЖНЕНИЕ": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "УПРАЖНЕНИЕ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EXERCISE"
           }
         }
       }
@@ -7855,6 +8399,23 @@
         }
       }
     },
+    "да": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "да"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "yes"
+          }
+        }
+      }
+    },
     "инвентарь": {
       "extractionState": "manual",
       "localizations": {
@@ -7868,6 +8429,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "equipment"
+          }
+        }
+      }
+    },
+    "нет": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "нет"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "no"
           }
         }
       }

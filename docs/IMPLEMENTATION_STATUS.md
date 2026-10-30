@@ -59,14 +59,17 @@
 | BodyWeightViewModel / BodyWeightEditorModel | Да | Да, реальное исполнение PortableWeightChecks и Swift 6 type-check | UI отдельно | Нет |
 | Карточка Весы, история, вес active/completed workout и SwiftData bodyWeight records | Да | Только syntax parse/resources/lint; Apple unit/UI tests написаны, не запускались | Да, persistence, ошибки сохранения, sheets, keyboard, RU/EN и signing | Существующая конфигурация; новых capabilities нет |
 | Результаты по новым референсам: квадратные дни календаря, крупные карточки, нейтральные поверхности и контурные tabs | Да | Только syntax parse/resources/lint; визуальной проверки не было | Да, узкий экран, 4–6 рядов, Dynamic Type, dark mode, TabView symbols и сравнение с референсом | Обычный signing |
+| FitSession CSV: parser, обе схемы, UUID v5, zero reps, multiplier и archive v3/v1/v2 migration | Да | Да, 13 новых Core tests и полная проверка обоих пользовательских CSV в Memory repository | Нет для Core | Нет |
+| CSV picker/Files, preview, локализованные ошибки и неизвестная длительность | Да | PortableCSVChecks проверяет decode/round-trip/reimport/форматирование; Apple sources — только parser/lint/resources | Да, document types, iCloud Drive, SwiftData и написанные Apple unit tests | Обычный signing; новых capabilities нет |
+
 
 ## Фактические проверки
 
 - `swift build`: прошёл для FitnessTrackerCore на Linux.
-- `swift test`: прошли 99 Swift Testing tests, включая parameterized cases. Стандартный XCTest runner также печатает «0 tests» — Core использует отдельный Swift Testing runner, его итоговая строка содержит 99 tests.
+- `swift test`: прошли 112 Swift Testing tests, включая parameterized cases. Стандартный XCTest runner также печатает «0 tests» — Core использует отдельный Swift Testing runner, его итоговая строка содержит 112 tests.
 - Отдельный Swift 6 strict-concurrency type-check без Apple SDK: HistoryViewModel, ProgressViewModel, ExerciseProgressViewModel, BodyWeightViewModel/BodyWeightEditorModel, ExerciseLibraryViewModel, ExerciseImageLoader, CloudAccountChecking, WidgetSnapshot, AppCapabilities, L10n и WorkoutFormatting. Это проверка типов указанной переносимой части, не функциональный тест и не сборка iOS target.
 - Swift formatting/lint, синтаксический разбор Apple Swift, структура/конфигурационные связи, plist/JSON, PNG и наличие ресурсов: прошли в `bash scripts/check-linux.sh`. Для Dynamic Island parser проверяет обе ветви shared intents: основной target с FITNESS_TRACKER_APP и widget extension без него.
-- Локализация: 469 ключей RU/EN и четыре InfoPlist-строки, placeholders, формы счётчиков, покрытие русских ключей, target resources и повторяемость генерации — прошли. Компиляция `.xcstrings` в Xcode не проверена; сценарии — [LOCALIZATION.md](LOCALIZATION.md).
+- Локализация: 503 ключа RU/EN и четыре InfoPlist-строки, placeholders, формы счётчиков, покрытие русских ключей, target resources и повторяемость генерации — прошли. Компиляция `.xcstrings` в Xcode не проверена; сценарии — [LOCALIZATION.md](LOCALIZATION.md).
 - В сессии использован внешний Swift 6.2.1 через SWIFT_BIN; для постоянной установки предусмотрен `setup-linux.sh`, toolchain не хранится в git.
 - Переносимая tracker-подсистема дополнительно исполнена в `Tests/PortableTrackerChecks/main.swift`: recording/pause, save failure/retry, mode race, минимальные permissions, history, real file round-trip/corruption/delete. Это не тест HealthKit/CoreBluetooth.
 - Исполнен `Tests/PortableProgressChecks/main.swift`: выбор упражнения/точки, периоды, bodyweight, удаление, точный workout UUID при совпадающей дате и связь с ProgressViewModel. Это не тест SwiftUI/Charts.
@@ -94,3 +97,5 @@ Watch записывает отдельный стартовый план и п�
 Изолированные демонстрационные тренировки: [DEMO_DATA.md](DEMO_DATA.md). Демо хранится в памяти и сбрасывается при выходе/завершении процесса; настройки приложения общие с личным профилем.
 
 Фиксация веса и перенос данных: [BODY_WEIGHT.md](BODY_WEIGHT.md).
+
+Импорт двух CSV-вариантов: [CSV_IMPORT.md](CSV_IMPORT.md). Новый экспорт — v3; старые v1/v2 читаются.

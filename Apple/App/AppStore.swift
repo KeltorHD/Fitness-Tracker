@@ -376,6 +376,10 @@ import WidgetKit
       error = "Демонстрационные тренировки не отправляются в «Здоровье»."
       return
     }
+    guard workout.durationIsKnown != false else {
+      error = "В исходном файле нет длительности тренировки. Экспорт в «Здоровье» недоступен."
+      return
+    }
     do {
       try Task.checkCancellation()
       try await health.requestAuthorization()

@@ -49,6 +49,24 @@ import XCTest
 }
 
 @MainActor final class AppStoreTests: XCTestCase {
+  func testUnknownImportedDurationNeverRequestsHealthWritePermission() async throws {
+    let repository = MemoryWorkoutRepository()
+    var workout = Workout(name: "CSV fixture", startedAt: Date(timeIntervalSince1970: 100))
+    workout.exercises = [
+      WorkoutExercise(
+        exercise: ExerciseCatalog.all[0],
+        sets: [WorkoutSet(weightKG: 40, completedAt: workout.startedAt)])
+    ]
+    try WorkoutEngine.finish(&workout, at: workout.startedAt)
+    workout.durationIsKnown = false
+    try repository.save(workout)
+    let health = RecordingHealthExporter()
+    let store = AppStore(repository: repository, health: health, platformServicesEnabled: false)
+    await store.exportHealth(workout)
+    XCTAssertFalse(health.authorized)
+    XCTAssertTrue(health.exported.isEmpty)
+    XCTAssertNotNil(store.error)
+  }
   func testFailedWeightReadPreservesTheEntirePreviousSnapshot() throws {
     let repository = FailingWorkoutRepository()
     let original = BodyWeightEntry(weightKG: 72)

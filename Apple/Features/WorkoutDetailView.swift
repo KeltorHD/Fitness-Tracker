@@ -22,7 +22,7 @@ struct WorkoutDetailView: View {
           HStack(spacing: 8) {
             SummaryMetric(
               title: L10n.text("Время", locale: locale),
-              value: session.duration().formattedWorkoutDuration(locale: locale))
+              value: session.formattedRecordedDuration(locale: locale))
             SummaryMetric(
               title: L10n.text("Объём", locale: locale),
               value:
@@ -82,7 +82,16 @@ struct WorkoutDetailView: View {
             WorkoutHeartRateView(workout: session, tracker: store.tracker)
             Button(L10n.text("Экспорт в «Здоровье»", locale: locale), systemImage: "heart") {
               exporting = true
-            }.disabled(exporting).frame(maxWidth: .infinity, alignment: .leading)
+            }.disabled(exporting || session.durationIsKnown == false).frame(
+              maxWidth: .infinity, alignment: .leading)
+            if session.durationIsKnown == false {
+              Text(
+                L10n.text(
+                  "В исходном файле нет длительности тренировки. Экспорт в «Здоровье» недоступен.",
+                  locale: locale)
+              )
+              .font(.footnote).foregroundStyle(.secondary)
+            }
           }
           Text(
             L10n.text(
@@ -200,8 +209,12 @@ struct WorkoutDetailView: View {
     }
   }
   private func setSummary(_ exercise: WorkoutExercise) -> String {
-    exercise.sets.filter { $0.completedAt != nil }.map {
-      "\(unit.display($0.weightKG).formatted(.number.locale(L10n.numberLocale).precision(.fractionLength(0...1)))) \(L10n.text(unit.rawValue, locale: locale)) × \($0.repetitions)"
+    exercise.sets.filter { $0.completedAt != nil }.map { set in
+      let base =
+        "\(unit.display(set.weightKG).formatted(.number.locale(L10n.numberLocale).precision(.fractionLength(0...1)))) \(L10n.text(unit.rawValue, locale: locale)) × \(set.repetitions)"
+      return (set.loadMultiplier ?? 1) > 1
+        ? L10n.format("%@ · множитель %@", base, String(set.loadMultiplier ?? 1), locale: locale)
+        : base
     }.joined(separator: ", ")
   }
   private func createTemplate() {

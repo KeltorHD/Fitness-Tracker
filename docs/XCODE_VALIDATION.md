@@ -219,3 +219,17 @@
 - [ ] Запустить новые PersistenceTests/AppStoreTests и UI tests: testBodyWeightCanBeRecordedFromResults, testBodyWeightIsSavedOnAnActiveWorkout, testHistoryMonthMenuPreservesCalendarNavigation. На Linux эти Apple-тесты не запускались.
 
 [Фиксация веса](BODY_WEIGHT.md), [оформление по референсу](REFERENCE_DESIGN.md).
+
+## Импорт CSV
+
+- [ ] Обновить проект; picker разрешает CSV, Files/Open in FitnessTracker и iCloud Drive открывают оба варианта экспорта с ПРОПУЩЕН/ПРОПУЩЕННЫЙ. Нет дополнительных capabilities.
+- [ ] До подтверждения repository не меняется. Импортировать оба файла по очереди; повторный импорт пропускает прежние UUID. Разная пунктуация не объединяет разные названия. Проверить существующие личные записи и demo isolation.
+- [ ] Предпросмотр показывает число записей, текущий timezone и неизвестную длительность. Даты на границе суток/года/DST корректны. Если source TZ отличается, установить нужный timezone устройства до импорта.
+- [ ] Множитель ×2 сохраняет вес одного снаряда и удваивает только объём; display/repeat/template/JSON round-trip сохраняют множитель. Ноль повторений остаётся невыполненным; completeSet не разрешает завершить нулевой подход.
+- [ ] Нет общей длительности: дневник/detail показывают «—», HealthKit button disabled и authorization не запрашивается. Repeat запускает новый обычный таймер. Не генерируются body weight, калории или паузы.
+- [ ] Кавычки, UTF-8 BOM, CRLF, многострочные заметки, десятичная запятая, повторяющиеся одинаковые подходы и группы более 30 подходов сохраняются. Некорректная строка отклоняет весь импорт с номером строки/полем без приватных значений.
+- [ ] Ошибка чтения/security-scoped URL, cancellation и отказ SwiftData save оставляют исходные данные/preview для повтора. Применение идёт одним save/rollback.
+- [ ] Новый экспорт v3 переносит multiplier/unknown-duration/zero reps; v1/v2 и прежний одиночный JSON читаются с прежней семантикой. Старое приложение отклоняет v3 вместо неверного расчёта объёма.
+- [ ] RU/EN errors и подсказки, VoiceOver, длинные имена, sheet/alert routing; запустить новые ArchiveTransferTests и AppStoreTests. На Linux эти Apple-тесты не выполнялись.
+
+[Документация CSV](CSV_IMPORT.md).

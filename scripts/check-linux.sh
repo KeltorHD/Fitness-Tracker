@@ -50,6 +50,12 @@ echo 'Portable presentation/data subset: Swift 6 type check passed (no Apple SDK
   "$bin_path"/FitnessTrackerCore.build/*.swift.o Apple/Features/BodyWeightViewModel.swift \
   Tests/PortableWeightChecks/main.swift -o "$bin_path/portable-weight-checks"
 "$bin_path/portable-weight-checks"
+"$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
+  -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \
+  "$bin_path"/FitnessTrackerCore.build/*.swift.o Apple/Design/WorkoutFormatting.swift Apple/Shared/L10n.swift \
+  Tests/PortableCSVChecks/main.swift \
+  -o "$bin_path/portable-csv-checks"
+"$bin_path/portable-csv-checks"
 # Exercise the real tracker presentation/storage subset with fakes, without radio/HealthKit calls.
 "$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
   -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \

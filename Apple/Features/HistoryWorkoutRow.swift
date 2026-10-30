@@ -30,7 +30,7 @@ struct HistoryWorkoutRow: View {
             Text(workout.name).font(.title3.weight(.semibold)).foregroundStyle(.primary)
             Text(
               L10n.format(
-                "workout.row.summary", workout.duration().formattedWorkoutDuration(locale: locale),
+                "workout.row.summary", workout.formattedRecordedDuration(locale: locale),
                 String(
                   unit.display(workout.volume).formatted(
                     .number.locale(L10n.numberLocale).precision(.fractionLength(0)))),

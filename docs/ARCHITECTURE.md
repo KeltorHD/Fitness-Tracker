@@ -75,3 +75,9 @@ TrainingJournal в Core группирует completed sessions по недел�
 `BodyWeightEntry` использует тот же repository и ModelContext с kind `bodyWeight`; второй store/context не создаётся. `Workout.bodyWeightKG` — необязательный снимок веса тела, старые payloads декодируются с nil. `BodyWeightSummary` объединяет отдельные взвешивания и веса завершённых тренировок без копирования записей между источниками. Вес тела не входит в объём/1ПМ снарядов и автоматически не экспортируется в HealthKit.
 
 `BodyWeightViewModel` готовит сводку/строки истории, `BodyWeightEditorModel` строго разбирает локализованный ввод и сохраняет исходную точность при изменении одной даты. AppStore публикует workouts/templates/bodyWeights только после успешного чтения всех трёх коллекций. Демо использует тот же изолированный memory workspace. Повторная доставка Watch использует additive import и сохраняет правки веса на телефоне. Архив v2 переносит все источники веса, v1 мигрирует явно. [Полные правила](BODY_WEIGHT.md).
+
+## CSV interoperability
+
+FitSessionCSVImporter преобразует CSV вне MainActor в валидированный WorkoutArchive; ArchiveFileService выбирает decoder по расширению. CSV и JSON используют общий preview/ArchiveImportPlan и одну транзакцию. UUID v5 зависят от исходной локальной даты/времени и точного нормализованного названия, не от файла/TZ. Отдельные типы ошибок передают UI только строку/столбец без содержимого данных.
+
+Optional loadMultiplier сохраняет номинальный вес, изменяя только объём; repeat/templates сохраняют множитель. Validation допускает ноль повторений только для невыполненного подхода при чтении Workout; completeSet/template validation остаются строгими. Optional durationIsKnown=false отделяет технический end timestamp CSV от реального измерения времени. UI показывает прочерк, HealthKit guard срабатывает до authorization. Архив v3 читает v1/v2 со значениями по умолчанию прежней семантики. [Правила](CSV_IMPORT.md).

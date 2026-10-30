@@ -11,6 +11,15 @@ struct ArchiveImportPreview {
   let archive: WorkoutArchive
   let fileName: String
   let summary: ArchiveImportSummary
+  let unknownDurationCount: Int
+  let cancelledCount: Int
+  init(archive: WorkoutArchive, fileName: String, summary: ArchiveImportSummary) {
+    self.archive = archive
+    self.fileName = fileName
+    self.summary = summary
+    unknownDurationCount = archive.workouts.filter { $0.durationIsKnown == false }.count
+    cancelledCount = archive.workouts.filter { $0.status == .cancelled }.count
+  }
 }
 
 @MainActor @Observable final class ArchiveTransferViewModel {

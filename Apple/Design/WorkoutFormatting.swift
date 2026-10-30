@@ -1,4 +1,11 @@
+import FitnessTrackerCore
 import Foundation
+
+extension Workout {
+  func formattedRecordedDuration(locale: Locale) -> String {
+    durationIsKnown == false ? "—" : duration().formattedWorkoutDuration(locale: locale)
+  }
+}
 
 extension TimeInterval {
   func formattedWorkoutDuration(locale: Locale) -> String {

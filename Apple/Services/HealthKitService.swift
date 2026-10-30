@@ -13,6 +13,10 @@ import HealthKit
   }
   func export(_ workout: Workout) async throws {
     try Validation.workout(workout)
+    guard workout.durationIsKnown != false else {
+      throw ServiceError.unavailable(
+        "В исходном файле нет длительности тренировки. Экспорт в «Здоровье» недоступен.")
+    }
     guard workout.status == .completed, let end = workout.endedAt else {
       throw TrainingError.invalidState
     }

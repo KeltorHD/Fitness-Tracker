@@ -227,6 +227,10 @@ private struct SetEditor: View {
         Text(L10n.text("Разминочный подход", locale: locale)).font(.caption).foregroundStyle(
           .secondary)
       }
+      if let multiplier = set.loadMultiplier, multiplier > 1 {
+        Text(L10n.format("Множитель веса: %@", String(multiplier), locale: locale))
+          .font(.caption).foregroundStyle(.secondary)
+      }
     }
     .onAppear {
       weight = unit.display(set.weightKG).formatted(

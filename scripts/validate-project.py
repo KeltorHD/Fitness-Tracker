@@ -90,6 +90,8 @@ assert document_types['com.fitnesstracker.archive']['LSHandlerRank'] == 'Owner'
 assert document_types['com.fitnesstracker.archive']['CFBundleTypeRole'] == 'Viewer'
 assert document_types['com.fitsession.archive']['LSHandlerRank'] == 'Owner'
 assert document_types['public.json']['LSHandlerRank'] == 'Alternate'
+assert document_types['public.comma-separated-values-text']['LSHandlerRank'] == 'Alternate'
+assert document_types['public.comma-separated-values-text']['CFBundleTypeRole'] == 'Viewer'
 legacy_type = next(item for item in app['UTExportedTypeDeclarations']
                    if item['UTTypeIdentifier'] == 'com.fitsession.archive')
 assert legacy_type['UTTypeTagSpecification']['public.filename-extension'] == ['fitsession']
