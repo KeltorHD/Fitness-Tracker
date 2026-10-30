@@ -1939,6 +1939,23 @@
         }
       }
     },
+    "Для завершения отметьте хотя бы один выполненный подход.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Для завершения отметьте хотя бы один выполненный подход."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mark at least one set as completed to finish the workout."
+          }
+        }
+      }
+    },
     "Для собственного упражнения можно сохранить технику в заметках тренировки.": {
       "extractionState": "manual",
       "localizations": {
@@ -2326,6 +2343,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Finish"
+          }
+        }
+      }
+    },
+    "Завершить тренировку": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Завершить тренировку"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finish workout"
           }
         }
       }

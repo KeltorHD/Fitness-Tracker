@@ -89,6 +89,11 @@ final class FitnessTrackerUITests: XCTestCase {
     let start = app.buttons["startWorkout"]
     XCTAssertTrue(start.waitForExistence(timeout: 10))
     start.tap()
+    let finish = app.buttons["finishWorkout"]
+    XCTAssertTrue(finish.waitForExistence(timeout: 5))
+    XCTAssertTrue(finish.isHittable)
+    XCTAssertFalse(finish.isEnabled)
+    XCTAssertTrue(app.staticTexts["finishWorkoutHint"].exists)
     app.buttons["addExercise"].tap()
     app.searchFields.firstMatch.tap()
     app.searchFields.firstMatch.typeText("Приседания")
@@ -101,8 +106,12 @@ final class FitnessTrackerUITests: XCTestCase {
     let complete = app.buttons["completeSet"].firstMatch
     XCTAssertTrue(complete.waitForExistence(timeout: 5))
     complete.tap()
-    let finish = app.buttons["finishWorkout"]
     XCTAssertTrue(finish.waitForExistence(timeout: 5))
+    XCTAssertTrue(finish.isEnabled)
+    XCTAssertTrue(finish.isHittable)
+    XCTAssertFalse(app.staticTexts["finishWorkoutHint"].exists)
+    app.buttons["pauseWorkout"].tap()
+    XCTAssertTrue(finish.isEnabled)
     finish.tap()
     let alert = app.alerts["Готово"]
     if alert.waitForExistence(timeout: 3) { alert.buttons["Хорошо"].tap() }
@@ -116,5 +125,9 @@ final class FitnessTrackerUITests: XCTestCase {
     app.buttons["Свернуть"].tap()
     app.buttons["startWorkout"].tap()
     XCTAssertTrue(app.buttons["addExercise"].waitForExistence(timeout: 5))
+    let finish = app.buttons["finishWorkout"]
+    XCTAssertTrue(finish.exists)
+    XCTAssertTrue(finish.isHittable)
+    XCTAssertFalse(finish.isEnabled)
   }
 }

@@ -72,7 +72,7 @@
 | --- | --- |
 | Root TabView / NavigationStack | Нативные панели iOS 26, safe areas, landscape/iPad и подписи вкладок |
 | DashboardView / MetricView | Размеры текста, контраст акцента, отсутствие обрезки русских строк |
-| SessionControls | `GlassEffectContainer`, появление finish action, `glassEffectID`/`matchedGeometry`, стили glass/glassProminent; клавиатура и узкий iPhone |
+| SessionControls | Всегда видимая «Завершить тренировку», disabled до первого выполненного подхода и пояснение; `GlassEffectContainer`, `glassEffectID`/`matchedGeometry`, стили glass/glassProminent; горизонтальная/вертикальная раскладка, клавиатура и узкий iPhone |
 | RestPill | Нативный `.glassEffect()`, читаемость countdown, остановка на нуле |
 | ActiveWorkoutView / SetEditor | decimal separator, кг/фунты, warmup, пауза, повторный completion заблокирован, заметки, отказ сохранения |
 | ExercisePicker / CustomExerciseView | Поиск, длинные названия, свой exercise, вложенные sheets |
@@ -178,3 +178,13 @@
 - [ ] Запустить UI-тест открытия/выхода; проверить переходы по вкладкам после сброса навигации и повторное открытие/закрытие профиля.
 
 [Состав и ограничения демо](DEMO_DATA.md).
+
+## Доступность завершения тренировки
+
+- [ ] Начать пустую тренировку: кнопка «Завершить тренировку» сразу видна в нижней закреплённой панели без прокрутки, неактивна; текст объясняет необходимость отметить выполненный подход.
+- [ ] Добавить упражнение и отметить подход: кнопка включается, пояснение скрывается. Завершить активную тренировку, затем повторить с паузой; запись появляется в дневнике после успешного сохранения.
+- [ ] Свернуть и открыть сессию, прокрутить длинную тренировку, открыть клавиатуру веса/повторов: кнопка остаётся доступной; интерактивное скрытие клавиатуры работает. Проверить ошибку сохранения: сессия остаётся открытой для повтора.
+- [ ] Узкий iPhone, landscape, английский и крупный Dynamic Type: горизонтальная раскладка при недостатке места заменяется вертикальной; подписи, VoiceOver, disabled-контраст и нажатия проверены на устройстве.
+- [ ] Запустить обновлённые `testLogSetAndFindWorkoutInHistory` и `testMinimizedSessionCanBeResumed`. На Linux эти XCTest UI tests не запускались.
+
+Выбор раскладки использует нативный [ViewThatFits](https://developer.apple.com/documentation/swiftui/viewthatfits); [Liquid Glass API](https://developer.apple.com/documentation/swiftui/applying-liquid-glass-to-custom-views) сохранены. Результат требует проверки rendering и SDK в Xcode.

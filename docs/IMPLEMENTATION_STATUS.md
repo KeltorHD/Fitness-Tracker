@@ -51,6 +51,7 @@
 | FitnessTracker: product/targets/Core rename, RU/EN, новые экспорты и прежние identities | Да | Да, 78 Core tests, старый envelope → новый экспорт, стабильные paths/URLs и aliases, branding validator | Да, Xcode generation и обновление установленного app/Watch/widgets/store | Существующие Team/Bundle ID/App Group/CloudKit |
 | DemoWorkoutData / WorkoutWorkspaceRepository: 24 тренировки, 3 плана, изоляция и безопасное переключение | Да | Да, 5 новых Core tests: RU/EN, DST, стабильные IDs, совпадающие UUID, reset и ошибки чтения | Нет для Core | Нет |
 | Демо-профиль в настройках, баннеры, reset/выход, guards внешних интеграций | Да | Только syntax parse, ресурсы и lint; AppStore/UI tests написаны, не запускались | Да, переключение, навигация, integration guards и accessibility | Обычный signing; дополнительных capabilities нет |
+| SessionControls: всегда видимое завершение, пояснение до первого подхода и адаптивная раскладка | Да | Только syntax parse, локализация и lint; UI tests обновлены, не запускались | Да, клавиатура, Dynamic Type, узкий экран, завершение active/paused | Обычный signing; дополнительных capabilities нет |
 
 ## Фактические проверки
 
@@ -58,7 +59,7 @@
 - `swift test`: прошли 83 Swift Testing tests, включая parameterized cases. Стандартный XCTest runner также печатает «0 tests» — Core использует отдельный Swift Testing runner, его итоговая строка содержит 83 tests.
 - Отдельный Swift 6 strict-concurrency type-check без Apple SDK: HistoryViewModel, ProgressViewModel, ExerciseLibraryViewModel, ExerciseImageLoader, CloudAccountChecking, WidgetSnapshot, AppCapabilities, L10n и WorkoutFormatting. Это проверка типов указанной переносимой части, не функциональный тест и не сборка iOS target.
 - Swift formatting/lint, синтаксический разбор Apple Swift, структура/конфигурационные связи, plist/JSON, PNG и наличие ресурсов: прошли в `bash scripts/check-linux.sh`. Для Dynamic Island parser проверяет обе ветви shared intents: основной target с FITNESS_TRACKER_APP и widget extension без него.
-- Локализация: 416 ключей RU/EN и четыре InfoPlist-строки, placeholders, формы счётчиков, покрытие русских ключей, target resources и повторяемость генерации — прошли. Компиляция `.xcstrings` в Xcode не проверена; сценарии — [LOCALIZATION.md](LOCALIZATION.md).
+- Локализация: 418 ключей RU/EN и четыре InfoPlist-строки, placeholders, формы счётчиков, покрытие русских ключей, target resources и повторяемость генерации — прошли. Компиляция `.xcstrings` в Xcode не проверена; сценарии — [LOCALIZATION.md](LOCALIZATION.md).
 - В сессии использован внешний Swift 6.2.1 через SWIFT_BIN; для постоянной установки предусмотрен `setup-linux.sh`, toolchain не хранится в git.
 - Переносимая tracker-подсистема дополнительно исполнена в `Tests/PortableTrackerChecks/main.swift`: recording/pause, save failure/retry, mode race, минимальные permissions, history, real file round-trip/corruption/delete. Это не тест HealthKit/CoreBluetooth.
 - XcodeGen generation, iOS/watchOS compilation, linking, Simulator, SwiftUI rendering и реальные Apple-сервисы **не проверены**. Linux CI не заменяет эти проверки.

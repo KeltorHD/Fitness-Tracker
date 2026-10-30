@@ -38,40 +38,60 @@ struct SessionControls: View {
   @Namespace private var controls
   let workout: Workout
   var body: some View {
-    // Requires Xcode validation: morphing, touch response, accessibility contrast.
-    GlassEffectContainer(spacing: 20) {
-      HStack(spacing: 20) {
-        Button {
-          withAnimation(reduceMotion ? nil : .smooth) {
-            store.mutate { value in
-              if value.status == .paused {
-                try WorkoutEngine.resume(&value)
-              } else {
-                try WorkoutEngine.pause(&value)
-              }
-            }
+    // Requires Xcode validation: narrow screens, keyboard, Dynamic Type and glass contrast.
+    VStack(spacing: 8) {
+      GlassEffectContainer(spacing: 12) {
+        ViewThatFits(in: .horizontal) {
+          HStack(spacing: 12) {
+            pauseButton
+            finishButton
           }
-        } label: {
-          Label(
-            workout.status == .paused
-              ? L10n.text("Продолжить", locale: locale) : L10n.text("Пауза", locale: locale),
-            systemImage: workout.status == .paused ? "play.fill" : "pause.fill")
+          VStack(spacing: 12) {
+            finishButton
+            pauseButton
+          }
         }
-        .buttonStyle(.glass)
-        .glassEffectID("pause", in: controls)
-        if workout.completedSets > 0 {
-          Button(L10n.text("Завершить", locale: locale), systemImage: "checkmark") {
-            store.finish()
+        .labelStyle(.titleAndIcon)
+        .controlSize(.large)
+      }
+      if workout.completedSets == 0 {
+        Text(L10n.text("Для завершения отметьте хотя бы один выполненный подход.", locale: locale))
+          .font(.footnote).foregroundStyle(.secondary).multilineTextAlignment(.center)
+          .accessibilityIdentifier("finishWorkoutHint")
+      }
+    }
+    .frame(maxWidth: .infinity).padding().background(FitTheme.paper)
+  }
+  private var pauseButton: some View {
+    Button {
+      withAnimation(reduceMotion ? nil : .smooth) {
+        store.mutate { value in
+          if value.status == .paused {
+            try WorkoutEngine.resume(&value)
+          } else {
+            try WorkoutEngine.pause(&value)
           }
-          .buttonStyle(.glassProminent)
-          .glassEffectID("finish", in: controls)
-          .glassEffectTransition(.matchedGeometry)
-          .accessibilityIdentifier("finishWorkout")
         }
       }
-      .controlSize(.large)
+    } label: {
+      Label(
+        workout.status == .paused
+          ? L10n.text("Продолжить", locale: locale) : L10n.text("Пауза", locale: locale),
+        systemImage: workout.status == .paused ? "play.fill" : "pause.fill")
     }
-    .padding()
+    .buttonStyle(.glass)
+    .glassEffectID("pause", in: controls)
+    .accessibilityIdentifier("pauseWorkout")
+  }
+  private var finishButton: some View {
+    Button(L10n.text("Завершить тренировку", locale: locale), systemImage: "checkmark") {
+      store.finish()
+    }
+    .buttonStyle(.glassProminent)
+    .glassEffectID("finish", in: controls)
+    .glassEffectTransition(.matchedGeometry)
+    .disabled(workout.completedSets == 0)
+    .accessibilityIdentifier("finishWorkout")
   }
 }
 

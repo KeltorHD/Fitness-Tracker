@@ -19,7 +19,7 @@
 
 ## Ресурсы и изменения переводов
 
-`Resources/Localizable.xcstrings` — нативный String Catalog с 416 ключами RU/EN, включая демо-профиль, общий для iOS, widgets и Watch. `Resources/InfoPlist.xcstrings` — четыре строки главного приложения. Xcode компилирует их в `.lproj` resources. `L10n` читает обычные локализованные bundles; подмены Bundle и глобального изменяемого состояния нет. Для динамических строк Core сохраняет прежние русские error descriptions, а Apple presentation переводит их перед показом.
+`Resources/Localizable.xcstrings` — нативный String Catalog с 418 ключами RU/EN, включая демо-профиль, общий для iOS, widgets и Watch. `Resources/InfoPlist.xcstrings` — четыре строки главного приложения. Xcode компилирует их в `.lproj` resources. `L10n` читает обычные локализованные bundles; подмены Bundle и глобального изменяемого состояния нет. Для динамических строк Core сохраняет прежние русские error descriptions, а Apple presentation переводит их перед показом.
 
 Исходники переводов интерфейса — `Data/Localization/Interface.en.json` и RU overrides в `Interface.ru.json`. Новая русская строка обычно служит ключом; форматированные сообщения принимают String-аргументы `%@`. Для счётчиков используются явные формы `one/few/many/other`, выбранные проверенными правилами AppLanguage. При добавлении языка нужны его правила и все переводы.
 

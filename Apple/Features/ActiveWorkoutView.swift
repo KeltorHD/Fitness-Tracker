@@ -84,6 +84,7 @@ struct ActiveWorkoutView: View {
           }
         }
         .listStyle(.plain).scrollContentBackground(.hidden).background(FitTheme.paper)
+        .scrollDismissesKeyboard(.interactively)
         .navigationTitle("").navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(FitTheme.accent, for: .navigationBar).toolbarBackground(
           .visible, for: .navigationBar
