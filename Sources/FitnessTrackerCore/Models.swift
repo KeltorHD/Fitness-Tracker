@@ -35,17 +35,23 @@ public struct WorkoutSet: Identifiable, Codable, Equatable, Sendable {
   public var weightKG: Double
   public var isWarmup: Bool
   public var completedAt: Date?
+  /// Number of equal implements contributing to volume; nil preserves legacy single-load semantics.
+  public var loadMultiplier: Int?
   public init(
     id: UUID = UUID(), repetitions: Int = 8, weightKG: Double = 0,
-    isWarmup: Bool = false, completedAt: Date? = nil
+    isWarmup: Bool = false, completedAt: Date? = nil, loadMultiplier: Int? = nil
   ) {
     self.id = id
     self.repetitions = repetitions
     self.weightKG = weightKG
     self.isWarmup = isWarmup
     self.completedAt = completedAt
+    self.loadMultiplier = loadMultiplier
   }
-  public var volume: Double { completedAt == nil || isWarmup ? 0 : weightKG * Double(repetitions) }
+  public var volume: Double {
+    completedAt == nil || isWarmup
+      ? 0 : weightKG * Double(repetitions) * Double(loadMultiplier ?? 1)
+  }
 }
 
 public struct WorkoutExercise: Identifiable, Codable, Equatable, Sendable {
@@ -65,15 +71,17 @@ public struct TemplateExercise: Identifiable, Codable, Equatable, Sendable {
   public var setCount: Int
   public var repetitions: Int
   public var weightKG: Double
+  public var loadMultiplier: Int?
   public init(
     id: UUID = UUID(), exercise: Exercise, setCount: Int = 3,
-    repetitions: Int = 8, weightKG: Double = 0
+    repetitions: Int = 8, weightKG: Double = 0, loadMultiplier: Int? = nil
   ) {
     self.id = id
     self.exercise = exercise
     self.setCount = setCount
     self.repetitions = repetitions
     self.weightKG = weightKG
+    self.loadMultiplier = loadMultiplier
   }
 }
 
@@ -97,7 +105,9 @@ public struct WorkoutTemplate: Identifiable, Codable, Equatable, Sendable {
         WorkoutExercise(
           exercise: item.exercise,
           sets: (0..<item.setCount).map { _ in
-            WorkoutSet(repetitions: item.repetitions, weightKG: item.weightKG)
+            WorkoutSet(
+              repetitions: item.repetitions, weightKG: item.weightKG,
+              loadMultiplier: item.loadMultiplier)
           })
       }, restSeconds: restSeconds)
   }
@@ -130,6 +140,8 @@ public struct Workout: Identifiable, Codable, Equatable, Sendable {
   public var notes: String
   /// Explicitly recorded body weight for this session. Missing in legacy payloads; never inferred.
   public var bodyWeightKG: Double?
+  /// False for imports without an end time. Nil means recorded duration for legacy/native sessions.
+  public var durationIsKnown: Bool?
   public init(
     id: UUID = UUID(), name: String, startedAt: Date = Date(),
     exercises: [WorkoutExercise] = [], restSeconds: Int = 90, bodyWeightKG: Double? = nil

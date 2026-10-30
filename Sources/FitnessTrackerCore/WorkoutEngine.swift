@@ -100,7 +100,9 @@ public enum WorkoutEngine {
       return WorkoutExercise(
         exercise: item.exercise,
         sets: completed.map {
-          WorkoutSet(repetitions: $0.repetitions, weightKG: $0.weightKG, isWarmup: $0.isWarmup)
+          WorkoutSet(
+            repetitions: $0.repetitions, weightKG: $0.weightKG, isWarmup: $0.isWarmup,
+            loadMultiplier: $0.loadMultiplier)
         })
     }
     return Workout(
@@ -115,7 +117,7 @@ public enum WorkoutEngine {
       guard let first = completed.first else { return nil }
       return TemplateExercise(
         exercise: item.exercise, setCount: completed.count, repetitions: first.repetitions,
-        weightKG: first.weightKG)
+        weightKG: first.weightKG, loadMultiplier: first.loadMultiplier)
     }
     let template = WorkoutTemplate(
       name: workout.name, exercises: exercises, restSeconds: workout.restSeconds)
@@ -136,6 +138,8 @@ public enum WorkoutEngine {
     guard workout.exercises[i].sets.count < 30 else { throw TrainingError.invalidSetCount }
     let last = workout.exercises[i].sets.last ?? WorkoutSet()
     workout.exercises[i].sets.append(
-      WorkoutSet(repetitions: last.repetitions, weightKG: last.weightKG))
+      WorkoutSet(
+        repetitions: last.repetitions, weightKG: last.weightKG,
+        loadMultiplier: last.loadMultiplier))
   }
 }

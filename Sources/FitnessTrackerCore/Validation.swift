@@ -4,6 +4,7 @@ public enum TrainingError: Error, Equatable, LocalizedError, Sendable {
   case invalidName, invalidRepetitions, invalidWeight, invalidSetCount, invalidRest
   case invalidDate, invalidState, emptyWorkout, missingExercise, missingSet, duplicateID
   case invalidBodyWeight, invalidMeasurementDate
+  case invalidLoadMultiplier
   public var errorDescription: String? {
     switch self {
     case .invalidName: "Введите название (1–80 символов)."
@@ -19,6 +20,7 @@ public enum TrainingError: Error, Equatable, LocalizedError, Sendable {
     case .duplicateID: "Обнаружены повторяющиеся идентификаторы."
     case .invalidBodyWeight: "Вес тела должен быть больше 0 и не превышать 1000 кг."
     case .invalidMeasurementDate: "Некорректная дата взвешивания."
+    case .invalidLoadMultiplier: "Множитель веса должен быть от 1 до 10."
     }
   }
 }
@@ -40,8 +42,14 @@ public enum Validation {
       throw TrainingError.invalidName
     }
   }
-  public static func set(_ value: WorkoutSet) throws {
-    guard (1...1000).contains(value.repetitions) else { throw TrainingError.invalidRepetitions }
+  public static func set(_ value: WorkoutSet, allowUnperformed: Bool = false) throws {
+    guard
+      (1...1000).contains(value.repetitions)
+        || (allowUnperformed && value.repetitions == 0 && value.completedAt == nil)
+    else { throw TrainingError.invalidRepetitions }
+    guard (1...10).contains(value.loadMultiplier ?? 1) else {
+      throw TrainingError.invalidLoadMultiplier
+    }
     guard value.weightKG.isFinite, (0...1500).contains(value.weightKG) else {
       throw TrainingError.invalidWeight
     }
@@ -54,7 +62,10 @@ public enum Validation {
     for exercise in value.exercises {
       try name(exercise.exercise.name)
       guard (1...30).contains(exercise.setCount) else { throw TrainingError.invalidSetCount }
-      try set(WorkoutSet(repetitions: exercise.repetitions, weightKG: exercise.weightKG))
+      try set(
+        WorkoutSet(
+          repetitions: exercise.repetitions, weightKG: exercise.weightKG,
+          loadMultiplier: exercise.loadMultiplier))
     }
   }
   public static func workout(_ value: Workout) throws {
@@ -93,7 +104,7 @@ public enum Validation {
       try name(exercise.exercise.name)
       guard (1...30).contains(exercise.sets.count) else { throw TrainingError.invalidSetCount }
       for item in exercise.sets {
-        try set(item)
+        try set(item, allowUnperformed: true)
         if let date = item.completedAt {
           guard date >= value.startedAt, date <= (value.endedAt ?? .distantFuture) else {
             throw TrainingError.invalidDate

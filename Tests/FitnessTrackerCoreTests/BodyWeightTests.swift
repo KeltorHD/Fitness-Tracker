@@ -88,7 +88,7 @@ func bodyWeightRejectsInvalidValuesWithoutChangingAWorkout(_ value: Double) thro
     workouts: [workout], templates: [], bodyWeights: [entry], exportedAt: weightDate)
   let data = try WorkoutArchiveCodec.encode(archive)
   #expect(try WorkoutArchiveCodec.decode(data) == archive)
-  #expect(archive.version == 2)
+  #expect(archive.version == WorkoutArchive.currentVersion)
   var object = try #require(JSONSerialization.jsonObject(with: data) as? [String: Any])
   object.removeValue(forKey: "bodyWeights")
   #expect(throws: WorkoutArchiveError.invalidFile) {
@@ -109,7 +109,7 @@ func bodyWeightRejectsInvalidValuesWithoutChangingAWorkout(_ value: Double) thro
   let restored = try WorkoutArchiveCodec.decode(JSONSerialization.data(withJSONObject: object))
   #expect(restored.bodyWeights.isEmpty)
   #expect(restored.workouts.first?.bodyWeightKG == nil)
-  #expect(restored.version == 2)
+  #expect(restored.version == WorkoutArchive.currentVersion)
   let original = try #require(workouts.first)
   let decoder = JSONDecoder()
   decoder.dateDecodingStrategy = .secondsSince1970

@@ -7,7 +7,7 @@ public struct WorkoutArchive: Codable, Equatable, Sendable {
   public static let legacyFormatIdentifier = "com.fitsession.archive"
   public static let fileExtension = "fitnesstracker"
   public static let legacyFileExtension = "fitsession"
-  public static let currentVersion = 2
+  public static let currentVersion = 3
   public let format: String
   public let version: Int
   public let exportedAt: Date
