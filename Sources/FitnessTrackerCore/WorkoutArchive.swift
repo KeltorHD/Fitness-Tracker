@@ -7,19 +7,42 @@ public struct WorkoutArchive: Codable, Equatable, Sendable {
   public static let legacyFormatIdentifier = "com.fitsession.archive"
   public static let fileExtension = "fitnesstracker"
   public static let legacyFileExtension = "fitsession"
-  public static let currentVersion = 1
+  public static let currentVersion = 2
   public let format: String
   public let version: Int
   public let exportedAt: Date
   public let workouts: [Workout]
   public let templates: [WorkoutTemplate]
+  public let bodyWeights: [BodyWeightEntry]
 
-  public init(workouts: [Workout], templates: [WorkoutTemplate], exportedAt: Date = Date()) {
+  public init(
+    workouts: [Workout], templates: [WorkoutTemplate], bodyWeights: [BodyWeightEntry] = [],
+    exportedAt: Date = Date()
+  ) {
     format = Self.formatIdentifier
     version = Self.currentVersion
     self.exportedAt = exportedAt
     self.workouts = workouts
     self.templates = templates
+    self.bodyWeights = bodyWeights
+  }
+
+  private enum CodingKeys: String, CodingKey {
+    case format, version, exportedAt, workouts, templates, bodyWeights
+  }
+  public init(from decoder: any Decoder) throws {
+    let values = try decoder.container(keyedBy: CodingKeys.self)
+    format = try values.decode(String.self, forKey: .format)
+    version = try values.decode(Int.self, forKey: .version)
+    exportedAt = try values.decode(Date.self, forKey: .exportedAt)
+    workouts = try values.decode([Workout].self, forKey: .workouts)
+    templates = try values.decode([WorkoutTemplate].self, forKey: .templates)
+    // Explicit v1 migration: these archives did not contain independent weigh-ins.
+    if version >= 2 {
+      bodyWeights = try values.decode([BodyWeightEntry].self, forKey: .bodyWeights)
+    } else {
+      bodyWeights = try values.decodeIfPresent([BodyWeightEntry].self, forKey: .bodyWeights) ?? []
+    }
   }
 }
 
@@ -32,7 +55,8 @@ public enum WorkoutArchiveError: Error, Equatable, LocalizedError, Sendable {
     case .unsupportedVersion:
       "Версия формата файла не поддерживается. Попробуйте обновить FitnessTracker."
     case .tooLarge: "Файл превышает допустимый размер 20 МБ."
-    case .tooManyRecords: "В одном файле допускается до 10 000 тренировок и 1 000 планов."
+    case .tooManyRecords:
+      "В одном файле допускается до 10 000 тренировок, 1 000 планов и 10 000 записей веса."
     case .duplicateID: "В файле обнаружены повторяющиеся записи. Импорт не выполнен."
     }
   }
@@ -48,7 +72,7 @@ public enum WorkoutArchiveCodec {
     // Numeric Unix seconds preserve subsecond pause intervals, unlike the old ISO-8601 export.
     encoder.dateEncodingStrategy = .secondsSince1970
     let current = WorkoutArchive(
-      workouts: archive.workouts, templates: archive.templates,
+      workouts: archive.workouts, templates: archive.templates, bodyWeights: archive.bodyWeights,
       exportedAt: archive.exportedAt)
     let data = try encoder.encode(current)
     guard data.count <= maximumBytes else { throw WorkoutArchiveError.tooLarge }
@@ -68,7 +92,9 @@ public enum WorkoutArchiveCodec {
         else {
           throw WorkoutArchiveError.invalidFile
         }
-        guard object["version"] as? Int == WorkoutArchive.currentVersion else {
+        guard let version = object["version"] as? Int,
+          (1...WorkoutArchive.currentVersion).contains(version)
+        else {
           throw WorkoutArchiveError.unsupportedVersion
         }
         let decoder = JSONDecoder()
@@ -76,6 +102,7 @@ public enum WorkoutArchiveCodec {
         let decoded = try decoder.decode(WorkoutArchive.self, from: data)
         archive = WorkoutArchive(
           workouts: decoded.workouts, templates: decoded.templates,
+          bodyWeights: decoded.bodyWeights,
           exportedAt: decoded.exportedAt)
       } else {
         // Compatibility with WorkoutDocument's original single-workout JSON export.
@@ -101,43 +128,51 @@ public enum WorkoutArchiveCodec {
     else {
       throw WorkoutArchiveError.invalidFile
     }
-    guard archive.version == WorkoutArchive.currentVersion else {
+    guard (1...WorkoutArchive.currentVersion).contains(archive.version) else {
       throw WorkoutArchiveError.unsupportedVersion
     }
     guard archive.exportedAt.timeIntervalSince1970.isFinite else {
       throw WorkoutArchiveError.invalidFile
     }
-    guard archive.workouts.count <= 10_000, archive.templates.count <= 1_000 else {
+    guard archive.workouts.count <= 10_000, archive.templates.count <= 1_000,
+      archive.bodyWeights.count <= 10_000
+    else {
       throw WorkoutArchiveError.tooManyRecords
     }
     guard Set(archive.workouts.map(\.id)).count == archive.workouts.count,
-      Set(archive.templates.map(\.id)).count == archive.templates.count
+      Set(archive.templates.map(\.id)).count == archive.templates.count,
+      Set(archive.bodyWeights.map(\.id)).count == archive.bodyWeights.count
     else { throw WorkoutArchiveError.duplicateID }
     for workout in archive.workouts { try Validation.workout(workout) }
     for template in archive.templates { try Validation.template(template) }
+    for entry in archive.bodyWeights { try Validation.bodyWeightEntry(entry) }
   }
 }
 
 public struct ArchiveImportSummary: Equatable, Sendable {
   public let addedWorkouts: Int
   public let addedTemplates: Int
+  public let addedBodyWeights: Int
   public let skippedExisting: Int
   public let skippedUnfinished: Int
-  public var hasChanges: Bool { addedWorkouts + addedTemplates > 0 }
+  public var hasChanges: Bool { addedWorkouts + addedTemplates + addedBodyWeights > 0 }
 }
 
 /// Additive merge: existing IDs are never overwritten and at most one unfinished session is restored.
 public struct ArchiveImportPlan: Sendable {
   public let workouts: [Workout]
   public let templates: [WorkoutTemplate]
+  public let bodyWeights: [BodyWeightEntry]
   public let summary: ArchiveImportSummary
 
   public init(
-    archive: WorkoutArchive, existingWorkouts: [Workout], existingTemplates: [WorkoutTemplate]
+    archive: WorkoutArchive, existingWorkouts: [Workout], existingTemplates: [WorkoutTemplate],
+    existingBodyWeights: [BodyWeightEntry] = []
   ) throws {
     try WorkoutArchiveCodec.validate(archive)
     let workoutIDs = Set(existingWorkouts.map(\.id))
     let templateIDs = Set(existingTemplates.map(\.id))
+    let bodyWeightIDs = Set(existingBodyWeights.map(\.id))
     var hasUnfinished = existingWorkouts.contains { [.active, .paused].contains($0.status) }
     var skippedExisting = 0
     var skippedUnfinished = 0
@@ -162,9 +197,12 @@ public struct ArchiveImportPlan: Sendable {
     }
     workouts = added
     templates = archive.templates.filter { !templateIDs.contains($0.id) }
+    bodyWeights = archive.bodyWeights.filter { !bodyWeightIDs.contains($0.id) }
     skippedExisting += archive.templates.count - templates.count
+    skippedExisting += archive.bodyWeights.count - bodyWeights.count
     summary = ArchiveImportSummary(
       addedWorkouts: workouts.count, addedTemplates: templates.count,
+      addedBodyWeights: bodyWeights.count,
       skippedExisting: skippedExisting, skippedUnfinished: skippedUnfinished)
   }
 }

@@ -18,14 +18,18 @@ import Foundation
     demo = replacement
   }
   public func closeDemo() throws -> WorkoutArchive {
-    // Read both collections before switching; a failed personal read preserves the demo workspace.
+    // Read every collection before switching; any failed read preserves the demo workspace.
     let snapshot = WorkoutArchive(
-      workouts: try personal.workouts(), templates: try personal.templates())
+      workouts: try personal.workouts(), templates: try personal.templates(),
+      bodyWeights: try personal.bodyWeights())
     demo = nil
     return snapshot
   }
   public func workouts() throws -> [Workout] { try current.workouts() }
   public func templates() throws -> [WorkoutTemplate] { try current.templates() }
+  public func bodyWeights() throws -> [BodyWeightEntry] { try current.bodyWeights() }
+  public func saveBodyWeight(_ entry: BodyWeightEntry) throws { try current.saveBodyWeight(entry) }
+  public func deleteBodyWeight(id: UUID) throws { try current.deleteBodyWeight(id: id) }
   public func save(_ workout: Workout) throws { try current.save(workout) }
   public func saveTemplate(_ template: WorkoutTemplate) throws {
     try current.saveTemplate(template)

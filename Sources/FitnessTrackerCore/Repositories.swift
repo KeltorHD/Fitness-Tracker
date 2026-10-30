@@ -7,6 +7,9 @@ import Foundation
   func templates() throws -> [WorkoutTemplate]
   func saveTemplate(_ template: WorkoutTemplate) throws
   func deleteTemplate(id: UUID) throws
+  func bodyWeights() throws -> [BodyWeightEntry]
+  func saveBodyWeight(_ entry: BodyWeightEntry) throws
+  func deleteBodyWeight(id: UUID) throws
   /// Validate the complete archive, then add new records in a single transaction or change nothing.
   func importArchive(_ archive: WorkoutArchive) throws -> ArchiveImportSummary
 }
@@ -19,6 +22,7 @@ import Foundation
 @MainActor public final class MemoryWorkoutRepository: WorkoutRepository {
   private var sessions: [UUID: Workout] = [:]
   private var routines: [UUID: WorkoutTemplate] = [:]
+  private var measurements: [UUID: BodyWeightEntry] = [:]
   public init() {}
   public func workouts() throws -> [Workout] {
     sessions.values.sorted { $0.startedAt > $1.startedAt }
@@ -36,15 +40,30 @@ import Foundation
     routines[template.id] = template
   }
   public func deleteTemplate(id: UUID) throws { routines[id] = nil }
+  public func bodyWeights() throws -> [BodyWeightEntry] {
+    measurements.values.sorted {
+      $0.measuredAt == $1.measuredAt
+        ? $0.id.uuidString < $1.id.uuidString : $0.measuredAt > $1.measuredAt
+    }
+  }
+  public func saveBodyWeight(_ entry: BodyWeightEntry) throws {
+    try Validation.bodyWeightEntry(entry)
+    measurements[entry.id] = entry
+  }
+  public func deleteBodyWeight(id: UUID) throws { measurements[id] = nil }
   public func importArchive(_ archive: WorkoutArchive) throws -> ArchiveImportSummary {
     let plan = try ArchiveImportPlan(
-      archive: archive, existingWorkouts: workouts(), existingTemplates: templates())
+      archive: archive, existingWorkouts: workouts(), existingTemplates: templates(),
+      existingBodyWeights: bodyWeights())
     var nextSessions = sessions
     var nextRoutines = routines
+    var nextMeasurements = measurements
     for workout in plan.workouts { nextSessions[workout.id] = workout }
     for template in plan.templates { nextRoutines[template.id] = template }
+    for entry in plan.bodyWeights { nextMeasurements[entry.id] = entry }
     sessions = nextSessions
     routines = nextRoutines
+    measurements = nextMeasurements
     return plan.summary
   }
 }

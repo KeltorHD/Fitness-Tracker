@@ -128,9 +128,11 @@ public struct Workout: Identifiable, Codable, Equatable, Sendable {
   public var pauses: [WorkoutPause]
   public var pausedSeconds: TimeInterval
   public var notes: String
+  /// Explicitly recorded body weight for this session. Missing in legacy payloads; never inferred.
+  public var bodyWeightKG: Double?
   public init(
     id: UUID = UUID(), name: String, startedAt: Date = Date(),
-    exercises: [WorkoutExercise] = [], restSeconds: Int = 90
+    exercises: [WorkoutExercise] = [], restSeconds: Int = 90, bodyWeightKG: Double? = nil
   ) {
     self.id = id
     self.name = name
@@ -141,6 +143,7 @@ public struct Workout: Identifiable, Codable, Equatable, Sendable {
     self.pausedSeconds = 0
     self.pauses = []
     self.notes = ""
+    self.bodyWeightKG = bodyWeightKG
   }
   public var completedSets: Int { exercises.flatMap(\.sets).filter { $0.completedAt != nil }.count }
   public var totalSets: Int { exercises.reduce(0) { $0 + $1.sets.count } }

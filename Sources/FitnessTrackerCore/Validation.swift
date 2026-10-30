@@ -3,6 +3,7 @@ import Foundation
 public enum TrainingError: Error, Equatable, LocalizedError, Sendable {
   case invalidName, invalidRepetitions, invalidWeight, invalidSetCount, invalidRest
   case invalidDate, invalidState, emptyWorkout, missingExercise, missingSet, duplicateID
+  case invalidBodyWeight, invalidMeasurementDate
   public var errorDescription: String? {
     switch self {
     case .invalidName: "Введите название (1–80 символов)."
@@ -16,11 +17,24 @@ public enum TrainingError: Error, Equatable, LocalizedError, Sendable {
     case .missingExercise: "Упражнение не найдено."
     case .missingSet: "Подход не найден."
     case .duplicateID: "Обнаружены повторяющиеся идентификаторы."
+    case .invalidBodyWeight: "Вес тела должен быть больше 0 и не превышать 1000 кг."
+    case .invalidMeasurementDate: "Некорректная дата взвешивания."
     }
   }
 }
 
 public enum Validation {
+  public static func bodyWeight(_ weightKG: Double) throws {
+    guard weightKG.isFinite, weightKG > 0, weightKG <= 1000 else {
+      throw TrainingError.invalidBodyWeight
+    }
+  }
+  public static func bodyWeightEntry(_ entry: BodyWeightEntry) throws {
+    try bodyWeight(entry.weightKG)
+    guard entry.measuredAt.timeIntervalSince1970.isFinite else {
+      throw TrainingError.invalidMeasurementDate
+    }
+  }
   public static func name(_ value: String) throws {
     guard (1...80).contains(value.trimmingCharacters(in: .whitespacesAndNewlines).count) else {
       throw TrainingError.invalidName
@@ -45,6 +59,7 @@ public enum Validation {
   }
   public static func workout(_ value: Workout) throws {
     try name(value.name)
+    if let weight = value.bodyWeightKG { try bodyWeight(weight) }
     guard (0...3600).contains(value.restSeconds) else { throw TrainingError.invalidRest }
     guard value.pausedSeconds.isFinite, value.pausedSeconds >= 0,
       value.startedAt.timeIntervalSince1970.isFinite

@@ -29,6 +29,18 @@ import XCTest
   func saveTemplate(_ template: WorkoutTemplate) throws { try memory.saveTemplate(template) }
   func deleteWorkout(id: UUID) throws { try memory.deleteWorkout(id: id) }
   func deleteTemplate(id: UUID) throws { try memory.deleteTemplate(id: id) }
+  func bodyWeights() throws -> [BodyWeightEntry] {
+    if failTemplateReads { throw failure }
+    return try memory.bodyWeights()
+  }
+  func saveBodyWeight(_ entry: BodyWeightEntry) throws {
+    if failSaves { throw failure }
+    try memory.saveBodyWeight(entry)
+  }
+  func deleteBodyWeight(id: UUID) throws {
+    if failSaves { throw failure }
+    try memory.deleteBodyWeight(id: id)
+  }
   func importArchive(_ archive: WorkoutArchive) throws -> ArchiveImportSummary {
     if failSaves { throw failure }
     return try memory.importArchive(archive)

@@ -57,12 +57,29 @@ import SwiftData
   }
   func deleteWorkout(id: UUID) throws { try remove(id: id, kind: "workout") }
   func deleteTemplate(id: UUID) throws { try remove(id: id, kind: "template") }
+  func bodyWeights() throws -> [BodyWeightEntry] {
+    try records(kind: "bodyWeight").map {
+      let entry = try JSONDecoder().decode(BodyWeightEntry.self, from: $0.payload)
+      try Validation.bodyWeightEntry(entry)
+      return entry
+    }.sorted {
+      $0.measuredAt == $1.measuredAt
+        ? $0.id.uuidString < $1.id.uuidString : $0.measuredAt > $1.measuredAt
+    }
+  }
+  func saveBodyWeight(_ entry: BodyWeightEntry) throws {
+    try Validation.bodyWeightEntry(entry)
+    try upsert(id: entry.id, kind: "bodyWeight", data: JSONEncoder().encode(entry))
+  }
+  func deleteBodyWeight(id: UUID) throws { try remove(id: id, kind: "bodyWeight") }
   func importArchive(_ archive: WorkoutArchive) throws -> ArchiveImportSummary {
     let plan = try ArchiveImportPlan(
-      archive: archive, existingWorkouts: self.workouts(), existingTemplates: self.templates())
+      archive: archive, existingWorkouts: self.workouts(), existingTemplates: self.templates(),
+      existingBodyWeights: self.bodyWeights())
     // Encode everything before changing the context. One save commits the entire import.
     let workouts = try plan.workouts.map { ($0.id, try JSONEncoder().encode($0)) }
     let templates = try plan.templates.map { ($0.id, try JSONEncoder().encode($0)) }
+    let bodyWeights = try plan.bodyWeights.map { ($0.id, try JSONEncoder().encode($0)) }
     guard plan.summary.hasChanges else { return plan.summary }
     do {
       for (id, data) in workouts {
@@ -70,6 +87,9 @@ import SwiftData
       }
       for (id, data) in templates {
         context.insert(StoredRecord(id: id, kind: "template", payload: data))
+      }
+      for (id, data) in bodyWeights {
+        context.insert(StoredRecord(id: id, kind: "bodyWeight", payload: data))
       }
       try context.save()
       return plan.summary

@@ -22,6 +22,9 @@ private var demoCalendar: Calendar {
   func saveTemplate(_ template: WorkoutTemplate) throws { try memory.saveTemplate(template) }
   func deleteWorkout(id: UUID) throws { try memory.deleteWorkout(id: id) }
   func deleteTemplate(id: UUID) throws { try memory.deleteTemplate(id: id) }
+  func bodyWeights() throws -> [BodyWeightEntry] { try memory.bodyWeights() }
+  func saveBodyWeight(_ entry: BodyWeightEntry) throws { try memory.saveBodyWeight(entry) }
+  func deleteBodyWeight(id: UUID) throws { try memory.deleteBodyWeight(id: id) }
   func importArchive(_ archive: WorkoutArchive) throws -> ArchiveImportSummary {
     try memory.importArchive(archive)
   }
