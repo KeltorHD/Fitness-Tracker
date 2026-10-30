@@ -24,10 +24,10 @@ UUID v5 вычисляются из даты, времени и названия
 
 ## Архивы и проверки
 
-Новые экспорты используют архив v3: `WorkoutSet.loadMultiplier`, `TemplateExercise.loadMultiplier` и `Workout.durationIsKnown` переносятся без потерь. Архивы v1/v2 и прежний одиночный Workout читаются: отсутствующий множитель означает 1, отсутствующий признак длительности сохраняет прежнее поведение. Старому приложению для чтения v3 понадобится обновление. [Формат](IMPORT_EXPORT.md).
+Новые экспорты используют архив v4 (множители и признак длительности появились в v3): `WorkoutSet.loadMultiplier`, `TemplateExercise.loadMultiplier` и `Workout.durationIsKnown` переносятся без потерь. Архивы v1/v2/v3 и прежний одиночный Workout читаются: отсутствующий множитель означает 1, отсутствующий признак длительности сохраняет прежнее поведение. Старому приложению для чтения v4 понадобится обновление. [Формат](IMPORT_EXPORT.md).
 
 - **Implemented:** Core CSV parser/importer, стабильные UUID, preview, CSV picker/open-in-place, localized errors, duration/HealthKit guards и сохранение множителей.
-- **Linux-tested:** 13 новых Core tests; общий набор — 112. `PortableCSVChecks` проверяет конвертацию, JSON round-trip, отображение неизвестной длительности и повторный импорт. Оба исходных пользовательских файла проверены целиком в Memory repository; личные CSV не включены в коммиты или bundle.
+- **Linux-tested:** 13 новых Core tests; общий набор — 127. `PortableCSVChecks` проверяет конвертацию, JSON round-trip, отображение неизвестной длительности и повторный импорт. Оба исходных пользовательских файла проверены целиком в Memory repository; личные CSV не включены в коммиты или bundle.
 - **Requires Xcode validation:** системный picker/Files/iCloud Drive, SwiftData transaction, UI/ошибки/отмена и написанные Apple unit tests. Apple SDK на Linux не запускался.
 - **Requires Apple Developer configuration:** новых capabilities нет; обычный signing приложения.
 

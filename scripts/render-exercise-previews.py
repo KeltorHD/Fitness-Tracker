@@ -170,6 +170,28 @@ def exercise_in_workout():
     s+=text(195,855,'✓ Завершить тренировку',13,ACCENT,600,'middle')
     return s+rect(142,879,106,5,'#171717',3)
 
+def set_types():
+    # A separate demonstration of mixed set types; no private/user workout data.
+    s=exercise_in_workout()+rect(22,288,346,402,'white')
+    def values(y,number,weight,reps,selected=False,done=False):
+        v=rect(24,y-28,35,38,'#ffebe6' if selected else '#f2f2f2',12)
+        v+=text(41,y-3,number,15,ACCENT if selected else MUTED,400,'middle')
+        v+=text(167,y,weight,34,INK,400,'end')+text(171,y,'кг',16,MUTED)+text(217,y-3,'×',22,MUTED,'middle')+text(248,y,reps,34,INK)
+        if done:v+=text(350,y-5,'✓',13,ACCENT,600,'middle')
+        return v
+    s+=values(322,'1',20,15,done=True)
+    s+=rect(77,335,86,22,'#ffebe6',11)+text(120,350,'♨ Разминка',11,ACCENT,500,'middle')
+    s+=rect(24,371,342,0.6,'#dcdcdc')
+    s+=values(412,'2',40,12,done=True)+rect(24,432,342,0.6,'#dcdcdc')
+    s+=rect(20,443,350,240,'#f7f7f7',16)
+    s+=values(483,'3',50,8,done=True)
+    s+=rect(77,495,158,22,'#ffebe6',11)+text(156,510,'Дропсет · этапов: 3',11,ACCENT,600,'middle')
+    s+=rect(76,528,281,0.5,'#dedede')
+    s+=values(565,'↓1',40,8,selected=True)+rect(76,586,281,0.5,'#dedede')
+    s+=values(627,'↓2',30,10)
+    s+=text(77,664,'Без отдыха между этапами',11,MUTED)
+    return s
+
 def heart_rate_live():
     s=shell()+rect(0,78,390,793,'#f2f2f7')+text(16,110,'‹ Настройки',14,ACCENT)+text(16,150,'Трекер',32,INK,700)
     s+=rect(16,173,358,103,'white',22)+text(30,202,'Модель трекера',14)+text(358,202,'AirPods Pro 3  ⌄',14,MUTED,400,'end')
@@ -317,7 +339,7 @@ if __name__ == '__main__':
     screens = [('diary', diary()), ('catalogue', catalogue()), ('results', results()),
                ('workout-detail', detail()), ('exercise-library', library()),
                ('exercise-detail', exercise_detail()), ('active-workout', workout()), ('settings', settings()),
-               ('exercise-in-workout', exercise_in_workout()), ('heart-rate-live', heart_rate_live()),
+               ('exercise-in-workout', exercise_in_workout()), ('workout-set-types', set_types()), ('heart-rate-live', heart_rate_live()),
                ('heart-rate-history', heart_rate_history())]
     for name, content in screens:
         file = OUT / (name + '.svg')
@@ -325,7 +347,8 @@ if __name__ == '__main__':
         render(file, 390, 900, scale=3)
     for name, selected in [('overview', [diary(), catalogue(), detail()]),
                            ('results-overview', [results(), workout(), settings()]),
-                           ('workout-flow', [detail(), workout(), exercise_in_workout()]),
+                           ('workout-flow', [detail(), workout(), set_types()]),
+                           ('set-types-overview', [exercise_in_workout(), set_types()]),
                            ('heart-rate-overview', [heart_rate_live(), heart_rate_history()])]:
         board_width = 40 + len(selected) * 410
         board = rect(0, 0, board_width, 1020, '#ebebeb')

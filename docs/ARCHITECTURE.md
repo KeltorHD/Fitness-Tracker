@@ -80,4 +80,8 @@ TrainingJournal в Core группирует completed sessions по недел�
 
 FitSessionCSVImporter преобразует CSV вне MainActor в валидированный WorkoutArchive; ArchiveFileService выбирает decoder по расширению. CSV и JSON используют общий preview/ArchiveImportPlan и одну транзакцию. UUID v5 зависят от исходной локальной даты/времени и точного нормализованного названия, не от файла/TZ. Отдельные типы ошибок передают UI только строку/столбец без содержимого данных.
 
-Optional loadMultiplier сохраняет номинальный вес, изменяя только объём; repeat/templates сохраняют множитель. Validation допускает ноль повторений только для невыполненного подхода при чтении Workout; completeSet/template validation остаются строгими. Optional durationIsKnown=false отделяет технический end timestamp CSV от реального измерения времени. UI показывает прочерк, HealthKit guard срабатывает до authorization. Архив v3 читает v1/v2 со значениями по умолчанию прежней семантики. [Правила](CSV_IMPORT.md).
+Optional loadMultiplier сохраняет номинальный вес, изменяя только объём; repeat/templates сохраняют множитель. Validation допускает ноль повторений только для невыполненного подхода при чтении Workout; completeSet/template validation остаются строгими. Optional durationIsKnown=false отделяет технический end timestamp CSV от реального измерения времени. UI показывает прочерк, HealthKit guard срабатывает до authorization. Архив v4 читает v1/v2/v3 со значениями по умолчанию прежней семантики. [Правила](CSV_IMPORT.md).
+
+## Этапы дропсета
+
+WorkoutSet сохраняет основной этап и optional dropStages. Core исполняет этапы последовательно, блокирует изменение выполненных значений, запускает отдых после последнего и считает объём по фактическим данным. fullyCompletedSets определяет live progress, completedSets — наличие записанной работы. plannedSets сохраняет mixed targets шаблонов без потерь; новые архивы v4, старые payloads читаются с nil optional fields. [Детали](DROP_SETS.md).

@@ -66,15 +66,18 @@
 | WorkoutExercisePresentation / draft validation / summary по row IDs | Да | Да, PortableWorkoutExerciseChecks: ввод, kg/lb precision, drafts, paging, reorder/delete, pause/history guards и Core completion | Нет для переносимой модели | Нет |
 | Компактная тренировка и отдельное упражнение по IMG_1612/1613, RU/EN и Liquid Glass dock | Да | Только parser/lint/resources; UI tests обновлены, не запускались | Да, NavigationStack, layout, keyboard, Dynamic Type, VoiceOver и сохранение/ошибки | Обычный signing, новых capabilities нет |
 | SVG/PNG превью тренировки, упражнения и просмотра пульса | Да, демонстрационные данные | Да, генерация librsvg/cairo, структура и воспроизводимость | Это иллюстрации; проверка интерфейса в Xcode остаётся обязательной | Нет |
+| DropSetStage / валидация и порядок / отдых / статистика / repeat и plannedSets / archive v4 | Да | Да, 13 новых Core tests: rollback, invalid order/targets, даты/IDs, partial finish, zero load, templates и v1–v3 migration | Нет для Core | Нет |
+| Редактор этапов, метки разминки/дропсета, Watch и Live Activity stage labels RU/EN | Да | Реальные portable presentation checks; для SwiftUI/SDK только parser/lint/resources, Apple tests написаны | Да, keyboard/accessibility, SwiftData, UI tests, device и Watch/ActivityKit | Существующий signing/capabilities; новых entitlements нет |
+| Макет смешанных типов подходов и сравнение SVG/PNG | Да, демо-данные | Генерация/ресурсы; это не тест SwiftUI | Да для реального интерфейса | Нет |
 
 
 ## Фактические проверки
 
 - `swift build`: прошёл для FitnessTrackerCore на Linux.
-- `swift test`: прошли 114 Swift Testing tests, включая parameterized cases. Стандартный XCTest runner также печатает «0 tests» — Core использует отдельный Swift Testing runner, его итоговая строка содержит 114 tests.
+- `swift test`: прошли 127 Swift Testing tests, включая parameterized cases. Стандартный XCTest runner также печатает «0 tests» — Core использует отдельный Swift Testing runner, его итоговая строка содержит 127 tests.
 - Отдельный Swift 6 strict-concurrency type-check без Apple SDK: HistoryViewModel, ProgressViewModel, ExerciseProgressViewModel, BodyWeightViewModel/BodyWeightEditorModel, WorkoutExercisePresentation, ExerciseLibraryViewModel, ExerciseImageLoader, CloudAccountChecking, WidgetSnapshot, AppCapabilities, L10n и WorkoutFormatting. Это проверка типов указанной переносимой части, не функциональный тест и не сборка iOS target.
 - Swift formatting/lint, синтаксический разбор Apple Swift, структура/конфигурационные связи, plist/JSON, PNG и наличие ресурсов: прошли в `bash scripts/check-linux.sh`. Для Dynamic Island parser проверяет обе ветви shared intents: основной target с FITNESS_TRACKER_APP и widget extension без него.
-- Локализация: 537 ключей RU/EN и четыре InfoPlist-строки, placeholders, формы счётчиков, покрытие русских ключей, target resources и повторяемость генерации — прошли. Компиляция `.xcstrings` в Xcode не проверена; сценарии — [LOCALIZATION.md](LOCALIZATION.md).
+- Локализация: 551 ключ RU/EN и четыре InfoPlist-строки, placeholders, формы счётчиков, покрытие русских ключей, target resources и повторяемость генерации — прошли. Компиляция `.xcstrings` в Xcode не проверена; сценарии — [LOCALIZATION.md](LOCALIZATION.md).
 - В сессии использован внешний Swift 6.2.1 через SWIFT_BIN; для постоянной установки предусмотрен `setup-linux.sh`, toolchain не хранится в git.
 - Переносимая tracker-подсистема дополнительно исполнена в `Tests/PortableTrackerChecks/main.swift`: recording/pause, save failure/retry, mode race, минимальные permissions, history, real file round-trip/corruption/delete. Это не тест HealthKit/CoreBluetooth.
 - Исполнен `Tests/PortableProgressChecks/main.swift`: выбор упражнения/точки, периоды, bodyweight, удаление, точный workout UUID при совпадающей дате и связь с ProgressViewModel. Это не тест SwiftUI/Charts.
@@ -105,4 +108,6 @@ Watch записывает отдельный стартовый план и п�
 
 Фиксация веса и перенос данных: [BODY_WEIGHT.md](BODY_WEIGHT.md).
 
-Импорт двух CSV-вариантов: [CSV_IMPORT.md](CSV_IMPORT.md). Новый экспорт — v3; старые v1/v2 читаются.
+Импорт двух CSV-вариантов: [CSV_IMPORT.md](CSV_IMPORT.md). Новый экспорт — v4; старые v1/v2/v3 читаются.
+
+Дропсеты и разминка: [DROP_SETS.md](DROP_SETS.md). Полная запись и частичное завершение не создают фиктивно выполненных этапов.

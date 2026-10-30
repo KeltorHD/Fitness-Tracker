@@ -229,7 +229,7 @@
 - [ ] Нет общей длительности: дневник/detail показывают «—», HealthKit button disabled и authorization не запрашивается. Repeat запускает новый обычный таймер. Не генерируются body weight, калории или паузы.
 - [ ] Кавычки, UTF-8 BOM, CRLF, многострочные заметки, десятичная запятая, повторяющиеся одинаковые подходы и группы более 30 подходов сохраняются. Некорректная строка отклоняет весь импорт с номером строки/полем без приватных значений.
 - [ ] Ошибка чтения/security-scoped URL, cancellation и отказ SwiftData save оставляют исходные данные/preview для повтора. Применение идёт одним save/rollback.
-- [ ] Новый экспорт v3 переносит multiplier/unknown-duration/zero reps; v1/v2 и прежний одиночный JSON читаются с прежней семантикой. Старое приложение отклоняет v3 вместо неверного расчёта объёма.
+- [ ] Новый экспорт v4 переносит multiplier/unknown-duration/zero reps и drops; v1/v2/v3 и прежний одиночный JSON читаются с прежней семантикой. Старое приложение отклоняет v4 вместо неверного расчёта объёма.
 - [ ] RU/EN errors и подсказки, VoiceOver, длинные имена, sheet/alert routing; запустить новые ArchiveTransferTests и AppStoreTests. На Linux эти Apple-тесты не выполнялись.
 
 [Документация CSV](CSV_IMPORT.md).
@@ -264,3 +264,17 @@
 - [ ] Запустить обновлённые testLogSetAndFindWorkoutInHistory, testActiveExerciseCanOpenAnEmptyProgressHistory и testExerciseChartsCanBeOpenedFromCompletedWorkout. На Linux они только разобраны синтаксически.
 
 Превью workout-flow и heart-rate-overview используют демонстрационные данные, не являются скриншотами и не проверяют реальный Liquid Glass/датчики.
+
+## Разминка и дропсеты
+
+- [ ] Выполнить xcodegen generate, собрать iPhone/Watch/widgets с Swift 6. WorkoutSetGroupView/Row показывают общий блок, ↓1/↓2, активный этап и метку разминки; нет конфликтов glass/keyboard.
+- [ ] Создать рабочий подход с положительным весом, ⋯ → Сделать дропсетом, добавить до пяти снижений, изменить все цели и выполнить по порядку. Неверный порядок/неуменьшающийся вес отклоняются без изменения сохранённых данных.
+- [ ] Включить/выключить разминку до выполнения; проверить long press и меню. Для дропсета сначала убрать группу, прежде чем включать разминку. После начала менять структуру/выполненные значения нельзя.
+- [ ] При выполнении каждого этапа сохраняются реальные вес/повторы/дата. Промежуточного отдыха нет, после последнего — один отдых. Пауза, пропуск отдыха, внешние Live Activity actions, сворачивание/восстановление и быстрый двойной tap безопасны.
+- [ ] Ошибка SwiftData save сохраняет draft/selection для повтора и не показывает невыполненный этап как выполненный. Запустить testDropStagesAndMixedTemplateTargetsRoundTrip и testWarmupAndDropStagesCanBeConfiguredBeforeCompletion; эти тесты на Linux не запускались.
+- [ ] Завершить посреди группы: история различает выполненное и «Не выполнено», объём/повторы считают только факт. Группа — один подход; active/Live Activity progress ждёт её завершения. Разминка не входит в рабочий объём и рекорды.
+- [ ] Повтор, mixed template, JSON/.fitnesstracker v4, старые v1–v3, legacy .fitsession: данные и IDs сохраняются при переносе; новые IDs/пустые completion timestamps при новом запуске. В шаблонах mixed targets отображаются и не перезаписываются uniform controls.
+- [ ] Watch logger следует очередному этапу, Live Activity/Dynamic Island показывают этап и не переходят к другому упражнению раньше времени. Проверить старый snapshot без optional stage fields, доставку Watch и CloudKit на двух актуальных клиентах.
+- [ ] RU/EN, кг/фунты, десятичный разделитель, Dynamic Type/VoiceOver, narrow screen, Dark/Increase Contrast/Reduce Transparency, много этапов и длинные ошибки.
+
+Правила и явно подписанный демо-макет: [DROP_SETS.md](DROP_SETS.md).

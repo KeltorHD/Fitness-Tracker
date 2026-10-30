@@ -67,3 +67,7 @@ WorkoutExercisePresentation хранит выбранные exercise/set IDs и 
 Сетка/шрифты поддерживают Dynamic Type: поля перестраиваются вертикально на accessibility sizes, длинный заголовок и подходы прокручиваются, основной таймер допускает уменьшение по ширине. Иконки нижней панели имеют стабильный размер и доступные подписи. Это реализовано в исходниках; фактическая геометрия, VoiceOver, keyboard safe areas и возврат navigation bar требуют Xcode.
 
 [Макеты тренировки и упражнения](previews/workout-flow.png), [макеты просмотра пульса](previews/heart-rate-overview.png). Это иллюстрации с демонстрационными данными, не скриншоты SwiftUI. Нативные стили сверены с [официальным руководством Apple по Liquid Glass](https://developer.apple.com/documentation/swiftui/applying-liquid-glass-to-custom-views).
+
+## Разминка и дропсет
+
+[Новый макет](previews/workout-set-types.png) показывает тёплую метку разминки, обычный подход и общий блок дропсета с двумя снижениями ↓1/↓2. Это пример другого состояния карточки с демонстрационными целями, не данные пользователя. В коде эта же компоновка задаётся WorkoutSetGroupView/WorkoutSetRow; выполнение проходит через Core. [Поведение](DROP_SETS.md).
