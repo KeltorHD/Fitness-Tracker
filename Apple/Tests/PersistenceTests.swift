@@ -4,6 +4,25 @@ import XCTest
 @testable import FitnessTracker
 
 @MainActor final class PersistenceTests: XCTestCase {
+  func testBodyWeightRoundTripDeleteAndCombinedArchiveImport() throws {
+    let repository = try SwiftDataWorkoutRepository(inMemory: true)
+    var entry = BodyWeightEntry(measuredAt: Date(timeIntervalSince1970: 100), weightKG: 72.5)
+    try repository.saveBodyWeight(entry)
+    entry.weightKG = 71.5
+    try repository.saveBodyWeight(entry)
+    XCTAssertEqual(try repository.bodyWeights(), [entry])
+    var invalid = entry
+    invalid.weightKG = 0
+    XCTAssertThrowsError(try repository.saveBodyWeight(invalid))
+    XCTAssertEqual(try repository.bodyWeights(), [entry])
+    try repository.deleteBodyWeight(id: entry.id)
+    let workout = Workout(name: "Weight fixture", bodyWeightKG: 72)
+    let archive = WorkoutArchive(workouts: [workout], templates: [], bodyWeights: [entry])
+    XCTAssertEqual(try repository.importArchive(archive).addedBodyWeights, 1)
+    XCTAssertEqual(try repository.bodyWeights(), [entry])
+    XCTAssertEqual(try repository.workouts().first?.bodyWeightKG, 72)
+    XCTAssertFalse(try repository.importArchive(archive).hasChanges)
+  }
   func testSwiftDataUpsertRoundTripAndDelete() throws {
     let repository = try SwiftDataWorkoutRepository(inMemory: true)
     var workout = try ExerciseCatalog.starterTemplates[0].start()

@@ -134,7 +134,7 @@ private struct ExerciseMetricChart: View {
         .font(.caption).foregroundStyle(.secondary)
       }
     }
-    .fitCard().accessibilityIdentifier("exerciseChart_\(metric.rawValue)")
+    .resultsCard().accessibilityIdentifier("exerciseChart_\(metric.rawValue)")
   }
 
   private func display(_ value: Double) -> Double {

@@ -16,6 +16,17 @@ private func weightedWorkout(weight: Double = 72.5) throws -> Workout {
   return workout
 }
 
+@Test @MainActor func repeatedWatchArchiveCannotEraseARecordedWorkoutWeight() throws {
+  let repository = MemoryWorkoutRepository()
+  let original = try weightedWorkout()
+  try repository.save(original)
+  var redelivered = original
+  redelivered.bodyWeightKG = nil
+  let result = try repository.importArchive(WorkoutArchive(workouts: [redelivered], templates: []))
+  #expect(!result.hasChanges && result.skippedExisting == 1)
+  #expect(try repository.workouts().first?.bodyWeightKG == original.bodyWeightKG)
+}
+
 @Test(arguments: [0.0, -1, .infinity, .nan, 1000.01])
 func bodyWeightRejectsInvalidValuesWithoutChangingAWorkout(_ value: Double) throws {
   var workout = Workout(name: "Weight fixture", bodyWeightKG: 72.5)

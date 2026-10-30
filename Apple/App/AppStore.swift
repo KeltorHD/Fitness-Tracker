@@ -8,12 +8,14 @@ import WidgetKit
   private(set) var workouts: [Workout] = []
   private(set) var completed: [Workout] = []
   private(set) var templates: [WorkoutTemplate] = []
+  private(set) var bodyWeights: [BodyWeightEntry] = []
   private(set) var active: Workout?
   var error: String?
   var notice: String?
   var showSession = false
   var showingWorkoutDetail = false
   var showingTemplateEditor = false
+  var showingBodyWeightEditor = false
   private(set) var isDemoMode = false
   private(set) var switchingDemo = false
   private(set) var workspaceID = UUID()
@@ -40,7 +42,8 @@ import WidgetKit
       guard let self else { throw ArchiveFileError.unreadable }
       return try ArchiveImportPlan(
         archive: archive, existingWorkouts: self.repository.workouts(),
-        existingTemplates: self.repository.templates()
+        existingTemplates: self.repository.templates(),
+        existingBodyWeights: self.repository.bodyWeights()
       ).summary
     },
     commit: { [weak self] archive in
@@ -108,6 +111,7 @@ import WidgetKit
       await previous?.value
       try Task.checkCancellation()
       guard !showSession, !showingWorkoutDetail, !showingTemplateEditor,
+        !showingBodyWeightEditor,
         !archiveTransfer.isPresented, !archiveTransfer.isSaving
       else { throw TrainingError.invalidState }
       try repository.openDemo(archive)
@@ -124,14 +128,16 @@ import WidgetKit
     }
   }
   func leaveDemoMode() async {
-    guard isDemoMode, !switchingDemo else { return }
+    guard isDemoMode, !switchingDemo, !showingBodyWeightEditor else { return }
     switchingDemo = true
     defer { switchingDemo = false }
     do {
       try Task.checkCancellation()
       let snapshot = try repository.closeDemo()
       isDemoMode = false
-      applySnapshot(workouts: snapshot.workouts, templates: snapshot.templates)
+      applySnapshot(
+        workouts: snapshot.workouts, templates: snapshot.templates,
+        bodyWeights: snapshot.bodyWeights)
       resetWorkspacePresentation()
       refreshIntegrations()
     } catch {
@@ -146,27 +152,76 @@ import WidgetKit
     showSession = false
     showingWorkoutDetail = false
     showingTemplateEditor = false
+    showingBodyWeightEditor = false
     archiveTransfer.cancelReading()
     archiveTransfer.isPresented = false
     workspaceID = UUID()
   }
   private func loadRepository() throws {
-    // Commit the UI snapshot only when both reads succeed; a partial read preserves the previous state.
+    // Publish only after all reads succeed; a partial read preserves the previous UI snapshot.
     let loaded = try repository.workouts()
     let routines = try repository.templates()
-    applySnapshot(workouts: loaded, templates: routines)
+    let measurements = try repository.bodyWeights()
+    applySnapshot(workouts: loaded, templates: routines, bodyWeights: measurements)
   }
-  private func applySnapshot(workouts loaded: [Workout], templates routines: [WorkoutTemplate]) {
+  private func applySnapshot(
+    workouts loaded: [Workout], templates routines: [WorkoutTemplate],
+    bodyWeights measurements: [BodyWeightEntry]
+  ) {
     workouts = loaded
     completed = loaded.filter { $0.status == .completed }
     templates = routines
+    bodyWeights = measurements
     let unfinished = loaded.filter { [.active, .paused].contains($0.status) }
     active = unfinished.first { $0.id == active?.id } ?? unfinished.first
     if !isDemoMode { tracker.attach(active) }
   }
 
   private func archiveSnapshot() throws -> WorkoutArchive {
-    WorkoutArchive(workouts: try repository.workouts(), templates: try repository.templates())
+    WorkoutArchive(
+      workouts: try repository.workouts(), templates: try repository.templates(),
+      bodyWeights: try repository.bodyWeights())
+  }
+
+  @discardableResult func saveBodyWeight(_ entry: BodyWeightEntry) -> Bool {
+    do {
+      try repository.saveBodyWeight(entry)
+      try loadRepository()
+      return true
+    } catch {
+      report(
+        error, operation: "saveBodyWeight", message: "Не удалось сохранить вес. Попробуйте ещё раз."
+      )
+      return false
+    }
+  }
+  @discardableResult func setBodyWeight(_ weightKG: Double?, for workoutID: UUID) -> Bool {
+    if active?.id == workoutID {
+      return mutate { try WorkoutEngine.setBodyWeight(weightKG, in: &$0) }
+    }
+    guard var workout = workouts.first(where: { $0.id == workoutID }), workout.status == .completed
+    else {
+      error = "Эта тренировка уже завершена или удалена."
+      return false
+    }
+    workout.bodyWeightKG = weightKG
+    return updateCompleted(workout)
+  }
+  @discardableResult func deleteBodyWeight(_ point: BodyWeightPoint) -> Bool {
+    switch point.source {
+    case .workout(let id): return setBodyWeight(nil, for: id)
+    case .measurement(let id):
+      do {
+        try repository.deleteBodyWeight(id: id)
+        try loadRepository()
+        return true
+      } catch {
+        report(
+          error, operation: "deleteBodyWeight",
+          message: "Не удалось удалить запись веса. Попробуйте ещё раз.")
+        return false
+      }
+    }
   }
 
   private func importArchive(_ archive: WorkoutArchive) throws -> ArchiveImportSummary {
@@ -341,7 +396,8 @@ import WidgetKit
   private func importWatch(_ workout: Workout) -> Bool {
     guard !isDemoMode else { return false }
     do {
-      try repository.save(workout)
+      // Re-delivery must not erase body weight or other edits already saved on the phone.
+      _ = try repository.importArchive(WorkoutArchive(workouts: [workout], templates: []))
       try loadRepository()
       refreshIntegrations()
       return true

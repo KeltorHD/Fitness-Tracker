@@ -13,6 +13,7 @@ private var demoCalendar: Calendar {
 @MainActor private final class FailingDemoPersonalRepository: WorkoutRepository {
   let memory = MemoryWorkoutRepository()
   var failRead = false
+  var failBodyWeightRead = false
   func workouts() throws -> [Workout] { try memory.workouts() }
   func templates() throws -> [WorkoutTemplate] {
     if failRead { throw TrainingError.invalidState }
@@ -22,7 +23,10 @@ private var demoCalendar: Calendar {
   func saveTemplate(_ template: WorkoutTemplate) throws { try memory.saveTemplate(template) }
   func deleteWorkout(id: UUID) throws { try memory.deleteWorkout(id: id) }
   func deleteTemplate(id: UUID) throws { try memory.deleteTemplate(id: id) }
-  func bodyWeights() throws -> [BodyWeightEntry] { try memory.bodyWeights() }
+  func bodyWeights() throws -> [BodyWeightEntry] {
+    if failBodyWeightRead { throw TrainingError.invalidState }
+    return try memory.bodyWeights()
+  }
   func saveBodyWeight(_ entry: BodyWeightEntry) throws { try memory.saveBodyWeight(entry) }
   func deleteBodyWeight(id: UUID) throws { try memory.deleteBodyWeight(id: id) }
   func importArchive(_ archive: WorkoutArchive) throws -> ArchiveImportSummary {
@@ -106,6 +110,11 @@ private var demoCalendar: Calendar {
   #expect(workspace.isDemoMode)
   #expect(try workspace.workouts() == original)
   personal.failRead = false
+  personal.failBodyWeightRead = true
+  #expect(throws: TrainingError.invalidState) { try workspace.closeDemo() }
+  #expect(workspace.isDemoMode)
+  #expect(try workspace.workouts() == original)
+  personal.failBodyWeightRead = false
   _ = try workspace.closeDemo()
   #expect(!workspace.isDemoMode)
   #expect(try workspace.workouts().isEmpty)

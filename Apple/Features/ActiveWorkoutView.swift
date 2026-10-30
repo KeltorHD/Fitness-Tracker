@@ -46,6 +46,7 @@ struct ActiveWorkoutView: View {
               }
             }
           }
+          Section { WorkoutBodyWeightRow(workout: workout) }
           ForEach(workout.exercises) { exercise in
             Section {
               NavigationLink {
@@ -155,13 +156,15 @@ struct ActiveWorkoutView: View {
           L10n.text("Нет активной тренировки", locale: locale), systemImage: "dumbbell")
       }
     }
-    .archiveTransferPresenter(when: !pickingExercise && !renaming && !confirmCancel)
+    .archiveTransferPresenter(
+      when: !pickingExercise && !renaming && !confirmCancel && !store.showingBodyWeightEditor
+    )
     .alert(
       L10n.text("Ошибка", locale: locale),
       isPresented: Binding(
         get: {
           store.error != nil && !pickingExercise && !renaming && !confirmCancel
-            && !store.archiveTransfer.isPresented
+            && !store.archiveTransfer.isPresented && !store.showingBodyWeightEditor
         },
         set: { if !$0 { store.error = nil } })
     ) {

@@ -10,17 +10,29 @@ struct RootView: View {
   var body: some View {
     @Bindable var store = store
     TabView(selection: $tab) {
-      Tab(L10n.text("Дневник", locale: locale), systemImage: "book.closed", value: 0) {
+      Tab(value: 0) {
         DashboardView().tint(FitTheme.accent)
+      } label: {
+        Label(L10n.text("Дневник", locale: locale), systemImage: "book")
+          .environment(\.symbolVariants, SymbolVariants.none)
       }
-      Tab(L10n.text("Каталог", locale: locale), systemImage: "dumbbell", value: 1) {
+      Tab(value: 1) {
         TemplatesView().tint(FitTheme.accent)
+      } label: {
+        Label(L10n.text("Каталог", locale: locale), systemImage: "dumbbell")
+          .environment(\.symbolVariants, SymbolVariants.none)
       }
-      Tab(L10n.text("Результаты", locale: locale), systemImage: "chart.bar", value: 2) {
-        ProgressScreen().tint(FitTheme.accent)
+      Tab(value: 2) {
+        ProgressScreen().tint(.primary)
+      } label: {
+        Label(L10n.text("Результаты", locale: locale), systemImage: "chart.bar.xaxis")
+          .environment(\.symbolVariants, SymbolVariants.none)
       }
-      Tab(L10n.text("Настройки", locale: locale), systemImage: "gearshape", value: 3) {
+      Tab(value: 3) {
         SettingsView(model: store.settings).tint(FitTheme.accent)
+      } label: {
+        Label(L10n.text("Настройки", locale: locale), systemImage: "gearshape")
+          .environment(\.symbolVariants, SymbolVariants.none)
       }
     }
     .id(store.workspaceID)
@@ -32,13 +44,14 @@ struct RootView: View {
     }
     .archiveTransferPresenter(
       when: !store.showSession && !store.showingWorkoutDetail && !store.showingTemplateEditor
+        && !store.showingBodyWeightEditor
     )
     .alert(
       "FitnessTracker",
       isPresented: Binding(
         get: {
           store.error != nil && !store.showSession && !store.showingWorkoutDetail
-            && !store.showingTemplateEditor
+            && !store.showingTemplateEditor && !store.showingBodyWeightEditor
             && !store.archiveTransfer.isPresented
         },
         set: { if !$0 { store.error = nil } })
@@ -53,6 +66,7 @@ struct RootView: View {
         get: {
           store.notice != nil && store.error == nil && !store.showSession
             && !store.showingWorkoutDetail && !store.showingTemplateEditor
+            && !store.showingBodyWeightEditor
             && !store.archiveTransfer.isPresented
         }, set: { if !$0 { store.notice = nil } })
     ) {

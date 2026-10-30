@@ -27,6 +27,7 @@ bin_path="$("$swift_bin" build "${flags[@]}" --show-bin-path)"
 "$swiftc_bin" -swift-version 6 -strict-concurrency=complete \
   -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -typecheck -I "$bin_path/Modules" \
   Apple/Features/ProgressViewModel.swift Apple/Features/ExerciseProgressViewModel.swift \
+  Apple/Features/BodyWeightViewModel.swift \
   Apple/Features/HistoryViewModel.swift \
   Apple/Features/ExerciseLibraryViewModel.swift Apple/Services/ExerciseImageLoader.swift \
   Apple/Services/CloudAccountChecking.swift Apple/Shared/WidgetSnapshot.swift \
@@ -41,8 +42,14 @@ echo 'Portable presentation/data subset: Swift 6 type check passed (no Apple SDK
   -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \
   "$bin_path"/FitnessTrackerCore.build/*.swift.o \
   Apple/Features/ExerciseProgressViewModel.swift Apple/Features/ProgressViewModel.swift \
+  Apple/Features/BodyWeightViewModel.swift \
   Tests/PortableProgressChecks/main.swift -o "$bin_path/portable-progress-checks"
 "$bin_path/portable-progress-checks"
+"$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
+  -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \
+  "$bin_path"/FitnessTrackerCore.build/*.swift.o Apple/Features/BodyWeightViewModel.swift \
+  Tests/PortableWeightChecks/main.swift -o "$bin_path/portable-weight-checks"
+"$bin_path/portable-weight-checks"
 # Exercise the real tracker presentation/storage subset with fakes, without radio/HealthKit calls.
 "$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
   -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \

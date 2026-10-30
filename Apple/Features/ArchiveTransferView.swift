@@ -15,7 +15,7 @@ struct ArchiveTransferView: View {
           if let workout = model.workout {
             Text(workout.name).font(.headline)
           } else {
-            Text(L10n.text("Вся история тренировок и планы", locale: locale))
+            Text(L10n.text("Вся история тренировок, планы и записи веса", locale: locale))
           }
           Picker(L10n.text("Формат", locale: locale), selection: $model.format) {
             ForEach(ArchiveExportFormat.allCases) { format in
@@ -53,6 +53,9 @@ struct ArchiveTransferView: View {
               value: "\(preview.summary.addedWorkouts)")
             LabeledContent(
               L10n.text("Новых планов", locale: locale), value: "\(preview.summary.addedTemplates)")
+            LabeledContent(
+              L10n.text("Новых записей веса", locale: locale),
+              value: "\(preview.summary.addedBodyWeights)")
             LabeledContent(
               L10n.text("Уже есть в приложении", locale: locale),
               value: "\(preview.summary.skippedExisting)")

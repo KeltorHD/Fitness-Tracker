@@ -30,7 +30,7 @@ AppStore публикует новый snapshot только после успе
 
 ## SwiftData / CloudKit
 
-`StoredRecord` хранит versioned JSON-агрегат одной тренировки или шаблона (`kind`, `recordID`, `payload`, `modifiedAt`, `schemaVersion`). Все поля имеют defaults, unique constraints отсутствуют. UUID внутри payload обеспечивает идемпотентность upsert и Watch import. При обнаружении дубликатов чтение выбирает запись с наиболее поздним `modifiedAt`; следующий upsert удаляет лишние локальные records.
+`StoredRecord` хранит versioned JSON-агрегат одной тренировки, шаблона или записи веса (`kind`, `recordID`, `payload`, `modifiedAt`, `schemaVersion`). Все поля имеют defaults, unique constraints отсутствуют. UUID внутри payload обеспечивает идемпотентность upsert и Watch import. При обнаружении дубликатов чтение выбирает запись с наиболее поздним `modifiedAt`; следующий upsert удаляет лишние локальные records.
 
 CloudKit отключён по умолчанию. Переключение режима применяется при следующем запуске к тому же именованному хранилищу. Включённый режим использует `ModelConfiguration.cloudKitDatabase = .private(containerID)`. Подписанные capabilities и CloudKit schema пользователь настраивает на Mac. Нет ручного дублирующего upload/download поверх SwiftData.
 
@@ -69,3 +69,9 @@ ExerciseLibraryEntry хранит дополнительные данные от
 ## Дневник и оформление по референсам
 
 TrainingJournal в Core группирует completed sessions по неделям, строит календарь без предположения о 24-часовых сутках и считает улучшения рабочего веса. Repeat создаёт новые session/exercise-row/set UUID, сохраняя identity упражнений. AppStore поддерживает сохранение правок completed workouts с прежней валидацией. FitTheme централизует оранжевую палитру; RootView содержит четыре системные вкладки. Смена темы и idle timer принадлежат Apple layer. Подробности: [REFERENCE_DESIGN.md](REFERENCE_DESIGN.md).
+
+## Вес тела
+
+`BodyWeightEntry` использует тот же repository и ModelContext с kind `bodyWeight`; второй store/context не создаётся. `Workout.bodyWeightKG` — необязательный снимок веса тела, старые payloads декодируются с nil. `BodyWeightSummary` объединяет отдельные взвешивания и веса завершённых тренировок без копирования записей между источниками. Вес тела не входит в объём/1ПМ снарядов и автоматически не экспортируется в HealthKit.
+
+`BodyWeightViewModel` готовит сводку/строки истории, `BodyWeightEditorModel` строго разбирает локализованный ввод и сохраняет исходную точность при изменении одной даты. AppStore публикует workouts/templates/bodyWeights только после успешного чтения всех трёх коллекций. Демо использует тот же изолированный memory workspace. Повторная доставка Watch использует additive import и сохраняет правки веса на телефоне. Архив v2 переносит все источники веса, v1 мигрирует явно. [Полные правила](BODY_WEIGHT.md).

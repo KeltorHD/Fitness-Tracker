@@ -1004,6 +1004,23 @@
         }
       }
     },
+    "В одном файле допускается до 10 000 тренировок, 1 000 планов и 10 000 записей веса.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "В одном файле допускается до 10 000 тренировок, 1 000 планов и 10 000 записей веса."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A file can contain up to 10,000 workouts, 1,000 plans and 10,000 weight entries."
+          }
+        }
+      }
+    },
     "В приложении вашего трекера включите передачу данных в Apple «Здоровье» и разрешите запись нужных показателей. Затем разрешите FitnessTracker их чтение.": {
       "extractionState": "manual",
       "localizations": {
@@ -1191,6 +1208,23 @@
         }
       }
     },
+    "Вес": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вес"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weight"
+          }
+        }
+      }
+    },
     "Вес в %@": {
       "extractionState": "manual",
       "localizations": {
@@ -1225,6 +1259,74 @@
         }
       }
     },
+    "Вес относится к этой тренировке. После завершения он появится в общей истории веса.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вес относится к этой тренировке. После завершения он появится в общей истории веса."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This weight belongs to this workout. It will appear in weight history after the workout is completed."
+          }
+        }
+      }
+    },
+    "Вес тела": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вес тела"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Body weight"
+          }
+        }
+      }
+    },
+    "Вес тела должен быть больше 0 и не превышать 1000 кг.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вес тела должен быть больше 0 и не превышать 1000 кг."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Body weight must be greater than 0 and no more than 1,000 kg."
+          }
+        }
+      }
+    },
+    "Весы": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Весы"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weight"
+          }
+        }
+      }
+    },
     "Весь инвентарь": {
       "extractionState": "manual",
       "localizations": {
@@ -1238,6 +1340,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "All equipment"
+          }
+        }
+      }
+    },
+    "Взвешивание": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Взвешивание"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weigh-in"
           }
         }
       }
@@ -1442,6 +1561,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "All workouts and templates"
+          }
+        }
+      }
+    },
+    "Вся история тренировок, планы и записи веса": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вся история тренировок, планы и записи веса"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All workouts, plans and weight entries"
           }
         }
       }
@@ -1854,6 +1990,23 @@
         }
       }
     },
+    "Дата взвешивания": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Дата взвешивания"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weigh-in date"
+          }
+        }
+      }
+    },
     "Действие должно выполняться в приложении FitnessTracker.": {
       "extractionState": "manual",
       "localizations": {
@@ -2194,6 +2347,23 @@
         }
       }
     },
+    "Добавлено тренировок: %@, планов: %@, записей веса: %@. Пропущено: %@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Добавлено тренировок: %@, планов: %@, записей веса: %@. Пропущено: %@."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Added workouts: %@, plans: %@, weight entries: %@. Skipped: %@."
+          }
+        }
+      }
+    },
     "Добавлено тренировок: %@, планов: %@. Пропущено: %@.": {
       "extractionState": "manual",
       "localizations": {
@@ -2360,6 +2530,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Weight units"
+          }
+        }
+      }
+    },
+    "Если вес относится к тренировке, будет убрано только её значение веса тела.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Если вес относится к тренировке, будет убрано только её значение веса тела."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "If this weight belongs to a workout, only that workout’s body weight value will be removed."
           }
         }
       }
@@ -2585,6 +2772,57 @@
         }
       }
     },
+    "Записать": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Записать"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Record"
+          }
+        }
+      }
+    },
+    "Записать вес": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Записать вес"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Record weight"
+          }
+        }
+      }
+    },
+    "Запись веса больше недоступна.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Запись веса больше недоступна."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This weight entry is no longer available."
+          }
+        }
+      }
+    },
     "Запись идёт только во время активной тренировки, включая отдых между подходами. Пауза приостанавливает запись. Поддерживаются Bluetooth-пульсометры с передачей пульса.": {
       "extractionState": "manual",
       "localizations": {
@@ -2598,6 +2836,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Recording runs only during an active workout, including rest between sets. Pausing suspends recording. Bluetooth monitors with heart rate broadcasting are supported."
+          }
+        }
+      }
+    },
+    "Запись хранится в истории веса. Вес прошедших тренировок не изменится.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Запись хранится в истории веса. Вес прошедших тренировок не изменится."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This entry is saved in weight history. Past workout weights will not change."
+          }
+        }
+      }
+    },
+    "Запишите вес здесь или в тренировке.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Запишите вес здесь или в тренировке."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Record your weight here or in a workout."
           }
         }
       }
@@ -2632,6 +2904,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Health"
+          }
+        }
+      }
+    },
+    "Изменение": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Изменение"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Change"
           }
         }
       }
@@ -2683,6 +2972,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Edit"
+          }
+        }
+      }
+    },
+    "Изменить вес": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Изменить вес"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit weight"
           }
         }
       }
@@ -2819,6 +3125,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "History"
+          }
+        }
+      }
+    },
+    "История веса": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "История веса"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weight history"
           }
         }
       }
@@ -3006,6 +3329,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Source database: yuhonas/free-exercise-db; original data by Ollie Jennings / exercises.json."
+          }
+        }
+      }
+    },
+    "К предыдущей записи": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "К предыдущей записи"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Since the previous entry"
           }
         }
       }
@@ -3928,6 +4268,23 @@
         }
       }
     },
+    "Не удалось сохранить вес. Попробуйте ещё раз.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось сохранить вес. Попробуйте ещё раз."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not save your weight. Please try again."
+          }
+        }
+      }
+    },
     "Не удалось сохранить изменения тренировки. Попробуйте ещё раз.": {
       "extractionState": "manual",
       "localizations": {
@@ -4047,6 +4404,23 @@
         }
       }
     },
+    "Не удалось удалить запись веса. Попробуйте ещё раз.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось удалить запись веса. Попробуйте ещё раз."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not delete the weight entry. Please try again."
+          }
+        }
+      }
+    },
     "Не удалось удалить запись пульса. Повторите действие.": {
       "extractionState": "manual",
       "localizations": {
@@ -4128,6 +4502,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Unfinished workouts skipped: %@. Only one unfinished session can be restored at a time. The others remain in the original file."
+          }
+        }
+      }
+    },
+    "Некорректная дата взвешивания.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Некорректная дата взвешивания."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invalid weigh-in date."
           }
         }
       }
@@ -4217,6 +4608,23 @@
         }
       }
     },
+    "Нет записей": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нет записей"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No entries"
+          }
+        }
+      }
+    },
     "Нет новых записей для импорта.": {
       "extractionState": "manual",
       "localizations": {
@@ -4264,6 +4672,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "New workout"
+          }
+        }
+      }
+    },
+    "Новых записей веса": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Новых записей веса"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New weight entries"
           }
         }
       }
@@ -4880,6 +5305,23 @@
         }
       }
     },
+    "Период истории": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Период истории"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "History period"
+          }
+        }
+      }
+    },
     "План тренировки": {
       "extractionState": "manual",
       "localizations": {
@@ -5267,6 +5709,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Scanning for heart rate monitors…"
+          }
+        }
+      }
+    },
+    "Пока нет записей веса": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пока нет записей веса"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No weight entries yet"
           }
         }
       }
@@ -6546,6 +7005,23 @@
         }
       }
     },
+    "Текущий месяц": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Текущий месяц"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current month"
+          }
+        }
+      }
+    },
     "Тема": {
       "extractionState": "manual",
       "localizations": {
@@ -6733,6 +7209,23 @@
         }
       }
     },
+    "Убрать вес из тренировки": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Убрать вес из тренировки"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove weight from workout"
+          }
+        }
+      }
+    },
     "Убрать упражнение": {
       "extractionState": "manual",
       "localizations": {
@@ -6780,6 +7273,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Delete"
+          }
+        }
+      }
+    },
+    "Удалить запись веса?": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Удалить запись веса?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete weight entry?"
           }
         }
       }
@@ -6848,6 +7358,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Already in the app"
+          }
+        }
+      }
+    },
+    "Указать вес": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Указать вес"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add weight"
           }
         }
       }

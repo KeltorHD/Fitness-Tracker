@@ -14,8 +14,32 @@ struct ProgressScreen: View {
       ScrollView {
         LazyVStack(alignment: .leading, spacing: 28) {
           VStack(spacing: 14) {
-            SectionHeading(title: L10n.text("История", locale: locale), symbol: "clock")
-            TrainingMonthCard(date: model.month, summary: model.report.month, move: model.moveMonth)
+            HStack {
+              SectionHeading(title: L10n.text("История", locale: locale), symbol: "clock")
+              Menu {
+                Button(L10n.text("Предыдущий месяц", locale: locale)) { model.moveMonth(by: -1) }
+                Button(L10n.text("Следующий месяц", locale: locale)) { model.moveMonth(by: 1) }
+                Button(L10n.text("Текущий месяц", locale: locale)) { model.showCurrentMonth() }
+              } label: {
+                Image(systemName: "ellipsis").foregroundStyle(.secondary)
+              }
+              .accessibilityLabel(L10n.text("Период истории", locale: locale))
+              .accessibilityIdentifier("historyPeriodMenu")
+            }
+            TrainingMonthCard(date: model.month, summary: model.report.month)
+          }
+          VStack(spacing: 14) {
+            HStack {
+              SectionHeading(title: L10n.text("Весы", locale: locale), symbol: "scalemass")
+              NavigationLink {
+                BodyWeightHistoryView()
+              } label: {
+                Image(systemName: "ellipsis").foregroundStyle(.secondary)
+              }
+              .accessibilityLabel(L10n.text("История веса", locale: locale))
+              .accessibilityIdentifier("openBodyWeightHistory")
+            }
+            BodyWeightCard(model: model.bodyWeight)
           }
           VStack(alignment: .leading, spacing: 14) {
             SectionHeading(
@@ -38,7 +62,7 @@ struct ProgressScreen: View {
                 )
                 .foregroundStyle(FitTheme.accent).cornerRadius(3)
               }.frame(height: 180).chartYAxis { AxisMarks(position: .trailing) }
-            }.fitCard()
+            }.resultsCard()
           }
           VStack(alignment: .leading, spacing: 14) {
             SectionHeading(title: L10n.text("Личные рекорды", locale: locale), symbol: "trophy")
@@ -65,7 +89,7 @@ struct ProgressScreen: View {
                       "\(unit.display(record.estimatedOneRepMax).formatted(.number.locale(L10n.numberLocale).precision(.fractionLength(0...1)))) \(L10n.text(unit.rawValue, locale: locale))"
                   )
                 }
-              }.fitCard()
+              }.resultsCard()
             }
             Text(
               L10n.text(
@@ -94,9 +118,12 @@ struct ProgressScreen: View {
           }
         }
         .onChange(of: store.workouts, initial: true) { refresh() }
+        .onChange(of: store.bodyWeights) { refresh() }
         .onChange(of: calendar) { refresh() }
         .onChange(of: phase) { if phase == .active { refresh() } }
     }
   }
-  private func refresh() { model.refresh(workouts: store.workouts, calendar: calendar) }
+  private func refresh() {
+    model.refresh(workouts: store.workouts, calendar: calendar, bodyWeights: store.bodyWeights)
+  }
 }

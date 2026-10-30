@@ -34,7 +34,7 @@
 ## Статусы и проверки
 
 - **Implemented:** Core-расчёты, presentation model, пять нативных Swift Charts, периоды, выбор точки, переходы из active/history и RU/EN.
-- **Linux-tested:** семь новых Core-тестов, общий набор 90 тестов. `Tests/PortableProgressChecks/main.swift` исполняет настоящие Foundation/Observation модели: выбор, периоды, bodyweight, удаление, точный workout UUID и обновление. Проверены strict concurrency, ресурсы, локализация, синтаксис и форматирование Apple-файлов.
+- **Linux-tested:** семь новых Core-тестов, общий набор 99 тестов. `Tests/PortableProgressChecks/main.swift` исполняет настоящие Foundation/Observation модели: выбор, периоды, bodyweight, удаление, точный workout UUID и обновление. Проверены strict concurrency, ресурсы, локализация, синтаксис и форматирование Apple-файлов.
 - **Requires Xcode validation:** SwiftUI/Charts compilation, gestures, оси, навигация, VoiceOver, RU/EN, Dynamic Type и написанные Apple unit/UI tests. На Linux это не проверялось.
 - **Requires Apple Developer configuration:** новых capabilities нет; обычный signing приложения.
 

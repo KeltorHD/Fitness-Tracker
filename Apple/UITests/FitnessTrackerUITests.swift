@@ -1,6 +1,59 @@
 import XCTest
 
 final class FitnessTrackerUITests: XCTestCase {
+  @MainActor func testBodyWeightCanBeRecordedFromResults() {
+    let app = launch()
+    app.tabBars.buttons["Результаты"].tap()
+    let record = app.buttons["recordBodyWeight"]
+    reveal(record, in: app)
+    record.tap()
+    let input = app.textFields["bodyWeightInput"]
+    XCTAssertTrue(input.waitForExistence(timeout: 5))
+    input.tap()
+    input.typeText("72,5")
+    app.buttons["saveBodyWeight"].tap()
+    let weight = app.descendants(matching: .any).matching(identifier: "latestBodyWeight").firstMatch
+    XCTAssertTrue(weight.waitForExistence(timeout: 5))
+    XCTAssertTrue(weight.label.contains("72"))
+    let history = app.buttons["openBodyWeightHistory"]
+    for _ in 0..<4 where !history.isHittable { app.swipeDown() }
+    XCTAssertTrue(history.isHittable)
+    history.tap()
+    XCTAssertTrue(app.staticTexts["Взвешивание"].waitForExistence(timeout: 5))
+  }
+
+  @MainActor func testBodyWeightIsSavedOnAnActiveWorkout() {
+    let app = launch()
+    XCTAssertTrue(app.buttons["startWorkout"].waitForExistence(timeout: 10))
+    app.buttons["startWorkout"].tap()
+    let edit = app.buttons["editWorkoutBodyWeight"]
+    reveal(edit, in: app)
+    edit.tap()
+    let input = app.textFields["bodyWeightInput"]
+    XCTAssertTrue(input.waitForExistence(timeout: 5))
+    input.tap()
+    input.typeText("73,2")
+    app.buttons["saveBodyWeight"].tap()
+    XCTAssertTrue(edit.waitForExistence(timeout: 5))
+    edit.tap()
+    XCTAssertTrue(input.waitForExistence(timeout: 5))
+    XCTAssertTrue((input.value as? String)?.contains("73") == true)
+  }
+
+  @MainActor func testHistoryMonthMenuPreservesCalendarNavigation() {
+    let app = launch()
+    app.tabBars.buttons["Результаты"].tap()
+    let title = app.staticTexts["trainingMonthTitle"]
+    XCTAssertTrue(title.waitForExistence(timeout: 5))
+    let original = title.label
+    app.buttons["historyPeriodMenu"].tap()
+    app.buttons["Предыдущий месяц"].tap()
+    XCTAssertNotEqual(title.label, original)
+    app.buttons["historyPeriodMenu"].tap()
+    app.buttons["Текущий месяц"].tap()
+    XCTAssertEqual(title.label, original)
+  }
+
   @MainActor func testResultsShowFiveExerciseChartsAndPeriodPicker() {
     let app = launch()
     openDemoProfile(in: app)

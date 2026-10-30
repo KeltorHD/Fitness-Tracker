@@ -55,17 +55,22 @@
 | ExerciseProgressReport: пять показателей, exercise identity, периоды и DST | Да | Да, 7 новых Core tests | Нет для Core | Нет |
 | ExerciseProgressViewModel: серии, выбор периода/точки, удаление и выделение workout UUID | Да | Да, реальное исполнение Foundation/Observation модели в PortableProgressChecks и Swift 6 type-check | UI отдельно | Нет |
 | Swift Charts по упражнениям в Результатах, active workout и истории | Да | Только syntax parse, ресурсы и lint; три UI-сценария написаны, не запускались | Да, Charts SDK, navigation, selection, RU/EN, кг/фунты и accessibility | Обычный signing; дополнительных capabilities нет |
+| BodyWeightEntry / Workout.bodyWeightKG / summary / validation / archive v2 migration | Да | Да, 9 новых Core tests: старые payloads, round-trip, kg/lb, rollback, duplicate Watch import и demo isolation | Нет для Core | Нет |
+| BodyWeightViewModel / BodyWeightEditorModel | Да | Да, реальное исполнение PortableWeightChecks и Swift 6 type-check | UI отдельно | Нет |
+| Карточка Весы, история, вес active/completed workout и SwiftData bodyWeight records | Да | Только syntax parse/resources/lint; Apple unit/UI tests написаны, не запускались | Да, persistence, ошибки сохранения, sheets, keyboard, RU/EN и signing | Существующая конфигурация; новых capabilities нет |
+| Результаты по новым референсам: квадратные дни календаря, крупные карточки, нейтральные поверхности и контурные tabs | Да | Только syntax parse/resources/lint; визуальной проверки не было | Да, узкий экран, 4–6 рядов, Dynamic Type, dark mode, TabView symbols и сравнение с референсом | Обычный signing |
 
 ## Фактические проверки
 
 - `swift build`: прошёл для FitnessTrackerCore на Linux.
-- `swift test`: прошли 90 Swift Testing tests, включая parameterized cases. Стандартный XCTest runner также печатает «0 tests» — Core использует отдельный Swift Testing runner, его итоговая строка содержит 90 tests.
-- Отдельный Swift 6 strict-concurrency type-check без Apple SDK: HistoryViewModel, ProgressViewModel, ExerciseProgressViewModel, ExerciseLibraryViewModel, ExerciseImageLoader, CloudAccountChecking, WidgetSnapshot, AppCapabilities, L10n и WorkoutFormatting. Это проверка типов указанной переносимой части, не функциональный тест и не сборка iOS target.
+- `swift test`: прошли 99 Swift Testing tests, включая parameterized cases. Стандартный XCTest runner также печатает «0 tests» — Core использует отдельный Swift Testing runner, его итоговая строка содержит 99 tests.
+- Отдельный Swift 6 strict-concurrency type-check без Apple SDK: HistoryViewModel, ProgressViewModel, ExerciseProgressViewModel, BodyWeightViewModel/BodyWeightEditorModel, ExerciseLibraryViewModel, ExerciseImageLoader, CloudAccountChecking, WidgetSnapshot, AppCapabilities, L10n и WorkoutFormatting. Это проверка типов указанной переносимой части, не функциональный тест и не сборка iOS target.
 - Swift formatting/lint, синтаксический разбор Apple Swift, структура/конфигурационные связи, plist/JSON, PNG и наличие ресурсов: прошли в `bash scripts/check-linux.sh`. Для Dynamic Island parser проверяет обе ветви shared intents: основной target с FITNESS_TRACKER_APP и widget extension без него.
-- Локализация: 438 ключей RU/EN и четыре InfoPlist-строки, placeholders, формы счётчиков, покрытие русских ключей, target resources и повторяемость генерации — прошли. Компиляция `.xcstrings` в Xcode не проверена; сценарии — [LOCALIZATION.md](LOCALIZATION.md).
+- Локализация: 469 ключей RU/EN и четыре InfoPlist-строки, placeholders, формы счётчиков, покрытие русских ключей, target resources и повторяемость генерации — прошли. Компиляция `.xcstrings` в Xcode не проверена; сценарии — [LOCALIZATION.md](LOCALIZATION.md).
 - В сессии использован внешний Swift 6.2.1 через SWIFT_BIN; для постоянной установки предусмотрен `setup-linux.sh`, toolchain не хранится в git.
 - Переносимая tracker-подсистема дополнительно исполнена в `Tests/PortableTrackerChecks/main.swift`: recording/pause, save failure/retry, mode race, минимальные permissions, history, real file round-trip/corruption/delete. Это не тест HealthKit/CoreBluetooth.
 - Исполнен `Tests/PortableProgressChecks/main.swift`: выбор упражнения/точки, периоды, bodyweight, удаление, точный workout UUID при совпадающей дате и связь с ProgressViewModel. Это не тест SwiftUI/Charts.
+- Исполнен `Tests/PortableWeightChecks/main.swift`: локализованный и строгий ввод, кг/фунты, точность при правке даты, источники веса, редактирование и смена workspace. Это не SwiftUI/SwiftData test.
 - XcodeGen generation, iOS/watchOS compilation, linking, Simulator, SwiftUI rendering и реальные Apple-сервисы **не проверены**. Linux CI не заменяет эти проверки.
 
 ## Границы текущей реализации
@@ -87,3 +92,5 @@ Watch записывает отдельный стартовый план и п�
 Графики по упражнениям и правила периодов: [EXERCISE_PROGRESS.md](EXERCISE_PROGRESS.md).
 
 Изолированные демонстрационные тренировки: [DEMO_DATA.md](DEMO_DATA.md). Демо хранится в памяти и сбрасывается при выходе/завершении процесса; настройки приложения общие с личным профилем.
+
+Фиксация веса и перенос данных: [BODY_WEIGHT.md](BODY_WEIGHT.md).

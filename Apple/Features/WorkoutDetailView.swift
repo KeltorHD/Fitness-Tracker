@@ -31,6 +31,7 @@ struct WorkoutDetailView: View {
             SummaryMetric(
               title: L10n.text("Подходы", locale: locale), value: "\(session.completedSets)")
           }
+          WorkoutBodyWeightRow(workout: session).fitCard()
           ForEach(Array(session.exercises.enumerated()), id: \.element.id) { index, exercise in
             VStack(spacing: 16) {
               NavigationLink {
@@ -163,7 +164,9 @@ struct WorkoutDetailView: View {
     .sheet(item: $templateDraft, onDismiss: { store.showingTemplateEditor = false }) {
       TemplateEditor(template: $0).onAppear { store.showingTemplateEditor = true }
     }
-    .archiveTransferPresenter(when: !editing && templateDraft == nil && !confirmDelete)
+    .archiveTransferPresenter(
+      when: !editing && templateDraft == nil && !confirmDelete && !store.showingBodyWeightEditor
+    )
     .confirmationDialog(
       L10n.text("Удалить тренировку?", locale: locale), isPresented: $confirmDelete,
       titleVisibility: .visible
@@ -178,6 +181,7 @@ struct WorkoutDetailView: View {
       isPresented: Binding(
         get: {
           !editing && templateDraft == nil && !store.archiveTransfer.isPresented
+            && !store.showingBodyWeightEditor
             && (store.error != nil || store.notice != nil)
         },
         set: {

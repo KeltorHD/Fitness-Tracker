@@ -14,6 +14,7 @@ import XCTest
   let memory = MemoryWorkoutRepository()
   var failSaves = false
   var failTemplateReads = false
+  var failBodyWeightReads = false
   private var failure: NSError {
     NSError(domain: "Test", code: 1, userInfo: [NSLocalizedDescriptionKey: "private diagnostic"])
   }
@@ -30,7 +31,7 @@ import XCTest
   func deleteWorkout(id: UUID) throws { try memory.deleteWorkout(id: id) }
   func deleteTemplate(id: UUID) throws { try memory.deleteTemplate(id: id) }
   func bodyWeights() throws -> [BodyWeightEntry] {
-    if failTemplateReads { throw failure }
+    if failBodyWeightReads { throw failure }
     return try memory.bodyWeights()
   }
   func saveBodyWeight(_ entry: BodyWeightEntry) throws {
@@ -48,6 +49,53 @@ import XCTest
 }
 
 @MainActor final class AppStoreTests: XCTestCase {
+  func testFailedWeightReadPreservesTheEntirePreviousSnapshot() throws {
+    let repository = FailingWorkoutRepository()
+    let original = BodyWeightEntry(weightKG: 72)
+    try repository.saveBodyWeight(original)
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    let workout = Workout(name: "Weight fixture")
+    try repository.save(workout)
+    try repository.saveBodyWeight(BodyWeightEntry(weightKG: 73))
+    repository.failBodyWeightReads = true
+    store.reload()
+    XCTAssertTrue(store.workouts.isEmpty)
+    XCTAssertEqual(store.bodyWeights, [original])
+    XCTAssertNotNil(store.error)
+    repository.failBodyWeightReads = false
+    store.reload()
+    XCTAssertEqual(store.workouts, [workout])
+    XCTAssertEqual(store.bodyWeights.count, 2)
+  }
+  func testWorkoutBodyWeightSaveFailurePreservesPreviousValue() throws {
+    let repository = FailingWorkoutRepository()
+    let workout = Workout(name: "Weight fixture")
+    try repository.save(workout)
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    XCTAssertTrue(store.setBodyWeight(72.5, for: workout.id))
+    repository.failSaves = true
+    XCTAssertFalse(store.setBodyWeight(71, for: workout.id))
+    XCTAssertEqual(store.active?.bodyWeightKG, 72.5)
+    XCTAssertEqual(try repository.workouts().first?.bodyWeightKG, 72.5)
+    XCTAssertNotNil(store.error)
+  }
+  func testDemoWeightsNeverChangePersonalWeightHistory() async throws {
+    let repository = MemoryWorkoutRepository()
+    let original = BodyWeightEntry(weightKG: 72.5)
+    try repository.saveBodyWeight(original)
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    await store.loadDemoData()
+    XCTAssertTrue(store.bodyWeights.isEmpty)
+    var demo = original
+    demo.weightKG = 90
+    XCTAssertTrue(store.saveBodyWeight(demo))
+    await store.leaveDemoMode()
+    XCTAssertEqual(store.bodyWeights, [original])
+    XCTAssertEqual(try repository.bodyWeights(), [original])
+  }
   func testDemoProfileIsIsolatedReloadableAndNeverExportsToHealth() async throws {
     let personal = MemoryWorkoutRepository()
     let fixture = try DemoWorkoutData.archive(relativeTo: Date().addingTimeInterval(-3600))

@@ -12,9 +12,17 @@ enum FitTheme {
     startPoint: .top, endPoint: .bottom)
   static let radius: CGFloat = 25
   static let cardPadding: CGFloat = 16
+  static let resultsRadius: CGFloat = 28
+  static let resultsPadding: CGFloat = 20
+  static let resultsSurface = Color("ResultsSurface")
+  static let separator = Color(.separator).opacity(0.5)
 }
 
 extension View {
+  func resultsCard(padding: CGFloat = FitTheme.resultsPadding) -> some View {
+    self.padding(padding)
+      .background(FitTheme.resultsSurface, in: .rect(cornerRadius: FitTheme.resultsRadius))
+  }
   func fitCard() -> some View {
     padding(FitTheme.cardPadding)
       .background(FitTheme.card, in: .rect(cornerRadius: FitTheme.radius))

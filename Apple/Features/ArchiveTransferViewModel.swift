@@ -31,8 +31,10 @@ struct ArchiveImportPreview {
   var notice: String? {
     if let result = importResult {
       return L10n.format(
-        "Добавлено тренировок: %@, планов: %@. Пропущено: %@.", String(result.addedWorkouts),
-        String(result.addedTemplates), String(result.skippedExisting + result.skippedUnfinished))
+        "Добавлено тренировок: %@, планов: %@, записей веса: %@. Пропущено: %@.",
+        String(result.addedWorkouts),
+        String(result.addedTemplates), String(result.addedBodyWeights),
+        String(result.skippedExisting + result.skippedUnfinished))
     }
     return exported ? L10n.text("Файл сохранён.") : nil
   }
