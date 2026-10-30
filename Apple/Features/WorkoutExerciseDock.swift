@@ -6,6 +6,7 @@ struct WorkoutExerciseDock: View {
   let workout: Workout
   let exerciseIndex: Int
   let canComplete: Bool
+  var completingDrop = false
   let previous: () -> Void
   let next: () -> Void
   let add: () -> Void
@@ -28,7 +29,8 @@ struct WorkoutExerciseDock: View {
               minWidth: 52, minHeight: 52)
           }.buttonStyle(.glassProminent).buttonBorderShape(.circle)
             .disabled(!canComplete).accessibilityLabel(
-              L10n.text("Выполнить подход", locale: locale)
+              L10n.text(
+                completingDrop ? "Выполнить этап дропсета" : "Выполнить подход", locale: locale)
             )
             .accessibilityIdentifier("completeSet")
           Spacer(minLength: 0)

@@ -104,11 +104,19 @@ struct TemplateOverviewView: View {
                 VStack(alignment: .leading, spacing: 6) {
                   Text(L10n.exerciseName(item.exercise, locale: locale)).font(
                     .title3.weight(.medium))
-                  Text(
-                    L10n.format(
-                      "%@ × %@ повторений", String(item.setCount),
-                      String(item.repetitions), locale: locale)
-                  ).font(.subheadline)
+                  if let plans = item.plannedSets {
+                    Text(
+                      WorkoutExerciseSummary.text(
+                        WorkoutExercise(exercise: item.exercise, sets: plans), completedOnly: false,
+                        unit: .kilograms, locale: locale, numberLocale: L10n.numberLocale)
+                    ).font(.subheadline)
+                  } else {
+                    Text(
+                      L10n.format(
+                        "%@ × %@ повторений", String(item.setCount),
+                        String(item.repetitions), locale: locale)
+                    ).font(.subheadline)
+                  }
                 }.frame(maxWidth: .infinity, alignment: .leading)
                 if let entry = ExerciseLibrary.entry(for: item.exercise.id) {
                   ExercisePhoto(path: entry.images[0]).frame(width: 48, height: 48).clipShape(
@@ -177,18 +185,28 @@ struct TemplateEditor: View {
             NavigationLink(L10n.text("Техника выполнения", locale: locale)) {
               ExerciseDetailView(exercise: exercise.exercise)
             }
-            Stepper(
-              L10n.format("Подходы: %@", String(exercise.setCount), locale: locale),
-              value: $exercise.setCount, in: 1...30)
-            Stepper(
-              L10n.format(
-                "Повторения: %@", String(exercise.repetitions), locale: locale),
-              value: $exercise.repetitions, in: 1...1000)
-            TextField(
-              L10n.text("Добавленный вес, кг", locale: locale), value: $exercise.weightKG,
-              format: .number
-            )
-            .keyboardType(.decimalPad)
+            if let plans = exercise.plannedSets {
+              Text(
+                WorkoutExerciseSummary.text(
+                  WorkoutExercise(exercise: exercise.exercise, sets: plans), completedOnly: false,
+                  unit: .kilograms, locale: locale, numberLocale: L10n.numberLocale))
+              Text(
+                L10n.text("Вес и этапы можно изменить после запуска тренировки.", locale: locale)
+              ).font(.caption).foregroundStyle(.secondary)
+            } else {
+              Stepper(
+                L10n.format("Подходы: %@", String(exercise.setCount), locale: locale),
+                value: $exercise.setCount, in: 1...30)
+              Stepper(
+                L10n.format(
+                  "Повторения: %@", String(exercise.repetitions), locale: locale),
+                value: $exercise.repetitions, in: 1...1000)
+              TextField(
+                L10n.text("Добавленный вес, кг", locale: locale), value: $exercise.weightKG,
+                format: .number
+              )
+              .keyboardType(.decimalPad)
+            }
             Button(L10n.text("Убрать упражнение", locale: locale), role: .destructive) {
               template.exercises.removeAll { $0.id == exercise.id }
             }

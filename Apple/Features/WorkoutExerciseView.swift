@@ -31,6 +31,7 @@ struct WorkoutExerciseView: View {
           WorkoutExerciseDock(
             workout: workout, exerciseIndex: model.index(in: workout) ?? 0,
             canComplete: workout.status == .active && model.selectedSetID != nil,
+            completingDrop: exercise.sets.first { $0.id == model.selectedSetID }?.isDropSet == true,
             previous: { move(-1, in: workout) }, next: { move(1, in: workout) },
             add: { addSet(in: workout) }, complete: { complete(in: workout) },
             pause: { pause(workout) }, close: { dismiss() })
@@ -111,11 +112,30 @@ struct WorkoutExerciseView: View {
                 Label(L10n.text("Техника выполнения", locale: locale), systemImage: "info.circle")
               }
               if let set = row.sets.first(where: { $0.id == model.selectedSetID }),
-                workout.status == .active
+                workout.status == .active, set.completedAt == nil
               {
-                Button(
-                  L10n.text(set.isWarmup ? "Рабочий подход" : "Разминочный подход", locale: locale)
-                ) { toggleWarmup(set, row: row, workout: workout) }
+                if !set.isDropSet {
+                  Button(
+                    L10n.text(
+                      set.isWarmup ? "Рабочий подход" : "Разминочный подход", locale: locale)
+                  ) { toggleWarmup(set, row: row, workout: workout) }
+                  .accessibilityIdentifier("toggleSetWarmup")
+                }
+                if !set.isWarmup {
+                  Button(
+                    L10n.text(
+                      set.isDropSet ? "Добавить снижение веса" : "Сделать дропсетом", locale: locale
+                    )
+                  ) { configureDrop(workout, adding: true) }
+                  .disabled((set.dropStages ?? []).count >= 5).accessibilityIdentifier(
+                    "addDropStage")
+                  if set.isDropSet {
+                    Button(L10n.text("Убрать дропсет", locale: locale)) {
+                      configureDrop(workout, adding: false)
+                    }
+                    .accessibilityIdentifier("removeDropSet")
+                  }
+                }
               }
             } label: {
               Image(systemName: "ellipsis").font(.title3.weight(.semibold)).frame(
@@ -132,17 +152,8 @@ struct WorkoutExerciseView: View {
           }.multilineTextAlignment(.center).padding(.horizontal, 12)
           LazyVStack(spacing: 0) {
             ForEach(Array(row.sets.enumerated()), id: \.element.id) { index, set in
-              WorkoutSetRow(
-                set: set, index: index, unit: model.unit,
-                editable: workout.status == .active && set.completedAt == nil,
-                selected: set.id == model.selectedSetID && workout.status == .active,
-                weight: Binding(
-                  get: { model.drafts[set.id]?.weight ?? "" },
-                  set: { model.editWeight($0, setID: set.id) }),
-                repetitions: Binding(
-                  get: { model.drafts[set.id]?.repetitions ?? "" },
-                  set: { model.editRepetitions($0, setID: set.id) }),
-                focus: $focus, select: { model.select(set.id, in: workout) },
+              WorkoutSetGroupView(
+                set: set, index: index, workout: workout, model: model, focus: $focus,
                 toggleWarmup: { toggleWarmup(set, row: row, workout: workout) })
               if index < row.sets.count - 1 { Divider() }
             }
@@ -240,11 +251,38 @@ struct WorkoutExerciseView: View {
       error = nil
       let saved = store.mutate {
         guard $0.id == workout.id else { throw TrainingError.invalidState }
-        try WorkoutEngine.completeSet(
-          in: &$0, exerciseID: request.exerciseID, setID: request.set.id,
-          repetitions: request.set.repetitions, weightKG: request.set.weightKG)
+        if let stageID = request.stageID,
+          let stage = request.set.dropStages?.first(where: { $0.id == stageID })
+        {
+          try WorkoutEngine.completeDropStage(
+            in: &$0, exerciseID: request.exerciseID, setID: request.set.id,
+            stageID: stageID, repetitions: stage.repetitions, weightKG: stage.weightKG,
+            dropStages: request.set.dropStages)
+        } else {
+          if request.set.isDropSet {
+            try WorkoutEngine.configureDropSet(
+              in: &$0, exerciseID: request.exerciseID, setID: request.set.id,
+              repetitions: request.set.repetitions, weightKG: request.set.weightKG,
+              stages: request.set.dropStages ?? [])
+          }
+          try WorkoutEngine.completeSet(
+            in: &$0, exerciseID: request.exerciseID, setID: request.set.id,
+            repetitions: request.set.repetitions, weightKG: request.set.weightKG)
+        }
       }
       if saved { lastCompletion = ContinuousClock().now }
+    } catch { self.error = error.localizedDescription }
+  }
+  private func configureDrop(_ workout: Workout, adding: Bool) {
+    focus = nil
+    do {
+      let set = try model.configuredDropSet(in: workout, adding: adding)
+      error = nil
+      mutate(workout) {
+        try WorkoutEngine.configureDropSet(
+          in: &$0, exerciseID: model.exerciseID, setID: set.id,
+          repetitions: set.repetitions, weightKG: set.weightKG, stages: set.dropStages ?? [])
+      }
     } catch { self.error = error.localizedDescription }
   }
   private func finish(_ workout: Workout) {

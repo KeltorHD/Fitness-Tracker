@@ -535,5 +535,19 @@
   "Предыдущее упражнение": "Previous exercise",
   "Рабочий подход": "Working set",
   "Разминка": "Warm-up",
-  "Следующее упражнение": "Next exercise"
+  "Следующее упражнение": "Next exercise",
+  "Без отдыха между этапами": "No rest between stages",
+  "Вес и этапы можно изменить после запуска тренировки.": "You can change weights and stages after starting the workout.",
+  "Выполнить этап дропсета": "Complete drop-set stage",
+  "Добавить снижение веса": "Add weight drop",
+  "Дропсет": "Drop set",
+  "Дропсет · этап %@/%@": "Drop set · stage %@/%@",
+  "Дропсет · этапов: %@": "Drop set · stages: %@",
+  "Дропсет должен содержать от 1 до 5 снижений веса. Каждый следующий вес должен быть меньше предыдущего. Разминка оформляется отдельно.": "A drop set must have 1 to 5 weight drops. Each weight must be lower than the previous one. Warm-ups are recorded separately.",
+  "Не выполнено": "Not completed",
+  "Сделать дропсетом": "Make a drop set",
+  "Сначала выполните предыдущий этап дропсета.": "Complete the previous drop-set stage first.",
+  "Снижение веса %@": "Weight drop %@",
+  "Убрать дропсет": "Remove drop set",
+  "Этапы дропсета включаются в объём и повторы. 1ПМ рассчитывается по основному этапу.": "Drop-set stages count toward volume and repetitions. One-rep max is estimated from the base stage."
 }

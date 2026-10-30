@@ -28,18 +28,27 @@ struct WatchWorkoutView: View {
             }
             Text(
               L10n.format(
-                "%@/%@ подходов", String(workout.completedSets),
+                "%@/%@ подходов", String(workout.fullyCompletedSets),
                 String(workout.totalSets), locale: locale)
             ).font(.caption)
             if workout.status == .paused {
               Text(L10n.text("На паузе", locale: locale)).foregroundStyle(.secondary)
             }
             if let exercise = workout.exercises.first(where: {
-              $0.sets.contains { $0.completedAt == nil }
+              $0.sets.contains { !$0.isFullyCompleted }
             }),
-              let set = exercise.sets.first(where: { $0.completedAt == nil })
+              let set = exercise.sets.first(where: { !$0.isFullyCompleted }),
+              let target = set.stages.first(where: { $0.completedAt == nil })
             {
               Text(L10n.exerciseName(exercise.exercise, locale: locale)).font(.headline)
+              if set.isDropSet {
+                Text(
+                  L10n.format(
+                    "Дропсет · этап %@/%@",
+                    String((set.stages.firstIndex { $0.id == target.id } ?? 0) + 1),
+                    String(set.stages.count), locale: locale)
+                ).font(.caption).foregroundStyle(.secondary)
+              }
               Stepper(
                 L10n.countText(reps, kind: "rep", locale: locale),
                 value: $reps, in: 1...1000)
@@ -51,14 +60,20 @@ struct WatchWorkoutView: View {
                 value: $weight, in: 0...1500, step: 2.5)
               Button(L10n.text("Готово", locale: locale), systemImage: "checkmark") {
                 store.update {
-                  try WorkoutEngine.completeSet(
-                    in: &$0, exerciseID: exercise.id,
-                    setID: set.id, repetitions: reps, weightKG: weight)
+                  if target.id == set.id {
+                    try WorkoutEngine.completeSet(
+                      in: &$0, exerciseID: exercise.id, setID: set.id, repetitions: reps,
+                      weightKG: weight)
+                  } else {
+                    try WorkoutEngine.completeDropStage(
+                      in: &$0, exerciseID: exercise.id, setID: set.id, stageID: target.id,
+                      repetitions: reps, weightKG: weight)
+                  }
                 }
               }.buttonStyle(.glassProminent).disabled(workout.status != .active)
-                .onChange(of: set.id, initial: true) {
-                  reps = set.repetitions
-                  weight = set.weightKG
+                .onChange(of: target.id, initial: true) {
+                  reps = target.repetitions
+                  weight = target.weightKG
                 }
             }
             if let end = workout.restEndsAt, end > .now {

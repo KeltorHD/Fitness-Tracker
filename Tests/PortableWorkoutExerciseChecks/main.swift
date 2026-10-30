@@ -116,8 +116,111 @@ private func rejects(_ action: () throws -> Void) throws {
     try expect(
       summary.contains("42,5") && summary.contains("11") && !summary.contains("45"),
       "History summary includes completed sets only")
+    try checkDrops(at: date)
     print(
       "Portable workout exercise presentation: localized/strict input, pounds precision, draft retention, repeated exercise identity, paging/reordering/removal, completion, pause/history guards and summaries passed (no Apple SDK)."
+    )
+  }
+
+  @MainActor private static func checkDrops(at date: Date) throws {
+    let row = WorkoutExercise(
+      exercise: Exercise(name: "Drop", muscle: .back),
+      sets: [WorkoutSet(repetitions: 10, weightKG: 50)])
+    var workout = Workout(name: "Drop", startedAt: date, exercises: [row])
+    let model = WorkoutExercisePresentation(
+      workout: workout, exerciseID: row.id, unit: .kilograms, locale: Locale(identifier: "ru_RU"))
+    for _ in 0..<2 {
+      let config = try model.configuredDropSet(in: workout, adding: true)
+      try WorkoutEngine.configureDropSet(
+        in: &workout, exerciseID: row.id, setID: config.id, repetitions: config.repetitions,
+        weightKG: config.weightKG, stages: config.dropStages ?? [])
+      model.refresh(workout)
+    }
+    let stages = workout.exercises[0].sets[0].dropStages ?? []
+    try expect(
+      stages.count == 2 && stages[0].weightKG == 40 && stages[1].weightKG == 32,
+      "Adding drops creates editable decreasing targets, never performed values")
+    model.editWeight("60", setID: row.sets[0].id)
+    model.editWeight("45", setID: stages[0].id)
+    model.editWeight("30", setID: stages[1].id)
+    let base = try model.completion(in: workout)
+    try expect(
+      base.stageID == nil && base.set.weightKG == 60 && base.set.dropStages?[0].weightKG == 45,
+      "Base completion validates all edited targets together")
+    try WorkoutEngine.configureDropSet(
+      in: &workout, exerciseID: row.id, setID: base.set.id, repetitions: base.set.repetitions,
+      weightKG: base.set.weightKG, stages: base.set.dropStages ?? [])
+    try WorkoutEngine.completeSet(
+      in: &workout, exerciseID: row.id, setID: base.set.id, repetitions: base.set.repetitions,
+      weightKG: base.set.weightKG, at: date.addingTimeInterval(1))
+    model.refresh(workout)
+    try expect(
+      model.selectedSetID == base.set.id && model.selectedStageID == stages[0].id
+        && workout.restEndsAt == nil,
+      "Selection stays in the same group and advances to its first drop")
+    model.select(stages[1].id, in: workout)
+    try rejects { _ = try model.completion(in: workout) }
+    model.select(stages[0].id, in: workout)
+    model.editWeight("25,5", setID: stages[0].id)
+    try rejects { _ = try model.completion(in: workout) }
+    model.editWeight("20", setID: stages[1].id)
+    let first = try model.completion(in: workout)
+    let value = first.set.dropStages?[0]
+    guard let value else { throw Failure(message: "Missing drop request") }
+    try WorkoutEngine.completeDropStage(
+      in: &workout, exerciseID: row.id, setID: first.set.id, stageID: value.id,
+      repetitions: value.repetitions, weightKG: value.weightKG, dropStages: first.set.dropStages,
+      at: date.addingTimeInterval(2))
+    model.refresh(workout)
+    try expect(
+      model.selectedStageID == stages[1].id && model.drafts[stages[0].id] == nil
+        && workout.restEndsAt == nil,
+      "Completed drop fields freeze; future draft remains ready without rest")
+    let last = try model.completion(in: workout)
+    guard let final = last.set.dropStages?.last else {
+      throw Failure(message: "Missing final drop")
+    }
+    try WorkoutEngine.completeDropStage(
+      in: &workout, exerciseID: row.id, setID: last.set.id, stageID: final.id,
+      repetitions: final.repetitions, weightKG: final.weightKG, dropStages: last.set.dropStages,
+      at: date.addingTimeInterval(3))
+    model.refresh(workout)
+    try expect(
+      model.selectedSetID == nil && workout.fullyCompletedSets == 1 && workout.totalSets == 1
+        && workout.restEndsAt != nil, "One complete group starts exactly one rest interval")
+    let summary = WorkoutExerciseSummary.text(
+      workout.exercises[0], completedOnly: true, unit: .kilograms,
+      locale: Locale(identifier: "ru_RU"), numberLocale: Locale(identifier: "ru_RU"))
+    try expect(
+      summary.contains("Дропсет") && summary.contains("25,5") && summary.contains("→"),
+      "History renders the actual linked stages")
+
+    var editable = Workout(name: "Editable", startedAt: date, exercises: [row])
+    let edit = WorkoutExercisePresentation(
+      workout: editable, exerciseID: row.id, unit: .kilograms, locale: Locale(identifier: "ru_RU"))
+    let config = try edit.configuredDropSet(in: editable, adding: true)
+    try WorkoutEngine.configureDropSet(
+      in: &editable, exerciseID: row.id, setID: config.id, repetitions: config.repetitions,
+      weightKG: config.weightKG, stages: config.dropStages ?? [])
+    edit.refresh(editable)
+    edit.editWeight("10", setID: config.id)
+    try rejects { _ = try edit.completion(in: editable) }
+    let plain = try edit.configuredDropSet(in: editable, adding: false)
+    try expect(
+      !plain.isDropSet && plain.weightKG == 10,
+      "Removing a drop group can recover from inconsistent pending stage targets")
+    try WorkoutEngine.configureDropSet(
+      in: &editable, exerciseID: row.id, setID: plain.id, repetitions: plain.repetitions,
+      weightKG: plain.weightKG, stages: [])
+    try WorkoutEngine.setWarmup(true, in: &editable, exerciseID: row.id, setID: plain.id)
+    edit.refresh(editable)
+    try rejects { _ = try edit.configuredDropSet(in: editable, adding: true) }
+    let warmup = WorkoutExerciseSummary.text(
+      editable.exercises[0], completedOnly: false, unit: .kilograms,
+      locale: Locale(identifier: "ru_RU"), numberLocale: Locale(identifier: "ru_RU"))
+    try expect(warmup.contains("Разминка"), "Warmup remains explicitly identified")
+    print(
+      "Portable drop-set presentation: configuration, mixed target editing, ordered selection, strict decrease, draft freezing, one-group count/rest, history and warmup separation passed (no Apple SDK)."
     )
   }
 }

@@ -21,7 +21,7 @@ struct WorkoutSessionSummary: View {
         SummaryMetric(
           title: L10n.text("Подходы", locale: locale),
           value: workout.status == .completed
-            ? String(workout.completedSets) : "\(workout.completedSets)/\(workout.totalSets)")
+            ? String(workout.completedSets) : "\(workout.fullyCompletedSets)/\(workout.totalSets)")
       }
     }
   }

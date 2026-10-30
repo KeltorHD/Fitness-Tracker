@@ -4,6 +4,31 @@ import XCTest
 @testable import FitnessTracker
 
 @MainActor final class PersistenceTests: XCTestCase {
+  func testDropStagesAndMixedTemplateTargetsRoundTrip() throws {
+    let repository = try SwiftDataWorkoutRepository(inMemory: true)
+    let date = Date(timeIntervalSince1970: 1_700_000_000)
+    let row = WorkoutExercise(
+      exercise: Exercise(name: "Drop", muscle: .back),
+      sets: [WorkoutSet(repetitions: 10, weightKG: 50, dropStages: [DropSetStage(weightKG: 40)])])
+    var workout = Workout(name: "Drop", startedAt: date, exercises: [row])
+    try WorkoutEngine.completeSet(
+      in: &workout, exerciseID: row.id, setID: row.sets[0].id, repetitions: 10, weightKG: 50,
+      at: date.addingTimeInterval(1))
+    let stage = try XCTUnwrap(row.sets[0].dropStages?.first)
+    try WorkoutEngine.completeDropStage(
+      in: &workout, exerciseID: row.id, setID: row.sets[0].id, stageID: stage.id, repetitions: 8,
+      weightKG: 40, at: date.addingTimeInterval(2))
+    try WorkoutEngine.finish(&workout, at: date.addingTimeInterval(3))
+    let template = try WorkoutEngine.makeTemplate(from: workout)
+    try repository.save(workout)
+    try repository.saveTemplate(template)
+    XCTAssertEqual(try repository.workouts(), [workout])
+    XCTAssertEqual(try repository.templates(), [template])
+    let archive = try WorkoutArchiveCodec.decode(
+      WorkoutArchiveCodec.encode(WorkoutArchive(workouts: [workout], templates: [template])))
+    XCTAssertEqual(archive.workouts, [workout])
+    XCTAssertEqual(archive.templates, [template])
+  }
   func testBodyWeightRoundTripDeleteAndCombinedArchiveImport() throws {
     let repository = try SwiftDataWorkoutRepository(inMemory: true)
     var entry = BodyWeightEntry(measuredAt: Date(timeIntervalSince1970: 100), weightKG: 72.5)

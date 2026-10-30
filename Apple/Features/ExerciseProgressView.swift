@@ -50,6 +50,12 @@ struct ExerciseProgressSection: View {
           "Учитываются только выполненные рабочие подходы. Разминка не включается. Вес тела не добавляется к отягощению.",
           locale: locale)
       ).font(.caption).foregroundStyle(.secondary)
+      Text(
+        L10n.text(
+          "Этапы дропсета включаются в объём и повторы. 1ПМ рассчитывается по основному этапу.",
+          locale: locale)
+      )
+      .font(.caption).foregroundStyle(.secondary)
     }
   }
 }

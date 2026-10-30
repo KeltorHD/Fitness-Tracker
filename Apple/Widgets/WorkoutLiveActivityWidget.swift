@@ -141,9 +141,14 @@ private struct NextWorkoutSet: View {
     VStack(alignment: .leading, spacing: 2) {
       if let name = state.nextExerciseName, let number = state.nextSetNumber {
         Text(name).font(.subheadline.bold()).lineLimit(1)
-        Text(L10n.format("Далее: подход %@", String(number), locale: locale)).font(
-          .caption
-        ).foregroundStyle(.secondary)
+        if let stage = state.nextDropStageNumber, let count = state.nextDropStageCount {
+          Text(L10n.format("Дропсет · этап %@/%@", String(stage), String(count), locale: locale))
+            .font(.caption).foregroundStyle(.secondary)
+        } else {
+          Text(L10n.format("Далее: подход %@", String(number), locale: locale)).font(
+            .caption
+          ).foregroundStyle(.secondary)
+        }
       } else {
         Text(
           state.totalSets == 0

@@ -1004,6 +1004,23 @@
         }
       }
     },
+    "Без отдыха между этапами": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Без отдыха между этапами"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No rest between stages"
+          }
+        }
+      }
+    },
     "Библиотека FitnessTracker": {
       "extractionState": "manual",
       "localizations": {
@@ -1476,6 +1493,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Weight must be between 0 and 1500 kg."
+          }
+        }
+      }
+    },
+    "Вес и этапы можно изменить после запуска тренировки.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вес и этапы можно изменить после запуска тренировки."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You can change weights and stages after starting the workout."
           }
         }
       }
@@ -2071,6 +2105,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Complete set"
+          }
+        }
+      }
+    },
+    "Выполнить этап дропсета": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выполнить этап дропсета"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Complete drop-set stage"
           }
         }
       }
@@ -2704,6 +2755,23 @@
         }
       }
     },
+    "Добавить снижение веса": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Добавить снижение веса"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add weight drop"
+          }
+        }
+      }
+    },
     "Добавить упражнение": {
       "extractionState": "manual",
       "localizations": {
@@ -2887,6 +2955,74 @@
           "stringUnit": {
             "state": "translated",
             "value": "iCloud access is restricted."
+          }
+        }
+      }
+    },
+    "Дропсет": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Дропсет"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drop set"
+          }
+        }
+      }
+    },
+    "Дропсет · этап %@/%@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Дропсет · этап %@/%@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drop set · stage %@/%@"
+          }
+        }
+      }
+    },
+    "Дропсет · этапов: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Дропсет · этапов: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drop set · stages: %@"
+          }
+        }
+      }
+    },
+    "Дропсет должен содержать от 1 до 5 снижений веса. Каждый следующий вес должен быть меньше предыдущего. Разминка оформляется отдельно.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Дропсет должен содержать от 1 до 5 снижений веса. Каждый следующий вес должен быть меньше предыдущего. Разминка оформляется отдельно."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A drop set must have 1 to 5 weight drops. Each weight must be lower than the previous one. Warm-ups are recorded separately."
           }
         }
       }
@@ -4417,6 +4553,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Start a workout and select AirPods Pro 3 in Apple Health mode."
+          }
+        }
+      }
+    },
+    "Не выполнено": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не выполнено"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not completed"
           }
         }
       }
@@ -7600,6 +7753,23 @@
         }
       }
     },
+    "Сделать дропсетом": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сделать дропсетом"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Make a drop set"
+          }
+        }
+      }
+    },
     "Синхронизация iCloud": {
       "extractionState": "manual",
       "localizations": {
@@ -7736,6 +7906,23 @@
         }
       }
     },
+    "Сначала выполните предыдущий этап дропсета.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сначала выполните предыдущий этап дропсета."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Complete the previous drop-set stage first."
+          }
+        }
+      }
+    },
     "Сначала загрузите запись пульса. Повторите загрузку в разделе «Трекер».": {
       "extractionState": "manual",
       "localizations": {
@@ -7766,6 +7953,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Start a workout in FitnessTracker first."
+          }
+        }
+      }
+    },
+    "Снижение веса %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Снижение веса %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weight drop %@"
           }
         }
       }
@@ -8327,6 +8531,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Remove weight from workout"
+          }
+        }
+      }
+    },
+    "Убрать дропсет": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Убрать дропсет"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove drop set"
           }
         }
       }
@@ -8922,6 +9143,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "This workout has already finished or been deleted."
+          }
+        }
+      }
+    },
+    "Этапы дропсета включаются в объём и повторы. 1ПМ рассчитывается по основному этапу.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Этапы дропсета включаются в объём и повторы. 1ПМ рассчитывается по основному этапу."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drop-set stages count toward volume and repetitions. One-rep max is estimated from the base stage."
           }
         }
       }

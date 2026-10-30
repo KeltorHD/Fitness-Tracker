@@ -1,6 +1,47 @@
 import XCTest
 
 final class FitnessTrackerUITests: XCTestCase {
+  @MainActor func testWarmupAndDropStagesCanBeConfiguredBeforeCompletion() {
+    let app = launch()
+    XCTAssertTrue(app.buttons["startWorkout"].waitForExistence(timeout: 10))
+    app.buttons["startWorkout"].tap()
+    app.buttons["addExercise"].tap()
+    app.searchFields.firstMatch.tap()
+    app.searchFields.firstMatch.typeText("Приседания")
+    app.buttons.containing(.staticText, identifier: "Приседания").firstMatch.tap()
+    let select = app.buttons["selectLibraryExercise"]
+    XCTAssertTrue(select.waitForExistence(timeout: 5))
+    select.tap()
+    app.buttons["openWorkoutExercise"].firstMatch.tap()
+    let weight = app.textFields.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "setWeight_")
+    ).firstMatch
+    XCTAssertTrue(weight.waitForExistence(timeout: 5))
+    weight.tap()
+    let original = weight.value as? String ?? ""
+    weight.typeText(
+      String(repeating: XCUIKeyboardKey.delete.rawValue, count: original.count) + "50")
+    app.buttons["Готово"].tap()
+    let menu = app.buttons["Действия упражнения"]
+    menu.tap()
+    app.buttons["toggleSetWarmup"].tap()
+    XCTAssertTrue(
+      app.descendants(matching: .any).matching(identifier: "warmupSet").firstMatch.waitForExistence(
+        timeout: 5))
+    menu.tap()
+    app.buttons["toggleSetWarmup"].tap()
+    menu.tap()
+    app.buttons["addDropStage"].tap()
+    let group = app.descendants(matching: .any).matching(identifier: "dropSetGroup").firstMatch
+    XCTAssertTrue(group.waitForExistence(timeout: 5))
+    menu.tap()
+    app.buttons["addDropStage"].tap()
+    XCTAssertTrue(app.staticTexts["Дропсет · этапов: 3"].waitForExistence(timeout: 5))
+    menu.tap()
+    app.buttons["removeDropSet"].tap()
+    XCTAssertFalse(group.exists)
+    XCTAssertEqual(app.alerts.count, 0)
+  }
   @MainActor func testBodyWeightCanBeRecordedFromResults() {
     let app = launch()
     app.tabBars.buttons["Результаты"].tap()

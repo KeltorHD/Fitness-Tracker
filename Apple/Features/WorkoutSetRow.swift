@@ -17,6 +17,8 @@ struct WorkoutSetRow: View {
   @ScaledMetric(relativeTo: .largeTitle) private var numberSize: CGFloat = 34
   let set: WorkoutSet
   let index: Int
+  var marker: String? = nil
+  var showsWarmupAction = true
   let unit: WeightUnit
   let editable: Bool
   let selected: Bool
@@ -30,13 +32,16 @@ struct WorkoutSetRow: View {
     VStack(alignment: .leading, spacing: 8) {
       HStack(spacing: 12) {
         Button(action: select) {
-          Text(String(index + 1)).font(.body).monospacedDigit()
+          Text(marker ?? String(index + 1)).font(.body).monospacedDigit()
             .frame(minWidth: 32, minHeight: 36)
             .foregroundStyle(selected ? FitTheme.accent : FitTheme.muted)
             .background(
               selected ? FitTheme.accent.opacity(0.12) : FitTheme.card, in: .rect(cornerRadius: 12))
         }.buttonStyle(.plain).frame(minWidth: 44, minHeight: 44).disabled(!editable)
-          .accessibilityLabel(L10n.format("Подход %@", String(index + 1), locale: locale))
+          .accessibilityLabel(
+            L10n.format(
+              marker == nil ? "Подход %@" : "Снижение веса %@", String(index + 1), locale: locale)
+          )
           .accessibilityAddTraits(selected ? .isSelected : [])
         Group {
           if typeSize.isAccessibilitySize {
@@ -57,9 +62,19 @@ struct WorkoutSetRow: View {
             .accessibilityLabel(L10n.text("Подход выполнен", locale: locale))
         }
       }
-      if set.isWarmup || (set.loadMultiplier ?? 1) > 1 {
+      if set.isWarmup || set.isDropSet || (set.loadMultiplier ?? 1) > 1 {
         HStack {
-          if set.isWarmup { Text(L10n.text("Разминка", locale: locale)) }
+          if set.isWarmup {
+            Label(L10n.text("Разминка", locale: locale), systemImage: "flame")
+              .foregroundStyle(FitTheme.accent).padding(.horizontal, 8).padding(.vertical, 4)
+              .background(FitTheme.accent.opacity(0.1), in: .capsule).accessibilityIdentifier(
+                "warmupSet")
+          }
+          if set.isDropSet {
+            Text(L10n.format("Дропсет · этапов: %@", String(set.stages.count), locale: locale))
+              .foregroundStyle(FitTheme.accent).padding(.horizontal, 8).padding(.vertical, 4)
+              .background(FitTheme.accent.opacity(0.1), in: .capsule)
+          }
           if let multiplier = set.loadMultiplier, multiplier > 1 {
             Text(L10n.format("Множитель веса: %@", String(multiplier), locale: locale))
           }
@@ -68,7 +83,7 @@ struct WorkoutSetRow: View {
     }
     .padding(.vertical, typeSize.isAccessibilitySize ? 16 : 12)
     .contextMenu {
-      if editable {
+      if editable && showsWarmupAction && !set.isDropSet {
         Button(
           L10n.text(set.isWarmup ? "Рабочий подход" : "Разминочный подход", locale: locale),
           action: toggleWarmup)
