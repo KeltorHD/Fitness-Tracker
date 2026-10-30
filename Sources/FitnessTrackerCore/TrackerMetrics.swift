@@ -4,6 +4,10 @@ public enum TrackerMode: String, CaseIterable, Codable, Sendable {
   case appleHealth, bluetooth
 }
 
+public enum HeartRateRecordingOrigin: String, Codable, Sendable {
+  case liveHealthKit
+}
+
 public struct HeartRateReading: Codable, Hashable, Sendable, Identifiable {
   public let date: Date
   public let beatsPerMinute: Double
@@ -27,15 +31,21 @@ public struct HeartRateRecording: Codable, Equatable, Sendable {
   public let schemaVersion: Int
   public let workoutID: UUID
   public let mode: TrackerMode
+  public let origin: HeartRateRecordingOrigin?
   public private(set) var readings: [HeartRateReading]
   public static let maximumReadings = 10_000
-  public init(workoutID: UUID, mode: TrackerMode, readings: [HeartRateReading] = []) throws {
+  public init(
+    workoutID: UUID, mode: TrackerMode, readings: [HeartRateReading] = [],
+    origin: HeartRateRecordingOrigin? = nil
+  ) throws {
     schemaVersion = 1
     self.workoutID = workoutID
     self.mode = mode
+    self.origin = origin
     self.readings = readings
     try validate()
   }
+  public var isLiveSensorRecording: Bool { mode == .bluetooth || origin == .liveHealthKit }
   public var average: Double? {
     readings.isEmpty ? nil : readings.reduce(0) { $0 + $1.beatsPerMinute } / Double(readings.count)
   }
@@ -43,6 +53,9 @@ public struct HeartRateRecording: Codable, Equatable, Sendable {
 
   public func validate() throws {
     guard schemaVersion == 1, readings.count <= Self.maximumReadings else {
+      throw TrackerDataError.invalidRecording
+    }
+    guard origin != .liveHealthKit || mode == .appleHealth else {
       throw TrackerDataError.invalidRecording
     }
     var previous = Date.distantPast
