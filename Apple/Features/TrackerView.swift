@@ -15,6 +15,15 @@ struct TrackerView: View {
     Form {
       Section {
         Picker(
+          L10n.text("Модель трекера", locale: locale),
+          selection: Binding(
+            get: { model.deviceProfile }, set: { model.selectDeviceProfile($0) })
+        ) {
+          ForEach(TrackerDeviceProfile.allCases) { profile in
+            Text(L10n.text(profile.titleKey, locale: locale)).tag(profile)
+          }
+        }.pickerStyle(.menu).accessibilityIdentifier("trackerDevicePicker")
+        Picker(
           L10n.text("Режим трекера", locale: locale),
           selection: Binding(
             get: { model.mode }, set: { model.selectMode($0) })
@@ -59,10 +68,8 @@ struct TrackerView: View {
   private var healthSections: some View {
     Group {
       Section {
-        Text(
-          L10n.text(
-            "Для Mi Band включите в Mi Fitness: Профиль → Данные сторонних приложений → Здоровье. Разрешите передачу нужных показателей.",
-            locale: locale))
+        Text(L10n.text(model.deviceProfile.healthSetupKey, locale: locale))
+          .accessibilityIdentifier("trackerHealthSetup")
         DatePicker(
           L10n.text("День", locale: locale), selection: $day, in: ...Date(),
           displayedComponents: .date)
@@ -104,7 +111,7 @@ struct TrackerView: View {
           if summary.isEmpty {
             Text(
               L10n.text(
-                "Нет доступных данных. Проверьте синхронизацию Mi Fitness и разрешения FitSession в «Здоровье».",
+                "Нет доступных данных. Проверьте синхронизацию приложения трекера и разрешения FitSession в «Здоровье».",
                 locale: locale))
           }
         } header: {
@@ -112,7 +119,7 @@ struct TrackerView: View {
         } footer: {
           Text(
             L10n.text(
-              "Сводка учитывает доступные источники Apple «Здоровье», а не только браслет. Сон — между полуднем предыдущего и выбранного дня.",
+              "Сводка учитывает доступные источники Apple «Здоровье», а не только выбранный трекер. Сон — между полуднем предыдущего и выбранного дня.",
               locale: locale))
         }
       }
@@ -122,11 +129,20 @@ struct TrackerView: View {
   private var bluetoothSections: some View {
     Group {
       Section {
-        Text(
-          L10n.text(
-            "На Mi Band 10 откройте Настройки → Share HR и включите передачу пульса. Держите браслет рядом с iPhone.",
-            locale: locale))
+        Text(L10n.text(model.deviceProfile.bluetoothSetupKey, locale: locale))
+          .accessibilityIdentifier("trackerBluetoothSetup")
+        if let note = model.deviceProfile.bluetoothNoteKey {
+          Text(L10n.text(note, locale: locale)).font(.footnote).foregroundStyle(.secondary)
+        }
+        if let url = model.deviceProfile.supportURL {
+          Link(L10n.text("Инструкция производителя", locale: locale), destination: url)
+        }
         LiveHeartRateValue(snapshot: model.bluetooth)
+        if let name = model.bluetooth.deviceName,
+          model.bluetooth.connection == .connected || model.bluetooth.connection == .connecting
+        {
+          LabeledContent(L10n.text("Устройство Bluetooth", locale: locale), value: name)
+        }
         Text(L10n.text(model.bluetooth.connection.message, locale: locale)).font(.subheadline)
           .foregroundStyle(.secondary)
         if model.bluetooth.connection == .connecting || model.bluetooth.connection == .connected {
@@ -174,7 +190,8 @@ extension HeartRateConnection {
     case .poweredOff: "Включите Bluetooth на iPhone."
     case .unauthorized: "Разрешите FitSession доступ к Bluetooth в настройках iOS."
     case .unsupported: "Bluetooth-пульсометр не поддерживается на этом устройстве."
-    case .failed: "Не удалось подключить пульсометр. Проверьте Share HR и повторите поиск."
+    case .failed:
+      "Не удалось подключить пульсометр. Проверьте трансляцию пульса на устройстве и повторите поиск."
     }
   }
 }

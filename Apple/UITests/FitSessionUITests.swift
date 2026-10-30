@@ -11,9 +11,16 @@ final class FitSessionUITests: XCTestCase {
     XCTAssertTrue(tracker.waitForExistence(timeout: 5))
     tracker.tap()
     XCTAssertTrue(app.buttons["readTrackerHealth"].waitForExistence(timeout: 5))
+    app.buttons["trackerDevicePicker"].tap()
+    app.buttons["HUAWEI WATCH GT 6 Pro"].tap()
+    XCTAssertTrue(app.staticTexts["trackerHealthSetup"].label.contains("HUAWEI Health"))
     app.buttons["trackerModePicker"].tap()
     app.buttons["Bluetooth-пульс"].tap()
     XCTAssertTrue(app.buttons["scanHeartRate"].waitForExistence(timeout: 5))
+    XCTAssertTrue(app.staticTexts["trackerBluetoothSetup"].label.contains("HR Data Broadcasts"))
+    app.buttons["trackerDevicePicker"].tap()
+    app.buttons["Xiaomi Smart Band 10"].tap()
+    XCTAssertTrue(app.staticTexts["trackerBluetoothSetup"].label.contains("Share HR"))
     XCTAssertEqual(app.alerts.count, 0)
   }
   @MainActor func testLanguageCanBeChangedWithoutRelaunchingTheApp() {

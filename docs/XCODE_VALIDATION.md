@@ -19,8 +19,12 @@
 
 Устройство и границы переключателя: [LOCALIZATION.md](LOCALIZATION.md).
 
-## Mi Band / HealthKit и Bluetooth
+## Mi Band / HUAWEI WATCH GT 6 Pro / HealthKit и Bluetooth
 
+- [ ] Модель трекера: Mi Band → HUAWEI WATCH GT 6 Pro → другой; выбор сохраняется после relaunch, не запрашивает permissions и не меняет текущую тренировку/режим/подключение. Проверить RU/EN подсказки и официальный Link.
+- [ ] WATCH GT 6 Pro: HUAWEI Health (региональная версия) → HealthKit, фактические записи/источники и отсутствие обещаний полного экспорта.
+- [ ] На GT 6 Pro включить HR Data Broadcasts, найти 180D, подписаться на 2A37 и записать реальный пульс; проверить потерю контакта, блокировку, паузу/завершение и возможное отключение HUAWEI Health. Если пункта нет, проверить путь через HealthKit.
+- [ ] В Bluetooth показывается имя реально выбранного устройства, а не название профиля; GT 6 Pro и Mi Band остаются доступны без whitelist по имени.
 - [ ] После `xcodegen generate` собираются HealthMetricsReader, BluetoothHeartRateService, TrackerView и график истории; проверить Swift 6 SDK actor annotations у delegate/queries.
 - [ ] При первом открытии «Трекер» permissions не запрашиваются. Read permissions появляются по кнопке; Bluetooth — по поиску. Выбор режима сохраняется, обе локали RU/EN проверены.
 - [ ] Health: Mi Fitness → «Здоровье» → FitSession, шаги/энергия/сон/пульс, реальные source names, дата/часовой пояс/DST, частичные права и пустые данные без ложного диагноза «доступ запрещён».

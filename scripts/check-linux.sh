@@ -31,7 +31,8 @@ bin_path="$("$swift_bin" build "${flags[@]}" --show-bin-path)"
   Apple/Services/AppCapabilities.swift Apple/Shared/L10n.swift \
   Apple/Design/WorkoutFormatting.swift Apple/Services/LocalHeartRateRepository.swift \
   Apple/Services/HeartRateBluetooth.swift Apple/Services/ServiceError.swift \
-  Apple/Features/TrackerViewModel.swift Apple/Features/WorkoutHeartRateViewModel.swift
+  Apple/Features/TrackerViewModel.swift Apple/Features/WorkoutHeartRateViewModel.swift \
+  Apple/Features/TrackerDeviceProfile.swift
 echo 'Portable presentation/data subset: Swift 6 type check passed (no Apple SDK).'
 # Exercise the real tracker presentation/storage subset with fakes, without radio/HealthKit calls.
 "$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
@@ -39,7 +40,8 @@ echo 'Portable presentation/data subset: Swift 6 type check passed (no Apple SDK
   "$bin_path"/FitSessionCore.build/*.swift.o \
   Apple/Services/LocalHeartRateRepository.swift Apple/Services/HeartRateBluetooth.swift \
   Apple/Services/ServiceError.swift Apple/Features/TrackerViewModel.swift \
-  Apple/Features/WorkoutHeartRateViewModel.swift Tests/PortableTrackerChecks/main.swift \
+  Apple/Features/WorkoutHeartRateViewModel.swift Apple/Features/TrackerDeviceProfile.swift \
+  Tests/PortableTrackerChecks/main.swift \
   -o "$bin_path/portable-tracker-checks"
 "$bin_path/portable-tracker-checks"
 python3 scripts/parse-apple.py "$swiftc_bin"

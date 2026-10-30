@@ -57,7 +57,7 @@ final class BluetoothHeartRateService: NSObject, HeartRateBluetooth,
     peripheral = candidate
     candidate.delegate = self
     snapshot.connection = .connecting
-    snapshot.deviceName = candidate.name
+    snapshot.deviceName = snapshot.devices.first { $0.id == id }?.name ?? candidate.name
     snapshot.reading = nil
     publish()
     central.connect(candidate)

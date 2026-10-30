@@ -307,6 +307,23 @@
         }
       }
     },
+    "HUAWEI WATCH GT 6 Pro": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HUAWEI WATCH GT 6 Pro"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HUAWEI WATCH GT 6 Pro"
+          }
+        }
+      }
+    },
     "HealthKit недоступен на этом устройстве.": {
       "extractionState": "manual",
       "localizations": {
@@ -320,6 +337,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "HealthKit is unavailable on this device."
+          }
+        }
+      }
+    },
+    "Xiaomi Smart Band 10": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Xiaomi Smart Band 10"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Xiaomi Smart Band 10"
           }
         }
       }
@@ -885,6 +919,23 @@
         }
       }
     },
+    "В приложении вашего трекера включите передачу данных в Apple «Здоровье» и разрешите запись нужных показателей. Затем разрешите FitSession их чтение.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "В приложении вашего трекера включите передачу данных в Apple «Здоровье» и разрешите запись нужных показателей. Затем разрешите FitSession их чтение."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enable sharing with Apple Health in your tracker’s app and allow writing the measurements you want to share. Then allow FitSession to read them."
+          }
+        }
+      }
+    },
     "В файле обнаружены повторяющиеся записи. Импорт не выполнен.": {
       "extractionState": "manual",
       "localizations": {
@@ -1102,6 +1153,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Turn on Bluetooth on your iPhone."
+          }
+        }
+      }
+    },
+    "Включите на устройстве трансляцию пульса по Bluetooth и держите его рядом с iPhone. Затем нажмите «Найти пульсометр».": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Включите на устройстве трансляцию пульса по Bluetooth и держите его рядом с iPhone. Затем нажмите «Найти пульсометр»."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enable Bluetooth heart rate broadcasting on your device and keep it near your iPhone. Then tap Find heart rate monitor."
           }
         }
       }
@@ -1905,6 +1973,23 @@
         }
       }
     },
+    "Другой трекер": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Другой трекер"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Other tracker"
+          }
+        }
+      }
+    },
     "Единицы измерения": {
       "extractionState": "manual",
       "localizations": {
@@ -1918,6 +2003,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Weight units"
+          }
+        }
+      }
+    },
+    "Если пункта HR Data Broadcasts нет, используйте режим Apple «Здоровье». Во время трансляции связь с HUAWEI Health может временно прерываться.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Если пункта HR Data Broadcasts нет, используйте режим Apple «Здоровье». Во время трансляции связь с HUAWEI Health может временно прерываться."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "If HR Data Broadcasts is unavailable, use Apple Health mode. Broadcasting may temporarily interrupt the connection to HUAWEI Health."
           }
         }
       }
@@ -2279,6 +2381,23 @@
         }
       }
     },
+    "Инструкция производителя": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Инструкция производителя"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manufacturer’s instructions"
+          }
+        }
+      }
+    },
     "История": {
       "extractionState": "manual",
       "localizations": {
@@ -2602,6 +2721,23 @@
         }
       }
     },
+    "Модель трекера": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Модель трекера"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tracker model"
+          }
+        }
+      }
+    },
     "На Mi Band 10 откройте Настройки → Share HR и включите передачу пульса. Держите браслет рядом с iPhone.": {
       "extractionState": "manual",
       "localizations": {
@@ -2615,6 +2751,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "On Mi Band 10, open Settings → Share HR and turn on heart rate sharing. Keep the band near your iPhone."
+          }
+        }
+      }
+    },
+    "На WATCH GT 6 Pro откройте Настройки → Трансляция пульса (HR Data Broadcasts) и запустите трансляцию. Держите часы рядом с iPhone и нажмите «Найти пульсометр».": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "На WATCH GT 6 Pro откройте Настройки → Трансляция пульса (HR Data Broadcasts) и запустите трансляцию. Держите часы рядом с iPhone и нажмите «Найти пульсометр»."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On WATCH GT 6 Pro, open Settings → HR Data Broadcasts and start broadcasting. Keep the watch near your iPhone and tap Find heart rate monitor."
           }
         }
       }
@@ -3163,19 +3316,19 @@
         }
       }
     },
-    "Не удалось подключить пульсометр. Проверьте Share HR и повторите поиск.": {
+    "Не удалось подключить пульсометр. Проверьте трансляцию пульса на устройстве и повторите поиск.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Не удалось подключить пульсометр. Проверьте Share HR и повторите поиск."
+            "value": "Не удалось подключить пульсометр. Проверьте трансляцию пульса на устройстве и повторите поиск."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Couldn’t connect to the heart rate monitor. Check Share HR and scan again."
+            "value": "Couldn’t connect to the heart rate monitor. Check heart rate broadcasting on your device and scan again."
           }
         }
       }
@@ -3520,19 +3673,19 @@
         }
       }
     },
-    "Нет доступных данных. Проверьте синхронизацию Mi Fitness и разрешения FitSession в «Здоровье».": {
+    "Нет доступных данных. Проверьте синхронизацию приложения трекера и разрешения FitSession в «Здоровье».": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Нет доступных данных. Проверьте синхронизацию Mi Fitness и разрешения FitSession в «Здоровье»."
+            "value": "Нет доступных данных. Проверьте синхронизацию приложения трекера и разрешения FitSession в «Здоровье»."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "No data is available. Check Mi Fitness sync and FitSession permissions in Health."
+            "value": "No data is available. Check your tracker app’s sync and FitSession permissions in Health."
           }
         }
       }
@@ -4421,6 +4574,23 @@
         }
       }
     },
+    "Подключите WATCH GT 6 Pro к HUAWEI Health на iPhone и включите доступную передачу данных в Apple «Здоровье». В «Здоровье» откройте профиль → Приложения и службы → HUAWEI Health и разрешите запись нужных показателей.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Подключите WATCH GT 6 Pro к HUAWEI Health на iPhone и включите доступную передачу данных в Apple «Здоровье». В «Здоровье» откройте профиль → Приложения и службы → HUAWEI Health и разрешите запись нужных показателей."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pair WATCH GT 6 Pro with HUAWEI Health on your iPhone and enable available data sharing with Apple Health. In Health, open your profile → Apps and Services → HUAWEI Health and allow writing the measurements you want to share."
+          }
+        }
+      }
+    },
     "Подтягивания": {
       "extractionState": "manual",
       "localizations": {
@@ -5254,19 +5424,19 @@
         }
       }
     },
-    "Сводка учитывает доступные источники Apple «Здоровье», а не только браслет. Сон — между полуднем предыдущего и выбранного дня.": {
+    "Сводка учитывает доступные источники Apple «Здоровье», а не только выбранный трекер. Сон — между полуднем предыдущего и выбранного дня.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Сводка учитывает доступные источники Apple «Здоровье», а не только браслет. Сон — между полуднем предыдущего и выбранного дня."
+            "value": "Сводка учитывает доступные источники Apple «Здоровье», а не только выбранный трекер. Сон — между полуднем предыдущего и выбранного дня."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The summary includes available Apple Health sources, including devices other than your band. Sleep covers noon on the previous day to noon on the selected day."
+            "value": "The summary includes available Apple Health sources, not just your selected tracker. Sleep covers noon on the previous day to noon on the selected day."
           }
         }
       }
@@ -6032,6 +6202,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Exercises"
+          }
+        }
+      }
+    },
+    "Устройство Bluetooth": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Устройство Bluetooth"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bluetooth device"
           }
         }
       }

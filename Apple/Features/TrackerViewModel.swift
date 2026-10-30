@@ -4,6 +4,7 @@ import Observation
 
 @MainActor @Observable final class TrackerViewModel {
   private(set) var mode: TrackerMode
+  private(set) var deviceProfile: TrackerDeviceProfile
   private(set) var bluetooth = HeartRateBluetoothSnapshot()
   private(set) var summary: HealthDaySummary?
   private(set) var loadingHealth = false
@@ -40,6 +41,9 @@ import Observation
     self.errorMessage = errorMessage
     self.now = now
     mode = TrackerMode(rawValue: defaults.string(forKey: "trackerMode") ?? "") ?? .appleHealth
+    deviceProfile =
+      TrackerDeviceProfile(rawValue: defaults.string(forKey: "trackerDeviceProfile") ?? "")
+      ?? .xiaomiSmartBand10
     sensor.onChange = { [weak self] snapshot in self?.receive(snapshot) }
   }
   func selectMode(_ mode: TrackerMode) {
@@ -51,6 +55,10 @@ import Observation
     self.mode = mode
     defaults.set(mode.rawValue, forKey: "trackerMode")
     error = nil
+  }
+  func selectDeviceProfile(_ profile: TrackerDeviceProfile) {
+    deviceProfile = profile
+    defaults.set(profile.rawValue, forKey: "trackerDeviceProfile")
   }
   func scan() {
     if mode == .bluetooth {

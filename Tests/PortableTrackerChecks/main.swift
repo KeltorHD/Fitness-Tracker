@@ -14,8 +14,9 @@ private func expect(_ condition: Bool, _ message: String) throws {
   func stopScan() {}
   func connect(_ id: UUID) {}
   func disconnect() { disconnectCount += 1 }
-  func emit(_ reading: HeartRateReading) {
-    onChange?(HeartRateBluetoothSnapshot(connection: .connected, reading: reading))
+  func emit(_ reading: HeartRateReading, deviceName: String? = nil) {
+    onChange?(
+      HeartRateBluetoothSnapshot(connection: .connected, deviceName: deviceName, reading: reading))
   }
 }
 
@@ -84,6 +85,22 @@ private actor RecordingStub: HeartRateRecordingRepository {
     try expect(
       health.dayAuthorizations == 0 && health.heartAuthorizations == 0,
       "No unsolicited Health permissions")
+    try expect(
+      tracker.deviceProfile == .xiaomiSmartBand10, "Existing installations keep Mi Band guidance")
+    let disconnects = sensor.disconnectCount
+    tracker.selectDeviceProfile(.huaweiWatchGT6Pro)
+    try expect(
+      tracker.mode == .appleHealth && sensor.disconnectCount == disconnects,
+      "Selecting a model does not change transport or disconnect a device")
+    let restored = TrackerViewModel(
+      health: health, sensor: SensorStub(), recordings: repository,
+      defaults: defaults, errorMessage: { _, _, fallback in fallback })
+    try expect(
+      restored.deviceProfile == .huaweiWatchGT6Pro,
+      "Huawei profile persists across model recreation")
+    try expect(
+      health.dayAuthorizations == 0 && health.heartAuthorizations == 0,
+      "Selecting Huawei does not request Health permissions")
     tracker.selectMode(.bluetooth)
     var workout = Workout(
       name: "Test", startedAt: now.addingTimeInterval(-100),
@@ -98,7 +115,14 @@ private actor RecordingStub: HeartRateRecordingRepository {
     let second = HeartRateReading(date: now.addingTimeInterval(-4), beatsPerMinute: 100)
     await repository.setFailing(true)
     sensor.emit(first)
-    sensor.emit(second)
+    sensor.emit(second, deviceName: "HUAWEI WATCH GT 6 Pro-A12")
+    try expect(
+      tracker.bluetooth.deviceName == "HUAWEI WATCH GT 6 Pro-A12",
+      "Display actual Bluetooth device identity")
+    tracker.selectDeviceProfile(.other)
+    try expect(
+      tracker.recording?.readings == [first, second] && tracker.mode == .bluetooth,
+      "Changing guidance must preserve the workout recording and selected mode")
     sensor.emit(HeartRateReading(date: now.addingTimeInterval(-50), beatsPerMinute: 200))
     await tracker.flush()
     try expect(

@@ -122,6 +122,6 @@
 		<string>en</string>
 	</array>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Подключать пульсометр, например Mi Band в режиме Share HR, и записывать пульс во время тренировки.</string>
+	<string>Подключать Bluetooth-пульсометр, например Mi Band или HUAWEI WATCH, и записывать пульс во время тренировки.</string>
 </dict>
 </plist>

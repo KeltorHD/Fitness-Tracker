@@ -22,7 +22,7 @@ def generate():
     info={
       'NSHealthShareUsageDescription':('Показывать шаги, активную энергию, сон и пульс из «Здоровья» и загружать измерения пульса для вашей тренировки по вашему запросу.','Show steps, active energy, sleep and heart rate from Health, and load heart rate measurements for your workout when you request it.'),
       'NSHealthUpdateUsageDescription':('Сохранять завершённые силовые тренировки в «Здоровье» по вашему запросу.','Save completed strength workouts to Health when you request it.'),
-      'NSBluetoothAlwaysUsageDescription':('Подключать пульсометр, например Mi Band в режиме Share HR, и записывать пульс во время тренировки.','Connect a heart rate monitor, such as a Mi Band in Share HR mode, and record heart rate during your workout.'),
+      'NSBluetoothAlwaysUsageDescription':('Подключать Bluetooth-пульсометр, например Mi Band или HUAWEI WATCH, и записывать пульс во время тренировки.','Connect a Bluetooth heart rate monitor, such as a Mi Band or HUAWEI WATCH, and record heart rate during your workout.'),
       'CFBundleDisplayName':('FitSession','FitSession')
     }
     write(ROOT/'Resources/InfoPlist.xcstrings',catalog(info))

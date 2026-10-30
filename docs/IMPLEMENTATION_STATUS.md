@@ -47,6 +47,7 @@
 | TrackerViewModel / WorkoutHeartRateViewModel / LocalHeartRateRepository | Да | Да, исполняемые проверки Foundation/Observation с fakes и реальными временными файлами; Swift 6 type-check | iOS file protection, lifecycle и UI отдельно | Нет |
 | HealthMetricsReader: дневная сводка и пульс тренировки | Да | Нет для HealthKit; только parser/lint | Да, права, источники Mi Fitness, queries и реальные данные | Существующий HealthKit capability/signing |
 | BluetoothHeartRateService + Tracker UI + график истории RU/EN | Да | Нет для CoreBluetooth/SwiftUI; Core/переносимые models проверены | Да, iPhone + Mi Band 10, Share HR, background, SDK concurrency и UI-тест | Обычный signing; Bluetooth permission |
+| HUAWEI WATCH GT 6 Pro / Mi Band / другой трекер: профили, RU/EN setup guidance и фактическое Bluetooth-имя | Да | Да, выбор/сохранение профиля без изменения mode, данных, connection и permissions; Apple UI test только написан | Да, реальные часы/прошивка, Huawei Health → HealthKit, HR Data Broadcasts, RU/EN UI | Существующий HealthKit и обычный signing; HUAWEI Developer account не требуется |
 
 ## Фактические проверки
 
@@ -54,7 +55,7 @@
 - `swift test`: прошли 77 Swift Testing tests, включая parameterized cases. Стандартный XCTest runner также печатает «0 tests» — Core использует отдельный Swift Testing runner, его итоговая строка содержит 77 tests.
 - Отдельный Swift 6 strict-concurrency type-check без Apple SDK: HistoryViewModel, ProgressViewModel, ExerciseLibraryViewModel, ExerciseImageLoader, CloudAccountChecking, WidgetSnapshot, AppCapabilities, L10n и WorkoutFormatting. Это проверка типов указанной переносимой части, не функциональный тест и не сборка iOS target.
 - Swift formatting/lint, синтаксический разбор Apple Swift, структура/конфигурационные связи, plist/JSON, PNG и наличие ресурсов: прошли в `bash scripts/check-linux.sh`. Для Dynamic Island parser проверяет обе ветви shared intents: основной target с FITSESSION_APP и widget extension без него.
-- Локализация: 385 ключей RU/EN и четыре InfoPlist-строки, placeholders, формы счётчиков, покрытие русских ключей, target resources и повторяемость генерации — прошли. Компиляция `.xcstrings` в Xcode не проверена; сценарии — [LOCALIZATION.md](LOCALIZATION.md).
+- Локализация: 396 ключей RU/EN и четыре InfoPlist-строки, placeholders, формы счётчиков, покрытие русских ключей, target resources и повторяемость генерации — прошли. Компиляция `.xcstrings` в Xcode не проверена; сценарии — [LOCALIZATION.md](LOCALIZATION.md).
 - В текущей рабочей сессии Swift установлен в `/tmp/fitsession-toolchain/swift-6.2.1-RELEASE-ubuntu24.04`; для постоянной установки предусмотрен `setup-linux.sh`, toolchain не хранится в git.
 - Переносимая tracker-подсистема дополнительно исполнена в `Tests/PortableTrackerChecks/main.swift`: recording/pause, save failure/retry, mode race, минимальные permissions, history, real file round-trip/corruption/delete. Это не тест HealthKit/CoreBluetooth.
 - XcodeGen generation, iOS/watchOS compilation, linking, Simulator, SwiftUI rendering и реальные Apple-сервисы **не проверены**. Linux CI не заменяет эти проверки.

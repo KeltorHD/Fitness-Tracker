@@ -24,13 +24,13 @@
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Подключать пульсометр, например Mi Band в режиме Share HR, и записывать пульс во время тренировки."
+            "value": "Подключать Bluetooth-пульсометр, например Mi Band или HUAWEI WATCH, и записывать пульс во время тренировки."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Connect a heart rate monitor, such as a Mi Band in Share HR mode, and record heart rate during your workout."
+            "value": "Connect a Bluetooth heart rate monitor, such as a Mi Band or HUAWEI WATCH, and record heart rate during your workout."
           }
         }
       }
