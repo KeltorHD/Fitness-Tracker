@@ -2364,6 +2364,40 @@
         }
       }
     },
+    "Действия тренировки": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Действия тренировки"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workout actions"
+          }
+        }
+      }
+    },
+    "Действия упражнения": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Действия упражнения"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exercise actions"
+          }
+        }
+      }
+    },
     "Демо-профиль открыт": {
       "extractionState": "manual",
       "localizations": {
@@ -2751,6 +2785,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Add between 1 and 30 sets."
+          }
+        }
+      }
+    },
+    "Добавьте первое упражнение": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Добавьте первое упражнение"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add your first exercise"
           }
         }
       }
@@ -3737,6 +3788,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Since the previous entry"
+          }
+        }
+      }
+    },
+    "К списку упражнений": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "К списку упражнений"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back to exercise list"
           }
         }
       }
@@ -5118,6 +5186,23 @@
         }
       }
     },
+    "Нет выполненных подходов": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нет выполненных подходов"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No completed sets"
+          }
+        }
+      }
+    },
     "Нет данных за выбранный период": {
       "extractionState": "manual",
       "localizations": {
@@ -5641,6 +5726,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Open a completed workout in your journal and choose Export to Health. FitnessTracker will request write permission."
+          }
+        }
+      }
+    },
+    "Откройте упражнение из списка, чтобы записать подходы.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Откройте упражнение из списка, чтобы записать подходы."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open an exercise from the list to record sets."
           }
         }
       }
@@ -6308,6 +6410,23 @@
         }
       }
     },
+    "Подход %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Подход %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set %@"
+          }
+        }
+      }
+    },
     "Подход выполнен": {
       "extractionState": "manual",
       "localizations": {
@@ -6474,6 +6593,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Latest heart rate"
+          }
+        }
+      }
+    },
+    "Предыдущее упражнение": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Предыдущее упражнение"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Previous exercise"
           }
         }
       }
@@ -7039,6 +7175,40 @@
         }
       }
     },
+    "Рабочий подход": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Рабочий подход"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Working set"
+          }
+        }
+      }
+    },
+    "Разминка": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Разминка"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warm-up"
+          }
+        }
+      }
+    },
     "Разминочный подход": {
       "extractionState": "manual",
       "localizations": {
@@ -7494,6 +7664,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Crunches"
+          }
+        }
+      }
+    },
+    "Следующее упражнение": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Следующее упражнение"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next exercise"
           }
         }
       }

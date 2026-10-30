@@ -28,6 +28,7 @@ bin_path="$("$swift_bin" build "${flags[@]}" --show-bin-path)"
   -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -typecheck -I "$bin_path/Modules" \
   Apple/Features/ProgressViewModel.swift Apple/Features/ExerciseProgressViewModel.swift \
   Apple/Features/BodyWeightViewModel.swift \
+  Apple/Features/WorkoutExercisePresentation.swift \
   Apple/Features/HistoryViewModel.swift \
   Apple/Features/ExerciseLibraryViewModel.swift Apple/Services/ExerciseImageLoader.swift \
   Apple/Services/CloudAccountChecking.swift Apple/Shared/WidgetSnapshot.swift \
@@ -75,6 +76,12 @@ echo 'Portable presentation/data subset: Swift 6 type check passed (no Apple SDK
   Apple/Features/TrackerDeviceProfile.swift Apple/Shared/AppCompatibility.swift \
   Tests/PortableAirPodsChecks/main.swift -o "$bin_path/portable-airpods-checks"
 "$bin_path/portable-airpods-checks"
+"$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
+  -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \
+  "$bin_path"/FitnessTrackerCore.build/*.swift.o Apple/Shared/L10n.swift \
+  Apple/Features/WorkoutExercisePresentation.swift \
+  Tests/PortableWorkoutExerciseChecks/main.swift -o "$bin_path/portable-workout-exercise-checks"
+"$bin_path/portable-workout-exercise-checks"
 python3 scripts/parse-apple.py "$swiftc_bin"
 if "$swift_bin" format --help >/dev/null 2>&1; then
   "$swift_bin" format lint --strict --recursive Sources Tests Apple Package.swift

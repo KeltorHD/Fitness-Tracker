@@ -14,6 +14,7 @@ enum FitTheme {
   static let cardPadding: CGFloat = 16
   static let resultsRadius: CGFloat = 28
   static let resultsPadding: CGFloat = 20
+  static let exerciseCardRadius: CGFloat = 28
   static let resultsSurface = Color("ResultsSurface")
   static let separator = Color(.separator).opacity(0.5)
 }
@@ -67,15 +68,18 @@ struct WorkoutHero: View {
   @Environment(\.locale) private var locale
   let title: String
   var date: Date? = nil
+  var showsDate = true
   var body: some View {
     VStack(alignment: .leading, spacing: 24) {
-      Group {
-        if let date {
-          Text(date, format: .dateTime.weekday(.wide).hour().minute())
-        } else {
-          Text(L10n.text("Шаблон тренировки", locale: locale))
-        }
-      }.font(.subheadline).textCase(.uppercase).frame(maxWidth: .infinity)
+      if showsDate {
+        Group {
+          if let date {
+            Text(date, format: .dateTime.weekday(.wide).hour().minute())
+          } else {
+            Text(L10n.text("Шаблон тренировки", locale: locale))
+          }
+        }.font(.subheadline).textCase(.uppercase).frame(maxWidth: .infinity)
+      }
       Rectangle().fill(.white.opacity(0.25)).frame(height: 0.5)
       Label(title, systemImage: "figure.strengthtraining.traditional")
         .font(.largeTitle.bold()).frame(maxWidth: .infinity, alignment: .leading)

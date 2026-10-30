@@ -524,5 +524,16 @@
   "Разрешите доступ к тренировкам в «Здоровье», чтобы получать пульс AirPods.": "Allow workout access in Health to receive AirPods heart rate data.",
   "Сначала загрузите запись пульса. Повторите загрузку в разделе «Трекер».": "Load the heart rate recording first. Retry loading in Tracker.",
   "Сначала начните тренировку в FitnessTracker.": "Start a workout in FitnessTracker first.",
-  "Этот режим предназначен для AirPods Pro 3 с датчиком пульса. iOS выбирает доступный источник; вместе с AirPods может использоваться Apple Watch.": "This mode is for AirPods Pro 3 with heart rate sensors. iOS chooses the available source and may also use Apple Watch."
+  "Этот режим предназначен для AirPods Pro 3 с датчиком пульса. iOS выбирает доступный источник; вместе с AirPods может использоваться Apple Watch.": "This mode is for AirPods Pro 3 with heart rate sensors. iOS chooses the available source and may also use Apple Watch.",
+  "Действия тренировки": "Workout actions",
+  "Действия упражнения": "Exercise actions",
+  "Добавьте первое упражнение": "Add your first exercise",
+  "К списку упражнений": "Back to exercise list",
+  "Нет выполненных подходов": "No completed sets",
+  "Откройте упражнение из списка, чтобы записать подходы.": "Open an exercise from the list to record sets.",
+  "Подход %@": "Set %@",
+  "Предыдущее упражнение": "Previous exercise",
+  "Рабочий подход": "Working set",
+  "Разминка": "Warm-up",
+  "Следующее упражнение": "Next exercise"
 }

@@ -78,6 +78,12 @@ final class FitnessTrackerUITests: XCTestCase {
       .firstMatch
     reveal(workout, in: app)
     workout.tap()
+    let exercise = app.buttons["openWorkoutExercise"].firstMatch
+    reveal(exercise, in: app)
+    exercise.tap()
+    XCTAssertTrue(
+      app.descendants(matching: .any).matching(identifier: "workoutExerciseScreen").firstMatch
+        .waitForExistence(timeout: 5))
     let progress = app.buttons["openExerciseProgress"].firstMatch
     reveal(progress, in: app)
     progress.tap()
@@ -100,6 +106,12 @@ final class FitnessTrackerUITests: XCTestCase {
     let select = app.buttons["selectLibraryExercise"]
     XCTAssertTrue(select.waitForExistence(timeout: 5))
     select.tap()
+    let exercise = app.buttons["openWorkoutExercise"].firstMatch
+    reveal(exercise, in: app)
+    exercise.tap()
+    XCTAssertTrue(
+      app.descendants(matching: .any).matching(identifier: "workoutExerciseScreen").firstMatch
+        .waitForExistence(timeout: 5))
     let progress = app.buttons["openExerciseProgress"].firstMatch
     reveal(progress, in: app)
     progress.tap()
@@ -251,9 +263,15 @@ final class FitnessTrackerUITests: XCTestCase {
     let select = app.buttons["selectLibraryExercise"]
     XCTAssertTrue(select.waitForExistence(timeout: 5))
     select.tap()
+    let exercise = app.buttons["openWorkoutExercise"].firstMatch
+    XCTAssertTrue(exercise.waitForExistence(timeout: 5))
+    exercise.tap()
+    XCTAssertTrue(app.buttons["addWorkoutSet"].waitForExistence(timeout: 5))
+    app.buttons["addWorkoutSet"].tap()
     let complete = app.buttons["completeSet"].firstMatch
     XCTAssertTrue(complete.waitForExistence(timeout: 5))
     complete.tap()
+    app.buttons["closeWorkoutExercise"].tap()
     XCTAssertTrue(finish.waitForExistence(timeout: 5))
     XCTAssertTrue(finish.isEnabled)
     XCTAssertTrue(finish.isHittable)

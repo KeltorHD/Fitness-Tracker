@@ -17,61 +17,20 @@ struct WorkoutDetailView: View {
   var body: some View {
     ScrollView {
       VStack(spacing: 0) {
-        WorkoutHero(title: session.name, date: session.startedAt)
+        WorkoutHero(title: session.name, showsDate: false)
         VStack(spacing: 20) {
-          HStack(spacing: 8) {
-            SummaryMetric(
-              title: L10n.text("Время", locale: locale),
-              value: session.formattedRecordedDuration(locale: locale))
-            SummaryMetric(
-              title: L10n.text("Объём", locale: locale),
-              value:
-                "\(unit.display(session.volume).formatted(.number.locale(L10n.numberLocale).precision(.fractionLength(0)))) \(L10n.text(unit.rawValue, locale: locale))"
-            )
-            SummaryMetric(
-              title: L10n.text("Подходы", locale: locale), value: "\(session.completedSets)")
-          }
-          WorkoutBodyWeightRow(workout: session).fitCard()
-          ForEach(Array(session.exercises.enumerated()), id: \.element.id) { index, exercise in
-            VStack(spacing: 16) {
+          WorkoutSessionSummary(workout: session, unit: unit)
+          VStack(spacing: 0) {
+            ForEach(Array(session.exercises.enumerated()), id: \.element.id) { index, row in
               NavigationLink {
-                ExerciseDetailView(exercise: exercise.exercise)
+                WorkoutExerciseView(workout: session, exerciseID: row.id, unit: unit)
               } label: {
-                HStack(alignment: .top, spacing: 14) {
-                  Text("\(index + 1)").font(.subheadline).frame(width: 16)
-                  VStack(alignment: .leading, spacing: 7) {
-                    Text(L10n.exerciseName(exercise.exercise, locale: locale)).font(
-                      .title3.weight(.medium))
-                    Text(setSummary(exercise)).font(.subheadline)
-                  }.frame(maxWidth: .infinity, alignment: .leading)
-                  if let entry = ExerciseLibrary.entry(for: exercise.exercise.id) {
-                    ExercisePhoto(path: entry.images[0]).frame(width: 48, height: 48)
-                      .clipShape(.rect(cornerRadius: 10))
-                      .overlay(
-                        RoundedRectangle(cornerRadius: 10).stroke(
-                          .gray.opacity(0.3), lineWidth: 0.5)
-                      )
-                      .accessibilityHidden(true)
-                  }
-                }.foregroundStyle(.primary)
-              }.buttonStyle(.plain)
-              NavigationLink {
-                ExerciseProgressScreen(exercise: exercise.exercise, workoutID: session.id)
-              } label: {
-                Label(
-                  L10n.text("Прогресс упражнения", locale: locale), systemImage: "chart.xyaxis.line"
-                )
-                .font(.subheadline).frame(maxWidth: .infinity, alignment: .leading)
-              }
-              .accessibilityLabel(
-                L10n.format(
-                  "Прогресс упражнения: %@", L10n.exerciseName(exercise.exercise, locale: locale),
-                  locale: locale)
-              )
-              .accessibilityIdentifier("openExerciseProgress")
-              Divider().padding(.leading, 30)
+                WorkoutExerciseListRow(row: row, index: index, unit: unit, completedOnly: true)
+              }.buttonStyle(.plain).accessibilityIdentifier("openWorkoutExercise")
+              Divider().padding(.leading, 34)
             }
           }
+          WorkoutBodyWeightRow(workout: session).fitCard()
           if !session.notes.isEmpty {
             VStack(alignment: .leading, spacing: 8) {
               Text(L10n.text("Заметка", locale: locale)).font(.headline)
@@ -109,6 +68,10 @@ struct WorkoutDetailView: View {
     )
     .toolbarColorScheme(.dark, for: .navigationBar)
     .toolbar {
+      ToolbarItem(placement: .principal) {
+        Text(session.startedAt, format: .dateTime.weekday(.wide).hour().minute())
+          .font(.subheadline).textCase(.uppercase).foregroundStyle(.white)
+      }
       ToolbarItem(placement: .topBarLeading) {
         Button(L10n.text("Закрыть", locale: locale), systemImage: "chevron.down") { dismiss() }
           .foregroundStyle(.white)
@@ -207,15 +170,6 @@ struct WorkoutDetailView: View {
     } message: {
       Text(L10n.text(store.error ?? store.notice ?? "", locale: locale))
     }
-  }
-  private func setSummary(_ exercise: WorkoutExercise) -> String {
-    exercise.sets.filter { $0.completedAt != nil }.map { set in
-      let base =
-        "\(unit.display(set.weightKG).formatted(.number.locale(L10n.numberLocale).precision(.fractionLength(0...1)))) \(L10n.text(unit.rawValue, locale: locale)) × \(set.repetitions)"
-      return (set.loadMultiplier ?? 1) > 1
-        ? L10n.format("%@ · множитель %@", base, String(set.loadMultiplier ?? 1), locale: locale)
-        : base
-    }.joined(separator: ", ")
   }
   private func createTemplate() {
     do { templateDraft = try WorkoutEngine.makeTemplate(from: session) } catch {
