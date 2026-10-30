@@ -61,6 +61,9 @@ struct WorkoutDetailView: View {
         }.padding(16)
       }
     }
+    .pullDownToDismiss()
+    .accessibilityIdentifier("workoutDetailScroll")
+    .interactiveDismissDisabled()
     .background(FitTheme.paper).navigationBarTitleDisplayMode(.inline)
     .safeAreaInset(edge: .top) { if store.isDemoMode { DemoModeBanner() } }
     .toolbarBackground(FitTheme.accent, for: .navigationBar).toolbarBackground(

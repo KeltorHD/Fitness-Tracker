@@ -396,4 +396,40 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(finish.isHittable)
     XCTAssertFalse(finish.isEnabled)
   }
+
+  @MainActor func testPullDownClosesExerciseThenMinimizesWorkoutWithoutLosingSets() {
+    let app = launch()
+    XCTAssertTrue(app.buttons["startWorkout"].waitForExistence(timeout: 10))
+    app.buttons["startWorkout"].tap()
+    app.buttons["addExercise"].tap()
+    app.searchFields.firstMatch.tap()
+    app.searchFields.firstMatch.typeText("Приседания")
+    app.buttons.containing(.staticText, identifier: "Приседания").firstMatch.tap()
+    let select = app.buttons["selectLibraryExercise"]
+    XCTAssertTrue(select.waitForExistence(timeout: 5))
+    select.tap()
+    app.buttons["openWorkoutExercise"].firstMatch.tap()
+    XCTAssertTrue(app.buttons["addWorkoutSet"].waitForExistence(timeout: 5))
+    app.buttons["addWorkoutSet"].tap()
+    app.buttons["completeSet"].firstMatch.tap()
+
+    let exerciseScroll = app.scrollViews["workoutExerciseScroll"]
+    XCTAssertTrue(exerciseScroll.waitForExistence(timeout: 5))
+    exerciseScroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.15))
+      .press(
+        forDuration: 0.05,
+        thenDragTo: exerciseScroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.95)))
+    let workoutScroll = app.scrollViews["activeWorkoutScroll"]
+    XCTAssertTrue(workoutScroll.waitForExistence(timeout: 5))
+    XCTAssertTrue(app.buttons["finishWorkout"].isEnabled)
+    workoutScroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.15))
+      .press(
+        forDuration: 0.05,
+        thenDragTo: workoutScroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.95)))
+    XCTAssertTrue(app.buttons["startWorkout"].waitForExistence(timeout: 5))
+    app.buttons["startWorkout"].tap()
+    XCTAssertTrue(workoutScroll.waitForExistence(timeout: 5))
+    XCTAssertTrue(app.buttons["openWorkoutExercise"].firstMatch.exists)
+    XCTAssertTrue(app.buttons["finishWorkout"].isEnabled)
+  }
 }

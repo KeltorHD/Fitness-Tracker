@@ -65,6 +65,7 @@ struct WorkoutExerciseView: View {
       }
     }
     .tint(FitTheme.accent).accessibilityIdentifier("workoutExerciseScreen")
+    .interactiveDismissDisabled()
     .onChange(of: workout) { _, value in
       if let value { model.refresh(value) }
       numberPad.reconcile(value)
@@ -174,6 +175,8 @@ struct WorkoutExerciseView: View {
             }
           }
         }
+        .pullDownToDismiss()
+        .accessibilityIdentifier("workoutExerciseScroll")
         .onChange(of: numberPad.field) { _, field in
           if let field {
             withAnimation(reduceMotion ? nil : .smooth) {

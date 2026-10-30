@@ -154,6 +154,8 @@ struct ActiveWorkoutView: View {
         }.padding(.horizontal, 16).padding(.bottom, 20)
       }
     }.background(FitTheme.paper).scrollDismissesKeyboard(.interactively)
+      .pullDownToDismiss()
+      .accessibilityIdentifier("activeWorkoutScroll")
   }
 }
 
