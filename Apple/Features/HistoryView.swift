@@ -84,6 +84,7 @@ struct HistoryView: View {
           }
         }.padding(.horizontal, 16).padding(.top, 12).padding(.bottom, 24)
       }
+      .refreshable { store.reload() }
       .background(FitTheme.paper).navigationTitle(L10n.text("Дневник", locale: locale))
       .toolbar {
         ToolbarItemGroup(placement: .topBarTrailing) {
@@ -119,8 +120,9 @@ struct HistoryView: View {
           ).tint(FitTheme.accent)
             .onAppear { store.showingWorkoutDetail = true }
         }
+        .presentationDetents([.large])
+        .presentationDragIndicator(.visible)
       }
-      .refreshable { store.reload() }
       .onChange(of: store.workouts, initial: true) { refresh() }
       .onChange(of: calendar) { refresh() }
       .onChange(of: phase) { if phase == .active { refresh() } }

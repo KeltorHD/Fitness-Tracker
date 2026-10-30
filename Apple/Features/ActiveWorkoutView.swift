@@ -7,6 +7,7 @@ struct ActiveWorkoutView: View {
   @Environment(\.dismiss) private var dismiss
   @AppStorage("weightUnit") private var unit: WeightUnit = .kilograms
   @State private var pickingExercise = false
+  @State private var selectedExercise: WorkoutExercise?
   @State private var confirmCancel = false
   @State private var renaming = false
   @State private var workoutName = ""
@@ -61,6 +62,9 @@ struct ActiveWorkoutView: View {
               store.mutate { try WorkoutEngine.addExercise(exercise, to: &$0) }
             }
           }
+          .sheet(item: $selectedExercise) { row in
+            WorkoutExerciseSheet(workout: workout, exerciseID: row.id, unit: unit)
+          }
           .confirmationDialog(
             L10n.text(
               "Отменить тренировку? Выполненные подходы не попадут в статистику.", locale: locale),
@@ -76,13 +80,15 @@ struct ActiveWorkoutView: View {
       }
     }
     .archiveTransferPresenter(
-      when: !pickingExercise && !renaming && !confirmCancel && !store.showingBodyWeightEditor
+      when: selectedExercise == nil && !pickingExercise && !renaming && !confirmCancel
+        && !store.showingBodyWeightEditor
     )
     .alert(
       L10n.text("Ошибка", locale: locale),
       isPresented: Binding(
         get: {
-          store.error != nil && !pickingExercise && !renaming && !confirmCancel
+          store.error != nil && selectedExercise == nil && !pickingExercise && !renaming
+            && !confirmCancel
             && !store.archiveTransfer.isPresented && !store.showingBodyWeightEditor
         },
         set: { if !$0 { store.error = nil } })
@@ -121,8 +127,8 @@ struct ActiveWorkoutView: View {
             )
           }
           ForEach(Array(workout.exercises.enumerated()), id: \.element.id) { index, row in
-            NavigationLink {
-              WorkoutExerciseView(workout: workout, exerciseID: row.id, unit: unit)
+            Button {
+              selectedExercise = row
             } label: {
               WorkoutExerciseListRow(row: row, index: index, unit: unit, completedOnly: false)
             }.buttonStyle(.plain).accessibilityIdentifier("openWorkoutExercise")
@@ -154,7 +160,6 @@ struct ActiveWorkoutView: View {
         }.padding(.horizontal, 16).padding(.bottom, 20)
       }
     }.background(FitTheme.paper).scrollDismissesKeyboard(.interactively)
-      .pullDownToDismiss()
       .accessibilityIdentifier("activeWorkoutScroll")
   }
 }

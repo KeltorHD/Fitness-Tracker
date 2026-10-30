@@ -8,6 +8,7 @@ struct WorkoutDetailView: View {
   @AppStorage("weightUnit") private var unit: WeightUnit = .kilograms
   @State private var exporting = false
   @State private var editing = false
+  @State private var selectedExercise: WorkoutExercise?
   @State private var templateDraft: WorkoutTemplate?
   @State private var confirmDelete = false
   let workout: Workout
@@ -22,8 +23,8 @@ struct WorkoutDetailView: View {
           WorkoutSessionSummary(workout: session, unit: unit)
           VStack(spacing: 0) {
             ForEach(Array(session.exercises.enumerated()), id: \.element.id) { index, row in
-              NavigationLink {
-                WorkoutExerciseView(workout: session, exerciseID: row.id, unit: unit)
+              Button {
+                selectedExercise = row
               } label: {
                 WorkoutExerciseListRow(row: row, index: index, unit: unit, completedOnly: true)
               }.buttonStyle(.plain).accessibilityIdentifier("openWorkoutExercise")
@@ -61,9 +62,7 @@ struct WorkoutDetailView: View {
         }.padding(16)
       }
     }
-    .pullDownToDismiss()
     .accessibilityIdentifier("workoutDetailScroll")
-    .interactiveDismissDisabled()
     .background(FitTheme.paper).navigationBarTitleDisplayMode(.inline)
     .safeAreaInset(edge: .top) { if store.isDemoMode { DemoModeBanner() } }
     .toolbarBackground(FitTheme.accent, for: .navigationBar).toolbarBackground(
@@ -136,11 +135,15 @@ struct WorkoutDetailView: View {
       exporting = false
     }
     .sheet(isPresented: $editing) { WorkoutEditorView(workout: session) }
+    .sheet(item: $selectedExercise) { row in
+      WorkoutExerciseSheet(workout: session, exerciseID: row.id, unit: unit)
+    }
     .sheet(item: $templateDraft, onDismiss: { store.showingTemplateEditor = false }) {
       TemplateEditor(template: $0).onAppear { store.showingTemplateEditor = true }
     }
     .archiveTransferPresenter(
-      when: !editing && templateDraft == nil && !confirmDelete && !store.showingBodyWeightEditor
+      when: selectedExercise == nil && !editing && templateDraft == nil && !confirmDelete
+        && !store.showingBodyWeightEditor
     )
     .confirmationDialog(
       L10n.text("Удалить тренировку?", locale: locale), isPresented: $confirmDelete,
@@ -155,7 +158,8 @@ struct WorkoutDetailView: View {
       "FitnessTracker",
       isPresented: Binding(
         get: {
-          !editing && templateDraft == nil && !store.archiveTransfer.isPresented
+          selectedExercise == nil && !editing && templateDraft == nil
+            && !store.archiveTransfer.isPresented
             && !store.showingBodyWeightEditor
             && (store.error != nil || store.notice != nil)
         },

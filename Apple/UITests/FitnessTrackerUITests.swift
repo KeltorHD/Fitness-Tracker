@@ -142,10 +142,9 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(title.waitForExistence(timeout: 5))
     let original = title.label
     let card = app.descendants(matching: .any).matching(identifier: "trainingMonthCard").firstMatch
-    card.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
-      .press(
-        forDuration: 0.05,
-        thenDragTo: card.coordinate(withNormalizedOffset: CGVector(dx: 0.58, dy: 0.5)))
+    let shortDragStart = card.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+    shortDragStart.press(
+      forDuration: 0.05, thenDragTo: shortDragStart.withOffset(CGVector(dx: 30, dy: 0)))
     XCTAssertEqual(title.label, original)
     card.swipeLeft()
     XCTAssertNotEqual(title.label, original)
@@ -425,6 +424,7 @@ final class FitnessTrackerUITests: XCTestCase {
         forDuration: 0.05,
         thenDragTo: exerciseScroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.95)))
     let workoutScroll = app.scrollViews["activeWorkoutScroll"]
+    XCTAssertTrue(exerciseScroll.waitForNonExistence(timeout: 5))
     XCTAssertTrue(workoutScroll.waitForExistence(timeout: 5))
     XCTAssertTrue(app.buttons["finishWorkout"].isEnabled)
     workoutScroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.15))
@@ -432,9 +432,42 @@ final class FitnessTrackerUITests: XCTestCase {
         forDuration: 0.05,
         thenDragTo: workoutScroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.95)))
     XCTAssertTrue(app.buttons["startWorkout"].waitForExistence(timeout: 5))
+    XCTAssertTrue(workoutScroll.waitForNonExistence(timeout: 5))
+    XCTAssertTrue(app.buttons["startWorkout"].isHittable)
     app.buttons["startWorkout"].tap()
     XCTAssertTrue(workoutScroll.waitForExistence(timeout: 5))
     XCTAssertTrue(app.buttons["openWorkoutExercise"].firstMatch.exists)
     XCTAssertTrue(app.buttons["finishWorkout"].isEnabled)
+  }
+
+  @MainActor func testCompletedWorkoutAndExerciseDismissOneSheetAtATime() {
+    let app = launch()
+    openDemoProfile(in: app)
+    app.tabBars.buttons["Дневник"].tap()
+    let workout = app.buttons.containing(NSPredicate(format: "label CONTAINS %@", "ДЕМО ·"))
+      .firstMatch
+    reveal(workout, in: app)
+    workout.tap()
+    let exercise = app.buttons["openWorkoutExercise"].firstMatch
+    XCTAssertTrue(exercise.waitForExistence(timeout: 5))
+    exercise.tap()
+    let exerciseScroll = app.scrollViews["workoutExerciseScroll"]
+    XCTAssertTrue(exerciseScroll.waitForExistence(timeout: 5))
+    exerciseScroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.15))
+      .press(
+        forDuration: 0.05,
+        thenDragTo: exerciseScroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.95)))
+    let workoutScroll = app.scrollViews["workoutDetailScroll"]
+    XCTAssertTrue(exerciseScroll.waitForNonExistence(timeout: 5))
+    XCTAssertTrue(workoutScroll.waitForExistence(timeout: 5))
+    XCTAssertTrue(exercise.isHittable)
+    workoutScroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.15))
+      .press(
+        forDuration: 0.05,
+        thenDragTo: workoutScroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.95)))
+    XCTAssertTrue(app.buttons["startWorkout"].waitForExistence(timeout: 5))
+    XCTAssertTrue(workoutScroll.waitForNonExistence(timeout: 5))
+    XCTAssertFalse(exercise.exists)
+    XCTAssertTrue(workout.exists)
   }
 }

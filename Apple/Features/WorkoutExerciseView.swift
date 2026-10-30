@@ -65,7 +65,6 @@ struct WorkoutExerciseView: View {
       }
     }
     .tint(FitTheme.accent).accessibilityIdentifier("workoutExerciseScreen")
-    .interactiveDismissDisabled()
     .onChange(of: workout) { _, value in
       if let value { model.refresh(value) }
       numberPad.reconcile(value)
@@ -175,7 +174,6 @@ struct WorkoutExerciseView: View {
             }
           }
         }
-        .pullDownToDismiss()
         .accessibilityIdentifier("workoutExerciseScroll")
         .onChange(of: numberPad.field) { _, field in
           if let field {
@@ -312,5 +310,22 @@ struct WorkoutExerciseView: View {
       return
     }
     store.finish()
+  }
+}
+
+struct WorkoutExerciseSheet: View {
+  @Environment(AppStore.self) private var store
+  let workout: Workout
+  let exerciseID: UUID
+  let unit: WeightUnit
+
+  var body: some View {
+    NavigationStack {
+      WorkoutExerciseView(workout: workout, exerciseID: exerciseID, unit: unit)
+    }
+    .tint(FitTheme.accent)
+    .presentationDetents([.large])
+    .presentationDragIndicator(.visible)
+    .safeAreaInset(edge: .top) { if store.isDemoMode { DemoModeBanner() } }
   }
 }

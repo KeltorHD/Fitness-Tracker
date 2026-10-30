@@ -3,6 +3,7 @@ import SwiftUI
 
 struct TrainingMonthPager: View {
   @Environment(\.accessibilityReduceMotion) private var reduceMotion
+  @Environment(\.dynamicTypeSize) private var typeSize
   @GestureState private var translation: CGSize = .zero
   @State private var width: CGFloat = 0
   @State private var settlingOffset: CGFloat = 0
@@ -11,9 +12,45 @@ struct TrainingMonthPager: View {
   let move: (Int) -> Void
 
   var body: some View {
+    if let current = pages.first(where: { $0.offset == 0 }) {
+      cardContent(summary: current.summary)
+        .resultsCard(padding: 16)
+        .accessibilityIdentifier("trainingMonthCard")
+        .contentShape(.rect)
+        .simultaneousGesture(
+          DragGesture(minimumDistance: 20)
+            .updating($translation) { value, state, transaction in
+              guard !isSettling else { return }
+              transaction.animation = nil
+              state = value.translation
+            }
+            .onEnded { value in settle(value.translation) }
+        )
+    }
+  }
+
+  @ViewBuilder private func cardContent(summary: TrainingMonthSummary) -> some View {
+    if typeSize.isAccessibilitySize {
+      VStack(alignment: .leading, spacing: 20) {
+        calendarPages
+        Divider()
+        TrainingMonthStatistics(summary: summary)
+      }
+    } else {
+      HStack(alignment: .top, spacing: 24) {
+        calendarPages.frame(maxWidth: .infinity)
+        TrainingMonthStatistics(summary: summary).frame(width: 64)
+      }
+      .overlay(alignment: .trailing) {
+        Rectangle().fill(FitTheme.separator).frame(width: 1).padding(.trailing, 76)
+      }
+    }
+  }
+
+  private var calendarPages: some View {
     ZStack(alignment: .top) {
       ForEach(pages) { page in
-        TrainingMonthCard(date: page.date, summary: page.summary)
+        TrainingMonthCalendar(date: page.date, summary: page.summary)
           .offset(x: CGFloat(page.offset) * width + visibleOffset)
           .opacity(page.offset == 0 || width > 0 ? 1 : 0)
           .accessibilityHidden(page.offset != 0)
@@ -26,16 +63,7 @@ struct TrainingMonthPager: View {
       width = $0
     }
     .clipped()
-    .contentShape(.rect)
-    .simultaneousGesture(
-      DragGesture(minimumDistance: 20)
-        .updating($translation) { value, state, transaction in
-          guard !isSettling else { return }
-          transaction.animation = nil
-          state = value.translation
-        }
-        .onEnded { value in settle(value.translation) }
-    )
+    .accessibilityIdentifier("trainingMonthCalendar")
   }
 
   private var visibleOffset: CGFloat {
@@ -74,42 +102,12 @@ struct TrainingMonthPager: View {
   }
 }
 
-struct TrainingMonthCard: View {
+private struct TrainingMonthCalendar: View {
   @Environment(\.locale) private var locale
-  @Environment(\.dynamicTypeSize) private var typeSize
   let date: Date
   let summary: TrainingMonthSummary
 
   var body: some View {
-    Group {
-      if typeSize.isAccessibilitySize {
-        VStack(alignment: .leading, spacing: 20) {
-          calendar
-          Divider()
-          HStack {
-            total
-            Spacer()
-            ring
-          }
-        }
-      } else {
-        HStack(alignment: .top, spacing: 24) {
-          calendar.frame(maxWidth: .infinity)
-          VStack(alignment: .leading, spacing: 16) {
-            total
-            Divider()
-            ring.padding(.top, 32)
-          }.frame(width: 64)
-        }
-        .overlay(alignment: .trailing) {
-          Rectangle().fill(FitTheme.separator).frame(width: 1).padding(.trailing, 76)
-        }
-      }
-    }
-    .resultsCard(padding: 16).accessibilityIdentifier("trainingMonthCard")
-  }
-
-  private var calendar: some View {
     VStack(alignment: .leading, spacing: 18) {
       Text(date.formatted(.dateTime.locale(locale).month(.wide)).localizedCapitalized)
         .font(.subheadline.weight(.medium)).foregroundStyle(.secondary)
@@ -143,6 +141,31 @@ struct TrainingMonthCard: View {
       }
     }.padding(.bottom, 24)
   }
+}
+
+private struct TrainingMonthStatistics: View {
+  @Environment(\.locale) private var locale
+  @Environment(\.dynamicTypeSize) private var typeSize
+  let summary: TrainingMonthSummary
+
+  var body: some View {
+    Group {
+      if typeSize.isAccessibilitySize {
+        HStack {
+          total
+          Spacer()
+          ring
+        }
+      } else {
+        VStack(alignment: .leading, spacing: 16) {
+          total
+          Divider()
+          ring.padding(.top, 32)
+        }
+      }
+    }.accessibilityIdentifier("trainingMonthStatistics")
+  }
+
   private var total: some View {
     VStack(alignment: .leading, spacing: 8) {
       Text(L10n.text("Всего", locale: locale)).font(.subheadline).foregroundStyle(.secondary)

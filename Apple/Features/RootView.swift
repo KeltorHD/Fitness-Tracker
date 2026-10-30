@@ -39,7 +39,9 @@ struct RootView: View {
     .safeAreaInset(edge: .top) { if store.isDemoMode { DemoModeBanner() } }
     .tint(.primary)
     .sheet(isPresented: $store.showSession) {
-      ActiveWorkoutView().environment(store).tint(FitTheme.accent).interactiveDismissDisabled()
+      ActiveWorkoutView().environment(store).tint(FitTheme.accent)
+        .presentationDetents([.large])
+        .presentationDragIndicator(.visible)
         .safeAreaInset(edge: .top) { if store.isDemoMode { DemoModeBanner() } }
     }
     .archiveTransferPresenter(
