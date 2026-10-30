@@ -1,6 +1,79 @@
 import XCTest
 
 final class FitnessTrackerUITests: XCTestCase {
+  @MainActor func testResultsShowFiveExerciseChartsAndPeriodPicker() {
+    let app = launch()
+    openDemoProfile(in: app)
+    app.tabBars.buttons["Результаты"].tap()
+    let period = app.buttons["exerciseProgressPeriod"]
+    reveal(period, in: app)
+    period.tap()
+    app.buttons["Всё время"].tap()
+    for metric in ["maximumWeight", "volume", "oneRepMax", "repetitions", "sets"] {
+      let chart = app.descendants(matching: .any).matching(identifier: "exerciseChart_\(metric)")
+        .firstMatch
+      reveal(chart, in: app)
+      XCTAssertTrue(chart.exists)
+    }
+  }
+
+  @MainActor func testExerciseChartsCanBeOpenedFromCompletedWorkout() {
+    let app = launch()
+    openDemoProfile(in: app)
+    app.tabBars.buttons["Дневник"].tap()
+    let workout = app.buttons.containing(NSPredicate(format: "label CONTAINS %@", "ДЕМО ·"))
+      .firstMatch
+    reveal(workout, in: app)
+    workout.tap()
+    let progress = app.buttons["openExerciseProgress"].firstMatch
+    reveal(progress, in: app)
+    progress.tap()
+    XCTAssertTrue(
+      app.descendants(matching: .any).matching(identifier: "exerciseProgressScreen").firstMatch
+        .waitForExistence(timeout: 5))
+    XCTAssertTrue(
+      app.descendants(matching: .any).matching(identifier: "exerciseChart_maximumWeight").firstMatch
+        .exists)
+  }
+
+  @MainActor func testActiveExerciseCanOpenAnEmptyProgressHistory() {
+    let app = launch()
+    XCTAssertTrue(app.buttons["startWorkout"].waitForExistence(timeout: 10))
+    app.buttons["startWorkout"].tap()
+    app.buttons["addExercise"].tap()
+    app.searchFields.firstMatch.tap()
+    app.searchFields.firstMatch.typeText("Приседания")
+    app.buttons.containing(.staticText, identifier: "Приседания").firstMatch.tap()
+    let select = app.buttons["selectLibraryExercise"]
+    XCTAssertTrue(select.waitForExistence(timeout: 5))
+    select.tap()
+    let progress = app.buttons["openExerciseProgress"].firstMatch
+    reveal(progress, in: app)
+    progress.tap()
+    XCTAssertTrue(app.staticTexts["Нет данных за выбранный период"].waitForExistence(timeout: 5))
+  }
+
+  @MainActor private func reveal(_ element: XCUIElement, in app: XCUIApplication) {
+    for _ in 0..<10 where !element.isHittable { app.swipeUp() }
+    XCTAssertTrue(element.waitForExistence(timeout: 5))
+    XCTAssertTrue(element.isHittable)
+  }
+
+  @MainActor private func openDemoProfile(in app: XCUIApplication) {
+    let settings = app.tabBars.buttons["Настройки"]
+    XCTAssertTrue(settings.waitForExistence(timeout: 10))
+    settings.tap()
+    let load = app.buttons["loadDemoData"]
+    reveal(load, in: app)
+    load.tap()
+    let confirm = app.buttons["confirmLoadDemoData"]
+    XCTAssertTrue(confirm.waitForExistence(timeout: 5))
+    confirm.tap()
+    XCTAssertTrue(
+      app.descendants(matching: .any).matching(identifier: "demoModeBanner").firstMatch
+        .waitForExistence(timeout: 5))
+  }
+
   @MainActor func testDemoProfileCanBeOpenedAndClosedWithoutChangingPersonalHistory() {
     let app = launch()
     let settings = app.tabBars.buttons["Настройки"]

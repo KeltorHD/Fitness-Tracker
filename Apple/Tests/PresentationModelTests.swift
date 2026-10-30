@@ -99,11 +99,11 @@ import XCTest
     try WorkoutEngine.finish(&workout, at: date.addingTimeInterval(60))
     let model = ProgressViewModel(now: { date.addingTimeInterval(120) })
     model.refresh(workouts: [workout], calendar: .current)
-    model.selectedExerciseID = workout.exercises[0].exercise.id
-    XCTAssertNotNil(model.selectedRecord)
-    XCTAssertEqual(model.points.count, 1)
+    model.exerciseProgress.selectedExerciseID = workout.exercises[0].exercise.id
+    XCTAssertNotNil(model.exerciseProgress.history)
+    XCTAssertEqual(model.exerciseProgress.points.count, 1)
     model.refresh(workouts: [], calendar: .current)
-    XCTAssertNil(model.selectedRecord)
-    XCTAssertTrue(model.points.isEmpty)
+    XCTAssertNil(model.exerciseProgress.history)
+    XCTAssertTrue(model.exerciseProgress.points.isEmpty)
   }
 }

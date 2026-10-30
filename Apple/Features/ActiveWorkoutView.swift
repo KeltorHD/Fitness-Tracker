@@ -55,6 +55,20 @@ struct ActiveWorkoutView: View {
                   L10n.text("Техника выполнения", locale: locale),
                   systemImage: "figure.strengthtraining.traditional")
               }
+              NavigationLink {
+                ExerciseProgressScreen(
+                  exercise: exercise.exercise, workoutID: workout.id, showsDemoBanner: false)
+              } label: {
+                Label(
+                  L10n.text("Прогресс упражнения", locale: locale), systemImage: "chart.xyaxis.line"
+                )
+              }
+              .accessibilityLabel(
+                L10n.format(
+                  "Прогресс упражнения: %@", L10n.exerciseName(exercise.exercise, locale: locale),
+                  locale: locale)
+              )
+              .accessibilityIdentifier("openExerciseProgress")
               ForEach(exercise.sets) { set in
                 SetEditor(exerciseID: exercise.id, set: set, disabled: workout.status != .active)
               }

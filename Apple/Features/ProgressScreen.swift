@@ -12,52 +12,16 @@ struct ProgressScreen: View {
   var body: some View {
     NavigationStack {
       ScrollView {
-        VStack(alignment: .leading, spacing: 28) {
+        LazyVStack(alignment: .leading, spacing: 28) {
           VStack(spacing: 14) {
             SectionHeading(title: L10n.text("История", locale: locale), symbol: "clock")
             TrainingMonthCard(date: model.month, summary: model.report.month, move: model.moveMonth)
           }
-          if let record = model.selectedRecord {
-            VStack(spacing: 14) {
-              HStack {
-                SectionHeading(
-                  title: L10n.exerciseName(record.exercise, locale: locale), symbol: "dumbbell")
-                Menu {
-                  ForEach(model.report.records) { item in
-                    Button(L10n.exerciseName(item.exercise, locale: locale)) {
-                      model.selectedExerciseID = item.id
-                    }
-                  }
-                } label: {
-                  Image(systemName: "ellipsis").foregroundStyle(.secondary)
-                }
-              }
-              VStack(alignment: .leading, spacing: 14) {
-                HStack(alignment: .top) {
-                  Text(
-                    L10n.format(
-                      "Объём за тренировку, %@",
-                      String(L10n.text(unit.rawValue, locale: locale)), locale: locale
-                    )
-                  ).font(.subheadline).foregroundStyle(
-                    .secondary)
-                  Spacer()
-                  Label(
-                    "\(unit.display(record.weightKG).formatted(.number.locale(L10n.numberLocale).precision(.fractionLength(0...1)))) \(L10n.text(unit.rawValue, locale: locale))",
-                    systemImage: "trophy.fill"
-                  )
-                  .font(.headline).foregroundStyle(FitTheme.accent)
-                }
-                Chart(model.points) { point in
-                  BarMark(
-                    x: .value(L10n.text("Дата", locale: locale), point.date),
-                    y: .value(L10n.text("Объём", locale: locale), unit.display(point.volume))
-                  )
-                  .foregroundStyle(FitTheme.accent).cornerRadius(3)
-                }.frame(height: 215).chartYAxis { AxisMarks(position: .trailing) }
-                  .accessibilityLabel(L10n.text("Объём упражнения по тренировкам", locale: locale))
-              }.fitCard()
-            }
+          VStack(alignment: .leading, spacing: 14) {
+            SectionHeading(
+              title: L10n.text("Прогресс по упражнениям", locale: locale),
+              symbol: "chart.xyaxis.line")
+            ExerciseProgressSection(model: model.exerciseProgress)
           }
           VStack(spacing: 14) {
             SectionHeading(title: L10n.text("Общий объём", locale: locale), symbol: "chart.bar")

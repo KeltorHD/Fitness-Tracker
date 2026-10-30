@@ -205,6 +205,23 @@
         }
       }
     },
+    "12 недель": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "12 недель"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "12 weeks"
+          }
+        }
+      }
+    },
     "1ПМ — оценка по формуле Эпли для 1–12 повторений. Собственный вес не включается в объём внешнего отягощения.": {
       "extractionState": "manual",
       "localizations": {
@@ -222,6 +239,23 @@
         }
       }
     },
+    "1ПМ — расчётная оценка по формуле Эпли, а не рекомендация нагрузки.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1ПМ — расчётная оценка по формуле Эпли, а не рекомендация нагрузки."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The one-rep max is an Epley estimate, not a recommended load."
+          }
+        }
+      }
+    },
     "24 тренировки за 8 недель и 3 плана. Демо открывается отдельно от личной истории и не синхронизируется. Настройки приложения общие для обоих профилей.": {
       "extractionState": "manual",
       "localizations": {
@@ -235,6 +269,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "24 workouts over 8 weeks and 3 templates. The demo opens separately from your history and does not sync. App settings are shared between both profiles."
+          }
+        }
+      }
+    },
+    "26 недель": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 недель"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 weeks"
+          }
+        }
+      }
+    },
+    "4 недели": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4 недели"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4 weeks"
           }
         }
       }
@@ -1378,6 +1446,23 @@
         }
       }
     },
+    "Всё время": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Всё время"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All time"
+          }
+        }
+      }
+    },
     "Всё тело": {
       "extractionState": "manual",
       "localizations": {
@@ -1459,6 +1544,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Full body · B"
+          }
+        }
+      }
+    },
+    "Выберите другой период или завершите тренировку с рабочими подходами этого упражнения.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выберите другой период или завершите тренировку с рабочими подходами этого упражнения."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose another period or finish a workout with working sets of this exercise."
           }
         }
       }
@@ -1952,6 +2054,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mark at least one set as completed to finish the workout."
+          }
+        }
+      }
+    },
+    "Для расчёта 1ПМ нужны рабочие подходы с весом на 1–12 повторений.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Для расчёта 1ПМ нужны рабочие подходы с весом на 1–12 повторений."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A one-rep max estimate requires weighted working sets of 1–12 reps."
           }
         }
       }
@@ -2704,6 +2823,23 @@
         }
       }
     },
+    "История упражнения по завершённым тренировкам": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "История упражнения по завершённым тренировкам"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exercise history from completed workouts"
+          }
+        }
+      }
+    },
     "История хранится на этом устройстве. Для переноса используйте импорт и экспорт файлов.": {
       "extractionState": "manual",
       "localizations": {
@@ -2874,6 +3010,23 @@
         }
       }
     },
+    "Каждая точка — одна завершённая тренировка. Нажмите на график, чтобы посмотреть значения.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Каждая точка — одна завершённая тренировка. Нажмите на график, чтобы посмотреть значения."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Each point is one completed workout. Touch the chart to inspect its values."
+          }
+        }
+      }
+    },
     "Как на устройстве": {
       "extractionState": "manual",
       "localizations": {
@@ -2989,6 +3142,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Maximum weight"
+          }
+        }
+      }
+    },
+    "Максимальный рабочий вес": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Максимальный рабочий вес"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maximum working weight"
           }
         }
       }
@@ -3996,6 +4166,23 @@
         }
       }
     },
+    "Нет данных за выбранный период": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нет данных за выбранный период"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No data for this period"
+          }
+        }
+      }
+    },
     "Нет доступных данных. Проверьте синхронизацию приложения трекера и разрешения FitnessTracker в «Здоровье».": {
       "extractionState": "manual",
       "localizations": {
@@ -4676,6 +4863,23 @@
         }
       }
     },
+    "Период графиков": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Период графиков"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chart period"
+          }
+        }
+      }
+    },
     "План тренировки": {
       "extractionState": "manual",
       "localizations": {
@@ -5271,6 +5475,57 @@
         }
       }
     },
+    "Прогресс по упражнениям": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Прогресс по упражнениям"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exercise progress"
+          }
+        }
+      }
+    },
+    "Прогресс упражнения": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Прогресс упражнения"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exercise progress"
+          }
+        }
+      }
+    },
+    "Прогресс упражнения: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Прогресс упражнения: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exercise progress: %@"
+          }
+        }
+      }
+    },
     "Продвинутый": {
       "extractionState": "manual",
       "localizations": {
@@ -5488,6 +5743,57 @@
           "stringUnit": {
             "state": "translated",
             "value": "Muscles worked"
+          }
+        }
+      }
+    },
+    "Рабочие повторения": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Рабочие повторения"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Working reps"
+          }
+        }
+      }
+    },
+    "Рабочие подходы": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Рабочие подходы"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Working sets"
+          }
+        }
+      }
+    },
+    "Рабочий объём": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Рабочий объём"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Working volume"
           }
         }
       }
@@ -6546,6 +6852,23 @@
         }
       }
     },
+    "Упражнение": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Упражнение"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exercise"
+          }
+        }
+      }
+    },
     "Упражнение не найдено.": {
       "extractionState": "manual",
       "localizations": {
@@ -6593,6 +6916,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bluetooth device"
+          }
+        }
+      }
+    },
+    "Учитываются только выполненные рабочие подходы. Разминка не включается. Вес тела не добавляется к отягощению.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Учитываются только выполненные рабочие подходы. Разминка не включается. Вес тела не добавляется к отягощению."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Only completed working sets are included. Warmups are excluded. Body weight is not added to external load."
           }
         }
       }

@@ -26,7 +26,8 @@ bin_path="$("$swift_bin" build "${flags[@]}" --show-bin-path)"
 # type check of this explicit subset; it does not compile SwiftUI or Apple integrations.
 "$swiftc_bin" -swift-version 6 -strict-concurrency=complete \
   -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -typecheck -I "$bin_path/Modules" \
-  Apple/Features/ProgressViewModel.swift Apple/Features/HistoryViewModel.swift \
+  Apple/Features/ProgressViewModel.swift Apple/Features/ExerciseProgressViewModel.swift \
+  Apple/Features/HistoryViewModel.swift \
   Apple/Features/ExerciseLibraryViewModel.swift Apple/Services/ExerciseImageLoader.swift \
   Apple/Services/CloudAccountChecking.swift Apple/Shared/WidgetSnapshot.swift \
   Apple/Services/AppCapabilities.swift Apple/Shared/L10n.swift \
@@ -35,6 +36,13 @@ bin_path="$("$swift_bin" build "${flags[@]}" --show-bin-path)"
   Apple/Features/TrackerViewModel.swift Apple/Features/WorkoutHeartRateViewModel.swift \
   Apple/Features/TrackerDeviceProfile.swift Apple/Shared/AppCompatibility.swift
 echo 'Portable presentation/data subset: Swift 6 type check passed (no Apple SDK).'
+# Exercise chart presentation with real Core data, without SwiftUI/Charts SDK stand-ins.
+"$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
+  -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \
+  "$bin_path"/FitnessTrackerCore.build/*.swift.o \
+  Apple/Features/ExerciseProgressViewModel.swift Apple/Features/ProgressViewModel.swift \
+  Tests/PortableProgressChecks/main.swift -o "$bin_path/portable-progress-checks"
+"$bin_path/portable-progress-checks"
 # Exercise the real tracker presentation/storage subset with fakes, without radio/HealthKit calls.
 "$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
   -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \

@@ -31,7 +31,7 @@
 | TrainingJournal: недельная лента, календарь, ЛР; повтор с новыми ID | Да | Да, 7 новых тестов | UI отдельно | Нет |
 | Дизайн по 11 референсам, четыре вкладки, темы, автоблокировка | Да | Только syntax parse и lint | Да, SwiftUI/Glass/presentation/idle timer | Обычный signing |
 | TrainingReport, сводка месяца, преобразование истории в шаблон | Да | Да, 6 новых тестов, включая ЛР при фильтре дня | UI отдельно | Нет |
-| HistoryViewModel / ProgressViewModel: подготовленные данные вне body | Да | Core-проекции — да; Apple models — нет | Да, обновление после редактирования/смены периода | Нет |
+| HistoryViewModel / ProgressViewModel: подготовленные данные вне body | Да | Core-проекции — да; ProgressViewModel дополнительно исполнен с ExerciseProgressViewModel без Apple SDK; HistoryViewModel — только type-check | Да, обновление после редактирования/смены периода | Нет |
 | ExerciseLibraryViewModel, SettingsViewModel, DI сервисов и cancellation | Да | Только type-check переносимой части; Apple tests не запускались | Да, permissions, retry, устаревшие ответы, sheet/alert | iCloud для проверки аккаунта |
 | ExerciseImageLoader actor и ExercisePhotoViewModel | Да | Type-check файлового сервиса; UIKit/Apple tests не запускались | Да, загрузка/ошибка/retry и cache при прокрутке | Нет |
 | Warmup/skip-rest через Core; ошибка сохранения не показывает успех | Да | Warmup и LiveAction rules — да; AppStore tests не запускались | Да, ошибки repository и восстановление UI | Нет |
@@ -52,16 +52,20 @@
 | DemoWorkoutData / WorkoutWorkspaceRepository: 24 тренировки, 3 плана, изоляция и безопасное переключение | Да | Да, 5 новых Core tests: RU/EN, DST, стабильные IDs, совпадающие UUID, reset и ошибки чтения | Нет для Core | Нет |
 | Демо-профиль в настройках, баннеры, reset/выход, guards внешних интеграций | Да | Только syntax parse, ресурсы и lint; AppStore/UI tests написаны, не запускались | Да, переключение, навигация, integration guards и accessibility | Обычный signing; дополнительных capabilities нет |
 | SessionControls: всегда видимое завершение, пояснение до первого подхода и адаптивная раскладка | Да | Только syntax parse, локализация и lint; UI tests обновлены, не запускались | Да, клавиатура, Dynamic Type, узкий экран, завершение active/paused | Обычный signing; дополнительных capabilities нет |
+| ExerciseProgressReport: пять показателей, exercise identity, периоды и DST | Да | Да, 7 новых Core tests | Нет для Core | Нет |
+| ExerciseProgressViewModel: серии, выбор периода/точки, удаление и выделение workout UUID | Да | Да, реальное исполнение Foundation/Observation модели в PortableProgressChecks и Swift 6 type-check | UI отдельно | Нет |
+| Swift Charts по упражнениям в Результатах, active workout и истории | Да | Только syntax parse, ресурсы и lint; три UI-сценария написаны, не запускались | Да, Charts SDK, navigation, selection, RU/EN, кг/фунты и accessibility | Обычный signing; дополнительных capabilities нет |
 
 ## Фактические проверки
 
 - `swift build`: прошёл для FitnessTrackerCore на Linux.
-- `swift test`: прошли 83 Swift Testing tests, включая parameterized cases. Стандартный XCTest runner также печатает «0 tests» — Core использует отдельный Swift Testing runner, его итоговая строка содержит 83 tests.
-- Отдельный Swift 6 strict-concurrency type-check без Apple SDK: HistoryViewModel, ProgressViewModel, ExerciseLibraryViewModel, ExerciseImageLoader, CloudAccountChecking, WidgetSnapshot, AppCapabilities, L10n и WorkoutFormatting. Это проверка типов указанной переносимой части, не функциональный тест и не сборка iOS target.
+- `swift test`: прошли 90 Swift Testing tests, включая parameterized cases. Стандартный XCTest runner также печатает «0 tests» — Core использует отдельный Swift Testing runner, его итоговая строка содержит 90 tests.
+- Отдельный Swift 6 strict-concurrency type-check без Apple SDK: HistoryViewModel, ProgressViewModel, ExerciseProgressViewModel, ExerciseLibraryViewModel, ExerciseImageLoader, CloudAccountChecking, WidgetSnapshot, AppCapabilities, L10n и WorkoutFormatting. Это проверка типов указанной переносимой части, не функциональный тест и не сборка iOS target.
 - Swift formatting/lint, синтаксический разбор Apple Swift, структура/конфигурационные связи, plist/JSON, PNG и наличие ресурсов: прошли в `bash scripts/check-linux.sh`. Для Dynamic Island parser проверяет обе ветви shared intents: основной target с FITNESS_TRACKER_APP и widget extension без него.
-- Локализация: 418 ключей RU/EN и четыре InfoPlist-строки, placeholders, формы счётчиков, покрытие русских ключей, target resources и повторяемость генерации — прошли. Компиляция `.xcstrings` в Xcode не проверена; сценарии — [LOCALIZATION.md](LOCALIZATION.md).
+- Локализация: 438 ключей RU/EN и четыре InfoPlist-строки, placeholders, формы счётчиков, покрытие русских ключей, target resources и повторяемость генерации — прошли. Компиляция `.xcstrings` в Xcode не проверена; сценарии — [LOCALIZATION.md](LOCALIZATION.md).
 - В сессии использован внешний Swift 6.2.1 через SWIFT_BIN; для постоянной установки предусмотрен `setup-linux.sh`, toolchain не хранится в git.
 - Переносимая tracker-подсистема дополнительно исполнена в `Tests/PortableTrackerChecks/main.swift`: recording/pause, save failure/retry, mode race, минимальные permissions, history, real file round-trip/corruption/delete. Это не тест HealthKit/CoreBluetooth.
+- Исполнен `Tests/PortableProgressChecks/main.swift`: выбор упражнения/точки, периоды, bodyweight, удаление, точный workout UUID при совпадающей дате и связь с ProgressViewModel. Это не тест SwiftUI/Charts.
 - XcodeGen generation, iOS/watchOS compilation, linking, Simulator, SwiftUI rendering и реальные Apple-сервисы **не проверены**. Linux CI не заменяет эти проверки.
 
 ## Границы текущей реализации
@@ -79,5 +83,7 @@ Watch записывает отдельный стартовый план и п�
 Два режима Mi Band/HealthKit/Bluetooth и границы хранения: [MI_BAND.md](MI_BAND.md).
 
 Переименование и установленные идентификаторы: [RENAME.md](RENAME.md).
+
+Графики по упражнениям и правила периодов: [EXERCISE_PROGRESS.md](EXERCISE_PROGRESS.md).
 
 Изолированные демонстрационные тренировки: [DEMO_DATA.md](DEMO_DATA.md). Демо хранится в памяти и сбрасывается при выходе/завершении процесса; настройки приложения общие с личным профилем.

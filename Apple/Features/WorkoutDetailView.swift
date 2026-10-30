@@ -54,6 +54,20 @@ struct WorkoutDetailView: View {
                   }
                 }.foregroundStyle(.primary)
               }.buttonStyle(.plain)
+              NavigationLink {
+                ExerciseProgressScreen(exercise: exercise.exercise, workoutID: session.id)
+              } label: {
+                Label(
+                  L10n.text("Прогресс упражнения", locale: locale), systemImage: "chart.xyaxis.line"
+                )
+                .font(.subheadline).frame(maxWidth: .infinity, alignment: .leading)
+              }
+              .accessibilityLabel(
+                L10n.format(
+                  "Прогресс упражнения: %@", L10n.exerciseName(exercise.exercise, locale: locale),
+                  locale: locale)
+              )
+              .accessibilityIdentifier("openExerciseProgress")
               Divider().padding(.leading, 30)
             }
           }

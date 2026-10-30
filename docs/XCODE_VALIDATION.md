@@ -79,6 +79,7 @@
 | TemplatesView / TemplateEditor | Binding коллекций, добавление/удаление exercise, диапазоны и сообщения validation |
 | HistoryView / WorkoutDetailView | Empty state, удаление с подтверждением, JSON ShareLink, прогресс export и alerts |
 | ProgressScreen / Charts | Пустые данные, бесплатный график за 26 недель, VoiceOver и unit conversion |
+| ExerciseProgressSection / ExerciseProgressScreen | Пять графиков, выбор упражнения/периода/точки, пустые состояния, переходы из active/history, подсветка workout UUID, lazy loading и доступность |
 | SettingsView | Opt-ins, отсутствие автоматического HealthKit-запроса, все функции доступны бесплатно |
 | Live Activity / Dynamic Island | Compact/minimal/expanded и Lock Screen; активное время с pauseTime, отдых до нуля, следующий подход; кнопки pause/resume/skip-rest, cold-launch intent и UUID deep link |
 | WeeklyWidgetView | Small/medium, отсутствие opt-in, обновление и смена недели, privacy redaction |
@@ -188,3 +189,17 @@
 - [ ] Запустить обновлённые `testLogSetAndFindWorkoutInHistory` и `testMinimizedSessionCanBeResumed`. На Linux эти XCTest UI tests не запускались.
 
 Выбор раскладки использует нативный [ViewThatFits](https://developer.apple.com/documentation/swiftui/viewthatfits); [Liquid Glass API](https://developer.apple.com/documentation/swiftui/applying-liquid-glass-to-custom-views) сохранены. Результат требует проверки rendering и SDK в Xcode.
+
+## Прогресс упражнений
+
+- [ ] После генерации в Results доступны пять графиков: максимальный рабочий вес, рабочий объём, расчётный 1ПМ, рабочие повторения, рабочие подходы. Выбор упражнения включает bodyweight, а не только обладателей рекордов с весом.
+- [ ] Периоды 4/12/26 недель и всё время работают отдельно от месяца календаря. Проверить разные timezone, DST, историю до текущего года и пустой период.
+- [ ] Выбор даты на любом графике выделяет ближайшую сессию и обновляет значения/дату всех пяти карточек. Несколько тренировок за день не объединяются; при открытии из истории сохраняется точный workout UUID даже при одинаковом времени.
+- [ ] Переход «Прогресс упражнения» из active workout и WorkoutDetail открывает именно exercise UUID. Назад возвращает в прежнюю тренировку без паузы/изменения подходов; активная сессия не включается в данные.
+- [ ] Bodyweight: повторения/подходы видны, дополнительный вес/объём равны нулю, 1ПМ отсутствует с пояснением. Разминка и невыполненные подходы исключены. Подходы более 12 повторений не создают 1ПМ.
+- [ ] Один отсчёт, одинаковые timestamps, нулевой вес, RU/EN и длинные пользовательские названия: оси и единицы читаемы. Выбор фунтов изменяет только весовые показатели.
+- [ ] Удаление, редактирование, импорт и переключение демо обновляют графики без чужих/устаревших точек; выбранное упражнение в фиксированном экране не заменяется другим. Демо-баннер виден, в активной сессии не дублируется.
+- [ ] VoiceOver читает даты/значения точек без дублирования линии; крупный Dynamic Type, Light/Dark, Increase Contrast, горизонтальная ориентация, прокрутка длинной истории и gesture selection работают. Проверить lazy cards при возврате вверх.
+- [ ] Запустить новые UI tests: testResultsShowFiveExerciseChartsAndPeriodPicker, testExerciseChartsCanBeOpenedFromCompletedWorkout, testActiveExerciseCanOpenAnEmptyProgressHistory; обновлённый PresentationModelTests. На Linux эти Apple-тесты не запускались.
+
+[Алгоритмы, периоды и статусы](EXERCISE_PROGRESS.md).

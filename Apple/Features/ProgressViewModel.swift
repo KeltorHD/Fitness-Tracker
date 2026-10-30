@@ -4,7 +4,7 @@ import Observation
 
 @MainActor @Observable final class ProgressViewModel {
   var month: Date { didSet { rebuild() } }
-  var selectedExerciseID: UUID?
+  let exerciseProgress: ExerciseProgressViewModel
   private(set) var report: TrainingReport
   @ObservationIgnored private var workouts: [Workout] = []
   @ObservationIgnored private var calendar: Calendar
@@ -13,23 +13,18 @@ import Observation
   init(calendar: Calendar = .current, now: @escaping () -> Date = Date.init) {
     self.calendar = calendar
     self.now = now
+    exerciseProgress = ExerciseProgressViewModel(now: now)
     let date = now()
     month = date
     report = TrainingReport(workouts: [], month: date, now: date, calendar: calendar)
   }
 
-  var selectedRecord: PersonalRecord? {
-    report.records.first { $0.id == selectedExerciseID } ?? report.records.first
-  }
-  var points: [ExerciseVolumePoint] {
-    guard let id = selectedRecord?.id else { return [] }
-    return report.exerciseVolumes[id] ?? []
-  }
   var year: Int { calendar.component(.year, from: month) }
 
   func refresh(workouts: [Workout], calendar: Calendar) {
     self.workouts = workouts
     self.calendar = calendar
+    exerciseProgress.refresh(workouts: workouts, calendar: calendar)
     rebuild()
   }
   func selectYear(_ year: Int) {
