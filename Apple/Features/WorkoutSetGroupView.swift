@@ -7,7 +7,7 @@ struct WorkoutSetGroupView: View {
   let index: Int
   let workout: Workout
   let model: WorkoutExercisePresentation
-  var focus: FocusState<WorkoutSetField?>.Binding
+  let numberPad: WorkoutNumberPadModel
   let toggleWarmup: () -> Void
 
   var body: some View {
@@ -41,16 +41,14 @@ struct WorkoutSetGroupView: View {
       set: value, index: index, marker: marker, showsWarmupAction: marker == nil,
       unit: model.unit, editable: workout.status == .active && value.completedAt == nil,
       selected: value.id == model.selectedTargetID && workout.status == .active,
-      weight: Binding(
-        get: { model.drafts[value.id]?.weight ?? "" },
-        set: { model.editWeight($0, setID: value.id) }),
-      repetitions: Binding(
-        get: { model.drafts[value.id]?.repetitions ?? "" },
-        set: { model.editRepetitions($0, setID: value.id) }),
-      focus: focus,
+      weight: model.drafts[value.id]?.weight ?? "",
+      repetitions: model.drafts[value.id]?.repetitions ?? "",
+      numberPad: numberPad, edit: { numberPad.begin($0, in: workout) },
       select: {
-        focus.wrappedValue = nil
+        numberPad.dismiss()
         model.select(value.id, in: workout)
-      }, toggleWarmup: toggleWarmup)
+      }, toggleWarmup: toggleWarmup
+    )
+    .id("number-\(value.id.uuidString)")
   }
 }

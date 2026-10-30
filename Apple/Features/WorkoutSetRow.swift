@@ -1,16 +1,6 @@
 import FitnessTrackerCore
 import SwiftUI
 
-enum WorkoutSetField: Hashable {
-  case weight(UUID)
-  case repetitions(UUID)
-  var setID: UUID {
-    switch self {
-    case .weight(let id), .repetitions(let id): id
-    }
-  }
-}
-
 struct WorkoutSetRow: View {
   @Environment(\.locale) private var locale
   @Environment(\.dynamicTypeSize) private var typeSize
@@ -22,9 +12,10 @@ struct WorkoutSetRow: View {
   let unit: WeightUnit
   let editable: Bool
   let selected: Bool
-  @Binding var weight: String
-  @Binding var repetitions: String
-  var focus: FocusState<WorkoutSetField?>.Binding
+  let weight: String
+  let repetitions: String
+  let numberPad: WorkoutNumberPadModel
+  let edit: (WorkoutSetField) -> Void
   let select: () -> Void
   let toggleWarmup: () -> Void
 
@@ -96,8 +87,8 @@ struct WorkoutSetRow: View {
   private var weightField: some View {
     HStack(alignment: .firstTextBaseline, spacing: 3) {
       if editable {
-        TextField("0", text: $weight).keyboardType(.decimalPad).multilineTextAlignment(.trailing)
-          .focused(focus, equals: .weight(set.id)).accessibilityIdentifier("setWeight_\(set.id)")
+        valueButton(weight, field: .weight(set.id))
+          .accessibilityIdentifier("setWeight_\(set.id)")
           .accessibilityLabel(
             L10n.format("Вес в %@", L10n.text(unit.rawValue, locale: locale), locale: locale))
       } else {
@@ -113,14 +104,33 @@ struct WorkoutSetRow: View {
   private var repetitionsField: some View {
     Group {
       if editable {
-        TextField(L10n.text("Повторы", locale: locale), text: $repetitions).keyboardType(.numberPad)
-          .focused(focus, equals: .repetitions(set.id)).accessibilityIdentifier(
-            "setRepetitions_\(set.id)"
-          )
+        valueButton(repetitions, field: .repetitions(set.id))
+          .accessibilityIdentifier("setRepetitions_\(set.id)")
           .accessibilityLabel(L10n.text("Повторения", locale: locale))
       } else {
         Text(String(set.repetitions)).frame(maxWidth: .infinity, alignment: .leading)
       }
     }.font(.system(size: numberSize, weight: .regular)).monospacedDigit()
   }
+  private func valueButton(_ value: String, field: WorkoutSetField) -> some View {
+    let active = numberPad.field == field
+    return Button {
+      edit(field)
+    } label: {
+      Text(value.isEmpty ? "0" : value)
+        .foregroundStyle(
+          (active && numberPad.replacesOnInput) || value.isEmpty ? FitTheme.muted : Color.primary
+        )
+        .padding(.bottom, 4)
+        .overlay(alignment: .bottom) {
+          if active { Capsule().fill(FitTheme.accent).frame(height: 3) }
+        }
+        .frame(maxWidth: .infinity, minHeight: 44, alignment: field.isWeight ? .trailing : .leading)
+        .contentShape(.rect)
+    }.buttonStyle(.plain).lineLimit(1).minimumScaleFactor(0.65)
+      .accessibilityValue(value.isEmpty ? "0" : value)
+      .accessibilityHint(L10n.text("Открыть цифровую панель", locale: locale))
+      .accessibilityAddTraits(active ? .isSelected : [])
+  }
+
 }

@@ -8,7 +8,8 @@ struct WorkoutExerciseView: View {
   @State private var model: WorkoutExercisePresentation
   @State private var error: String?
   @State private var lastCompletion: ContinuousClock.Instant?
-  @FocusState private var focus: WorkoutSetField?
+  @State private var numberPad: WorkoutNumberPadModel
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
   private let workoutID: UUID
   private var workout: Workout? {
     if store.active?.id == workoutID { return store.active }
@@ -16,9 +17,11 @@ struct WorkoutExerciseView: View {
   }
   init(workout: Workout, exerciseID: UUID, unit: WeightUnit) {
     workoutID = workout.id
-    _model = State(
-      initialValue: WorkoutExercisePresentation(
-        workout: workout, exerciseID: exerciseID, unit: unit, locale: L10n.numberLocale))
+    let presentation = WorkoutExercisePresentation(
+      workout: workout, exerciseID: exerciseID, unit: unit, locale: L10n.numberLocale)
+    _model = State(initialValue: presentation)
+    _numberPad = State(
+      initialValue: WorkoutNumberPadModel(editor: presentation, locale: L10n.numberLocale))
   }
   var body: some View {
     ZStack(alignment: .top) {
@@ -28,19 +31,22 @@ struct WorkoutExerciseView: View {
         VStack(spacing: 16) {
           sessionHeader(workout)
           exerciseCard(exercise, workout: workout)
-          WorkoutExerciseDock(
-            workout: workout, exerciseIndex: model.index(in: workout) ?? 0,
-            canComplete: workout.status == .active && model.selectedSetID != nil,
-            completingDrop: exercise.sets.first { $0.id == model.selectedSetID }?.isDropSet == true,
-            previous: { move(-1, in: workout) }, next: { move(1, in: workout) },
-            add: { addSet(in: workout) }, complete: { complete(in: workout) },
-            pause: { pause(workout) }, close: { dismiss() })
-          if [.active, .paused].contains(workout.status) {
-            Button(
-              L10n.text("Завершить тренировку", locale: locale), systemImage: "checkmark.circle"
-            ) { finish(workout) }
-            .buttonStyle(.glass).disabled(workout.completedSets == 0).accessibilityIdentifier(
-              "finishWorkout")
+          if numberPad.field == nil {
+            WorkoutExerciseDock(
+              workout: workout, exerciseIndex: model.index(in: workout) ?? 0,
+              canComplete: workout.status == .active && model.selectedSetID != nil,
+              completingDrop: exercise.sets.first { $0.id == model.selectedSetID }?.isDropSet
+                == true,
+              previous: { move(-1, in: workout) }, next: { move(1, in: workout) },
+              add: { addSet(in: workout) }, complete: { complete(in: workout) },
+              pause: { pause(workout) }, close: { dismiss() })
+            if [.active, .paused].contains(workout.status) {
+              Button(
+                L10n.text("Завершить тренировку", locale: locale), systemImage: "checkmark.circle"
+              ) { finish(workout) }
+              .buttonStyle(.glass).disabled(workout.completedSets == 0).accessibilityIdentifier(
+                "finishWorkout")
+            }
           }
         }.padding(.horizontal, 12).padding(.bottom, 8)
       } else {
@@ -53,17 +59,17 @@ struct WorkoutExerciseView: View {
       }
     }
     .toolbar(.hidden, for: .navigationBar)
-    .toolbar {
-      ToolbarItemGroup(placement: .keyboard) {
-        Spacer()
-        Button(L10n.text("Готово", locale: locale)) { focus = nil }
+    .safeAreaInset(edge: .bottom, spacing: 0) {
+      if let workout, numberPad.field != nil {
+        WorkoutNumberPad(model: numberPad, workout: workout)
       }
     }
     .tint(FitTheme.accent).accessibilityIdentifier("workoutExerciseScreen")
-    .onChange(of: workout) { _, value in if let value { model.refresh(value) } }
-    .onChange(of: focus) { _, value in
-      if let value, let workout { model.select(value.setID, in: workout) }
+    .onChange(of: workout) { _, value in
+      if let value { model.refresh(value) }
+      numberPad.reconcile(value)
     }
+    .onDisappear { numberPad.dismiss() }
   }
   private func sessionHeader(_ workout: Workout) -> some View {
     HStack {
@@ -94,77 +100,89 @@ struct WorkoutExerciseView: View {
   }
   private func exerciseCard(_ row: WorkoutExercise, workout: Workout) -> some View {
     VStack(spacing: 16) {
-      ScrollView {
-        VStack(spacing: 16) {
-          HStack(alignment: .top) {
-            Button {
-              dismiss()
-            } label: {
-              Image(systemName: "chevron.down").font(.title3.weight(.semibold))
-            }
-            .frame(minWidth: 44, minHeight: 44).accessibilityLabel(
-              L10n.text("К списку упражнений", locale: locale))
-            Spacer()
-            Menu {
-              NavigationLink {
-                ExerciseDetailView(exercise: row.exercise).toolbar(.visible, for: .navigationBar)
+      ScrollViewReader { proxy in
+        ScrollView {
+          VStack(spacing: 16) {
+            HStack(alignment: .top) {
+              Button {
+                dismiss()
               } label: {
-                Label(L10n.text("Техника выполнения", locale: locale), systemImage: "info.circle")
+                Image(systemName: "chevron.down").font(.title3.weight(.semibold))
               }
-              if let set = row.sets.first(where: { $0.id == model.selectedSetID }),
-                workout.status == .active, set.completedAt == nil
-              {
-                if !set.isDropSet {
-                  Button(
-                    L10n.text(
-                      set.isWarmup ? "Рабочий подход" : "Разминочный подход", locale: locale)
-                  ) { toggleWarmup(set, row: row, workout: workout) }
-                  .accessibilityIdentifier("toggleSetWarmup")
+              .frame(minWidth: 44, minHeight: 44).accessibilityLabel(
+                L10n.text("К списку упражнений", locale: locale))
+              Spacer()
+              Menu {
+                NavigationLink {
+                  ExerciseDetailView(exercise: row.exercise).toolbar(.visible, for: .navigationBar)
+                } label: {
+                  Label(L10n.text("Техника выполнения", locale: locale), systemImage: "info.circle")
                 }
-                if !set.isWarmup {
-                  Button(
-                    L10n.text(
-                      set.isDropSet ? "Добавить снижение веса" : "Сделать дропсетом", locale: locale
-                    )
-                  ) { configureDrop(workout, adding: true) }
-                  .disabled((set.dropStages ?? []).count >= 5).accessibilityIdentifier(
-                    "addDropStage")
-                  if set.isDropSet {
-                    Button(L10n.text("Убрать дропсет", locale: locale)) {
-                      configureDrop(workout, adding: false)
+                if let set = row.sets.first(where: { $0.id == model.selectedSetID }),
+                  workout.status == .active, set.completedAt == nil
+                {
+                  if !set.isDropSet {
+                    Button(
+                      L10n.text(
+                        set.isWarmup ? "Рабочий подход" : "Разминочный подход", locale: locale)
+                    ) { toggleWarmup(set, row: row, workout: workout) }
+                    .accessibilityIdentifier("toggleSetWarmup")
+                  }
+                  if !set.isWarmup {
+                    Button(
+                      L10n.text(
+                        set.isDropSet ? "Добавить снижение веса" : "Сделать дропсетом",
+                        locale: locale
+                      )
+                    ) { configureDrop(workout, adding: true) }
+                    .disabled((set.dropStages ?? []).count >= 5).accessibilityIdentifier(
+                      "addDropStage")
+                    if set.isDropSet {
+                      Button(L10n.text("Убрать дропсет", locale: locale)) {
+                        configureDrop(workout, adding: false)
+                      }
+                      .accessibilityIdentifier("removeDropSet")
                     }
-                    .accessibilityIdentifier("removeDropSet")
                   }
                 }
+              } label: {
+                Image(systemName: "ellipsis").font(.title3.weight(.semibold)).frame(
+                  width: 44, height: 44)
               }
-            } label: {
-              Image(systemName: "ellipsis").font(.title3.weight(.semibold)).frame(
-                width: 44, height: 44)
-            }
-            .accessibilityLabel(L10n.text("Действия упражнения", locale: locale))
-          }.foregroundStyle(.secondary)
-          VStack(spacing: 10) {
-            Text(L10n.exerciseName(row.exercise, locale: locale)).font(.title2.bold())
-              .foregroundStyle(
-                FitTheme.accent)
-            Text(row.exercise.muscle.title).font(.subheadline).foregroundStyle(.secondary).textCase(
-              .uppercase)
-          }.multilineTextAlignment(.center).padding(.horizontal, 12)
-          LazyVStack(spacing: 0) {
-            ForEach(Array(row.sets.enumerated()), id: \.element.id) { index, set in
-              WorkoutSetGroupView(
-                set: set, index: index, workout: workout, model: model, focus: $focus,
-                toggleWarmup: { toggleWarmup(set, row: row, workout: workout) })
-              if index < row.sets.count - 1 { Divider() }
-            }
-            if let error = error ?? store.error {
-              Text(L10n.text(error, locale: locale)).font(.footnote).foregroundStyle(.red).padding(
-                .top, 12)
+              .accessibilityLabel(L10n.text("Действия упражнения", locale: locale))
+            }.foregroundStyle(.secondary)
+            VStack(spacing: 10) {
+              Text(L10n.exerciseName(row.exercise, locale: locale)).font(.title2.bold())
+                .foregroundStyle(
+                  FitTheme.accent)
+              Text(row.exercise.muscle.title).font(.subheadline).foregroundStyle(.secondary)
+                .textCase(
+                  .uppercase)
+            }.multilineTextAlignment(.center).padding(.horizontal, 12)
+            LazyVStack(spacing: 0) {
+              ForEach(Array(row.sets.enumerated()), id: \.element.id) { index, set in
+                WorkoutSetGroupView(
+                  set: set, index: index, workout: workout, model: model, numberPad: numberPad,
+                  toggleWarmup: { toggleWarmup(set, row: row, workout: workout) })
+                if index < row.sets.count - 1 { Divider() }
+              }
+              if let error = error ?? store.error {
+                Text(L10n.text(error, locale: locale)).font(.footnote).foregroundStyle(.red)
+                  .padding(
+                    .top, 12)
+              }
             }
           }
         }
-      }.scrollDismissesKeyboard(.interactively)
-      cardFooter(row, workout: workout)
+        .onChange(of: numberPad.field) { _, field in
+          if let field {
+            withAnimation(reduceMotion ? nil : .smooth) {
+              proxy.scrollTo("number-\(field.setID.uuidString)", anchor: .center)
+            }
+          }
+        }
+      }
+      if numberPad.field == nil { cardFooter(row, workout: workout) }
     }.padding(12).background(FitTheme.paper, in: .rect(cornerRadius: FitTheme.exerciseCardRadius))
   }
   private func cardFooter(_ row: WorkoutExercise, workout: Workout) -> some View {
@@ -214,7 +232,7 @@ struct WorkoutExerciseView: View {
     }.font(.caption)
   }
   private func move(_ offset: Int, in workout: Workout) {
-    focus = nil
+    numberPad.dismiss()
     error = nil
     model.move(offset, in: workout)
   }
@@ -233,7 +251,7 @@ struct WorkoutExerciseView: View {
     }
   }
   private func pause(_ workout: Workout) {
-    focus = nil
+    numberPad.dismiss()
     mutate(workout) {
       if $0.status == .paused {
         try WorkoutEngine.resume(&$0)
@@ -245,7 +263,7 @@ struct WorkoutExerciseView: View {
   private func complete(in workout: Workout) {
     let instant = ContinuousClock().now
     if let lastCompletion, lastCompletion.duration(to: instant) < .milliseconds(500) { return }
-    focus = nil
+    numberPad.dismiss()
     do {
       let request = try model.completion(in: workout)
       error = nil
@@ -274,7 +292,7 @@ struct WorkoutExerciseView: View {
     } catch { self.error = error.localizedDescription }
   }
   private func configureDrop(_ workout: Workout, adding: Bool) {
-    focus = nil
+    numberPad.dismiss()
     do {
       let set = try model.configuredDropSet(in: workout, adding: adding)
       error = nil

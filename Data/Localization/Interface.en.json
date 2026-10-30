@@ -549,5 +549,13 @@
   "Сначала выполните предыдущий этап дропсета.": "Complete the previous drop-set stage first.",
   "Снижение веса %@": "Weight drop %@",
   "Убрать дропсет": "Remove drop set",
-  "Этапы дропсета включаются в объём и повторы. 1ПМ рассчитывается по основному этапу.": "Drop-set stages count toward volume and repetitions. One-rep max is estimated from the base stage."
+  "Этапы дропсета включаются в объём и повторы. 1ПМ рассчитывается по основному этапу.": "Drop-set stages count toward volume and repetitions. One-rep max is estimated from the base stage.",
+  "Десятичный разделитель": "Decimal separator",
+  "Обновлено строк: %@": "Rows updated: %@",
+  "Открыть цифровую панель": "Open number pad",
+  "Повторить вес в следующих обычных подходах": "Copy weight to following ordinary sets",
+  "Повторить число повторений в следующих строках": "Copy repetitions to following rows",
+  "Скрыть цифровую панель": "Hide number pad",
+  "Следующее поле": "Next field",
+  "Удалить цифру": "Delete digit"
 }

@@ -18,31 +18,39 @@ struct WorkoutSetDraft {
     decimalSeparator = locale.decimalSeparator ?? "."
   }
 
-  func validatedSet(from set: WorkoutSet, unit: WeightUnit) throws -> WorkoutSet {
-    var result = set
+  func weightInKG(unit: WeightUnit) throws -> Double {
     if weight == originalText {
-      result.weightKG = originalWeightKG
-    } else {
-      let input = weight.trimmingCharacters(in: .whitespacesAndNewlines)
-      guard !input.isEmpty, input.count <= 20 else { throw TrainingError.invalidWeight }
-      var normalized = ""
-      for character in input {
-        if let digit = character.wholeNumberValue, (0...9).contains(digit) {
-          normalized += String(digit)
-        } else if character == "." || character == "," || String(character) == decimalSeparator {
-          normalized += "."
-        } else {
-          throw TrainingError.invalidWeight
-        }
-      }
-      guard let displayed = Double(normalized) else { throw TrainingError.invalidWeight }
-      result.weightKG = unit.kilograms(from: displayed)
+      try Validation.set(WorkoutSet(repetitions: 1, weightKG: originalWeightKG))
+      return originalWeightKG
     }
+    let input = weight.trimmingCharacters(in: .whitespacesAndNewlines)
+    guard !input.isEmpty, input.count <= 20 else { throw TrainingError.invalidWeight }
+    var normalized = ""
+    for character in input {
+      if let digit = character.wholeNumberValue, (0...9).contains(digit) {
+        normalized += String(digit)
+      } else if character == "." || character == "," || String(character) == decimalSeparator {
+        normalized += "."
+      } else {
+        throw TrainingError.invalidWeight
+      }
+    }
+    guard let displayed = Double(normalized) else { throw TrainingError.invalidWeight }
+    let kilograms = unit.kilograms(from: displayed)
+    try Validation.set(WorkoutSet(repetitions: 1, weightKG: kilograms))
+    return kilograms
+  }
+  func repetitionCount() throws -> Int {
     let input = repetitions.trimmingCharacters(in: .whitespacesAndNewlines)
     guard !input.isEmpty, input.count <= 4, input.allSatisfy({ $0.isASCII && $0.isNumber }),
-      let count = Int(input)
+      let count = Int(input), (1...1000).contains(count)
     else { throw TrainingError.invalidRepetitions }
-    result.repetitions = count
+    return count
+  }
+  func validatedSet(from set: WorkoutSet, unit: WeightUnit) throws -> WorkoutSet {
+    var result = set
+    result.weightKG = try weightInKG(unit: unit)
+    result.repetitions = try repetitionCount()
     try Validation.set(
       WorkoutSet(
         repetitions: result.repetitions, weightKG: result.weightKG, isWarmup: result.isWarmup,

@@ -2585,6 +2585,23 @@
         }
       }
     },
+    "Десятичный разделитель": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Десятичный разделитель"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Decimal separator"
+          }
+        }
+      }
+    },
     "Для Mi Band включите в Mi Fitness: Профиль → Данные сторонних приложений → Здоровье. Разрешите передачу нужных показателей.": {
       "extractionState": "manual",
       "localizations": {
@@ -5577,6 +5594,23 @@
         }
       }
     },
+    "Обновлено строк: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Обновлено строк: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rows updated: %@"
+          }
+        }
+      }
+    },
     "Общий объём": {
       "extractionState": "manual",
       "localizations": {
@@ -5930,6 +5964,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Open iOS settings"
+          }
+        }
+      }
+    },
+    "Открыть цифровую панель": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Открыть цифровую панель"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open number pad"
           }
         }
       }
@@ -6325,6 +6376,23 @@
         }
       }
     },
+    "Повторить вес в следующих обычных подходах": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Повторить вес в следующих обычных подходах"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy weight to following ordinary sets"
+          }
+        }
+      }
+    },
     "Повторить загрузку записи пульса": {
       "extractionState": "manual",
       "localizations": {
@@ -6389,6 +6457,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Retry saving"
+          }
+        }
+      }
+    },
+    "Повторить число повторений в следующих строках": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Повторить число повторений в следующих строках"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy repetitions to following rows"
           }
         }
       }
@@ -7838,6 +7923,40 @@
         }
       }
     },
+    "Скрыть цифровую панель": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Скрыть цифровую панель"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hide number pad"
+          }
+        }
+      }
+    },
+    "Следующее поле": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Следующее поле"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next field"
+          }
+        }
+      }
+    },
     "Следующее упражнение": {
       "extractionState": "manual",
       "localizations": {
@@ -8633,6 +8752,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Delete workout?"
+          }
+        }
+      }
+    },
+    "Удалить цифру": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Удалить цифру"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete digit"
           }
         }
       }
