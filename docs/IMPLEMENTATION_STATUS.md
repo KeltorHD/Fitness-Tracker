@@ -6,6 +6,7 @@
 
 | Модуль | Implemented | Linux-tested | Requires Xcode validation | Requires Apple Developer configuration |
 | --- | --- | --- | --- | --- |
+| Свайпы месяцев в карточке «История» на «Результатах» | Да: влево следующий, вправо предыдущий; используется существующий ProgressViewModel | Только синтаксис и lint; жесты на Linux не проверены | Да, UI test testHistoryMonthCanBeSwipedInBothDirections и совместимость с вертикальной прокруткой | Нет |
 | Workout/Exercise/Set models, Codable, units | Да | Да | Нет для Core | Нет |
 | Templates и стартовые планы | Да | Да | UI отдельно | Нет |
 | State machine, валидация, паузы, отдых | Да | Да | Поведение UI отдельно | Нет |

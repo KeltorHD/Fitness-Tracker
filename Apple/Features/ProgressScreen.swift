@@ -27,6 +27,18 @@ struct ProgressScreen: View {
               .accessibilityIdentifier("historyPeriodMenu")
             }
             TrainingMonthCard(date: model.month, summary: model.report.month)
+              .contentShape(.rect)
+              .simultaneousGesture(
+                DragGesture(minimumDistance: 20)
+                  .onEnded { value in
+                    let horizontal = value.translation.width
+                    let vertical = value.translation.height
+                    guard abs(horizontal) >= 50, abs(horizontal) > abs(vertical) * 1.5 else {
+                      return
+                    }
+                    model.moveMonth(by: horizontal < 0 ? 1 : -1)
+                  }
+              )
           }
           VStack(spacing: 14) {
             HStack {

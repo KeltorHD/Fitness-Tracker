@@ -135,6 +135,25 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertEqual(title.label, original)
   }
 
+  @MainActor func testHistoryMonthCanBeSwipedInBothDirections() {
+    let app = launch()
+    app.tabBars.buttons["Результаты"].tap()
+    let title = app.staticTexts["trainingMonthTitle"]
+    XCTAssertTrue(title.waitForExistence(timeout: 5))
+    let original = title.label
+    let card = app.descendants(matching: .any).matching(identifier: "trainingMonthCard").firstMatch
+    card.swipeLeft()
+    XCTAssertNotEqual(title.label, original)
+    app.buttons["historyPeriodMenu"].tap()
+    app.buttons["Предыдущий месяц"].tap()
+    XCTAssertEqual(title.label, original)
+    card.swipeRight()
+    XCTAssertNotEqual(title.label, original)
+    app.buttons["historyPeriodMenu"].tap()
+    app.buttons["Следующий месяц"].tap()
+    XCTAssertEqual(title.label, original)
+  }
+
   @MainActor func testResultsShowFiveExerciseChartsAndPeriodPicker() {
     let app = launch()
     openDemoProfile(in: app)
