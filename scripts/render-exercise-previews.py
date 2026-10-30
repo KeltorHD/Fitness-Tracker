@@ -192,6 +192,40 @@ def set_types():
     s+=text(77,664,'Без отдыха между этапами',11,MUTED)
     return s
 
+def number_entry(kind='repetitions'):
+    s=shell()+rect(0,78,390,793,'#f1f1f1')+rect(0,78,390,199,ACCENT)
+    s+=text(20,125,'1/4',17,'#ffdfd7')+text(195,128,'0:18:24',29,'white',400,'middle')+text(367,124,'⌄',24,'white',400,'middle')
+    s+=rect(12,154,366,480,'#e4e4e4',28)+rect(12,151,366,480,'white',28)
+    s+=text(36,181,'⌄',23,MUTED,700,'middle')+text(354,181,'•••',15,MUTED,700,'middle')
+    s+=text(195,208,'Тяга верхнего блока',22,ACCENT,700,'middle')+text(195,236,'широким хватом',22,ACCENT,700,'middle')+text(195,268,'СПИНА',12,MUTED,500,'middle')
+    for i,(weight,reps) in enumerate(SESSION_EXERCISES[0][1]):
+        y=324+i*66
+        active=i==2
+        s+=rect(24,y-28,33,38,'#ffebe6' if active else '#f2f2f2',12)+text(40,y-3,i+1,16,ACCENT if active else MUTED,400,'middle')
+        s+=text(167,y,weight,34,MUTED if active and kind=='weight' else INK,400,'end')+text(171,y,'кг',16,MUTED)+text(217,y-3,'×',22,MUTED,'middle')+text(248,y,reps,34,MUTED if active and kind=='repetitions' else INK)
+        if active:s+=rect(126 if kind=='weight' else 248,y+8,43,3,ACCENT,1.5)
+        if i<3:s+=rect(24,y+20,342,0.6,'#dcdcdc')
+    top,height,left=650,52,330
+    s+=rect(0,top,390,250,'#f2f2f7')+rect(left,top,60,250,'#e8e8eb')
+    for row in range(4):
+        for column in range(3):
+            x=column*110
+            if row==3 and column==0 and kind=='repetitions':s+=rect(x,top+row*height,110,height,'#dddddf')
+            if row<3:label=str(row*3+column+1)
+            elif column==0:label=','
+            elif column==1:label='0'
+            else:label=''
+            if label:s+=text(x+55,top+row*height+34,label,23,'#babac0' if row==3 and column==0 and kind=='repetitions' else INK,400,'middle')
+        if row<3:s+=rect(0,top+(row+1)*height,left,0.6,'#d2d2d7')
+    for x in [110,220]:s+=rect(x,top,0.6,height*4,'#d2d2d7')
+    s+=f'<path d="M269 817h18v22h-18l-13-11Z M271 823l9 10m0-10-9 10" fill="none" stroke="{INK}" stroke-width="1.5" stroke-linejoin="round"/>'
+    s+=f'<path d="M357 669l7 8-7 8 M351 721v27m-7-8 7 8 7-8 M365 724h9m-9 5h9" fill="none" stroke="{ACCENT}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'
+    s+=rect(346,794,28,19,'none',2,ACCENT)
+    for x in [353,360,367]:s+=rect(x,794,0.7,19,ACCENT)
+    for y in [800,807]:s+=rect(346,y,28,0.7,ACCENT)
+    s+=f'<path d="M353 821l7 6 7-6" fill="none" stroke="{ACCENT}" stroke-width="2" stroke-linecap="round"/>'
+    return s+rect(142,879,106,5,'#171717',3)
+
 def heart_rate_live():
     s=shell()+rect(0,78,390,793,'#f2f2f7')+text(16,110,'‹ Настройки',14,ACCENT)+text(16,150,'Трекер',32,INK,700)
     s+=rect(16,173,358,103,'white',22)+text(30,202,'Модель трекера',14)+text(358,202,'AirPods Pro 3  ⌄',14,MUTED,400,'end')
@@ -339,7 +373,8 @@ if __name__ == '__main__':
     screens = [('diary', diary()), ('catalogue', catalogue()), ('results', results()),
                ('workout-detail', detail()), ('exercise-library', library()),
                ('exercise-detail', exercise_detail()), ('active-workout', workout()), ('settings', settings()),
-               ('exercise-in-workout', exercise_in_workout()), ('workout-set-types', set_types()), ('heart-rate-live', heart_rate_live()),
+               ('exercise-in-workout', exercise_in_workout()), ('workout-set-types', set_types()),
+               ('number-entry', number_entry()), ('weight-entry', number_entry('weight')), ('heart-rate-live', heart_rate_live()),
                ('heart-rate-history', heart_rate_history())]
     for name, content in screens:
         file = OUT / (name + '.svg')
@@ -347,7 +382,8 @@ if __name__ == '__main__':
         render(file, 390, 900, scale=3)
     for name, selected in [('overview', [diary(), catalogue(), detail()]),
                            ('results-overview', [results(), workout(), settings()]),
-                           ('workout-flow', [detail(), workout(), set_types()]),
+                           ('workout-flow', [detail(), workout(), set_types(), number_entry()]),
+                           ('number-entry-overview', [number_entry('weight'), number_entry()]),
                            ('set-types-overview', [exercise_in_workout(), set_types()]),
                            ('heart-rate-overview', [heart_rate_live(), heart_rate_history()])]:
         board_width = 40 + len(selected) * 410

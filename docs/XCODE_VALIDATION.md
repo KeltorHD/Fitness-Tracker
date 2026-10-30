@@ -278,3 +278,16 @@
 - [ ] RU/EN, кг/фунты, десятичный разделитель, Dynamic Type/VoiceOver, narrow screen, Dark/Increase Contrast/Reduce Transparency, много этапов и длинные ошибки.
 
 Правила и явно подписанный демо-макет: [DROP_SETS.md](DROP_SETS.md).
+
+## Цифровая панель по IMG_1614
+
+- [ ] Сгенерировать проект и собрать WorkoutNumberPad/Model, scalar draft validation и новые numeric buttons. Проверить подпись/underline и выбор поля, полный hit target всех клеток/side actions, контраст и pressed state.
+- [ ] Первый ввод заменяет число; последующие дописывают; удаление очищает initial selection, затем удаляет по символу; удержание повторяет. Вес допускает локальный разделитель, повторы — только целые. Пустое/недопустимое значение не проходит next/copy/complete.
+- [ ] ›: вес → повторы → следующая pending строка/этап; completed строки пропускаются, последний next закрывает панель. Проверить legacy zero reps: допустимый вес позволяет перейти к исправлению повторов.
+- [ ] ↓=: другой kind/упражнение/выполненные строки не меняются. Копирование веса пропускает группы дропсета; копирование повторов может обновлять их pending stages. Invalid copy ничего не переносит, feedback показывает число строк.
+- [ ] Скрытие сохраняет drafts и возвращает session controls/finish/технику/графики. Ввод без ✓ не отмечает выполнение и не меняет объём/экспорт. Уход с экрана, внешний pause/finish/remove и смена упражнения закрывают панель.
+- [ ] ScrollViewReader удерживает активную строку видимой после появления inset, для последнего/среднего set и drop stage. Узкий iPhone, landscape/iPad, AX5, VoiceOver, Reduce Motion, light/dark и Increase Contrast.
+- [ ] Подключённая клавиатура: цифры/локальный separator/Backspace/Return/Escape, повтор удаления, отсутствие перехвата клавиш после закрытия. При активной панели не появляется вторая системная клавиатура.
+- [ ] Выполнить testNumberPadReplacesValuesAndCopiesFollowingRepetitions и обновлённый testWarmupAndDropStagesCanBeConfiguredBeforeCompletion. Они на Linux только parsed/linted; реальное исполнение не выполнено.
+
+[Правила](NUMBER_ENTRY.md), [демо-макеты](previews/number-entry-overview.png).

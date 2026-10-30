@@ -69,6 +69,8 @@
 | DropSetStage / валидация и порядок / отдых / статистика / repeat и plannedSets / archive v4 | Да | Да, 13 новых Core tests: rollback, invalid order/targets, даты/IDs, partial finish, zero load, templates и v1–v3 migration | Нет для Core | Нет |
 | Редактор этапов, метки разминки/дропсета, Watch и Live Activity stage labels RU/EN | Да | Реальные portable presentation checks; для SwiftUI/SDK только parser/lint/resources, Apple tests написаны | Да, keyboard/accessibility, SwiftData, UI tests, device и Watch/ActivityKit | Существующий signing/capabilities; новых entitlements нет |
 | Макет смешанных типов подходов и сравнение SVG/PNG | Да, демо-данные | Генерация/ресурсы; это не тест SwiftUI | Да для реального интерфейса | Нет |
+| WorkoutNumberPadModel и скалярная валидация целей | Да | Да, PortableNumberPadChecks и Swift 6 type-check: replacement/delete/decimal, next/copy, readonly guards, legacy reps и точность lb | Нет для переносимой модели | Нет |
+| Цифровая панель и underline по IMG_1614, SwiftUI buttons/insets, RU/EN, shortcuts и превью | Да | Для SDK только parser/lint/resources; макеты генерируются, UI tests обновлены/не запускались | Да, scroll timing, hardware/VoiceOver/AX, full hit areas и layout | Обычный signing, новых capabilities нет |
 
 
 ## Фактические проверки
@@ -77,13 +79,14 @@
 - `swift test`: прошли 127 Swift Testing tests, включая parameterized cases. Стандартный XCTest runner также печатает «0 tests» — Core использует отдельный Swift Testing runner, его итоговая строка содержит 127 tests.
 - Отдельный Swift 6 strict-concurrency type-check без Apple SDK: HistoryViewModel, ProgressViewModel, ExerciseProgressViewModel, BodyWeightViewModel/BodyWeightEditorModel, WorkoutExercisePresentation, ExerciseLibraryViewModel, ExerciseImageLoader, CloudAccountChecking, WidgetSnapshot, AppCapabilities, L10n и WorkoutFormatting. Это проверка типов указанной переносимой части, не функциональный тест и не сборка iOS target.
 - Swift formatting/lint, синтаксический разбор Apple Swift, структура/конфигурационные связи, plist/JSON, PNG и наличие ресурсов: прошли в `bash scripts/check-linux.sh`. Для Dynamic Island parser проверяет обе ветви shared intents: основной target с FITNESS_TRACKER_APP и widget extension без него.
-- Локализация: 551 ключ RU/EN и четыре InfoPlist-строки, placeholders, формы счётчиков, покрытие русских ключей, target resources и повторяемость генерации — прошли. Компиляция `.xcstrings` в Xcode не проверена; сценарии — [LOCALIZATION.md](LOCALIZATION.md).
+- Локализация: 559 ключей RU/EN и четыре InfoPlist-строки, placeholders, формы счётчиков, покрытие русских ключей, target resources и повторяемость генерации — прошли. Компиляция `.xcstrings` в Xcode не проверена; сценарии — [LOCALIZATION.md](LOCALIZATION.md).
 - В сессии использован внешний Swift 6.2.1 через SWIFT_BIN; для постоянной установки предусмотрен `setup-linux.sh`, toolchain не хранится в git.
 - Переносимая tracker-подсистема дополнительно исполнена в `Tests/PortableTrackerChecks/main.swift`: recording/pause, save failure/retry, mode race, минимальные permissions, history, real file round-trip/corruption/delete. Это не тест HealthKit/CoreBluetooth.
 - Исполнен `Tests/PortableProgressChecks/main.swift`: выбор упражнения/точки, периоды, bodyweight, удаление, точный workout UUID при совпадающей дате и связь с ProgressViewModel. Это не тест SwiftUI/Charts.
 - Исполнен `Tests/PortableWeightChecks/main.swift`: локализованный и строгий ввод, кг/фунты, точность при правке даты, источники веса, редактирование и смена workspace. Это не SwiftUI/SwiftData test.
 - Исполнен `Tests/PortableAirPodsChecks/main.swift`: явный запуск, свежесть/паузы, provenance, сохранение, защита от импорта, поздние callbacks, смена режима/тренировки, отмена, отказ и ошибки загрузки. Источник подставной; HealthKit и AirPods не тестировались.
 - Исполнен `Tests/PortableWorkoutExerciseChecks/main.swift`: реальные presentation/draft модели без SwiftUI, включая недопустимые данные, precision в фунтах, повторяющиеся упражнения, навигацию по UUID и запрет выполнения в истории/паузе.
+- Исполнен `Tests/PortableNumberPadChecks/main.swift`: реальная Foundation модель и существующие drafts, замена/удаление/разделитель, границы, next/copy isolation, readonly/paused/removal, legacy zero reps и lb precision. Это не UI/keyboard test.
 - XcodeGen generation, iOS/watchOS compilation, linking, Simulator, SwiftUI rendering и реальные Apple-сервисы **не проверены**. Linux CI не заменяет эти проверки.
 
 ## Границы текущей реализации
@@ -111,3 +114,5 @@ Watch записывает отдельный стартовый план и п�
 Импорт двух CSV-вариантов: [CSV_IMPORT.md](CSV_IMPORT.md). Новый экспорт — v4; старые v1/v2/v3 читаются.
 
 Дропсеты и разминка: [DROP_SETS.md](DROP_SETS.md). Полная запись и частичное завершение не создают фиктивно выполненных этапов.
+
+Цифровая панель: [NUMBER_ENTRY.md](NUMBER_ENTRY.md); два новых ввода и общий макет — демонстрационные SVG/PNG.

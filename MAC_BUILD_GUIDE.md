@@ -196,3 +196,7 @@ xcodebuild -project FitnessTracker.xcodeproj -scheme FitnessTracker \
 ## Проверка разминки и дропсетов
 
 После обновления выполните xcodegen generate и сборку iOS/Watch/widgets. Новых entitlements и физической SwiftData schema migration нет: новые поля optional в JSON aggregates. В карточке упражнения выберите pending set, укажите положительный вес и откройте ⋯ → Сделать дропсетом; добавьте второй drop. Выполните этапы, проверьте отсутствие отдыха между ними, запуск отдыха после последнего, сохранение, графики и новый экспорт v4. В отдельном подходе включите «Разминочный подход» и проверьте метку и исключение из рабочего объёма. Запустите новые PersistenceTests и testWarmupAndDropStagesCanBeConfiguredBeforeCompletion; Linux их не исполняет. [Сценарии](docs/DROP_SETS.md).
+
+## Проверка цифрового ввода по IMG_1614
+
+После xcodegen generate проверьте сборку WorkoutNumberPad и новые numeric buttons. В активном упражнении нажмите вес/повторы: откроется нижняя панель, первое число заменяет прежнее; › идёт по незавершённым полям, ↓= копирует только подходящие будущие поля, кнопка клавиатуры закрывает её. Проверить десятичную запятую/точку, long-press удаления, аппаратные цифры/Backspace/Return/Escape, позицию поля после inset и AX/landscape/iPad. Поля теперь являются accessibility buttons, UI tests обновлены соответствующим образом. Реальное SDK-поведение, touch/scroll и shortcuts не проверялись на Linux. [Сценарии](docs/NUMBER_ENTRY.md).

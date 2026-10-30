@@ -39,3 +39,5 @@ Watch logger понимает следующий незавершённый эт
 - **Requires Apple Developer configuration:** обычный signing и уже существующие настройки Watch/widgets/CloudKit. Новых entitlements нет.
 
 Сценарии: [XCODE_VALIDATION.md](XCODE_VALIDATION.md), [формат архива](IMPORT_EXPORT.md).
+
+Цифры этапов редактируются через [цифровую панель](NUMBER_ENTRY.md). Копирование веса вниз не выравнивает веса дропсетов; переход › включает их незавершённые этапы, а копирование числа повторений допускается.
