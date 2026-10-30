@@ -36,5 +36,5 @@ import Testing
   #expect(migrated.workouts[0].volume == 400)
   #expect(migrated.workouts[0].durationIsKnown == nil)
   #expect(migrated.workouts[0].exercises[0].sets[0].loadMultiplier == nil)
-  #expect(migrated.version == 3)
+  #expect(migrated.version == WorkoutArchive.currentVersion)
 }

@@ -5,6 +5,7 @@ public enum TrainingError: Error, Equatable, LocalizedError, Sendable {
   case invalidDate, invalidState, emptyWorkout, missingExercise, missingSet, duplicateID
   case invalidBodyWeight, invalidMeasurementDate
   case invalidLoadMultiplier
+  case invalidDropSet, invalidDropStageOrder
   public var errorDescription: String? {
     switch self {
     case .invalidName: "Введите название (1–80 символов)."
@@ -21,6 +22,9 @@ public enum TrainingError: Error, Equatable, LocalizedError, Sendable {
     case .invalidBodyWeight: "Вес тела должен быть больше 0 и не превышать 1000 кг."
     case .invalidMeasurementDate: "Некорректная дата взвешивания."
     case .invalidLoadMultiplier: "Множитель веса должен быть от 1 до 10."
+    case .invalidDropSet:
+      "Дропсет должен содержать от 1 до 5 снижений веса. Каждый следующий вес должен быть меньше предыдущего. Разминка оформляется отдельно."
+    case .invalidDropStageOrder: "Сначала выполните предыдущий этап дропсета."
     }
   }
 }
@@ -53,6 +57,27 @@ public enum Validation {
     guard value.weightKG.isFinite, (0...1500).contains(value.weightKG) else {
       throw TrainingError.invalidWeight
     }
+    if let stages = value.dropStages {
+      guard !value.isWarmup, (1...5).contains(stages.count) else {
+        throw TrainingError.invalidDropSet
+      }
+      try unique([value.id] + stages.map(\.id))
+      var previousWeight = value.weightKG
+      var previousCompletion = value.completedAt
+      for stage in stages {
+        guard stage.weightKG.isFinite, stage.weightKG >= 0, stage.weightKG < previousWeight else {
+          throw TrainingError.invalidDropSet
+        }
+        guard (1...1000).contains(stage.repetitions) else { throw TrainingError.invalidRepetitions }
+        if let date = stage.completedAt {
+          guard date.timeIntervalSince1970.isFinite, let previousCompletion,
+            date >= previousCompletion
+          else { throw TrainingError.invalidDropStageOrder }
+        }
+        previousWeight = stage.weightKG
+        previousCompletion = stage.completedAt
+      }
+    }
   }
   public static func template(_ value: WorkoutTemplate) throws {
     try name(value.name)
@@ -66,7 +91,17 @@ public enum Validation {
         WorkoutSet(
           repetitions: exercise.repetitions, weightKG: exercise.weightKG,
           loadMultiplier: exercise.loadMultiplier))
+      if let plans = exercise.plannedSets {
+        guard plans.count == exercise.setCount else { throw TrainingError.invalidSetCount }
+        for plan in plans {
+          try set(plan)
+          guard plan.stages.allSatisfy({ $0.completedAt == nil }) else {
+            throw TrainingError.invalidState
+          }
+        }
+      }
     }
+    try unique(value.exercises.flatMap { ($0.plannedSets ?? []).flatMap(\.stages).map(\.id) })
   }
   public static func workout(_ value: Workout) throws {
     try name(value.name)
@@ -99,13 +134,13 @@ public enum Validation {
     }
     if let pause = value.pausedAt, pause < previousEnd { throw TrainingError.invalidDate }
     try unique(value.exercises.map(\.id))
-    try unique(value.exercises.flatMap(\.sets).map(\.id))
+    try unique(value.exercises.flatMap(\.sets).flatMap(\.stages).map(\.id))
     for exercise in value.exercises {
       try name(exercise.exercise.name)
       guard (1...30).contains(exercise.sets.count) else { throw TrainingError.invalidSetCount }
       for item in exercise.sets {
         try set(item, allowUnperformed: true)
-        if let date = item.completedAt {
+        for date in item.performedStages.compactMap(\.completedAt) {
           guard date >= value.startedAt, date <= (value.endedAt ?? .distantFuture) else {
             throw TrainingError.invalidDate
           }

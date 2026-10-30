@@ -7,7 +7,7 @@ public struct WorkoutArchive: Codable, Equatable, Sendable {
   public static let legacyFormatIdentifier = "com.fitsession.archive"
   public static let fileExtension = "fitnesstracker"
   public static let legacyFileExtension = "fitsession"
-  public static let currentVersion = 3
+  public static let currentVersion = 4
   public let format: String
   public let version: Int
   public let exportedAt: Date
@@ -100,6 +100,7 @@ public enum WorkoutArchiveCodec {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .secondsSince1970
         let decoded = try decoder.decode(WorkoutArchive.self, from: data)
+        try validate(decoded)
         archive = WorkoutArchive(
           workouts: decoded.workouts, templates: decoded.templates,
           bodyWeights: decoded.bodyWeights,
@@ -130,6 +131,13 @@ public enum WorkoutArchiveCodec {
     }
     guard (1...WorkoutArchive.currentVersion).contains(archive.version) else {
       throw WorkoutArchiveError.unsupportedVersion
+    }
+    if archive.version < 4 {
+      let hasDrops = archive.workouts.contains {
+        $0.exercises.contains { $0.sets.contains(where: \.isDropSet) }
+      }
+      let hasPlans = archive.templates.contains { $0.exercises.contains { $0.plannedSets != nil } }
+      guard !hasDrops && !hasPlans else { throw WorkoutArchiveError.invalidFile }
     }
     guard archive.exportedAt.timeIntervalSince1970.isFinite else {
       throw WorkoutArchiveError.invalidFile

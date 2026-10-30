@@ -71,7 +71,7 @@ public struct ExerciseProgressReport: Equatable, Sendable {
               TrainingStatistics.estimatedOneRepMax(
                 weightKG: $0.weightKG, repetitions: $0.repetitions)
             }.max(),
-            repetitions: sets.reduce(0) { $0 + $1.repetitions }, setCount: sets.count))
+            repetitions: sets.reduce(0) { $0 + $1.performedRepetitions }, setCount: sets.count))
       }
     }
     exercises = definitions.values.map {

@@ -20,6 +20,9 @@ public enum WorkoutEngine {
     guard workout.exercises[exercise].sets[set].completedAt == nil else {
       throw TrainingError.invalidState
     }
+    guard !warmup || !workout.exercises[exercise].sets[set].isDropSet else {
+      throw TrainingError.invalidDropSet
+    }
     workout.exercises[exercise].sets[set].isWarmup = warmup
   }
 
@@ -43,7 +46,8 @@ public enum WorkoutEngine {
     item.completedAt = date
     workout.exercises[e].sets[s] = item
     workout.restEndsAt =
-      workout.restSeconds > 0 ? date.addingTimeInterval(Double(workout.restSeconds)) : nil
+      item.isFullyCompleted && workout.restSeconds > 0
+      ? date.addingTimeInterval(Double(workout.restSeconds)) : nil
   }
   public static func pause(_ workout: inout Workout, at date: Date = Date()) throws {
     guard workout.status == .active else { throw TrainingError.invalidState }
@@ -85,10 +89,11 @@ public enum WorkoutEngine {
     workout.status = status
     workout.restEndsAt = nil
   }
-  private static func latestEvent(in workout: Workout) -> Date {
+  static func latestEvent(in workout: Workout) -> Date {
     max(
       workout.startedAt,
-      workout.exercises.flatMap(\.sets).compactMap(\.completedAt).max() ?? workout.startedAt,
+      workout.exercises.flatMap(\.sets).flatMap(\.performedStages).compactMap(\.completedAt).max()
+        ?? workout.startedAt,
       workout.pauses.last?.endedAt ?? workout.startedAt)
   }
   public static func repeatWorkout(_ original: Workout, at date: Date = Date()) throws -> Workout {
@@ -99,11 +104,7 @@ public enum WorkoutEngine {
       guard !completed.isEmpty else { return nil }
       return WorkoutExercise(
         exercise: item.exercise,
-        sets: completed.map {
-          WorkoutSet(
-            repetitions: $0.repetitions, weightKG: $0.weightKG, isWarmup: $0.isWarmup,
-            loadMultiplier: $0.loadMultiplier)
-        })
+        sets: completed.map { $0.freshCopy(performedOnly: true) })
     }
     return Workout(
       name: original.name, startedAt: date, exercises: exercises, restSeconds: original.restSeconds)
@@ -117,7 +118,9 @@ public enum WorkoutEngine {
       guard let first = completed.first else { return nil }
       return TemplateExercise(
         exercise: item.exercise, setCount: completed.count, repetitions: first.repetitions,
-        weightKG: first.weightKG, loadMultiplier: first.loadMultiplier)
+        weightKG: first.weightKG, loadMultiplier: first.loadMultiplier,
+        plannedSets: completed.contains(where: \.isDropSet)
+          ? completed.map { $0.freshCopy(performedOnly: true) } : nil)
     }
     let template = WorkoutTemplate(
       name: workout.name, exercises: exercises, restSeconds: workout.restSeconds)
@@ -137,9 +140,8 @@ public enum WorkoutEngine {
     }
     guard workout.exercises[i].sets.count < 30 else { throw TrainingError.invalidSetCount }
     let last = workout.exercises[i].sets.last ?? WorkoutSet()
-    workout.exercises[i].sets.append(
-      WorkoutSet(
-        repetitions: last.repetitions, weightKG: last.weightKG,
-        loadMultiplier: last.loadMultiplier))
+    var copy = last.freshCopy()
+    copy.isWarmup = false
+    workout.exercises[i].sets.append(copy)
   }
 }

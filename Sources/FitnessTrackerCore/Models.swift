@@ -34,12 +34,14 @@ public struct WorkoutSet: Identifiable, Codable, Equatable, Sendable {
   /// Always stored in kilograms. Zero represents bodyweight without added load.
   public var weightKG: Double
   public var isWarmup: Bool
+  /// Completion of the base stage. Additional stages keep their own timestamps.
   public var completedAt: Date?
-  /// Number of equal implements contributing to volume; nil preserves legacy single-load semantics.
   public var loadMultiplier: Int?
+  public var dropStages: [DropSetStage]?
   public init(
     id: UUID = UUID(), repetitions: Int = 8, weightKG: Double = 0,
-    isWarmup: Bool = false, completedAt: Date? = nil, loadMultiplier: Int? = nil
+    isWarmup: Bool = false, completedAt: Date? = nil, loadMultiplier: Int? = nil,
+    dropStages: [DropSetStage]? = nil
   ) {
     self.id = id
     self.repetitions = repetitions
@@ -47,10 +49,24 @@ public struct WorkoutSet: Identifiable, Codable, Equatable, Sendable {
     self.isWarmup = isWarmup
     self.completedAt = completedAt
     self.loadMultiplier = loadMultiplier
+    self.dropStages = dropStages
   }
+  public var isDropSet: Bool { !(dropStages ?? []).isEmpty }
+  public var isFullyCompleted: Bool {
+    completedAt != nil && (dropStages ?? []).allSatisfy { $0.completedAt != nil }
+  }
+  public var stages: [DropSetStage] {
+    [DropSetStage(id: id, repetitions: repetitions, weightKG: weightKG, completedAt: completedAt)]
+      + (dropStages ?? [])
+  }
+  public var performedStages: [DropSetStage] { stages.filter { $0.completedAt != nil } }
+  public var performedRepetitions: Int { performedStages.reduce(0) { $0 + $1.repetitions } }
   public var volume: Double {
-    completedAt == nil || isWarmup
-      ? 0 : weightKG * Double(repetitions) * Double(loadMultiplier ?? 1)
+    isWarmup
+      ? 0
+      : performedStages.reduce(0) {
+        $0 + $1.weightKG * Double($1.repetitions) * Double(loadMultiplier ?? 1)
+      }
   }
 }
 
@@ -72,9 +88,12 @@ public struct TemplateExercise: Identifiable, Codable, Equatable, Sendable {
   public var repetitions: Int
   public var weightKG: Double
   public var loadMultiplier: Int?
+  /// Lossless individual targets; nil retains legacy uniform targets.
+  public var plannedSets: [WorkoutSet]?
   public init(
     id: UUID = UUID(), exercise: Exercise, setCount: Int = 3,
-    repetitions: Int = 8, weightKG: Double = 0, loadMultiplier: Int? = nil
+    repetitions: Int = 8, weightKG: Double = 0, loadMultiplier: Int? = nil,
+    plannedSets: [WorkoutSet]? = nil
   ) {
     self.id = id
     self.exercise = exercise
@@ -82,6 +101,7 @@ public struct TemplateExercise: Identifiable, Codable, Equatable, Sendable {
     self.repetitions = repetitions
     self.weightKG = weightKG
     self.loadMultiplier = loadMultiplier
+    self.plannedSets = plannedSets
   }
 }
 
@@ -104,11 +124,12 @@ public struct WorkoutTemplate: Identifiable, Codable, Equatable, Sendable {
       exercises: exercises.map { item in
         WorkoutExercise(
           exercise: item.exercise,
-          sets: (0..<item.setCount).map { _ in
-            WorkoutSet(
-              repetitions: item.repetitions, weightKG: item.weightKG,
-              loadMultiplier: item.loadMultiplier)
-          })
+          sets: item.plannedSets.map { $0.map { $0.freshCopy() } }
+            ?? (0..<item.setCount).map { _ in
+              WorkoutSet(
+                repetitions: item.repetitions, weightKG: item.weightKG,
+                loadMultiplier: item.loadMultiplier)
+            })
       }, restSeconds: restSeconds)
   }
 }
@@ -158,6 +179,7 @@ public struct Workout: Identifiable, Codable, Equatable, Sendable {
     self.bodyWeightKG = bodyWeightKG
   }
   public var completedSets: Int { exercises.flatMap(\.sets).filter { $0.completedAt != nil }.count }
+  public var fullyCompletedSets: Int { exercises.flatMap(\.sets).filter(\.isFullyCompleted).count }
   public var totalSets: Int { exercises.reduce(0) { $0 + $1.sets.count } }
   public var volume: Double { exercises.flatMap(\.sets).reduce(0) { $0 + $1.volume } }
   public func duration(at date: Date = Date()) -> TimeInterval {

@@ -13,10 +13,12 @@ public struct WorkoutLiveState: Codable, Hashable, Sendable {
   public let nextExerciseName: String?
   public let nextSetNumber: Int?
   public let languageCode: String?
+  public let nextDropStageNumber: Int?
+  public let nextDropStageCount: Int?
 
   public init(workout: Workout, at date: Date = Date(), languageCode: String? = nil) {
     self.languageCode = languageCode
-    completedSets = workout.completedSets
+    completedSets = workout.fullyCompletedSets
     totalSets = workout.totalSets
     paused = workout.status == .paused
     // Moving the anchor forward by accumulated pauses makes a system count-up timer
@@ -31,9 +33,16 @@ public struct WorkoutLiveState: Codable, Hashable, Sendable {
       restStartsAt = nil
       restEndsAt = nil
     }
-    let exercise = workout.exercises.first { $0.sets.contains { $0.completedAt == nil } }
+    let exercise = workout.exercises.first { $0.sets.contains { !$0.isFullyCompleted } }
     nextExerciseName = exercise.map { String($0.exercise.name.prefix(80)) }
-    nextSetNumber = exercise?.sets.firstIndex { $0.completedAt == nil }.map { $0 + 1 }
+    nextSetNumber = exercise?.sets.firstIndex { !$0.isFullyCompleted }.map { $0 + 1 }
+    if let set = exercise?.sets.first(where: { !$0.isFullyCompleted }), set.isDropSet {
+      nextDropStageNumber = set.stages.firstIndex { $0.completedAt == nil }.map { $0 + 1 }
+      nextDropStageCount = set.stages.count
+    } else {
+      nextDropStageNumber = nil
+      nextDropStageCount = nil
+    }
   }
 
   public var progress: Double {
