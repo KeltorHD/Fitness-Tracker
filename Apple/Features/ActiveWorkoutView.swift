@@ -65,7 +65,7 @@ struct ActiveWorkoutView: View {
               Text(L10n.exerciseName(exercise.exercise, locale: locale))
             }
           }
-          Section { WorkoutTrackerCard(tracker: store.tracker) }
+          if !store.isDemoMode { Section { WorkoutTrackerCard(tracker: store.tracker) } }
           Section {
             Button(L10n.text("Добавить упражнение", locale: locale), systemImage: "plus.circle") {
               pickingExercise = true

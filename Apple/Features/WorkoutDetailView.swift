@@ -63,10 +63,12 @@ struct WorkoutDetailView: View {
               Text(session.notes)
             }.frame(maxWidth: .infinity, alignment: .leading).fitCard()
           }
-          WorkoutHeartRateView(workout: session, tracker: store.tracker)
-          Button(L10n.text("Экспорт в «Здоровье»", locale: locale), systemImage: "heart") {
-            exporting = true
-          }.disabled(exporting).frame(maxWidth: .infinity, alignment: .leading)
+          if !store.isDemoMode {
+            WorkoutHeartRateView(workout: session, tracker: store.tracker)
+            Button(L10n.text("Экспорт в «Здоровье»", locale: locale), systemImage: "heart") {
+              exporting = true
+            }.disabled(exporting).frame(maxWidth: .infinity, alignment: .leading)
+          }
           Text(
             L10n.text(
               "Калории и пульс не рассчитываются из веса снарядов. В «Здоровье» передаются тип, длительность и паузы тренировки.",
@@ -77,6 +79,7 @@ struct WorkoutDetailView: View {
       }
     }
     .background(FitTheme.paper).navigationBarTitleDisplayMode(.inline)
+    .safeAreaInset(edge: .top) { if store.isDemoMode { DemoModeBanner() } }
     .toolbarBackground(FitTheme.accent, for: .navigationBar).toolbarBackground(
       .visible, for: .navigationBar
     )

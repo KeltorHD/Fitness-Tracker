@@ -36,6 +36,44 @@ import XCTest
 }
 
 @MainActor final class AppStoreTests: XCTestCase {
+  func testDemoProfileIsIsolatedReloadableAndNeverExportsToHealth() async throws {
+    let personal = MemoryWorkoutRepository()
+    let fixture = try DemoWorkoutData.archive(relativeTo: Date().addingTimeInterval(-3600))
+    var own = try XCTUnwrap(fixture.workouts.first)
+    own.name = "Личная тренировка"
+    try personal.save(own)
+    let health = RecordingHealthExporter()
+    let store = AppStore(repository: personal, health: health, platformServicesEnabled: false)
+    await store.loadDemoData()
+    XCTAssertTrue(store.isDemoMode)
+    XCTAssertEqual(store.completed.count, 24)
+    XCTAssertEqual(store.templates.count, 3)
+    store.delete(workout: try XCTUnwrap(store.completed.first))
+    XCTAssertEqual(try personal.workouts(), [own])
+    await store.loadDemoData()
+    XCTAssertEqual(store.completed.count, 24)
+    await store.exportHealth(try XCTUnwrap(store.completed.first))
+    XCTAssertFalse(health.authorized)
+    XCTAssertTrue(health.exported.isEmpty)
+    await store.leaveDemoMode()
+    XCTAssertFalse(store.isDemoMode)
+    XCTAssertEqual(store.workouts, [own])
+  }
+  func testFailedPersonalReadKeepsTheDemoProfileAndItsData() async throws {
+    let personal = FailingWorkoutRepository()
+    let store = AppStore(
+      repository: personal, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    await store.loadDemoData()
+    let demo = store.workouts
+    personal.failTemplateReads = true
+    await store.leaveDemoMode()
+    XCTAssertTrue(store.isDemoMode)
+    XCTAssertEqual(store.workouts, demo)
+    XCTAssertNotNil(store.error)
+    personal.failTemplateReads = false
+    await store.leaveDemoMode()
+    XCTAssertFalse(store.isDemoMode)
+  }
   func testFailedSavePreservesActiveSessionAndDoesNotAnnounceSuccess() throws {
     let repository = FailingWorkoutRepository()
     let store = AppStore(

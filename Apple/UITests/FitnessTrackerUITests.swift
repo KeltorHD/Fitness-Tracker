@@ -1,6 +1,30 @@
 import XCTest
 
 final class FitnessTrackerUITests: XCTestCase {
+  @MainActor func testDemoProfileCanBeOpenedAndClosedWithoutChangingPersonalHistory() {
+    let app = launch()
+    let settings = app.tabBars.buttons["Настройки"]
+    XCTAssertTrue(settings.waitForExistence(timeout: 10))
+    settings.tap()
+    let load = app.buttons["loadDemoData"]
+    for _ in 0..<4 where !load.isHittable { app.swipeUp() }
+    XCTAssertTrue(load.waitForExistence(timeout: 5))
+    load.tap()
+    let confirm = app.buttons["confirmLoadDemoData"]
+    XCTAssertTrue(confirm.waitForExistence(timeout: 5))
+    confirm.tap()
+    let banner = app.descendants(matching: .any).matching(identifier: "demoModeBanner").firstMatch
+    XCTAssertTrue(banner.waitForExistence(timeout: 5))
+    settings.tap()
+    let leave = app.buttons["leaveDemoData"]
+    for _ in 0..<4 where !leave.isHittable { app.swipeUp() }
+    XCTAssertTrue(leave.waitForExistence(timeout: 5))
+    leave.tap()
+    app.buttons["confirmLeaveDemoData"].tap()
+    app.tabBars.buttons["Дневник"].tap()
+    XCTAssertTrue(app.staticTexts["Начните свой дневник"].waitForExistence(timeout: 5))
+    XCTAssertFalse(banner.exists)
+  }
   @MainActor func testTrackerOffersBothModesWithoutRequestingPermissionsOnOpen() {
     let app = launch()
     let settings = app.tabBars.buttons["Настройки"]

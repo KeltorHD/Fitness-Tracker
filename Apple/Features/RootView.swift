@@ -23,9 +23,12 @@ struct RootView: View {
         SettingsView(model: store.settings).tint(FitTheme.accent)
       }
     }
+    .id(store.workspaceID)
+    .safeAreaInset(edge: .top) { if store.isDemoMode { DemoModeBanner() } }
     .tint(.primary)
     .sheet(isPresented: $store.showSession) {
       ActiveWorkoutView().environment(store).tint(FitTheme.accent).interactiveDismissDisabled()
+        .safeAreaInset(edge: .top) { if store.isDemoMode { DemoModeBanner() } }
     }
     .archiveTransferPresenter(
       when: !store.showSession && !store.showingWorkoutDetail && !store.showingTemplateEditor

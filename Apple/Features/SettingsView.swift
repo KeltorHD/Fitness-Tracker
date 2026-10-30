@@ -32,7 +32,7 @@ struct SettingsView: View {
                 }
               })
           ) { SettingsLabel(title: L10n.text("Уведомления", locale: locale), symbol: "bell") }
-          .disabled(model.requestingNotifications)
+          .disabled(model.requestingNotifications || store.isDemoMode)
           if model.requestingNotifications {
             ProgressView(L10n.text("Запрос разрешения…", locale: locale))
           }
@@ -44,6 +44,7 @@ struct SettingsView: View {
               title: L10n.text("Отключить автоблокировку", locale: locale), symbol: "lock.iphone")
           }
           Toggle(isOn: $liveActivities) { SettingsLabel(title: "Live Activities", symbol: "timer") }
+            .disabled(store.isDemoMode)
           Stepper(value: $goal, in: 1...7) {
             SettingsLabel(
               title: L10n.format("Цель на неделю: %@", String(goal), locale: locale),
@@ -55,7 +56,7 @@ struct SettingsView: View {
             TrackerView(model: store.tracker)
           } label: {
             SettingsLabel(title: L10n.text("Трекер", locale: locale), symbol: "heart.circle")
-          }.accessibilityIdentifier("openTracker")
+          }.disabled(store.isDemoMode).accessibilityIdentifier("openTracker")
           Picker(L10n.text("Язык приложения", locale: locale), selection: $language) {
             Text(L10n.text("Как на устройстве", locale: locale)).tag(AppLanguage.system)
             Text("Русский").tag(AppLanguage.russian)
@@ -95,21 +96,21 @@ struct SettingsView: View {
           } label: {
             SettingsLabel(
               title: L10n.text("Здоровье", locale: locale), symbol: "heart.fill", color: .pink)
-          }
+          }.disabled(store.isDemoMode)
         }
         Section {
           if AppCapabilities.current.supportsCloudSync {
             Toggle(isOn: $cloud) {
               SettingsLabel(
                 title: L10n.text("Синхронизация iCloud", locale: locale), symbol: "icloud")
-            }
+            }.disabled(store.isDemoMode)
           }
           Button {
             store.archiveTransfer.present()
           } label: {
             SettingsLabel(
               title: L10n.text("Импорт и экспорт", locale: locale), symbol: "arrow.up.arrow.down")
-          }.accessibilityIdentifier("openArchiveTransfer")
+          }.disabled(store.switchingDemo).accessibilityIdentifier("openArchiveTransfer")
           if AppCapabilities.current.supportsCloudSync {
             Button {
               cloudRequest += 1
@@ -117,7 +118,7 @@ struct SettingsView: View {
               SettingsLabel(
                 title: L10n.text("Проверить учётную запись", locale: locale),
                 symbol: "person.crop.circle")
-            }.disabled(model.cloudState == .loading)
+            }.disabled(model.cloudState == .loading || store.isDemoMode)
             if model.cloudState == .loading {
               ProgressView(L10n.text("Проверка iCloud…", locale: locale))
             }
@@ -145,11 +146,12 @@ struct SettingsView: View {
             )
           }
         }
+        DemoDataSection()
         Section {
           Toggle(isOn: $widgetSharing) {
             SettingsLabel(
               title: L10n.text("Сводка для виджета", locale: locale), symbol: "square.grid.2x2")
-          }
+          }.disabled(store.isDemoMode)
         } footer: {
           Text(
             L10n.text(

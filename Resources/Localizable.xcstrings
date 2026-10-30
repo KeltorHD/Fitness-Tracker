@@ -222,6 +222,23 @@
         }
       }
     },
+    "24 тренировки за 8 недель и 3 плана. Демо открывается отдельно от личной истории и не синхронизируется. Настройки приложения общие для обоих профилей.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 тренировки за 8 недель и 3 плана. Демо открывается отдельно от личной истории и не синхронизируется. Настройки приложения общие для обоих профилей."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 workouts over 8 weeks and 3 templates. The demo opens separately from your history and does not sync. App settings are shared between both profiles."
+          }
+        }
+      }
+    },
     "Apple «Здоровье»": {
       "extractionState": "manual",
       "localizations": {
@@ -1038,6 +1055,23 @@
         }
       }
     },
+    "Вернуться к моим данным": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вернуться к моим данным"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Return to my data"
+          }
+        }
+      }
+    },
     "Версия": {
       "extractionState": "manual",
       "localizations": {
@@ -1068,6 +1102,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "This file format version is unsupported. Try updating FitnessTracker."
+          }
+        }
+      }
+    },
+    "Верх тела": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Верх тела"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Upper body"
           }
         }
       }
@@ -1344,6 +1395,40 @@
         }
       }
     },
+    "Всё тело A": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Всё тело A"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Full body A"
+          }
+        }
+      }
+    },
+    "Всё тело B": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Всё тело B"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Full body B"
+          }
+        }
+      }
+    },
     "Всё тело · A": {
       "extractionState": "manual",
       "localizations": {
@@ -1565,6 +1650,23 @@
         }
       }
     },
+    "ДЕМО · ": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ДЕМО · "
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "DEMO · "
+          }
+        }
+      }
+    },
     "Далее: подход %@": {
       "extractionState": "manual",
       "localizations": {
@@ -1680,6 +1782,125 @@
           "stringUnit": {
             "state": "translated",
             "value": "This action is unavailable in the workout’s current state."
+          }
+        }
+      }
+    },
+    "Демо-профиль открыт": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Демо-профиль открыт"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demo profile is open"
+          }
+        }
+      }
+    },
+    "Демо-режим · данные вымышлены": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Демо-режим · данные вымышлены"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demo mode · synthetic data"
+          }
+        }
+      }
+    },
+    "Демо-тренировка": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Демо-тренировка"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demo workout"
+          }
+        }
+      }
+    },
+    "Демо-тренировки откроются отдельно. Ваша личная история останется без изменений.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Демо-тренировки откроются отдельно. Ваша личная история останется без изменений."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demo workouts will open separately. Your personal history will remain unchanged."
+          }
+        }
+      }
+    },
+    "Демонстрационная тренировка. Значения вымышлены и не относятся к вашей истории.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Демонстрационная тренировка. Значения вымышлены и не относятся к вашей истории."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demonstration workout. These values are synthetic and are not your training history."
+          }
+        }
+      }
+    },
+    "Демонстрационные данные": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Демонстрационные данные"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demo data"
+          }
+        }
+      }
+    },
+    "Демонстрационные тренировки не отправляются в «Здоровье».": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Демонстрационные тренировки не отправляются в «Здоровье»."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demo workouts are not exported to Health."
           }
         }
       }
@@ -2075,6 +2296,23 @@
         }
       }
     },
+    "Завершите текущую тренировку перед открытием демо-профиля.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Завершите текущую тренировку перед открытием демо-профиля."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finish your current workout before opening the demo profile."
+          }
+        }
+      }
+    },
     "Завершить": {
       "extractionState": "manual",
       "localizations": {
@@ -2258,6 +2496,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sync changes take effect after restarting. History is stored on your device and, if you choose, in your private iCloud."
+          }
+        }
+      }
+    },
+    "Изменения в демо-профиле будут сброшены. Ваша личная история останется без изменений.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Изменения в демо-профиле будут сброшены. Ваша личная история останется без изменений."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Changes in the demo profile will be discarded. Your personal history will remain unchanged."
           }
         }
       }
@@ -3078,6 +3333,23 @@
         }
       }
     },
+    "Не удалось загрузить демо-данные. Ваши тренировки сохранены; попробуйте ещё раз.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось загрузить демо-данные. Ваши тренировки сохранены; попробуйте ещё раз."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn’t load demo data. Your workouts are safe; try again."
+          }
+        }
+      }
+    },
     "Не удалось загрузить пульс. Проверьте доступ и попробуйте ещё раз.": {
       "extractionState": "manual",
       "localizations": {
@@ -3244,6 +3516,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Couldn’t open workout history."
+          }
+        }
+      }
+    },
+    "Не удалось открыть личную историю. Демо-профиль сохранён; попробуйте ещё раз.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось открыть личную историю. Демо-профиль сохранён; попробуйте ещё раз."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn’t open your personal history. The demo profile is still available; try again."
           }
         }
       }
@@ -4115,6 +4404,23 @@
         }
       }
     },
+    "Открыть демо-профиль": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Открыть демо-профиль"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open demo profile"
+          }
+        }
+      }
+    },
     "Открыть настройки iOS": {
       "extractionState": "manual",
       "localizations": {
@@ -4319,6 +4625,23 @@
         }
       }
     },
+    "Перезагрузить демо-данные": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Перезагрузить демо-данные"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reload demo data"
+          }
+        }
+      }
+    },
     "План тренировки": {
       "extractionState": "manual",
       "localizations": {
@@ -4519,6 +4842,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Reps"
+          }
+        }
+      }
+    },
+    "Подготовка данных…": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Подготовка данных…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preparing data…"
           }
         }
       }

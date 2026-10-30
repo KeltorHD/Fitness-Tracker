@@ -14,10 +14,13 @@ import WidgetKit
   var showSession = false
   var showingWorkoutDetail = false
   var showingTemplateEditor = false
+  private(set) var isDemoMode = false
+  private(set) var switchingDemo = false
+  private(set) var workspaceID = UUID()
   let settings: SettingsViewModel
   let tracker: TrackerViewModel
   @ObservationIgnored let exerciseImages: any ExerciseImageLoading
-  @ObservationIgnored private let repository: any WorkoutRepository
+  @ObservationIgnored private let repository: WorkoutWorkspaceRepository
   @ObservationIgnored private let health: any HealthWorkoutExporting
   @ObservationIgnored private let notifications: any RestNotificationServing
   @ObservationIgnored private let liveActivity = LiveActivityService()
@@ -54,7 +57,7 @@ import WidgetKit
     archiveFiles: any ArchiveFileHandling = ArchiveFileService(),
     tracker: TrackerViewModel? = nil
   ) {
-    self.repository = repository
+    self.repository = WorkoutWorkspaceRepository(personal: repository)
     self.health = health
     self.defaults = defaults
     self.platformServicesEnabled = platformServicesEnabled
@@ -89,16 +92,77 @@ import WidgetKit
         message: "Не удалось прочитать историю. Попробуйте открыть приложение ещё раз.")
     }
   }
+  func loadDemoData(at date: Date = Date(), calendar: Calendar = .current) async {
+    guard !switchingDemo else { return }
+    guard isDemoMode || active == nil else {
+      error = "Завершите текущую тренировку перед открытием демо-профиля."
+      return
+    }
+    switchingDemo = true
+    defer { switchingDemo = false }
+    do {
+      let archive = try DemoWorkoutData.archive(
+        relativeTo: date, calendar: calendar, language: L10n.language)
+      let previous = integrationTask
+      // Finish the personal workspace's last notification/widget update before switching data.
+      await previous?.value
+      try Task.checkCancellation()
+      guard !showSession, !showingWorkoutDetail, !showingTemplateEditor,
+        !archiveTransfer.isPresented, !archiveTransfer.isSaving
+      else { throw TrainingError.invalidState }
+      try repository.openDemo(archive)
+      isDemoMode = true
+      tracker.disconnect()
+      tracker.attach(nil)
+      try loadRepository()
+      resetWorkspacePresentation()
+    } catch {
+      guard !Task.isCancelled else { return }
+      report(
+        error, operation: "loadDemo",
+        message: "Не удалось загрузить демо-данные. Ваши тренировки сохранены; попробуйте ещё раз.")
+    }
+  }
+  func leaveDemoMode() async {
+    guard isDemoMode, !switchingDemo else { return }
+    switchingDemo = true
+    defer { switchingDemo = false }
+    do {
+      try Task.checkCancellation()
+      let snapshot = try repository.closeDemo()
+      isDemoMode = false
+      applySnapshot(workouts: snapshot.workouts, templates: snapshot.templates)
+      resetWorkspacePresentation()
+      refreshIntegrations()
+    } catch {
+      report(
+        error, operation: "leaveDemo",
+        message: "Не удалось открыть личную историю. Демо-профиль сохранён; попробуйте ещё раз.")
+    }
+  }
+  private func resetWorkspacePresentation() {
+    error = nil
+    notice = nil
+    showSession = false
+    showingWorkoutDetail = false
+    showingTemplateEditor = false
+    archiveTransfer.cancelReading()
+    archiveTransfer.isPresented = false
+    workspaceID = UUID()
+  }
   private func loadRepository() throws {
     // Commit the UI snapshot only when both reads succeed; a partial read preserves the previous state.
     let loaded = try repository.workouts()
     let routines = try repository.templates()
+    applySnapshot(workouts: loaded, templates: routines)
+  }
+  private func applySnapshot(workouts loaded: [Workout], templates routines: [WorkoutTemplate]) {
     workouts = loaded
     completed = loaded.filter { $0.status == .completed }
     templates = routines
     let unfinished = loaded.filter { [.active, .paused].contains($0.status) }
     active = unfinished.first { $0.id == active?.id } ?? unfinished.first
-    tracker.attach(active)
+    if !isDemoMode { tracker.attach(active) }
   }
 
   private func archiveSnapshot() throws -> WorkoutArchive {
@@ -113,6 +177,7 @@ import WidgetKit
     return result
   }
   func seedTemplatesIfNeeded() {
+    guard !isDemoMode else { return }
     // An explicit flag prevents deleted defaults from returning on every launch.
     guard !defaults.bool(forKey: "seededTemplates") else { return }
     do {
@@ -131,7 +196,9 @@ import WidgetKit
       return
     }
     do {
-      let workout = try template?.start() ?? Workout(name: L10n.text("Свободная тренировка"))
+      let workout =
+        try template?.start()
+        ?? Workout(name: L10n.text(isDemoMode ? "Демо-тренировка" : "Свободная тренировка"))
       try activate(workout)
     } catch {
       report(
@@ -143,7 +210,9 @@ import WidgetKit
     try repository.save(workout)
     try loadRepository()
     showSession = true
-    if platformServicesEnabled, defaults.object(forKey: "liveActivities") as? Bool != false {
+    if platformServicesEnabled, !isDemoMode,
+      defaults.object(forKey: "liveActivities") as? Bool != false
+    {
       // Request synchronously while foregrounded, before notification/widget async work.
       do { try liveActivity.startIfNeeded(for: workout) } catch {
         report(
@@ -212,7 +281,7 @@ import WidgetKit
     guard mutate({ try WorkoutEngine.cancel(&$0) }) else { return }
     if active == nil {
       showSession = false
-      if let cancelledID { tracker.removeRecording(for: cancelledID) }
+      if let cancelledID, !isDemoMode { tracker.removeRecording(for: cancelledID) }
     }
   }
   func save(template: WorkoutTemplate) -> Bool {
@@ -238,7 +307,7 @@ import WidgetKit
   func delete(workout: Workout) {
     do {
       try repository.deleteWorkout(id: workout.id)
-      tracker.removeRecording(for: workout.id)
+      if !isDemoMode { tracker.removeRecording(for: workout.id) }
       try loadRepository()
       refreshIntegrations()
     } catch {
@@ -248,10 +317,15 @@ import WidgetKit
     }
   }
   func exportHealth(_ workout: Workout) async {
+    guard !isDemoMode else {
+      error = "Демонстрационные тренировки не отправляются в «Здоровье»."
+      return
+    }
     do {
       try Task.checkCancellation()
       try await health.requestAuthorization()
       try Task.checkCancellation()
+      guard !isDemoMode else { return }
       try await health.export(workout)
       try Task.checkCancellation()
       notice = "Тренировка отправлена в «Здоровье»."
@@ -265,6 +339,7 @@ import WidgetKit
     }
   }
   private func importWatch(_ workout: Workout) -> Bool {
+    guard !isDemoMode else { return false }
     do {
       try repository.save(workout)
       try loadRepository()
@@ -279,6 +354,7 @@ import WidgetKit
   }
   /// Intents use the same context as the UI, even when the system cold-launches the process.
   func performLiveAction(_ action: WorkoutLiveAction, workoutID: UUID) async throws {
+    guard !isDemoMode else { throw TrainingError.invalidState }
     do {
       guard var workout = try repository.workouts().first(where: { $0.id == workoutID }) else {
         throw TrainingError.invalidState
@@ -334,7 +410,7 @@ import WidgetKit
   }
 
   func refreshIntegrations(allowStart: Bool? = nil) {
-    guard platformServicesEnabled else { return }
+    guard platformServicesEnabled, !isDemoMode else { return }
     let previous = integrationTask
     previous?.cancel()
     let workout = active

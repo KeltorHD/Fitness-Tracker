@@ -3,6 +3,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct ArchiveTransferView: View {
+  @Environment(AppStore.self) private var store
   @Environment(\.locale) private var locale
   @Environment(\.dismiss) private var dismiss
   @Bindable var model: ArchiveTransferViewModel
@@ -106,6 +107,7 @@ struct ArchiveTransferView: View {
           }
         }
       }
+      .safeAreaInset(edge: .top) { if store.isDemoMode { DemoModeBanner() } }
       .navigationTitle(L10n.text("Импорт и экспорт", locale: locale)).navigationBarTitleDisplayMode(
         .inline
       )

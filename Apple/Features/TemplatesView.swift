@@ -225,6 +225,7 @@ struct TemplateEditor: View {
         ExercisePicker { template.exercises.append(TemplateExercise(exercise: $0)) }
       }
       .archiveTransferPresenter(when: store.showingTemplateEditor && !picking)
+      .safeAreaInset(edge: .top) { if store.isDemoMode { DemoModeBanner() } }
     }
   }
 }
