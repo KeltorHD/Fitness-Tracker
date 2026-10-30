@@ -42,3 +42,7 @@ HealthKit может сохранять сами измерения пульса
 - [HKWorkoutSession: внешние датчики на iPhone](https://developer.apple.com/documentation/healthkit/hkworkoutsession).
 - [HKLiveWorkoutDataSource.typesToCollect](https://developer.apple.com/documentation/healthkit/hkliveworkoutdatasource/typestocollect).
 - [HKWorkoutBuilder.discardWorkout(): завершение без сохранения тренировки](https://developer.apple.com/documentation/healthkit/hkworkoutbuilder/discardworkout()).
+
+## Превью просмотра пульса
+
+[Текущий пульс и история](previews/heart-rate-overview.png), [экран трекера](previews/heart-rate-live.png), [график истории](previews/heart-rate-history.png). Это макеты с демонстрационными значениями, не скриншоты устройства и не результат проверки HealthKit. В приложении текущий пульс доступен в «Трекере» и карточке активной тренировки; график, среднее и максимум — ниже упражнений в истории.

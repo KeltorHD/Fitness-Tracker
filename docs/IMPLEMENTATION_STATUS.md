@@ -63,20 +63,24 @@
 | CSV picker/Files, preview, локализованные ошибки и неизвестная длительность | Да | PortableCSVChecks проверяет decode/round-trip/reimport/форматирование; Apple sources — только parser/lint/resources | Да, document types, iCloud Drive, SwiftData и написанные Apple unit tests | Обычный signing; новых capabilities нет |
 | AirPods Pro 3: origin совместим со старым sidecar, live session state и защита записей | Да | Да, 2 новых Core tests и PortableAirPodsChecks с реальными TrackerViewModel/DI | Нет для Core; SDK/UI отдельно | Нет для Core |
 | AirPodsHeartRateService / явные live controls RU/EN / HealthKit usage strings | Да | Только parser/lint/resources для SDK/SwiftUI; переносимая модель исполнена с fake source | Да, iPhone + AirPods Pro 3, HealthKit concurrency, права, блокировка, отсутствие лишних HKWorkout и UI test | Существующий HealthKit capability/signing, новых entitlements нет |
+| WorkoutExercisePresentation / draft validation / summary по row IDs | Да | Да, PortableWorkoutExerciseChecks: ввод, kg/lb precision, drafts, paging, reorder/delete, pause/history guards и Core completion | Нет для переносимой модели | Нет |
+| Компактная тренировка и отдельное упражнение по IMG_1612/1613, RU/EN и Liquid Glass dock | Да | Только parser/lint/resources; UI tests обновлены, не запускались | Да, NavigationStack, layout, keyboard, Dynamic Type, VoiceOver и сохранение/ошибки | Обычный signing, новых capabilities нет |
+| SVG/PNG превью тренировки, упражнения и просмотра пульса | Да, демонстрационные данные | Да, генерация librsvg/cairo, структура и воспроизводимость | Это иллюстрации; проверка интерфейса в Xcode остаётся обязательной | Нет |
 
 
 ## Фактические проверки
 
 - `swift build`: прошёл для FitnessTrackerCore на Linux.
 - `swift test`: прошли 114 Swift Testing tests, включая parameterized cases. Стандартный XCTest runner также печатает «0 tests» — Core использует отдельный Swift Testing runner, его итоговая строка содержит 114 tests.
-- Отдельный Swift 6 strict-concurrency type-check без Apple SDK: HistoryViewModel, ProgressViewModel, ExerciseProgressViewModel, BodyWeightViewModel/BodyWeightEditorModel, ExerciseLibraryViewModel, ExerciseImageLoader, CloudAccountChecking, WidgetSnapshot, AppCapabilities, L10n и WorkoutFormatting. Это проверка типов указанной переносимой части, не функциональный тест и не сборка iOS target.
+- Отдельный Swift 6 strict-concurrency type-check без Apple SDK: HistoryViewModel, ProgressViewModel, ExerciseProgressViewModel, BodyWeightViewModel/BodyWeightEditorModel, WorkoutExercisePresentation, ExerciseLibraryViewModel, ExerciseImageLoader, CloudAccountChecking, WidgetSnapshot, AppCapabilities, L10n и WorkoutFormatting. Это проверка типов указанной переносимой части, не функциональный тест и не сборка iOS target.
 - Swift formatting/lint, синтаксический разбор Apple Swift, структура/конфигурационные связи, plist/JSON, PNG и наличие ресурсов: прошли в `bash scripts/check-linux.sh`. Для Dynamic Island parser проверяет обе ветви shared intents: основной target с FITNESS_TRACKER_APP и widget extension без него.
-- Локализация: 526 ключей RU/EN и четыре InfoPlist-строки, placeholders, формы счётчиков, покрытие русских ключей, target resources и повторяемость генерации — прошли. Компиляция `.xcstrings` в Xcode не проверена; сценарии — [LOCALIZATION.md](LOCALIZATION.md).
+- Локализация: 537 ключей RU/EN и четыре InfoPlist-строки, placeholders, формы счётчиков, покрытие русских ключей, target resources и повторяемость генерации — прошли. Компиляция `.xcstrings` в Xcode не проверена; сценарии — [LOCALIZATION.md](LOCALIZATION.md).
 - В сессии использован внешний Swift 6.2.1 через SWIFT_BIN; для постоянной установки предусмотрен `setup-linux.sh`, toolchain не хранится в git.
 - Переносимая tracker-подсистема дополнительно исполнена в `Tests/PortableTrackerChecks/main.swift`: recording/pause, save failure/retry, mode race, минимальные permissions, history, real file round-trip/corruption/delete. Это не тест HealthKit/CoreBluetooth.
 - Исполнен `Tests/PortableProgressChecks/main.swift`: выбор упражнения/точки, периоды, bodyweight, удаление, точный workout UUID при совпадающей дате и связь с ProgressViewModel. Это не тест SwiftUI/Charts.
 - Исполнен `Tests/PortableWeightChecks/main.swift`: локализованный и строгий ввод, кг/фунты, точность при правке даты, источники веса, редактирование и смена workspace. Это не SwiftUI/SwiftData test.
 - Исполнен `Tests/PortableAirPodsChecks/main.swift`: явный запуск, свежесть/паузы, provenance, сохранение, защита от импорта, поздние callbacks, смена режима/тренировки, отмена, отказ и ошибки загрузки. Источник подставной; HealthKit и AirPods не тестировались.
+- Исполнен `Tests/PortableWorkoutExerciseChecks/main.swift`: реальные presentation/draft модели без SwiftUI, включая недопустимые данные, precision в фунтах, повторяющиеся упражнения, навигацию по UUID и запрет выполнения в истории/паузе.
 - XcodeGen generation, iOS/watchOS compilation, linking, Simulator, SwiftUI rendering и реальные Apple-сервисы **не проверены**. Linux CI не заменяет эти проверки.
 
 ## Границы текущей реализации

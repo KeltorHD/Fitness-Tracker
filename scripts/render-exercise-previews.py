@@ -28,10 +28,10 @@ def wrap(x, y, value, chars=42, size=14, color=INK, limit=6, line=21, weight=400
     lines = textwrap.wrap(value, chars, break_long_words=False)[:limit]
     return ''.join(text(x, y + i * line, word, size, color, weight) for i, word in enumerate(lines))
 
-def photo(source_id, index, x, y, w, h):
+def photo(source_id, index, x, y, w, h, surface='#e6edeb'):
     path = ROOT / 'Resources/ExerciseMedia' / ENTRIES[source_id]['images'][index]
     data = base64.b64encode(path.read_bytes()).decode()
-    return rect(x, y, w, h, '#e6edeb', 12) + f'<image x="{x}" y="{y}" width="{w}" height="{h}" preserveAspectRatio="xMidYMid meet" href="data:image/jpeg;base64,{data}"/>'
+    return rect(x, y, w, h, surface, 12) + f'<image x="{x}" y="{y}" width="{w}" height="{h}" preserveAspectRatio="xMidYMid meet" href="data:image/jpeg;base64,{data}"/>'
 
 def icon(kind, x, y, size=25, color=INK):
     common = f'fill="none" stroke="{color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"'
@@ -109,24 +109,102 @@ def catalogue():
         s += rect(16,y,358,58,'#f2f2f2',29) + icon('fitness',28,y+17,25,ACCENT) + text(61,y+36,name,19,INK,700)
     return s+tabbar(1)
 
+SESSION_EXERCISES = [
+    ('Wide-Grip_Lat_Pulldown', [(35,12),(40,12),(45,10),(50,8)]),
+    ('Seated_Cable_Rows', [(25,15),(30,12),(35,12)]),
+    ('Seated_Triceps_Press', [(16,15),(18,12),(20,10)]),
+    ('Triceps_Pushdown_-_Rope_Attachment', [(20,15),(25,12),(30,10)]),
+]
+
+def session_overview(active=False):
+    s=shell()+rect(0,83,390,168,ACCENT,29)+rect(0,148,390,103,ACCENT)
+    s+=text(28,112,'⌄',24,'white',700,'middle')+text(195,112,'ПЯТНИЦА, 18:15',13,'white',400,'middle')+text(362,112,'•••',14,'white',700,'middle')
+    s+=rect(16,132,358,0.5,'#ff9983')+icon('fitness',18,189,32,'white')+text(59,215,'Спина и руки',29,'white',700)
+    volume=420 if active else sum(w*r for _,sets in SESSION_EXERCISES for w,r in sets)
+    count=sum(len(sets) for _,sets in SESSION_EXERCISES)
+    for i,(label,value) in enumerate([('Время','18 мин' if active else '48 мин'),('Объём',f'{volume:,} кг'.replace(',',' ')),('Подходы',f'1/{count}' if active else str(count))]):
+        x=16+i*122
+        s+=rect(x,267,114,59,'#f2f2f2',16)+text(x+57,289,label,12,MUTED,400,'middle')+text(x+57,313,value,16,INK,700,'middle')
+    for i,(key,sets) in enumerate(SESSION_EXERCISES):
+        y=354+i*92
+        name=ENTRIES[key]['name']
+        summary=', '.join(f'{w} кг × {r}' for w,r in sets)
+        s+=text(30,y,i+1,15,MUTED)+wrap(58,y,name,chars=24,size=17,weight=600,limit=2,line=21)
+        s+=wrap(58,y+45,summary,chars=31,size=12,color=MUTED,line=16,limit=2)
+        s+=photo(key,0,328,y+5,46,46,surface='white')+rect(328,y+5,46,46,'none',12,'#dedede')
+        s+=rect(58,y+73,316,0.6,'#dcdcdc')
+    s+=rect(16,724,358,67,'#f2f2f2',22)+text(32,750,'Вес тела',14)+text(356,750,'76,2 кг',14,INK,500,'end')+text(32,776,'Изменить вес',13,ACCENT)
+    s+=rect(0,801,390,72,'white')
+    if active:
+        s+=rect(18,811,117,44,'#f2f2f2',22)+text(77,839,'Ⅱ Пауза',14,ACCENT,600,'middle')
+        s+=rect(146,811,228,44,ACCENT,22)+text(260,839,'✓ Завершить тренировку',14,'white',600,'middle')
+    else:
+        s+=rect(16,811,48,48,'#f2f2f2',24)+text(40,843,'+',30,ACCENT,400,'middle')
+        s+=rect(132,811,126,48,ACCENT,24)+text(195,842,'Повторить',17,'white',700,'middle')
+        s+=rect(326,811,48,48,'#f2f2f2',24)+text(350,842,'✎',27,ACCENT,400,'middle')
+    return s+rect(142,879,106,5,'#171717',3)
+
 def detail():
-    s=shell()+rect(0,83,390,174,ACCENT,29)+rect(0,151,390,106,ACCENT)
-    s+=text(28,112,'⌄',24,'white',700,'middle')+text(195,112,'ВТОРНИК, 18:27',13,'white',400,'middle')+text(362,112,'•••',14,'white',700,'middle')
-    s+=rect(16,132,358,0.5,'#ff9983')+icon('fitness',18,201,32,'white')+text(58,226,'Грудь бицепс',29,'white',700)
-    for i,(label,value) in enumerate([('Время','1 ч 20 мин'),('Объём','6 240 кг'),('Подходы','9')]):
-        x=16+i*124
-        s+=rect(x,273,116,61,'#f2f2f2',17)+text(x+58,295,label,12,MUTED,400,'middle')+text(x+58,319,value,16,INK,700,'middle')
-    data=[('Barbell_Incline_Bench_Press_-_Medium_Grip','Жим штанги на наклонной скамье','30 кг × 8, 40 кг × 8, 50 кг × 8'),('Dumbbell_Bench_Press','Жим гантелей лёжа','18 кг × 8, 20 кг × 8, 22 кг × 8'),('EZ-Bar_Curl','Сгибания рук с EZ-грифом','20 кг × 10, 25 кг × 8, 25 кг × 8'),('Butterfly','Сведение рук в тренажёре','35 кг × 10, 40 кг × 8, 40 кг × 8')]
-    for i,(key,name,summary) in enumerate(data):
-        y=371+i*99
-        s+=text(33,y,i+1,14)+wrap(58,y,name,chars=23,size=17,weight=500,limit=2,line=21)
-        s+=wrap(58,y+49,summary,chars=35,size=12,line=16,limit=2)+photo(key,0,328,y+1,46,46)
-        s+=rect(58,y+76,316,0.6,'#dcdcdc')
-    s+=rect(16,799,48,48,'#f2f2f2',24)+text(40,832,'+',30,ACCENT,400,'middle')
-    s+=rect(139,799,112,48,ACCENT,24)+text(195,830,'Повторить',17,'white',700,'middle')
-    s+=rect(326,799,48,48,'#f2f2f2',24)+text(350,831,'✎',27,ACCENT,400,'middle')
-    s+=rect(142,879,106,5,'#171717',3)
-    return s
+    return session_overview()
+
+def exercise_in_workout():
+    s=shell()+rect(0,78,390,793,'#f1f1f1')
+    s+=rect(0,78,390,199,ACCENT)
+    s+=text(20,125,'1/4',17,'#ffdfd7')+text(195,128,'0:18:24',29,'white',400,'middle')+text(367,124,'⌄',24,'white',400,'middle')
+    s+=rect(12,154,366,609,'#e4e4e4',28)+rect(12,151,366,608,'white',28)
+    s+=text(36,181,'⌄',23,MUTED,700,'middle')+text(354,181,'•••',15,MUTED,700,'middle')
+    s+=text(195,208,'Тяга верхнего блока',22,ACCENT,700,'middle')+text(195,236,'широким хватом',22,ACCENT,700,'middle')
+    s+=text(195,268,'СПИНА',12,MUTED,500,'middle')
+    for i,(weight,reps) in enumerate(SESSION_EXERCISES[0][1]):
+        y=324+i*66
+        s+=rect(24,y-28,33,38,'#ffebe6' if i==1 else '#f2f2f2',12)
+        s+=text(40,y-3,i+1,16,ACCENT if i==1 else MUTED,400,'middle')
+        s+=text(167,y,weight,34,INK,400,'end')+text(171,y,'кг',16,MUTED)+text(217,y-3,'×',22,MUTED,'middle')+text(248,y,reps,34,INK)
+        if i==0:s+=text(350,y-5,'✓',13,ACCENT,600,'middle')
+        if i<3:s+=rect(24,y+20,342,0.6,'#dcdcdc')
+    s+=icon('chart',28,708,25,MUTED)+photo('Wide-Grip_Lat_Pulldown',0,295,699,37,37,surface='white')+text(353,727,'i',24,MUTED,500,'middle')
+    for x,label in [(30,'‹'),(108,'+'),(282,'Ⅱ'),(360,'›')]:
+        s+=text(x,812,label,32,MUTED,400,'middle')
+    s+=f'<circle cx="195" cy="801" r="32" fill="{ACCENT}" stroke="white" stroke-width="4"/>'
+    s+=text(195,812,'✓',31,'white',700,'middle')
+    s+=text(195,855,'✓ Завершить тренировку',13,ACCENT,600,'middle')
+    return s+rect(142,879,106,5,'#171717',3)
+
+def heart_rate_live():
+    s=shell()+rect(0,78,390,793,'#f2f2f7')+text(16,110,'‹ Настройки',14,ACCENT)+text(16,150,'Трекер',32,INK,700)
+    s+=rect(16,173,358,103,'white',22)+text(30,202,'Модель трекера',14)+text(358,202,'AirPods Pro 3  ⌄',14,MUTED,400,'end')
+    s+=rect(30,221,344,0.5,'#e5e5e5')+text(30,252,'Режим трекера',14)+text(358,252,'Apple «Здоровье»  ⌄',13,MUTED,400,'end')
+    s+=text(30,307,'ПУЛЬС ВО ВРЕМЯ ТРЕНИРОВКИ',11,MUTED,500)+rect(16,321,358,375,'white',22)
+    s+=wrap(30,347,'Наденьте AirPods Pro 3 и подключите их к iPhone. В настройках iOS → AirPods → Пульс включите измерение. Затем начните тренировку в FitnessTracker и включите приём пульса.',chars=46,size=12,line=18,limit=5)
+    s+=wrap(30,449,'Этот режим предназначен для AirPods Pro 3 с датчиком пульса. iOS выбирает доступный источник; вместе с AirPods может использоваться Apple Watch.',chars=48,size=11,color=MUTED,line=16,limit=4)
+    s+=text(30,536,'♥',23,'#ef4b4b')+text(63,536,'128 уд/мин',19,INK,500)
+    s+=wrap(30,563,'Приём пульса включён. Если измерения нет, проверьте посадку AirPods и доступ к пульсу.',chars=48,size=11,color=MUTED,line=16,limit=3)
+    s+=text(30,632,'Остановить приём пульса',15,ACCENT)+text(30,672,'Инструкция производителя  ↗',13,ACCENT)
+    s+=wrap(30,718,'Для приёма нужен доступ к пульсу и тренировкам в «Здоровье». Запись тренировки в «Здоровье» остаётся отдельным действием.',chars=51,size=10,color=MUTED,line=15,limit=3)
+    s+=rect(16,775,358,79,'white',22)+text(30,800,'День',14)+text(358,800,'30 октября 2026',13,MUTED,400,'end')+text(30,834,'Прочитать показатели',15,ACCENT)
+    return s+rect(142,879,106,5,'#171717',3)
+
+def heart_rate_history():
+    s=shell()+rect(0,83,390,52,ACCENT)+text(28,115,'⌄',24,'white',700,'middle')+text(195,114,'ПЯТНИЦА, 18:15',13,'white',400,'middle')+text(362,114,'•••',14,'white',700,'middle')
+    s+=text(18,167,'История · Спина и руки',19,INK,700)
+    s+=rect(16,190,358,78,'#f2f2f2',24)+text(32,219,'Вес тела',14)+text(358,219,'76,2 кг',14,INK,500,'end')+text(32,250,'Изменить вес',14,ACCENT)
+    s+=rect(16,288,358,375,'#f2f2f2',24)+text(32,319,'♥  Пульс',17,INK,700)
+    values=[91,98,108,132,146,138,117,112,130,151,142,116,105,122,145,156,141,126,109,118,138,150,131,110]
+    average=round(sum(values)/len(values))
+    s+=text(32,352,f'Средний: {average}',13)+text(358,352,f'Максимум: {max(values)}',13,INK,400,'end')
+    for v in [90,110,130,150]:
+        y=539-(v-90)*2.15
+        s+=rect(36,y,283,0.5,'#dedede')+text(326,y+4,v,10,MUTED)
+    for indices in [list(range(0,11)),list(range(12,len(values)))]:
+        points=' '.join(f'{38+i*11.6},{539-(values[i]-90)*2.15}' for i in indices)
+        s+=f'<polyline points="{points}" fill="none" stroke="{ACCENT}" stroke-width="2.5" stroke-linejoin="round"/>'
+    for x,label in [(38,'18:15'),(145,'18:35'),(277,'19:00')]:s+=text(x,565,label,10,MUTED)
+    s+=text(32,597,'Источник: пульс во время тренировки',11,MUTED)
+    s+=wrap(32,622,'Разрывы графика означают отсутствие измерений. Средний пульс рассчитан по сохранённым точкам.',chars=48,size=10,color=MUTED,line=15,limit=3)
+    s+=text(20,704,'♥  Экспорт в «Здоровье»',15,ACCENT)
+    s+=wrap(20,736,'Калории и пульс не рассчитываются из веса снарядов. В «Здоровье» передаются тип, длительность и паузы тренировки.',chars=51,size=10,color=MUTED,line=16,limit=3)
+    s+=rect(16,811,48,48,'#f2f2f2',24)+text(40,843,'+',30,ACCENT,400,'middle')+rect(132,811,126,48,ACCENT,24)+text(195,842,'Повторить',17,'white',700,'middle')+rect(326,811,48,48,'#f2f2f2',24)+text(350,842,'✎',27,ACCENT,400,'middle')
+    return s+rect(142,879,106,5,'#171717',3)
 
 def results():
     import calendar
@@ -162,23 +240,7 @@ def library():
     return s
 
 def workout():
-    s=shell()+rect(0,83,390,166,ACCENT,29)+rect(0,145,390,104,ACCENT)
-    s+=text(28,111,'⌄',24,'white',700,'middle')+text(195,111,'ЧЕТВЕРГ, 18:30',13,'white',400,'middle')+text(360,111,'•••',14,'white',700,'middle')
-    s+=rect(16,132,358,0.5,'#ff9983')+icon('fitness',19,191,32,'white')+text(58,218,'Всё тело · A',30,'white',700)
-    for i,(label,value) in enumerate([('Время','00:18:24'),('Объём','320 кг'),('Подходы','1/3')]):
-        x=16+i*124
-        s+=rect(x,265,116,61,'#f2f2f2',17)+text(x+58,287,label,12,MUTED,400,'middle')+text(x+58,311,value,17,INK,700,'middle')
-    s+=rect(102,346,186,41,'#fff0eb',21)+text(195,373,'Отдых  00:53',16,ACCENT,700,'middle')
-    s+=text(20,422,'ПРИСЕДАНИЯ',12,MUTED,700)+text(20,453,'Техника выполнения  ›',14,ACCENT)
-    for i in range(3):
-        y=493+i*70
-        s+=text(22,y,'40',23,INK,500)+text(66,y,'кг',13,MUTED)+text(153,y,'8',23,INK,500)+text(180,y,'повторов',13,MUTED)
-        s+=text(349,y,'✓' if i==0 else '○',26,ACCENT,500,'middle')
-        s+=text(22,y+25,'Подход выполнен' if i==0 else 'Разминочный подход',11,MUTED)+rect(20,y+40,354,0.5,'#dedede')
-    s+=text(20,708,'+ Добавить упражнение',15,ACCENT)+text(20,752,'Заметка о тренировке',13,MUTED)
-    s+=rect(42,809,137,44,'#f2f2f2',22)+text(110,837,'Ⅱ  Пауза',15,ACCENT,700,'middle')+rect(193,809,156,44,ACCENT,22)+text(270,837,'✓  Завершить',15,'white',700,'middle')
-    s+=rect(142,879,106,5,'#171717',3)
-    return s
+    return session_overview(active=True)
 
 def settings():
     s=shell()+rect(0,78,390,791,'#f1f1f1')+text(16,151,'Настройки',34,INK,700)
@@ -254,18 +316,23 @@ if __name__ == '__main__':
     OUT.mkdir(parents=True, exist_ok=True)
     screens = [('diary', diary()), ('catalogue', catalogue()), ('results', results()),
                ('workout-detail', detail()), ('exercise-library', library()),
-               ('exercise-detail', exercise_detail()), ('active-workout', workout()), ('settings', settings())]
+               ('exercise-detail', exercise_detail()), ('active-workout', workout()), ('settings', settings()),
+               ('exercise-in-workout', exercise_in_workout()), ('heart-rate-live', heart_rate_live()),
+               ('heart-rate-history', heart_rate_history())]
     for name, content in screens:
         file = OUT / (name + '.svg')
         file.write_text(svg(390, 900, content))
         render(file, 390, 900, scale=3)
     for name, selected in [('overview', [diary(), catalogue(), detail()]),
-                           ('results-overview', [results(), workout(), settings()])]:
-        board = rect(0, 0, 1270, 1020, '#ebebeb')
+                           ('results-overview', [results(), workout(), settings()]),
+                           ('workout-flow', [detail(), workout(), exercise_in_workout()]),
+                           ('heart-rate-overview', [heart_rate_live(), heart_rate_history()])]:
+        board_width = 40 + len(selected) * 410
+        board = rect(0, 0, board_width, 1020, '#ebebeb')
         board += text(30, 38, 'FitnessTracker · дизайн по вашим референсам', 25, INK, 700)
         board += text(30, 63, 'Демонстрационные данные. Это макеты, не скриншоты Xcode; Liquid Glass проверяется на Mac.', 12, MUTED)
         for i, content in enumerate(selected):
             board += f'<svg x="{30 + i * 410}" y="85" width="390" height="900" viewBox="0 0 390 900">{content}</svg>'
         file = OUT / (name + '.svg')
-        file.write_text(svg(1270, 1020, board))
-        render(file, 1270, 1020)
+        file.write_text(svg(board_width, 1020, board))
+        render(file, board_width, 1020)
