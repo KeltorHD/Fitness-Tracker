@@ -1,6 +1,6 @@
 import XCTest
 
-final class FitSessionUITests: XCTestCase {
+final class FitnessTrackerUITests: XCTestCase {
   @MainActor func testTrackerOffersBothModesWithoutRequestingPermissionsOnOpen() {
     let app = launch()
     let settings = app.tabBars.buttons["Настройки"]

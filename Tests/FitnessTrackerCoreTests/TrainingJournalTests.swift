@@ -1,7 +1,7 @@
 import Foundation
 import Testing
 
-@testable import FitSessionCore
+@testable import FitnessTrackerCore
 
 private var journalCalendar: Calendar {
   var value = Calendar(identifier: .iso8601)

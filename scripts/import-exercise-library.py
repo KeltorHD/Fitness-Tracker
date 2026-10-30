@@ -18,8 +18,8 @@ REVISION = 'f00c92c7dcf1216a928a52c3706c7ce8e2f71ed5'
 BASE = f'https://raw.githubusercontent.com/yuhonas/free-exercise-db/{REVISION}/'
 VENDOR = ROOT / 'ThirdParty/free-exercise-db'
 MEDIA = ROOT / 'Resources/ExerciseMedia'
-RESOURCE = ROOT / 'Sources/FitSessionCore/Resources/ExerciseLibrary.ru.json'
-ENGLISH_RESOURCE = ROOT / 'Sources/FitSessionCore/Resources/ExerciseLibrary.en.json'
+RESOURCE = ROOT / 'Sources/FitnessTrackerCore/Resources/ExerciseLibrary.ru.json'
+ENGLISH_RESOURCE = ROOT / 'Sources/FitnessTrackerCore/Resources/ExerciseLibrary.en.json'
 MUSCLES = {
     'abdominals': 'Мышцы живота', 'abductors': 'Отводящие мышцы бедра',
     'adductors': 'Приводящие мышцы бедра', 'biceps': 'Бицепс', 'calves': 'Икроножные мышцы',

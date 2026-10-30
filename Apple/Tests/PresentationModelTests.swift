@@ -1,7 +1,7 @@
-import FitSessionCore
+import FitnessTrackerCore
 import XCTest
 
-@testable import FitSession
+@testable import FitnessTracker
 
 @MainActor private final class ControlledCloudAccount: CloudAccountChecking {
   private(set) var requests: [CheckedContinuation<CloudAccountStatus, any Error>] = []

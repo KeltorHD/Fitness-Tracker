@@ -19,22 +19,22 @@ required = ['Package.swift', 'project.yml', 'README.md', 'MAC_BUILD_GUIDE.md',
 for path in required:
     assert (root / path).is_file(), f'Missing {path}'
 spec = yaml.safe_load((root / 'project.yml').read_text())
-assert spec['name'] == 'FitSession'
-assert spec['packages']['FitSessionCore']['path'] == '.'
-assert set(spec['targets']) == {'FitSession', 'FitSessionWatch', 'FitSessionWidgets', 'FitSessionTests', 'FitSessionUITests'}
+assert spec['name'] == 'FitnessTracker'
+assert spec['packages']['FitnessTrackerCore']['path'] == '.'
+assert set(spec['targets']) == {'FitnessTracker', 'FitnessTrackerWatch', 'FitnessTrackerWidgets', 'FitnessTrackerTests', 'FitnessTrackerUITests'}
 assert spec['options']['deploymentTarget'] == {'iOS': '26.0', 'watchOS': '26.0'}
-assert {'path': 'Resources/ExerciseMedia', 'type': 'folder', 'buildPhase': 'resources'} in spec['targets']['FitSession']['sources']
-assert 'FITSESSION_APP' in spec['targets']['FitSession']['settings']['base']['SWIFT_ACTIVE_COMPILATION_CONDITIONS']
-assert 'FITSESSION_APP' not in spec['targets']['FitSessionWidgets']['settings']['base'].get('SWIFT_ACTIVE_COMPILATION_CONDITIONS', '')
-assert {'package': 'FitSessionCore'} in spec['targets']['FitSessionWidgets']['dependencies']
+assert {'path': 'Resources/ExerciseMedia', 'type': 'folder', 'buildPhase': 'resources'} in spec['targets']['FitnessTracker']['sources']
+assert 'FITNESS_TRACKER_APP' in spec['targets']['FitnessTracker']['settings']['base']['SWIFT_ACTIVE_COMPILATION_CONDITIONS']
+assert 'FITNESS_TRACKER_APP' not in spec['targets']['FitnessTrackerWidgets']['settings']['base'].get('SWIFT_ACTIVE_COMPILATION_CONDITIONS', '')
+assert {'package': 'FitnessTrackerCore'} in spec['targets']['FitnessTrackerWidgets']['dependencies']
 assert spec['configs']['PersonalDebug'] == 'debug'
 assert spec['configs']['PersonalRelease'] == 'release'
-assert spec['schemes']['FitSession Personal']['run']['config'] == 'PersonalDebug'
-assert spec['schemes']['FitSession Personal']['archive']['config'] == 'PersonalRelease'
-assert spec['settings']['base']['FITSESSION_CLOUD_SYNC_AVAILABLE'] == 'YES'
+assert spec['schemes']['FitnessTracker Personal']['run']['config'] == 'PersonalDebug'
+assert spec['schemes']['FitnessTracker Personal']['archive']['config'] == 'PersonalRelease'
+assert spec['settings']['base']['FITNESS_TRACKER_CLOUD_SYNC_AVAILABLE'] == 'YES'
 for config in ['PersonalDebug', 'PersonalRelease']:
-    assert spec['settings']['configs'][config]['FITSESSION_CLOUD_SYNC_AVAILABLE'] == 'NO'
-    assert spec['targets']['FitSession']['settings']['configs'][config]['CODE_SIGN_ENTITLEMENTS'] == 'Config/PersonalTeam.entitlements'
+    assert spec['settings']['configs'][config]['FITNESS_TRACKER_CLOUD_SYNC_AVAILABLE'] == 'NO'
+    assert spec['targets']['FitnessTracker']['settings']['configs'][config]['CODE_SIGN_ENTITLEMENTS'] == 'Config/PersonalTeam.entitlements'
 for path in spec['configFiles'].values(): assert (root / path).is_file()
 covered = set()
 for name, target in spec['targets'].items():
@@ -79,18 +79,24 @@ assert 'remote-notification' in app['UIBackgroundModes']
 assert app['NSHealthUpdateUsageDescription']
 assert app['NSBluetoothAlwaysUsageDescription']
 assert 'bluetooth-central' in app['UIBackgroundModes']
-assert app['FitSessionCloudSyncAvailable'] == '$(FITSESSION_CLOUD_SYNC_AVAILABLE)'
+assert app['FitnessTrackerCloudSyncAvailable'] == '$(FITNESS_TRACKER_CLOUD_SYNC_AVAILABLE)'
 archive_type = next(item for item in app['UTExportedTypeDeclarations']
-                    if item['UTTypeIdentifier'] == 'com.fitsession.archive')
+                    if item['UTTypeIdentifier'] == 'com.fitnesstracker.archive')
 assert archive_type['UTTypeConformsTo'] == ['public.json']
-assert archive_type['UTTypeTagSpecification']['public.filename-extension'] == ['fitsession']
-document_types = {tuple(item['LSItemContentTypes']): item for item in app['CFBundleDocumentTypes']}
-assert document_types[('com.fitsession.archive',)]['LSHandlerRank'] == 'Owner'
-assert document_types[('com.fitsession.archive',)]['CFBundleTypeRole'] == 'Viewer'
-assert document_types[('public.json',)]['LSHandlerRank'] == 'Alternate'
+assert archive_type['UTTypeTagSpecification']['public.filename-extension'] == ['fitnesstracker']
+document_types = {identifier: item for item in app['CFBundleDocumentTypes']
+                  for identifier in item['LSItemContentTypes']}
+assert document_types['com.fitnesstracker.archive']['LSHandlerRank'] == 'Owner'
+assert document_types['com.fitnesstracker.archive']['CFBundleTypeRole'] == 'Viewer'
+assert document_types['com.fitsession.archive']['LSHandlerRank'] == 'Owner'
+assert document_types['public.json']['LSHandlerRank'] == 'Alternate'
+legacy_type = next(item for item in app['UTExportedTypeDeclarations']
+                   if item['UTTypeIdentifier'] == 'com.fitsession.archive')
+assert legacy_type['UTTypeTagSpecification']['public.filename-extension'] == ['fitsession']
+assert set(app['CFBundleURLTypes'][0]['CFBundleURLSchemes']) == {'fitnesstracker', 'fitsession'}
 assert app['LSSupportsOpeningDocumentsInPlace'] is True
 assert not app.get('UIDesignRequiresCompatibility', False), 'Native Liquid Glass must stay enabled'
-assert plists['Watch-Info.plist']['WKCompanionAppBundleIdentifier'] == '$(FITSESSION_BUNDLE_ID)'
+assert plists['Watch-Info.plist']['WKCompanionAppBundleIdentifier'] == '$(FITNESS_TRACKER_BUNDLE_ID)'
 assert plists['Watch-Info.plist']['WKApplication'] is True
 assert plists['Widgets-Info.plist']['NSExtension']['NSExtensionPointIdentifier'] == 'com.apple.widgetkit-extension'
 entitlements = plists['App.entitlements']

@@ -1,4 +1,4 @@
 // Copy to Local.xcconfig, then use your registered identifier and Team ID.
 DEVELOPMENT_TEAM = YOURTEAMID
-FITSESSION_BUNDLE_ID = com.yourcompany.fitsession
+FITNESS_TRACKER_BUNDLE_ID = com.yourcompany.fitnesstracker
 // Register the derived App Group and CloudKit container in the Developer portal.

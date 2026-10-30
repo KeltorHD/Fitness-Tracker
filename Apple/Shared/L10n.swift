@@ -1,4 +1,4 @@
-import FitSessionCore
+import FitnessTrackerCore
 import Foundation
 
 /// Immutable lookups in native String Catalog output. No Bundle swizzling or global mutable state.
@@ -6,7 +6,7 @@ enum L10n {
   static var selection: AppLanguage {
     let defaults: UserDefaults
     if Bundle.main.bundleURL.pathExtension == "appex",
-      let group = Bundle.main.object(forInfoDictionaryKey: "FitSessionAppGroup") as? String,
+      let group = Bundle.main.object(forInfoDictionaryKey: "FitnessTrackerAppGroup") as? String,
       let shared = UserDefaults(suiteName: group)
     {
       defaults = shared

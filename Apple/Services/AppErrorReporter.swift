@@ -1,4 +1,4 @@
-import FitSessionCore
+import FitnessTrackerCore
 import Foundation
 import OSLog
 
@@ -6,7 +6,7 @@ enum AppErrorReporter {
   /// Do not log localized descriptions, URLs, workout names or other private payloads.
   static func record(_ error: any Error, operation: String) {
     let diagnostic = error as NSError
-    Logger(subsystem: "FitSession", category: "Services").error(
+    Logger(subsystem: "FitnessTracker", category: "Services").error(
       "Operation \(operation, privacy: .public) failed: \(diagnostic.domain, privacy: .public), code \(diagnostic.code)"
     )
   }

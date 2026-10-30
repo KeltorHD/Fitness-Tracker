@@ -17,13 +17,13 @@
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>CFBundleDisplayName</key>
-	<string>FitSession</string>
+	<string>FitnessTracker</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>WKApplication</key>
 	<true/>
 	<key>WKCompanionAppBundleIdentifier</key>
-	<string>$(FITSESSION_BUNDLE_ID)</string>
+	<string>$(FITNESS_TRACKER_BUNDLE_ID)</string>
 	<key>WKRunsIndependentlyOfCompanionApp</key>
 	<true/>
 	<key>CFBundleLocalizations</key>

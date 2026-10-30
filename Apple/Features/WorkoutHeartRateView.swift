@@ -1,5 +1,5 @@
 import Charts
-import FitSessionCore
+import FitnessTrackerCore
 import SwiftUI
 
 struct WorkoutHeartRateView: View {

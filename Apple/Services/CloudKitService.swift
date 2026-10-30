@@ -5,7 +5,7 @@ import Foundation
   var available = AppCapabilities.current.supportsCloudSync
   var containerIdentifier: String? =
     Bundle.main.object(
-      forInfoDictionaryKey: "FitSessionCloudContainer") as? String
+      forInfoDictionaryKey: "FitnessTrackerCloudContainer") as? String
 
   func accountStatus() async throws -> CloudAccountStatus {
     guard available else {

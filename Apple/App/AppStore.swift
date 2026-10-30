@@ -1,4 +1,4 @@
-import FitSessionCore
+import FitnessTrackerCore
 import Foundation
 import Observation
 import UIKit
@@ -291,7 +291,7 @@ import WidgetKit
     } catch {
       report(
         error, operation: "liveAction",
-        message: "Не удалось изменить тренировку. Откройте FitSession и повторите действие.")
+        message: "Не удалось изменить тренировку. Откройте FitnessTracker и повторите действие.")
       reload()
       refreshIntegrations(allowStart: false)
       await integrationTask?.value

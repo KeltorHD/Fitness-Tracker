@@ -1,5 +1,5 @@
 import ActivityKit
-import FitSessionCore
+import FitnessTrackerCore
 import Foundation
 
 struct WorkoutActivityAttributes: ActivityAttributes, Sendable {
@@ -7,5 +7,5 @@ struct WorkoutActivityAttributes: ActivityAttributes, Sendable {
   var workoutID: UUID
   var name: String
 
-  var workoutURL: URL? { URL(string: "fitsession://workout?id=\(workoutID.uuidString)") }
+  var workoutURL: URL? { URL(string: "fitnesstracker://workout?id=\(workoutID.uuidString)") }
 }

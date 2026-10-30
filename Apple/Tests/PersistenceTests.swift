@@ -1,7 +1,7 @@
-import FitSessionCore
+import FitnessTrackerCore
 import XCTest
 
-@testable import FitSession
+@testable import FitnessTracker
 
 @MainActor final class PersistenceTests: XCTestCase {
   func testSwiftDataUpsertRoundTripAndDelete() throws {

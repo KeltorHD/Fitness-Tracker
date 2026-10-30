@@ -6,7 +6,7 @@
 	<true/>
 	<key>com.apple.developer.icloud-container-identifiers</key>
 	<array>
-		<string>$(FITSESSION_CLOUD_CONTAINER)</string>
+		<string>$(FITNESS_TRACKER_CLOUD_CONTAINER)</string>
 	</array>
 	<key>com.apple.developer.icloud-services</key>
 	<array>
@@ -14,9 +14,9 @@
 	</array>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>$(FITSESSION_APP_GROUP)</string>
+		<string>$(FITNESS_TRACKER_APP_GROUP)</string>
 	</array>
 	<key>aps-environment</key>
-	<string>$(FITSESSION_APS_ENVIRONMENT)</string>
+	<string>$(FITNESS_TRACKER_APS_ENVIRONMENT)</string>
 </dict>
 </plist>

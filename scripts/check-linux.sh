@@ -19,6 +19,7 @@ flags=(--cache-path "$PWD/.build/cache" --config-path "$PWD/.build/config" --sec
 python3 scripts/validate-project.py
 python3 scripts/validate-exercise-library.py
 python3 scripts/validate-localizations.py
+python3 scripts/validate-branding.py
 swiftc_bin="$(dirname "$(command -v "$swift_bin")")/swiftc"
 bin_path="$("$swift_bin" build "${flags[@]}" --show-bin-path)"
 # These presentation/data types use only Foundation/Observation. This is a real Swift 6
@@ -32,15 +33,16 @@ bin_path="$("$swift_bin" build "${flags[@]}" --show-bin-path)"
   Apple/Design/WorkoutFormatting.swift Apple/Services/LocalHeartRateRepository.swift \
   Apple/Services/HeartRateBluetooth.swift Apple/Services/ServiceError.swift \
   Apple/Features/TrackerViewModel.swift Apple/Features/WorkoutHeartRateViewModel.swift \
-  Apple/Features/TrackerDeviceProfile.swift
+  Apple/Features/TrackerDeviceProfile.swift Apple/Shared/AppCompatibility.swift
 echo 'Portable presentation/data subset: Swift 6 type check passed (no Apple SDK).'
 # Exercise the real tracker presentation/storage subset with fakes, without radio/HealthKit calls.
 "$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
   -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \
-  "$bin_path"/FitSessionCore.build/*.swift.o \
+  "$bin_path"/FitnessTrackerCore.build/*.swift.o \
   Apple/Services/LocalHeartRateRepository.swift Apple/Services/HeartRateBluetooth.swift \
   Apple/Services/ServiceError.swift Apple/Features/TrackerViewModel.swift \
   Apple/Features/WorkoutHeartRateViewModel.swift Apple/Features/TrackerDeviceProfile.swift \
+  Apple/Shared/AppCompatibility.swift \
   Tests/PortableTrackerChecks/main.swift \
   -o "$bin_path/portable-tracker-checks"
 "$bin_path/portable-tracker-checks"

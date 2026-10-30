@@ -5,7 +5,7 @@ struct AppCapabilities: Equatable, Sendable {
   let supportsCloudSync: Bool
 
   init(info: [String: Any]) {
-    supportsCloudSync = info["FitSessionCloudSyncAvailable"] as? String == "YES"
+    supportsCloudSync = info["FitnessTrackerCloudSyncAvailable"] as? String == "YES"
   }
 
   static var current: Self { Self(info: Bundle.main.infoDictionary ?? [:]) }

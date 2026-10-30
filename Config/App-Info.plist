@@ -17,7 +17,7 @@
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>CFBundleDisplayName</key>
-	<string>FitSession</string>
+	<string>FitnessTracker</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -46,19 +46,20 @@
 		<string>remote-notification</string>
 		<string>bluetooth-central</string>
 	</array>
-	<key>FitSessionAppGroup</key>
-	<string>$(FITSESSION_APP_GROUP)</string>
-	<key>FitSessionCloudContainer</key>
-	<string>$(FITSESSION_CLOUD_CONTAINER)</string>
-	<key>FitSessionCloudSyncAvailable</key>
-	<string>$(FITSESSION_CLOUD_SYNC_AVAILABLE)</string>
+	<key>FitnessTrackerAppGroup</key>
+	<string>$(FITNESS_TRACKER_APP_GROUP)</string>
+	<key>FitnessTrackerCloudContainer</key>
+	<string>$(FITNESS_TRACKER_CLOUD_CONTAINER)</string>
+	<key>FitnessTrackerCloudSyncAvailable</key>
+	<string>$(FITNESS_TRACKER_CLOUD_SYNC_AVAILABLE)</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
 			<key>CFBundleURLName</key>
-			<string>FitSession</string>
+			<string>FitnessTracker</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
+				<string>fitnesstracker</string>
 				<string>fitsession</string>
 			</array>
 		</dict>
@@ -69,9 +70,28 @@
 	<array>
 		<dict>
 			<key>UTTypeIdentifier</key>
+			<string>com.fitnesstracker.archive</string>
+			<key>UTTypeDescription</key>
+			<string>Архив FitnessTracker</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.json</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>fitnesstracker</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/vnd.fitnesstracker+json</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
 			<string>com.fitsession.archive</string>
 			<key>UTTypeDescription</key>
-			<string>Архив FitSession</string>
+			<string>Архив FitnessTracker (старый формат)</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.json</string>
@@ -91,19 +111,20 @@
 	<array>
 		<dict>
 			<key>CFBundleTypeName</key>
-			<string>Архив FitSession</string>
+			<string>Архив FitnessTracker</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSHandlerRank</key>
 			<string>Owner</string>
 			<key>LSItemContentTypes</key>
 			<array>
+				<string>com.fitnesstracker.archive</string>
 				<string>com.fitsession.archive</string>
 			</array>
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
-			<string>JSON FitSession</string>
+			<string>JSON FitnessTracker</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSHandlerRank</key>

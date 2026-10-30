@@ -27,5 +27,5 @@ swift build
 swift test
 # XcodeGen validates the real spec on the platform where generation is supported.
 xcodegen generate
-printf '\nГотово: откройте FitSession.xcodeproj. Следуйте MAC_BUILD_GUIDE.md для signing, сборки и интеграций.\n'
-printf 'Для бесплатной Personal Team выберите схему «FitSession Personal». Схема «FitSession» включает iCloud и Push для Apple Developer Program.\n'
+printf '\nГотово: откройте FitnessTracker.xcodeproj. Следуйте MAC_BUILD_GUIDE.md для signing, сборки и интеграций.\n'
+printf 'Для бесплатной Personal Team выберите схему «FitnessTracker Personal». Схема «FitnessTracker» включает iCloud и Push для Apple Developer Program.\n'

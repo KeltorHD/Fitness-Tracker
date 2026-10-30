@@ -1,4 +1,4 @@
-import FitSessionCore
+import FitnessTrackerCore
 import Foundation
 
 // Executable behavior checks of the real Foundation/Observation subset. No Apple SDK or radios.
@@ -69,7 +69,31 @@ private actor RecordingStub: HeartRateRecordingRepository {
 
 @main private struct PortableTrackerChecks {
   @MainActor static func main() async throws {
-    let suite = "FitSession.PortableTrackerTests.\(UUID().uuidString)"
+    try expect(
+      AppCompatibility.storeConfiguration == "FitSession",
+      "Rename must preserve the installed database location")
+    try expect(
+      AppCompatibility.heartRateDirectory == "FitSession/HeartRate",
+      "Rename must retain existing sensor recordings")
+    try expect(
+      AppCompatibility.watchArchiveFileName == "FitSession-watch.json",
+      "Rename must retain the Watch outbox")
+    try expect(
+      AppCompatibility.healthSyncPrefix == "FitSession.", "Rename must not duplicate Health exports"
+    )
+    try expect(
+      AppCompatibility.weeklyWidgetKind == "FitSession.Weekly", "Installed widgets keep their kind")
+    for scheme in ["fitsession", "fitnesstracker"] {
+      guard let url = URL(string: scheme + "://workout?id=" + UUID().uuidString) else {
+        throw CheckFailure(message: "URL fixture")
+      }
+      try expect(AppCompatibility.acceptsURL(url), "Both URL generations open the existing workout")
+    }
+    guard let foreignURL = URL(string: "https://example.com/workout") else {
+      throw CheckFailure(message: "URL fixture")
+    }
+    try expect(!AppCompatibility.acceptsURL(foreignURL), "Unrelated URLs are not app routes")
+    let suite = "FitnessTracker.PortableTrackerTests.\(UUID().uuidString)"
     guard let defaults = UserDefaults(suiteName: suite) else {
       throw CheckFailure(message: "defaults")
     }

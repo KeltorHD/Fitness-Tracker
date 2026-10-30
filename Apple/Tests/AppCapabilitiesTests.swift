@@ -1,17 +1,18 @@
 import XCTest
 
-@testable import FitSession
+@testable import FitnessTracker
 
 final class AppCapabilitiesTests: XCTestCase {
   func testCloudAvailabilityFailsClosedForMissingOrUnexpandedConfiguration() {
     for info: [String: Any] in [
-      [:], ["FitSessionCloudSyncAvailable": "NO"],
-      ["FitSessionCloudSyncAvailable": "$(FITSESSION_CLOUD_SYNC_AVAILABLE)"],
-      ["FitSessionCloudSyncAvailable": true],
+      [:], ["FitnessTrackerCloudSyncAvailable": "NO"],
+      ["FitnessTrackerCloudSyncAvailable": "$(FITNESS_TRACKER_CLOUD_SYNC_AVAILABLE)"],
+      ["FitnessTrackerCloudSyncAvailable": true],
     ] {
       XCTAssertFalse(AppCapabilities(info: info).supportsCloudSync)
     }
-    XCTAssertTrue(AppCapabilities(info: ["FitSessionCloudSyncAvailable": "YES"]).supportsCloudSync)
+    XCTAssertTrue(
+      AppCapabilities(info: ["FitnessTrackerCloudSyncAvailable": "YES"]).supportsCloudSync)
   }
 
   @MainActor func testUnavailableCloudServiceFailsBeforeAccessingAContainer() async {

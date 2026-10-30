@@ -1,7 +1,7 @@
-import FitSessionCore
+import FitnessTrackerCore
 import XCTest
 
-@testable import FitSession
+@testable import FitnessTracker
 
 final class L10nTests: XCTestCase {
   func testExplicitLanguageUsesTheCompiledCatalogInTheHostApp() {

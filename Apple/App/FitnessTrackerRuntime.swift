@@ -1,8 +1,8 @@
-import FitSessionCore
+import FitnessTrackerCore
 import Foundation
 
 /// One store/context per app process, including a cold launch by LiveActivityIntent.
-@MainActor enum FitSessionRuntime {
+@MainActor enum FitnessTrackerRuntime {
   private static var cachedStore: AppStore?
 
   static func store() throws -> AppStore {
@@ -19,14 +19,14 @@ import Foundation
     }
     let defaults: UserDefaults
     if testing {
-      guard let testDefaults = UserDefaults(suiteName: "FitSession.UITests") else {
+      guard let testDefaults = UserDefaults(suiteName: "FitnessTracker.UITests") else {
         throw ServiceError.unavailable("Не удалось открыть настройки тестового запуска.")
       }
       defaults = testDefaults
     } else {
       defaults = .standard
     }
-    if testing { defaults.removePersistentDomain(forName: "FitSession.UITests") }
+    if testing { defaults.removePersistentDomain(forName: "FitnessTracker.UITests") }
     defaults.register(defaults: ["weeklyGoal": 3, "liveActivities": !testing])
     let store = AppStore(
       repository: repository, health: HealthKitService(), defaults: defaults,

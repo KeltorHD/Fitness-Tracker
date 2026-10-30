@@ -1,7 +1,7 @@
 import Foundation
 import Testing
 
-@testable import FitSessionCore
+@testable import FitnessTrackerCore
 
 private let start = Date(timeIntervalSince1970: 1_700_000_000)
 private func liveWorkout() throws -> Workout {

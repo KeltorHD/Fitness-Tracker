@@ -60,7 +60,7 @@ for kind in ['workout', 'set', 'rep', 'completed.set', 'record']:
 spec = importlib.util.spec_from_file_location('localization_tools', ROOT / 'scripts/localization-tools.py')
 scanner = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(scanner)
-sources = list((ROOT / 'Apple').rglob('*.swift')) + list((ROOT / 'Sources/FitSessionCore').glob('*.swift'))
+sources = list((ROOT / 'Apple').rglob('*.swift')) + list((ROOT / 'Sources/FitnessTrackerCore').glob('*.swift'))
 for path in sources:
     if {'Tests', 'UITests'} & set(path.parts):
         continue
@@ -71,10 +71,10 @@ for path in sources:
             assert key in ui, f'{path.relative_to(ROOT)}:{source[:start].count(chr(10))+1}: missing {key}'
 
 project = yaml.safe_load((ROOT / 'project.yml').read_text())
-for target in ['FitSession', 'FitSessionWidgets', 'FitSessionWatch']:
+for target in ['FitnessTracker', 'FitnessTrackerWidgets', 'FitnessTrackerWatch']:
     resources = project['targets'][target]['sources']
     assert {'path': paths[0], 'buildPhase': 'resources'} in resources, f'{target}: missing UI catalog'
-    if target == 'FitSession':
+    if target == 'FitnessTracker':
         assert {'path': paths[1], 'buildPhase': 'resources'} in resources
     info_path = project['targets'][target]['settings']['base']['INFOPLIST_FILE']
     info = plistlib.loads((ROOT / info_path).read_bytes())

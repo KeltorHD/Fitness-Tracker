@@ -7,13 +7,13 @@
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "FitSession"
+            "value": "FitnessTracker"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "FitSession"
+            "value": "FitnessTracker"
           }
         }
       }

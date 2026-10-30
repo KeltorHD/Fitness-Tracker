@@ -1,5 +1,5 @@
 import ActivityKit
-import FitSessionCore
+import FitnessTrackerCore
 import SwiftUI
 import WidgetKit
 
@@ -147,7 +147,7 @@ private struct NextWorkoutSet: View {
       } else {
         Text(
           state.totalSets == 0
-            ? L10n.text("Добавьте упражнения в FitSession", locale: locale)
+            ? L10n.text("Добавьте упражнения в FitnessTracker", locale: locale)
             : L10n.text("Все подходы записаны", locale: locale)
         )
         .font(.caption).lineLimit(1)

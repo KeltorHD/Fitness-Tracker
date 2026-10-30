@@ -1,7 +1,7 @@
 import Foundation
 import Testing
 
-@testable import FitSessionCore
+@testable import FitnessTrackerCore
 
 @Test func languageSelectionHonorsPreferenceOrderRegionsAndExplicitChoice() {
   #expect(AppLanguage.system.resolved(preferredLanguages: ["de-DE", "ru-RU", "en-US"]) == .russian)

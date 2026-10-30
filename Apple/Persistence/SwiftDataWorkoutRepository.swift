@@ -1,4 +1,4 @@
-import FitSessionCore
+import FitnessTrackerCore
 import Foundation
 import SwiftData
 
@@ -23,9 +23,9 @@ import SwiftData
   init(inMemory: Bool = false, cloudEnabled: Bool = false) throws {
     let schema = Schema([StoredRecord.self])
     let cloudID =
-      Bundle.main.object(forInfoDictionaryKey: "FitSessionCloudContainer") as? String ?? ""
+      Bundle.main.object(forInfoDictionaryKey: "FitnessTrackerCloudContainer") as? String ?? ""
     let configuration = ModelConfiguration(
-      "FitSession", schema: schema, isStoredInMemoryOnly: inMemory,
+      AppCompatibility.storeConfiguration, schema: schema, isStoredInMemoryOnly: inMemory,
       groupContainer: .none,
       cloudKitDatabase: cloudEnabled && !inMemory && AppCapabilities.current.supportsCloudSync
         ? .private(cloudID) : .none)

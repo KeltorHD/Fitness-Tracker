@@ -7,7 +7,7 @@ import UIKit
 
   func begin(onExpiration: @escaping @MainActor () -> Void) {
     self.onExpiration = onExpiration
-    identifier = UIApplication.shared.beginBackgroundTask(withName: "FitSession.LiveActivity") {
+    identifier = UIApplication.shared.beginBackgroundTask(withName: "FitnessTracker.LiveActivity") {
       [weak self] in
       // UIKit invokes the expiration handler on the main thread; release before returning.
       MainActor.assumeIsolated {

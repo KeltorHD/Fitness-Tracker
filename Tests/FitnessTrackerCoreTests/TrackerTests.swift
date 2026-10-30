@@ -1,7 +1,7 @@
 import Foundation
 import Testing
 
-@testable import FitSessionCore
+@testable import FitnessTrackerCore
 
 @Test func heartRatePacketsDecodeWidthsContactEnergyAndRRIntervals() throws {
   let simple = try BluetoothHeartRateMeasurement.decode(Data([0, 72]))

@@ -834,19 +834,19 @@
         }
       }
     },
-    "Библиотека FitSession": {
+    "Библиотека FitnessTracker": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Библиотека FitSession"
+            "value": "Библиотека FitnessTracker"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "FitSession Library"
+            "value": "FitnessTracker Library"
           }
         }
       }
@@ -919,19 +919,19 @@
         }
       }
     },
-    "В приложении вашего трекера включите передачу данных в Apple «Здоровье» и разрешите запись нужных показателей. Затем разрешите FitSession их чтение.": {
+    "В приложении вашего трекера включите передачу данных в Apple «Здоровье» и разрешите запись нужных показателей. Затем разрешите FitnessTracker их чтение.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "В приложении вашего трекера включите передачу данных в Apple «Здоровье» и разрешите запись нужных показателей. Затем разрешите FitSession их чтение."
+            "value": "В приложении вашего трекера включите передачу данных в Apple «Здоровье» и разрешите запись нужных показателей. Затем разрешите FitnessTracker их чтение."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enable sharing with Apple Health in your tracker’s app and allow writing the measurements you want to share. Then allow FitSession to read them."
+            "value": "Enable sharing with Apple Health in your tracker’s app and allow writing the measurements you want to share. Then allow FitnessTracker to read them."
           }
         }
       }
@@ -1055,19 +1055,19 @@
         }
       }
     },
-    "Версия формата файла не поддерживается. Попробуйте обновить FitSession.": {
+    "Версия формата файла не поддерживается. Попробуйте обновить FitnessTracker.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Версия формата файла не поддерживается. Попробуйте обновить FitSession."
+            "value": "Версия формата файла не поддерживается. Попробуйте обновить FitnessTracker."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "This file format version is unsupported. Try updating FitSession."
+            "value": "This file format version is unsupported. Try updating FitnessTracker."
           }
         }
       }
@@ -1174,19 +1174,19 @@
         }
       }
     },
-    "Включите сводку виджета в настройках FitSession.": {
+    "Включите сводку виджета в настройках FitnessTracker.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Включите сводку виджета в настройках FitSession."
+            "value": "Включите сводку виджета в настройках FitnessTracker."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enable the widget summary in FitSession settings."
+            "value": "Enable the widget summary in FitnessTracker settings."
           }
         }
       }
@@ -1259,19 +1259,19 @@
         }
       }
     },
-    "Все функции FitSession доступны бесплатно.": {
+    "Все функции FitnessTracker доступны бесплатно.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Все функции FitSession доступны бесплатно."
+            "value": "Все функции FitnessTracker доступны бесплатно."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "All FitSession features are free."
+            "value": "All FitnessTracker features are free."
           }
         }
       }
@@ -1395,19 +1395,19 @@
         }
       }
     },
-    "Выберите файл .fitsession или .json.": {
+    "Выберите файл .fitnesstracker или .json.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Выберите файл .fitsession или .json."
+            "value": "Выберите файл .fitnesstracker или .json."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Choose a .fitsession or .json file."
+            "value": "Choose a .fitnesstracker or .json file."
           }
         }
       }
@@ -1599,19 +1599,19 @@
         }
       }
     },
-    "Данные могут поступать с задержкой. Доступны только показатели, переданные в «Здоровье» и разрешённые для FitSession.": {
+    "Данные могут поступать с задержкой. Доступны только показатели, переданные в «Здоровье» и разрешённые для FitnessTracker.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Данные могут поступать с задержкой. Доступны только показатели, переданные в «Здоровье» и разрешённые для FitSession."
+            "value": "Данные могут поступать с задержкой. Доступны только показатели, переданные в «Здоровье» и разрешённые для FitnessTracker."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Data may arrive with a delay. Only measurements shared with Health and authorized for FitSession are available."
+            "value": "Data may arrive with a delay. Only measurements shared with Health and authorized for FitnessTracker are available."
           }
         }
       }
@@ -1650,19 +1650,19 @@
         }
       }
     },
-    "Действие должно выполняться в приложении FitSession.": {
+    "Действие должно выполняться в приложении FitnessTracker.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Действие должно выполняться в приложении FitSession."
+            "value": "Действие должно выполняться в приложении FitnessTracker."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "This action must run in the FitSession app."
+            "value": "This action must run in the FitnessTracker app."
           }
         }
       }
@@ -1871,19 +1871,19 @@
         }
       }
     },
-    "Добавьте упражнения в FitSession": {
+    "Добавьте упражнения в FitnessTracker": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Добавьте упражнения в FitSession"
+            "value": "Добавьте упражнения в FitnessTracker"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Add exercises in FitSession"
+            "value": "Add exercises in FitnessTracker"
           }
         }
       }
@@ -2908,19 +2908,19 @@
         }
       }
     },
-    "Названия, мышцы, оборудование и сокращённые пошаговые инструкции переведены и адаптированы на русский язык для FitSession.": {
+    "Названия, мышцы, оборудование и сокращённые пошаговые инструкции переведены и адаптированы на русский язык для FitnessTracker.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Названия, мышцы, оборудование и сокращённые пошаговые инструкции переведены и адаптированы на русский язык для FitSession."
+            "value": "Названия, мышцы, оборудование и сокращённые пошаговые инструкции переведены и адаптированы на русский язык для FitnessTracker."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Russian names, muscles, equipment and concise instructions are adapted for FitSession. English instructions come from the original exercise database."
+            "value": "Russian names, muscles, equipment and concise instructions are adapted for FitnessTracker. English instructions come from the original exercise database."
           }
         }
       }
@@ -3095,19 +3095,19 @@
         }
       }
     },
-    "Не удалось изменить тренировку. Откройте FitSession и повторите действие.": {
+    "Не удалось изменить тренировку. Откройте FitnessTracker и повторите действие.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Не удалось изменить тренировку. Откройте FitSession и повторите действие."
+            "value": "Не удалось изменить тренировку. Откройте FitnessTracker и повторите действие."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Couldn’t change the workout. Open FitSession and try again."
+            "value": "Couldn’t change the workout. Open FitnessTracker and try again."
           }
         }
       }
@@ -3673,19 +3673,19 @@
         }
       }
     },
-    "Нет доступных данных. Проверьте синхронизацию приложения трекера и разрешения FitSession в «Здоровье».": {
+    "Нет доступных данных. Проверьте синхронизацию приложения трекера и разрешения FitnessTracker в «Здоровье».": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Нет доступных данных. Проверьте синхронизацию приложения трекера и разрешения FitSession в «Здоровье»."
+            "value": "Нет доступных данных. Проверьте синхронизацию приложения трекера и разрешения FitnessTracker в «Здоровье»."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "No data is available. Check your tracker app’s sync and FitSession permissions in Health."
+            "value": "No data is available. Check your tracker app’s sync and FitnessTracker permissions in Health."
           }
         }
       }
@@ -4081,36 +4081,36 @@
         }
       }
     },
-    "Откройте FitSession, чтобы обновить сводку.": {
+    "Откройте FitnessTracker, чтобы обновить сводку.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Откройте FitSession, чтобы обновить сводку."
+            "value": "Откройте FitnessTracker, чтобы обновить сводку."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Open FitSession to update the summary."
+            "value": "Open FitnessTracker to update the summary."
           }
         }
       }
     },
-    "Откройте завершённую тренировку в дневнике и выберите «Экспорт в Здоровье». FitSession запросит разрешение на запись.": {
+    "Откройте завершённую тренировку в дневнике и выберите «Экспорт в Здоровье». FitnessTracker запросит разрешение на запись.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Откройте завершённую тренировку в дневнике и выберите «Экспорт в Здоровье». FitSession запросит разрешение на запись."
+            "value": "Откройте завершённую тренировку в дневнике и выберите «Экспорт в Здоровье». FitnessTracker запросит разрешение на запись."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Open a completed workout in your journal and choose Export to Health. FitSession will request write permission."
+            "value": "Open a completed workout in your journal and choose Export to Health. FitnessTracker will request write permission."
           }
         }
       }
@@ -4523,19 +4523,19 @@
         }
       }
     },
-    "Поддерживаются .fitsession и .json. Можно выбрать архив или прежний JSON одной тренировки.": {
+    "Поддерживаются .fitnesstracker и .json. Можно выбрать архив или прежний JSON одной тренировки.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Поддерживаются .fitsession и .json. Можно выбрать архив или прежний JSON одной тренировки."
+            "value": "Поддерживаются .fitnesstracker и .json. Можно выбрать архив или прежний JSON одной тренировки."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Supports .fitsession and .json, including the original single-workout JSON export."
+            "value": "Supports .fitnesstracker and .json, including the original single-workout JSON export."
           }
         }
       }
@@ -5135,19 +5135,19 @@
         }
       }
     },
-    "Разрешите FitSession доступ к Bluetooth в настройках iOS.": {
+    "Разрешите FitnessTracker доступ к Bluetooth в настройках iOS.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Разрешите FitSession доступ к Bluetooth в настройках iOS."
+            "value": "Разрешите FitnessTracker доступ к Bluetooth в настройках iOS."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Allow FitSession to use Bluetooth in iOS settings."
+            "value": "Allow FitnessTracker to use Bluetooth in iOS settings."
           }
         }
       }
@@ -5164,24 +5164,24 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Allow FitSession to write workouts in the Health app."
+            "value": "Allow FitnessTracker to write workouts in the Health app."
           }
         }
       }
     },
-    "Разрешите уведомления FitSession в настройках устройства.": {
+    "Разрешите уведомления FitnessTracker в настройках устройства.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Разрешите уведомления FitSession в настройках устройства."
+            "value": "Разрешите уведомления FitnessTracker в настройках устройства."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Allow FitSession notifications in device settings."
+            "value": "Allow FitnessTracker notifications in device settings."
           }
         }
       }
@@ -6240,19 +6240,19 @@
         }
       }
     },
-    "Файл повреждён или не содержит данные FitSession.": {
+    "Файл повреждён или не содержит данные FitnessTracker.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Файл повреждён или не содержит данные FitSession."
+            "value": "Файл повреждён или не содержит данные FitnessTracker."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The file is corrupted or does not contain FitSession data."
+            "value": "The file is corrupted or does not contain FitnessTracker data."
           }
         }
       }
@@ -6546,19 +6546,19 @@
         }
       }
     },
-    "Эта тренировка больше недоступна. Откройте FitSession.": {
+    "Эта тренировка больше недоступна. Откройте FitnessTracker.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Эта тренировка больше недоступна. Откройте FitSession."
+            "value": "Эта тренировка больше недоступна. Откройте FitnessTracker."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "This workout is no longer available. Open FitSession."
+            "value": "This workout is no longer available. Open FitnessTracker."
           }
         }
       }

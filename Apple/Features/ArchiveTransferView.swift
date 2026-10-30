@@ -1,4 +1,4 @@
-import FitSessionCore
+import FitnessTrackerCore
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -40,7 +40,7 @@ struct ArchiveTransferView: View {
         } footer: {
           Text(
             L10n.text(
-              "Поддерживаются .fitsession и .json. Можно выбрать архив или прежний JSON одной тренировки.",
+              "Поддерживаются .fitnesstracker и .json. Можно выбрать архив или прежний JSON одной тренировки.",
               locale: locale)
           )
         }
@@ -114,8 +114,10 @@ struct ArchiveTransferView: View {
           Button(L10n.text("Готово", locale: locale)) { dismiss() }.disabled(model.isSaving)
         }
       }
-      .fileImporter(isPresented: $model.showingImporter, allowedContentTypes: [.fitSession, .json])
-      { result in
+      .fileImporter(
+        isPresented: $model.showingImporter,
+        allowedContentTypes: [.fitnessTracker, .legacyWorkoutArchive, .json]
+      ) { result in
         switch result {
         case .success(let url): model.selectFile(url)
         case .failure(let error): model.pickerFailed(error)
@@ -124,7 +126,7 @@ struct ArchiveTransferView: View {
       .fileExporter(
         isPresented: $model.showingExporter, item: model.exportDocument,
         contentTypes: [(model.exportDocument?.format ?? model.format).contentType],
-        defaultFilename: model.workout == nil ? "FitSession-Archive" : "FitSession-Workout",
+        defaultFilename: model.workout == nil ? "FitnessTracker-Archive" : "FitnessTracker-Workout",
         onCompletion: model.exportCompleted, onCancellation: model.exportCancelled
       )
       .task(id: model.request?.id) { if let request = model.request { await model.load(request) } }

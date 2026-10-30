@@ -1,5 +1,5 @@
 import AppIntents
-import FitSessionCore
+import FitnessTrackerCore
 import Foundation
 
 struct SetWorkoutPausedIntent: LiveActivityIntent {
@@ -46,8 +46,8 @@ struct SkipWorkoutRestIntent: LiveActivityIntent {
 @MainActor private enum WorkoutIntentExecutor {
   static func perform(_ action: WorkoutLiveAction, workoutID: String) async throws {
     guard let id = UUID(uuidString: workoutID) else { throw WorkoutIntentError.invalidWorkout }
-    #if FITSESSION_APP
-      let store = try FitSessionRuntime.store()
+    #if FITNESS_TRACKER_APP
+      let store = try FitnessTrackerRuntime.store()
       try await store.performLiveAction(action, workoutID: id)
     #else
       // LiveActivityIntent is dispatched to the containing app, never writes from the extension.
@@ -60,8 +60,8 @@ enum WorkoutIntentError: LocalizedError {
   case invalidWorkout, requiresAppProcess
   var errorDescription: String? {
     switch self {
-    case .invalidWorkout: L10n.text("Эта тренировка больше недоступна. Откройте FitSession.")
-    case .requiresAppProcess: L10n.text("Действие должно выполняться в приложении FitSession.")
+    case .invalidWorkout: L10n.text("Эта тренировка больше недоступна. Откройте FitnessTracker.")
+    case .requiresAppProcess: L10n.text("Действие должно выполняться в приложении FitnessTracker.")
     }
   }
 }

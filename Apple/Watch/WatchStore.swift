@@ -1,4 +1,4 @@
-import FitSessionCore
+import FitnessTrackerCore
 import Foundation
 import Observation
 import WatchConnectivity
@@ -21,7 +21,7 @@ private struct WatchArchive: Codable {
       let folder = try FileManager.default.url(
         for: .applicationSupportDirectory, in: .userDomainMask,
         appropriateFor: nil, create: true)
-      archiveURL = folder.appendingPathComponent("FitSession-watch.json")
+      archiveURL = folder.appendingPathComponent(AppCompatibility.watchArchiveFileName)
       if let archiveURL, FileManager.default.fileExists(atPath: archiveURL.path) {
         let archive = try JSONDecoder().decode(
           WatchArchive.self, from: Data(contentsOf: archiveURL))

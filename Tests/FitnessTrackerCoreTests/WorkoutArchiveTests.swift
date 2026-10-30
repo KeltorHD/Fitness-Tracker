@@ -1,7 +1,7 @@
 import Foundation
 import Testing
 
-@testable import FitSessionCore
+@testable import FitnessTrackerCore
 
 private let archiveDate = Date(timeIntervalSince1970: 1_790_000_000)
 
@@ -53,6 +53,29 @@ private func archivedWorkout(at date: Date = archiveDate) throws -> Workout {
   let restored = try WorkoutArchiveCodec.decode(encoder.encode(workout))
   #expect(restored.workouts == [workout])
   #expect(restored.templates.isEmpty)
+}
+
+@Test func archivesFromBeforeTheRenameImportWithoutChangingUserDataAndExportTheNewFormat() throws {
+  let workout = try archivedWorkout()
+  let current = WorkoutArchive(
+    workouts: [workout], templates: ExerciseCatalog.starterTemplates,
+    exportedAt: archiveDate)
+  var object = try #require(
+    JSONSerialization.jsonObject(with: WorkoutArchiveCodec.encode(current)) as? [String: Any])
+  object["format"] = WorkoutArchive.legacyFormatIdentifier
+  let legacyData = try JSONSerialization.data(withJSONObject: object)
+  let restored = try WorkoutArchiveCodec.decode(legacyData)
+  #expect(restored == current)
+  #expect(restored.workouts == [workout])
+  #expect(restored.templates == current.templates)
+  let decoder = JSONDecoder()
+  decoder.dateDecodingStrategy = .secondsSince1970
+  let legacy = try decoder.decode(WorkoutArchive.self, from: legacyData)
+  #expect(try WorkoutArchiveCodec.decode(WorkoutArchiveCodec.encode(legacy)) == current)
+  object["version"] = 99
+  #expect(throws: WorkoutArchiveError.unsupportedVersion) {
+    try WorkoutArchiveCodec.decode(JSONSerialization.data(withJSONObject: object))
+  }
 }
 
 @Test(arguments: ["not JSON", "[]", "{}", "{\"name\":\"Not a workout\"}"])

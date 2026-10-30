@@ -19,7 +19,7 @@ enum TrackerDeviceProfile: String, CaseIterable, Identifiable, Sendable {
     case .huaweiWatchGT6Pro:
       "Подключите WATCH GT 6 Pro к HUAWEI Health на iPhone и включите доступную передачу данных в Apple «Здоровье». В «Здоровье» откройте профиль → Приложения и службы → HUAWEI Health и разрешите запись нужных показателей."
     case .other:
-      "В приложении вашего трекера включите передачу данных в Apple «Здоровье» и разрешите запись нужных показателей. Затем разрешите FitSession их чтение."
+      "В приложении вашего трекера включите передачу данных в Apple «Здоровье» и разрешите запись нужных показателей. Затем разрешите FitnessTracker их чтение."
     }
   }
   var bluetoothSetupKey: String {

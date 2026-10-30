@@ -1,4 +1,4 @@
-name: FitSession
+name: FitnessTracker
 options:
   minimumXcodeGenVersion: 2.44.0
   xcodeVersion: '26.0'
@@ -9,16 +9,16 @@ options:
     watchOS: '26.0'
 settings:
   base:
-    FITSESSION_CLOUD_SYNC_AVAILABLE: 'YES'
+    FITNESS_TRACKER_CLOUD_SYNC_AVAILABLE: 'YES'
   configs:
     Debug:
-      FITSESSION_APS_ENVIRONMENT: development
+      FITNESS_TRACKER_APS_ENVIRONMENT: development
     Release:
-      FITSESSION_APS_ENVIRONMENT: production
+      FITNESS_TRACKER_APS_ENVIRONMENT: production
     PersonalDebug:
-      FITSESSION_CLOUD_SYNC_AVAILABLE: 'NO'
+      FITNESS_TRACKER_CLOUD_SYNC_AVAILABLE: 'NO'
     PersonalRelease:
-      FITSESSION_CLOUD_SYNC_AVAILABLE: 'NO'
+      FITNESS_TRACKER_CLOUD_SYNC_AVAILABLE: 'NO'
 configs:
   Debug: debug
   Release: release
@@ -30,7 +30,7 @@ configFiles:
   PersonalDebug: Config/Base.xcconfig
   PersonalRelease: Config/Base.xcconfig
 packages:
-  FitSessionCore:
+  FitnessTrackerCore:
     path: .
 fileGroups:
   - README.md
@@ -38,44 +38,44 @@ fileGroups:
   - docs
   - Config
 schemes:
-  FitSession Personal:
+  FitnessTracker Personal:
     build:
       targets:
-        FitSession: all
+        FitnessTracker: all
     run:
       config: PersonalDebug
     test:
       config: PersonalDebug
       targets:
-        - FitSessionTests
-        - FitSessionUITests
+        - FitnessTrackerTests
+        - FitnessTrackerUITests
     profile:
       config: PersonalRelease
     archive:
       config: PersonalRelease
-  FitSession:
+  FitnessTracker:
     build:
       targets:
-        FitSession: all
+        FitnessTracker: all
     run:
       config: Debug
     test:
       config: Debug
       targets:
-        - FitSessionTests
-        - FitSessionUITests
-  FitSessionWatch:
+        - FitnessTrackerTests
+        - FitnessTrackerUITests
+  FitnessTrackerWatch:
     build:
       targets:
-        FitSessionWatch: all
+        FitnessTrackerWatch: all
     run:
       config: Debug
-  FitSessionWidgets:
+  FitnessTrackerWidgets:
     build:
       targets:
-        FitSessionWidgets: all
+        FitnessTrackerWidgets: all
 targets:
-  FitSession:
+  FitnessTracker:
     type: application
     platform: iOS
     sources:
@@ -97,8 +97,8 @@ targets:
         buildPhase: resources
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: $(FITSESSION_BUNDLE_ID)
-        SWIFT_ACTIVE_COMPILATION_CONDITIONS: $(inherited) FITSESSION_APP
+        PRODUCT_BUNDLE_IDENTIFIER: $(FITNESS_TRACKER_BUNDLE_ID)
+        SWIFT_ACTIVE_COMPILATION_CONDITIONS: $(inherited) FITNESS_TRACKER_APP
         INFOPLIST_FILE: Config/App-Info.plist
         CODE_SIGN_ENTITLEMENTS: Config/App.entitlements
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
@@ -110,13 +110,13 @@ targets:
         PersonalRelease:
           CODE_SIGN_ENTITLEMENTS: Config/PersonalTeam.entitlements
     dependencies:
-      - package: FitSessionCore
-      - target: FitSessionWidgets
+      - package: FitnessTrackerCore
+      - target: FitnessTrackerWidgets
         embed: true
-      - target: FitSessionWatch
+      - target: FitnessTrackerWatch
         embed: true
     # Capabilities are declared in real entitlements, not invented XcodeGen keys.
-  FitSessionWidgets:
+  FitnessTrackerWidgets:
     type: app-extension
     platform: iOS
     sources:
@@ -129,20 +129,21 @@ targets:
         buildPhase: resources
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: $(FITSESSION_BUNDLE_ID).widgets
+        PRODUCT_BUNDLE_IDENTIFIER: $(FITNESS_TRACKER_BUNDLE_ID).widgets
         INFOPLIST_FILE: Config/Widgets-Info.plist
         CODE_SIGN_ENTITLEMENTS: Config/Widgets.entitlements
         APPLICATION_EXTENSION_API_ONLY: YES
         SKIP_INSTALL: YES
         ASSETCATALOG_COMPILER_APPICON_NAME: ''
     dependencies:
-      - package: FitSessionCore
-  FitSessionWatch:
+      - package: FitnessTrackerCore
+  FitnessTrackerWatch:
     type: application
     platform: watchOS
     sources:
       - Apple/Watch
       - Apple/Shared/L10n.swift
+      - Apple/Shared/AppCompatibility.swift
       - path: Resources/Localizable.xcstrings
         buildPhase: resources
       - path: Resources/WatchAssets.xcassets
@@ -150,32 +151,32 @@ targets:
         buildPhase: resources
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: $(FITSESSION_BUNDLE_ID).watchkitapp
+        PRODUCT_BUNDLE_IDENTIFIER: $(FITNESS_TRACKER_BUNDLE_ID).watchkitapp
         INFOPLIST_FILE: Config/Watch-Info.plist
         CODE_SIGN_ENTITLEMENTS: Config/Watch.entitlements
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         SDKROOT: watchos
         SKIP_INSTALL: YES
     dependencies:
-      - package: FitSessionCore
-  FitSessionTests:
+      - package: FitnessTrackerCore
+  FitnessTrackerTests:
     type: bundle.unit-test
     platform: iOS
     sources: [Apple/Tests]
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: $(FITSESSION_BUNDLE_ID).tests
+        PRODUCT_BUNDLE_IDENTIFIER: $(FITNESS_TRACKER_BUNDLE_ID).tests
         GENERATE_INFOPLIST_FILE: YES
     dependencies:
-      - target: FitSession
-      - package: FitSessionCore
-  FitSessionUITests:
+      - target: FitnessTracker
+      - package: FitnessTrackerCore
+  FitnessTrackerUITests:
     type: bundle.ui-testing
     platform: iOS
     sources: [Apple/UITests]
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: $(FITSESSION_BUNDLE_ID).uitests
+        PRODUCT_BUNDLE_IDENTIFIER: $(FITNESS_TRACKER_BUNDLE_ID).uitests
         GENERATE_INFOPLIST_FILE: YES
     dependencies:
-      - target: FitSession
+      - target: FitnessTracker

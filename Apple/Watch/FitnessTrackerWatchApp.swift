@@ -1,7 +1,7 @@
-import FitSessionCore
+import FitnessTrackerCore
 import SwiftUI
 
-@main struct FitSessionWatchApp: App {
+@main struct FitnessTrackerWatchApp: App {
   @State private var store = WatchStore()
   var body: some Scene {
     WindowGroup { WatchWorkoutView().environment(store).environment(\.locale, L10n.locale) }
@@ -94,7 +94,7 @@ struct WatchWorkoutView: View {
               store.pending.isEmpty)
           }
         }.padding(.horizontal, 8)
-      }.navigationTitle("FitSession")
+      }.navigationTitle("FitnessTracker")
         .confirmationDialog(L10n.text("Отменить тренировку?", locale: locale), isPresented: $cancel)
       {
         Button(L10n.text("Отменить", locale: locale), role: .destructive) {
@@ -102,7 +102,7 @@ struct WatchWorkoutView: View {
         }
       }
         .alert(
-          "FitSession",
+          "FitnessTracker",
           isPresented: Binding(get: { store.error != nil }, set: { if !$0 { store.error = nil } })
         ) {
           Button(L10n.text("Понятно", locale: locale)) { store.error = nil }

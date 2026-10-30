@@ -1,5 +1,5 @@
 import CoreBluetooth
-import FitSessionCore
+import FitnessTrackerCore
 import Foundation
 
 /// Both delegates run on the explicitly selected main queue. SDK references never cross actors.

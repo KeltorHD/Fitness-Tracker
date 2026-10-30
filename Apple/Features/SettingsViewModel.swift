@@ -69,7 +69,7 @@ import Observation
       try Task.checkCancellation()
       guard notificationRequestID == requestID else { return nil }
       if !allowed {
-        notificationMessage = "Разрешите уведомления FitSession в настройках устройства."
+        notificationMessage = "Разрешите уведомления FitnessTracker в настройках устройства."
       }
       return allowed
     } catch {

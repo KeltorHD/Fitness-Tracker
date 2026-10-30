@@ -1,17 +1,20 @@
 import CoreTransferable
-import FitSessionCore
+import FitnessTrackerCore
 import Foundation
 import UniformTypeIdentifiers
 
 extension UTType {
-  static let fitSession = UTType(exportedAs: WorkoutArchive.formatIdentifier, conformingTo: .json)
+  static let fitnessTracker = UTType(
+    exportedAs: WorkoutArchive.formatIdentifier, conformingTo: .json)
+  static let legacyWorkoutArchive = UTType(
+    exportedAs: WorkoutArchive.legacyFormatIdentifier, conformingTo: .json)
 }
 
 enum ArchiveExportFormat: String, CaseIterable, Identifiable, Sendable {
-  case fitSession, json
+  case fitnessTracker, json
   var id: Self { self }
-  var title: String { self == .json ? "JSON (.json)" : "FitSession (.fitsession)" }
-  var contentType: UTType { self == .json ? .json : .fitSession }
+  var title: String { self == .json ? "JSON (.json)" : "FitnessTracker (.fitnesstracker)" }
+  var contentType: UTType { self == .json ? .json : .fitnessTracker }
 }
 
 struct ArchiveDocument: Transferable, Sendable {
@@ -20,11 +23,13 @@ struct ArchiveDocument: Transferable, Sendable {
   let format: ArchiveExportFormat
 
   static var transferRepresentation: some TransferRepresentation {
-    DataRepresentation(exportedContentType: .fitSession) { document in
+    DataRepresentation(exportedContentType: .fitnessTracker) { document in
       try await document.files.encode(document.archive)
-    }.suggestedFileName("FitSession.fitsession").exportingCondition { $0.format == .fitSession }
+    }.suggestedFileName("FitnessTracker.fitnesstracker").exportingCondition {
+      $0.format == .fitnessTracker
+    }
     DataRepresentation(exportedContentType: .json) { document in
       try await document.files.encode(document.archive)
-    }.suggestedFileName("FitSession.json").exportingCondition { $0.format == .json }
+    }.suggestedFileName("FitnessTracker.json").exportingCondition { $0.format == .json }
   }
 }

@@ -1,8 +1,8 @@
-import FitSessionCore
+import FitnessTrackerCore
 import UniformTypeIdentifiers
 import XCTest
 
-@testable import FitSession
+@testable import FitnessTracker
 
 private struct ArchiveFileStub: ArchiveFileHandling {
   let result: Result<WorkoutArchive, any Error>
@@ -52,7 +52,7 @@ private struct ArchiveFileStub: ArchiveFileHandling {
         ).summary
       },
       commit: { try repository.importArchive($0) })
-    model.openFile(URL(fileURLWithPath: "/fixture.fitsession"))
+    model.openFile(URL(fileURLWithPath: "/fixture.fitnesstracker"))
     await model.load(try XCTUnwrap(model.request))
     XCTAssertEqual(model.preview?.summary.addedWorkouts, 1)
     XCTAssertTrue(try repository.workouts().isEmpty)
@@ -133,7 +133,7 @@ private struct ArchiveFileStub: ArchiveFileHandling {
     let oldRequest = try XCTUnwrap(model.request)
     let first = Task { await model.load(oldRequest) }
     await files.waitForRead(count: 1)
-    model.selectFile(URL(fileURLWithPath: "/new.fitsession"))
+    model.selectFile(URL(fileURLWithPath: "/new.fitnesstracker"))
     let newRequest = try XCTUnwrap(model.request)
     let second = Task { await model.load(newRequest) }
     await files.waitForRead(count: 2)
@@ -144,7 +144,7 @@ private struct ArchiveFileStub: ArchiveFileHandling {
     files.requests[1].resume(returning: archive)
     await second.value
     XCTAssertFalse(model.isLoading)
-    XCTAssertEqual(model.preview?.fileName, "new.fitsession")
+    XCTAssertEqual(model.preview?.fileName, "new.fitnesstracker")
   }
 
   func testReadCancellationDoesNotShowAnErrorOrPreview() async throws {
@@ -187,8 +187,8 @@ private struct ArchiveFileStub: ArchiveFileHandling {
     XCTAssertEqual(model.exportDocument?.archive.workouts, archive.workouts)
     XCTAssertTrue(try XCTUnwrap(model.exportDocument).archive.templates.isEmpty)
     XCTAssertEqual(model.format, .json)
-    XCTAssertEqual(UTType.fitSession.preferredFilenameExtension, "fitsession")
-    XCTAssertTrue(UTType.fitSession.conforms(to: .json))
+    XCTAssertEqual(UTType.fitnessTracker.preferredFilenameExtension, "fitnesstracker")
+    XCTAssertTrue(UTType.fitnessTracker.conforms(to: .json))
   }
 
   func testFileServiceReadsBothExtensionsAndRejectsOversizedOrUnsupportedFiles() async throws {
@@ -202,13 +202,13 @@ private struct ArchiveFileStub: ArchiveFileHandling {
     let files = ArchiveFileService()
     let archive = makeArchive()
     let data = try await files.encode(archive)
-    for suffix in ["json", "fitsession", "FITSESSION"] {
+    for suffix in ["json", "fitnesstracker", "FITNESS_TRACKER"] {
       let url = directory.appendingPathComponent("fixture.\(suffix)")
       try data.write(to: url)
       let restored = try await files.read(url)
       XCTAssertEqual(restored.workouts, archive.workouts)
     }
-    let oversized = directory.appendingPathComponent("large.fitsession")
+    let oversized = directory.appendingPathComponent("large.fitnesstracker")
     try Data(repeating: 0, count: WorkoutArchiveCodec.maximumBytes + 1).write(to: oversized)
     do {
       _ = try await files.read(oversized)

@@ -1,7 +1,7 @@
 import UIKit
 import XCTest
 
-@testable import FitSession
+@testable import FitnessTracker
 
 private struct ImageDataStub: ExerciseImageLoading {
   let result: Result<Data, any Error>

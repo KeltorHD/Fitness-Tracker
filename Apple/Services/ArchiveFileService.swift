@@ -1,4 +1,4 @@
-import FitSessionCore
+import FitnessTrackerCore
 import Foundation
 
 protocol ArchiveFileHandling: Sendable {
@@ -10,7 +10,7 @@ enum ArchiveFileError: Error, LocalizedError {
   case unsupportedFile, unreadable
   var errorDescription: String? {
     switch self {
-    case .unsupportedFile: "Выберите файл .fitsession или .json."
+    case .unsupportedFile: "Выберите файл .fitnesstracker или .json."
     case .unreadable: "Не удалось прочитать файл. Проверьте, что он доступен на устройстве."
     }
   }
@@ -20,7 +20,10 @@ enum ArchiveFileError: Error, LocalizedError {
 actor ArchiveFileService: ArchiveFileHandling {
   func read(_ url: URL) async throws -> WorkoutArchive {
     try Task.checkCancellation()
-    guard url.isFileURL, ["json", "fitsession"].contains(url.pathExtension.lowercased()) else {
+    guard url.isFileURL,
+      ["json", WorkoutArchive.fileExtension, WorkoutArchive.legacyFileExtension].contains(
+        url.pathExtension.lowercased())
+    else {
       throw ArchiveFileError.unsupportedFile
     }
     let accessing = url.startAccessingSecurityScopedResource()

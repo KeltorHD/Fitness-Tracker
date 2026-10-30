@@ -1,7 +1,7 @@
 import Foundation
 import Testing
 
-@testable import FitSessionCore
+@testable import FitnessTrackerCore
 
 private func reportCalendar() throws -> Calendar {
   var calendar = Calendar(identifier: .iso8601)

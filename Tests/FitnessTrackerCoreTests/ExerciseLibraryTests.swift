@@ -1,7 +1,7 @@
 import Foundation
 import Testing
 
-@testable import FitSessionCore
+@testable import FitnessTrackerCore
 
 @Test func bundledLibraryLoadsAndHasRussianContent() throws {
   #expect(ExerciseLibrary.loadingError == nil)

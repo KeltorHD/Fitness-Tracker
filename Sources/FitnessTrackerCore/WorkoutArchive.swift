@@ -1,8 +1,12 @@
 import Foundation
 
-/// The .json and .fitsession extensions share this versioned, UTF-8 JSON payload.
+/// The .json and .fitnesstracker extensions share this versioned, UTF-8 JSON payload.
 public struct WorkoutArchive: Codable, Equatable, Sendable {
-  public static let formatIdentifier = "com.fitsession.archive"
+  public static let formatIdentifier = "com.fitnesstracker.archive"
+  /// Read-only compatibility with archives created before the product rename.
+  public static let legacyFormatIdentifier = "com.fitsession.archive"
+  public static let fileExtension = "fitnesstracker"
+  public static let legacyFileExtension = "fitsession"
   public static let currentVersion = 1
   public let format: String
   public let version: Int
@@ -24,9 +28,9 @@ public enum WorkoutArchiveError: Error, Equatable, LocalizedError, Sendable {
 
   public var errorDescription: String? {
     switch self {
-    case .invalidFile: "Файл повреждён или не содержит данные FitSession."
+    case .invalidFile: "Файл повреждён или не содержит данные FitnessTracker."
     case .unsupportedVersion:
-      "Версия формата файла не поддерживается. Попробуйте обновить FitSession."
+      "Версия формата файла не поддерживается. Попробуйте обновить FitnessTracker."
     case .tooLarge: "Файл превышает допустимый размер 20 МБ."
     case .tooManyRecords: "В одном файле допускается до 10 000 тренировок и 1 000 планов."
     case .duplicateID: "В файле обнаружены повторяющиеся записи. Импорт не выполнен."
@@ -43,7 +47,10 @@ public enum WorkoutArchiveCodec {
     encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
     // Numeric Unix seconds preserve subsecond pause intervals, unlike the old ISO-8601 export.
     encoder.dateEncodingStrategy = .secondsSince1970
-    let data = try encoder.encode(archive)
+    let current = WorkoutArchive(
+      workouts: archive.workouts, templates: archive.templates,
+      exportedAt: archive.exportedAt)
+    let data = try encoder.encode(current)
     guard data.count <= maximumBytes else { throw WorkoutArchiveError.tooLarge }
     return data
   }
@@ -56,7 +63,9 @@ public enum WorkoutArchiveCodec {
       }
       let archive: WorkoutArchive
       if object["format"] != nil || object["version"] != nil || object["workouts"] != nil {
-        guard object["format"] as? String == WorkoutArchive.formatIdentifier else {
+        guard let format = object["format"] as? String,
+          [WorkoutArchive.formatIdentifier, WorkoutArchive.legacyFormatIdentifier].contains(format)
+        else {
           throw WorkoutArchiveError.invalidFile
         }
         guard object["version"] as? Int == WorkoutArchive.currentVersion else {
@@ -64,7 +73,10 @@ public enum WorkoutArchiveCodec {
         }
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .secondsSince1970
-        archive = try decoder.decode(WorkoutArchive.self, from: data)
+        let decoded = try decoder.decode(WorkoutArchive.self, from: data)
+        archive = WorkoutArchive(
+          workouts: decoded.workouts, templates: decoded.templates,
+          exportedAt: decoded.exportedAt)
       } else {
         // Compatibility with WorkoutDocument's original single-workout JSON export.
         let decoder = JSONDecoder()
@@ -83,7 +95,10 @@ public enum WorkoutArchiveCodec {
   }
 
   public static func validate(_ archive: WorkoutArchive) throws {
-    guard archive.format == WorkoutArchive.formatIdentifier else {
+    guard
+      [WorkoutArchive.formatIdentifier, WorkoutArchive.legacyFormatIdentifier].contains(
+        archive.format)
+    else {
       throw WorkoutArchiveError.invalidFile
     }
     guard archive.version == WorkoutArchive.currentVersion else {

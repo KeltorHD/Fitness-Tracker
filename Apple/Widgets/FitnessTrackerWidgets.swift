@@ -29,7 +29,7 @@ private struct WeeklyProvider: TimelineProvider {
   private func loadEntry(at date: Date) -> WeeklyEntry {
     do { return WeeklyEntry(date: date, snapshot: try WidgetSnapshot.read()) } catch {
       let diagnostic = error as NSError
-      Logger(subsystem: "FitSession", category: "Widget").error(
+      Logger(subsystem: "FitnessTracker", category: "Widget").error(
         "Snapshot unavailable: \(diagnostic.domain, privacy: .public), code \(diagnostic.code)")
       return WeeklyEntry(date: date, snapshot: nil, loadFailed: true)
     }
@@ -40,7 +40,8 @@ private struct WeeklyWidgetView: View {
   let entry: WeeklyEntry
   var body: some View {
     VStack(alignment: .leading, spacing: 10) {
-      Label("FitSession", systemImage: "figure.strengthtraining.traditional").font(.caption.bold())
+      Label("FitnessTracker", systemImage: "figure.strengthtraining.traditional").font(
+        .caption.bold())
       if let snapshot = entry.snapshot {
         let sameWeek =
           Calendar.current.dateInterval(of: .weekOfYear, for: entry.date)?.contains(
@@ -55,26 +56,26 @@ private struct WeeklyWidgetView: View {
         Text(L10n.text("Ваша неделя", locale: locale)).font(.headline)
         Text(
           entry.loadFailed
-            ? L10n.text("Откройте FitSession, чтобы обновить сводку.", locale: locale)
-            : L10n.text("Включите сводку виджета в настройках FitSession.", locale: locale)
+            ? L10n.text("Откройте FitnessTracker, чтобы обновить сводку.", locale: locale)
+            : L10n.text("Включите сводку виджета в настройках FitnessTracker.", locale: locale)
         ).font(.caption).foregroundStyle(
           .secondary)
       }
     }
     .containerBackground(.fill.tertiary, for: .widget)
-    .widgetURL(URL(string: "fitsession://today"))
+    .widgetURL(URL(string: "fitnesstracker://today"))
   }
 }
 struct WeeklyWorkoutWidget: Widget {
   var body: some WidgetConfiguration {
-    StaticConfiguration(kind: "FitSession.Weekly", provider: WeeklyProvider()) {
+    StaticConfiguration(kind: AppCompatibility.weeklyWidgetKind, provider: WeeklyProvider()) {
       WeeklyWidgetView(entry: $0).environment(\.locale, L10n.locale)
     }
     .configurationDisplayName("Ваша неделя").description("Прогресс к недельной цели.")
     .supportedFamilies([.systemSmall, .systemMedium])
   }
 }
-@main struct FitSessionWidgetBundle: WidgetBundle {
+@main struct FitnessTrackerWidgetBundle: WidgetBundle {
   var body: some Widget {
     WeeklyWorkoutWidget()
     WorkoutLiveActivityWidget()

@@ -1,4 +1,4 @@
-import FitSessionCore
+import FitnessTrackerCore
 import SwiftUI
 import UIKit
 
@@ -79,7 +79,7 @@ struct TrackerView: View {
       } footer: {
         Text(
           L10n.text(
-            "Данные могут поступать с задержкой. Доступны только показатели, переданные в «Здоровье» и разрешённые для FitSession.",
+            "Данные могут поступать с задержкой. Доступны только показатели, переданные в «Здоровье» и разрешённые для FitnessTracker.",
             locale: locale))
       }
       if let summary = model.summary {
@@ -111,7 +111,7 @@ struct TrackerView: View {
           if summary.isEmpty {
             Text(
               L10n.text(
-                "Нет доступных данных. Проверьте синхронизацию приложения трекера и разрешения FitSession в «Здоровье».",
+                "Нет доступных данных. Проверьте синхронизацию приложения трекера и разрешения FitnessTracker в «Здоровье».",
                 locale: locale))
           }
         } header: {
@@ -188,7 +188,7 @@ extension HeartRateConnection {
     case .connected: "Пульсометр подключён"
     case .disconnected: "Связь с пульсометром потеряна. Повторите подключение."
     case .poweredOff: "Включите Bluetooth на iPhone."
-    case .unauthorized: "Разрешите FitSession доступ к Bluetooth в настройках iOS."
+    case .unauthorized: "Разрешите FitnessTracker доступ к Bluetooth в настройках iOS."
     case .unsupported: "Bluetooth-пульсометр не поддерживается на этом устройстве."
     case .failed:
       "Не удалось подключить пульсометр. Проверьте трансляцию пульса на устройстве и повторите поиск."

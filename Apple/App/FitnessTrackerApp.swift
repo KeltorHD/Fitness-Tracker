@@ -1,8 +1,8 @@
-import FitSessionCore
+import FitnessTrackerCore
 import SwiftUI
 import WidgetKit
 
-@main struct FitSessionApp: App {
+@main struct FitnessTrackerApp: App {
   @UIApplicationDelegateAdaptor(AppDelegate.self) private var delegate
   @State private var store: AppStore?
   @State private var startupError: String?
@@ -26,7 +26,7 @@ import WidgetKit
               .font(.footnote).padding()
           }
         } else {
-          ProgressView("FitSession")
+          ProgressView("FitnessTracker")
         }
       }
       .tint(FitTheme.accent)
@@ -54,7 +54,7 @@ import WidgetKit
   }
   @MainActor private func boot() {
     do {
-      let appStore = try FitSessionRuntime.store()
+      let appStore = try FitnessTrackerRuntime.store()
       appStore.seedTemplatesIfNeeded()
       appStore.startServices()
       store = appStore
