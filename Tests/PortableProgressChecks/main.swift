@@ -88,6 +88,30 @@ private func expect(_ condition: Bool, _ message: String) throws {
     try expect(
       results.exerciseProgress.points.count == 2,
       "Calendar navigation must not silently change the chart period")
+    try expect(results.monthPages.map(\.offset) == [-1, 0, 1], "Pager needs three ordered months")
+    results.showCurrentMonth()
+    try expect(
+      results.monthPages.first { $0.offset == 0 }?.summary.workoutCount == 1,
+      "Current page must include the real recent workout")
+    results.refresh(workouts: [], calendar: calendar)
+    try expect(
+      results.monthPages.allSatisfy { $0.summary.workoutCount == 0 },
+      "Refreshing history must clear all cached month pages")
+    guard let january = calendar.date(from: DateComponents(year: 2024, month: 1, day: 31)) else {
+      throw ProgressCheckFailure(message: "Invalid month boundary fixture")
+    }
+    results.month = january
+    try expect(
+      results.monthPages.map { calendar.component(.month, from: $0.date) } == [12, 1, 2]
+        && results.monthPages.map { calendar.component(.year, from: $0.date) }
+          == [2023, 2024, 2024],
+      "Adjacent pages must cross the year boundary without skipping February from January 31")
+    results.moveMonth(by: 1)
+    try expect(
+      results.monthPages.map { calendar.component(.month, from: $0.date) } == [1, 2, 3]
+        && results.monthPages.first { $0.offset == 0 }?.summary.days.filter(\.isInMonth).count
+          == 29,
+      "Paging must rebuild neighbors and the leap February calendar")
     print(
       "Portable exercise progress: selection, periods, bodyweight, deletion, linked workout identity and refresh passed (no Apple SDK)."
     )

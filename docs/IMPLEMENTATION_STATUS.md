@@ -7,7 +7,7 @@
 | Модуль | Implemented | Linux-tested | Requires Xcode validation | Requires Apple Developer configuration |
 | --- | --- | --- | --- | --- |
 | Протягивание вниз для закрытия упражнения и сворачивания тренировки | Да: общий SwiftUI modifier, закрытие текущего уровня при отпускании за верхним краем, без refresh | Только синтаксис, структура и lint; Apple UI test не запускался | Да, scroll phases/overscroll, вложенная навигация и сохранение подходов | Нет |
-| Свайпы месяцев в карточке «История» на «Результатах» | Да: влево следующий, вправо предыдущий; используется существующий ProgressViewModel | Только синтаксис и lint; жесты на Linux не проверены | Да, UI test testHistoryMonthCanBeSwipedInBothDirections и совместимость с вертикальной прокруткой | Нет |
+| Свайпы месяцев в карточке «История» на «Результатах» | Да: три подготовленные страницы, движение за пальцем, доведение/возврат с анимацией; Reduce Motion без сдвига | PortableProgressChecks: данные соседних месяцев, обновление, декабрь/январь и високосный февраль; жесты на Linux не проверены | Да, UI test testHistoryMonthCanBeSwipedInBothDirections, интерактивная анимация и совместимость с вертикальной прокруткой | Нет |
 | Workout/Exercise/Set models, Codable, units | Да | Да | Нет для Core | Нет |
 | Templates и стартовые планы | Да | Да | UI отдельно | Нет |
 | State machine, валидация, паузы, отдых | Да | Да | Поведение UI отдельно | Нет |

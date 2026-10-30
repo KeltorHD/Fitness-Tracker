@@ -1,6 +1,79 @@
 import FitnessTrackerCore
 import SwiftUI
 
+struct TrainingMonthPager: View {
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
+  @GestureState private var translation: CGSize = .zero
+  @State private var width: CGFloat = 0
+  @State private var settlingOffset: CGFloat = 0
+  @State private var isSettling = false
+  let pages: [TrainingMonthPage]
+  let move: (Int) -> Void
+
+  var body: some View {
+    ZStack(alignment: .top) {
+      ForEach(pages) { page in
+        TrainingMonthCard(date: page.date, summary: page.summary)
+          .offset(x: CGFloat(page.offset) * width + visibleOffset)
+          .opacity(page.offset == 0 || width > 0 ? 1 : 0)
+          .accessibilityHidden(page.offset != 0)
+          .allowsHitTesting(page.offset == 0)
+      }
+    }
+    .onGeometryChange(for: CGFloat.self) {
+      $0.size.width
+    } action: {
+      width = $0
+    }
+    .clipped()
+    .contentShape(.rect)
+    .simultaneousGesture(
+      DragGesture(minimumDistance: 20)
+        .updating($translation) { value, state, transaction in
+          guard !isSettling else { return }
+          transaction.animation = nil
+          state = value.translation
+        }
+        .onEnded { value in settle(value.translation) }
+    )
+  }
+
+  private var visibleOffset: CGFloat {
+    if reduceMotion { return 0 }
+    return isSettling ? settlingOffset : horizontalOffset(translation)
+  }
+
+  private func horizontalOffset(_ translation: CGSize) -> CGFloat {
+    guard abs(translation.width) > abs(translation.height) * 1.5 else { return 0 }
+    return min(width, max(-width, translation.width))
+  }
+
+  private func settle(_ translation: CGSize) {
+    guard !isSettling, width > 0 else { return }
+    let offset = horizontalOffset(translation)
+    let direction = abs(offset) >= 50 ? (offset < 0 ? 1 : -1) : 0
+    if reduceMotion {
+      if direction != 0 { move(direction) }
+      return
+    }
+    var transaction = Transaction()
+    transaction.disablesAnimations = true
+    withTransaction(transaction) {
+      settlingOffset = offset
+      isSettling = true
+    }
+    withAnimation(.snappy(duration: 0.25), completionCriteria: .removed) {
+      settlingOffset = -CGFloat(direction) * width
+    } completion: {
+      withTransaction(transaction) {
+        if direction != 0 { move(direction) }
+        settlingOffset = 0
+        isSettling = false
+      }
+    }
+  }
+}
+
 struct TrainingMonthCard: View {
   @Environment(\.locale) private var locale
   @Environment(\.dynamicTypeSize) private var typeSize

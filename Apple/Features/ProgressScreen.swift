@@ -26,19 +26,11 @@ struct ProgressScreen: View {
               .accessibilityLabel(L10n.text("Период истории", locale: locale))
               .accessibilityIdentifier("historyPeriodMenu")
             }
-            TrainingMonthCard(date: model.month, summary: model.report.month)
-              .contentShape(.rect)
-              .simultaneousGesture(
-                DragGesture(minimumDistance: 20)
-                  .onEnded { value in
-                    let horizontal = value.translation.width
-                    let vertical = value.translation.height
-                    guard abs(horizontal) >= 50, abs(horizontal) > abs(vertical) * 1.5 else {
-                      return
-                    }
-                    model.moveMonth(by: horizontal < 0 ? 1 : -1)
-                  }
-              )
+            TrainingMonthPager(pages: model.monthPages) { [month = model.month] direction in
+              guard model.month == month else { return }
+              model.moveMonth(by: direction)
+            }
+            .id(model.month)
           }
           VStack(spacing: 14) {
             HStack {

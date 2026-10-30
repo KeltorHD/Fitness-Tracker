@@ -142,6 +142,11 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(title.waitForExistence(timeout: 5))
     let original = title.label
     let card = app.descendants(matching: .any).matching(identifier: "trainingMonthCard").firstMatch
+    card.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+      .press(
+        forDuration: 0.05,
+        thenDragTo: card.coordinate(withNormalizedOffset: CGVector(dx: 0.58, dy: 0.5)))
+    XCTAssertEqual(title.label, original)
     card.swipeLeft()
     XCTAssertNotEqual(title.label, original)
     app.buttons["historyPeriodMenu"].tap()
