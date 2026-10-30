@@ -43,7 +43,10 @@ private func progressWorkout(_ date: Date, sets: [WorkoutSet], exercise: Exercis
   #expect(point.volume == 570)
   #expect(point.repetitions == 13)
   #expect(point.setCount == 2)
-  #expect(abs(try #require(point.estimatedOneRepMaxKG) - 50 * (1 + 5.0 / 30)) < 0.0001)
+  let actualOneRepMaxKG: Double = try #require(point.estimatedOneRepMaxKG)
+  let expectedOneRepMaxKG: Double = 50.0 * (1.0 + 5.0 / 30.0)
+  let oneRepMaxDifference: Double = abs(actualOneRepMaxKG - expectedOneRepMaxKG)
+  #expect(oneRepMaxDifference < 0.0001)
 }
 
 @Test func exerciseProgressKeepsBodyweightAndOmitsUnsupportedOneRepMaxEstimates() throws {

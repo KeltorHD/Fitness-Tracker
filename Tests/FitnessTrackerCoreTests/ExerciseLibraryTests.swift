@@ -65,7 +65,8 @@ import Testing
 
 @Test(arguments: ["locale", "duplicate", "image", "steps", "version"])
 func malformedImportedLibraryIsRejected(_ mutation: String) throws {
-  let data = try JSONEncoder().encode(#require(ExerciseLibrary.document))
+  let document: ExerciseLibraryDocument = try #require(ExerciseLibrary.document)
+  let data = try JSONEncoder().encode(document)
   var object = try #require(JSONSerialization.jsonObject(with: data) as? [String: Any])
   var entries = try #require(object["entries"] as? [[String: Any]])
   switch mutation {

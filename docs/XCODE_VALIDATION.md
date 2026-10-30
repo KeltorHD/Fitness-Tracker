@@ -2,6 +2,12 @@
 
 Все пункты ниже остаются **непроверенными** до выполнения на macOS/устройстве. Отметьте устройство, ОС, Xcode version, результат и ссылку на исправление при первом прогоне.
 
+## Swift Testing: проверка типов в macOS toolchain
+
+По пользовательскому логу macOS сборка Core tests останавливалась на вложенном `#require` и арифметике внутри `#expect` в ExerciseProgressTests. Выражение разделено на типизированные значения, условие и допуск сохранены; optional библиотеки также извлекается перед JSON encoding. На Linux 127 Core tests прошли после правки. Повторная проверка macOS остаётся необходимой.
+
+- [ ] Запустить `swift test` toolchain выбранного Xcode: ExerciseProgressTests и ExerciseLibraryTests компилируются без type-check timeout, полный Core suite проходит. Записать версию Xcode/Swift и результат; не считать Linux-проверку подтверждением macOS/iOS-сборки.
+
 ## Локализация RU/EN
 
 - [ ] После генерации Localizable.xcstrings компилируется в app/widgets/Watch, InfoPlist.xcstrings — в главном app target; в продукте есть ru.lproj и en.lproj.

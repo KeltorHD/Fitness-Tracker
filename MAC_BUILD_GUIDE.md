@@ -105,6 +105,7 @@ xcodebuild -project FitnessTracker.xcodeproj -scheme FitnessTracker \
 
 Разбор частых ошибок:
 
+- **`unable to type-check this expression in reasonable time` в ExerciseProgressTests:** обновите исходники через `git pull --ff-only` и повторите `swift test`. Извлечение optional, расчёт ожидаемого 1ПМ и проверка разницы теперь разделены на типизированные `Double`-выражения; допуск теста не изменён. В ExerciseLibraryTests вложенный `#require` также вынесен перед JSON encoding. Если ошибка возникла в `setup-macos.sh`, после успешных тестов повторите скрипт: при сбое `swift test` он останавливается до генерации проекта.
 - **Нет GlassEffectContainer / glass styles:** проверьте выбранный Xcode, SDK и deployment target 26.0. Не заменяйте эффект blur-реализацией.
 - **Swift 6 isolation / Sendable:** проверьте границы `@MainActor` и `nonisolated` в делегатах. Передавайте `Data`, строки и Core value types через `Task`, а не `ModelContext`.
 - **SwiftData macro / CloudKit schema:** проверьте defaults всех полей `StoredRecord`, отсутствие unique constraints, container ID и signed entitlements. Не стирайте хранилище как первый способ исправления.
