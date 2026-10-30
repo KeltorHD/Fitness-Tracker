@@ -9,7 +9,8 @@ import Observation
   private(set) var summary: HealthDaySummary?
   private(set) var loadingHealth = false
   private(set) var hasRequestedHealth = false
-  private(set) var recording: HeartRateRecording?
+  private(set) var recording: HeartRateRecording? { didSet { rebuildChart() } }
+  private(set) var chartPoints: [HeartRateChartPoint] = []
   private(set) var preparingRecording = false
   private(set) var live = LiveHeartRateSnapshot()
   private(set) var startingLive = false
@@ -29,7 +30,7 @@ import Observation
   @ObservationIgnored private let defaults: UserDefaults
   @ObservationIgnored private let errorMessage: (any Error, String, String) -> String
   @ObservationIgnored private let now: () -> Date
-  @ObservationIgnored private var workout: Workout?
+  @ObservationIgnored private var workout: Workout? { didSet { rebuildChart() } }
   @ObservationIgnored private var loadTask: Task<Void, Never>?
   @ObservationIgnored private var saveTask: Task<Void, Never>?
   @ObservationIgnored private var pendingSaves: [UUID: HeartRateRecording] = [:]
@@ -153,6 +154,10 @@ import Observation
       let workout, !preparingRecording, let recording, recording.mode == .bluetooth
     else { return }
     append(reading, to: workout, recording: recording)
+  }
+  private func rebuildChart() {
+    chartPoints = HeartRateChartPoint.make(
+      readings: recording?.readings ?? [], pauses: workout?.pauses ?? [])
   }
   private func append(
     _ reading: HeartRateReading, to workout: Workout, recording original: HeartRateRecording

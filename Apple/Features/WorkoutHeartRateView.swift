@@ -1,4 +1,3 @@
-import Charts
 import FitnessTrackerCore
 import SwiftUI
 
@@ -32,14 +31,7 @@ struct WorkoutHeartRateView: View {
                 locale: locale))
           }
         }.font(.subheadline)
-        Chart(model.points) { point in
-          LineMark(
-            x: .value(L10n.text("Время", locale: locale), point.reading.date),
-            y: .value(L10n.text("уд/мин", locale: locale), point.reading.beatsPerMinute),
-            series: .value("Segment", point.segment)
-          )
-          .foregroundStyle(FitTheme.accent)
-        }.frame(height: 170).accessibilityLabel(
+        HeartRateLineChart(points: model.points).frame(height: 170).accessibilityLabel(
           L10n.text("Пульс во время тренировки", locale: locale))
         Text(
           L10n.text(

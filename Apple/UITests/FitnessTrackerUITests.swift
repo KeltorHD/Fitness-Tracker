@@ -1,6 +1,22 @@
 import XCTest
 
 final class FitnessTrackerUITests: XCTestCase {
+  @MainActor func testHealthChartsAreAvailableWithoutRequestingAccessOnOpen() {
+    let app = launch()
+    app.tabBars.buttons["Результаты"].tap()
+    let link = app.buttons["openHealthCharts"]
+    reveal(link, in: app)
+    link.tap()
+    let toggle = app.switches["enableHealthCharts"]
+    XCTAssertTrue(toggle.waitForExistence(timeout: 5))
+    XCTAssertEqual(toggle.value as? String, "0")
+    XCTAssertTrue(
+      app.descendants(matching: .any).matching(identifier: "currentHeartRate").firstMatch.exists)
+    XCTAssertFalse(
+      app.descendants(matching: .any).matching(identifier: "dailyHeartRateChart").firstMatch.exists)
+    XCTAssertEqual(app.alerts.count, 0)
+  }
+
   @MainActor func testWarmupAndDropStagesCanBeConfiguredBeforeCompletion() {
     let app = launch()
     XCTAssertTrue(app.buttons["startWorkout"].waitForExistence(timeout: 10))

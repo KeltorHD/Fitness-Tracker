@@ -2,12 +2,6 @@ import FitnessTrackerCore
 import Foundation
 import Observation
 
-struct HeartRateChartPoint: Identifiable {
-  let reading: HeartRateReading
-  let segment: Int
-  var id: Date { reading.date }
-}
-
 @MainActor @Observable final class WorkoutHeartRateViewModel {
   private(set) var recording: HeartRateRecording?
   private(set) var points: [HeartRateChartPoint] = []
@@ -39,20 +33,7 @@ struct HeartRateChartPoint: Identifiable {
         try HeartRateRecording(
           workoutID: $0.workoutID, mode: $0.mode, readings: readings, origin: $0.origin)
       }
-      var previous: Date?
-      var segment = 0
-      points = readings.map { reading in
-        if let previous,
-          reading.date.timeIntervalSince(previous) > 30
-            || workout.pauses.contains(where: {
-              $0.startedAt >= previous && $0.startedAt <= reading.date
-            })
-        {
-          segment += 1
-        }
-        previous = reading.date
-        return HeartRateChartPoint(reading: reading, segment: segment)
-      }
+      points = HeartRateChartPoint.make(readings: readings, pauses: workout.pauses)
     } catch {
       guard !Task.isCancelled, requestID == id else { return }
       self.error = tracker.message(

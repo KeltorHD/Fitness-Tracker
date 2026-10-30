@@ -2,7 +2,126 @@ import FitnessTrackerCore
 import Foundation
 import HealthKit
 
-@MainActor final class HealthMetricsReader: HealthMetricsReading {
+@MainActor final class HealthMetricsReader: HealthMetricsReading, HealthChartsReading {
+  private var observationTask: Task<Void, Never>?
+  func requestChartAuthorization() async throws { try await Self.authorizeCharts() }
+  func chartSnapshot(day: Date, calendar: Calendar) async throws -> HealthChartSnapshot {
+    try await Self.readCharts(day: day, calendar: calendar)
+  }
+  func changes(since date: Date) -> AsyncThrowingStream<Void, any Error> {
+    stopChanges()
+    return AsyncThrowingStream(bufferingPolicy: .bufferingNewest(1)) { continuation in
+      let task = Task { await Self.observeChanges(since: date, continuation: continuation) }
+      observationTask = task
+      continuation.onTermination = { _ in task.cancel() }
+    }
+  }
+  func stopChanges() {
+    observationTask?.cancel()
+    observationTask = nil
+  }
+
+  @concurrent nonisolated private static func authorizeCharts() async throws {
+    guard HKHealthStore.isHealthDataAvailable() else {
+      throw ServiceError.unavailable("HealthKit недоступен на этом устройстве.")
+    }
+    try await HKHealthStore().requestAuthorization(
+      toShare: [], read: [HKQuantityType(.stepCount), HKQuantityType(.heartRate)])
+  }
+
+  @concurrent nonisolated private static func observeChanges(
+    since date: Date, continuation: AsyncThrowingStream<Void, any Error>.Continuation
+  ) async {
+    do {
+      let predicate = HKQuery.predicateForSamples(withStart: date, end: nil, options: [])
+      let query = HKAnchoredObjectQueryDescriptor<HKQuantitySample>(
+        predicates: [
+          .quantitySample(type: HKQuantityType(.heartRate), predicate: predicate),
+          .quantitySample(type: HKQuantityType(.stepCount), predicate: predicate),
+        ], anchor: nil)
+      for try await _ in query.results(for: HKHealthStore()) {
+        try Task.checkCancellation()
+        continuation.yield(())
+      }
+      continuation.finish()
+    } catch {
+      continuation.finish(throwing: error)
+    }
+  }
+
+  @concurrent nonisolated private static func readCharts(day: Date, calendar: Calendar) async throws
+    -> HealthChartSnapshot
+  {
+    let now = Date()
+    let window = try HealthChartWindow(day: day, now: now, calendar: calendar)
+    let interval = window.day
+    let store = HKHealthStore()
+    let stepQuery = HKStatisticsCollectionQueryDescriptor(
+      predicate: .quantitySample(
+        type: HKQuantityType(.stepCount),
+        predicate: predicate(window.stepsInterval)),
+      options: .cumulativeSum, anchorDate: interval.start,
+      intervalComponents: DateComponents(calendar: calendar, timeZone: calendar.timeZone, day: 1))
+    let totals = try await stepQuery.result(for: store)
+    try Task.checkCancellation()
+    let steps = window.stepDays.map { date in
+      let count = totals.statistics(for: date)?.sumQuantity()?.doubleValue(for: .count())
+      return HealthStepDay(
+        date: date,
+        steps: count.flatMap { $0.isFinite && $0 >= 0 ? Int(exactly: $0.rounded()) : nil })
+    }
+    let samples = try await HKSampleQueryDescriptor(
+      predicates: [
+        .quantitySample(
+          type: HKQuantityType(.heartRate),
+          predicate: HKQuery.predicateForSamples(
+            withStart: interval.start, end: min(interval.end, now),
+            options: [.strictStartDate, .strictEndDate]))
+      ], sortDescriptors: [SortDescriptor(\.startDate)], limit: 100_001
+    ).result(for: store)
+    try Task.checkCancellation()
+    guard samples.count <= 100_000 else { throw TrackerDataError.recordingFull }
+    var seen = Set<Date>()
+    let readings = samples.compactMap { sample -> HeartRateReading? in
+      let reading = HeartRateReading(
+        date: sample.startDate,
+        beatsPerMinute: sample.quantity.doubleValue(for: .count().unitDivided(by: .minute())))
+      return reading.isValid && seen.insert(reading.date).inserted ? reading : nil
+    }
+    let currentSamples: [HKQuantitySample]
+    if calendar.isDate(day, inSameDayAs: now) {
+      currentSamples = samples
+    } else {
+      currentSamples = try await HKSampleQueryDescriptor(
+        predicates: [
+          .quantitySample(
+            type: HKQuantityType(.heartRate),
+            predicate: HKQuery.predicateForSamples(
+              withStart: calendar.startOfDay(for: now), end: now,
+              options: [.strictStartDate, .strictEndDate]))
+        ], sortDescriptors: [SortDescriptor(\.startDate)], limit: 100_001
+      ).result(for: store)
+    }
+    try Task.checkCancellation()
+    guard currentSamples.count <= 100_000 else { throw TrackerDataError.recordingFull }
+    let latest = currentSamples.last
+    let latestReading = latest.map {
+      HeartRateReading(
+        date: $0.startDate,
+        beatsPerMinute: $0.quantity.doubleValue(for: .count().unitDivided(by: .minute())))
+    }
+    return HealthChartSnapshot(
+      day: interval.start, steps: steps, heartRate: readings,
+      latestHeartRate: latestReading?.isValid == true ? latestReading : nil,
+      heartRateSource: latest?.sourceRevision.source.name,
+      currentDayHeartRate: currentSamples.compactMap {
+        let reading = HeartRateReading(
+          date: $0.startDate,
+          beatsPerMinute: $0.quantity.doubleValue(for: .count().unitDivided(by: .minute())))
+        return reading.isValid ? reading : nil
+      })
+  }
+
   func requestReadAuthorization() async throws { try await Self.authorize() }
   func requestHeartRateAuthorization() async throws {
     try await Self.authorize(heartRateOnly: true)

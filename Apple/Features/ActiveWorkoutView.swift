@@ -104,6 +104,9 @@ struct ActiveWorkoutView: View {
         WorkoutHero(title: workout.name, showsDate: false)
         VStack(spacing: 0) {
           WorkoutSessionSummary(workout: workout, unit: unit).padding(.vertical, 16)
+          if !store.isDemoMode {
+            WorkoutLiveHeartRateChart(workoutID: workout.id).fitCard().padding(.bottom, 16)
+          }
           if let end = workout.restEndsAt, end > .now {
             HStack {
               RestPill(end: end)

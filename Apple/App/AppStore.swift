@@ -21,6 +21,7 @@ import WidgetKit
   private(set) var workspaceID = UUID()
   let settings: SettingsViewModel
   let tracker: TrackerViewModel
+  let healthCharts: HealthChartsViewModel
   @ObservationIgnored let exerciseImages: any ExerciseImageLoading
   @ObservationIgnored private let repository: WorkoutWorkspaceRepository
   @ObservationIgnored private let health: any HealthWorkoutExporting
@@ -58,7 +59,8 @@ import WidgetKit
     cloud: any CloudAccountChecking = CloudKitService(),
     exerciseImages: any ExerciseImageLoading = ExerciseImageLoader(),
     archiveFiles: any ArchiveFileHandling = ArchiveFileService(),
-    tracker: TrackerViewModel? = nil
+    tracker: TrackerViewModel? = nil,
+    healthCharts: HealthChartsViewModel? = nil
   ) {
     self.repository = WorkoutWorkspaceRepository(personal: repository)
     self.health = health
@@ -75,6 +77,16 @@ import WidgetKit
         liveSource: AirPodsHeartRateService(),
         recordings: LocalHeartRateRepository(), defaults: defaults,
         errorMessage: { AppErrorReporter.message(for: $0, operation: $1, fallback: $2) })
+    self.healthCharts =
+      healthCharts
+      ?? HealthChartsViewModel(
+        reader: HealthMetricsReader(), defaults: defaults,
+        errorMessage: {
+          AppErrorReporter.message(
+            for: $0, operation: "healthCharts",
+            fallback:
+              "Не удалось загрузить пульс и шаги. Проверьте доступ к «Здоровью» и повторите.")
+        })
     watch.receive = { [weak self] workout in self?.importWatch(workout) ?? false }
     watch.failure = { [weak self] error in
       self?.report(
@@ -119,6 +131,8 @@ import WidgetKit
       isDemoMode = true
       tracker.disconnect()
       tracker.attach(nil)
+      healthCharts.attach(nil)
+      healthCharts.clear()
       try loadRepository()
       resetWorkspacePresentation()
     } catch {
@@ -175,7 +189,10 @@ import WidgetKit
     bodyWeights = measurements
     let unfinished = loaded.filter { [.active, .paused].contains($0.status) }
     active = unfinished.first { $0.id == active?.id } ?? unfinished.first
-    if !isDemoMode { tracker.attach(active) }
+    if !isDemoMode {
+      tracker.attach(active)
+      healthCharts.attach(active)
+    }
   }
 
   private func archiveSnapshot() throws -> WorkoutArchive {

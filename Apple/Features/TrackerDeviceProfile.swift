@@ -2,7 +2,7 @@ import Foundation
 
 /// Setup guidance, not a device identity or a filter over HealthKit sources.
 enum TrackerDeviceProfile: String, CaseIterable, Identifiable, Sendable {
-  case xiaomiSmartBand10, huaweiWatchGT6Pro, airPodsPro3, other
+  case xiaomiSmartBand10, huaweiWatchGT6Pro, airPodsPro3, appleWatch, other
   var id: String { rawValue }
 
   var titleKey: String {
@@ -10,6 +10,7 @@ enum TrackerDeviceProfile: String, CaseIterable, Identifiable, Sendable {
     case .xiaomiSmartBand10: "Xiaomi Smart Band 10"
     case .huaweiWatchGT6Pro: "HUAWEI WATCH GT 6 Pro"
     case .airPodsPro3: "AirPods Pro 3"
+    case .appleWatch: "Apple Watch"
     case .other: "Другой трекер"
     }
   }
@@ -21,6 +22,8 @@ enum TrackerDeviceProfile: String, CaseIterable, Identifiable, Sendable {
       "Подключите WATCH GT 6 Pro к HUAWEI Health на iPhone и включите доступную передачу данных в Apple «Здоровье». В «Здоровье» откройте профиль → Приложения и службы → HUAWEI Health и разрешите запись нужных показателей."
     case .airPodsPro3:
       "Наденьте AirPods Pro 3 и подключите их к iPhone. В настройках iOS → AirPods → Пульс включите измерение. Затем начните тренировку в FitnessTracker и включите приём пульса."
+    case .appleWatch:
+      "Для частых измерений запустите приложение «Тренировка» на Apple Watch. FitnessTracker показывает измерения, поступившие в Apple «Здоровье»; передача может происходить с задержкой."
     case .other:
       "В приложении вашего трекера включите передачу данных в Apple «Здоровье» и разрешите запись нужных показателей. Затем разрешите FitnessTracker их чтение."
     }
@@ -33,6 +36,8 @@ enum TrackerDeviceProfile: String, CaseIterable, Identifiable, Sendable {
       "На WATCH GT 6 Pro откройте Настройки → Трансляция пульса (HR Data Broadcasts) и запустите трансляцию. Держите часы рядом с iPhone и нажмите «Найти пульсометр»."
     case .airPodsPro3:
       "Для пульса AirPods Pro 3 выберите режим Apple «Здоровье». Отдельный поиск Bluetooth-пульсометра для них не нужен."
+    case .appleWatch:
+      "Для Apple Watch выберите Apple «Здоровье». Часы не подключаются как обычный Bluetooth-пульсометр."
     case .other:
       "Включите на устройстве трансляцию пульса по Bluetooth и держите его рядом с iPhone. Затем нажмите «Найти пульсометр»."
     }
@@ -41,7 +46,7 @@ enum TrackerDeviceProfile: String, CaseIterable, Identifiable, Sendable {
     switch self {
     case .huaweiWatchGT6Pro:
       "Если пункта HR Data Broadcasts нет, используйте режим Apple «Здоровье». Во время трансляции связь с HUAWEI Health может временно прерываться."
-    case .xiaomiSmartBand10, .airPodsPro3, .other: nil
+    case .xiaomiSmartBand10, .airPodsPro3, .appleWatch, .other: nil
     }
   }
   var supportURL: URL? {
@@ -51,7 +56,7 @@ enum TrackerDeviceProfile: String, CaseIterable, Identifiable, Sendable {
       URL(string: "https://consumer.huawei.com/en/support/content/en-us15827504/")
     case .airPodsPro3:
       URL(string: "https://support.apple.com/guide/airpods/dev1b40fb47d/web")
-    case .other: nil
+    case .appleWatch, .other: nil
     }
   }
 }

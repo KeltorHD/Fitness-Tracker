@@ -57,7 +57,7 @@ struct TrackerView: View {
           }
         }
         healthSections
-      } else if model.deviceProfile == .airPodsPro3 {
+      } else if [.airPodsPro3, .appleWatch].contains(model.deviceProfile) {
         Section {
           Text(L10n.text(model.deviceProfile.bluetoothSetupKey, locale: locale))
           Button(L10n.text("Выбрать Apple «Здоровье»", locale: locale)) {
@@ -102,6 +102,7 @@ struct TrackerView: View {
   private var healthSections: some View {
     Group {
       Section {
+        NavigationLink(L10n.text("Пульс и шаги", locale: locale)) { HealthChartsView() }
         if model.deviceProfile != .airPodsPro3 {
           Text(L10n.text(model.deviceProfile.healthSetupKey, locale: locale))
             .accessibilityIdentifier("trackerHealthSetup")
@@ -276,7 +277,8 @@ struct WorkoutTrackerCard: View {
       } else {
         Text(
           L10n.text(
-            "Пульс из «Здоровья» можно загрузить после завершения тренировки.", locale: locale)
+            "Текущий пульс из «Здоровья» доступен в разделе «Пульс и шаги» после включения доступа. Обновления зависят от синхронизации устройства.",
+            locale: locale)
         ).font(.caption)
       }
       NavigationLink(L10n.text("Трекер", locale: locale)) { TrackerView(model: tracker) }

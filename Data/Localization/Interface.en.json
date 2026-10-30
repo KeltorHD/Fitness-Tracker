@@ -557,5 +557,22 @@
   "Повторить число повторений в следующих строках": "Copy repetitions to following rows",
   "Скрыть цифровую панель": "Hide number pad",
   "Следующее поле": "Next field",
-  "Удалить цифру": "Delete digit"
+  "Удалить цифру": "Delete digit",
+  "Не удалось загрузить пульс и шаги. Проверьте доступ к «Здоровью» и повторите.": "Unable to load heart rate and steps. Check Health access and try again.",
+  "Для частых измерений запустите приложение «Тренировка» на Apple Watch. FitnessTracker показывает измерения, поступившие в Apple «Здоровье»; передача может происходить с задержкой.": "For frequent measurements, start the Workout app on Apple Watch. FitnessTracker displays readings received by Apple Health; transfer may be delayed.",
+  "Для Apple Watch выберите Apple «Здоровье». Часы не подключаются как обычный Bluetooth-пульсометр.": "For Apple Watch, choose Apple Health. The watch does not connect as a standard Bluetooth heart rate monitor.",
+  "Пульс и шаги": "Heart rate and steps",
+  "Текущий пульс из «Здоровья» доступен в разделе «Пульс и шаги» после включения доступа. Обновления зависят от синхронизации устройства.": "Current heart rate from Health is available in Heart rate and steps after enabling access. Updates depend on device synchronization.",
+  "Пульс и шаги из «Здоровья»": "Heart rate and steps from Health",
+  "Показываем доступные источники: Apple Watch, AirPods, приложения браслетов и iPhone. Частота обновлений зависит от устройства и синхронизации с «Здоровьем».": "Available sources include Apple Watch, AirPods, tracker apps and iPhone. Update frequency depends on the device and Health synchronization.",
+  "Пульс за день": "Daily heart rate",
+  "Разрывы графика означают отсутствие измерений.": "Gaps in the chart indicate missing measurements.",
+  "Шаги за 7 дней": "Steps over 7 days",
+  "Нет доступных данных о шагах.": "No step data available.",
+  "Прочерк означает отсутствие доступных данных, а не ноль шагов.": "A dash means data is unavailable, rather than zero steps.",
+  "Обновить показатели": "Refresh metrics",
+  "Bluetooth-пульсометр": "Bluetooth heart rate monitor",
+  "Текущий пульс": "Current heart rate",
+  "Свежее измерение": "Fresh measurement",
+  "Последнее измерение": "Last measurement"
 }

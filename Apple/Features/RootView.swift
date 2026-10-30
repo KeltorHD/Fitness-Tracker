@@ -5,6 +5,7 @@ struct RootView: View {
   @Environment(\.locale) private var locale
   @Environment(AppStore.self) private var store
   @Environment(\.scenePhase) private var phase
+  @Environment(\.calendar) private var calendar
   @State private var tab = 0
   @AppStorage("keepScreenAwake") private var keepScreenAwake = false
   var body: some View {
@@ -89,6 +90,19 @@ struct RootView: View {
     .onChange(of: keepScreenAwake) { updateIdleTimer() }
     .onChange(of: store.active?.status) { updateIdleTimer() }
     .onChange(of: phase, initial: true) { updateIdleTimer() }
+    .task(
+      id: HealthChartsObservation(
+        day: store.healthCharts.day, calendar: calendar,
+        enabled: store.healthCharts.enabled && !store.isDemoMode, active: phase == .active,
+        request: store.healthCharts.request)
+    ) {
+      guard !Task.isCancelled else { return }
+      guard store.healthCharts.enabled, !store.isDemoMode, phase == .active else {
+        store.healthCharts.clear()
+        return
+      }
+      await store.healthCharts.observe(calendar: calendar)
+    }
     .task(id: phase) {
       if phase == .active {
         store.reload()

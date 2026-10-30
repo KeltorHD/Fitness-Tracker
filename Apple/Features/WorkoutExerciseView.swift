@@ -159,6 +159,9 @@ struct WorkoutExerciseView: View {
                 .textCase(
                   .uppercase)
             }.multilineTextAlignment(.center).padding(.horizontal, 12)
+            if !store.isDemoMode, store.active?.id == workout.id {
+              WorkoutLiveHeartRateChart(workoutID: workout.id)
+            }
             LazyVStack(spacing: 0) {
               ForEach(Array(row.sets.enumerated()), id: \.element.id) { index, set in
                 WorkoutSetGroupView(

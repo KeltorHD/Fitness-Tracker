@@ -45,6 +45,14 @@ struct ProgressScreen: View {
             }
             BodyWeightCard(model: model.bodyWeight)
           }
+          if !store.isDemoMode {
+            NavigationLink {
+              HealthChartsView()
+            } label: {
+              Label(L10n.text("Пульс и шаги", locale: locale), systemImage: "heart.text.clipboard")
+                .font(.headline).frame(maxWidth: .infinity, alignment: .leading).resultsCard()
+            }.buttonStyle(.plain).accessibilityIdentifier("openHealthCharts")
+          }
           VStack(alignment: .leading, spacing: 14) {
             SectionHeading(
               title: L10n.text("Прогресс по упражнениям", locale: locale),

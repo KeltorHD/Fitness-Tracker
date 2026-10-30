@@ -358,6 +358,23 @@
         }
       }
     },
+    "Bluetooth-пульсометр": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bluetooth-пульсометр"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bluetooth heart rate monitor"
+          }
+        }
+      }
+    },
     "Bluetooth-пульсометр не поддерживается на этом устройстве.": {
       "extractionState": "manual",
       "localizations": {
@@ -2602,6 +2619,23 @@
         }
       }
     },
+    "Для Apple Watch выберите Apple «Здоровье». Часы не подключаются как обычный Bluetooth-пульсометр.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Для Apple Watch выберите Apple «Здоровье». Часы не подключаются как обычный Bluetooth-пульсометр."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For Apple Watch, choose Apple Health. The watch does not connect as a standard Bluetooth heart rate monitor."
+          }
+        }
+      }
+    },
     "Для Mi Band включите в Mi Fitness: Профиль → Данные сторонних приложений → Здоровье. Разрешите передачу нужных показателей.": {
       "extractionState": "manual",
       "localizations": {
@@ -2700,6 +2734,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "For a custom exercise, you can record technique in your workout notes."
+          }
+        }
+      }
+    },
+    "Для частых измерений запустите приложение «Тренировка» на Apple Watch. FitnessTracker показывает измерения, поступившие в Apple «Здоровье»; передача может происходить с задержкой.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Для частых измерений запустите приложение «Тренировка» на Apple Watch. FitnessTracker показывает измерения, поступившие в Apple «Здоровье»; передача может происходить с задержкой."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For frequent measurements, start the Workout app on Apple Watch. FitnessTracker displays readings received by Apple Health; transfer may be delayed."
           }
         }
       }
@@ -4642,6 +4693,23 @@
         }
       }
     },
+    "Не удалось загрузить пульс и шаги. Проверьте доступ к «Здоровью» и повторите.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось загрузить пульс и шаги. Проверьте доступ к «Здоровью» и повторите."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unable to load heart rate and steps. Check Health access and try again."
+          }
+        }
+      }
+    },
     "Не удалось загрузить пульс. Проверьте доступ и попробуйте ещё раз.": {
       "extractionState": "manual",
       "localizations": {
@@ -5390,6 +5458,23 @@
         }
       }
     },
+    "Нет доступных данных о шагах.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нет доступных данных о шагах."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No step data available."
+          }
+        }
+      }
+    },
     "Нет доступных данных. Проверьте синхронизацию приложения трекера и разрешения FitnessTracker в «Здоровье».": {
       "extractionState": "manual",
       "localizations": {
@@ -5590,6 +5675,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Duplicate identifiers were found."
+          }
+        }
+      }
+    },
+    "Обновить показатели": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Обновить показатели"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Refresh metrics"
           }
         }
       }
@@ -6784,6 +6886,23 @@
         }
       }
     },
+    "Показываем доступные источники: Apple Watch, AirPods, приложения браслетов и iPhone. Частота обновлений зависит от устройства и синхронизации с «Здоровьем».": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Показываем доступные источники: Apple Watch, AirPods, приложения браслетов и iPhone. Частота обновлений зависит от устройства и синхронизации с «Здоровьем»."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Available sources include Apple Watch, AirPods, tracker apps and iPhone. Update frequency depends on the device and Health synchronization."
+          }
+        }
+      }
+    },
     "Положение %@ из %@": {
       "extractionState": "manual",
       "localizations": {
@@ -6814,6 +6933,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "OK"
+          }
+        }
+      }
+    },
+    "Последнее измерение": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Последнее измерение"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last measurement"
           }
         }
       }
@@ -7192,6 +7328,23 @@
         }
       }
     },
+    "Прочерк означает отсутствие доступных данных, а не ноль шагов.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Прочерк означает отсутствие доступных данных, а не ноль шагов."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A dash means data is unavailable, rather than zero steps."
+          }
+        }
+      }
+    },
     "Прочитать показатели": {
       "extractionState": "manual",
       "localizations": {
@@ -7256,6 +7409,57 @@
           "stringUnit": {
             "state": "translated",
             "value": "Workout heart rate"
+          }
+        }
+      }
+    },
+    "Пульс за день": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пульс за день"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daily heart rate"
+          }
+        }
+      }
+    },
+    "Пульс и шаги": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пульс и шаги"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate and steps"
+          }
+        }
+      }
+    },
+    "Пульс и шаги из «Здоровья»": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пульс и шаги из «Здоровья»"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate and steps from Health"
           }
         }
       }
@@ -7532,6 +7736,23 @@
         }
       }
     },
+    "Разрывы графика означают отсутствие измерений.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Разрывы графика означают отсутствие измерений."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gaps in the chart indicate missing measurements."
+          }
+        }
+      }
+    },
     "Разрывы графика означают отсутствие измерений. Средний пульс рассчитан по сохранённым точкам.": {
       "extractionState": "manual",
       "localizations": {
@@ -7681,6 +7902,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Reset search and filters"
+          }
+        }
+      }
+    },
+    "Свежее измерение": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Свежее измерение"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fresh measurement"
           }
         }
       }
@@ -8433,6 +8671,40 @@
         }
       }
     },
+    "Текущий пульс": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Текущий пульс"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current heart rate"
+          }
+        }
+      }
+    },
+    "Текущий пульс из «Здоровья» доступен в разделе «Пульс и шаги» после включения доступа. Обновления зависят от синхронизации устройства.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Текущий пульс из «Здоровья» доступен в разделе «Пульс и шаги» после включения доступа. Обновления зависят от синхронизации устройства."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current heart rate from Health is available in Heart rate and steps after enabling access. Updates depend on device synchronization."
+          }
+        }
+      }
+    },
     "Тема": {
       "extractionState": "manual",
       "localizations": {
@@ -9177,6 +9449,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Steps"
+          }
+        }
+      }
+    },
+    "Шаги за 7 дней": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Шаги за 7 дней"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Steps over 7 days"
           }
         }
       }
