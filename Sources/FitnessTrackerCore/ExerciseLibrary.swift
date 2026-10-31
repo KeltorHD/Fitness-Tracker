@@ -195,6 +195,13 @@ public enum ExerciseLibrary {
   public static func search(
     _ query: String, group: MuscleGroup?, equipment: ExerciseEquipment?, language: AppLanguage
   ) -> [ExerciseLibraryEntry] {
+    search(query, groups: group.map { [$0] } ?? [], equipment: equipment, language: language)
+  }
+
+  public static func search(
+    _ query: String = "", groups: Set<MuscleGroup>, equipment: ExerciseEquipment? = nil,
+    language: AppLanguage = .russian
+  ) -> [ExerciseLibraryEntry] {
     let tokens = normalize(query).split(whereSeparator: \.isWhitespace).map(String.init)
     let candidates: [ExerciseLibraryEntry]
     switch language.resolved() == .english ? englishResult : result {
@@ -202,7 +209,7 @@ public enum ExerciseLibrary {
     case .failure: candidates = []
     }
     return candidates.filter { entry in
-      guard group == nil || entry.group == group,
+      guard groups.isEmpty || groups.contains(entry.group),
         equipment == nil || entry.equipment == equipment
       else { return false }
       let fields =

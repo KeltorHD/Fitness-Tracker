@@ -4,34 +4,37 @@ import Observation
 
 @MainActor @Observable final class ExerciseLibraryViewModel {
   var search = "" { didSet { refresh() } }
-  var group: MuscleGroup? { didSet { refresh() } }
+  var groups: Set<MuscleGroup> { didSet { refresh() } }
   var equipment: ExerciseEquipment? { didSet { refresh() } }
   var language: AppLanguage = .russian { didSet { refresh() } }
   private(set) var results: [ExerciseLibraryEntry]
   private(set) var loadingError = ExerciseLibrary.loadingError
   @ObservationIgnored private let find:
-    (String, MuscleGroup?, ExerciseEquipment?, AppLanguage) -> [ExerciseLibraryEntry]
+    (String, Set<MuscleGroup>, ExerciseEquipment?, AppLanguage) -> [ExerciseLibraryEntry]
 
   init(
+    groups: Set<MuscleGroup> = [],
     find:
-      @escaping (String, MuscleGroup?, ExerciseEquipment?, AppLanguage) -> [ExerciseLibraryEntry] =
+      @escaping (String, Set<MuscleGroup>, ExerciseEquipment?, AppLanguage) ->
+      [ExerciseLibraryEntry] =
       {
-        ExerciseLibrary.search($0, group: $1, equipment: $2, language: $3)
+        ExerciseLibrary.search($0, groups: $1, equipment: $2, language: $3)
       }
   ) {
     self.find = find
-    results = find("", nil, nil, .russian)
+    self.groups = groups
+    results = find("", groups, nil, .russian)
   }
   func reset() {
     search = ""
-    group = nil
+    groups = []
     equipment = nil
   }
   private func refresh() {
     do {
       _ = try ExerciseLibrary.document(language: language)
       loadingError = nil
-      results = find(search, group, equipment, language)
+      results = find(search, groups, equipment, language)
     } catch {
       loadingError = error.localizedDescription
       results = []

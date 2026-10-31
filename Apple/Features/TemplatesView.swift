@@ -22,7 +22,10 @@ struct TemplatesView: View {
               HStack(spacing: 12) {
                 Image(systemName: "figure.strengthtraining.traditional").foregroundStyle(
                   FitTheme.accent)
-                Text(template.name).font(.title3.weight(.semibold)).foregroundStyle(.primary)
+                VStack(alignment: .leading, spacing: 4) {
+                  Text(template.name).font(.title3.weight(.semibold)).foregroundStyle(.primary)
+                  TemplateMuscleGroups(template: template)
+                }
                 Spacer(minLength: 0)
               }.padding(.horizontal, 18).padding(.vertical, 20)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -85,6 +88,7 @@ struct TemplateOverviewView: View {
       VStack(spacing: 0) {
         WorkoutHero(title: current.name)
         VStack(spacing: 20) {
+          TemplateMuscleGroups(template: current)
           HStack(spacing: 8) {
             SummaryMetric(
               title: L10n.text("Упражнения", locale: locale), value: "\(current.exercises.count)")
@@ -177,6 +181,28 @@ struct TemplateEditor: View {
         Section(L10n.text("Название", locale: locale)) {
           TextField(L10n.text("Название плана", locale: locale), text: $template.name)
         }
+        Section {
+          ForEach(MuscleGroup.allCases, id: \.self) { group in
+            Toggle(
+              L10n.text(group.title, locale: locale),
+              isOn: Binding(
+                get: { template.muscleGroups.contains(group) },
+                set: { selected in
+                  if selected {
+                    template.muscleGroups.insert(group)
+                  } else {
+                    template.muscleGroups.remove(group)
+                  }
+                }))
+          }
+        } header: {
+          Text(L10n.text("Основные группы мышц", locale: locale))
+        } footer: {
+          Text(
+            L10n.text(
+              "Необязательно. Выбранные группы включат фильтр при добавлении упражнений.",
+              locale: locale))
+        }
         Section(L10n.text("Отдых между подходами", locale: locale)) {
           Stepper(
             L10n.format("%@ секунд", String(template.restSeconds), locale: locale),
@@ -242,10 +268,27 @@ struct TemplateEditor: View {
         }
       }
       .sheet(isPresented: $picking) {
-        ExercisePicker { template.exercises.append(TemplateExercise(exercise: $0)) }
+        ExercisePicker(initialGroups: template.muscleGroups) {
+          template.exercises.append(TemplateExercise(exercise: $0))
+        }
       }
       .archiveTransferPresenter(when: store.showingTemplateEditor && !picking)
       .safeAreaInset(edge: .top) { if store.isDemoMode { DemoModeBanner() } }
+    }
+  }
+}
+
+struct TemplateMuscleGroups: View {
+  @Environment(\.locale) private var locale
+  let template: WorkoutTemplate
+
+  var body: some View {
+    if !template.muscleGroups.isEmpty {
+      Text(
+        MuscleGroup.allCases.filter { template.muscleGroups.contains($0) }
+          .map { L10n.text($0.title, locale: locale) }.joined(separator: ", ")
+      )
+      .font(.subheadline).foregroundStyle(.secondary)
     }
   }
 }

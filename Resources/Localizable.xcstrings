@@ -5815,6 +5815,23 @@
         }
       }
     },
+    "Необязательно. Выбранные группы включат фильтр при добавлении упражнений.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Необязательно. Выбранные группы включат фильтр при добавлении упражнений."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Optional. Selected groups will filter exercises when adding them."
+          }
+        }
+      }
+    },
     "Нет активной тренировки": {
       "extractionState": "manual",
       "localizations": {
@@ -6270,6 +6287,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "General"
+          }
+        }
+      }
+    },
+    "Основные группы мышц": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Основные группы мышц"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Primary muscle groups"
           }
         }
       }

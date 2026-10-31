@@ -4,20 +4,35 @@ import SwiftUI
 struct ExerciseLibraryView: View {
   @Environment(\.locale) private var locale
   var onSelect: ((Exercise) -> Void)? = nil
-  @State private var model = ExerciseLibraryViewModel()
+  @State private var model: ExerciseLibraryViewModel
+
+  init(initialGroups: Set<MuscleGroup> = [], onSelect: ((Exercise) -> Void)? = nil) {
+    self.onSelect = onSelect
+    _model = State(initialValue: ExerciseLibraryViewModel(groups: initialGroups))
+  }
+
   var body: some View {
     @Bindable var model = model
     List {
       Section {
         HStack {
           Menu {
-            Button(L10n.text("Все мышцы", locale: locale)) { model.group = nil }
+            Button(L10n.text("Все мышцы", locale: locale)) { model.groups = [] }
             ForEach(MuscleGroup.allCases, id: \.self) { value in
-              Button(value.title) { model.group = value }
+              Toggle(
+                L10n.text(value.title, locale: locale),
+                isOn: Binding(
+                  get: { model.groups.contains(value) },
+                  set: { selected in
+                    if selected { model.groups.insert(value) } else { model.groups.remove(value) }
+                  }))
             }
           } label: {
             Label(
-              model.group?.title ?? L10n.text("Все мышцы", locale: locale),
+              model.groups.isEmpty
+                ? L10n.text("Все мышцы", locale: locale)
+                : MuscleGroup.allCases.filter { model.groups.contains($0) }
+                  .map { L10n.text($0.title, locale: locale) }.joined(separator: ", "),
               systemImage: "figure.strengthtraining.traditional")
           }
           Spacer()
@@ -41,7 +56,7 @@ struct ExerciseLibraryView: View {
       }
       Section {
         DisclosureGroup(L10n.text("Выбрать на схеме тела", locale: locale)) {
-          ExerciseBodyPicker(selection: $model.group)
+          ExerciseBodyPicker(selection: $model.groups)
             .padding(.vertical, 8)
         }
         .accessibilityIdentifier("exerciseBodyPicker")

@@ -197,10 +197,11 @@ struct ExercisePicker: View {
   @Environment(\.locale) private var locale
   @Environment(\.dismiss) private var dismiss
   @State private var custom = false
+  var initialGroups: Set<MuscleGroup> = []
   let select: (Exercise) -> Void
   var body: some View {
     NavigationStack {
-      ExerciseLibraryView { exercise in
+      ExerciseLibraryView(initialGroups: initialGroups) { exercise in
         select(exercise)
         dismiss()
       }

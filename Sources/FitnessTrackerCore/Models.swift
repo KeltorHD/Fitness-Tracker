@@ -110,13 +110,32 @@ public struct WorkoutTemplate: Identifiable, Codable, Equatable, Sendable {
   public var name: String
   public var exercises: [TemplateExercise]
   public var restSeconds: Int
-  public init(id: UUID = UUID(), name: String, exercises: [TemplateExercise], restSeconds: Int = 90)
-  {
+  public var muscleGroups: Set<MuscleGroup>
+  public init(
+    id: UUID = UUID(), name: String, exercises: [TemplateExercise], restSeconds: Int = 90,
+    muscleGroups: Set<MuscleGroup> = []
+  ) {
     self.id = id
     self.name = name
     self.exercises = exercises
     self.restSeconds = restSeconds
+    self.muscleGroups = muscleGroups
   }
+
+  private enum CodingKeys: String, CodingKey {
+    case id, name, exercises, restSeconds, muscleGroups
+  }
+
+  public init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    id = try container.decode(UUID.self, forKey: .id)
+    name = try container.decode(String.self, forKey: .name)
+    exercises = try container.decode([TemplateExercise].self, forKey: .exercises)
+    restSeconds = try container.decode(Int.self, forKey: .restSeconds)
+    // Additive migration: existing templates have no preferred muscle filter.
+    muscleGroups = try container.decodeIfPresent(Set<MuscleGroup>.self, forKey: .muscleGroups) ?? []
+  }
+
   public func start(at date: Date = Date()) throws -> Workout {
     try Validation.template(self)
     return Workout(

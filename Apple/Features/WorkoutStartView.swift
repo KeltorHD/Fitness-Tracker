@@ -80,6 +80,7 @@ struct WorkoutStartView: View {
                   .accessibilityHidden(true)
                 VStack(alignment: .leading, spacing: 4) {
                   Text(template.name).font(.headline)
+                  TemplateMuscleGroups(template: template)
                   if let selectionIndex {
                     Text(L10n.format("Порядок: %@", String(selectionIndex + 1), locale: locale))
                       .font(.caption).foregroundStyle(.secondary)
