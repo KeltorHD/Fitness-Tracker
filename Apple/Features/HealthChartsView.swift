@@ -253,9 +253,21 @@ struct WorkoutLiveHeartRateChart: View {
   @Environment(AppStore.self) private var store
   @Environment(\.locale) private var locale
   let workoutID: UUID
+  var onHide: (() -> Void)? = nil
   var body: some View {
     VStack(alignment: .leading, spacing: 12) {
-      CurrentHeartRateView(tracker: store.tracker, health: store.healthCharts)
+      HStack(alignment: .top, spacing: 8) {
+        CurrentHeartRateView(tracker: store.tracker, health: store.healthCharts)
+          .frame(maxWidth: .infinity, alignment: .leading)
+        if let onHide {
+          Button(action: onHide) {
+            Image(systemName: "xmark").frame(minWidth: 44, minHeight: 44)
+          }
+          .buttonStyle(.plain).foregroundStyle(.secondary)
+          .accessibilityLabel(L10n.text("Скрыть карточку пульса", locale: locale))
+          .accessibilityIdentifier("hideWorkoutHeartRate")
+        }
+      }
       if store.tracker.recording?.workoutID == workoutID, !store.tracker.chartPoints.isEmpty {
         HeartRateLineChart(points: store.tracker.chartPoints).frame(height: 170)
           .accessibilityIdentifier("liveWorkoutHeartRateChart")

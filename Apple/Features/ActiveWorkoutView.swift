@@ -6,6 +6,7 @@ struct ActiveWorkoutView: View {
   @Environment(AppStore.self) private var store
   @Environment(\.dismiss) private var dismiss
   @AppStorage("weightUnit") private var unit: WeightUnit = .kilograms
+  @AppStorage("showWorkoutHeartRate") private var showHeartRate = true
   @State private var pickingExercise = false
   @State private var selectedExercise: WorkoutExercise?
   @State private var confirmCancel = false
@@ -52,6 +53,15 @@ struct ActiveWorkoutView: View {
                 }
                 Button(L10n.text("Добавить упражнение", locale: locale), systemImage: "plus") {
                   pickingExercise = true
+                }
+                if !store.isDemoMode {
+                  Button(
+                    L10n.text(
+                      showHeartRate ? "Скрыть карточку пульса" : "Показать карточку пульса",
+                      locale: locale),
+                    systemImage: showHeartRate ? "eye.slash" : "eye"
+                  ) { showHeartRate.toggle() }
+                  .accessibilityIdentifier("toggleWorkoutHeartRate")
                 }
                 Button(
                   L10n.text("Отменить тренировку", locale: locale), systemImage: "trash",
@@ -116,8 +126,10 @@ struct ActiveWorkoutView: View {
       VStack(spacing: 0) {
         VStack(spacing: 0) {
           WorkoutSessionSummary(workout: workout, unit: unit).padding(.vertical, 16)
-          if !store.isDemoMode {
-            WorkoutLiveHeartRateChart(workoutID: workout.id).fitCard().padding(.bottom, 16)
+          if !store.isDemoMode && showHeartRate {
+            WorkoutLiveHeartRateChart(workoutID: workout.id, onHide: { showHeartRate = false })
+              .fitCard().padding(.bottom, 16)
+              .accessibilityIdentifier("workoutHeartRateCard")
           }
           if let end = workout.restEndsAt, end > .now {
             HStack {

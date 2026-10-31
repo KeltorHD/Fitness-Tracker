@@ -608,5 +608,7 @@
   "Каталог переведён на русский язык. Новые описания преимущественно переведены автоматически; такие карточки отмечены.": "The catalog is translated into Russian. Most new descriptions are machine-translated and marked accordingly.",
   "%@ уд/мин": "%@ bpm",
   "Нет свежих данных пульса": "No recent heart rate data",
-  "Нажмите на график, чтобы увидеть пульс и время измерения.": "Tap the chart to see heart rate and measurement time."
+  "Нажмите на график, чтобы увидеть пульс и время измерения.": "Tap the chart to see heart rate and measurement time.",
+  "Скрыть карточку пульса": "Hide heart rate card",
+  "Показать карточку пульса": "Show heart rate card"
 }
