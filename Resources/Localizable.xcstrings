@@ -7260,23 +7260,6 @@
         }
       }
     },
-    "Показать карточку пульса": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Показать карточку пульса"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Show heart rate card"
-          }
-        }
-      }
-    },
     "Показываем доступные источники: Apple Watch, AirPods, приложения браслетов и iPhone. Частота обновлений зависит от устройства и синхронизации с «Здоровьем».": {
       "extractionState": "manual",
       "localizations": {
@@ -8076,6 +8059,23 @@
         }
       }
     },
+    "Развернуть карточку пульса": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Развернуть карточку пульса"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expand heart rate card"
+          }
+        }
+      }
+    },
     "Разминка": {
       "extractionState": "manual",
       "localizations": {
@@ -8399,6 +8399,23 @@
         }
       }
     },
+    "Свернуть карточку пульса": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Свернуть карточку пульса"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Collapse heart rate card"
+          }
+        }
+      }
+    },
     "Светлая": {
       "extractionState": "manual",
       "localizations": {
@@ -8633,23 +8650,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Crunches"
-          }
-        }
-      }
-    },
-    "Скрыть карточку пульса": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Скрыть карточку пульса"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hide heart rate card"
           }
         }
       }

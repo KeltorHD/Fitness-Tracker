@@ -609,6 +609,6 @@
   "%@ уд/мин": "%@ bpm",
   "Нет свежих данных пульса": "No recent heart rate data",
   "Нажмите на график, чтобы увидеть пульс и время измерения.": "Tap the chart to see heart rate and measurement time.",
-  "Скрыть карточку пульса": "Hide heart rate card",
-  "Показать карточку пульса": "Show heart rate card"
+  "Свернуть карточку пульса": "Collapse heart rate card",
+  "Развернуть карточку пульса": "Expand heart rate card"
 }

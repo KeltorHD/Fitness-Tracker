@@ -204,6 +204,7 @@ struct CurrentHeartRateView: View {
   @Environment(\.locale) private var locale
   let tracker: TrackerViewModel
   let health: HealthChartsViewModel
+  var compact = false
 
   private var reading: HeartRateReading? {
     if tracker.mode == .bluetooth, tracker.bluetooth.connection == .connected {
@@ -224,28 +225,52 @@ struct CurrentHeartRateView: View {
 
   var body: some View {
     TimelineView(.periodic(from: .now, by: 1)) { timeline in
-      VStack(alignment: .leading, spacing: 8) {
-        Label(L10n.text("Текущий пульс", locale: locale), systemImage: "heart.fill").font(.headline)
-        if let reading {
-          HStack(alignment: .firstTextBaseline) {
-            Text(reading.beatsPerMinute, format: .number.precision(.fractionLength(0)))
-              .font(.title2.bold()).monospacedDigit()
-            Text(L10n.text("уд/мин", locale: locale))
+      Group {
+        if compact {
+          HStack(spacing: 8) {
+            Label(L10n.text("Пульс", locale: locale), systemImage: "heart.fill")
+              .foregroundStyle(FitTheme.accent)
+            Spacer(minLength: 4)
+            if let reading, isFresh(at: timeline.date) {
+              Text(reading.beatsPerMinute, format: .number.precision(.fractionLength(0)))
+                .monospacedDigit()
+            } else {
+              Text("—").foregroundStyle(.secondary)
+                .accessibilityLabel(L10n.text("Нет свежего измерения", locale: locale))
+            }
+            Text(L10n.text("уд/мин", locale: locale)).foregroundStyle(.secondary)
           }
-          let fresh =
-            reading.isFresh(at: timeline.date)
-            && (tracker.bluetooth.connection == .connected || tracker.live.state == .running
-              || health.observing)
-          Text(L10n.text(fresh ? "Свежее измерение" : "Последнее измерение", locale: locale))
-            .font(.caption).foregroundStyle(fresh ? FitTheme.accent : FitTheme.muted)
-          Text(reading.date, format: .dateTime.day().month(.abbreviated).hour().minute().second())
-            .font(.caption).foregroundStyle(.secondary)
-          if let source { Text(source).font(.caption).foregroundStyle(.secondary) }
+          .font(.subheadline)
         } else {
-          Text(L10n.text("Нет свежего измерения", locale: locale)).foregroundStyle(.secondary)
+          VStack(alignment: .leading, spacing: 8) {
+            Label(L10n.text("Текущий пульс", locale: locale), systemImage: "heart.fill").font(
+              .headline)
+            if let reading {
+              HStack(alignment: .firstTextBaseline) {
+                Text(reading.beatsPerMinute, format: .number.precision(.fractionLength(0)))
+                  .font(.title2.bold()).monospacedDigit()
+                Text(L10n.text("уд/мин", locale: locale))
+              }
+              let fresh = isFresh(at: timeline.date)
+              Text(L10n.text(fresh ? "Свежее измерение" : "Последнее измерение", locale: locale))
+                .font(.caption).foregroundStyle(fresh ? FitTheme.accent : FitTheme.muted)
+              Text(
+                reading.date, format: .dateTime.day().month(.abbreviated).hour().minute().second()
+              )
+              .font(.caption).foregroundStyle(.secondary)
+              if let source { Text(source).font(.caption).foregroundStyle(.secondary) }
+            } else {
+              Text(L10n.text("Нет свежего измерения", locale: locale)).foregroundStyle(.secondary)
+            }
+          }
         }
       }.accessibilityElement(children: .combine).accessibilityIdentifier("currentHeartRate")
     }
+  }
+  private func isFresh(at date: Date) -> Bool {
+    reading?.isFresh(at: date) == true
+      && (tracker.bluetooth.connection == .connected || tracker.live.state == .running
+        || health.observing)
   }
 }
 
@@ -253,41 +278,51 @@ struct WorkoutLiveHeartRateChart: View {
   @Environment(AppStore.self) private var store
   @Environment(\.locale) private var locale
   let workoutID: UUID
-  var onHide: (() -> Void)? = nil
+  var isExpanded = true
+  var onToggle: (() -> Void)? = nil
   var body: some View {
     VStack(alignment: .leading, spacing: 12) {
-      HStack(alignment: .top, spacing: 8) {
-        CurrentHeartRateView(tracker: store.tracker, health: store.healthCharts)
-          .frame(maxWidth: .infinity, alignment: .leading)
-        if let onHide {
-          Button(action: onHide) {
-            Image(systemName: "xmark").frame(minWidth: 44, minHeight: 44)
+      HStack(alignment: isExpanded ? .top : .center, spacing: 8) {
+        CurrentHeartRateView(
+          tracker: store.tracker, health: store.healthCharts, compact: !isExpanded
+        )
+        .frame(maxWidth: .infinity, alignment: .leading)
+        if let onToggle {
+          Button(action: onToggle) {
+            Image(systemName: isExpanded ? "chevron.up" : "chevron.down").frame(
+              minWidth: 44, minHeight: 44)
           }
           .buttonStyle(.plain).foregroundStyle(.secondary)
-          .accessibilityLabel(L10n.text("Скрыть карточку пульса", locale: locale))
-          .accessibilityIdentifier("hideWorkoutHeartRate")
+          .accessibilityLabel(
+            L10n.text(
+              isExpanded ? "Свернуть карточку пульса" : "Развернуть карточку пульса", locale: locale
+            )
+          )
+          .accessibilityIdentifier("toggleWorkoutHeartRateCard")
         }
       }
-      if store.tracker.recording?.workoutID == workoutID, !store.tracker.chartPoints.isEmpty {
-        HeartRateLineChart(points: store.tracker.chartPoints).frame(height: 170)
-          .accessibilityIdentifier("liveWorkoutHeartRateChart")
-      } else if !store.healthCharts.workoutPoints.isEmpty {
-        HeartRateLineChart(points: store.healthCharts.workoutPoints).frame(height: 170)
-          .accessibilityIdentifier("liveWorkoutHeartRateChart")
-      }
-      if let error = store.tracker.error {
-        Text(L10n.text(error, locale: locale)).font(.caption).foregroundStyle(.red)
-      }
-      HStack {
-        NavigationLink(L10n.text("Пульс и шаги", locale: locale)) {
-          HealthChartsView().toolbar(.visible, for: .navigationBar)
+      if isExpanded {
+        if store.tracker.recording?.workoutID == workoutID, !store.tracker.chartPoints.isEmpty {
+          HeartRateLineChart(points: store.tracker.chartPoints).frame(height: 170)
+            .accessibilityIdentifier("liveWorkoutHeartRateChart")
+        } else if !store.healthCharts.workoutPoints.isEmpty {
+          HeartRateLineChart(points: store.healthCharts.workoutPoints).frame(height: 170)
+            .accessibilityIdentifier("liveWorkoutHeartRateChart")
         }
-        .accessibilityIdentifier("openHealthCharts")
-        Spacer(minLength: 8)
-        NavigationLink(L10n.text("Трекер", locale: locale)) {
-          TrackerView(model: store.tracker).toolbar(.visible, for: .navigationBar)
+        if let error = store.tracker.error {
+          Text(L10n.text(error, locale: locale)).font(.caption).foregroundStyle(.red)
         }
-        .accessibilityIdentifier("openWorkoutTracker")
+        HStack {
+          NavigationLink(L10n.text("Пульс и шаги", locale: locale)) {
+            HealthChartsView().toolbar(.visible, for: .navigationBar)
+          }
+          .accessibilityIdentifier("openHealthCharts")
+          Spacer(minLength: 8)
+          NavigationLink(L10n.text("Трекер", locale: locale)) {
+            TrackerView(model: store.tracker).toolbar(.visible, for: .navigationBar)
+          }
+          .accessibilityIdentifier("openWorkoutTracker")
+        }
       }
     }
   }
