@@ -1,11 +1,12 @@
 # Статусы модулей
 
-Последняя проверка: 2026-10-31, Ubuntu 24.04 x86_64, Swift 6.2.1, Swift language mode 6.
+Последняя проверка: 2026-11-01, Ubuntu 24.04 x86_64, Swift 6.2.1, Swift language mode 6.
 
 **Implemented** означает наличие реализации в исходниках. **Linux-tested** означает выполнение функциональных тестов соответствующего Core-кода. Синтаксический разбор Apple-файлов и проверка ресурсов не считаются функциональным тестированием SwiftUI или Apple SDK.
 
 | Модуль | Implemented | Linux-tested | Requires Xcode validation | Requires Apple Developer configuration |
 | --- | --- | --- | --- | --- |
+| Центральная кнопка начала тренировки | Implemented: выступающая круглая кнопка в общей Liquid Glass панели, выбор сохранённого шаблона/свободного старта; активная сессия продолжается без дубликата | Core regression suite; Apple-исходники только parser/lint, структура и RU/EN ресурсы; новые XCTest/UI tests на Linux не запускались | Requires Xcode validation: геометрия стекла, tab navigation, sheet transitions, отмена, пустой каталог, ошибка сохранения, активная сессия, доступность | Нет новых capabilities |
 | Сворачивание верхней карточки пульса в тренировке | Implemented: компактная строка пульса со стрелкой; график/детали раскрываются, карточка остаётся на месте; AppStorage сохраняет вид | Linux-tested: parser/lint/структура/локализация; Apple UI не запускался | Requires Xcode validation: свернуть/развернуть, relaunch, прежняя настройка false, свежесть, demo mode, VoiceOver; запись/Live Activity продолжаются | Нет |
 | Единая карточка пульса в активной тренировке | Implemented: нижний WorkoutTrackerCard удалён; текущее значение, график и ошибки сверху, прямой переход в Трекер для подключения/live controls | Linux-tested: parser/lint/структура/локализация; Apple UI не запускался | Requires Xcode validation: одна карточка, переходы и Bluetooth/AirPods controls | Без новых permissions |
 | Заголовок активной тренировки в navigation bar | Implemented: отдельные Image/Text для значка и видимого названия над временем, без toolbar Label style; отдельный WorkoutHero убран | Linux-tested: syntax, lint, project/localization; Apple UI не запускался | Requires Xcode validation: длинное название, rename, Dynamic Type, VoiceOver и узкий экран | Нет |

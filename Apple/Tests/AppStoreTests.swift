@@ -49,6 +49,36 @@ import XCTest
 }
 
 @MainActor final class AppStoreTests: XCTestCase {
+  func testFailedWorkoutStartDoesNotPresentOrCreateSession() throws {
+    let repository = FailingWorkoutRepository()
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    repository.failSaves = true
+    store.start()
+    XCTAssertNil(store.active)
+    XCTAssertFalse(store.showSession)
+    XCTAssertTrue(try repository.workouts().isEmpty)
+    XCTAssertNotNil(store.error)
+    repository.failSaves = false
+    store.start()
+    XCTAssertNotNil(store.active)
+    XCTAssertTrue(store.showSession)
+    XCTAssertEqual(try repository.workouts().count, 1)
+  }
+
+  func testStartingAnotherTemplateResumesExistingSessionWithoutReplacingIt() throws {
+    let repository = MemoryWorkoutRepository()
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    store.start(template: ExerciseCatalog.starterTemplates[0])
+    let original = try XCTUnwrap(store.active)
+    store.showSession = false
+    store.start(template: ExerciseCatalog.starterTemplates[1])
+    XCTAssertEqual(store.active, original)
+    XCTAssertTrue(store.showSession)
+    XCTAssertEqual(try repository.workouts(), [original])
+  }
+
   func testUnknownImportedDurationNeverRequestsHealthWritePermission() async throws {
     let repository = MemoryWorkoutRepository()
     var workout = Workout(name: "CSV fixture", startedAt: Date(timeIntervalSince1970: 100))

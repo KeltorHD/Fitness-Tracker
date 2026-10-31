@@ -1072,6 +1072,23 @@
         }
       }
     },
+    "Без шаблона": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Без шаблона"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Without a template"
+          }
+        }
+      }
+    },
     "Библиотека FitnessTracker": {
       "extractionState": "manual",
       "localizations": {
@@ -3044,6 +3061,23 @@
         }
       }
     },
+    "Добавляйте упражнения по ходу": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Добавляйте упражнения по ходу"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add exercises as you go"
+          }
+        }
+      }
+    },
     "Добавьте от 1 до 30 подходов.": {
       "extractionState": "manual",
       "localizations": {
@@ -4506,6 +4540,23 @@
         }
       }
     },
+    "Мои шаблоны": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Мои шаблоны"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "My templates"
+          }
+        }
+      }
+    },
     "На Mi Band 10 откройте Настройки → Share HR и включите передачу пульса. Держите браслет рядом с iPhone.": {
       "extractionState": "manual",
       "localizations": {
@@ -4825,6 +4876,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Beginner"
+          }
+        }
+      }
+    },
+    "Начать": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Начать"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start"
           }
         }
       }
@@ -10027,6 +10095,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Workout template"
+          }
+        }
+      }
+    },
+    "Шаблонов пока нет. Их можно создать в разделе «Каталог».": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Шаблонов пока нет. Их можно создать в разделе «Каталог»."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No templates yet. Create one in the Catalog tab."
           }
         }
       }

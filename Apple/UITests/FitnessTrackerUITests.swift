@@ -1,9 +1,60 @@
 import XCTest
 
 final class FitnessTrackerUITests: XCTestCase {
+  @MainActor func testWorkoutStartCanBeCancelledFromEveryTab() {
+    let app = launch()
+    let start = app.buttons["workoutStartAction"]
+    XCTAssertTrue(start.waitForExistence(timeout: 10))
+    for index in 0...3 {
+      app.buttons["navigationTab_\(index)"].tap()
+      start.tap()
+      XCTAssertTrue(app.buttons["startWorkoutWithoutTemplate"].waitForExistence(timeout: 5))
+      app.buttons["closeWorkoutStart"].tap()
+      XCTAssertTrue(start.waitForExistence(timeout: 5))
+      XCTAssertEqual(start.label, "Начать тренировку")
+      XCTAssertFalse(app.buttons["addExercise"].exists)
+    }
+  }
+
+  @MainActor func testCenterActionStartsEmptyWorkoutAndResumesIt() {
+    let app = launch()
+    let start = app.buttons["workoutStartAction"]
+    XCTAssertTrue(start.waitForExistence(timeout: 10))
+    start.tap()
+    let empty = app.buttons["startWorkoutWithoutTemplate"]
+    XCTAssertTrue(empty.waitForExistence(timeout: 5))
+    empty.tap()
+    XCTAssertTrue(app.buttons["addExercise"].waitForExistence(timeout: 5))
+    XCTAssertFalse(app.buttons["finishWorkout"].isEnabled)
+    XCTAssertFalse(app.buttons["openWorkoutExercise"].exists)
+    app.buttons["Свернуть"].tap()
+    XCTAssertTrue(start.waitForExistence(timeout: 5))
+    XCTAssertEqual(start.label, "Продолжить тренировку")
+    app.buttons["navigationTab_1"].tap()
+    start.tap()
+    XCTAssertTrue(app.buttons["addExercise"].waitForExistence(timeout: 5))
+    XCTAssertFalse(app.buttons["startWorkoutWithoutTemplate"].exists)
+    XCTAssertFalse(app.buttons["openWorkoutExercise"].exists)
+    XCTAssertEqual(app.alerts.count, 0)
+  }
+
+  @MainActor func testCenterActionStartsSavedTemplate() {
+    let app = launch()
+    let start = app.buttons["workoutStartAction"]
+    XCTAssertTrue(start.waitForExistence(timeout: 10))
+    start.tap()
+    let template = app.buttons["startWorkoutTemplate_20000000-0000-0000-0000-000000000001"]
+    XCTAssertTrue(template.waitForExistence(timeout: 5))
+    template.tap()
+    XCTAssertTrue(app.buttons["addExercise"].waitForExistence(timeout: 5))
+    XCTAssertTrue(app.buttons["openWorkoutExercise"].firstMatch.exists)
+    XCTAssertTrue(app.staticTexts["Приседания"].exists)
+    XCTAssertEqual(app.alerts.count, 0)
+  }
+
   @MainActor func testHealthChartsAreAvailableWithoutRequestingAccessOnOpen() {
     let app = launch()
-    app.tabBars.buttons["Результаты"].tap()
+    app.buttons["navigationTab_2"].tap()
     let link = app.buttons["openHealthCharts"]
     reveal(link, in: app)
     link.tap()
@@ -100,7 +151,7 @@ final class FitnessTrackerUITests: XCTestCase {
 
   @MainActor func testBodyWeightCanBeRecordedFromResults() {
     let app = launch()
-    app.tabBars.buttons["Результаты"].tap()
+    app.buttons["navigationTab_2"].tap()
     let record = app.buttons["recordBodyWeight"]
     reveal(record, in: app)
     record.tap()
@@ -139,7 +190,7 @@ final class FitnessTrackerUITests: XCTestCase {
 
   @MainActor func testHistoryMonthMenuPreservesCalendarNavigation() {
     let app = launch()
-    app.tabBars.buttons["Результаты"].tap()
+    app.buttons["navigationTab_2"].tap()
     let title = app.staticTexts["trainingMonthTitle"]
     XCTAssertTrue(title.waitForExistence(timeout: 5))
     let original = title.label
@@ -153,7 +204,7 @@ final class FitnessTrackerUITests: XCTestCase {
 
   @MainActor func testHistoryMonthCanBeSwipedInBothDirections() {
     let app = launch()
-    app.tabBars.buttons["Результаты"].tap()
+    app.buttons["navigationTab_2"].tap()
     let title = app.staticTexts["trainingMonthTitle"]
     XCTAssertTrue(title.waitForExistence(timeout: 5))
     let original = title.label
@@ -177,7 +228,7 @@ final class FitnessTrackerUITests: XCTestCase {
   @MainActor func testResultsShowFiveExerciseChartsAndPeriodPicker() {
     let app = launch()
     openDemoProfile(in: app)
-    app.tabBars.buttons["Результаты"].tap()
+    app.buttons["navigationTab_2"].tap()
     let period = app.buttons["exerciseProgressPeriod"]
     reveal(period, in: app)
     period.tap()
@@ -193,7 +244,7 @@ final class FitnessTrackerUITests: XCTestCase {
   @MainActor func testExerciseChartsCanBeOpenedFromCompletedWorkout() {
     let app = launch()
     openDemoProfile(in: app)
-    app.tabBars.buttons["Дневник"].tap()
+    app.buttons["navigationTab_0"].tap()
     let workout = app.buttons.containing(NSPredicate(format: "label CONTAINS %@", "ДЕМО ·"))
       .firstMatch
     reveal(workout, in: app)
@@ -245,7 +296,7 @@ final class FitnessTrackerUITests: XCTestCase {
   }
 
   @MainActor private func openDemoProfile(in app: XCUIApplication) {
-    let settings = app.tabBars.buttons["Настройки"]
+    let settings = app.buttons["navigationTab_3"]
     XCTAssertTrue(settings.waitForExistence(timeout: 10))
     settings.tap()
     let load = app.buttons["loadDemoData"]
@@ -261,7 +312,7 @@ final class FitnessTrackerUITests: XCTestCase {
 
   @MainActor func testDemoProfileCanBeOpenedAndClosedWithoutChangingPersonalHistory() {
     let app = launch()
-    let settings = app.tabBars.buttons["Настройки"]
+    let settings = app.buttons["navigationTab_3"]
     XCTAssertTrue(settings.waitForExistence(timeout: 10))
     settings.tap()
     let load = app.buttons["loadDemoData"]
@@ -279,13 +330,13 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(leave.waitForExistence(timeout: 5))
     leave.tap()
     app.buttons["confirmLeaveDemoData"].tap()
-    app.tabBars.buttons["Дневник"].tap()
+    app.buttons["navigationTab_0"].tap()
     XCTAssertTrue(app.staticTexts["Начните свой дневник"].waitForExistence(timeout: 5))
     XCTAssertFalse(banner.exists)
   }
   @MainActor func testTrackerOffersBothModesWithoutRequestingPermissionsOnOpen() {
     let app = launch()
-    let settings = app.tabBars.buttons["Настройки"]
+    let settings = app.buttons["navigationTab_3"]
     XCTAssertTrue(settings.waitForExistence(timeout: 10))
     settings.tap()
     let tracker = app.buttons["openTracker"]
@@ -307,7 +358,7 @@ final class FitnessTrackerUITests: XCTestCase {
   }
   @MainActor func testAirPodsSetupRequiresAnExplicitActiveWorkout() {
     let app = launch()
-    app.tabBars.buttons["Настройки"].tap()
+    app.buttons["navigationTab_3"].tap()
     let tracker = app.buttons["openTracker"]
     reveal(tracker, in: app)
     tracker.tap()
@@ -329,7 +380,7 @@ final class FitnessTrackerUITests: XCTestCase {
 
   @MainActor func testLanguageCanBeChangedWithoutRelaunchingTheApp() {
     let app = launch()
-    let settings = app.tabBars.buttons["Настройки"]
+    let settings = app.buttons["navigationTab_3"]
     XCTAssertTrue(settings.waitForExistence(timeout: 10))
     settings.tap()
     let language = app.buttons["appLanguagePicker"]
@@ -337,17 +388,17 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(language.waitForExistence(timeout: 5))
     language.tap()
     app.buttons["English"].tap()
-    XCTAssertTrue(app.tabBars.buttons["Settings"].waitForExistence(timeout: 5))
-    XCTAssertTrue(app.tabBars.buttons["Journal"].exists)
+    XCTAssertTrue(app.buttons["Settings"].waitForExistence(timeout: 5))
+    XCTAssertTrue(app.buttons["Journal"].exists)
     let selectedLanguage = app.buttons["appLanguagePicker"]
     selectedLanguage.tap()
     app.buttons["Русский"].tap()
-    XCTAssertTrue(app.tabBars.buttons["Настройки"].waitForExistence(timeout: 5))
+    XCTAssertTrue(app.buttons["Настройки"].waitForExistence(timeout: 5))
   }
 
   @MainActor func testArchiveToolsAreAvailableFromSettings() {
     let app = launch()
-    let settings = app.tabBars.buttons["Настройки"]
+    let settings = app.buttons["navigationTab_3"]
     XCTAssertTrue(settings.waitForExistence(timeout: 10))
     settings.tap()
     let tools = app.buttons["openArchiveTransfer"]
@@ -401,7 +452,7 @@ final class FitnessTrackerUITests: XCTestCase {
     finish.tap()
     let alert = app.alerts["Готово"]
     if alert.waitForExistence(timeout: 3) { alert.buttons["Хорошо"].tap() }
-    app.tabBars.buttons["Дневник"].tap()
+    app.buttons["navigationTab_0"].tap()
     XCTAssertTrue(app.staticTexts["Свободная тренировка"].waitForExistence(timeout: 5))
   }
   @MainActor func testMinimizedSessionCanBeResumed() {
@@ -459,7 +510,7 @@ final class FitnessTrackerUITests: XCTestCase {
   @MainActor func testCompletedWorkoutAndExerciseDismissOneSheetAtATime() {
     let app = launch()
     openDemoProfile(in: app)
-    app.tabBars.buttons["Дневник"].tap()
+    app.buttons["navigationTab_0"].tap()
     let workout = app.buttons.containing(NSPredicate(format: "label CONTAINS %@", "ДЕМО ·"))
       .firstMatch
     reveal(workout, in: app)

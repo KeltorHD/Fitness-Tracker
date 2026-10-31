@@ -13,6 +13,7 @@ import WidgetKit
   var error: String?
   var notice: String?
   var showSession = false
+  var showingWorkoutStart = false
   var showingWorkoutDetail = false
   var showingTemplateEditor = false
   var showingBodyWeightEditor = false
@@ -126,7 +127,7 @@ import WidgetKit
       // Finish the personal workspace's last notification/widget update before switching data.
       await previous?.value
       try Task.checkCancellation()
-      guard !showSession, !showingWorkoutDetail, !showingTemplateEditor,
+      guard !showSession, !showingWorkoutStart, !showingWorkoutDetail, !showingTemplateEditor,
         !showingBodyWeightEditor,
         !archiveTransfer.isPresented, !archiveTransfer.isSaving
       else { throw TrainingError.invalidState }
@@ -168,6 +169,7 @@ import WidgetKit
     error = nil
     notice = nil
     showSession = false
+    showingWorkoutStart = false
     showingWorkoutDetail = false
     showingTemplateEditor = false
     showingBodyWeightEditor = false
