@@ -25,6 +25,8 @@ private func expect(_ condition: Bool, _ message: String) throws {
   var heartAuthorizations = 0
   var workoutReads = 0
   var suspendSummary = false
+  var dayValue: HealthDaySummary?
+  var failDay = false
   var pending: CheckedContinuation<HealthDaySummary, any Error>?
   private var waiter: CheckedContinuation<Void, Never>?
   func requestReadAuthorization() async throws { dayAuthorizations += 1 }
@@ -37,7 +39,8 @@ private func expect(_ condition: Bool, _ message: String) throws {
         waiter = nil
       }
     }
-    return Self.summary(day)
+    if failDay { throw CheckFailure(message: "Private Health failure") }
+    return dayValue ?? Self.summary(day)
   }
   static func summary(_ day: Date) -> HealthDaySummary {
     HealthDaySummary(
@@ -199,7 +202,7 @@ private actor RecordingStub: HeartRateRecordingRepository {
     health.pending = nil
     await request.value
     try expect(
-      tracker.summary == nil && !tracker.loadingHealth,
+      tracker.summary == nil && !tracker.loadingHealth && tracker.healthReadAt == nil,
       "Late Health response cannot overwrite another mode")
 
     var other = workout
@@ -232,6 +235,28 @@ private actor RecordingStub: HeartRateRecordingRepository {
     try await files.remove(for: local.workoutID)
     let absent = try await files.recording(for: local.workoutID)
     try expect(absent == nil, "Explicit deletion removes local recording")
+    health.suspendSummary = false
+    tracker.selectMode(.appleHealth)
+    await tracker.readHealth(day: now, calendar: .current)
+    try expect(
+      tracker.healthReadAt == now && tracker.summary?.isEmpty == true
+        && tracker.healthReadChanged == nil,
+      "A successful empty read must have a completion time and stay distinct from failure")
+    await tracker.readHealth(day: now, calendar: .current)
+    try expect(tracker.healthReadChanged == false, "An unchanged read must report no new data")
+    health.dayValue = HealthDaySummary(
+      day: now, steps: 0, activeEnergyKCal: nil, sleepSeconds: nil,
+      latestHeartRate: nil, heartRateSource: nil)
+    await tracker.readHealth(day: now, calendar: .current)
+    try expect(
+      tracker.healthReadChanged == true && tracker.summary?.isEmpty == false,
+      "Actual zero steps is available data, rather than an empty read")
+    health.failDay = true
+    await tracker.readHealth(day: now, calendar: .current)
+    try expect(
+      tracker.healthReadAt == nil && tracker.error != nil && tracker.healthReadFailed
+        && !tracker.loadingHealth,
+      "A failed attempt must never claim a successful read")
     print(
       "Portable tracker behavior: recording, pause, persistence failure/retry, mode races, permissions, history and file integrity passed (no Apple SDK)."
     )

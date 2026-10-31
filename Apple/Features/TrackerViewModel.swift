@@ -9,6 +9,9 @@ import Observation
   private(set) var summary: HealthDaySummary?
   private(set) var loadingHealth = false
   private(set) var hasRequestedHealth = false
+  private(set) var healthReadAt: Date?
+  private(set) var healthReadChanged: Bool?
+  private(set) var healthReadFailed = false
   private(set) var recording: HeartRateRecording? { didSet { rebuildChart() } }
   private(set) var chartPoints: [HeartRateChartPoint] = []
   private(set) var preparingRecording = false
@@ -35,6 +38,7 @@ import Observation
   @ObservationIgnored private var saveTask: Task<Void, Never>?
   @ObservationIgnored private var pendingSaves: [UUID: HeartRateRecording] = [:]
   @ObservationIgnored private var healthRequest: UUID?
+  @ObservationIgnored private var healthBaseline: HealthDaySummary?
   @ObservationIgnored private var lastQueuedAt: Date?
   @ObservationIgnored private var backgroundWorkCancelled = false
   @ObservationIgnored private var liveRequest: UUID?
@@ -68,6 +72,10 @@ import Observation
     sensor.disconnect()
     healthRequest = nil
     loadingHealth = false
+    healthReadAt = nil
+    healthReadChanged = nil
+    healthBaseline = nil
+    healthReadFailed = false
     self.mode = mode
     defaults.set(mode.rawValue, forKey: "trackerMode")
     error = nil
@@ -321,6 +329,9 @@ import Observation
     let request = UUID()
     healthRequest = request
     loadingHealth = true
+    healthReadAt = nil
+    healthReadChanged = nil
+    healthReadFailed = false
     summary = nil
     error = nil
     defer { if healthRequest == request { loadingHealth = false } }
@@ -331,9 +342,17 @@ import Observation
       hasRequestedHealth = true
       let summary = try await health.daySummary(for: day, calendar: calendar)
       try Task.checkCancellation()
-      if healthRequest == request { self.summary = summary }
+      if healthRequest == request {
+        healthReadChanged = healthBaseline.flatMap { previous in
+          calendar.isDate(previous.day, inSameDayAs: summary.day) ? previous != summary : nil
+        }
+        healthBaseline = summary
+        self.summary = summary
+        healthReadAt = now()
+      }
     } catch {
       guard !Task.isCancelled, healthRequest == request else { return }
+      healthReadFailed = true
       report(
         error, operation: "readHealthMetrics",
         fallback: "Не удалось прочитать показатели. Проверьте доступ к «Здоровью» и повторите.")

@@ -110,9 +110,24 @@ struct TrackerView: View {
         DatePicker(
           L10n.text("День", locale: locale), selection: $day, in: ...Date(),
           displayedComponents: .date)
-        Button(L10n.text("Прочитать показатели", locale: locale)) { request += 1 }
-          .disabled(model.loadingHealth).accessibilityIdentifier("readTrackerHealth")
-        if model.loadingHealth { ProgressView(L10n.text("Чтение показателей…", locale: locale)) }
+        Button(
+          L10n.text(
+            model.loadingHealth ? "Чтение показателей…" : "Прочитать показатели", locale: locale)
+        ) { request += 1 }
+        .disabled(model.loadingHealth).accessibilityIdentifier("readTrackerHealth")
+        if model.loadingHealth || model.healthReadAt != nil || model.healthReadFailed {
+          HealthReadFeedback(
+            loading: model.loadingHealth, completedAt: model.healthReadAt,
+            hasData: model.summary?.isEmpty == false, changed: model.healthReadChanged,
+            failed: model.healthReadFailed,
+            detail: model.summary.map { summary in
+              let count = [
+                summary.steps != nil, summary.activeEnergyKCal != nil,
+                summary.sleepSeconds != nil, summary.latestHeartRate != nil,
+              ].filter { $0 }.count
+              return L10n.format("Получено показателей: %@ из 4.", String(count), locale: locale)
+            })
+        }
       } footer: {
         Text(
           L10n.text(
@@ -213,6 +228,66 @@ struct TrackerView: View {
         }
       }
     }
+  }
+}
+
+struct HealthReadFeedback: View {
+  @Environment(\.locale) private var locale
+  let loading: Bool
+  let completedAt: Date?
+  let hasData: Bool
+  let changed: Bool?
+  let failed: Bool
+  let detail: String?
+
+  var body: some View {
+    VStack(alignment: .leading, spacing: 8) {
+      if loading {
+        ProgressView(L10n.text("Проверяем доступ и читаем показатели…", locale: locale))
+        Text(
+          L10n.text(
+            "Если появился запрос доступа к «Здоровью», выберите разрешённые показатели.",
+            locale: locale)
+        )
+        .font(.footnote).foregroundStyle(.secondary)
+      } else if failed {
+        Label(
+          L10n.text("Не удалось обновить показатели.", locale: locale),
+          systemImage: "exclamationmark.circle"
+        )
+        .foregroundStyle(.red)
+      } else if let completedAt {
+        Label(
+          L10n.text(
+            !hasData
+              ? "Чтение завершено: доступных данных нет."
+              : changed == false
+                ? "Проверка завершена: новых данных нет." : "Показатели прочитаны.",
+            locale: locale),
+          systemImage: hasData ? "checkmark.circle" : "info.circle"
+        )
+        .font(.subheadline.weight(.medium))
+        if let detail { Text(detail).font(.footnote) }
+        Text(
+          L10n.format(
+            "Успешное чтение: %@",
+            completedAt.formatted(
+              .dateTime.locale(locale).day().month(.abbreviated).hour().minute().second()),
+            locale: locale)
+        )
+        .font(.caption).foregroundStyle(.secondary)
+        if !hasData {
+          Text(
+            L10n.text(
+              "Нет доступных данных. Проверьте синхронизацию приложения трекера и разрешения FitnessTracker в «Здоровье».",
+              locale: locale)
+          )
+          .font(.footnote).foregroundStyle(.secondary)
+        }
+      }
+    }
+    .accessibilityElement(children: .combine)
+    .accessibilityIdentifier("healthReadFeedback")
   }
 }
 

@@ -23,7 +23,22 @@ struct HealthChartsView: View {
           DatePicker(
             L10n.text("День", locale: locale), selection: $model.day, in: ...Date(),
             displayedComponents: .date)
-          if model.loading { ProgressView(L10n.text("Чтение показателей…", locale: locale)) }
+          Button(
+            L10n.text(model.loading ? "Чтение показателей…" : "Обновить показатели", locale: locale)
+          ) { model.retry() }
+          .disabled(model.loading).accessibilityIdentifier("refreshHealthCharts")
+          HealthReadFeedback(
+            loading: model.loading, completedAt: model.updatedAt,
+            hasData: model.snapshot.map {
+              !$0.heartRate.isEmpty || $0.steps.contains { $0.steps != nil }
+            } ?? false,
+            changed: model.updateChanged, failed: model.error != nil,
+            detail: model.snapshot.map {
+              L10n.format(
+                "Измерений пульса за день: %@. Дней с данными о шагах: %@ из 7.",
+                String($0.heartRate.count), String($0.steps.filter { $0.steps != nil }.count),
+                locale: locale)
+            })
           if let snapshot = model.snapshot {
             if model.points.isEmpty && snapshot.steps.allSatisfy({ $0.steps == nil }) {
               Text(
@@ -80,8 +95,6 @@ struct HealthChartsView: View {
             Text(L10n.text(error, locale: locale)).foregroundStyle(.red)
             Button(L10n.text("Повторить", locale: locale)) { model.retry() }
           }
-          Button(L10n.text("Обновить показатели", locale: locale)) { model.retry() }
-            .disabled(model.loading)
         }
       }.padding(16)
     }

@@ -88,10 +88,14 @@ private func expect(_ condition: Bool, _ message: String) throws {
     let task = Task { await model.observe(calendar: .current) }
     await reader.waitForObservation()
     try expect(model.observing && model.snapshot == empty, "Empty data must stay empty")
+    try expect(
+      model.updatedAt == day && model.updateChanged == nil,
+      "Successful empty reads must be confirmed")
     reader.value = populated
     reader.changesContinuation?.yield(())
     await reader.waitForRead(2)
     try expect(model.snapshot == populated && model.points.count == 1, "Events refresh both charts")
+    try expect(model.updateChanged == true, "New data must be reported")
     var workout = Workout(name: "Test", startedAt: day.addingTimeInterval(-5), exercises: [])
     model.attach(workout)
     try expect(
@@ -116,7 +120,8 @@ private func expect(_ condition: Bool, _ message: String) throws {
     reader.fail = true
     await model.observe(calendar: .current)
     try expect(
-      model.error == "Safe failure" && !model.loading, "Failure must be safe and retryable")
+      model.error == "Safe failure" && !model.loading && model.updatedAt == nil,
+      "Failure must be safe, retryable and never labelled successful")
     reader.fail = false
     reader.suspend = true
     let old = Task { await model.observe(calendar: .current) }
@@ -133,6 +138,34 @@ private func expect(_ condition: Bool, _ message: String) throws {
     let restored = HealthChartsViewModel(
       reader: reader, defaults: defaults, now: { day }, errorMessage: { _ in "Safe failure" })
     try expect(!restored.enabled, "Only the opt-in setting is persisted")
+    let repeatReader = Reader(populated)
+    let repeated = HealthChartsViewModel(
+      reader: repeatReader, defaults: defaults, now: { day }, errorMessage: { _ in "Safe failure" })
+    repeated.enabled = true
+    let firstRead = Task { await repeated.observe(calendar: .current) }
+    await repeatReader.waitForObservation()
+    firstRead.cancel()
+    await firstRead.value
+    repeated.retry()
+    try expect(repeated.loading && repeated.updatedAt == nil, "Refresh feedback starts immediately")
+    let secondRead = Task { await repeated.observe(calendar: .current) }
+    await repeatReader.waitForObservation()
+    try expect(
+      repeated.updateChanged == false && repeated.updatedAt == day && !repeated.loading,
+      "Repeated identical data must report a completed check without new data")
+    secondRead.cancel()
+    await secondRead.value
+    repeatReader.suspend = true
+    let staleRead = Task { await repeated.observe(calendar: .current) }
+    await repeatReader.waitForRead(3)
+    repeated.retry()
+    repeatReader.pending?.resume(returning: empty)
+    repeatReader.pending = nil
+    await staleRead.value
+    try expect(
+      repeated.updatedAt == nil && repeated.loading && repeated.snapshot == nil,
+      "An old response must not confirm success after the user requests a new refresh")
+    repeated.clear()
     print(
       "Portable health charts: opt-in, empty data, event updates, cancellation, failure and stale request isolation passed (no Apple SDK)."
     )

@@ -574,5 +574,14 @@
   "Bluetooth-пульсометр": "Bluetooth heart rate monitor",
   "Текущий пульс": "Current heart rate",
   "Свежее измерение": "Fresh measurement",
-  "Последнее измерение": "Last measurement"
+  "Последнее измерение": "Last measurement",
+  "Получено показателей: %@ из 4.": "Metrics received: %@ of 4.",
+  "Проверяем доступ и читаем показатели…": "Checking access and reading metrics…",
+  "Если появился запрос доступа к «Здоровью», выберите разрешённые показатели.": "If Health requests access, choose which metrics to allow.",
+  "Не удалось обновить показатели.": "Unable to refresh metrics.",
+  "Чтение завершено: доступных данных нет.": "Read complete: no data available.",
+  "Проверка завершена: новых данных нет.": "Check complete: no new data.",
+  "Показатели прочитаны.": "Metrics read successfully.",
+  "Успешное чтение: %@": "Successful read: %@",
+  "Измерений пульса за день: %@. Дней с данными о шагах: %@ из 7.": "Heart rate readings for the day: %@. Days with step data: %@ of 7."
 }

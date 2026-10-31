@@ -3163,6 +3163,23 @@
         }
       }
     },
+    "Если появился запрос доступа к «Здоровью», выберите разрешённые показатели.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Если появился запрос доступа к «Здоровью», выберите разрешённые показатели."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "If Health requests access, choose which metrics to allow."
+          }
+        }
+      }
+    },
     "Если пункта HR Data Broadcasts нет, используйте режим Apple «Здоровье». Во время трансляции связь с HUAWEI Health может временно прерываться.": {
       "extractionState": "manual",
       "localizations": {
@@ -3652,6 +3669,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Edit workout"
+          }
+        }
+      }
+    },
+    "Измерений пульса за день: %@. Дней с данными о шагах: %@ из 7.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Измерений пульса за день: %@. Дней с данными о шагах: %@ из 7."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate readings for the day: %@. Days with step data: %@ of 7."
           }
         }
       }
@@ -4791,6 +4825,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Couldn’t exchange data with Apple Watch. Try again."
+          }
+        }
+      }
+    },
+    "Не удалось обновить показатели.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось обновить показатели."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unable to refresh metrics."
           }
         }
       }
@@ -6886,6 +6937,23 @@
         }
       }
     },
+    "Показатели прочитаны.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Показатели прочитаны."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Metrics read successfully."
+          }
+        }
+      }
+    },
     "Показываем доступные источники: Apple Watch, AirPods, приложения браслетов и iPhone. Частота обновлений зависит от устройства и синхронизации с «Здоровьем».": {
       "extractionState": "manual",
       "localizations": {
@@ -6916,6 +6984,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Position %@ of %@"
+          }
+        }
+      }
+    },
+    "Получено показателей: %@ из 4.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Получено показателей: %@ из 4."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Metrics received: %@ of 4."
           }
         }
       }
@@ -7171,6 +7256,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Checking iCloud…"
+          }
+        }
+      }
+    },
+    "Проверка завершена: новых данных нет.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Проверка завершена: новых данных нет."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check complete: no new data."
+          }
+        }
+      }
+    },
+    "Проверяем доступ и читаем показатели…": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Проверяем доступ и читаем показатели…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Checking access and reading metrics…"
           }
         }
       }
@@ -9164,6 +9283,23 @@
         }
       }
     },
+    "Успешное чтение: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Успешное чтение: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Successful read: %@"
+          }
+        }
+      }
+    },
     "Устройство Bluetooth": {
       "extractionState": "manual",
       "localizations": {
@@ -9381,6 +9517,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Reps must be between 1 and 1000."
+          }
+        }
+      }
+    },
+    "Чтение завершено: доступных данных нет.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Чтение завершено: доступных данных нет."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Read complete: no data available."
           }
         }
       }
