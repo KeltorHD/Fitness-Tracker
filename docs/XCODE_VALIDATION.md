@@ -312,3 +312,7 @@
 - [ ] Выполнить testNumberPadReplacesValuesAndCopiesFollowingRepetitions и обновлённый testWarmupAndDropStagesCanBeConfiguredBeforeCompletion. Они на Linux только parsed/linted; реальное исполнение не выполнено.
 
 [Правила](NUMBER_ENTRY.md), [демо-макеты](previews/number-entry-overview.png).
+
+## Выбор мышц на схеме тела
+
+Requires Xcode validation. В каталоге и при добавлении упражнения раскрыть «Выбрать на схеме тела»: выбрать грудь/корпус спереди, спину сзади, плечи/руки/ноги с обеих сторон. Проверить подсветку и общий фильтр меню, повторное нажатие для сброса, сочетание с текстом и инвентарём, пустые результаты и общий сброс. Переключение вида сохраняет выбранную группу. Проверить VoiceOver (название и выбранное состояние), RU/EN, Dark Mode, Increase Contrast, Dynamic Type, узкий экран и прокрутку. Схема обозначает шесть групп каталога, а не отдельные анатомические мышцы. Выполнить ExerciseLibraryFilterTests на Apple SDK; Linux parser не подтверждает SwiftUI-компиляцию или попадание в области касания.

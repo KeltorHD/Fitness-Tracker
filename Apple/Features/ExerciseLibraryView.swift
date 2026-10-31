@@ -39,6 +39,13 @@ struct ExerciseLibraryView: View {
             "Найдено: %@ · Фото и инструкции доступны без интернета",
             String(model.results.count), locale: locale))
       }
+      Section {
+        DisclosureGroup(L10n.text("Выбрать на схеме тела", locale: locale)) {
+          ExerciseBodyPicker(selection: $model.group)
+            .padding(.vertical, 8)
+        }
+        .accessibilityIdentifier("exerciseBodyPicker")
+      }
       if let error = model.loadingError {
         ContentUnavailableView(
           L10n.text("Библиотека недоступна", locale: locale),

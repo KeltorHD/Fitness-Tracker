@@ -1633,6 +1633,23 @@
         }
       }
     },
+    "Вид тела": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вид тела"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Body view"
+          }
+        }
+      }
+    },
     "Виджет получает только число тренировок и недельную цель. Эта сводка может быть видна на экране блокировки.": {
       "extractionState": "manual",
       "localizations": {
@@ -2041,6 +2058,23 @@
         }
       }
     },
+    "Выбрано": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выбрано"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selected"
+          }
+        }
+      }
+    },
     "Выбрать Apple «Здоровье»": {
       "extractionState": "manual",
       "localizations": {
@@ -2054,6 +2088,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Choose Apple Health"
+          }
+        }
+      }
+    },
+    "Выбрать на схеме тела": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выбрать на схеме тела"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose on body map"
           }
         }
       }
@@ -4400,6 +4451,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wear your AirPods Pro 3 and connect them to your iPhone. Enable heart rate sensing in iOS Settings → AirPods → Heart Rate. Then start a workout in FitnessTracker and enable heart rate recording."
+          }
+        }
+      }
+    },
+    "Нажмите на область тела, чтобы выбрать группу мышц.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нажмите на область тела, чтобы выбрать группу мышц."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap an area of the body to select a muscle group."
           }
         }
       }
@@ -8008,6 +8076,23 @@
         }
       }
     },
+    "Сбросить": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сбросить"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset"
+          }
+        }
+      }
+    },
     "Сбросить поиск и фильтры": {
       "extractionState": "manual",
       "localizations": {
@@ -8208,6 +8293,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Make a drop set"
+          }
+        }
+      }
+    },
+    "Сзади": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сзади"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back"
           }
         }
       }
@@ -8582,6 +8684,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Save file"
+          }
+        }
+      }
+    },
+    "Спереди": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Спереди"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Front"
           }
         }
       }
