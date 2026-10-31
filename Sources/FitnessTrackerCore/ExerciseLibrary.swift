@@ -5,6 +5,11 @@ public enum ExerciseEquipment: String, Codable, CaseIterable, Sendable {
   case bodyWeight = "body only"
   case kettlebell = "kettlebells"
   case ezBar = "e-z curl bar"
+  case bands
+  case medicineBall = "medicine ball"
+  case exerciseBall = "exercise ball"
+  case foamRoll = "foam roll"
+  case unspecified
 
   public var title: String {
     switch self {
@@ -16,6 +21,11 @@ public enum ExerciseEquipment: String, Codable, CaseIterable, Sendable {
     case .bodyWeight: "Собственный вес"
     case .kettlebell: "Гиря"
     case .ezBar: "EZ-гриф"
+    case .bands: "Эспандер"
+    case .medicineBall: "Медицинский мяч"
+    case .exerciseBall: "Фитбол"
+    case .foamRoll: "Массажный ролик"
+    case .unspecified: "Не указан"
     }
   }
 }
@@ -39,6 +49,13 @@ public struct ExerciseLibrarySource: Codable, Hashable, Sendable {
   public let licenseText: String
 }
 
+public struct ExerciseGeneratedMedia: Codable, Hashable, Sendable {
+  public let poster: String
+  public let gif: String
+  public let frames: [String]
+  public let frameDuration: Double
+}
+
 public struct ExerciseLibraryEntry: Identifiable, Codable, Hashable, Sendable {
   public let id: UUID
   public let sourceID: String
@@ -53,6 +70,11 @@ public struct ExerciseLibraryEntry: Identifiable, Codable, Hashable, Sendable {
   public let steps: [String]
   /// Paths relative to the iOS-only ExerciseMedia folder; no runtime network requests.
   public let images: [String]
+  /// Explicit missing-source metadata, rather than fabricated instructions or broken image paths.
+  public let techniqueUnavailable: Bool?
+  public let imagesUnavailable: Bool?
+  public let generatedMedia: ExerciseGeneratedMedia?
+  public let translationAutomatic: Bool?
 
   public var exercise: Exercise {
     Exercise(id: id, name: name, muscle: group, instructions: steps.joined(separator: "\n"))
@@ -86,6 +108,8 @@ public enum ExerciseLibrary {
   }
   public static var document: ExerciseLibraryDocument? { try? result.get() }
   public static let entries: [ExerciseLibraryEntry] = document?.entries ?? []
+  private static let russianNames = Dictionary(
+    uniqueKeysWithValues: entries.map { ($0.id, $0.name) })
   private static let englishResult: Result<ExerciseLibraryDocument, any Error> = Result {
     guard let url = Bundle.module.url(forResource: "ExerciseLibrary.en", withExtension: "json")
     else {
@@ -127,16 +151,33 @@ public enum ExerciseLibrary {
       if value.locale == "en", entry.name != entry.englishName {
         throw ExerciseLibraryError.invalidDocument
       }
-      guard !entry.sourceID.isEmpty, entry.steps.count >= (value.locale == "ru" ? 3 : 1),
+      let missingTechnique = entry.techniqueUnavailable == true
+      let missingImages = entry.imagesUnavailable == true
+      guard !entry.sourceID.isEmpty,
+        missingTechnique
+          ? entry.steps.isEmpty : entry.steps.count >= (value.locale == "ru" ? 3 : 1),
         entry.steps.allSatisfy({ !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }),
-        !entry.primaryMuscles.isEmpty, entry.images.count == 2,
-        Set(entry.images).count == 2,
+        !entry.primaryMuscles.isEmpty,
+        missingImages ? entry.images.isEmpty : entry.images.count == 2,
+        Set(entry.images).count == entry.images.count,
         entry.images.allSatisfy({ path in
           !path.contains("..") && !path.contains("\\") && !path.hasPrefix("/")
             && path.hasPrefix(entry.sourceID + "/") && path.hasSuffix(".jpg")
             && path.split(separator: "/").count == 2
         })
       else { throw ExerciseLibraryError.invalidDocument }
+      if let media = entry.generatedMedia {
+        let paths = [media.poster, media.gif] + media.frames
+        guard (2...24).contains(media.frames.count), media.frameDuration.isFinite,
+          (0.05...2).contains(media.frameDuration), media.poster.hasSuffix(".jpg"),
+          media.gif.hasSuffix(".gif"), media.frames.allSatisfy({ $0.hasSuffix(".jpg") }),
+          Set(paths).count == paths.count,
+          paths.allSatisfy({
+            $0.hasPrefix(entry.sourceID + "/ai-") && !$0.contains("..") && !$0.contains("\\")
+              && $0.split(separator: "/").count == 2
+          })
+        else { throw ExerciseLibraryError.invalidDocument }
+      }
     }
     return value
   }
@@ -167,7 +208,7 @@ public enum ExerciseLibrary {
       let fields =
         [
           entry.name, entry.englishName, entry.equipment.title,
-          entries.first(where: { $0.id == entry.id })?.name ?? "",
+          russianNames[entry.id] ?? "",
         ]
         + entry.aliases + entry.primaryMuscles + entry.secondaryMuscles
       let text = normalize(fields.joined(separator: " "))

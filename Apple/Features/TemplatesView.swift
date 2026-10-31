@@ -119,8 +119,10 @@ struct TemplateOverviewView: View {
                   }
                 }.frame(maxWidth: .infinity, alignment: .leading)
                 if let entry = ExerciseLibrary.entry(for: item.exercise.id) {
-                  ExercisePhoto(path: entry.images[0]).frame(width: 48, height: 48).clipShape(
-                    .rect(cornerRadius: 10))
+                  if let path = entry.generatedMedia?.poster ?? entry.images.first {
+                    ExercisePhoto(path: path).frame(width: 48, height: 48).clipShape(
+                      .rect(cornerRadius: 10))
+                  }
                 }
               }.foregroundStyle(.primary)
             }

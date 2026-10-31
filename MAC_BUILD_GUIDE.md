@@ -207,3 +207,7 @@ xcodebuild -project FitnessTracker.xcodeproj -scheme FitnessTracker \
 ## Проверка цифрового ввода по IMG_1614
 
 После xcodegen generate проверьте сборку WorkoutNumberPad и новые numeric buttons. В активном упражнении нажмите вес/повторы: откроется нижняя панель, первое число заменяет прежнее; › идёт по незавершённым полям, ↓= копирует только подходящие будущие поля, кнопка клавиатуры закрывает её. Проверить десятичную запятую/точку, long-press удаления, аппаратные цифры/Backspace/Return/Escape, позицию поля после inset и AX/landscape/iPad. Поля теперь являются accessibility buttons, UI tests обновлены соответствующим образом. Реальное SDK-поведение, touch/scroll и shortcuts не проверялись на Linux. [Сценарии](docs/NUMBER_ENTRY.md).
+
+## Полный каталог упражнений
+
+После обновления выполните xcodegen generate: в iOS folder resource ExerciseMedia теперь 1746 оригинальных фото и 11 готовых ИИ-анимаций. Убедитесь, что Watch/widgets не копируют медиаресурсы. Выполните сценарии полного каталога, анимаций и схемы тела из docs/XCODE_VALIDATION.md. Linux-проверки не подтверждают компиляцию SwiftUI или воспроизведение. Генерация новых GIF остановлена.

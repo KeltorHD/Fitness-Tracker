@@ -54,7 +54,9 @@ struct WorkoutExerciseListRow: View {
 struct WorkoutExerciseThumbnail: View {
   let exercise: Exercise
   var body: some View {
-    if let path = ExerciseLibrary.entry(for: exercise.id)?.images.first {
+    if let entry = ExerciseLibrary.entry(for: exercise.id),
+      let path = entry.generatedMedia?.poster ?? entry.images.first
+    {
       ExercisePhoto(path: path).frame(width: 46, height: 46)
         .background(FitTheme.paper, in: .rect(cornerRadius: 12))
         .clipShape(.rect(cornerRadius: 12))

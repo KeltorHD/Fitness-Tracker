@@ -27,12 +27,12 @@ MUSCLES = {
     'hamstrings': 'Задняя поверхность бедра', 'lats': 'Широчайшие мышцы спины',
     'lower back': 'Разгибатели спины', 'middle back': 'Средняя часть спины',
     'quadriceps': 'Квадрицепс', 'shoulders': 'Дельтовидные мышцы',
-    'traps': 'Трапециевидные мышцы', 'triceps': 'Трицепс'
+    'traps': 'Трапециевидные мышцы', 'triceps': 'Трицепс', 'neck': 'Мышцы шеи'
 }
 GROUPS = {**dict.fromkeys(['abductors', 'adductors', 'calves', 'glutes', 'hamstrings', 'quadriceps'], 'legs'),
           **dict.fromkeys(['lats', 'lower back', 'middle back', 'traps'], 'back'),
           **dict.fromkeys(['biceps', 'forearms', 'triceps'], 'arms'),
-          'abdominals': 'core', 'chest': 'chest', 'shoulders': 'shoulders'}
+          'abdominals': 'core', 'chest': 'chest', 'shoulders': 'shoulders', 'neck': 'shoulders'}
 
 LEGACY_SOURCE_IDS = ['Barbell_Squat', 'Barbell_Bench_Press_-_Medium_Grip', 'Bent_Over_Barbell_Row',
                      'Standing_Military_Press', 'Romanian_Deadlift', 'Pullups', 'Dumbbell_Bicep_Curl', 'Crunches']
@@ -85,26 +85,35 @@ def download():
 
 def generate():
     source = {item['id']: item for item in json.loads((VENDOR / 'exercises.selected.json').read_text())}
+    generated_path = ROOT / 'Data/ExerciseLibrary/generated-media.json'
+    generated = json.loads(generated_path.read_text()) if generated_path.exists() else {}
+    translation_path = ROOT / 'Data/ExerciseLibrary/translation-provenance.json'
+    automatic = set(json.loads(translation_path.read_text()).get('automaticSourceIDs', [])) if translation_path.exists() else set()
     translations = {}
     for line in (ROOT / 'Data/ExerciseLibrary/instructions.ru.tsv').read_text().splitlines():
         fields = line.split('\t')
         assert fields[0] not in translations, fields[0]
-        assert len(fields) >= 4, fields[0]
-        translations[fields[0]] = fields[1:]
+        translations[fields[0]] = [field for field in fields[1:] if field]
     assert set(source) == set(translations) == {row[0] for row in selection()}
     entries = []
     for index, (source_id, name, aliases) in enumerate(selection()):
         item = source[source_id]
         assert 0 < len(name) <= 80 and re.search('[А-Яа-яЁё]', name)
         steps = translations[source_id]
-        assert all(len(s) >= 20 and re.search('[А-Яа-яЁё]', s) for s in steps)
+        assert bool(steps) == bool(item['instructions']), source_id
+        assert not steps or len(steps) >= 3, source_id
+        assert all(len(s) >= 5 and re.search('[А-Яа-яЁё]', s) for s in steps), source_id
         stable_id = LEGACY_IDS.get(source_id) or str(uuid.uuid5(uuid.NAMESPACE_URL, 'https://github.com/yuhonas/free-exercise-db/' + source_id))
         entries.append({'id': stable_id, 'sourceID': source_id, 'name': name,
                         'englishName': item['name'], 'aliases': aliases.split(';'),
-                        'group': GROUPS[item['primaryMuscles'][0]], 'equipment': item['equipment'],
+                        'group': GROUPS[item['primaryMuscles'][0]], 'equipment': item['equipment'] or 'unspecified',
                         'level': item['level'], 'primaryMuscles': [MUSCLES[m] for m in item['primaryMuscles']],
                         'secondaryMuscles': [MUSCLES[m] for m in item['secondaryMuscles']],
-                        'steps': steps, 'images': item['images']})
+                        'steps': steps, 'images': item['images'],
+                        'techniqueUnavailable': not bool(item['instructions']),
+                        'imagesUnavailable': not bool(item['images']),
+                        'generatedMedia': generated.get(source_id),
+                        'translationAutomatic': source_id in automatic})
     write_json(RESOURCE, {'schemaVersion': 1, 'locale': 'ru',
                          'source': {'name': 'free-exercise-db',
                                     'repositoryURL': 'https://github.com/yuhonas/free-exercise-db',
@@ -115,7 +124,8 @@ def generate():
         item = source[entry['sourceID']]
         english_entries.append({**entry, 'name': item['name'],
             'primaryMuscles': item['primaryMuscles'], 'secondaryMuscles': item['secondaryMuscles'],
-            'steps': item['instructions']})
+            'steps': [step for step in item['instructions'] if step.strip()],
+            'translationAutomatic': False})
     russian = json.loads(RESOURCE.read_text())
     write_json(ENGLISH_RESOURCE, {**russian, 'locale': 'en', 'entries': english_entries})
     print(f'Generated {len(entries)} fully Russian exercise entries at {RESOURCE.relative_to(ROOT)}.')

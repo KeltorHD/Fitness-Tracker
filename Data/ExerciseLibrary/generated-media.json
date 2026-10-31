@@ -1,0 +1,167 @@
+{
+  "Barbell_Bench_Press_-_Medium_Grip": {
+    "poster": "Barbell_Bench_Press_-_Medium_Grip/ai-poster.jpg",
+    "gif": "Barbell_Bench_Press_-_Medium_Grip/ai-motion.gif",
+    "frames": [
+      "Barbell_Bench_Press_-_Medium_Grip/ai-frame-00.jpg",
+      "Barbell_Bench_Press_-_Medium_Grip/ai-frame-01.jpg",
+      "Barbell_Bench_Press_-_Medium_Grip/ai-frame-02.jpg",
+      "Barbell_Bench_Press_-_Medium_Grip/ai-frame-03.jpg",
+      "Barbell_Bench_Press_-_Medium_Grip/ai-frame-04.jpg",
+      "Barbell_Bench_Press_-_Medium_Grip/ai-frame-05.jpg",
+      "Barbell_Bench_Press_-_Medium_Grip/ai-frame-06.jpg",
+      "Barbell_Bench_Press_-_Medium_Grip/ai-frame-07.jpg"
+    ],
+    "frameDuration": 0.25
+  },
+  "Barbell_Squat": {
+    "poster": "Barbell_Squat/ai-poster.jpg",
+    "gif": "Barbell_Squat/ai-motion.gif",
+    "frames": [
+      "Barbell_Squat/ai-frame-00.jpg",
+      "Barbell_Squat/ai-frame-01.jpg",
+      "Barbell_Squat/ai-frame-02.jpg",
+      "Barbell_Squat/ai-frame-03.jpg",
+      "Barbell_Squat/ai-frame-04.jpg",
+      "Barbell_Squat/ai-frame-05.jpg",
+      "Barbell_Squat/ai-frame-06.jpg",
+      "Barbell_Squat/ai-frame-07.jpg"
+    ],
+    "frameDuration": 0.25
+  },
+  "Bent_Over_Barbell_Row": {
+    "poster": "Bent_Over_Barbell_Row/ai-poster.jpg",
+    "gif": "Bent_Over_Barbell_Row/ai-motion.gif",
+    "frames": [
+      "Bent_Over_Barbell_Row/ai-frame-00.jpg",
+      "Bent_Over_Barbell_Row/ai-frame-01.jpg",
+      "Bent_Over_Barbell_Row/ai-frame-02.jpg",
+      "Bent_Over_Barbell_Row/ai-frame-03.jpg",
+      "Bent_Over_Barbell_Row/ai-frame-04.jpg",
+      "Bent_Over_Barbell_Row/ai-frame-05.jpg",
+      "Bent_Over_Barbell_Row/ai-frame-06.jpg",
+      "Bent_Over_Barbell_Row/ai-frame-07.jpg"
+    ],
+    "frameDuration": 0.25
+  },
+  "Crunches": {
+    "poster": "Crunches/ai-poster.jpg",
+    "gif": "Crunches/ai-motion.gif",
+    "frames": [
+      "Crunches/ai-frame-00.jpg",
+      "Crunches/ai-frame-01.jpg",
+      "Crunches/ai-frame-02.jpg",
+      "Crunches/ai-frame-03.jpg",
+      "Crunches/ai-frame-04.jpg",
+      "Crunches/ai-frame-05.jpg",
+      "Crunches/ai-frame-06.jpg",
+      "Crunches/ai-frame-07.jpg"
+    ],
+    "frameDuration": 0.25
+  },
+  "Dumbbell_Bicep_Curl": {
+    "poster": "Dumbbell_Bicep_Curl/ai-poster.jpg",
+    "gif": "Dumbbell_Bicep_Curl/ai-motion.gif",
+    "frames": [
+      "Dumbbell_Bicep_Curl/ai-frame-00.jpg",
+      "Dumbbell_Bicep_Curl/ai-frame-01.jpg",
+      "Dumbbell_Bicep_Curl/ai-frame-02.jpg",
+      "Dumbbell_Bicep_Curl/ai-frame-03.jpg",
+      "Dumbbell_Bicep_Curl/ai-frame-04.jpg",
+      "Dumbbell_Bicep_Curl/ai-frame-05.jpg",
+      "Dumbbell_Bicep_Curl/ai-frame-06.jpg",
+      "Dumbbell_Bicep_Curl/ai-frame-07.jpg"
+    ],
+    "frameDuration": 0.25
+  },
+  "Kettlebell_Halo": {
+    "poster": "Kettlebell_Halo/ai-poster.jpg",
+    "gif": "Kettlebell_Halo/ai-motion.gif",
+    "frames": [
+      "Kettlebell_Halo/ai-frame-00.jpg",
+      "Kettlebell_Halo/ai-frame-01.jpg",
+      "Kettlebell_Halo/ai-frame-02.jpg",
+      "Kettlebell_Halo/ai-frame-03.jpg",
+      "Kettlebell_Halo/ai-frame-04.jpg",
+      "Kettlebell_Halo/ai-frame-05.jpg",
+      "Kettlebell_Halo/ai-frame-06.jpg",
+      "Kettlebell_Halo/ai-frame-07.jpg"
+    ],
+    "frameDuration": 0.25
+  },
+  "Kettlebell_Halo_With_Overhead_Extension": {
+    "poster": "Kettlebell_Halo_With_Overhead_Extension/ai-poster.jpg",
+    "gif": "Kettlebell_Halo_With_Overhead_Extension/ai-motion.gif",
+    "frames": [
+      "Kettlebell_Halo_With_Overhead_Extension/ai-frame-00.jpg",
+      "Kettlebell_Halo_With_Overhead_Extension/ai-frame-01.jpg",
+      "Kettlebell_Halo_With_Overhead_Extension/ai-frame-02.jpg",
+      "Kettlebell_Halo_With_Overhead_Extension/ai-frame-03.jpg",
+      "Kettlebell_Halo_With_Overhead_Extension/ai-frame-04.jpg",
+      "Kettlebell_Halo_With_Overhead_Extension/ai-frame-05.jpg",
+      "Kettlebell_Halo_With_Overhead_Extension/ai-frame-06.jpg",
+      "Kettlebell_Halo_With_Overhead_Extension/ai-frame-07.jpg"
+    ],
+    "frameDuration": 0.25
+  },
+  "Kettlebell_Overhead_Triceps_Extension": {
+    "poster": "Kettlebell_Overhead_Triceps_Extension/ai-poster.jpg",
+    "gif": "Kettlebell_Overhead_Triceps_Extension/ai-motion.gif",
+    "frames": [
+      "Kettlebell_Overhead_Triceps_Extension/ai-frame-00.jpg",
+      "Kettlebell_Overhead_Triceps_Extension/ai-frame-01.jpg",
+      "Kettlebell_Overhead_Triceps_Extension/ai-frame-02.jpg",
+      "Kettlebell_Overhead_Triceps_Extension/ai-frame-03.jpg",
+      "Kettlebell_Overhead_Triceps_Extension/ai-frame-04.jpg",
+      "Kettlebell_Overhead_Triceps_Extension/ai-frame-05.jpg",
+      "Kettlebell_Overhead_Triceps_Extension/ai-frame-06.jpg",
+      "Kettlebell_Overhead_Triceps_Extension/ai-frame-07.jpg"
+    ],
+    "frameDuration": 0.25
+  },
+  "Pullups": {
+    "poster": "Pullups/ai-poster.jpg",
+    "gif": "Pullups/ai-motion.gif",
+    "frames": [
+      "Pullups/ai-frame-00.jpg",
+      "Pullups/ai-frame-01.jpg",
+      "Pullups/ai-frame-02.jpg",
+      "Pullups/ai-frame-03.jpg",
+      "Pullups/ai-frame-04.jpg",
+      "Pullups/ai-frame-05.jpg",
+      "Pullups/ai-frame-06.jpg",
+      "Pullups/ai-frame-07.jpg"
+    ],
+    "frameDuration": 0.25
+  },
+  "Romanian_Deadlift": {
+    "poster": "Romanian_Deadlift/ai-poster.jpg",
+    "gif": "Romanian_Deadlift/ai-motion.gif",
+    "frames": [
+      "Romanian_Deadlift/ai-frame-00.jpg",
+      "Romanian_Deadlift/ai-frame-01.jpg",
+      "Romanian_Deadlift/ai-frame-02.jpg",
+      "Romanian_Deadlift/ai-frame-03.jpg",
+      "Romanian_Deadlift/ai-frame-04.jpg",
+      "Romanian_Deadlift/ai-frame-05.jpg",
+      "Romanian_Deadlift/ai-frame-06.jpg",
+      "Romanian_Deadlift/ai-frame-07.jpg"
+    ],
+    "frameDuration": 0.25
+  },
+  "Standing_Military_Press": {
+    "poster": "Standing_Military_Press/ai-poster.jpg",
+    "gif": "Standing_Military_Press/ai-motion.gif",
+    "frames": [
+      "Standing_Military_Press/ai-frame-00.jpg",
+      "Standing_Military_Press/ai-frame-01.jpg",
+      "Standing_Military_Press/ai-frame-02.jpg",
+      "Standing_Military_Press/ai-frame-03.jpg",
+      "Standing_Military_Press/ai-frame-04.jpg",
+      "Standing_Military_Press/ai-frame-05.jpg",
+      "Standing_Military_Press/ai-frame-06.jpg",
+      "Standing_Military_Press/ai-frame-07.jpg"
+    ],
+    "frameDuration": 0.25
+  }
+}

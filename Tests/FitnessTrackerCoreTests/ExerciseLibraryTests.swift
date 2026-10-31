@@ -6,24 +6,26 @@ import Testing
 @Test func bundledLibraryLoadsAndHasRussianContent() throws {
   #expect(ExerciseLibrary.loadingError == nil)
   let document = try #require(ExerciseLibrary.document)
-  #expect(document.entries.count == 100)
+  #expect(document.entries.count == 876)
   #expect(document.locale == "ru")
   #expect(document.source.licenseName == "Unlicense")
   #expect(document.source.revision.count == 40)
   for entry in document.entries {
     #expect(entry.name.range(of: "[А-Яа-яЁё]", options: .regularExpression) != nil)
-    #expect(entry.steps.count >= 3)
+    #expect(entry.steps.isEmpty == (entry.techniqueUnavailable == true))
+    #expect(entry.steps.isEmpty || entry.steps.count >= 3)
     #expect(
       entry.steps.allSatisfy { $0.range(of: "[А-Яа-яЁё]", options: .regularExpression) != nil })
-    #expect(entry.images.count == 2)
+    #expect(entry.images.isEmpty == (entry.imagesUnavailable == true))
+    #expect(entry.images.isEmpty || entry.images.count == 2)
     try Validation.name(entry.exercise.name)
     #expect(entry.exercise.instructions == entry.steps.joined(separator: "\n"))
   }
 }
 
 @Test func expandedCatalogPreservesLegacyIDsAndTemplateExercises() {
-  #expect(ExerciseCatalog.all.count == 100)
-  #expect(Set(ExerciseCatalog.all.map(\.id)).count == 100)
+  #expect(ExerciseCatalog.all.count == 876)
+  #expect(Set(ExerciseCatalog.all.map(\.id)).count == 876)
   let expected = (1...8).map {
     UUID(uuidString: String(format: "10000000-0000-0000-0000-%012d", $0))!
   }
@@ -41,7 +43,10 @@ import Testing
 
 @Test func librarySearchMatchesRussianAliasesAndEnglishSourceNames() {
   #expect(ExerciseLibrary.search("хип-траст").map(\.sourceID) == ["Barbell_Hip_Thrust"])
-  #expect(ExerciseLibrary.search("Romanian Deadlift").map(\.sourceID) == ["Romanian_Deadlift"])
+  #expect(
+    Set(ExerciseLibrary.search("Romanian Deadlift").map(\.sourceID)) == [
+      "Romanian_Deadlift", "Romanian_Deadlift_from_Deficit",
+    ])
   #expect(!ExerciseLibrary.search("молот").isEmpty)
 }
 
@@ -49,8 +54,10 @@ import Testing
   let entries = ExerciseLibrary.search("жим", group: .chest, equipment: .dumbbell)
   #expect(!entries.isEmpty)
   #expect(entries.allSatisfy { $0.group == .chest && $0.equipment == .dumbbell })
-  #expect(ExerciseLibrary.search(group: .legs, equipment: .cable).isEmpty)
-  #expect(ExerciseLibrary.search("  ").count == 100)
+  let cableLegs = ExerciseLibrary.search(group: .legs, equipment: .cable)
+  #expect(cableLegs.contains { $0.sourceID == "Cable_Hip_Adduction" })
+  #expect(cableLegs.allSatisfy { $0.group == .legs && $0.equipment == .cable })
+  #expect(ExerciseLibrary.search("  ").count == 876)
 }
 
 @Test func everyLibraryMetadataLabelIsLocalized() {
@@ -63,7 +70,9 @@ import Testing
   }
 }
 
-@Test(arguments: ["locale", "duplicate", "image", "steps", "version"])
+@Test(arguments: [
+  "locale", "duplicate", "image", "steps", "version", "animationPath", "animationDuration",
+])
 func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   let document: ExerciseLibraryDocument = try #require(ExerciseLibrary.document)
   let data = try JSONEncoder().encode(document)
@@ -74,6 +83,14 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   case "duplicate": entries.append(entries[0])
   case "image": entries[0]["images"] = ["../outside.jpg", "Barbell_Squat/1.jpg"]
   case "steps": entries[0]["steps"] = []
+  case "animationPath":
+    var media = try #require(entries[0]["generatedMedia"] as? [String: Any])
+    media["gif"] = "../outside.gif"
+    entries[0]["generatedMedia"] = media
+  case "animationDuration":
+    var media = try #require(entries[0]["generatedMedia"] as? [String: Any])
+    media["frameDuration"] = 0
+    entries[0]["generatedMedia"] = media
   default: object["schemaVersion"] = 999
   }
   object["entries"] = entries
@@ -89,4 +106,33 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   let exercise = try JSONDecoder().decode(Exercise.self, from: data)
   #expect(exercise.instructions == "Старое описание")
   #expect(ExerciseLibrary.entry(for: exercise.id)?.steps.count == 3)
+}
+
+@Test func fullCatalogRepresentsMissingSourceMaterialsExplicitly() {
+  #expect(
+    Set(ExerciseLibrary.entries.filter { $0.imagesUnavailable == true }.map(\.sourceID)) == [
+      "Kettlebell_Halo", "Kettlebell_Halo_With_Overhead_Extension",
+      "Kettlebell_Overhead_Triceps_Extension",
+    ])
+  #expect(
+    Set(ExerciseLibrary.entries.filter { $0.techniqueUnavailable == true }.map(\.sourceID)) == [
+      "Iron_Cross", "One-Arm_Kettlebell_Swings", "Push_Press", "Side_Bridge", "Side_Jackknife",
+    ])
+}
+
+@Test func originalLibraryWithoutOptionalMetadataStillDecodes() throws {
+  let data = try JSONEncoder().encode(try #require(ExerciseLibrary.document))
+  var object = try #require(JSONSerialization.jsonObject(with: data) as? [String: Any])
+  var entries = Array(try #require(object["entries"] as? [[String: Any]]).prefix(100))
+  for index in entries.indices {
+    for key in [
+      "techniqueUnavailable", "imagesUnavailable", "generatedMedia", "translationAutomatic",
+    ] {
+      entries[index].removeValue(forKey: key)
+    }
+  }
+  object["entries"] = entries
+  let decoded = try ExerciseLibrary.decode(JSONSerialization.data(withJSONObject: object))
+  #expect(decoded.entries.count == 100)
+  #expect(decoded.entries.allSatisfy { $0.generatedMedia == nil && $0.translationAutomatic == nil })
 }

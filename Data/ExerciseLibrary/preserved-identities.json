@@ -1,0 +1,502 @@
+[
+  {
+    "sourceID": "Barbell_Squat",
+    "id": "10000000-0000-0000-0000-000000000001",
+    "name": "Приседания"
+  },
+  {
+    "sourceID": "Barbell_Bench_Press_-_Medium_Grip",
+    "id": "10000000-0000-0000-0000-000000000002",
+    "name": "Жим лёжа"
+  },
+  {
+    "sourceID": "Bent_Over_Barbell_Row",
+    "id": "10000000-0000-0000-0000-000000000003",
+    "name": "Тяга в наклоне"
+  },
+  {
+    "sourceID": "Standing_Military_Press",
+    "id": "10000000-0000-0000-0000-000000000004",
+    "name": "Жим над головой"
+  },
+  {
+    "sourceID": "Romanian_Deadlift",
+    "id": "10000000-0000-0000-0000-000000000005",
+    "name": "Румынская тяга"
+  },
+  {
+    "sourceID": "Pullups",
+    "id": "10000000-0000-0000-0000-000000000006",
+    "name": "Подтягивания"
+  },
+  {
+    "sourceID": "Dumbbell_Bicep_Curl",
+    "id": "10000000-0000-0000-0000-000000000007",
+    "name": "Сгибания на бицепс"
+  },
+  {
+    "sourceID": "Crunches",
+    "id": "10000000-0000-0000-0000-000000000008",
+    "name": "Скручивания"
+  },
+  {
+    "sourceID": "Bodyweight_Squat",
+    "id": "7ab4f873-94ed-5a90-b7ba-4e1a6deb4f81",
+    "name": "Приседания без отягощения"
+  },
+  {
+    "sourceID": "Front_Barbell_Squat",
+    "id": "3c067a0d-d946-56d2-92ec-45f1d24c646e",
+    "name": "Фронтальные приседания"
+  },
+  {
+    "sourceID": "Goblet_Squat",
+    "id": "ed465484-107c-5708-8ff8-382a6b70ee00",
+    "name": "Гоблет-приседания"
+  },
+  {
+    "sourceID": "Dumbbell_Squat",
+    "id": "71c5940f-ac06-5fe8-814c-c14b85d33466",
+    "name": "Приседания с гантелями"
+  },
+  {
+    "sourceID": "Barbell_Lunge",
+    "id": "10ffe19b-f657-564c-80ae-6537b9176cbb",
+    "name": "Выпады со штангой"
+  },
+  {
+    "sourceID": "Dumbbell_Lunges",
+    "id": "19b0b1dd-64b6-5d0e-958d-2dee667a7894",
+    "name": "Выпады с гантелями"
+  },
+  {
+    "sourceID": "Dumbbell_Rear_Lunge",
+    "id": "9eea4575-be29-53cb-9bd5-c728edef5a13",
+    "name": "Обратные выпады с гантелями"
+  },
+  {
+    "sourceID": "Split_Squat_with_Dumbbells",
+    "id": "25c70770-0592-5a41-b61c-f1eabd03aeef",
+    "name": "Болгарские сплит-приседания с гантелями"
+  },
+  {
+    "sourceID": "Dumbbell_Step_Ups",
+    "id": "5a59b3cc-f6e2-5a4b-94c7-7d11d08bc7b2",
+    "name": "Зашагивания с гантелями"
+  },
+  {
+    "sourceID": "Leg_Press",
+    "id": "69e24aea-c818-5ce4-ba9f-9c4adb7d2798",
+    "name": "Жим ногами"
+  },
+  {
+    "sourceID": "Leg_Extensions",
+    "id": "2f498ecf-4776-5b8f-99e2-438726bda696",
+    "name": "Разгибание ног в тренажёре"
+  },
+  {
+    "sourceID": "Lying_Leg_Curls",
+    "id": "5e911f6c-3710-5b1a-843d-86373e826908",
+    "name": "Сгибание ног лёжа"
+  },
+  {
+    "sourceID": "Seated_Leg_Curl",
+    "id": "5f33d757-dd11-5715-9929-c8d8391a86ba",
+    "name": "Сгибание ног сидя"
+  },
+  {
+    "sourceID": "Barbell_Deadlift",
+    "id": "60a5a10a-940e-57a3-b83b-9d8d51dc4bf3",
+    "name": "Становая тяга"
+  },
+  {
+    "sourceID": "Sumo_Deadlift",
+    "id": "ad946ce7-1a7d-55a8-83d9-91b593c1991a",
+    "name": "Становая тяга сумо"
+  },
+  {
+    "sourceID": "Stiff-Legged_Dumbbell_Deadlift",
+    "id": "5e3e91da-a533-5fd2-bfd1-ea1f2e76b88a",
+    "name": "Тяга с гантелями на прямых ногах"
+  },
+  {
+    "sourceID": "Barbell_Glute_Bridge",
+    "id": "d81e0a08-b853-524c-b049-6b4bc7eb2908",
+    "name": "Ягодичный мост со штангой"
+  },
+  {
+    "sourceID": "Barbell_Hip_Thrust",
+    "id": "fbf2f80a-ad4d-554e-80f4-75fa60e708ff",
+    "name": "Подъём таза со штангой с опорой на скамью"
+  },
+  {
+    "sourceID": "Butt_Lift_Bridge",
+    "id": "c36ea3c1-1fc4-5c88-a87b-8c1c9c072fdc",
+    "name": "Ягодичный мост"
+  },
+  {
+    "sourceID": "Single_Leg_Glute_Bridge",
+    "id": "31527337-22cf-5a8a-8602-c36cde9b3fc0",
+    "name": "Ягодичный мост на одной ноге"
+  },
+  {
+    "sourceID": "Thigh_Abductor",
+    "id": "5535b57a-8686-5a59-95a8-c950089708f0",
+    "name": "Разведение ног в тренажёре"
+  },
+  {
+    "sourceID": "Thigh_Adductor",
+    "id": "d8cf4152-006b-53c1-a0a7-299a2cc39c70",
+    "name": "Сведение ног в тренажёре"
+  },
+  {
+    "sourceID": "Standing_Calf_Raises",
+    "id": "5d7df1f0-31a1-55bf-85fe-fd59c2060c3c",
+    "name": "Подъёмы на носки стоя"
+  },
+  {
+    "sourceID": "Seated_Calf_Raise",
+    "id": "4c0bcab5-3c05-5181-b003-cdff750e36f1",
+    "name": "Подъёмы на носки сидя"
+  },
+  {
+    "sourceID": "Calf_Press_On_The_Leg_Press_Machine",
+    "id": "435c922b-38b6-502f-b2b1-83f3101e9e5f",
+    "name": "Подъёмы на носки в жиме ногами"
+  },
+  {
+    "sourceID": "Chin-Up",
+    "id": "4925d85c-1a3f-5c48-a177-3dff5b1de9a9",
+    "name": "Подтягивания обратным хватом"
+  },
+  {
+    "sourceID": "Wide-Grip_Lat_Pulldown",
+    "id": "9737759b-d324-5076-9931-a7dba7779f2f",
+    "name": "Тяга верхнего блока широким хватом"
+  },
+  {
+    "sourceID": "Close-Grip_Front_Lat_Pulldown",
+    "id": "c6221067-76d0-588e-aca1-5876cf3f5dc8",
+    "name": "Тяга верхнего блока узким хватом"
+  },
+  {
+    "sourceID": "Underhand_Cable_Pulldowns",
+    "id": "537e6599-4ef1-545a-b31d-891526416088",
+    "name": "Тяга верхнего блока обратным хватом"
+  },
+  {
+    "sourceID": "Seated_Cable_Rows",
+    "id": "cf73d3b0-1291-565b-bcb3-37b52071d5da",
+    "name": "Тяга горизонтального блока"
+  },
+  {
+    "sourceID": "One-Arm_Dumbbell_Row",
+    "id": "09b8d89d-34d3-5a3d-8e6b-b04cb3807bb7",
+    "name": "Тяга гантели одной рукой"
+  },
+  {
+    "sourceID": "Bent_Over_Two-Dumbbell_Row",
+    "id": "a23a71eb-91df-5f3c-84e4-4dbf1624678a",
+    "name": "Тяга двух гантелей в наклоне"
+  },
+  {
+    "sourceID": "Dumbbell_Incline_Row",
+    "id": "4f98c5cf-83a1-5ffa-bae5-fd96e0039b2c",
+    "name": "Тяга гантелей с опорой грудью"
+  },
+  {
+    "sourceID": "T-Bar_Row_with_Handle",
+    "id": "3efa47cf-4d76-5133-8686-ba128078829f",
+    "name": "Тяга Т-грифа"
+  },
+  {
+    "sourceID": "Straight-Arm_Pulldown",
+    "id": "43c5d9b4-9d40-5375-ba81-6be4873632fa",
+    "name": "Тяга верхнего блока прямыми руками"
+  },
+  {
+    "sourceID": "Hyperextensions_Back_Extensions",
+    "id": "225fb098-7905-5995-867e-09d8512d70fd",
+    "name": "Гиперэкстензия"
+  },
+  {
+    "sourceID": "Barbell_Shrug",
+    "id": "5c71cd1c-0595-516e-b7bc-79c91466ef38",
+    "name": "Шраги со штангой"
+  },
+  {
+    "sourceID": "Dumbbell_Shrug",
+    "id": "a27dbdf1-867c-5e63-b7c1-11fa230aa47f",
+    "name": "Шраги с гантелями"
+  },
+  {
+    "sourceID": "Dumbbell_Bench_Press",
+    "id": "df15f938-2c8b-505f-9bd4-e45783def49b",
+    "name": "Жим гантелей лёжа"
+  },
+  {
+    "sourceID": "Barbell_Incline_Bench_Press_-_Medium_Grip",
+    "id": "afd0d1c7-849d-5faa-85e7-765757ad8759",
+    "name": "Жим штанги на наклонной скамье"
+  },
+  {
+    "sourceID": "Incline_Dumbbell_Press",
+    "id": "e8bc138e-2642-570b-aee7-07ec627b5e97",
+    "name": "Жим гантелей на наклонной скамье"
+  },
+  {
+    "sourceID": "Decline_Barbell_Bench_Press",
+    "id": "075e9828-6384-53f6-a998-edfffb5b470f",
+    "name": "Жим штанги на скамье с наклоном вниз"
+  },
+  {
+    "sourceID": "Decline_Dumbbell_Bench_Press",
+    "id": "211142bc-4f62-5a01-b894-0609979a67e7",
+    "name": "Жим гантелей на скамье с наклоном вниз"
+  },
+  {
+    "sourceID": "Dumbbell_Flyes",
+    "id": "e99de1f3-c80d-5d18-86df-f1fd3959c2d2",
+    "name": "Разведение гантелей лёжа"
+  },
+  {
+    "sourceID": "Incline_Dumbbell_Flyes",
+    "id": "66dc7b09-9ad5-59af-9769-f2a5dc8e1d2c",
+    "name": "Разведение гантелей на наклонной скамье"
+  },
+  {
+    "sourceID": "Cable_Crossover",
+    "id": "0dee0627-e8c5-5372-b47f-89adcf61dfa8",
+    "name": "Сведение рук в кроссовере"
+  },
+  {
+    "sourceID": "Butterfly",
+    "id": "facb412b-7748-553d-9b54-5f61185a3cc6",
+    "name": "Сведение рук в тренажёре"
+  },
+  {
+    "sourceID": "Pushups",
+    "id": "ae5c7154-d37a-515d-89a0-4559daa94acc",
+    "name": "Отжимания"
+  },
+  {
+    "sourceID": "Push-Ups_With_Feet_Elevated",
+    "id": "d8b52366-d691-53b6-b7e0-6094db238a60",
+    "name": "Отжимания с ногами на возвышении"
+  },
+  {
+    "sourceID": "Incline_Push-Up",
+    "id": "7603f146-3f9f-5ec0-8cfe-90c5a2158747",
+    "name": "Отжимания с руками на возвышении"
+  },
+  {
+    "sourceID": "Dips_-_Chest_Version",
+    "id": "b1918380-05ba-5b28-b917-eba3ba751a0e",
+    "name": "Отжимания на брусьях на грудь"
+  },
+  {
+    "sourceID": "Straight-Arm_Dumbbell_Pullover",
+    "id": "07709428-f691-562f-8f24-5754cdea6c07",
+    "name": "Пуловер с гантелью"
+  },
+  {
+    "sourceID": "Dumbbell_Shoulder_Press",
+    "id": "4d261748-ded9-5bb1-b2ef-0ee8c1f6b6c9",
+    "name": "Жим гантелей сидя"
+  },
+  {
+    "sourceID": "Arnold_Dumbbell_Press",
+    "id": "a53d6212-fcba-5d19-ad1d-1b56e34a8396",
+    "name": "Жим Арнольда"
+  },
+  {
+    "sourceID": "Standing_Dumbbell_Press",
+    "id": "451e9781-7faa-52a4-af90-cc64f957ddec",
+    "name": "Жим гантелей стоя"
+  },
+  {
+    "sourceID": "Side_Lateral_Raise",
+    "id": "18506dde-bb5a-5a3d-869e-64052b31aa57",
+    "name": "Подъёмы гантелей через стороны"
+  },
+  {
+    "sourceID": "Seated_Side_Lateral_Raise",
+    "id": "4e12da0a-d453-5215-83f6-f87b5205bf6c",
+    "name": "Подъёмы гантелей через стороны сидя"
+  },
+  {
+    "sourceID": "Front_Dumbbell_Raise",
+    "id": "2cd25084-d696-5ddc-80ca-5dc9e60d5930",
+    "name": "Подъёмы гантелей перед собой"
+  },
+  {
+    "sourceID": "Seated_Bent-Over_Rear_Delt_Raise",
+    "id": "db28531e-fe10-5e1b-b377-f5eae9db95a9",
+    "name": "Разведение гантелей в наклоне сидя"
+  },
+  {
+    "sourceID": "Reverse_Machine_Flyes",
+    "id": "a6d85d61-c001-5765-a5e0-534499d120a6",
+    "name": "Обратное разведение в тренажёре"
+  },
+  {
+    "sourceID": "Face_Pull",
+    "id": "3880eac8-8b0a-5cbd-9605-1b8fdd4062fc",
+    "name": "Тяга каната к лицу"
+  },
+  {
+    "sourceID": "Standing_Low-Pulley_Deltoid_Raise",
+    "id": "a33f61be-8fb1-5828-8512-1fa0f29e41ee",
+    "name": "Отведение руки на нижнем блоке"
+  },
+  {
+    "sourceID": "Barbell_Curl",
+    "id": "e54658d0-7a9d-5ac3-9f61-4bd22c4dedb8",
+    "name": "Сгибания рук со штангой"
+  },
+  {
+    "sourceID": "EZ-Bar_Curl",
+    "id": "4983e50f-edbe-549d-926f-92252e3a3bf8",
+    "name": "Сгибания рук с EZ-грифом"
+  },
+  {
+    "sourceID": "Alternate_Hammer_Curl",
+    "id": "fd8689e0-08f2-5f5c-8f04-b10f35fdd7cd",
+    "name": "Попеременные молотковые сгибания"
+  },
+  {
+    "sourceID": "Incline_Dumbbell_Curl",
+    "id": "f3991dd6-1c65-5f95-ac35-b3c59a492abc",
+    "name": "Сгибания рук на наклонной скамье"
+  },
+  {
+    "sourceID": "Concentration_Curls",
+    "id": "691675fe-2053-5df4-809a-f84f044940ec",
+    "name": "Концентрированные сгибания"
+  },
+  {
+    "sourceID": "Preacher_Curl",
+    "id": "4b498274-bf05-5850-87b1-ddccd604c40a",
+    "name": "Сгибания рук на скамье Скотта"
+  },
+  {
+    "sourceID": "Standing_Biceps_Cable_Curl",
+    "id": "0eb7172b-3f36-59b1-a06f-0395a7121845",
+    "name": "Сгибания рук на нижнем блоке"
+  },
+  {
+    "sourceID": "Reverse_Barbell_Curl",
+    "id": "b03e86b4-84aa-51d6-a063-0968fe074110",
+    "name": "Сгибания со штангой обратным хватом"
+  },
+  {
+    "sourceID": "Close-Grip_Barbell_Bench_Press",
+    "id": "523c01f8-5df1-52f1-b9de-5bda5638709c",
+    "name": "Жим штанги узким хватом"
+  },
+  {
+    "sourceID": "EZ-Bar_Skullcrusher",
+    "id": "7c8dcb45-8f9a-5835-bad3-c9f6fcbbc01b",
+    "name": "Французский жим с EZ-грифом лёжа"
+  },
+  {
+    "sourceID": "Seated_Triceps_Press",
+    "id": "384723df-3a8f-5119-99ed-644811e9c17c",
+    "name": "Разгибание рук с гантелью из-за головы сидя"
+  },
+  {
+    "sourceID": "Triceps_Pushdown",
+    "id": "fab97bee-59c5-5466-9042-a521f43f3845",
+    "name": "Разгибание рук на верхнем блоке"
+  },
+  {
+    "sourceID": "Triceps_Pushdown_-_Rope_Attachment",
+    "id": "5bb15a5e-ff03-5b25-a9c4-a1b69e3bde99",
+    "name": "Разгибание рук с канатом на блоке"
+  },
+  {
+    "sourceID": "Cable_Rope_Overhead_Triceps_Extension",
+    "id": "18876255-6141-5510-8664-cc21e78464b8",
+    "name": "Разгибание рук с канатом из-за головы"
+  },
+  {
+    "sourceID": "Tricep_Dumbbell_Kickback",
+    "id": "e8e181c4-2ab6-5b73-9bd3-46507b15aa7b",
+    "name": "Разгибание руки с гантелью в наклоне"
+  },
+  {
+    "sourceID": "Dips_-_Triceps_Version",
+    "id": "a8d345bd-29c4-5f39-a443-cfc03e438453",
+    "name": "Отжимания на брусьях на трицепс"
+  },
+  {
+    "sourceID": "Bench_Dips",
+    "id": "c985db11-e322-5f99-bce9-f017453b325f",
+    "name": "Обратные отжимания от скамьи"
+  },
+  {
+    "sourceID": "Seated_Palm-Up_Barbell_Wrist_Curl",
+    "id": "fd0fa3a9-0ca0-5524-ab18-323d3a3829f5",
+    "name": "Сгибание кистей со штангой"
+  },
+  {
+    "sourceID": "Seated_Palms-Down_Barbell_Wrist_Curl",
+    "id": "7ca34fb6-135c-5e98-9e22-0603dd4c9243",
+    "name": "Разгибание кистей со штангой"
+  },
+  {
+    "sourceID": "Air_Bike",
+    "id": "a3e9e78d-38f3-5144-9066-3af46cf7627f",
+    "name": "Велосипед на пресс"
+  },
+  {
+    "sourceID": "Reverse_Crunch",
+    "id": "f4c55e35-d616-540e-b21a-98c2d4b68ca7",
+    "name": "Обратные скручивания"
+  },
+  {
+    "sourceID": "Hanging_Leg_Raise",
+    "id": "cdada155-858a-5678-bf19-ead8fb8849e3",
+    "name": "Подъём ног в висе"
+  },
+  {
+    "sourceID": "Flat_Bench_Lying_Leg_Raise",
+    "id": "411d38b7-9823-50fc-a29f-b49b77afe2f1",
+    "name": "Подъём ног лёжа на скамье"
+  },
+  {
+    "sourceID": "Cable_Crunch",
+    "id": "91dd1c45-b68a-5360-8e1a-9e7730544d7f",
+    "name": "Скручивания на верхнем блоке"
+  },
+  {
+    "sourceID": "Russian_Twist",
+    "id": "bd4bebd1-e58e-5f90-8126-a24884067711",
+    "name": "Русские скручивания"
+  },
+  {
+    "sourceID": "Dead_Bug",
+    "id": "a3710600-1084-5a61-a2f4-cb156963a90c",
+    "name": "Мёртвый жук"
+  },
+  {
+    "sourceID": "Alternate_Heel_Touchers",
+    "id": "52eafb22-b1a0-5b65-80f5-871d89901916",
+    "name": "Касания пяток лёжа"
+  },
+  {
+    "sourceID": "Ab_Roller",
+    "id": "2f3a52ca-c293-54ad-99b8-a856101eb704",
+    "name": "Выкаты с роликом"
+  },
+  {
+    "sourceID": "Barbell_Side_Bend",
+    "id": "401823d2-66ae-501d-8bc6-e97b7f610668",
+    "name": "Наклоны в сторону со штангой"
+  },
+  {
+    "sourceID": "Dumbbell_Side_Bend",
+    "id": "3ec4bf86-a4be-5b79-9f61-08a52cd3291b",
+    "name": "Наклоны в сторону с гантелью"
+  }
+]

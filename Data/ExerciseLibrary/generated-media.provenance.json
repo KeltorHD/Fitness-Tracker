@@ -1,0 +1,633 @@
+{
+  "generator": "built-in image_gen",
+  "assembly": "8 pose frames, JPEG posters and GIF loops; generated independently of FitSession.",
+  "entries": [
+    {
+      "sourceID": "Barbell_Bench_Press_-_Medium_Grip",
+      "generator": "built-in image_gen",
+      "prompt": "Use case: scientific-educational. Original exercise animation atlas for a native fitness app. Create one precise 4-column by 2-row sprite sheet, eight equal square tiles on a 2:1 canvas. Exercise: Barbell Bench Press - Medium Grip. Exact motion description: Lie back on a flat bench. Using a medium width grip (a grip that creates a 90-degree angle in the middle of the movement between the forearms and the upper arms), lift the bar from the rack and hold it straight over you with your arms locked. This will be your starting position. From the starting position, breathe in and begin coming down slowly until the bar touches your middle chest. After a brief pause, push the bar back to the starting position as you breathe out. Focus on pushing the bar using your chest muscles. Lock your arms and squeeze your chest in the contracted position at the top of the motion, hold for a second and then start coming down slowly again. Tip: Ideally, lowering the weight should take about twice as long as raising it. Repeat the movement for the prescribed amount of repetitions. When you are done, place the bar back in the rack.. Show a single complete controlled repetition in frames 1 to 8: starting position, two progressive intermediate positions, endpoint, same endpoint, two progressive return positions, starting position matching frame 1. Identical generic adult athletic male in charcoal t-shirt, dark shorts and white trainers, same equipment, fixed orthographic three-quarter camera, same scale and margins, all limbs and equipment visible inside each tile. Restrained professional 3D instructional illustration, neutral light-grey background, diffuse studio lighting, orange accents only on small equipment details. No text, lines, borders, gutters, logos, arrows or labels. Every tile boundary is exactly at quarters horizontally and halves vertically. Correct anatomy and the correct exercise, no changing equipment or body proportions, no camera movement. Do not copy any FitSession imagery.\n",
+      "files": [
+        {
+          "path": "Barbell_Bench_Press_-_Medium_Grip/ai-poster.jpg",
+          "sha256": "6968f1568813c437f861c36c044e1e4ec7b5eaafe8ba9bfe38fb876a63823036",
+          "bytes": 20771
+        },
+        {
+          "path": "Barbell_Bench_Press_-_Medium_Grip/ai-motion.gif",
+          "sha256": "350f1b1561821ac477b042b074abb2996e3ad9579b1873ae7479230be0575a8a",
+          "bytes": 336364
+        },
+        {
+          "path": "Barbell_Bench_Press_-_Medium_Grip/ai-frame-00.jpg",
+          "sha256": "8d9ae7e9f72e1281043df69d59d862c9646a8dd6b44e5e9536f793ed09fb182e",
+          "bytes": 16863
+        },
+        {
+          "path": "Barbell_Bench_Press_-_Medium_Grip/ai-frame-01.jpg",
+          "sha256": "e328078b3c452e945fa000acd5a1aaec4d7746f1c1dce21ff01528ac09e23638",
+          "bytes": 16773
+        },
+        {
+          "path": "Barbell_Bench_Press_-_Medium_Grip/ai-frame-02.jpg",
+          "sha256": "6fecef6c39fad2613282c3001d6a949bb071f1ac589aa07f167feda63b49cb4f",
+          "bytes": 16230
+        },
+        {
+          "path": "Barbell_Bench_Press_-_Medium_Grip/ai-frame-03.jpg",
+          "sha256": "526fa1b1a6182ba5298696de4688270953fa500df3ed8dc2ec5d4090e1668de0",
+          "bytes": 15572
+        },
+        {
+          "path": "Barbell_Bench_Press_-_Medium_Grip/ai-frame-04.jpg",
+          "sha256": "f305092e550fe6081c93d69204b6acc0afccf814c7040b5db36d7199beb043c6",
+          "bytes": 15948
+        },
+        {
+          "path": "Barbell_Bench_Press_-_Medium_Grip/ai-frame-05.jpg",
+          "sha256": "be6a47705a20658d0aff79e4f3a90eecdc97f5162cba9b8fcac861a7d8e6324b",
+          "bytes": 16592
+        },
+        {
+          "path": "Barbell_Bench_Press_-_Medium_Grip/ai-frame-06.jpg",
+          "sha256": "92bd8f7b0ffe71e9b080cd63fa1049453dbae3646cf1b127aa6229b554ceac5e",
+          "bytes": 16822
+        },
+        {
+          "path": "Barbell_Bench_Press_-_Medium_Grip/ai-frame-07.jpg",
+          "sha256": "e3291a8afbb0f012d0d16639345814136c9204f4c489f0a06e1cc66604388ae0",
+          "bytes": 16764
+        }
+      ]
+    },
+    {
+      "sourceID": "Barbell_Squat",
+      "generator": "built-in image_gen",
+      "prompt": "Use case: scientific-educational. Asset type: original exercise animation sprite sheet for a native fitness app. Create ONE precise 4-column by 2-row sprite atlas, eight equally sized rectangular tiles in row-major animation order, ideally a 2:1 canvas. Each tile shows the SAME generic adult athletic male in a plain charcoal t-shirt, dark shorts and white trainers performing a conventional barbell back squat. Full body and barbell visible in every tile with generous identical margins. Fixed orthographic three-quarter side camera, same scale, no camera movement. Barbell rests on upper back, held with both hands, plates fixed on bar, feet shoulder width, heels stay planted, knees track over toes, back neutral. Frames: 1 standing upright, 2 slight descent, 3 midway descent, 4 thighs approximately parallel at bottom, 5 same bottom position, 6 midway ascent, 7 near upright, 8 upright matching frame 1 for a loop. Restrained high quality 3D instructional illustration, neutral light grey seamless background in every tile, diffuse studio lighting, orange accents only on barbell collars. No text, arrows, logos, panels, gutters, borders or grid lines. Tile boundaries must align at exact quarters horizontally and halves vertically. Anatomically plausible poses, two hands and two feet per figure, no duplicated limbs, no changing equipment, no exaggerated depth, no likeness of a real person. Do not use any image from FitSession or imitate its art. This is an original asset.\n",
+      "files": [
+        {
+          "path": "Barbell_Squat/ai-poster.jpg",
+          "sha256": "88628904222cdbcfe5ff4a44689c9399a28b060616637edf9754227cd12ff677",
+          "bytes": 12712
+        },
+        {
+          "path": "Barbell_Squat/ai-motion.gif",
+          "sha256": "5c964f11f1e8e9903cf36bfb8f363702469affac67e431e3c0b8173fccf4e915",
+          "bytes": 320218
+        },
+        {
+          "path": "Barbell_Squat/ai-frame-00.jpg",
+          "sha256": "ee3f75833b14b2443c9dcb4ca2fe8dc55cca7cf293fa9bdcf3bc1bd7d67b9b9a",
+          "bytes": 10078
+        },
+        {
+          "path": "Barbell_Squat/ai-frame-01.jpg",
+          "sha256": "5622fc4cb383b1700c11363af09c6ccfa8f0485004919b2e78c186d228116313",
+          "bytes": 10393
+        },
+        {
+          "path": "Barbell_Squat/ai-frame-02.jpg",
+          "sha256": "8c142350ae5ff0e531b7c9954962cd0ebbe266cbfc7ae606c0d06782a60f0a95",
+          "bytes": 10595
+        },
+        {
+          "path": "Barbell_Squat/ai-frame-03.jpg",
+          "sha256": "776cc3f2bdd040c6d5372ab52cd4611f9b3ccba7a6fa2badc985db6ffc9874a3",
+          "bytes": 10043
+        },
+        {
+          "path": "Barbell_Squat/ai-frame-04.jpg",
+          "sha256": "512ddd5015cec9d36c6a2c88f0a83929f687af6cec9c2f30bc6cd30273249600",
+          "bytes": 10075
+        },
+        {
+          "path": "Barbell_Squat/ai-frame-05.jpg",
+          "sha256": "6094b4350efd5972bf62948220974b1697a13fd7c909f9d00d55b188dcaf3f50",
+          "bytes": 10299
+        },
+        {
+          "path": "Barbell_Squat/ai-frame-06.jpg",
+          "sha256": "8a572a1c7263079338a02ad4be4dfb94ea28a0af704913e93b49fe8463117cbd",
+          "bytes": 10026
+        },
+        {
+          "path": "Barbell_Squat/ai-frame-07.jpg",
+          "sha256": "4ff4ab45f3c2c913a5ae4ab903e0f576129b0d4d78f3467c671460e423057936",
+          "bytes": 10018
+        }
+      ]
+    },
+    {
+      "sourceID": "Bent_Over_Barbell_Row",
+      "generator": "built-in image_gen",
+      "prompt": "Use case: scientific-educational. Original exercise animation atlas for a native fitness app. Create one precise 4-column by 2-row sprite sheet, eight equal square tiles on a 2:1 canvas. Exercise: Bent Over Barbell Row. Exact motion description: Holding a barbell with a pronated grip (palms facing down), bend your knees slightly and bring your torso forward, by bending at the waist, while keeping the back straight until it is almost parallel to the floor. Tip: Make sure that you keep the head up. The barbell should hang directly in front of you as your arms hang perpendicular to the floor and your torso. This is your starting position. Now, while keeping the torso stationary, breathe out and lift the barbell to you. Keep the elbows close to the body and only use the forearms to hold the weight. At the top contracted position, squeeze the back muscles and hold for a brief pause. Then inhale and slowly lower the barbell back to the starting position. Repeat for the recommended amount of repetitions.. Show a single complete controlled repetition in frames 1 to 8: starting position, two progressive intermediate positions, endpoint, same endpoint, two progressive return positions, starting position matching frame 1. Identical generic adult athletic male in charcoal t-shirt, dark shorts and white trainers, same equipment, fixed orthographic three-quarter camera, same scale and margins, all limbs and equipment visible inside each tile. Restrained professional 3D instructional illustration, neutral light-grey background, diffuse studio lighting, orange accents only on small equipment details. No text, lines, borders, gutters, logos, arrows or labels. Every tile boundary is exactly at quarters horizontally and halves vertically. Correct anatomy and the correct exercise, no changing equipment or body proportions, no camera movement. Do not copy any FitSession imagery.\n",
+      "files": [
+        {
+          "path": "Bent_Over_Barbell_Row/ai-poster.jpg",
+          "sha256": "c62e63f7add4048e13d62b9b1baa8d3a2517abce8d57d920accdd11f4ed4bb73",
+          "bytes": 16330
+        },
+        {
+          "path": "Bent_Over_Barbell_Row/ai-motion.gif",
+          "sha256": "d61e22ed6ac1db2eeceec1e0fcb8d004a07fefc9f29c88a1dccbc438c7689685",
+          "bytes": 314540
+        },
+        {
+          "path": "Bent_Over_Barbell_Row/ai-frame-00.jpg",
+          "sha256": "c72e55a18f970d75421d26a5aef2f90cf555f17f5ed8b781bb003e0aeba63255",
+          "bytes": 13051
+        },
+        {
+          "path": "Bent_Over_Barbell_Row/ai-frame-01.jpg",
+          "sha256": "7fae5e505c3cea6d530d3ac4185b2d57c07e2be588ed34d8b067c0ef6dab23d6",
+          "bytes": 13156
+        },
+        {
+          "path": "Bent_Over_Barbell_Row/ai-frame-02.jpg",
+          "sha256": "e38544b7e3c04808669ba4e87f2c6f1ad1b891869da147e540f84295f53d62e7",
+          "bytes": 12333
+        },
+        {
+          "path": "Bent_Over_Barbell_Row/ai-frame-03.jpg",
+          "sha256": "488924e8494fcfee7127ab79e0cb85b9c7342594aae4709a156d88e6032f3ef4",
+          "bytes": 12273
+        },
+        {
+          "path": "Bent_Over_Barbell_Row/ai-frame-04.jpg",
+          "sha256": "9fa117823528104f6f9f958018784cbd7cc8ec7441184d369e9361b2ce726349",
+          "bytes": 12488
+        },
+        {
+          "path": "Bent_Over_Barbell_Row/ai-frame-05.jpg",
+          "sha256": "8acaecddd1b6093be35d01e84550174b4f5305925eaa0b2b0f140db535bb5a43",
+          "bytes": 12153
+        },
+        {
+          "path": "Bent_Over_Barbell_Row/ai-frame-06.jpg",
+          "sha256": "2deb4e411e849bd1957c26e6c08a9970cd65e239cd94cbb56ccb7869212a3855",
+          "bytes": 12918
+        },
+        {
+          "path": "Bent_Over_Barbell_Row/ai-frame-07.jpg",
+          "sha256": "9591f0cd688dc2981f53c097555ee536b74da1a48b3f91390b1c402b9bf83dc8",
+          "bytes": 13178
+        }
+      ]
+    },
+    {
+      "sourceID": "Crunches",
+      "generator": "built-in image_gen",
+      "prompt": "Use case: scientific-educational. Original exercise animation atlas for a native fitness app. Create one precise 4-column by 2-row sprite sheet, eight equal square tiles on a 2:1 canvas. Exercise: Crunches. Exact motion description: Lie flat on your back with your feet flat on the ground, or resting on a bench with your knees bent at a 90 degree angle. If you are resting your feet on a bench, place them three to four inches apart and point your toes inward so they touch. Now place your hands lightly on either side of your head keeping your elbows in. Tip: Don't lock your fingers behind your head. While pushing the small of your back down in the floor to better isolate your abdominal muscles, begin to roll your shoulders off the floor. Continue to push down as hard as you can with your lower back as you contract your abdominals and exhale. Your shoulders should come up off the floor only about four inches, and your lower back should remain on the floor. At the top of the movement, contract your abdominals hard and keep the contraction for a second. Tip: Focus on slow, controlled movement - don't cheat yourself by using momentum. After the one second contraction, begin to come down slowly again to the starting position as you inhale. Repeat for the recommended amount of repetitions.. Show a single complete controlled repetition in frames 1 to 8: starting position, two progressive intermediate positions, endpoint, same endpoint, two progressive return positions, starting position matching frame 1. Identical generic adult athletic male in charcoal t-shirt, dark shorts and white trainers, same equipment, fixed orthographic three-quarter camera, same scale and margins, all limbs and equipment visible inside each tile. Restrained professional 3D instructional illustration, neutral light-grey background, diffuse studio lighting, orange accents only on small equipment details. No text, lines, borders, gutters, logos, arrows or labels. Every tile boundary is exactly at quarters horizontally and halves vertically. Correct anatomy and the correct exercise, no changing equipment or body proportions, no camera movement. Do not copy any FitSession imagery.\n",
+      "files": [
+        {
+          "path": "Crunches/ai-poster.jpg",
+          "sha256": "7ec8c76c81d830920ef5de240b86275645aebdb95a9388b5964530bfe91fa17a",
+          "bytes": 12930
+        },
+        {
+          "path": "Crunches/ai-motion.gif",
+          "sha256": "25a37b6db26f631c98f05a36af57bfd0df85de55b2319cec66bd8ff859acb534",
+          "bytes": 278670
+        },
+        {
+          "path": "Crunches/ai-frame-00.jpg",
+          "sha256": "874dbeef97fdc65fa2429576622dfa9283666ec361e6652cf00a73466cf5f875",
+          "bytes": 10167
+        },
+        {
+          "path": "Crunches/ai-frame-01.jpg",
+          "sha256": "5c9cfc6673c138933d05498ab43854a6c8cebaf0ea447be7d4127d0f7ac9271a",
+          "bytes": 11210
+        },
+        {
+          "path": "Crunches/ai-frame-02.jpg",
+          "sha256": "4adf93068a8030e1ec2df5805c8a701de3e133834eb37eaf8c0c7517638f834f",
+          "bytes": 12128
+        },
+        {
+          "path": "Crunches/ai-frame-03.jpg",
+          "sha256": "73c36b79215343a461267453f7b30501b97642d69b6e9b41a16d4ba6ebe78e10",
+          "bytes": 12112
+        },
+        {
+          "path": "Crunches/ai-frame-04.jpg",
+          "sha256": "993ff931f1f935a2464052700272c4ea904d4a561c27387be84535eec331a1b5",
+          "bytes": 12176
+        },
+        {
+          "path": "Crunches/ai-frame-05.jpg",
+          "sha256": "909d23587d6ca555f8eb26f1276350d0edec6551986fa9ac4e9a7ad7b3c00fe6",
+          "bytes": 11785
+        },
+        {
+          "path": "Crunches/ai-frame-06.jpg",
+          "sha256": "fe85c403e203e8191bc32adcbc7cab1c5b0ca8624d7f2a55805af67148def6dc",
+          "bytes": 10572
+        },
+        {
+          "path": "Crunches/ai-frame-07.jpg",
+          "sha256": "23543c4d9c9f05187feef64cd4b2d563ae90dcf1bcc505c730e7a0d13ad6c417",
+          "bytes": 10485
+        }
+      ]
+    },
+    {
+      "sourceID": "Dumbbell_Bicep_Curl",
+      "generator": "built-in image_gen",
+      "prompt": "Use case: scientific-educational. Original exercise animation atlas for a native fitness app. Create one precise 4-column by 2-row sprite sheet, eight equal square tiles on a 2:1 canvas. Exercise: Dumbbell Bicep Curl. Exact motion description: Stand up straight with a dumbbell in each hand at arm's length. Keep your elbows close to your torso and rotate the palms of your hands until they are facing forward. This will be your starting position. Now, keeping the upper arms stationary, exhale and curl the weights while contracting your biceps. Continue to raise the weights until your biceps are fully contracted and the dumbbells are at shoulder level. Hold the contracted position for a brief pause as you squeeze your biceps. Then, inhale and slowly begin to lower the dumbbells back to the starting position. Repeat for the recommended amount of repetitions.. Show a single complete controlled repetition in frames 1 to 8: starting position, two progressive intermediate positions, endpoint, same endpoint, two progressive return positions, starting position matching frame 1. Identical generic adult athletic male in charcoal t-shirt, dark shorts and white trainers, same equipment, fixed orthographic three-quarter camera, same scale and margins, all limbs and equipment visible inside each tile. Restrained professional 3D instructional illustration, neutral light-grey background, diffuse studio lighting, orange accents only on small equipment details. No text, lines, borders, gutters, logos, arrows or labels. Every tile boundary is exactly at quarters horizontally and halves vertically. Correct anatomy and the correct exercise, no changing equipment or body proportions, no camera movement. Do not copy any FitSession imagery.\n",
+      "files": [
+        {
+          "path": "Dumbbell_Bicep_Curl/ai-poster.jpg",
+          "sha256": "5db8c82d300ac8fec4ff597be2ed54d8019299378b15bc0cc32f7fb4343f5e04",
+          "bytes": 11201
+        },
+        {
+          "path": "Dumbbell_Bicep_Curl/ai-motion.gif",
+          "sha256": "bed3f0b6e0d219d2f42019c756eb24831a1e91f622d4bbb497bbec583dac6dd1",
+          "bytes": 339041
+        },
+        {
+          "path": "Dumbbell_Bicep_Curl/ai-frame-00.jpg",
+          "sha256": "4b57aed3d18e043b4b17f92dbe7d6fccbf610463bfdf4ab0aa39360652a87c20",
+          "bytes": 8824
+        },
+        {
+          "path": "Dumbbell_Bicep_Curl/ai-frame-01.jpg",
+          "sha256": "d10677e56dbc0e53d361075f47034e72a12dde4c8b2e4bf8bd0c3377cd1fb68f",
+          "bytes": 8728
+        },
+        {
+          "path": "Dumbbell_Bicep_Curl/ai-frame-02.jpg",
+          "sha256": "4a299af75fe43b77abcce926a41e4f81259fc06595d6c9cce4fc664d0b38910b",
+          "bytes": 8866
+        },
+        {
+          "path": "Dumbbell_Bicep_Curl/ai-frame-03.jpg",
+          "sha256": "8230cd9989043af659a0bb09788c3a278260c668e96bf6ac71bf71d4c52189fc",
+          "bytes": 8588
+        },
+        {
+          "path": "Dumbbell_Bicep_Curl/ai-frame-04.jpg",
+          "sha256": "dfdc3ed5d9ac29855f72a893a2ff08b03dcb75d0b5e57024d29336888628cdca",
+          "bytes": 8619
+        },
+        {
+          "path": "Dumbbell_Bicep_Curl/ai-frame-05.jpg",
+          "sha256": "362ef86ab01de223a40281c8524cbfa622670069a1104b2ede14935d2138bfae",
+          "bytes": 8604
+        },
+        {
+          "path": "Dumbbell_Bicep_Curl/ai-frame-06.jpg",
+          "sha256": "b2408f4b69f5f47d1303d16ace8b788dbff919963d89b2cebbb810cc40be0b7b",
+          "bytes": 8966
+        },
+        {
+          "path": "Dumbbell_Bicep_Curl/ai-frame-07.jpg",
+          "sha256": "70fbc25264e47af2ab01a3efe774b3782d1c783e64928c60a9dfc2a33856a8d8",
+          "bytes": 9091
+        }
+      ]
+    },
+    {
+      "sourceID": "Kettlebell_Halo",
+      "generator": "built-in image_gen",
+      "prompt": "Use case: scientific-educational. Original exercise animation atlas for a native fitness app. Create one precise 4-column by 2-row sprite sheet, eight equal square tiles on a 2:1 canvas. Exercise: Kettlebell Halo. Exact motion description: Stand tall with your feet hip-width apart. Hold a kettlebell upside down by the horns, with the bell above your hands and close to your chest. Brace your abdominals and squeeze your glutes so your ribcage stays down. This is your starting position. Keeping your elbows close to your head, move the kettlebell up past one ear and around behind your head. Continue the circle past the opposite ear and back down to the starting position in front of your chest, letting the bell pass close to your body throughout. Complete the prescribed number of circles in one direction, then repeat the same number in the opposite direction. Move slowly and keep your head, hips and lower back still. If your lower back arches or the bell drifts far from your head, use a lighter weight.. Show a single complete controlled repetition in frames 1 to 8: starting position, two progressive intermediate positions, endpoint, same endpoint, two progressive return positions, starting position matching frame 1. Identical generic adult athletic male in charcoal t-shirt, dark shorts and white trainers, same equipment, fixed orthographic three-quarter camera, same scale and margins, all limbs and equipment visible inside each tile. Restrained professional 3D instructional illustration, neutral light-grey background, diffuse studio lighting, orange accents only on small equipment details. No text, lines, borders, gutters, logos, arrows or labels. Every tile boundary is exactly at quarters horizontally and halves vertically. Correct anatomy and the correct exercise, no changing equipment or body proportions, no camera movement. Do not copy any FitSession imagery.\n",
+      "files": [
+        {
+          "path": "Kettlebell_Halo/ai-poster.jpg",
+          "sha256": "73ca8b602a3f5c3cb964be4d321d2d14133b68b7ccd8ef8249de98b0a6835f6e",
+          "bytes": 10981
+        },
+        {
+          "path": "Kettlebell_Halo/ai-motion.gif",
+          "sha256": "2dde71c3484c811649998ddb28a57d698626d194d76ccfad8ffa402454f43b3e",
+          "bytes": 292969
+        },
+        {
+          "path": "Kettlebell_Halo/ai-frame-00.jpg",
+          "sha256": "4567ffcb0abb6ff08d5dcddc46134eaa87a9278158f7687e6dd73385cf69c57e",
+          "bytes": 8572
+        },
+        {
+          "path": "Kettlebell_Halo/ai-frame-01.jpg",
+          "sha256": "8abccb01d5afde26b9e611facf5496f0c6b69116390cfad1d43939b501307ec7",
+          "bytes": 8611
+        },
+        {
+          "path": "Kettlebell_Halo/ai-frame-02.jpg",
+          "sha256": "76b25ec78e460b6f90e4c5fd0f916236d34a5da2ef91ca5680e135f38c10c47a",
+          "bytes": 8779
+        },
+        {
+          "path": "Kettlebell_Halo/ai-frame-03.jpg",
+          "sha256": "88463a2ff5037aa9240d49261e6f5a7f9a712c8a5c4df304013f1cb2d63e9c16",
+          "bytes": 8963
+        },
+        {
+          "path": "Kettlebell_Halo/ai-frame-04.jpg",
+          "sha256": "acf3f07df429299f3acf6b7359432cbdadb42bb6a3f9987f9bec7313e0bb5e15",
+          "bytes": 8899
+        },
+        {
+          "path": "Kettlebell_Halo/ai-frame-05.jpg",
+          "sha256": "939fa6bc37d5e7cc64a90d4ac126388c3a341adce1be229430f7be77c42a8a17",
+          "bytes": 8566
+        },
+        {
+          "path": "Kettlebell_Halo/ai-frame-06.jpg",
+          "sha256": "d5ec6bb317017a84d800ff9c844a929a4061165e8e418fea3a3b36b788dd4629",
+          "bytes": 8496
+        },
+        {
+          "path": "Kettlebell_Halo/ai-frame-07.jpg",
+          "sha256": "9211eb2c7e42462380491155ed3e4eb8b9db083de68ebd0b6ef7163226c91503",
+          "bytes": 8744
+        }
+      ]
+    },
+    {
+      "sourceID": "Kettlebell_Halo_With_Overhead_Extension",
+      "generator": "built-in image_gen",
+      "prompt": "Use case: scientific-educational. Original exercise animation atlas for a native fitness app. Create one precise 4-column by 2-row sprite sheet, eight equal square tiles on a 2:1 canvas. Exercise: Kettlebell Halo with Overhead Extension. Exact motion description: Stand tall with your feet hip-width apart. Hold a kettlebell upside down by the horns, with the bell above your hands and close to your chest. Brace your abdominals and squeeze your glutes so your ribcage stays down. This is your starting position. Keeping your elbows close to your head, move the kettlebell up past one ear and around until it sits behind your head. Pause here. From this position, extend your elbows to press the kettlebell up and overhead until your arms are straight, keeping your upper arms alongside your head. Bend your elbows to lower the kettlebell back to the pause position behind your head, under control. Continue the circle past the opposite ear and back down to the starting position in front of your chest to complete one repetition. Alternate the direction of the circle on each repetition. Keep your head, hips and lower back still throughout; if your lower back arches or you cannot reach the overhead position without leaning back, use a lighter weight or perform the halo and the extension as separate exercises.. Show a single complete controlled repetition in frames 1 to 8: starting position, two progressive intermediate positions, endpoint, same endpoint, two progressive return positions, starting position matching frame 1. Identical generic adult athletic male in charcoal t-shirt, dark shorts and white trainers, same equipment, fixed orthographic three-quarter camera, same scale and margins, all limbs and equipment visible inside each tile. Restrained professional 3D instructional illustration, neutral light-grey background, diffuse studio lighting, orange accents only on small equipment details. No text, lines, borders, gutters, logos, arrows or labels. Every tile boundary is exactly at quarters horizontally and halves vertically. Correct anatomy and the correct exercise, no changing equipment or body proportions, no camera movement. Do not copy any FitSession imagery.\n",
+      "files": [
+        {
+          "path": "Kettlebell_Halo_With_Overhead_Extension/ai-poster.jpg",
+          "sha256": "94ba11816b461209581c07d2fad5f21697a4ec507ed31307717860e824c0046b",
+          "bytes": 10153
+        },
+        {
+          "path": "Kettlebell_Halo_With_Overhead_Extension/ai-motion.gif",
+          "sha256": "62c2280d8e43efdf155e70374d931f91f0b6c035846a63be1b06dd0975db689a",
+          "bytes": 321616
+        },
+        {
+          "path": "Kettlebell_Halo_With_Overhead_Extension/ai-frame-00.jpg",
+          "sha256": "7b32ed04f1be0193ead8610a378a37e02490562f3716679b238e7d7be5bdba67",
+          "bytes": 7999
+        },
+        {
+          "path": "Kettlebell_Halo_With_Overhead_Extension/ai-frame-01.jpg",
+          "sha256": "60dc8c0ef18403c1e85856869442fd4b708219c961bdaea44398a25890f060fc",
+          "bytes": 8210
+        },
+        {
+          "path": "Kettlebell_Halo_With_Overhead_Extension/ai-frame-02.jpg",
+          "sha256": "3393a94aacb93bbdc9d8178a456f1d2dcdbfdc9a092dc19ac1dccc984c45d671",
+          "bytes": 7832
+        },
+        {
+          "path": "Kettlebell_Halo_With_Overhead_Extension/ai-frame-03.jpg",
+          "sha256": "de8128b7215c27a4b7d1ba6bff56068dc5a51182738512fb07fb57202ad802e9",
+          "bytes": 7663
+        },
+        {
+          "path": "Kettlebell_Halo_With_Overhead_Extension/ai-frame-04.jpg",
+          "sha256": "15eeaada32f1181a2d2a922f269f239b4146cd97c335723e34891b5d9951d210",
+          "bytes": 7928
+        },
+        {
+          "path": "Kettlebell_Halo_With_Overhead_Extension/ai-frame-05.jpg",
+          "sha256": "d315160a6977eb09e6cfb51696195b23e88e5392068df05404e0cefd0ab402fa",
+          "bytes": 8172
+        },
+        {
+          "path": "Kettlebell_Halo_With_Overhead_Extension/ai-frame-06.jpg",
+          "sha256": "b5c866399febc7c253217ce9c724c6ded27e1ca8b8bd60529c01060b364a1bb4",
+          "bytes": 8223
+        },
+        {
+          "path": "Kettlebell_Halo_With_Overhead_Extension/ai-frame-07.jpg",
+          "sha256": "1d46a519c16d1a336596e6977c5c30f17181dd596f3136903bc22ff280b80fb9",
+          "bytes": 8178
+        }
+      ]
+    },
+    {
+      "sourceID": "Kettlebell_Overhead_Triceps_Extension",
+      "generator": "built-in image_gen",
+      "prompt": "Use case: scientific-educational. Original exercise animation atlas for a native fitness app. Create one precise 4-column by 2-row sprite sheet, eight equal square tiles on a 2:1 canvas. Exercise: Kettlebell Overhead Triceps Extension. Exact motion description: Stand with your feet hip-width apart, holding a kettlebell by the horns with both hands. Press it overhead until your arms are extended, with the bell hanging behind your hands. Brace your abdominals and keep your upper arms vertical and close to your head. This is your starting position. Bend at the elbows to lower the kettlebell behind your head, going as far as your shoulder mobility allows without your elbows flaring outward. Extend your elbows to press the kettlebell back to the starting position, keeping your upper arms still throughout. Keep your ribcage down and avoid arching your lower back as you extend.. Show a single complete controlled repetition in frames 1 to 8: starting position, two progressive intermediate positions, endpoint, same endpoint, two progressive return positions, starting position matching frame 1. Identical generic adult athletic male in charcoal t-shirt, dark shorts and white trainers, same equipment, fixed orthographic three-quarter camera, same scale and margins, all limbs and equipment visible inside each tile. Restrained professional 3D instructional illustration, neutral light-grey background, diffuse studio lighting, orange accents only on small equipment details. No text, lines, borders, gutters, logos, arrows or labels. Every tile boundary is exactly at quarters horizontally and halves vertically. Correct anatomy and the correct exercise, no changing equipment or body proportions, no camera movement. Do not copy any FitSession imagery.\n",
+      "files": [
+        {
+          "path": "Kettlebell_Overhead_Triceps_Extension/ai-poster.jpg",
+          "sha256": "d9532a2a6864c79e6431e5a1791eb72053553881f5ff30800f9935f9bcc3d471",
+          "bytes": 9127
+        },
+        {
+          "path": "Kettlebell_Overhead_Triceps_Extension/ai-motion.gif",
+          "sha256": "507d966815d599f03594e84e3eaa7c9403ed4dce48b736818fe1a20dc69c29ee",
+          "bytes": 306647
+        },
+        {
+          "path": "Kettlebell_Overhead_Triceps_Extension/ai-frame-00.jpg",
+          "sha256": "c696f3ad77dd8bac9d024536ff1774d2cd63924d2a00962fe1bd23a2bf5a4a45",
+          "bytes": 7148
+        },
+        {
+          "path": "Kettlebell_Overhead_Triceps_Extension/ai-frame-01.jpg",
+          "sha256": "396dfdb1119c0bd78fd97aecb2d877e49b55c7f5d95d3a7005dd529c21961575",
+          "bytes": 7062
+        },
+        {
+          "path": "Kettlebell_Overhead_Triceps_Extension/ai-frame-02.jpg",
+          "sha256": "a9c2f97ac4768bcff9c68fe9985dbe665a6738b67c29b3d936a95aa2338edc23",
+          "bytes": 6852
+        },
+        {
+          "path": "Kettlebell_Overhead_Triceps_Extension/ai-frame-03.jpg",
+          "sha256": "b1cf6c791c58b049568c1a9e20daa8713ff5969538216f36dcbd1a549279fc77",
+          "bytes": 6785
+        },
+        {
+          "path": "Kettlebell_Overhead_Triceps_Extension/ai-frame-04.jpg",
+          "sha256": "c7f75c19948dca6a4b403e3642f7fec1f5f204d4174f7da1f799272e2c968a54",
+          "bytes": 7273
+        },
+        {
+          "path": "Kettlebell_Overhead_Triceps_Extension/ai-frame-05.jpg",
+          "sha256": "0feae5ce48e9f820c0d01a16b021fd3112be3d5048f044cd50d54025cddf9d34",
+          "bytes": 6985
+        },
+        {
+          "path": "Kettlebell_Overhead_Triceps_Extension/ai-frame-06.jpg",
+          "sha256": "1fc92be409497c34b03059ad28ebcdc7e69f927dbf539a1ce7c851b0504f4a3d",
+          "bytes": 6995
+        },
+        {
+          "path": "Kettlebell_Overhead_Triceps_Extension/ai-frame-07.jpg",
+          "sha256": "2ffc0b1d604a80c42eaca65cb535c44f5299c7349cc84803168fba05bedc50de",
+          "bytes": 7221
+        }
+      ]
+    },
+    {
+      "sourceID": "Pullups",
+      "generator": "built-in image_gen",
+      "prompt": "Use case: scientific-educational. Original exercise animation atlas for a native fitness app. Create one precise 4-column by 2-row sprite sheet, eight equal square tiles on a 2:1 canvas. Exercise: Pullups. Exact motion description: Grab the pull-up bar with the palms facing forward using the prescribed grip. Note on grips: For a wide grip, your hands need to be spaced out at a distance wider than your shoulder width. For a medium grip, your hands need to be spaced out at a distance equal to your shoulder width and for a close grip at a distance smaller than your shoulder width. As you have both arms extended in front of you holding the bar at the chosen grip width, bring your torso back around 30 degrees or so while creating a curvature on your lower back and sticking your chest out. This is your starting position. Pull your torso up until the bar touches your upper chest by drawing the shoulders and the upper arms down and back. Exhale as you perform this portion of the movement. Tip: Concentrate on squeezing the back muscles once you reach the full contracted position. The upper torso should remain stationary as it moves through space and only the arms should move. The forearms should do no other work other than hold the bar. After a second on the contracted position, start to inhale and slowly lower your torso back to the starting position when your arms are fully extended and the lats are fully stretched. Repeat this motion for the prescribed amount of repetitions.. Show a single complete controlled repetition in frames 1 to 8: starting position, two progressive intermediate positions, endpoint, same endpoint, two progressive return positions, starting position matching frame 1. Identical generic adult athletic male in charcoal t-shirt, dark shorts and white trainers, same equipment, fixed orthographic three-quarter camera, same scale and margins, all limbs and equipment visible inside each tile. Restrained professional 3D instructional illustration, neutral light-grey background, diffuse studio lighting, orange accents only on small equipment details. No text, lines, borders, gutters, logos, arrows or labels. Every tile boundary is exactly at quarters horizontally and halves vertically. Correct anatomy and the correct exercise, no changing equipment or body proportions, no camera movement. Do not copy any FitSession imagery.\n",
+      "files": [
+        {
+          "path": "Pullups/ai-poster.jpg",
+          "sha256": "d27d62c7cd497b43736e40050763e1e160824b6b673d6b3dceb3c3f1c285f823",
+          "bytes": 13260
+        },
+        {
+          "path": "Pullups/ai-motion.gif",
+          "sha256": "2a94275bf128a57d3bf08fd7823829c31bc8117ab579e8bb6b823360f588d246",
+          "bytes": 336715
+        },
+        {
+          "path": "Pullups/ai-frame-00.jpg",
+          "sha256": "901f2139ec77cf949278a959112f964b7424e0d1b3555061a5b490045e02f6bd",
+          "bytes": 10672
+        },
+        {
+          "path": "Pullups/ai-frame-01.jpg",
+          "sha256": "f6ae98048adf188553721e522f835d52bf16ee003aed8c0ce2ca18ddc707df43",
+          "bytes": 10638
+        },
+        {
+          "path": "Pullups/ai-frame-02.jpg",
+          "sha256": "3680452dc27b2d2ae992a22544b12548113f7bbd07184cabea9f23293a56a35d",
+          "bytes": 10684
+        },
+        {
+          "path": "Pullups/ai-frame-03.jpg",
+          "sha256": "8133e745c6adda436988aaff868272d201e63bffeaba6ed187189e882da089bb",
+          "bytes": 10403
+        },
+        {
+          "path": "Pullups/ai-frame-04.jpg",
+          "sha256": "cf2c0375af1e44128654545b6a3f02c47b9f267d709233601e957001d16d68af",
+          "bytes": 10604
+        },
+        {
+          "path": "Pullups/ai-frame-05.jpg",
+          "sha256": "39c051f324cdc8bfdb105ba17019d701c6930a5896794366527558dd790b6f93",
+          "bytes": 10483
+        },
+        {
+          "path": "Pullups/ai-frame-06.jpg",
+          "sha256": "d20c6beb580730933417cadcf5e17a9e93f1949ff1979c82c61ab1581e57bde9",
+          "bytes": 10617
+        },
+        {
+          "path": "Pullups/ai-frame-07.jpg",
+          "sha256": "2a51bf82eb6e9b524339c8f6ccfe819aa6c71a1a7bab6a8026a058a54bd3882d",
+          "bytes": 10749
+        }
+      ]
+    },
+    {
+      "sourceID": "Romanian_Deadlift",
+      "generator": "built-in image_gen",
+      "prompt": "Create a NEW corrected original 4 by 2 equal-square sprite atlas for ROMANIAN DEADLIFT (not conventional deadlift). Exact 2:1 canvas, no grid lines or gutters. Same generic athletic adult man charcoal t-shirt, dark shorts and white trainers, identical barbell, consistent orthographic side three-quarter camera and size in every tile. The exercise MUST START STANDING UPRIGHT with the bar in his hands against the FRONT OF HIS THIGHS, knees slightly soft. It is a HIP HINGE: push hips backward with a NEUTRAL BACK, only small knee bend, lower the bar CLOSE TO THE LEGS to JUST BELOW KNEES OR MID SHIN. THE BAR AND PLATES MUST NEVER TOUCH THE FLOOR. Frame 1 upright, frame 2 slight hip hinge, frame 3 midway hinge, frame 4 bottom hinge (back inclined, hips back, bar at mid shin above floor), frame 5 same bottom, frame 6 halfway back up, frame 7 nearly upright, frame 8 upright matching 1. Do not squat. Do not start from the floor. Full body, feet flat and visible, bar visible within each tile. Clean realistic 3D educational illustration, neutral light-grey background, diffuse light, no rack, no text/arrows/logos. Eight separate phases of the same controlled repetition.\n",
+      "files": [
+        {
+          "path": "Romanian_Deadlift/ai-poster.jpg",
+          "sha256": "43baaebcd297c81947d52447755f0fa8d90bb6cabbe9039991e8cd5a1fc83606",
+          "bytes": 13171
+        },
+        {
+          "path": "Romanian_Deadlift/ai-motion.gif",
+          "sha256": "627539e8e933b7aa40528ea94b791266cec96ba13752c9ed8b1680c1222e1db4",
+          "bytes": 325545
+        },
+        {
+          "path": "Romanian_Deadlift/ai-frame-00.jpg",
+          "sha256": "20180e9f596fcff17dfed28494688999b8f26b06356506bb3f502a257b0dbaef",
+          "bytes": 10411
+        },
+        {
+          "path": "Romanian_Deadlift/ai-frame-01.jpg",
+          "sha256": "5a66b100c218bf72453c2fd4dd56b4db1c48b32553f4f0783fa97e9be8c798a9",
+          "bytes": 10641
+        },
+        {
+          "path": "Romanian_Deadlift/ai-frame-02.jpg",
+          "sha256": "aaee6074798e9527dc6259b4af23544b02e8bbae4d23b3c1b40628a446e0cac1",
+          "bytes": 10901
+        },
+        {
+          "path": "Romanian_Deadlift/ai-frame-03.jpg",
+          "sha256": "d7b8c446801a9a5bc2d1f8d4ba70d8cffe9a13daffe4f728fc80da8b5ddb2ec7",
+          "bytes": 10762
+        },
+        {
+          "path": "Romanian_Deadlift/ai-frame-04.jpg",
+          "sha256": "2773002691029ff1087f1ce2a94b628aaf5aac45699eb44d333f5a9f60c7a812",
+          "bytes": 10658
+        },
+        {
+          "path": "Romanian_Deadlift/ai-frame-05.jpg",
+          "sha256": "f07a7040eea1b8287c90abbf8a37e58e1a5e8289b66f00f20fba80f0d3341294",
+          "bytes": 10589
+        },
+        {
+          "path": "Romanian_Deadlift/ai-frame-06.jpg",
+          "sha256": "194e002424dd6bbb96443a4281eb31c74fd328800039148774e1f068d7b6c37f",
+          "bytes": 10214
+        },
+        {
+          "path": "Romanian_Deadlift/ai-frame-07.jpg",
+          "sha256": "6fa935877ef274a2400d4889f211cfeb55d82e330335634d1efe3f64cb41833e",
+          "bytes": 10475
+        }
+      ]
+    },
+    {
+      "sourceID": "Standing_Military_Press",
+      "generator": "built-in image_gen",
+      "prompt": "Use case: scientific-educational. Original exercise animation atlas for a native fitness app. Create one precise 4-column by 2-row sprite sheet, eight equal square tiles on a 2:1 canvas. Exercise: Standing Military Press. Exact motion description: Start by placing a barbell that is about chest high on a squat rack. Once you have selected the weights, grab the barbell using a pronated (palms facing forward) grip. Make sure to grip the bar wider than shoulder width apart from each other. Slightly bend the knees and place the barbell on your collar bone. Lift the barbell up keeping it lying on your chest. Take a step back and position your feet shoulder width apart from each other. Once you pick up the barbell with the correct grip length, lift the bar up over your head by locking your arms. Hold at about shoulder level and slightly in front of your head. This is your starting position. Lower the bar down to the collarbone slowly as you inhale. Lift the bar back up to the starting position as you exhale. Repeat for the recommended amount of repetitions.. Show a single complete controlled repetition in frames 1 to 8: starting position, two progressive intermediate positions, endpoint, same endpoint, two progressive return positions, starting position matching frame 1. Identical generic adult athletic male in charcoal t-shirt, dark shorts and white trainers, same equipment, fixed orthographic three-quarter camera, same scale and margins, all limbs and equipment visible inside each tile. Restrained professional 3D instructional illustration, neutral light-grey background, diffuse studio lighting, orange accents only on small equipment details. No text, lines, borders, gutters, logos, arrows or labels. Every tile boundary is exactly at quarters horizontally and halves vertically. Correct anatomy and the correct exercise, no changing equipment or body proportions, no camera movement. Do not copy any FitSession imagery.\n",
+      "files": [
+        {
+          "path": "Standing_Military_Press/ai-poster.jpg",
+          "sha256": "4978e09e37aa9deeb78af320f6ca0ac6d231109130934a0887b04b81d139be82",
+          "bytes": 19558
+        },
+        {
+          "path": "Standing_Military_Press/ai-motion.gif",
+          "sha256": "4843268618c0ebb110f6ffc5a31d28a7a201caf3f8ef0db32bb1d767bcf30b37",
+          "bytes": 359807
+        },
+        {
+          "path": "Standing_Military_Press/ai-frame-00.jpg",
+          "sha256": "5bae86f7a0444f0ba610f543fdac949563d0862103a91b54accfec506d460d2b",
+          "bytes": 15879
+        },
+        {
+          "path": "Standing_Military_Press/ai-frame-01.jpg",
+          "sha256": "9e3abc3675d8122ac0abe49494e40d1a8297a602b197c34fada503443d397a0c",
+          "bytes": 15813
+        },
+        {
+          "path": "Standing_Military_Press/ai-frame-02.jpg",
+          "sha256": "eefa8ce6bc4be0d599f18026f7285e809eb0f7e64c850d9ef260de8778226606",
+          "bytes": 15897
+        },
+        {
+          "path": "Standing_Military_Press/ai-frame-03.jpg",
+          "sha256": "4acd699eca1429c2e2477d0b209b4db6038301eed44c52551ea22ce2bdc1ee83",
+          "bytes": 15434
+        },
+        {
+          "path": "Standing_Military_Press/ai-frame-04.jpg",
+          "sha256": "2d10ddc718dd74f176e9f0eda6c79f7f4d42c4c5053a3b2a196af692f9bc794e",
+          "bytes": 15755
+        },
+        {
+          "path": "Standing_Military_Press/ai-frame-05.jpg",
+          "sha256": "250070def3b0899b952443ced6f35886cefadc6ac57c6279c7b04a441205ccc6",
+          "bytes": 15810
+        },
+        {
+          "path": "Standing_Military_Press/ai-frame-06.jpg",
+          "sha256": "e2a70147aa978e5b5db5b3b94da86c10c71360b53c64010fa7330dd23bd34b3c",
+          "bytes": 15773
+        },
+        {
+          "path": "Standing_Military_Press/ai-frame-07.jpg",
+          "sha256": "0f0c6691efbf81f4a7ebd07070699e1f458ad36a1a1f11abce0e18af5af74cd6",
+          "bytes": 16058
+        }
+      ]
+    }
+  ]
+}

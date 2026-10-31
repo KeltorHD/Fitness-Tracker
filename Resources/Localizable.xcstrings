@@ -324,6 +324,23 @@
         }
       }
     },
+    "876 упражнений и 1746 фотографий, встроенных в приложение.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "876 упражнений и 1746 фотографий, встроенных в приложение."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "876 exercises and 1746 photos included in the app."
+          }
+        }
+      }
+    },
     "Apple «Здоровье»": {
       "extractionState": "manual",
       "localizations": {
@@ -1140,6 +1157,40 @@
         }
       }
     },
+    "В исходном каталоге нет изображений этого упражнения.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "В исходном каталоге нет изображений этого упражнения."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The source catalog has no images for this exercise."
+          }
+        }
+      }
+    },
+    "В исходном каталоге нет подробной техники этого упражнения.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "В исходном каталоге нет подробной техники этого упражнения."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The source catalog has no detailed instructions for this exercise."
+          }
+        }
+      }
+    },
     "В исходном файле нет длительности тренировки. Экспорт в «Здоровье» недоступен.": {
       "extractionState": "manual",
       "localizations": {
@@ -1748,6 +1799,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sign in to iCloud in device settings."
+          }
+        }
+      }
+    },
+    "Воспроизвести анимацию": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Воспроизвести анимацию"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Play animation"
           }
         }
       }
@@ -3741,6 +3809,23 @@
         }
       }
     },
+    "Иллюстрация движения, созданная ИИ.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Иллюстрация движения, созданная ИИ."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AI-generated movement illustration."
+          }
+        }
+      }
+    },
     "Импорт": {
       "extractionState": "manual",
       "localizations": {
@@ -4166,6 +4251,23 @@
         }
       }
     },
+    "Каталог переведён на русский язык. Новые описания преимущественно переведены автоматически; такие карточки отмечены.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Каталог переведён на русский язык. Новые описания преимущественно переведены автоматически; такие карточки отмечены."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The catalog is translated into Russian. Most new descriptions are machine-translated and marked accordingly."
+          }
+        }
+      }
+    },
     "Контролируйте движение и сохраняйте устойчивую опору. Используйте комфортную амплитуду.": {
       "extractionState": "manual",
       "localizations": {
@@ -4298,6 +4400,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Maximum: %@"
+          }
+        }
+      }
+    },
+    "Массажный ролик": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Массажный ролик"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Foam roller"
+          }
+        }
+      }
+    },
+    "Медицинский мяч": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Медицинский мяч"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Medicine ball"
           }
         }
       }
@@ -5458,6 +5594,23 @@
         }
       }
     },
+    "Не указан": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не указан"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not specified"
+          }
+        }
+      }
+    },
     "Неделя": {
       "extractionState": "manual",
       "localizations": {
@@ -5934,6 +6087,23 @@
         }
       }
     },
+    "Описание переведено автоматически из открытого источника.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Описание переведено автоматически из открытого источника."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The description was automatically translated from the open source dataset."
+          }
+        }
+      }
+    },
     "Основные": {
       "extractionState": "manual",
       "localizations": {
@@ -5964,6 +6134,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rest remaining"
+          }
+        }
+      }
+    },
+    "Остановить анимацию": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Остановить анимацию"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause animation"
           }
         }
       }
@@ -8977,6 +9164,40 @@
         }
       }
     },
+    "Техника из free-exercise-db. Иллюстрация движения создана ИИ.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Техника из free-exercise-db. Иллюстрация движения создана ИИ."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Instructions from free-exercise-db. Movement illustration generated with AI."
+          }
+        }
+      }
+    },
+    "Техника из free-exercise-db. Показаны фотографии отдельных положений, а не видеозапись движения.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Техника из free-exercise-db. Показаны фотографии отдельных положений, а не видеозапись движения."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Instructions from free-exercise-db. Photos show individual positions, rather than a video recording."
+          }
+        }
+      }
+    },
     "Трекер": {
       "extractionState": "manual",
       "localizations": {
@@ -9521,6 +9742,23 @@
         }
       }
     },
+    "Фитбол": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Фитбол"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exercise ball"
+          }
+        }
+      }
+    },
     "Формат": {
       "extractionState": "manual",
       "localizations": {
@@ -9806,6 +10044,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Export file"
+          }
+        }
+      }
+    },
+    "Эспандер": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Эспандер"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resistance band"
           }
         }
       }

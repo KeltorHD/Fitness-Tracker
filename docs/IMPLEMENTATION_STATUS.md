@@ -30,8 +30,8 @@
 | project.yml / Info / entitlements / assets | Да | Структура/ресурсы проверяются скриптом | Да, XcodeGen + actool + signing | Да для capabilities |
 | setup/check scripts и Linux CI | Да | Локальный check script; remote CI ещё не запускался | setup-macos.sh ещё не запускался на Mac | Нет |
 | WorkoutLiveState / idempotent Live Actions | Да | Да, 8 новых тестов | UI отдельно | Нет |
-| Exercise Library: 100 русских записей, поиск, фильтры | Да | Да, 8 новых тестов | UI отдельно | Нет |
-| Локальные фото (200 JPEG), SwiftUI-карточки и выбор упражнений | Да | Hashes и структура — да; Apple UI — нет | Да, folder resources, листание, добавление | Обычный signing |
+| Exercise Library: 876 записей RU/EN, поиск, фильтры; 774 автоматических перевода отмечены | Да | Да, 8 новых тестов | UI отдельно | Нет |
+| Локальные фото (1746 JPEG), 11 готовых ИИ-анимаций, SwiftUI-карточки; генерация остальных остановлена | Да | Hashes и структура — да; Apple UI — нет | Да, folder resources, листание, пауза/Reduce Motion/retry анимации, отсутствие исходных материалов, добавление | Обычный signing |
 | Иллюстративные PNG/SVG-макеты | Да | Отрендерены и просмотрены | Не заменяют проверку SwiftUI | Нет |
 | TrainingJournal: недельная лента, календарь, ЛР; повтор с новыми ID | Да | Да, 7 новых тестов | UI отдельно | Нет |
 | Дизайн по 11 референсам, четыре вкладки, темы, автоблокировка | Да | Только syntax parse и lint | Да, SwiftUI/Glass/presentation/idle timer | Обычный signing |

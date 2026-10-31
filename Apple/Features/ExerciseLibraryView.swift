@@ -63,8 +63,13 @@ struct ExerciseLibraryView: View {
           ExerciseDetailView(exercise: entry.exercise, onSelect: onSelect)
         } label: {
           HStack(spacing: 12) {
-            ExercisePhoto(path: entry.images[0]).frame(width: 76, height: 60)
-              .clipShape(.rect(cornerRadius: 12)).accessibilityHidden(true)
+            if let path = entry.generatedMedia?.poster ?? entry.images.first {
+              ExercisePhoto(path: path).frame(width: 76, height: 60)
+                .clipShape(.rect(cornerRadius: 12)).accessibilityHidden(true)
+            } else {
+              Image(systemName: "dumbbell").frame(width: 76, height: 60).foregroundStyle(.secondary)
+                .accessibilityHidden(true)
+            }
             VStack(alignment: .leading, spacing: 5) {
               Text(entry.name).font(.headline).foregroundStyle(.primary)
               Text(
@@ -110,37 +115,44 @@ struct ExerciseDetailView: View {
     ScrollView {
       VStack(alignment: .leading, spacing: 24) {
         if let entry {
-          VStack(spacing: 8) {
-            TabView(selection: $photo) {
-              ForEach(Array(entry.images.enumerated()), id: \.offset) { index, path in
-                ExercisePhoto(path: path).tag(index)
-                  .accessibilityLabel(
-                    L10n.format(
-                      "Фото %@ из %@: %@", String(index + 1),
-                      String(entry.images.count), String(entry.name),
-                      locale: locale))
+          if let generated = entry.generatedMedia {
+            ExerciseAnimation(media: generated)
+          } else if !entry.images.isEmpty {
+            VStack(spacing: 8) {
+              TabView(selection: $photo) {
+                ForEach(Array(entry.images.enumerated()), id: \.offset) { index, path in
+                  ExercisePhoto(path: path).tag(index)
+                    .accessibilityLabel(
+                      L10n.format(
+                        "Фото %@ из %@: %@", String(index + 1),
+                        String(entry.images.count), String(entry.name),
+                        locale: locale))
+                }
               }
+              .tabViewStyle(.page(indexDisplayMode: .never)).frame(height: 270)
+              .background(Color(.secondarySystemGroupedBackground), in: .rect(cornerRadius: 20))
+              HStack {
+                Button(L10n.text("Предыдущее фото", locale: locale), systemImage: "chevron.left") {
+                  photo = max(0, photo - 1)
+                }
+                .labelStyle(.iconOnly).disabled(photo == 0)
+                Spacer()
+                Text(
+                  L10n.format(
+                    "Положение %@ из %@", String(photo + 1),
+                    String(entry.images.count), locale: locale)
+                ).font(.caption)
+                  .foregroundStyle(.secondary)
+                Spacer()
+                Button(L10n.text("Следующее фото", locale: locale), systemImage: "chevron.right") {
+                  photo = min(entry.images.count - 1, photo + 1)
+                }
+                .labelStyle(.iconOnly).disabled(photo == entry.images.count - 1)
+              }.buttonStyle(.glass)
             }
-            .tabViewStyle(.page(indexDisplayMode: .never)).frame(height: 270)
-            .background(Color(.secondarySystemGroupedBackground), in: .rect(cornerRadius: 20))
-            HStack {
-              Button(L10n.text("Предыдущее фото", locale: locale), systemImage: "chevron.left") {
-                photo = max(0, photo - 1)
-              }
-              .labelStyle(.iconOnly).disabled(photo == 0)
-              Spacer()
-              Text(
-                L10n.format(
-                  "Положение %@ из %@", String(photo + 1),
-                  String(entry.images.count), locale: locale)
-              ).font(.caption)
-                .foregroundStyle(.secondary)
-              Spacer()
-              Button(L10n.text("Следующее фото", locale: locale), systemImage: "chevron.right") {
-                photo = min(entry.images.count - 1, photo + 1)
-              }
-              .labelStyle(.iconOnly).disabled(photo == entry.images.count - 1)
-            }.buttonStyle(.glass)
+          } else {
+            Text(L10n.text("В исходном каталоге нет изображений этого упражнения.", locale: locale))
+              .foregroundStyle(.secondary)
           }
           HStack(alignment: .top, spacing: 12) {
             MetricView(
@@ -162,6 +174,19 @@ struct ExerciseDetailView: View {
             }
           }
           Text(L10n.text("Техника выполнения", locale: locale)).font(.title2.bold())
+          if entry.translationAutomatic == true && !entry.steps.isEmpty {
+            Text(
+              L10n.text("Описание переведено автоматически из открытого источника.", locale: locale)
+            )
+            .font(.caption).foregroundStyle(.secondary)
+          }
+          if entry.steps.isEmpty {
+            Text(
+              L10n.text(
+                "В исходном каталоге нет подробной техники этого упражнения.", locale: locale)
+            )
+            .foregroundStyle(.secondary)
+          }
           ForEach(Array(entry.steps.enumerated()), id: \.offset) { index, text in
             HStack(alignment: .top, spacing: 12) {
               Text("\(index + 1)").font(.headline).foregroundStyle(.tint)
@@ -172,7 +197,9 @@ struct ExerciseDetailView: View {
           }
           Text(
             L10n.text(
-              "Русская адаптация инструкций free-exercise-db. Показаны фотографии отдельных положений, а не видеозапись движения.",
+              entry.generatedMedia == nil
+                ? "Техника из free-exercise-db. Показаны фотографии отдельных положений, а не видеозапись движения."
+                : "Техника из free-exercise-db. Иллюстрация движения создана ИИ.",
               locale: locale)
           )
           .font(.caption).foregroundStyle(.secondary)
@@ -215,10 +242,10 @@ struct ExerciseCreditsView: View {
       Section(L10n.text("Библиотека FitnessTracker", locale: locale)) {
         Text(
           L10n.text(
-            "100 силовых упражнений и 200 фотографий, встроенных в приложение.", locale: locale))
+            "876 упражнений и 1746 фотографий, встроенных в приложение.", locale: locale))
         Text(
           L10n.text(
-            "Названия, мышцы, оборудование и сокращённые пошаговые инструкции переведены и адаптированы на русский язык для FitnessTracker.",
+            "Каталог переведён на русский язык. Новые описания преимущественно переведены автоматически; такие карточки отмечены.",
             locale: locale)
         )
       }
