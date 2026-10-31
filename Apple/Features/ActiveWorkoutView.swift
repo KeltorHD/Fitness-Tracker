@@ -20,7 +20,7 @@ struct ActiveWorkoutView: View {
             .visible, for: .navigationBar
           )
           .toolbarColorScheme(.dark, for: .navigationBar)
-          .safeAreaInset(edge: .bottom) { SessionControls(workout: workout) }
+          .safeAreaInset(edge: .bottom, spacing: 0) { SessionControls(workout: workout) }
           .toolbar {
             ToolbarItem(placement: .topBarLeading) {
               Button(L10n.text("Свернуть", locale: locale), systemImage: "chevron.down") {

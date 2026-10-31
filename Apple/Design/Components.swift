@@ -38,30 +38,18 @@ struct SessionControls: View {
   @Namespace private var controls
   let workout: Workout
   var body: some View {
-    // Requires Xcode validation: narrow screens, keyboard, Dynamic Type and glass contrast.
-    VStack(spacing: 8) {
-      GlassEffectContainer(spacing: 12) {
-        ViewThatFits(in: .horizontal) {
-          HStack(spacing: 12) {
-            pauseButton
-            finishButton
-          }
-          VStack(spacing: 12) {
-            finishButton
-            pauseButton
-          }
-        }
-        .labelStyle(.titleAndIcon)
-        .controlSize(.large)
+    GlassEffectContainer(spacing: 8) {
+      HStack(spacing: 8) {
+        pauseButton
+        finishButton
       }
-      if workout.completedSets == 0 {
-        Text(L10n.text("Для завершения отметьте хотя бы один выполненный подход.", locale: locale))
-          .font(.footnote).foregroundStyle(.secondary).multilineTextAlignment(.center)
-          .accessibilityIdentifier("finishWorkoutHint")
-      }
+      .font(.subheadline.weight(.semibold))
+      .controlSize(.regular)
     }
-    .frame(maxWidth: .infinity).padding().background(FitTheme.paper)
+    .padding(.horizontal, 16).padding(.vertical, 6)
+    .background(FitTheme.paper)
   }
+
   private var pauseButton: some View {
     Button {
       withAnimation(reduceMotion ? nil : .smooth) {
@@ -77,20 +65,32 @@ struct SessionControls: View {
       Label(
         workout.status == .paused
           ? L10n.text("Продолжить", locale: locale) : L10n.text("Пауза", locale: locale),
-        systemImage: workout.status == .paused ? "play.fill" : "pause.fill")
+        systemImage: workout.status == .paused ? "play.fill" : "pause.fill"
+      )
+      .labelStyle(.iconOnly)
+      .frame(minWidth: 44, minHeight: 44)
     }
     .buttonStyle(.glass)
+    .buttonBorderShape(.circle)
     .glassEffectID("pause", in: controls)
     .accessibilityIdentifier("pauseWorkout")
   }
   private var finishButton: some View {
-    Button(L10n.text("Завершить тренировку", locale: locale), systemImage: "checkmark") {
+    Button {
       store.finish()
+    } label: {
+      Label(L10n.text("Завершить", locale: locale), systemImage: "checkmark")
+        .frame(maxWidth: .infinity, minHeight: 44)
     }
     .buttonStyle(.glassProminent)
     .glassEffectID("finish", in: controls)
     .glassEffectTransition(.matchedGeometry)
     .disabled(workout.completedSets == 0)
+    .accessibilityLabel(L10n.text("Завершить тренировку", locale: locale))
+    .accessibilityHint(
+      workout.completedSets == 0
+        ? L10n.text("Для завершения отметьте хотя бы один выполненный подход.", locale: locale) : ""
+    )
     .accessibilityIdentifier("finishWorkout")
   }
 }

@@ -373,7 +373,7 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(finish.waitForExistence(timeout: 5))
     XCTAssertTrue(finish.isHittable)
     XCTAssertFalse(finish.isEnabled)
-    XCTAssertTrue(app.staticTexts["finishWorkoutHint"].exists)
+    XCTAssertFalse(app.staticTexts["finishWorkoutHint"].exists)
     app.buttons["addExercise"].tap()
     app.searchFields.firstMatch.tap()
     app.searchFields.firstMatch.typeText("Приседания")

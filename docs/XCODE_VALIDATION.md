@@ -90,7 +90,7 @@
 | --- | --- |
 | Root TabView / NavigationStack | Нативные панели iOS 26, safe areas, landscape/iPad и подписи вкладок |
 | DashboardView / MetricView | Размеры текста, контраст акцента, отсутствие обрезки русских строк |
-| SessionControls | Всегда видимая «Завершить тренировку», disabled до первого выполненного подхода и пояснение; `GlassEffectContainer`, `glassEffectID`/`matchedGeometry`, стили glass/glassProminent; горизонтальная/вертикальная раскладка, клавиатура и узкий iPhone |
+| SessionControls | Один компактный ряд: пауза/продолжение значком и «Завершить»; завершение disabled до первого выполненного подхода, пояснение только в accessibilityHint; `GlassEffectContainer`, `glassEffectID`/`matchedGeometry`, стили glass/glassProminent; VoiceOver, минимум 44 pt для нажатий, Dynamic Type, RU/EN, клавиатура и узкий iPhone. Проверить, что нижняя панель не перекрывает последнюю строку ScrollView; finish работает active/paused |
 | RestPill | Нативный `.glassEffect()`, читаемость countdown, остановка на нуле |
 | ActiveWorkoutView / SetEditor | decimal separator, кг/фунты, warmup, пауза, повторный completion заблокирован, заметки, отказ сохранения |
 | ExercisePicker / CustomExerciseView | Поиск, длинные названия, свой exercise, вложенные sheets |
