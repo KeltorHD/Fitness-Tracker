@@ -49,6 +49,46 @@ import XCTest
 }
 
 @MainActor final class AppStoreTests: XCTestCase {
+  func testCombinedTemplateStartPersistsOneSessionAndResumesWithoutReplacement() throws {
+    let repository = MemoryWorkoutRepository()
+    let first = ExerciseCatalog.starterTemplates[0]
+    var second = ExerciseCatalog.starterTemplates[1]
+    second.exercises.insert(first.exercises[0], at: 0)
+    try repository.saveTemplate(first)
+    try repository.saveTemplate(second)
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    store.start(templates: [first, second])
+    let active = try XCTUnwrap(store.active)
+    XCTAssertEqual(active.exercises.count, 6)
+    XCTAssertEqual(Set(active.exercises.map(\.exercise.id)).count, 6)
+    XCTAssertEqual(try repository.workouts(), [active])
+    XCTAssertEqual(try repository.templates().count, 2)
+    XCTAssertTrue(store.showSession)
+    store.showSession = false
+    store.start(templates: [second, first])
+    XCTAssertEqual(store.active, active)
+    XCTAssertEqual(try repository.workouts(), [active])
+    XCTAssertTrue(store.showSession)
+  }
+
+  func testCombinedTemplateSaveFailureDoesNotLeaveAPartialSession() throws {
+    let repository = FailingWorkoutRepository()
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    repository.failSaves = true
+    store.start(templates: ExerciseCatalog.starterTemplates)
+    XCTAssertNil(store.active)
+    XCTAssertFalse(store.showSession)
+    XCTAssertTrue(try repository.workouts().isEmpty)
+    XCTAssertNotNil(store.error)
+    repository.failSaves = false
+    store.start(templates: ExerciseCatalog.starterTemplates)
+    XCTAssertEqual(store.active?.exercises.count, 6)
+    XCTAssertEqual(try repository.workouts().count, 1)
+    XCTAssertTrue(store.showSession)
+  }
+
   func testFailedWorkoutStartDoesNotPresentOrCreateSession() throws {
     let repository = FailingWorkoutRepository()
     let store = AppStore(

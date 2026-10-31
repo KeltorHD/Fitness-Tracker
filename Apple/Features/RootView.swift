@@ -164,7 +164,7 @@ struct RootView: View {
     pendingWorkoutStart = nil
     switch selection {
     case .empty: store.start()
-    case .template(let template): store.start(template: template)
+    case .templates(let templates): store.start(templates: templates)
     }
   }
   private func updateIdleTimer() {

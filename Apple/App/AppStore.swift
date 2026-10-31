@@ -269,14 +269,23 @@ import WidgetKit
     }
   }
   func start(template: WorkoutTemplate? = nil) {
+    start(templates: template.map { [$0] } ?? [])
+  }
+  func start(templates: [WorkoutTemplate]) {
     guard active == nil else {
       showSession = true
       return
     }
     do {
-      let workout =
-        try template?.start()
-        ?? Workout(name: L10n.text(isDemoMode ? "Демо-тренировка" : "Свободная тренировка"))
+      let workout: Workout
+      switch templates.count {
+      case 0:
+        workout = Workout(name: L10n.text(isDemoMode ? "Демо-тренировка" : "Свободная тренировка"))
+      case 1:
+        workout = try templates[0].start()
+      default:
+        workout = try WorkoutTemplate.start(combining: templates)
+      }
       try activate(workout)
     } catch {
       report(

@@ -616,5 +616,9 @@
   "Мои шаблоны": "My templates",
   "Начать": "Start",
   "Шаблоны": "Templates",
-  "Шаблонов пока нет. Их можно создать в разделе «Шаблоны».": "No templates yet. Create one in the Templates tab."
+  "Шаблонов пока нет. Их можно создать в разделе «Шаблоны».": "No templates yet. Create one in the Templates tab.",
+  "Выберите один или несколько шаблонов. Повторяющиеся упражнения добавятся один раз.": "Select one or more templates. Duplicate exercises will be added only once.",
+  "При объединении параметры упражнения берутся из первого вхождения, отдых — из первого выбранного шаблона.": "When combining templates, exercise targets come from the first occurrence, and rest comes from the first selected template.",
+  "Порядок: %@": "Order: %@",
+  "Выбрано шаблонов: %@": "Selected templates: %@"
 }

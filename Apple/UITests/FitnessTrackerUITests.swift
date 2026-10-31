@@ -9,6 +9,11 @@ final class FitnessTrackerUITests: XCTestCase {
       app.buttons["navigationTab_\(index)"].tap()
       start.tap()
       XCTAssertTrue(app.buttons["startWorkoutWithoutTemplate"].waitForExistence(timeout: 5))
+      XCTAssertFalse(app.buttons["startSelectedTemplates"].isEnabled)
+      let first = app.buttons["startWorkoutTemplate_20000000-0000-0000-0000-000000000001"]
+      reveal(first, in: app)
+      first.tap()
+      XCTAssertTrue(app.buttons["startSelectedTemplates"].isEnabled)
       app.buttons["closeWorkoutStart"].tap()
       XCTAssertTrue(start.waitForExistence(timeout: 5))
       XCTAssertEqual(start.label, "Начать тренировку")
@@ -45,10 +50,36 @@ final class FitnessTrackerUITests: XCTestCase {
     start.tap()
     let template = app.buttons["startWorkoutTemplate_20000000-0000-0000-0000-000000000001"]
     XCTAssertTrue(template.waitForExistence(timeout: 5))
+    reveal(template, in: app)
     template.tap()
+    XCTAssertFalse(app.buttons["addExercise"].exists)
+    app.buttons["startSelectedTemplates"].tap()
     XCTAssertTrue(app.buttons["addExercise"].waitForExistence(timeout: 5))
     XCTAssertTrue(app.buttons["openWorkoutExercise"].firstMatch.exists)
     XCTAssertTrue(app.staticTexts["Приседания"].exists)
+    XCTAssertEqual(app.alerts.count, 0)
+  }
+
+  @MainActor func testCenterActionCombinesMultipleTemplatesAndAllowsDeselection() {
+    let app = launch()
+    let start = app.buttons["workoutStartAction"]
+    XCTAssertTrue(start.waitForExistence(timeout: 10))
+    start.tap()
+    let first = app.buttons["startWorkoutTemplate_20000000-0000-0000-0000-000000000001"]
+    let second = app.buttons["startWorkoutTemplate_20000000-0000-0000-0000-000000000002"]
+    XCTAssertTrue(first.waitForExistence(timeout: 5))
+    reveal(first, in: app)
+    first.tap()
+    reveal(second, in: app)
+    second.tap()
+    XCTAssertTrue(app.staticTexts["Выбрано шаблонов: 2"].exists)
+    second.tap()
+    XCTAssertTrue(app.staticTexts["Выбрано шаблонов: 1"].exists)
+    second.tap()
+    app.buttons["startSelectedTemplates"].tap()
+    XCTAssertTrue(app.buttons["addExercise"].waitForExistence(timeout: 5))
+    XCTAssertEqual(app.buttons.matching(identifier: "openWorkoutExercise").count, 6)
+    XCTAssertFalse(app.buttons["finishWorkout"].isEnabled)
     XCTAssertEqual(app.alerts.count, 0)
   }
 

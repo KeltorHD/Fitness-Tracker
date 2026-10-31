@@ -2109,6 +2109,23 @@
         }
       }
     },
+    "Выберите один или несколько шаблонов. Повторяющиеся упражнения добавятся один раз.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выберите один или несколько шаблонов. Повторяющиеся упражнения добавятся один раз."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Select one or more templates. Duplicate exercises will be added only once."
+          }
+        }
+      }
+    },
     "Выберите пульсометр из списка или начните поиск.": {
       "extractionState": "manual",
       "localizations": {
@@ -2173,6 +2190,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Selected"
+          }
+        }
+      }
+    },
+    "Выбрано шаблонов: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выбрано шаблонов: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selected templates: %@"
           }
         }
       }
@@ -7396,6 +7430,23 @@
         }
       }
     },
+    "Порядок: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Порядок: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Order: %@"
+          }
+        }
+      }
+    },
     "Последнее измерение": {
       "extractionState": "manual",
       "localizations": {
@@ -7494,6 +7545,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Core"
+          }
+        }
+      }
+    },
+    "При объединении параметры упражнения берутся из первого вхождения, отдых — из первого выбранного шаблона.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "При объединении параметры упражнения берутся из первого вхождения, отдых — из первого выбранного шаблона."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When combining templates, exercise targets come from the first occurrence, and rest comes from the first selected template."
           }
         }
       }
