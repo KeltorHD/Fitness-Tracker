@@ -31,7 +31,7 @@ struct WorkoutHeartRateView: View {
                 locale: locale))
           }
         }.font(.subheadline)
-        HeartRateLineChart(points: model.points).frame(height: 170).accessibilityLabel(
+        HeartRateLineChart(points: model.points).frame(height: 210).accessibilityLabel(
           L10n.text("Пульс во время тренировки", locale: locale))
         Text(
           L10n.text(

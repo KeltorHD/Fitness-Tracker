@@ -607,5 +607,6 @@
   "876 упражнений и 1746 фотографий, встроенных в приложение.": "876 exercises and 1746 photos included in the app.",
   "Каталог переведён на русский язык. Новые описания преимущественно переведены автоматически; такие карточки отмечены.": "The catalog is translated into Russian. Most new descriptions are machine-translated and marked accordingly.",
   "%@ уд/мин": "%@ bpm",
-  "Нет свежих данных пульса": "No recent heart rate data"
+  "Нет свежих данных пульса": "No recent heart rate data",
+  "Нажмите на график, чтобы увидеть пульс и время измерения.": "Tap the chart to see heart rate and measurement time."
 }

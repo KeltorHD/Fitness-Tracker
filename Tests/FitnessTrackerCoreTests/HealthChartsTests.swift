@@ -48,3 +48,24 @@ import Testing
   #expect(points.allSatisfy { $0.segment == 0 })
   #expect(HeartRateChartPoint.make(readings: readings, maximumPoints: 1).isEmpty)
 }
+
+@Test func heartRateSelectionSnapsToSamplesAndDoesNotInterpolateAcrossGaps() throws {
+  let start = Date(timeIntervalSince1970: 1_700_000_000)
+  let points = HeartRateChartPoint.make(readings: [
+    HeartRateReading(date: start, beatsPerMinute: 80),
+    HeartRateReading(date: start.addingTimeInterval(10), beatsPerMinute: 95.5),
+    HeartRateReading(date: start.addingTimeInterval(100), beatsPerMinute: 130),
+  ])
+  #expect(HeartRateChartPoint.nearest(to: start, in: []) == nil)
+  #expect(HeartRateChartPoint.nearest(to: Date(timeIntervalSince1970: .nan), in: points) == nil)
+  #expect(HeartRateChartPoint.nearest(to: start.addingTimeInterval(-1), in: points) == points.first)
+  #expect(HeartRateChartPoint.nearest(to: start.addingTimeInterval(101), in: points) == points.last)
+  #expect(HeartRateChartPoint.nearest(to: start.addingTimeInterval(5), in: points) == points[0])
+  #expect(HeartRateChartPoint.nearest(to: start.addingTimeInterval(6), in: points) == points[1])
+  #expect(HeartRateChartPoint.nearest(to: start.addingTimeInterval(10), in: points) == points[1])
+  let gapPoint = try #require(
+    HeartRateChartPoint.nearest(to: start.addingTimeInterval(60), in: points))
+  #expect(gapPoint == points[2])
+  #expect(gapPoint.reading.date == start.addingTimeInterval(100))
+  #expect(HeartRateChartPoint.nearest(to: start, in: [points[1]]) == points[1])
+}

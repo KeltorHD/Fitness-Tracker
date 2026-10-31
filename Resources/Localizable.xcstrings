@@ -4608,6 +4608,23 @@
         }
       }
     },
+    "Нажмите на график, чтобы увидеть пульс и время измерения.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нажмите на график, чтобы увидеть пульс и время измерения."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap the chart to see heart rate and measurement time."
+          }
+        }
+      }
+    },
     "Нажмите на область тела, чтобы выбрать группу мышц.": {
       "extractionState": "manual",
       "localizations": {

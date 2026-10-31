@@ -60,6 +60,28 @@ public struct HeartRateChartPoint: Identifiable, Equatable, Sendable {
   public let segment: Int
   public var id: Date { reading.date }
 
+  /// Finds an actual plotted sample; points must be sorted by date, as returned by make().
+  /// Equal distances choose the earlier sample, including across gaps; no interpolation.
+  public static func nearest(to date: Date, in points: [Self]) -> Self? {
+    guard date.timeIntervalSince1970.isFinite, !points.isEmpty else { return nil }
+    var lower = 0
+    var upper = points.count
+    while lower < upper {
+      let middle = lower + (upper - lower) / 2
+      if points[middle].reading.date < date {
+        lower = middle + 1
+      } else {
+        upper = middle
+      }
+    }
+    guard lower > 0 else { return points.first }
+    guard lower < points.count else { return points.last }
+    let before = points[lower - 1]
+    let after = points[lower]
+    return date.timeIntervalSince(before.reading.date) <= after.reading.date.timeIntervalSince(date)
+      ? before : after
+  }
+
   /// Segment before thinning, so a chart never draws a line across an actual recording gap.
   public static func make(
     readings: [HeartRateReading], pauses: [WorkoutPause] = [], gap: TimeInterval = 30,

@@ -54,7 +54,7 @@ struct HealthChartsView: View {
                 Text(L10n.text("Нет записанных измерений пульса.", locale: locale))
                   .foregroundStyle(.secondary)
               } else {
-                HeartRateLineChart(points: model.points).frame(height: 200)
+                HeartRateLineChart(points: model.points).frame(height: 230)
                   .accessibilityIdentifier("dailyHeartRateChart")
               }
               Text(
@@ -105,21 +105,98 @@ struct HealthChartsView: View {
 struct HeartRateLineChart: View {
   @Environment(\.locale) private var locale
   let points: [HeartRateChartPoint]
+  @State private var rawSelectedDate: Date?
+  @State private var selectedPointDate: Date?
+
+  private var selectedPoint: HeartRateChartPoint? {
+    guard let selectedPointDate,
+      let point = HeartRateChartPoint.nearest(to: selectedPointDate, in: points),
+      point.reading.date == selectedPointDate
+    else { return nil }
+    return point
+  }
+
   var body: some View {
-    Chart(points) { point in
-      LineMark(
-        x: .value(L10n.text("Время", locale: locale), point.reading.date),
-        y: .value(L10n.text("уд/мин", locale: locale), point.reading.beatsPerMinute),
-        series: .value("Segment", point.segment))
-      PointMark(
-        x: .value(L10n.text("Время", locale: locale), point.reading.date),
-        y: .value(L10n.text("уд/мин", locale: locale), point.reading.beatsPerMinute)
+    VStack(alignment: .leading, spacing: 8) {
+      if let selectedPoint {
+        HStack(alignment: .firstTextBaseline) {
+          Text(value(selectedPoint)).font(.headline).monospacedDigit()
+          Spacer(minLength: 8)
+          Text(selectedPoint.reading.date, format: .dateTime.day().month().hour().minute().second())
+            .font(.caption).foregroundStyle(.secondary)
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("selectedHeartRateReading")
+      } else {
+        Text(L10n.text("Нажмите на график, чтобы увидеть пульс и время измерения.", locale: locale))
+          .font(.caption).foregroundStyle(.secondary)
+      }
+      Chart {
+        ForEach(points) { point in
+          LineMark(
+            x: .value(L10n.text("Время", locale: locale), point.reading.date),
+            y: .value(L10n.text("уд/мин", locale: locale), point.reading.beatsPerMinute),
+            series: .value("Segment", point.segment)
+          )
+          .accessibilityHidden(true)
+          PointMark(
+            x: .value(L10n.text("Время", locale: locale), point.reading.date),
+            y: .value(L10n.text("уд/мин", locale: locale), point.reading.beatsPerMinute)
+          )
+          .symbolSize(8)
+          .accessibilityLabel(Text(point.reading.date, format: .dateTime.hour().minute().second()))
+          .accessibilityValue(Text(value(point)))
+        }
+        if let selectedPoint {
+          RuleMark(x: .value(L10n.text("Время", locale: locale), selectedPoint.reading.date))
+            .foregroundStyle(.secondary)
+            .lineStyle(StrokeStyle(lineWidth: 1, dash: [4]))
+            .accessibilityHidden(true)
+          PointMark(
+            x: .value(L10n.text("Время", locale: locale), selectedPoint.reading.date),
+            y: .value(L10n.text("уд/мин", locale: locale), selectedPoint.reading.beatsPerMinute)
+          )
+          .symbolSize(75).accessibilityHidden(true)
+        }
+      }
+      .foregroundStyle(FitTheme.accent)
+      .chartYScale(domain: .automatic(includesZero: false))
+      .chartXSelection(value: $rawSelectedDate)
+      .accessibilityLabel(L10n.text("Пульс", locale: locale))
+      .accessibilityValue(
+        selectedPoint.map {
+          value($0) + " · "
+            + $0.reading.date.formatted(.dateTime.hour().minute().second().locale(locale))
+        } ?? L10n.text("Нажмите на график, чтобы увидеть пульс и время измерения.", locale: locale)
       )
-      .symbolSize(8)
+      .accessibilityAdjustableAction { direction in
+        guard !points.isEmpty else { return }
+        let index = selectedPoint.flatMap { selected in points.firstIndex { $0.id == selected.id } }
+        switch direction {
+        case .increment: selectedPointDate = points[min(points.count - 1, (index ?? -1) + 1)].id
+        case .decrement: selectedPointDate = points[max(0, (index ?? points.count) - 1)].id
+        @unknown default: break
+        }
+      }
     }
-    .foregroundStyle(FitTheme.accent)
-    .chartYScale(domain: .automatic(includesZero: false))
-    .accessibilityLabel(L10n.text("Пульс", locale: locale))
+    .onChange(of: rawSelectedDate) {
+      // Keep the inspected reading visible after the finger lifts.
+      if let rawSelectedDate {
+        selectedPointDate = HeartRateChartPoint.nearest(to: rawSelectedDate, in: points)?.id
+      }
+    }
+    .onChange(of: points) {
+      if selectedPoint == nil {
+        selectedPointDate = nil
+        rawSelectedDate = nil
+      }
+    }
+  }
+
+  private func value(_ point: HeartRateChartPoint) -> String {
+    let number = point.reading.beatsPerMinute.formatted(
+      .number.locale(locale).precision(.fractionLength(0...1)))
+    return L10n.format("%@ уд/мин", number, locale: locale)
   }
 }
 
@@ -180,10 +257,10 @@ struct WorkoutLiveHeartRateChart: View {
     VStack(alignment: .leading, spacing: 12) {
       CurrentHeartRateView(tracker: store.tracker, health: store.healthCharts)
       if store.tracker.recording?.workoutID == workoutID, !store.tracker.chartPoints.isEmpty {
-        HeartRateLineChart(points: store.tracker.chartPoints).frame(height: 120)
+        HeartRateLineChart(points: store.tracker.chartPoints).frame(height: 170)
           .accessibilityIdentifier("liveWorkoutHeartRateChart")
       } else if !store.healthCharts.workoutPoints.isEmpty {
-        HeartRateLineChart(points: store.healthCharts.workoutPoints).frame(height: 120)
+        HeartRateLineChart(points: store.healthCharts.workoutPoints).frame(height: 170)
           .accessibilityIdentifier("liveWorkoutHeartRateChart")
       }
       NavigationLink(L10n.text("Пульс и шаги", locale: locale)) {
