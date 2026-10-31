@@ -10099,19 +10099,36 @@
         }
       }
     },
-    "Шаблонов пока нет. Их можно создать в разделе «Каталог».": {
+    "Шаблонов пока нет. Их можно создать в разделе «Шаблоны».": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Шаблонов пока нет. Их можно создать в разделе «Каталог»."
+            "value": "Шаблонов пока нет. Их можно создать в разделе «Шаблоны»."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "No templates yet. Create one in the Catalog tab."
+            "value": "No templates yet. Create one in the Templates tab."
+          }
+        }
+      }
+    },
+    "Шаблоны": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Шаблоны"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Templates"
           }
         }
       }

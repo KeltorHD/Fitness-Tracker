@@ -22,7 +22,7 @@
 | State machine, валидация, паузы, отдых | Да | Да | Поведение UI отдельно | Нет |
 | Volume, 1ПМ, records, недели, streak | Да | Да | Charts отдельно | Нет |
 | Repository protocols и Memory repository | Да | Да | Нет для Core | Нет |
-| SwiftUI: Дневник, Каталог/editor, Session, History/detail, Результаты, Настройки | Да | Нет, только syntax parse | Да | Signing для устройства |
+| SwiftUI: Дневник, Шаблоны/editor, Session, History/detail, Результаты, Настройки | Да | Нет, только syntax parse | Да | Signing для устройства |
 | Liquid Glass: container, effect, ID, transition, glass buttons | Да | Нет, только syntax parse | Да, включая rendering/accessibility | Signing для устройства |
 | SwiftData repository и восстановление сессии | Да | Нет, Apple unit tests не запускались | Да, macro expansion/round-trip/ошибки | Нет для локального store |
 | CloudKit через SwiftData, проверка аккаунта | Да | Нет | Да, два устройства и production schema | Да, iCloud container, Push, profiles |

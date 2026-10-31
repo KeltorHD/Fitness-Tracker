@@ -24,7 +24,7 @@ struct RootView: View {
         TemplatesView().tint(FitTheme.accent)
           .toolbar(.hidden, for: .tabBar)
       } label: {
-        Label(L10n.text("Каталог", locale: locale), systemImage: "dumbbell")
+        Label(L10n.text("Шаблоны", locale: locale), systemImage: "dumbbell")
           .environment(\.symbolVariants, SymbolVariants.none)
       }
       Tab(value: 2) {

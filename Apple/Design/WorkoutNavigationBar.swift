@@ -15,7 +15,7 @@ struct WorkoutNavigationBar: View {
     GlassEffectContainer {
       HStack(alignment: .bottom, spacing: 0) {
         tab("Дневник", symbol: "book", value: 0)
-        tab("Каталог", symbol: "dumbbell", value: 1)
+        tab("Шаблоны", symbol: "dumbbell", value: 1)
         Button(action: onStart) {
           VStack(spacing: 4) {
             Image(systemName: "play.fill")

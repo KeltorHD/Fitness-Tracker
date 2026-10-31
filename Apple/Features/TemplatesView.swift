@@ -31,7 +31,7 @@ struct TemplatesView: View {
           }
         }.padding(.horizontal, 16).padding(.top, 12).padding(.bottom, 24)
       }
-      .background(FitTheme.paper).navigationTitle(L10n.text("Тренировки", locale: locale))
+      .background(FitTheme.paper).navigationTitle(L10n.text("Шаблоны", locale: locale))
       .toolbar {
         ToolbarItem(placement: .topBarLeading) {
           NavigationLink {

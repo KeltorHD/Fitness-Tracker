@@ -44,7 +44,7 @@ struct WorkoutStartView: View {
           if store.templates.isEmpty {
             Text(
               L10n.text(
-                "Шаблонов пока нет. Их можно создать в разделе «Каталог».", locale: locale)
+                "Шаблонов пока нет. Их можно создать в разделе «Шаблоны».", locale: locale)
             )
             .font(.subheadline).foregroundStyle(.secondary)
             .accessibilityIdentifier("workoutStartEmptyTemplates")
