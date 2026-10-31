@@ -28,8 +28,16 @@ struct ActiveWorkoutView: View {
               }.labelStyle(.iconOnly)
             }
             ToolbarItem(placement: .principal) {
-              Text(workout.startedAt, format: .dateTime.weekday(.wide).hour().minute())
-                .font(.subheadline).textCase(.uppercase).foregroundStyle(.white)
+              VStack(spacing: 1) {
+                Label(workout.name, systemImage: "dumbbell.fill")
+                  .font(.headline).lineLimit(1).truncationMode(.tail)
+                Text(workout.startedAt, format: .dateTime.weekday(.wide).hour().minute())
+                  .font(.caption2).lineLimit(1)
+              }
+              .foregroundStyle(.white)
+              .accessibilityElement(children: .combine)
+              .accessibilityAddTraits(.isHeader)
+              .accessibilityIdentifier("activeWorkoutHeader")
             }
             ToolbarItem(placement: .topBarTrailing) {
               Menu {
@@ -101,7 +109,6 @@ struct ActiveWorkoutView: View {
   private func overview(_ workout: Workout) -> some View {
     ScrollView {
       VStack(spacing: 0) {
-        WorkoutHero(title: workout.name, showsDate: false)
         VStack(spacing: 0) {
           WorkoutSessionSummary(workout: workout, unit: unit).padding(.vertical, 16)
           if !store.isDemoMode {
