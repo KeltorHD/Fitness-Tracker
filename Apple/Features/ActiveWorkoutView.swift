@@ -29,8 +29,13 @@ struct ActiveWorkoutView: View {
             }
             ToolbarItem(placement: .principal) {
               VStack(spacing: 1) {
-                Label(workout.name, systemImage: "dumbbell.fill")
-                  .font(.headline).lineLimit(1).truncationMode(.tail)
+                HStack(spacing: 6) {
+                  Image(systemName: "dumbbell.fill").accessibilityHidden(true)
+                  Text(workout.name)
+                    .lineLimit(1).truncationMode(.tail).layoutPriority(1)
+                    .accessibilityIdentifier("activeWorkoutTitle")
+                }
+                .font(.headline)
                 Text(workout.startedAt, format: .dateTime.weekday(.wide).hour().minute())
                   .font(.caption2).lineLimit(1)
               }
