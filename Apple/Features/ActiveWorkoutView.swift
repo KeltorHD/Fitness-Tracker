@@ -156,11 +156,6 @@ struct ActiveWorkoutView: View {
           .font(.headline).frame(maxWidth: .infinity, alignment: .leading).padding(.vertical, 20)
           VStack(spacing: 16) {
             WorkoutBodyWeightRow(workout: workout).fitCard()
-            if !store.isDemoMode {
-              WorkoutTrackerCard(tracker: store.tracker).frame(
-                maxWidth: .infinity, alignment: .leading
-              ).fitCard()
-            }
             TextField(
               L10n.text("Заметка о тренировке", locale: locale),
               text: Binding(

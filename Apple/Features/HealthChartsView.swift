@@ -263,10 +263,20 @@ struct WorkoutLiveHeartRateChart: View {
         HeartRateLineChart(points: store.healthCharts.workoutPoints).frame(height: 170)
           .accessibilityIdentifier("liveWorkoutHeartRateChart")
       }
-      NavigationLink(L10n.text("Пульс и шаги", locale: locale)) {
-        HealthChartsView().toolbar(.visible, for: .navigationBar)
+      if let error = store.tracker.error {
+        Text(L10n.text(error, locale: locale)).font(.caption).foregroundStyle(.red)
       }
-      .accessibilityIdentifier("openHealthCharts")
+      HStack {
+        NavigationLink(L10n.text("Пульс и шаги", locale: locale)) {
+          HealthChartsView().toolbar(.visible, for: .navigationBar)
+        }
+        .accessibilityIdentifier("openHealthCharts")
+        Spacer(minLength: 8)
+        NavigationLink(L10n.text("Трекер", locale: locale)) {
+          TrackerView(model: store.tracker).toolbar(.visible, for: .navigationBar)
+        }
+        .accessibilityIdentifier("openWorkoutTracker")
+      }
     }
   }
 }

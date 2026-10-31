@@ -336,30 +336,3 @@ struct FreshHeartRateValue: View {
     }
   }
 }
-
-struct WorkoutTrackerCard: View {
-  @Environment(\.locale) private var locale
-  let tracker: TrackerViewModel
-  var body: some View {
-    VStack(alignment: .leading, spacing: 8) {
-      if tracker.mode == .bluetooth {
-        LiveHeartRateValue(snapshot: tracker.bluetooth)
-        Text(L10n.text(tracker.bluetooth.connection.message, locale: locale)).font(.caption)
-          .foregroundStyle(.secondary)
-        if tracker.preparingRecording { ProgressView() }
-      } else if tracker.deviceProfile == .airPodsPro3 {
-        LiveWorkoutHeartRateControls(model: tracker)
-      } else {
-        Text(
-          L10n.text(
-            "Текущий пульс из «Здоровья» доступен в разделе «Пульс и шаги» после включения доступа. Обновления зависят от синхронизации устройства.",
-            locale: locale)
-        ).font(.caption)
-      }
-      NavigationLink(L10n.text("Трекер", locale: locale)) { TrackerView(model: tracker) }
-      if let error = tracker.error {
-        Text(L10n.text(error, locale: locale)).foregroundStyle(.red).font(.caption)
-      }
-    }
-  }
-}
