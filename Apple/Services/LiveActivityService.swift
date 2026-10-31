@@ -4,20 +4,23 @@ import Foundation
 import UIKit
 
 @MainActor final class LiveActivityService {
-  func startIfNeeded(for workout: Workout) throws {
+  func startIfNeeded(for workout: Workout, heartRate: HeartRateReading? = nil) throws {
     guard workout.endedAt == nil, UIApplication.shared.applicationState == .active,
       ActivityAuthorizationInfo().areActivitiesEnabled,
       !Activity<WorkoutActivityAttributes>.activities.contains(where: {
         $0.attributes.workoutID == workout.id && [.active, .stale].contains($0.activityState)
       })
     else { return }
+    let state = localizedState(for: workout, heartRate: heartRate)
     _ = try Activity.request(
       attributes: WorkoutActivityAttributes(workoutID: workout.id, name: workout.name),
-      content: ActivityContent(state: localizedState(for: workout), staleDate: nil),
+      content: ActivityContent(state: state, staleDate: state.heartRateStaleDate),
       pushType: nil)
   }
 
-  func update(for workout: Workout?, allowStart: Bool = true) async throws {
+  func update(
+    for workout: Workout?, allowStart: Bool = true, heartRate: HeartRateReading? = nil
+  ) async throws {
     // Keep SDK reference objects out of actor crossings; reconciliation uses value snapshots.
     let activities = Activity<WorkoutActivityAttributes>.activities.map {
       (
@@ -32,7 +35,7 @@ import UIKit
     }
     try Task.checkCancellation()
     guard let workout, workout.endedAt == nil else { return }
-    let state = localizedState(for: workout)
+    let state = localizedState(for: workout, heartRate: heartRate)
     let matching = activities.filter {
       $0.workoutID == workout.id && $0.canUpdate
     }
@@ -48,16 +51,19 @@ import UIKit
       if updated { return }
     }
     if allowStart {
-      try startIfNeeded(for: workout)
+      try startIfNeeded(for: workout, heartRate: heartRate)
     }
   }
 
-  private func localizedState(for workout: Workout) -> WorkoutLiveState {
+  private func localizedState(for workout: Workout, heartRate: HeartRateReading?)
+    -> WorkoutLiveState
+  {
     var display = workout
     for index in display.exercises.indices {
       display.exercises[index].exercise.name = L10n.exerciseName(display.exercises[index].exercise)
     }
-    return WorkoutLiveState(workout: display, languageCode: L10n.language.rawValue)
+    return WorkoutLiveState(
+      workout: display, languageCode: L10n.language.rawValue, heartRate: heartRate)
   }
 
   // @concurrent keeps SDK handles on the generic executor, including with Swift 6.2's
@@ -80,7 +86,7 @@ import UIKit
         $0.id == id && [.active, .stale].contains($0.activityState)
       })
     else { return false }
-    await activity.update(ActivityContent(state: state, staleDate: nil))
+    await activity.update(ActivityContent(state: state, staleDate: state.heartRateStaleDate))
     return true
   }
 }

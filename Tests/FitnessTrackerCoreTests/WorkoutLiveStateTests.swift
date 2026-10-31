@@ -129,3 +129,48 @@ private func liveWorkout() throws -> Workout {
   #expect(state.progress == 1)
   #expect(state.nextSetNumber == nil)
 }
+
+@Test func liveHeartRateRejectsInvalidOldFutureAndOtherSessionSamples() throws {
+  let workout = try liveWorkout()
+  let date = start.addingTimeInterval(30)
+  for reading in [
+    HeartRateReading(date: date, beatsPerMinute: 0),
+    HeartRateReading(date: date, beatsPerMinute: .nan),
+    HeartRateReading(date: date.addingTimeInterval(1), beatsPerMinute: 90),
+    HeartRateReading(date: start.addingTimeInterval(-1), beatsPerMinute: 90),
+    HeartRateReading(date: date.addingTimeInterval(-16), beatsPerMinute: 90),
+  ] {
+    #expect(WorkoutLiveState(workout: workout, at: date, heartRate: reading).heartRate == nil)
+  }
+  let reading = HeartRateReading(date: date.addingTimeInterval(-5), beatsPerMinute: 123)
+  let state = WorkoutLiveState(workout: workout, at: date, heartRate: reading)
+  #expect(state.heartRate == reading)
+  #expect(state.heartRateStaleDate == date.addingTimeInterval(10))
+  #expect(
+    try JSONDecoder().decode(WorkoutLiveState.self, from: JSONEncoder().encode(state)) == state)
+  var legacy = try #require(
+    JSONSerialization.jsonObject(with: JSONEncoder().encode(state)) as? [String: Any])
+  legacy.removeValue(forKey: "heartRate")
+  let restored = try JSONDecoder().decode(
+    WorkoutLiveState.self, from: JSONSerialization.data(withJSONObject: legacy))
+  #expect(restored.heartRate == nil)
+  #expect(restored.heartRateStaleDate == nil)
+}
+
+@Test func pausedResumedAndCompletedActivitiesDoNotReuseOldHeartRate() throws {
+  var workout = try liveWorkout()
+  let reading = HeartRateReading(date: start.addingTimeInterval(5), beatsPerMinute: 100)
+  try WorkoutEngine.pause(&workout, at: start.addingTimeInterval(6))
+  #expect(
+    WorkoutLiveState(workout: workout, at: start.addingTimeInterval(7), heartRate: reading)
+      .heartRate == nil)
+  try WorkoutEngine.resume(&workout, at: start.addingTimeInterval(8))
+  #expect(
+    WorkoutLiveState(workout: workout, at: start.addingTimeInterval(9), heartRate: reading)
+      .heartRate == nil)
+  let fresh = HeartRateReading(date: start.addingTimeInterval(9), beatsPerMinute: 105)
+  #expect(WorkoutLiveState(workout: workout, at: fresh.date, heartRate: fresh).heartRate == fresh)
+  workout.status = .completed
+  workout.endedAt = start.addingTimeInterval(10)
+  #expect(WorkoutLiveState(workout: workout, at: fresh.date, heartRate: fresh).heartRate == nil)
+}

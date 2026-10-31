@@ -29,6 +29,7 @@ import WidgetKit
   @ObservationIgnored private let liveActivity = LiveActivityService()
   @ObservationIgnored private let watch = PhoneWatchBridge()
   @ObservationIgnored private var integrationTask: Task<Void, Never>?
+  @ObservationIgnored private var heartRateUpdateTask: Task<Void, Never>?
   @ObservationIgnored private var servicesStarted = false
   @ObservationIgnored private let platformServicesEnabled: Bool
   @ObservationIgnored private let defaults: UserDefaults
@@ -87,6 +88,8 @@ import WidgetKit
             fallback:
               "Не удалось загрузить пульс и шаги. Проверьте доступ к «Здоровью» и повторите.")
         })
+    self.tracker.onHeartRateChange = { [weak self] in self?.scheduleHeartRateUpdate() }
+    self.healthCharts.onHeartRateChange = { [weak self] in self?.scheduleHeartRateUpdate() }
     watch.receive = { [weak self] workout in self?.importWatch(workout) ?? false }
     watch.failure = { [weak self] error in
       self?.report(
@@ -287,7 +290,7 @@ import WidgetKit
       defaults.object(forKey: "liveActivities") as? Bool != false
     {
       // Request synchronously while foregrounded, before notification/widget async work.
-      do { try liveActivity.startIfNeeded(for: workout) } catch {
+      do { try liveActivity.startIfNeeded(for: workout, heartRate: currentLiveHeartRate) } catch {
         report(
           error, operation: "startLiveActivity",
           message:
@@ -458,12 +461,14 @@ import WidgetKit
 
   func prepareForBackground() async {
     guard platformServicesEnabled else { return }
+    heartRateUpdateTask?.cancel()
     refreshIntegrations(allowStart: false)
     let pending = integrationTask
     let lease = BackgroundTaskLease()
     let tracker = tracker
-    lease.begin {
+    lease.begin { [weak self] in
       pending?.cancel()
+      self?.heartRateUpdateTask?.cancel()
       tracker.cancelPendingWork()
     }
     defer { lease.end() }
@@ -487,10 +492,32 @@ import WidgetKit
     showSession = active != nil
   }
 
-  func refreshIntegrations(allowStart: Bool? = nil) {
+  private var currentLiveHeartRate: HeartRateReading? {
+    tracker.liveActivityHeartRate(
+      healthReading: healthCharts.enabled ? healthCharts.snapshot?.latestHeartRate : nil)
+  }
+
+  private func scheduleHeartRateUpdate() {
+    guard platformServicesEnabled, !isDemoMode, active != nil,
+      defaults.object(forKey: "liveActivities") as? Bool != false,
+      heartRateUpdateTask == nil
+    else { return }
+    // Coalesce sensor callbacks; no polling or widget/notification refresh per measurement.
+    // This finite task belongs to the store and never starts a background activity.
+    heartRateUpdateTask = Task { [weak self] in
+      guard let self else { return }
+      defer { self.heartRateUpdateTask = nil }
+      do { try await Task.sleep(for: .seconds(5)) } catch { return }
+      guard !Task.isCancelled else { return }
+      self.refreshIntegrations(allowStart: false, liveActivityOnly: true)
+      await self.integrationTask?.value
+    }
+  }
+
+  func refreshIntegrations(allowStart: Bool? = nil, liveActivityOnly: Bool = false) {
     guard platformServicesEnabled, !isDemoMode else { return }
     let previous = integrationTask
-    previous?.cancel()
+    if !liveActivityOnly { previous?.cancel() }
     let workout = active
     let canStart = allowStart ?? (UIApplication.shared.applicationState == .active)
     integrationTask = Task {
@@ -499,17 +526,19 @@ import WidgetKit
       guard !Task.isCancelled else { return }
       var firstError: (any Error)?
       do {
-        if defaults.bool(forKey: "restNotifications") {
-          try await notifications.schedule(until: workout?.restEndsAt)
-        } else {
-          notifications.cancel()
+        if !liveActivityOnly {
+          if defaults.bool(forKey: "restNotifications") {
+            try await notifications.schedule(until: workout?.restEndsAt)
+          } else {
+            notifications.cancel()
+          }
         }
       } catch { firstError = error }
       guard !Task.isCancelled else { return }
       do {
         try await liveActivity.update(
           for: defaults.object(forKey: "liveActivities") as? Bool == false ? nil : workout,
-          allowStart: canStart)
+          allowStart: canStart, heartRate: currentLiveHeartRate)
       } catch {
         if firstError == nil {
           firstError = error
@@ -518,6 +547,10 @@ import WidgetKit
         }
       }
       guard !Task.isCancelled else { return }
+      if liveActivityOnly {
+        if let firstError { AppErrorReporter.record(firstError, operation: "updateLiveHeartRate") }
+        return
+      }
       do {
         if defaults.bool(forKey: "widgetSharing") {
           let week = TrainingStatistics.weeks(in: workouts, count: 1).first

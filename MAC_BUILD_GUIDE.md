@@ -211,3 +211,7 @@ xcodebuild -project FitnessTracker.xcodeproj -scheme FitnessTracker \
 ## Полный каталог упражнений
 
 После обновления выполните xcodegen generate: в iOS folder resource ExerciseMedia теперь 1746 оригинальных фото и 11 готовых ИИ-анимаций. Убедитесь, что Watch/widgets не копируют медиаресурсы. Выполните сценарии полного каталога, анимаций и схемы тела из docs/XCODE_VALIDATION.md. Linux-проверки не подтверждают компиляцию SwiftUI или воспроизведение. Генерация новых GIF остановлена.
+
+## Пульс на экране блокировки и в Dynamic Island
+
+Обновите проект через xcodegen generate и соберите app/widgets. WorkoutLiveState теперь содержит optional HeartRateReading, совместимый со старыми ActivityKit payloads. На реальном iPhone проверьте все размеры Island, lock screen, свежесть и system staleDate, pause/resume/skip и отсутствие фонового создания activity. Источники и их ограничения — в docs/XCODE_VALIDATION.md. Новых capabilities/permissions нет; фоновые обновления не гарантируются вне существующей доставки измерений.

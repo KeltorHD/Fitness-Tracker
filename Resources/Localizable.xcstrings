@@ -171,6 +171,23 @@
         }
       }
     },
+    "%@ уд/мин": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ уд/мин"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ bpm"
+          }
+        }
+      }
+    },
     "%@ ч %@ мин": {
       "extractionState": "manual",
       "localizations": {
@@ -5828,6 +5845,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "No recent measurement"
+          }
+        }
+      }
+    },
+    "Нет свежих данных пульса": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нет свежих данных пульса"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No recent heart rate data"
           }
         }
       }

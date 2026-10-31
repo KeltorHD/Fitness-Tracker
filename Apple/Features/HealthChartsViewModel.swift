@@ -12,11 +12,15 @@ struct HealthChartsObservation: Hashable {
 
 /// RootView owns the observation task, cancels it in the background and restarts after day changes.
 @MainActor @Observable final class HealthChartsViewModel {
+  @ObservationIgnored var onHeartRateChange: (@MainActor () -> Void)?
   var day: Date
   var enabled: Bool {
-    didSet { defaults.set(enabled, forKey: "healthChartsEnabled") }
+    didSet {
+      defaults.set(enabled, forKey: "healthChartsEnabled")
+      onHeartRateChange?()
+    }
   }
-  private(set) var snapshot: HealthChartSnapshot?
+  private(set) var snapshot: HealthChartSnapshot? { didSet { onHeartRateChange?() } }
   private(set) var points: [HeartRateChartPoint] = []
   private(set) var workoutPoints: [HeartRateChartPoint] = []
   private(set) var loading = false

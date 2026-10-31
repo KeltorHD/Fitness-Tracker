@@ -3,9 +3,10 @@ import Foundation
 import Observation
 
 @MainActor @Observable final class TrackerViewModel {
-  private(set) var mode: TrackerMode
+  @ObservationIgnored var onHeartRateChange: (@MainActor () -> Void)?
+  private(set) var mode: TrackerMode { didSet { onHeartRateChange?() } }
   private(set) var deviceProfile: TrackerDeviceProfile
-  private(set) var bluetooth = HeartRateBluetoothSnapshot()
+  private(set) var bluetooth = HeartRateBluetoothSnapshot() { didSet { onHeartRateChange?() } }
   private(set) var summary: HealthDaySummary?
   private(set) var loadingHealth = false
   private(set) var hasRequestedHealth = false
@@ -15,7 +16,7 @@ import Observation
   private(set) var recording: HeartRateRecording? { didSet { rebuildChart() } }
   private(set) var chartPoints: [HeartRateChartPoint] = []
   private(set) var preparingRecording = false
-  private(set) var live = LiveHeartRateSnapshot()
+  private(set) var live = LiveHeartRateSnapshot() { didSet { onHeartRateChange?() } }
   private(set) var startingLive = false
   private(set) var attachedWorkoutStatus: WorkoutStatus?
   var hasLiveSession: Bool { [.starting, .running, .paused].contains(live.state) }
@@ -65,6 +66,20 @@ import Observation
     sensor.onChange = { [weak self] snapshot in self?.receive(snapshot) }
     liveSource?.onChange = { [weak self] snapshot in self?.receiveLive(snapshot) }
   }
+  func liveActivityHeartRate(healthReading: HeartRateReading?) -> HeartRateReading? {
+    guard let workout, workout.status == .active else { return nil }
+    let candidates = [
+      mode == .bluetooth && bluetooth.connection == .connected ? bluetooth.reading : nil,
+      mode == .appleHealth && live.state == .running && liveWorkoutID == workout.id
+        ? live.reading : nil,
+      healthReading,
+    ]
+    let earliest = max(workout.startedAt, workout.pauses.last?.endedAt ?? workout.startedAt)
+    return candidates.compactMap { $0 }
+      .filter { $0.isFresh(at: now()) && $0.date >= earliest }
+      .max { $0.date < $1.date }
+  }
+
   func selectMode(_ mode: TrackerMode) {
     guard mode != self.mode else { return }
     queueSave()

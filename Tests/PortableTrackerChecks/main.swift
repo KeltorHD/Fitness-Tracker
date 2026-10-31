@@ -257,6 +257,43 @@ private actor RecordingStub: HeartRateRecordingRepository {
       tracker.healthReadAt == nil && tracker.error != nil && tracker.healthReadFailed
         && !tracker.loadingHealth,
       "A failed attempt must never claim a successful read")
+    let liveSensor = SensorStub()
+    let liveTracker = TrackerViewModel(
+      health: health, sensor: liveSensor, recordings: RecordingStub(), defaults: defaults,
+      errorMessage: { _, _, fallback in fallback }, now: { now })
+    liveTracker.selectMode(.bluetooth)
+    let liveWorkout = Workout(name: "Live", startedAt: now.addingTimeInterval(-100))
+    liveTracker.attach(liveWorkout)
+    let newerHealth = HeartRateReading(date: now, beatsPerMinute: 110)
+    let sensorReading = HeartRateReading(date: now.addingTimeInterval(-1), beatsPerMinute: 105)
+    var callbackReading: HeartRateReading?
+    var callbacks = 0
+    liveTracker.onHeartRateChange = {
+      callbacks += 1
+      callbackReading = liveTracker.liveActivityHeartRate(healthReading: nil)
+    }
+    liveSensor.emit(sensorReading)
+    try expect(callbackReading == sensorReading, "A live callback sees the new sensor sample")
+    try expect(
+      liveTracker.liveActivityHeartRate(healthReading: newerHealth) == newerHealth,
+      "The latest fresh reading wins across available sources")
+    liveSensor.onChange?(HeartRateBluetoothSnapshot(connection: .disconnected))
+    try expect(
+      callbacks == 2 && callbackReading == nil,
+      "Disconnect publishes missing data instead of retaining the old pulse")
+    try expect(
+      liveTracker.liveActivityHeartRate(
+        healthReading:
+          HeartRateReading(date: now.addingTimeInterval(-16), beatsPerMinute: 100)) == nil,
+      "Stale Health data cannot be shown as a current activity pulse")
+    var pausedWorkout = liveWorkout
+    try WorkoutEngine.pause(&pausedWorkout, at: now)
+    liveTracker.attach(pausedWorkout)
+    try expect(
+      liveTracker.liveActivityHeartRate(healthReading: newerHealth) == nil,
+      "Paused workouts hide current heart rate")
+    liveTracker.onHeartRateChange = nil
+    liveTracker.attach(nil)
     print(
       "Portable tracker behavior: recording, pause, persistence failure/retry, mode races, permissions, history and file integrity passed (no Apple SDK)."
     )

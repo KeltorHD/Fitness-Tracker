@@ -15,8 +15,22 @@ public struct WorkoutLiveState: Codable, Hashable, Sendable {
   public let languageCode: String?
   public let nextDropStageNumber: Int?
   public let nextDropStageCount: Int?
+  public let heartRate: HeartRateReading?
 
-  public init(workout: Workout, at date: Date = Date(), languageCode: String? = nil) {
+  public var heartRateStaleDate: Date? { heartRate?.date.addingTimeInterval(15) }
+
+  public init(
+    workout: Workout, at date: Date = Date(), languageCode: String? = nil,
+    heartRate: HeartRateReading? = nil
+  ) {
+    if workout.status == .active, let heartRate, heartRate.isFresh(at: date),
+      heartRate.date >= workout.startedAt,
+      heartRate.date >= (workout.pauses.last?.endedAt ?? workout.startedAt)
+    {
+      self.heartRate = heartRate
+    } else {
+      self.heartRate = nil
+    }
     self.languageCode = languageCode
     completedSets = workout.fullyCompletedSets
     totalSets = workout.totalSets

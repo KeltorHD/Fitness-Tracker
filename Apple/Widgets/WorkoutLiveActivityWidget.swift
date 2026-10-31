@@ -14,6 +14,7 @@ struct WorkoutLiveActivityWidget: Widget {
           Spacer()
           SetProgress(state: context.state).environment(\.locale, context.state.presentationLocale)
         }.font(.subheadline)
+        WorkoutActivityHeartRate(state: context.state, isStale: context.isStale)
         NextWorkoutSet(state: context.state).environment(\.locale, context.state.presentationLocale)
         WorkoutActivityControls(context: context).environment(
           \.locale, context.state.presentationLocale)
@@ -35,8 +36,13 @@ struct WorkoutLiveActivityWidget: Widget {
           .font(.caption).foregroundStyle(Color.accentColor)
         }
         DynamicIslandExpandedRegion(.trailing) {
-          SetProgress(state: context.state).environment(\.locale, context.state.presentationLocale)
+          VStack(alignment: .trailing, spacing: 4) {
+            WorkoutActivityHeartRate(state: context.state, isStale: context.isStale)
+            SetProgress(state: context.state).environment(
+              \.locale, context.state.presentationLocale
+            )
             .font(.caption)
+          }
         }
         DynamicIslandExpandedRegion(.bottom) {
           VStack(alignment: .leading, spacing: 8) {
@@ -53,13 +59,21 @@ struct WorkoutLiveActivityWidget: Widget {
           }
         }
       } compactLeading: {
-        Image(systemName: context.state.paused ? "pause.fill" : "dumbbell.fill")
-          .foregroundStyle(Color.accentColor).accessibilityLabel(
-            context.state.paused
+        Image(
+          systemName: hasCurrentHeartRate(context)
+            ? "heart.fill"
+            : (context.state.paused ? "pause.fill" : "dumbbell.fill")
+        )
+        .foregroundStyle(Color.accentColor).accessibilityLabel(
+          hasCurrentHeartRate(context)
+            ? L10n.text("Пульс", locale: context.state.presentationLocale)
+            : (context.state.paused
               ? L10n.text("На паузе", locale: context.state.presentationLocale)
-              : L10n.text("Тренировка", locale: context.state.presentationLocale))
+              : L10n.text("Тренировка", locale: context.state.presentationLocale)))
       } compactTrailing: {
-        if context.state.restEndsAt != nil {
+        if hasCurrentHeartRate(context) {
+          WorkoutActivityHeartRate(state: context.state, isStale: context.isStale, compact: true)
+        } else if context.state.restEndsAt != nil {
           WorkoutRestTime(state: context.state).environment(
             \.locale, context.state.presentationLocale
           ).frame(width: 46)
@@ -69,7 +83,9 @@ struct WorkoutLiveActivityWidget: Widget {
           ).frame(width: 60)
         }
       } minimal: {
-        if context.state.paused {
+        if hasCurrentHeartRate(context) {
+          WorkoutActivityHeartRate(state: context.state, isStale: context.isStale, compact: true)
+        } else if context.state.paused {
           Image(systemName: "pause.fill").foregroundStyle(Color.accentColor).accessibilityLabel(
             L10n.text("На паузе", locale: context.state.presentationLocale))
         } else {
@@ -89,6 +105,43 @@ struct WorkoutLiveActivityWidget: Widget {
       .widgetURL(context.attributes.workoutURL)
       .keylineTint(Color.accentColor)
     }
+  }
+}
+
+private func hasCurrentHeartRate(_ context: ActivityViewContext<WorkoutActivityAttributes>) -> Bool
+{
+  !context.isStale && context.state.heartRate?.isFresh(at: .now) == true
+}
+
+private struct WorkoutActivityHeartRate: View {
+  let state: WorkoutLiveState
+  let isStale: Bool
+  var compact = false
+
+  private var reading: HeartRateReading? {
+    guard !isStale, let value = state.heartRate, value.isFresh(at: .now) else { return nil }
+    return value
+  }
+  var body: some View {
+    HStack(spacing: 4) {
+      if !compact { Image(systemName: "heart.fill").foregroundStyle(Color.accentColor) }
+      if let reading {
+        Text(reading.beatsPerMinute, format: .number.precision(.fractionLength(0)))
+          .monospacedDigit().contentTransition(.numericText())
+      } else {
+        Text("—")
+      }
+      if !compact { Text(L10n.text("уд/мин", locale: state.presentationLocale)).font(.caption) }
+    }
+    .font(compact ? .caption.bold() : .subheadline.bold())
+    .environment(\.locale, state.presentationLocale)
+    .accessibilityElement(children: .ignore)
+    .accessibilityLabel(L10n.text("Пульс", locale: state.presentationLocale))
+    .accessibilityValue(
+      reading.map {
+        L10n.format(
+          "%@ уд/мин", String(Int($0.beatsPerMinute.rounded())), locale: state.presentationLocale)
+      } ?? L10n.text("Нет свежих данных пульса", locale: state.presentationLocale))
   }
 }
 
