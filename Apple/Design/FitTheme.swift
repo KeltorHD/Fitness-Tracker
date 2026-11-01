@@ -17,6 +17,11 @@ enum FitTheme {
 }
 
 extension View {
+  func cardListRow() -> some View {
+    listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+      .listRowSeparator(.hidden).listRowBackground(Color.clear)
+  }
+
   func resultsCard(padding: CGFloat = FitTheme.resultsPadding) -> some View {
     self.padding(padding)
       .background(FitTheme.resultsSurface, in: .rect(cornerRadius: FitTheme.resultsRadius))

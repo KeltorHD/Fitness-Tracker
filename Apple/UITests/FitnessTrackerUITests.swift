@@ -47,6 +47,63 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(templates.isSelected)
   }
 
+  @MainActor func testTemplateCardsSupportInlineAndSwipeRemovalWithoutSavingOnCancel() {
+    let app = launch()
+    XCTAssertTrue(app.buttons["navigationTab_1"].waitForExistence(timeout: 10))
+    app.buttons["navigationTab_1"].tap()
+    let template = app.buttons["templateRow_20000000-0000-0000-0000-000000000001"]
+    XCTAssertTrue(template.waitForExistence(timeout: 5))
+    template.tap()
+    app.buttons["templateActions"].tap()
+    app.buttons["editTemplate"].tap()
+    let removals = app.buttons.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "removeTemplateExercise_"))
+    reveal(removals.firstMatch, in: app)
+    let removalID = removals.firstMatch.identifier
+    removals.firstMatch.tap()
+    XCTAssertTrue(app.buttons[removalID].waitForNonExistence(timeout: 5))
+    app.buttons["cancelTemplateEditing"].tap()
+    app.buttons["templateActions"].tap()
+    app.buttons["editTemplate"].tap()
+    let restored = app.buttons[removalID]
+    reveal(restored, in: app)
+    let rowID = String(removalID.dropFirst("removeTemplateExercise_".count))
+    let card = app.descendants(matching: .any)
+      .matching(identifier: "templateExerciseCard_\(rowID)").firstMatch
+    card.swipeLeft()
+    XCTAssertTrue(restored.exists)
+    let swipeRemoval = app.buttons["swipeRemoveTemplateExercise_\(rowID)"]
+    XCTAssertTrue(swipeRemoval.waitForExistence(timeout: 5))
+    swipeRemoval.tap()
+    XCTAssertTrue(restored.waitForNonExistence(timeout: 5))
+    app.buttons["cancelTemplateEditing"].tap()
+    let technique = app.buttons["templateExerciseTechnique_\(rowID)"]
+    reveal(technique, in: app)
+    technique.tap()
+    XCTAssertTrue(app.staticTexts["Работающие мышцы"].waitForExistence(timeout: 5))
+  }
+
+  @MainActor func testTemplateSwipeRequiresConfirmationAndCanBeCancelled() {
+    let app = launch()
+    XCTAssertTrue(app.buttons["navigationTab_1"].waitForExistence(timeout: 10))
+    app.buttons["navigationTab_1"].tap()
+    let template = app.buttons["templateRow_20000000-0000-0000-0000-000000000001"]
+    XCTAssertTrue(template.waitForExistence(timeout: 5))
+    template.swipeLeft()
+    XCTAssertTrue(template.exists)
+    let action = app.buttons["swipeDeleteTemplate_20000000-0000-0000-0000-000000000001"]
+    XCTAssertTrue(action.waitForExistence(timeout: 5))
+    action.tap()
+    XCTAssertTrue(app.buttons["confirmDeleteTemplate"].waitForExistence(timeout: 5))
+    app.buttons["Отмена"].tap()
+    XCTAssertTrue(template.exists)
+    template.swipeLeft()
+    action.tap()
+    app.buttons["confirmDeleteTemplate"].tap()
+    XCTAssertTrue(template.waitForNonExistence(timeout: 5))
+    XCTAssertEqual(app.alerts.count, 0)
+  }
+
   @MainActor func testCenterActionStartsEmptyWorkoutAndResumesIt() {
     let app = launch()
     let start = app.buttons["workoutStartAction"]

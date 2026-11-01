@@ -207,6 +207,13 @@ struct WorkoutEditorView: View {
                 .subheadline
               ).foregroundStyle(.secondary)
             }
+            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+              Button(role: .destructive) {
+                workout.exercises.removeAll { $0.id == item.id }
+              } label: {
+                Label(L10n.text("Убрать упражнение", locale: locale), systemImage: "minus.circle")
+              }
+            }
           }
           .onMove { workout.exercises.move(fromOffsets: $0, toOffset: $1) }
           .onDelete { workout.exercises.remove(atOffsets: $0) }

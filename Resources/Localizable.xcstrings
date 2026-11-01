@@ -2789,6 +2789,23 @@
         }
       }
     },
+    "Действия шаблона": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Действия шаблона"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Template actions"
+          }
+        }
+      }
+    },
     "Дельтовидные мышцы": {
       "extractionState": "manual",
       "localizations": {
@@ -4213,6 +4230,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Equipment"
+          }
+        }
+      }
+    },
+    "Индивидуальные параметры": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Индивидуальные параметры"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Individual targets"
           }
         }
       }
@@ -10541,6 +10575,23 @@
         }
       }
     },
+    "Убрать упражнение: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Убрать упражнение: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove exercise: %@"
+          }
+        }
+      }
+    },
     "Уведомления": {
       "extractionState": "manual",
       "localizations": {
@@ -10707,6 +10758,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Exercise"
+          }
+        }
+      }
+    },
+    "Упражнение %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Упражнение %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exercise %@"
           }
         }
       }

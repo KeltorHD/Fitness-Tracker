@@ -680,5 +680,9 @@
   "Трицепс": "Triceps",
   "Мышцы шеи": "Neck",
   "Сбросить выбор": "Clear selection",
-  "Необязательно. Выбор включит фильтр по основным мышцам при добавлении упражнений.": "Optional. Your selection will filter exercises by their primary muscles when adding them."
+  "Необязательно. Выбор включит фильтр по основным мышцам при добавлении упражнений.": "Optional. Your selection will filter exercises by their primary muscles when adding them.",
+  "Упражнение %@": "Exercise %@",
+  "Убрать упражнение: %@": "Remove exercise: %@",
+  "Индивидуальные параметры": "Individual targets",
+  "Действия шаблона": "Template actions"
 }

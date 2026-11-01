@@ -60,3 +60,7 @@ Capabilities выражены настоящими entitlement keys: [HealthKit]
 - [NSFileCoordinator coordinated read](https://developer.apple.com/documentation/foundation/nsfilecoordinator/coordinate(readingitemat:options:error:byaccessor:)) — синхронное coordinated чтение на worker actor, используется переданный accessor URL. Данные ограничиваются до 20 МиБ. Отмена проверяется перед/после coordination и между блоками чтения; ожидание file provider может завершиться позже отмены UI.
 
 Новые document APIs iOS 27 не требуются. File association и фактическое поведение диалогов остаются в Xcode validation checklist.
+
+## Удаление свайпом и техника упражнения
+
+Штатные [swipeActions(edge:allowsFullSwipe:content:)](https://developer.apple.com/documentation/swiftui/view/swipeactions(edge:allowsfullswipe:content:)) размещены на строках List; `allowsFullSwipe: false` раскрывает действие без автоматического выполнения. Навигация к технике карточки использует [navigationDestination(item:destination:)](https://developer.apple.com/documentation/swiftui/view/navigationdestination(item:destination:)) на стабильном корне экрана, вне ленивых строк. SwipeActionsContainer требует iOS 27 по Apple DocC metadata и не используется при deployment iOS 26. Проверка native gestures/SDK остаётся за Xcode.
