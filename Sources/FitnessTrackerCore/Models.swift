@@ -112,7 +112,7 @@ public struct WorkoutTemplate: Identifiable, Codable, Equatable, Sendable {
   public var restSeconds: Int
   public var muscleGroups: Set<MuscleGroup>
   public init(
-    id: UUID = UUID(), name: String, exercises: [TemplateExercise], restSeconds: Int = 90,
+    id: UUID = UUID(), name: String, exercises: [TemplateExercise], restSeconds: Int = 0,
     muscleGroups: Set<MuscleGroup> = []
   ) {
     self.id = id

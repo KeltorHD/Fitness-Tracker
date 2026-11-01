@@ -97,7 +97,9 @@ struct TemplateOverviewView: View {
               value: "\(current.exercises.reduce(0) { $0 + $1.setCount })")
             SummaryMetric(
               title: L10n.text("Отдых", locale: locale),
-              value: L10n.format("%@ с", String(current.restSeconds), locale: locale))
+              value: current.restSeconds == 0
+                ? L10n.text("Произвольный", locale: locale)
+                : L10n.format("%@ с", String(current.restSeconds), locale: locale))
           }
           ForEach(Array(current.exercises.enumerated()), id: \.element.id) { index, item in
             NavigationLink {
@@ -203,37 +205,10 @@ struct TemplateEditor: View {
               "Необязательно. Выбранные группы включат фильтр при добавлении упражнений.",
               locale: locale))
         }
-        Section(L10n.text("Отдых между подходами", locale: locale)) {
-          Stepper(
-            L10n.format("%@ секунд", String(template.restSeconds), locale: locale),
-            value: $template.restSeconds, in: 0...3600, step: 15)
-        }
         ForEach($template.exercises) { $exercise in
           Section(L10n.exerciseName(exercise.exercise, locale: locale)) {
             NavigationLink(L10n.text("Техника выполнения", locale: locale)) {
               ExerciseDetailView(exercise: exercise.exercise)
-            }
-            if let plans = exercise.plannedSets {
-              Text(
-                WorkoutExerciseSummary.text(
-                  WorkoutExercise(exercise: exercise.exercise, sets: plans), completedOnly: false,
-                  unit: .kilograms, locale: locale, numberLocale: L10n.numberLocale))
-              Text(
-                L10n.text("Вес и этапы можно изменить после запуска тренировки.", locale: locale)
-              ).font(.caption).foregroundStyle(.secondary)
-            } else {
-              Stepper(
-                L10n.format("Подходы: %@", String(exercise.setCount), locale: locale),
-                value: $exercise.setCount, in: 1...30)
-              Stepper(
-                L10n.format(
-                  "Повторения: %@", String(exercise.repetitions), locale: locale),
-                value: $exercise.repetitions, in: 1...1000)
-              TextField(
-                L10n.text("Добавленный вес, кг", locale: locale), value: $exercise.weightKG,
-                format: .number
-              )
-              .keyboardType(.decimalPad)
             }
             Button(L10n.text("Убрать упражнение", locale: locale), role: .destructive) {
               template.exercises.removeAll { $0.id == exercise.id }
@@ -242,6 +217,37 @@ struct TemplateEditor: View {
         }
         Button(L10n.text("Добавить упражнение", locale: locale), systemImage: "plus") {
           picking = true
+        }
+        Section {
+          DisclosureGroup(L10n.text("Параметры выполнения", locale: locale)) {
+            Picker(
+              L10n.text("Отдых между подходами", locale: locale),
+              selection: Binding(
+                get: { template.restSeconds > 0 },
+                set: { template.restSeconds = $0 ? 90 : 0 }
+              )
+            ) {
+              Text(L10n.text("Произвольный", locale: locale)).tag(false)
+              Text(L10n.text("По таймеру", locale: locale)).tag(true)
+            }
+            if template.restSeconds > 0 {
+              Stepper(
+                L10n.format("%@ секунд", String(template.restSeconds), locale: locale),
+                value: $template.restSeconds, in: 1...3600, step: 15)
+            }
+            Text(
+              L10n.text(
+                "Отдых общий для всех упражнений. При произвольном отдыхе таймер не запускается.",
+                locale: locale)
+            ).font(.caption).foregroundStyle(.secondary)
+            ForEach($template.exercises) { $exercise in
+              VStack(alignment: .leading, spacing: 12) {
+                Text(L10n.exerciseName(exercise.exercise, locale: locale)).font(.headline)
+                TemplateExerciseParameters(exercise: $exercise)
+              }.padding(.vertical, 4)
+            }
+          }
+          .accessibilityIdentifier("templateExecutionParameters")
         }
         if let validationMessage {
           Text(L10n.text(validationMessage, locale: locale)).foregroundStyle(.red)
@@ -274,6 +280,38 @@ struct TemplateEditor: View {
       }
       .archiveTransferPresenter(when: store.showingTemplateEditor && !picking)
       .safeAreaInset(edge: .top) { if store.isDemoMode { DemoModeBanner() } }
+    }
+  }
+}
+
+private struct TemplateExerciseParameters: View {
+  @Environment(\.locale) private var locale
+  @Binding var exercise: TemplateExercise
+
+  var body: some View {
+    Group {
+      if let plans = exercise.plannedSets {
+        Text(
+          WorkoutExerciseSummary.text(
+            WorkoutExercise(exercise: exercise.exercise, sets: plans), completedOnly: false,
+            unit: .kilograms, locale: locale, numberLocale: L10n.numberLocale))
+        Text(
+          L10n.text("Вес и этапы можно изменить после запуска тренировки.", locale: locale)
+        ).font(.caption).foregroundStyle(.secondary)
+      } else {
+        Stepper(
+          L10n.format("Подходы: %@", String(exercise.setCount), locale: locale),
+          value: $exercise.setCount, in: 1...30)
+        Stepper(
+          L10n.format(
+            "Повторения: %@", String(exercise.repetitions), locale: locale),
+          value: $exercise.repetitions, in: 1...1000)
+        TextField(
+          L10n.text("Добавленный вес, кг", locale: locale), value: $exercise.weightKG,
+          format: .number
+        )
+        .keyboardType(.decimalPad)
+      }
     }
   }
 }

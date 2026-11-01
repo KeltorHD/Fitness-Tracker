@@ -6444,6 +6444,23 @@
         }
       }
     },
+    "Отдых общий для всех упражнений. При произвольном отдыхе таймер не запускается.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Отдых общий для всех упражнений. При произвольном отдыхе таймер не запускается."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rest applies to all exercises. No timer starts when resting as needed."
+          }
+        }
+      }
+    },
     "Отключить автоблокировку": {
       "extractionState": "manual",
       "localizations": {
@@ -6750,6 +6767,23 @@
         }
       }
     },
+    "Параметры выполнения": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Параметры выполнения"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workout parameters"
+          }
+        }
+      }
+    },
     "Пауза": {
       "extractionState": "manual",
       "localizations": {
@@ -6899,6 +6933,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Shoulders"
+          }
+        }
+      }
+    },
+    "По таймеру": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "По таймеру"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Timed"
           }
         }
       }
@@ -7902,6 +7953,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Resume workout"
+          }
+        }
+      }
+    },
+    "Произвольный": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Произвольный"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As needed"
           }
         }
       }

@@ -131,3 +131,5 @@ Watch записывает отдельный стартовый план и п�
 Цифровая панель: [NUMBER_ENTRY.md](NUMBER_ENTRY.md); два новых ввода и общий макет — демонстрационные SVG/PNG.
 
 Группы мышц шаблона: **Implemented**. Несколько необязательных групп сохраняются в Codable payload с additive migration старых шаблонов; подписи видны в каталоге/обзоре/выборе, каталог упражнений сразу фильтруется по объединению групп. Core compatibility/archive/repository/search: **Linux-tested**. SwiftUI и Apple unit tests: **Requires Xcode validation** (сценарии в XCODE_VALIDATION.md).
+
+Параметры выполнения шаблона: **Implemented**. Отдых, подходы, повторения, вес и сводки plannedSets перенесены в общий свёрнутый DisclosureGroup. Новый шаблон использует произвольный отдых (restSeconds = 0, без автоматического таймера); сохранённые значения не меняются. Core default/start/timed-rest compatibility: **Linux-tested**. SwiftUI: **Requires Xcode validation**.
