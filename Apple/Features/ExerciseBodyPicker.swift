@@ -5,7 +5,7 @@ import SwiftUI
 struct ExerciseBodyPicker: View {
   @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
-  @Binding var selection: Set<MuscleGroup>
+  @Binding var selection: ExerciseMuscleSelection
   @State private var showsBack = false
 
   var body: some View {
@@ -26,30 +26,33 @@ struct ExerciseBodyPicker: View {
             .frame(width: 42, height: 50).offset(x: 129, y: 4)
           ForEach(regions) { region in
             Button {
-              if selection.contains(region.group) {
-                selection.remove(region.group)
-              } else {
-                selection.insert(region.group)
-              }
+              selection.set(region.group, selected: selection.state(of: region.group) != .all)
             } label: {
               BodyMusclePatch()
                 .fill(
-                  selection.contains(region.group) ? colorTheme.accent : FitTheme.muted.opacity(0.4)
+                  selection.state(of: region.group) == .all
+                    ? colorTheme.accent
+                    : selection.state(of: region.group) == .partial
+                      ? colorTheme.accent.opacity(0.45) : FitTheme.muted.opacity(0.4)
                 )
                 .overlay {
                   BodyMusclePatch().strokeBorder(
-                    selection.contains(region.group) ? Color.primary : Color.clear, lineWidth: 2)
+                    selection.state(of: region.group) != .none ? Color.primary : Color.clear,
+                    lineWidth: 2)
                 }
                 .frame(width: region.width, height: region.height)
                 .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
             .offset(x: region.x, y: region.y)
-            .accessibilityLabel(L10n.text(region.group.title, locale: locale))
+            .accessibilityLabel(MuscleSelectionText.groupTitle(region.group, locale: locale))
             .accessibilityValue(
-              selection.contains(region.group) ? L10n.text("Выбрано", locale: locale) : ""
+              selection.state(of: region.group) == .partial
+                ? L10n.text("Частично выбрано", locale: locale)
+                : selection.state(of: region.group) == .all
+                  ? L10n.text("Выбрано", locale: locale) : ""
             )
-            .accessibilityAddTraits(selection.contains(region.group) ? [.isSelected] : [])
+            .accessibilityAddTraits(selection.state(of: region.group) != .none ? [.isSelected] : [])
             .accessibilityIdentifier("bodyMuscle_\(region.id)")
           }
         }
@@ -60,16 +63,11 @@ struct ExerciseBodyPicker: View {
       .frame(height: 400)
 
       HStack {
-        Text(
-          selection.isEmpty
-            ? L10n.text("Все мышцы", locale: locale)
-            : MuscleGroup.allCases.filter { selection.contains($0) }
-              .map { L10n.text($0.title, locale: locale) }.joined(separator: ", ")
-        )
-        .font(.headline)
+        Text(MuscleSelectionText.summary(selection, locale: locale))
+          .font(.headline)
         Spacer()
         if !selection.isEmpty {
-          Button(L10n.text("Сбросить", locale: locale)) { selection = [] }
+          Button(L10n.text("Сбросить", locale: locale)) { selection = ExerciseMuscleSelection() }
             .accessibilityIdentifier("clearBodyMuscle")
         }
       }

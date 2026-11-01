@@ -219,3 +219,7 @@ xcodebuild -project FitnessTracker.xcodeproj -scheme FitnessTracker \
 ## Цветовые темы
 
 После обновления выполните `xcodegen generate`: добавлен `Apple/Design/FitnessColorTheme.swift`. Настройки → «Цветовая тема» предлагает Индиго, Океан, Лес, Роза и Янтарь; выбор сохраняется отдельно от Авто/Светлая/Тёмная и применяется без перезапуска. Проверьте все темы с iOS SDK в обеих схемах отображения и Increase Contrast, сохранение навигации/активной сессии и testColorThemeSwitchingKeepsActiveWorkoutAndPersistsChoice. Watch/widgets/Live Activity пока используют базовый индиго. [Сценарии](docs/XCODE_VALIDATION.md#цветовые-темы-приложения).
+
+## Выбор отдельных мышц
+
+После обновления выполните `xcodegen generate`: добавлен `Apple/Features/MuscleSelectionView.swift`, а SPM Core содержит `ExerciseMuscles.swift`. Каталог и шаблоны теперь используют 17 конкретных мышц из локальной free-exercise-db: целая группа либо отдельные мышцы, с частичным состоянием. Фильтрация учитывает основные мышцы; вспомогательные показаны в технике. Существующие muscleGroups и exercise IDs сохранены, новое поле шаблона muscles при отсутствии читается как пустое. Сборка iOS и тесты взаимодействия требуют Apple SDK. [Проверки](docs/XCODE_VALIDATION.md#группы-и-конкретные-мышцы-библиотеки).

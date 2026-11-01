@@ -186,25 +186,25 @@ struct TemplateEditor: View {
           TextField(L10n.text("Название плана", locale: locale), text: $template.name)
         }
         Section {
-          ForEach(MuscleGroup.allCases, id: \.self) { group in
-            Toggle(
-              L10n.text(group.title, locale: locale),
-              isOn: Binding(
-                get: { template.muscleGroups.contains(group) },
-                set: { selected in
-                  if selected {
-                    template.muscleGroups.insert(group)
-                  } else {
-                    template.muscleGroups.remove(group)
-                  }
-                }))
+          NavigationLink {
+            MuscleSelectionView(selection: $template.muscleSelection)
+          } label: {
+            VStack(alignment: .leading, spacing: 4) {
+              Text(L10n.text("Группы и мышцы", locale: locale))
+              Text(
+                template.muscleSelection.isEmpty
+                  ? L10n.text("Не выбраны", locale: locale)
+                  : MuscleSelectionText.summary(template.muscleSelection, locale: locale)
+              ).font(.subheadline).foregroundStyle(.secondary)
+            }
           }
+          .accessibilityIdentifier("chooseTemplateMuscles")
         } header: {
           Text(L10n.text("Основные группы мышц", locale: locale))
         } footer: {
           Text(
             L10n.text(
-              "Необязательно. Выбранные группы включат фильтр при добавлении упражнений.",
+              "Необязательно. Выбор включит фильтр по основным мышцам при добавлении упражнений.",
               locale: locale))
         }
         ForEach($template.exercises) { $exercise in
@@ -277,7 +277,7 @@ struct TemplateEditor: View {
         }
       }
       .sheet(isPresented: $picking) {
-        ExercisePicker(initialGroups: template.muscleGroups) {
+        ExercisePicker(initialGroups: template.muscleGroups, initialMuscles: template.muscles) {
           template.exercises.append(TemplateExercise(exercise: $0))
         }
       }
@@ -352,12 +352,9 @@ struct TemplateMuscleGroups: View {
   let template: WorkoutTemplate
 
   var body: some View {
-    if !template.muscleGroups.isEmpty {
-      Text(
-        MuscleGroup.allCases.filter { template.muscleGroups.contains($0) }
-          .map { L10n.text($0.title, locale: locale) }.joined(separator: ", ")
-      )
-      .font(.subheadline).foregroundStyle(.secondary)
+    if !template.muscleSelection.isEmpty {
+      Text(MuscleSelectionText.summary(template.muscleSelection, locale: locale))
+        .font(.subheadline).foregroundStyle(.secondary)
     }
   }
 }

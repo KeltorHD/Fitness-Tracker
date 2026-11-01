@@ -194,10 +194,12 @@ struct ExercisePicker: View {
   @Environment(\.dismiss) private var dismiss
   @State private var custom = false
   var initialGroups: Set<MuscleGroup> = []
+  var initialMuscles: Set<ExerciseMuscle> = []
   let select: (Exercise) -> Void
   var body: some View {
     NavigationStack {
-      ExerciseLibraryView(initialGroups: initialGroups) { exercise in
+      ExerciseLibraryView(initialGroups: initialGroups, initialMuscles: initialMuscles) {
+        exercise in
         select(exercise)
         dismiss()
       }

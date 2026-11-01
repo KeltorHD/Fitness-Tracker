@@ -71,6 +71,12 @@ struct WorkoutExerciseView: View {
     }
     .onDisappear { numberPad.dismiss() }
   }
+  private func primaryMuscleNames(_ exercise: Exercise) -> String {
+    let language = AppLanguage.system.resolved(preferredLanguages: [locale.identifier])
+    return ExerciseLibrary.entry(for: exercise.id, language: language)
+      .map { $0.primaryMuscles.joined(separator: ", ") } ?? exercise.muscle.title
+  }
+
   private func sessionHeader(_ workout: Workout) -> some View {
     HStack {
       Text("\((model.index(in: workout) ?? 0) + 1)/\(workout.exercises.count)")
@@ -107,7 +113,8 @@ struct WorkoutExerciseView: View {
               VStack(alignment: .leading, spacing: 6) {
                 Text(L10n.exerciseName(row.exercise, locale: locale)).font(.title2.bold())
                   .foregroundStyle(.primary).accessibilityAddTraits(.isHeader)
-                Text(row.exercise.muscle.title).font(.subheadline).foregroundStyle(.secondary)
+                Text(primaryMuscleNames(row.exercise)).font(.subheadline).foregroundStyle(
+                  .secondary)
               }.frame(maxWidth: .infinity, alignment: .leading)
               Menu {
                 NavigationLink {

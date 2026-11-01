@@ -6,61 +6,54 @@ struct ExerciseLibraryView: View {
   var onSelect: ((Exercise) -> Void)? = nil
   @State private var model: ExerciseLibraryViewModel
 
-  init(initialGroups: Set<MuscleGroup> = [], onSelect: ((Exercise) -> Void)? = nil) {
+  init(
+    initialGroups: Set<MuscleGroup> = [], initialMuscles: Set<ExerciseMuscle> = [],
+    onSelect: ((Exercise) -> Void)? = nil
+  ) {
     self.onSelect = onSelect
-    _model = State(initialValue: ExerciseLibraryViewModel(groups: initialGroups))
+    _model = State(
+      initialValue: ExerciseLibraryViewModel(groups: initialGroups, muscles: initialMuscles))
   }
 
   var body: some View {
     @Bindable var model = model
     List {
       Section {
-        HStack {
-          Menu {
-            Button(L10n.text("Все мышцы", locale: locale)) { model.groups = [] }
-            ForEach(MuscleGroup.allCases, id: \.self) { value in
-              Toggle(
-                L10n.text(value.title, locale: locale),
-                isOn: Binding(
-                  get: { model.groups.contains(value) },
-                  set: { selected in
-                    if selected { model.groups.insert(value) } else { model.groups.remove(value) }
-                  }))
-            }
-          } label: {
-            Label(
-              model.groups.isEmpty
-                ? L10n.text("Все мышцы", locale: locale)
-                : MuscleGroup.allCases.filter { model.groups.contains($0) }
-                  .map { L10n.text($0.title, locale: locale) }.joined(separator: ", "),
-              systemImage: "figure.strengthtraining.traditional")
+        NavigationLink {
+          MuscleSelectionView(selection: $model.muscleSelection, showsDoneButton: true)
+        } label: {
+          Label(
+            MuscleSelectionText.compactSummary(model.muscleSelection, locale: locale),
+            systemImage: "figure.strengthtraining.traditional")
+        }
+        .font(.subheadline)
+        .accessibilityIdentifier("chooseExerciseMuscles")
+        .accessibilityValue(MuscleSelectionText.summary(model.muscleSelection, locale: locale))
+        Menu {
+          Button(L10n.text("Весь инвентарь", locale: locale)) { model.equipment = [] }
+          ForEach(ExerciseEquipment.allCases, id: \.self) { value in
+            Toggle(
+              L10n.text(value.title, locale: locale),
+              isOn: Binding(
+                get: { model.equipment.contains(value) },
+                set: { selected in
+                  if selected {
+                    model.equipment.insert(value)
+                  } else {
+                    model.equipment.remove(value)
+                  }
+                }))
           }
-          Spacer()
-          Menu {
-            Button(L10n.text("Весь инвентарь", locale: locale)) { model.equipment = [] }
-            ForEach(ExerciseEquipment.allCases, id: \.self) { value in
-              Toggle(
-                L10n.text(value.title, locale: locale),
-                isOn: Binding(
-                  get: { model.equipment.contains(value) },
-                  set: { selected in
-                    if selected {
-                      model.equipment.insert(value)
-                    } else {
-                      model.equipment.remove(value)
-                    }
-                  }))
-            }
-          } label: {
-            Label(
-              model.equipment.isEmpty
-                ? L10n.text("Весь инвентарь", locale: locale)
-                : ExerciseEquipment.allCases.filter { model.equipment.contains($0) }
-                  .map { L10n.text($0.title, locale: locale) }.joined(separator: ", "),
-              systemImage: "line.3.horizontal.decrease"
-            )
-          }
-        }.font(.subheadline)
+        } label: {
+          Label(
+            model.equipment.isEmpty
+              ? L10n.text("Весь инвентарь", locale: locale)
+              : ExerciseEquipment.allCases.filter { model.equipment.contains($0) }
+                .map { L10n.text($0.title, locale: locale) }.joined(separator: ", "),
+            systemImage: "line.3.horizontal.decrease"
+          )
+        }
+        .font(.subheadline)
       } footer: {
         Text(
           L10n.format(
@@ -69,7 +62,7 @@ struct ExerciseLibraryView: View {
       }
       Section {
         DisclosureGroup(L10n.text("Выбрать на схеме тела", locale: locale)) {
-          ExerciseBodyPicker(selection: $model.groups)
+          ExerciseBodyPicker(selection: $model.muscleSelection)
             .padding(.vertical, 8)
         }
         .accessibilityIdentifier("exerciseBodyPicker")
@@ -101,7 +94,7 @@ struct ExerciseLibraryView: View {
             VStack(alignment: .leading, spacing: 5) {
               Text(entry.name).font(.headline).foregroundStyle(.primary)
               Text(
-                "\(L10n.text(entry.group.title, locale: locale)) · \(L10n.text(entry.equipment.title, locale: locale))"
+                "\(entry.primaryMuscles.joined(separator: ", ")) · \(L10n.text(entry.equipment.title, locale: locale))"
               )
               .font(.caption).foregroundStyle(.secondary)
             }

@@ -76,3 +76,27 @@ extension ExerciseLibraryFilterTests {
     XCTAssertEqual(model.results.count, ExerciseLibrary.entries.count)
   }
 }
+
+extension ExerciseLibraryFilterTests {
+  func testIndividualMusclePreferencesAreActiveImmediatelyAndCombineWithOtherFilters() {
+    let model = ExerciseLibraryViewModel(muscles: [.biceps])
+    XCTAssertFalse(model.results.isEmpty)
+    XCTAssertTrue(model.results.allSatisfy { $0.primaryMuscleIDs.contains(.biceps) })
+    model.search = "curl"
+    model.equipment = [.barbell, .dumbbell]
+    XCTAssertFalse(model.results.isEmpty)
+    let ids = Set(model.results.map(\.id))
+    model.language = .english
+    XCTAssertEqual(Set(model.results.map(\.id)), ids)
+    model.muscleSelection.set(MuscleGroup.arms, selected: true)
+    XCTAssertTrue(ids.isSubset(of: Set(model.results.map(\.id))))
+    model.muscleSelection.set(.biceps, selected: false)
+    XCTAssertEqual(model.muscleSelection.state(of: .arms), .partial)
+    XCTAssertTrue(model.results.allSatisfy { !$0.primaryMuscleIDs.contains(.biceps) })
+    XCTAssertEqual(model.search, "curl")
+    XCTAssertEqual(model.equipment, [.barbell, .dumbbell])
+    model.reset()
+    XCTAssertTrue(model.muscleSelection.isEmpty)
+    XCTAssertEqual(model.results.count, ExerciseLibrary.entries.count)
+  }
+}

@@ -467,6 +467,45 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertEqual(app.alerts.count, 0)
   }
 
+  @MainActor func testMusclePickerAllowsWholeGroupsAndIndividualMuscles() {
+    let app = launch()
+    let start = app.buttons["workoutStartAction"]
+    XCTAssertTrue(start.waitForExistence(timeout: 10))
+    start.tap()
+    app.buttons["startWorkoutWithoutTemplate"].tap()
+    XCTAssertTrue(app.buttons["addExercise"].waitForExistence(timeout: 5))
+    app.buttons["addExercise"].tap()
+    let choose = app.buttons["chooseExerciseMuscles"]
+    XCTAssertTrue(choose.waitForExistence(timeout: 5))
+    choose.tap()
+    let arms = app.buttons["muscleGroup_arms"]
+    XCTAssertTrue(arms.waitForExistence(timeout: 5))
+    arms.tap()
+    XCTAssertTrue(arms.isSelected)
+    let expansion = app.descendants(matching: .any)
+      .matching(identifier: "expandMuscleGroup_arms").firstMatch
+    reveal(expansion, in: app)
+    expansion.tap()
+    let biceps = app.switches["muscle_biceps"]
+    XCTAssertTrue(biceps.waitForExistence(timeout: 5))
+    XCTAssertEqual(biceps.value as? String, "1")
+    biceps.tap()
+    XCTAssertEqual(biceps.value as? String, "0")
+    XCTAssertEqual(app.switches["muscle_triceps"].value as? String, "1")
+    XCTAssertEqual(arms.value as? String, "Частично выбрано")
+    app.buttons["Готово"].tap()
+    choose.tap()
+    XCTAssertTrue(app.switches["muscle_biceps"].waitForExistence(timeout: 5))
+    XCTAssertEqual(app.switches["muscle_biceps"].value as? String, "0")
+    let reset = app.buttons["clearMuscleSelection"]
+    reveal(reset, in: app)
+    reset.tap()
+    XCTAssertFalse(reset.isEnabled)
+    app.buttons["Готово"].tap()
+    XCTAssertTrue(choose.waitForExistence(timeout: 5))
+    XCTAssertEqual(choose.value as? String, "Все мышцы")
+  }
+
   @MainActor func testColorThemeSwitchingKeepsActiveWorkoutAndPersistsChoice() {
     let app = launch()
     let start = app.buttons["workoutStartAction"]

@@ -1140,6 +1140,23 @@
         }
       }
     },
+    "Бицепс": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Бицепс"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Biceps"
+          }
+        }
+      }
+    },
     "Блочный тренажёр": {
       "extractionState": "manual",
       "localizations": {
@@ -2296,6 +2313,23 @@
         }
       }
     },
+    "Выбрать всю группу: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выбрать всю группу: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Select entire group: %@"
+          }
+        }
+      }
+    },
     "Выбрать на схеме тела": {
       "extractionState": "manual",
       "localizations": {
@@ -2449,6 +2483,23 @@
         }
       }
     },
+    "Грудные мышцы": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Грудные мышцы"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chest"
+          }
+        }
+      }
+    },
     "Грудь": {
       "extractionState": "manual",
       "localizations": {
@@ -2479,6 +2530,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Muscle group"
+          }
+        }
+      }
+    },
+    "Группы и мышцы": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Группы и мышцы"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Groups and muscles"
           }
         }
       }
@@ -2717,6 +2785,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Exercise actions"
+          }
+        }
+      }
+    },
+    "Дельтовидные мышцы": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Дельтовидные мышцы"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shoulders"
           }
         }
       }
@@ -3673,6 +3758,23 @@
         }
       }
     },
+    "Задняя поверхность бедра": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Задняя поверхность бедра"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hamstrings"
+          }
+        }
+      }
+    },
     "Закрыть": {
       "extractionState": "manual",
       "localizations": {
@@ -4009,6 +4111,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Heart rate readings for the day: %@. Days with step data: %@ of 7."
+          }
+        }
+      }
+    },
+    "Икроножные мышцы": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Икроножные мышцы"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calves"
           }
         }
       }
@@ -4489,6 +4608,23 @@
         }
       }
     },
+    "Квадрицепс": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Квадрицепс"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quadriceps"
+          }
+        }
+      }
+    },
     "Контролируйте движение и сохраняйте устойчивую опору. Используйте комфортную амплитуду.": {
       "extractionState": "manual",
       "localizations": {
@@ -4757,6 +4893,74 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ocean-blue accents"
+          }
+        }
+      }
+    },
+    "Мышцы живота": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Мышцы живота"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abdominals"
+          }
+        }
+      }
+    },
+    "Мышцы предплечья": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Мышцы предплечья"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forearms"
+          }
+        }
+      }
+    },
+    "Мышцы шеи": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Мышцы шеи"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neck"
+          }
+        }
+      }
+    },
+    "Мышцы: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Мышцы: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Muscles: %@"
           }
         }
       }
@@ -5182,6 +5386,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Start a workout and select AirPods Pro 3 in Apple Health mode."
+          }
+        }
+      }
+    },
+    "Не выбраны": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не выбраны"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "None selected"
           }
         }
       }
@@ -6019,6 +6240,23 @@
         }
       }
     },
+    "Необязательно. Выбор включит фильтр по основным мышцам при добавлении упражнений.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Необязательно. Выбор включит фильтр по основным мышцам при добавлении упражнений."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Optional. Your selection will filter exercises by their primary muscles when adding them."
+          }
+        }
+      }
+    },
     "Необязательно. Выбранные группы включат фильтр при добавлении упражнений.": {
       "extractionState": "manual",
       "localizations": {
@@ -6597,6 +6835,23 @@
         }
       }
     },
+    "Отводящие мышцы бедра": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Отводящие мышцы бедра"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abductors"
+          }
+        }
+      }
+    },
     "Отдых": {
       "extractionState": "manual",
       "localizations": {
@@ -6920,6 +7175,23 @@
         }
       }
     },
+    "Отметьте группу целиком или раскройте её и выберите отдельные мышцы.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Отметьте группу целиком или раскройте её и выберите отдельные мышцы."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Select a whole group or expand it to choose individual muscles."
+          }
+        }
+      }
+    },
     "Ошибка": {
       "extractionState": "manual",
       "localizations": {
@@ -7154,6 +7426,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Shoulders"
+          }
+        }
+      }
+    },
+    "Плечи и шея": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Плечи и шея"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shoulders and neck"
           }
         }
       }
@@ -7906,6 +8195,23 @@
         }
       }
     },
+    "Приводящие мышцы бедра": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Приводящие мышцы бедра"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adductors"
+          }
+        }
+      }
+    },
     "Приседания": {
       "extractionState": "manual",
       "localizations": {
@@ -8586,6 +8892,23 @@
         }
       }
     },
+    "Разгибатели спины": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Разгибатели спины"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lower back"
+          }
+        }
+      }
+    },
     "Разминка": {
       "extractionState": "manual",
       "localizations": {
@@ -8905,6 +9228,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Reset"
+          }
+        }
+      }
+    },
+    "Сбросить выбор": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сбросить выбор"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear selection"
           }
         }
       }
@@ -9402,6 +9742,23 @@
         }
       }
     },
+    "Снять выбор группы: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Снять выбор группы: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear group: %@"
+          }
+        }
+      }
+    },
     "Собственный вес": {
       "extractionState": "manual",
       "localizations": {
@@ -9619,6 +9976,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Average: %@"
+          }
+        }
+      }
+    },
+    "Средняя часть спины": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Средняя часть спины"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Middle back"
           }
         }
       }
@@ -9895,6 +10269,23 @@
         }
       }
     },
+    "Трапециевидные мышцы": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Трапециевидные мышцы"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Traps"
+          }
+        }
+      }
+    },
     "Трекер": {
       "extractionState": "manual",
       "localizations": {
@@ -10010,6 +10401,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Workouts"
+          }
+        }
+      }
+    },
+    "Трицепс": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Трицепс"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Triceps"
           }
         }
       }
@@ -10456,6 +10864,23 @@
         }
       }
     },
+    "Фильтр учитывает основные мышцы упражнения.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Фильтр учитывает основные мышцы упражнения."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The filter uses the primary muscles of each exercise."
+          }
+        }
+      }
+    },
     "Фитбол": {
       "extractionState": "manual",
       "localizations": {
@@ -10588,6 +11013,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Weekly goal: %@"
+          }
+        }
+      }
+    },
+    "Частично выбрано": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Частично выбрано"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partially selected"
           }
         }
       }
@@ -10762,6 +11204,23 @@
         }
       }
     },
+    "Широчайшие мышцы спины": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Широчайшие мышцы спины"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lats"
+          }
+        }
+      }
+    },
     "Штанга": {
       "extractionState": "manual",
       "localizations": {
@@ -10911,6 +11370,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "This mode is for AirPods Pro 3 with heart rate sensors. iOS chooses the available source and may also use Apple Watch."
+          }
+        }
+      }
+    },
+    "Ягодичные мышцы": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ягодичные мышцы"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Glutes"
           }
         }
       }

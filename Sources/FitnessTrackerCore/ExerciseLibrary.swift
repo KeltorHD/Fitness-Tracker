@@ -158,6 +158,8 @@ public enum ExerciseLibrary {
           ? entry.steps.isEmpty : entry.steps.count >= (value.locale == "ru" ? 3 : 1),
         entry.steps.allSatisfy({ !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }),
         !entry.primaryMuscles.isEmpty,
+        entry.primaryMuscleIDs.count == entry.primaryMuscles.count,
+        entry.secondaryMuscleIDs.count == entry.secondaryMuscles.count,
         missingImages ? entry.images.isEmpty : entry.images.count == 2,
         Set(entry.images).count == entry.images.count,
         entry.images.allSatisfy({ path in
@@ -210,6 +212,15 @@ public enum ExerciseLibrary {
     _ query: String = "", groups: Set<MuscleGroup> = [], equipment: Set<ExerciseEquipment>,
     language: AppLanguage = .russian
   ) -> [ExerciseLibraryEntry] {
+    search(
+      query, muscleSelection: ExerciseMuscleSelection(groups: groups), equipment: equipment,
+      language: language)
+  }
+
+  public static func search(
+    _ query: String = "", muscleSelection: ExerciseMuscleSelection,
+    equipment: Set<ExerciseEquipment> = [], language: AppLanguage = .russian
+  ) -> [ExerciseLibraryEntry] {
     let tokens = normalize(query).split(whereSeparator: \.isWhitespace).map(String.init)
     let candidates: [ExerciseLibraryEntry]
     switch language.resolved() == .english ? englishResult : result {
@@ -217,7 +228,7 @@ public enum ExerciseLibrary {
     case .failure: candidates = []
     }
     return candidates.filter { entry in
-      guard groups.isEmpty || groups.contains(entry.group),
+      guard muscleSelection.matches(entry),
         equipment.isEmpty || equipment.contains(entry.equipment)
       else { return false }
       let fields =
