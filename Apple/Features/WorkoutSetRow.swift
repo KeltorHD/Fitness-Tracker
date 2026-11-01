@@ -1,10 +1,38 @@
 import FitnessTrackerCore
 import SwiftUI
 
+private enum WorkoutSetTableLayout {
+  static let indexWidth: CGFloat = 44
+  static let statusWidth: CGFloat = 24
+  static let spacing: CGFloat = 12
+  static let horizontalPadding: CGFloat = 8
+}
+
+struct WorkoutSetTableHeader: View {
+  @Environment(\.locale) private var locale
+  @Environment(\.dynamicTypeSize) private var typeSize
+  let unit: WeightUnit
+
+  var body: some View {
+    if !typeSize.isAccessibilitySize {
+      HStack(spacing: WorkoutSetTableLayout.spacing) {
+        Text(L10n.text("Подход", locale: locale)).frame(width: WorkoutSetTableLayout.indexWidth)
+        Text(L10n.format("Вес, %@", L10n.text(unit.rawValue, locale: locale), locale: locale))
+          .frame(maxWidth: .infinity)
+        Text(L10n.text("Повторения", locale: locale)).frame(maxWidth: .infinity)
+        Image(systemName: "checkmark").frame(width: WorkoutSetTableLayout.statusWidth)
+      }
+      .font(.caption).foregroundStyle(.secondary).multilineTextAlignment(.center)
+      .padding(.horizontal, WorkoutSetTableLayout.horizontalPadding)
+      .accessibilityHidden(true)
+      .accessibilityIdentifier("workoutSetTableHeader")
+    }
+  }
+}
+
 struct WorkoutSetRow: View {
   @Environment(\.locale) private var locale
   @Environment(\.dynamicTypeSize) private var typeSize
-  @ScaledMetric(relativeTo: .largeTitle) private var numberSize: CGFloat = 34
   let set: WorkoutSet
   let index: Int
   var marker: String? = nil
@@ -21,58 +49,64 @@ struct WorkoutSetRow: View {
 
   var body: some View {
     VStack(alignment: .leading, spacing: 8) {
-      HStack(spacing: 12) {
+      HStack(spacing: WorkoutSetTableLayout.spacing) {
         Button(action: select) {
-          Text(marker ?? String(index + 1)).font(.body).monospacedDigit()
-            .frame(minWidth: 32, minHeight: 36)
-            .foregroundStyle(selected ? FitTheme.accent : FitTheme.muted)
-            .background(
-              selected ? FitTheme.accent.opacity(0.12) : FitTheme.card, in: .rect(cornerRadius: 12))
-        }.buttonStyle(.plain).frame(minWidth: 44, minHeight: 44).disabled(!editable)
-          .accessibilityLabel(
-            L10n.format(
-              marker == nil ? "Подход %@" : "Снижение веса %@", String(index + 1), locale: locale)
-          )
-          .accessibilityAddTraits(selected ? .isSelected : [])
+          Text(marker ?? String(index + 1)).font(.callout.weight(selected ? .semibold : .regular))
+            .monospacedDigit().foregroundStyle(selected ? FitTheme.accent : FitTheme.muted)
+            .frame(maxWidth: .infinity, minHeight: 44)
+            .contentShape(.rect)
+        }
+        .buttonStyle(.plain).frame(width: WorkoutSetTableLayout.indexWidth).disabled(!editable)
+        .accessibilityLabel(
+          L10n.format(
+            marker == nil ? "Подход %@" : "Снижение веса %@", String(index + 1), locale: locale)
+        )
+        .accessibilityAddTraits(selected ? .isSelected : [])
         Group {
           if typeSize.isAccessibilitySize {
-            VStack(alignment: .leading, spacing: 8) {
-              weightField
-              repetitionsField
+            VStack(alignment: .leading, spacing: 12) {
+              VStack(alignment: .leading, spacing: 2) {
+                Text(
+                  L10n.format("Вес, %@", L10n.text(unit.rawValue, locale: locale), locale: locale)
+                )
+                .font(.caption).foregroundStyle(.secondary)
+                weightField
+              }
+              VStack(alignment: .leading, spacing: 2) {
+                Text(L10n.text("Повторения", locale: locale)).font(.caption)
+                  .foregroundStyle(.secondary)
+                repetitionsField
+              }
             }
           } else {
-            HStack(alignment: .firstTextBaseline, spacing: 6) {
+            HStack(spacing: WorkoutSetTableLayout.spacing) {
               weightField
-              separator
               repetitionsField
             }
           }
         }.frame(maxWidth: .infinity)
-        if set.completedAt != nil {
-          Image(systemName: "checkmark").font(.caption.bold()).foregroundStyle(FitTheme.accent)
-            .accessibilityLabel(L10n.text("Подход выполнен", locale: locale))
-        }
+        Image(systemName: set.completedAt != nil ? "checkmark.circle.fill" : "circle")
+          .font(.body)
+          .foregroundStyle(
+            set.completedAt != nil
+              ? FitTheme.muted : selected ? FitTheme.accent : FitTheme.separator
+          )
+          .frame(width: WorkoutSetTableLayout.statusWidth)
+          .accessibilityLabel(
+            L10n.text(set.completedAt != nil ? "Подход выполнен" : "Не выполнено", locale: locale))
       }
       if set.isWarmup || set.isDropSet || (set.loadMultiplier ?? 1) > 1 {
-        HStack {
-          if set.isWarmup {
-            Label(L10n.text("Разминка", locale: locale), systemImage: "flame")
-              .foregroundStyle(FitTheme.accent).padding(.horizontal, 8).padding(.vertical, 4)
-              .background(FitTheme.accent.opacity(0.1), in: .capsule).accessibilityIdentifier(
-                "warmupSet")
-          }
-          if set.isDropSet {
-            Text(L10n.format("Дропсет · этапов: %@", String(set.stages.count), locale: locale))
-              .foregroundStyle(FitTheme.accent).padding(.horizontal, 8).padding(.vertical, 4)
-              .background(FitTheme.accent.opacity(0.1), in: .capsule)
-          }
-          if let multiplier = set.loadMultiplier, multiplier > 1 {
-            Text(L10n.format("Множитель веса: %@", String(multiplier), locale: locale))
-          }
-        }.font(.caption).foregroundStyle(.secondary).padding(.leading, 44)
+        ViewThatFits(in: .horizontal) {
+          HStack(spacing: 8) { metadata }
+          VStack(alignment: .leading, spacing: 6) { metadata }
+        }
+        .font(.caption).foregroundStyle(.secondary)
+        .padding(.leading, WorkoutSetTableLayout.indexWidth + WorkoutSetTableLayout.spacing)
       }
     }
-    .padding(.vertical, typeSize.isAccessibilitySize ? 16 : 12)
+    .padding(.horizontal, WorkoutSetTableLayout.horizontalPadding)
+    .padding(.vertical, typeSize.isAccessibilitySize ? 16 : 8)
+    .background(selected ? FitTheme.accent.opacity(0.09) : Color.clear, in: .rect(cornerRadius: 16))
     .contextMenu {
       if editable && showsWarmupAction && !set.isDropSet {
         Button(
@@ -81,26 +115,47 @@ struct WorkoutSetRow: View {
       }
     }
   }
-  private var separator: some View {
-    Text("×").font(.title2).foregroundStyle(.secondary).accessibilityHidden(true)
+
+  @ViewBuilder private var metadata: some View {
+    if set.isWarmup {
+      Label(L10n.text("Разминка", locale: locale), systemImage: "flame")
+        .foregroundStyle(FitTheme.accent).padding(.horizontal, 8).padding(.vertical, 4)
+        .background(FitTheme.accent.opacity(0.1), in: .capsule).accessibilityIdentifier("warmupSet")
+    }
+    if set.isDropSet {
+      Text(L10n.format("Дропсет · этапов: %@", String(set.stages.count), locale: locale))
+        .foregroundStyle(FitTheme.accent).padding(.horizontal, 8).padding(.vertical, 4)
+        .background(FitTheme.accent.opacity(0.1), in: .capsule)
+    }
+    if let multiplier = set.loadMultiplier, multiplier > 1 {
+      Text(L10n.format("Множитель веса: %@", String(multiplier), locale: locale))
+    }
   }
+
   private var weightField: some View {
-    HStack(alignment: .firstTextBaseline, spacing: 3) {
+    Group {
       if editable {
         valueButton(weight, field: .weight(set.id))
           .accessibilityIdentifier("setWeight_\(set.id)")
           .accessibilityLabel(
             L10n.format("Вес в %@", L10n.text(unit.rawValue, locale: locale), locale: locale))
       } else {
-        Text(
-          unit.display(set.weightKG),
-          format: .number.locale(L10n.numberLocale).precision(.fractionLength(0...2))
-        )
-        .frame(maxWidth: .infinity, alignment: .trailing)
+        Text(formattedWeight).frame(maxWidth: .infinity, minHeight: 44)
+          .accessibilityLabel(
+            L10n.format(
+              "Вес: %@ %@", formattedWeight, L10n.text(unit.rawValue, locale: locale),
+              locale: locale))
       }
-      Text(L10n.text(unit.rawValue, locale: locale)).font(.body).foregroundStyle(.secondary)
-    }.font(.system(size: numberSize, weight: .regular)).monospacedDigit()
+    }
+    .font(.title2.weight(.medium)).monospacedDigit()
+    .foregroundStyle(set.completedAt != nil ? Color.secondary : .primary)
   }
+
+  private var formattedWeight: String {
+    unit.display(set.weightKG).formatted(
+      .number.locale(L10n.numberLocale).precision(.fractionLength(0...2)))
+  }
+
   private var repetitionsField: some View {
     Group {
       if editable {
@@ -108,10 +163,15 @@ struct WorkoutSetRow: View {
           .accessibilityIdentifier("setRepetitions_\(set.id)")
           .accessibilityLabel(L10n.text("Повторения", locale: locale))
       } else {
-        Text(String(set.repetitions)).frame(maxWidth: .infinity, alignment: .leading)
+        Text(String(set.repetitions)).frame(maxWidth: .infinity, minHeight: 44)
+          .accessibilityLabel(
+            L10n.format("Повторения: %@", String(set.repetitions), locale: locale))
       }
-    }.font(.system(size: numberSize, weight: .regular)).monospacedDigit()
+    }
+    .font(.title2.weight(.medium)).monospacedDigit()
+    .foregroundStyle(set.completedAt != nil ? Color.secondary : .primary)
   }
+
   private func valueButton(_ value: String, field: WorkoutSetField) -> some View {
     let active = numberPad.field == field
     return Button {
@@ -125,12 +185,11 @@ struct WorkoutSetRow: View {
         .overlay(alignment: .bottom) {
           if active { Capsule().fill(FitTheme.accent).frame(height: 3) }
         }
-        .frame(maxWidth: .infinity, minHeight: 44, alignment: field.isWeight ? .trailing : .leading)
+        .frame(maxWidth: .infinity, minHeight: 44)
         .contentShape(.rect)
     }.buttonStyle(.plain).lineLimit(1).minimumScaleFactor(0.65)
       .accessibilityValue(value.isEmpty ? "0" : value)
       .accessibilityHint(L10n.text("Открыть цифровую панель", locale: locale))
       .accessibilityAddTraits(active ? .isSelected : [])
   }
-
 }

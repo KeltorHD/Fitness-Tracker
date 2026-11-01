@@ -18,10 +18,6 @@ struct ActiveWorkoutView: View {
       if let workout = store.active {
         overview(workout)
           .navigationTitle("").navigationBarTitleDisplayMode(.inline)
-          .toolbarBackground(FitTheme.accent, for: .navigationBar).toolbarBackground(
-            .visible, for: .navigationBar
-          )
-          .toolbarColorScheme(.dark, for: .navigationBar)
           .safeAreaInset(edge: .bottom, spacing: 0) { SessionControls(workout: workout) }
           .toolbar {
             ToolbarItem(placement: .topBarLeading) {
@@ -39,9 +35,9 @@ struct ActiveWorkoutView: View {
                 }
                 .font(.headline)
                 Text(workout.startedAt, format: .dateTime.weekday(.wide).hour().minute())
-                  .font(.caption2).lineLimit(1)
+                  .font(.caption2).foregroundStyle(.secondary).lineLimit(1)
               }
-              .foregroundStyle(.white)
+              .foregroundStyle(.primary)
               .accessibilityElement(children: .combine)
               .accessibilityAddTraits(.isHeader)
               .accessibilityIdentifier("activeWorkoutHeader")
@@ -69,7 +65,7 @@ struct ActiveWorkoutView: View {
                   role: .destructive
                 ) { confirmCancel = true }
               } label: {
-                Image(systemName: "ellipsis").foregroundStyle(.white)
+                Image(systemName: "ellipsis").foregroundStyle(.primary)
               }
               .accessibilityLabel(L10n.text("Действия тренировки", locale: locale))
             }

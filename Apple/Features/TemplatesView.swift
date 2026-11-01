@@ -89,18 +89,19 @@ struct TemplateOverviewView: View {
         WorkoutHero(title: current.name)
         VStack(spacing: 20) {
           TemplateMuscleGroups(template: current)
-          HStack(spacing: 8) {
-            SummaryMetric(
-              title: L10n.text("Упражнения", locale: locale), value: "\(current.exercises.count)")
-            SummaryMetric(
+          WorkoutSummaryCard(metrics: [
+            (title: L10n.text("Упражнения", locale: locale), value: "\(current.exercises.count)"),
+            (
               title: L10n.text("Подходы", locale: locale),
-              value: "\(current.exercises.reduce(0) { $0 + $1.setCount })")
-            SummaryMetric(
+              value: "\(current.exercises.reduce(0) { $0 + $1.setCount })"
+            ),
+            (
               title: L10n.text("Отдых", locale: locale),
               value: current.restSeconds == 0
                 ? L10n.text("Произвольный", locale: locale)
-                : L10n.format("%@ с", String(current.restSeconds), locale: locale))
-          }
+                : L10n.format("%@ с", String(current.restSeconds), locale: locale)
+            ),
+          ])
           ForEach(Array(current.exercises.enumerated()), id: \.element.id) { index, item in
             NavigationLink {
               ExerciseDetailView(exercise: item.exercise)

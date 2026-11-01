@@ -65,18 +65,14 @@ struct WorkoutDetailView: View {
     .accessibilityIdentifier("workoutDetailScroll")
     .background(FitTheme.paper).navigationBarTitleDisplayMode(.inline)
     .safeAreaInset(edge: .top) { if store.isDemoMode { DemoModeBanner() } }
-    .toolbarBackground(FitTheme.accent, for: .navigationBar).toolbarBackground(
-      .visible, for: .navigationBar
-    )
-    .toolbarColorScheme(.dark, for: .navigationBar)
     .toolbar {
       ToolbarItem(placement: .principal) {
         Text(session.startedAt, format: .dateTime.weekday(.wide).hour().minute())
-          .font(.subheadline).textCase(.uppercase).foregroundStyle(.white)
+          .font(.subheadline).foregroundStyle(.secondary)
       }
       ToolbarItem(placement: .topBarLeading) {
         Button(L10n.text("Закрыть", locale: locale), systemImage: "chevron.down") { dismiss() }
-          .foregroundStyle(.white)
+          .foregroundStyle(.primary)
       }
       ToolbarItem(placement: .topBarTrailing) {
         Menu {
@@ -96,7 +92,7 @@ struct WorkoutDetailView: View {
             confirmDelete = true
           }
         } label: {
-          Image(systemName: "ellipsis.circle.fill").foregroundStyle(.white)
+          Image(systemName: "ellipsis.circle.fill").foregroundStyle(.primary)
         }
       }
     }

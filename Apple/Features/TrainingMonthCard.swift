@@ -120,7 +120,7 @@ private struct TrainingMonthCalendar: View {
           Circle().fill(.clear).aspectRatio(1, contentMode: .fit)
             .overlay {
               if day.hasWorkout {
-                Circle().fill(FitTheme.header)
+                Circle().fill(FitTheme.accent)
               } else if day.isInMonth {
                 Circle().stroke(FitTheme.separator, lineWidth: 1)
               }
@@ -131,7 +131,8 @@ private struct TrainingMonthCalendar: View {
                 .lineLimit(1).minimumScaleFactor(0.7)
                 .foregroundStyle(
                   day.hasWorkout
-                    ? Color.white : day.isInMonth ? Color.primary : Color.secondary.opacity(0.6))
+                    ? FitTheme.accentForeground
+                    : day.isInMonth ? Color.primary : Color.secondary.opacity(0.6))
             }
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(
@@ -177,7 +178,7 @@ private struct TrainingMonthStatistics: View {
     ZStack {
       Circle().stroke(FitTheme.separator, lineWidth: 12)
       Circle().trim(from: 0, to: summary.trainingDayFraction)
-        .stroke(FitTheme.header, style: StrokeStyle(lineWidth: 12, lineCap: .round))
+        .stroke(FitTheme.accent, style: StrokeStyle(lineWidth: 12, lineCap: .round))
         .rotationEffect(.degrees(-90))
     }.frame(width: 52, height: 52).padding(6)
       .accessibilityLabel(L10n.text("Дни с тренировками в выбранном месяце", locale: locale))

@@ -24,7 +24,7 @@ struct WorkoutNavigationBar: View {
           VStack(spacing: 4) {
             Image(systemName: "play.fill")
               .font(.system(size: 22, weight: .semibold))
-              .foregroundStyle(.white)
+              .foregroundStyle(FitTheme.accentForeground)
               .frame(width: 52, height: 52)
               .glassEffect(.regular.tint(FitTheme.accent).interactive(), in: .circle)
               .glassEffectID("workoutStart", in: selectionGlass)

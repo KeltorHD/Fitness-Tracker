@@ -206,6 +206,38 @@ final class FitnessTrackerUITests: XCTestCase {
       app.descendants(matching: .any).matching(identifier: "workoutNumberPad").firstMatch.exists)
   }
 
+  @MainActor func testWorkoutTableKeepsEditingAndCompletedRowsReadOnly() {
+    let app = launch()
+    let start = app.buttons["workoutStartAction"]
+    XCTAssertTrue(start.waitForExistence(timeout: 10))
+    start.tap()
+    let template = app.buttons["startWorkoutTemplate_20000000-0000-0000-0000-000000000001"]
+    reveal(template, in: app)
+    template.tap()
+    app.buttons["startSelectedTemplates"].tap()
+    let exercise = app.buttons["openWorkoutExercise"].firstMatch
+    XCTAssertTrue(exercise.waitForExistence(timeout: 5))
+    exercise.tap()
+    let weights = app.buttons.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "setWeight_"))
+    XCTAssertTrue(weights.firstMatch.waitForExistence(timeout: 5))
+    let firstWeightID = weights.firstMatch.identifier
+    weights.firstMatch.tap()
+    app.buttons["numberPadDigit_5"].tap()
+    app.buttons["numberPadDigit_0"].tap()
+    app.buttons["numberPadNext"].tap()
+    app.buttons["numberPadDigit_1"].tap()
+    app.buttons["numberPadDigit_0"].tap()
+    app.buttons["numberPadHide"].tap()
+    app.buttons["completeSet"].tap()
+    XCTAssertTrue(weights.firstMatch.waitForExistence(timeout: 5))
+    XCTAssertNotEqual(weights.firstMatch.identifier, firstWeightID)
+    XCTAssertFalse(app.buttons[firstWeightID].exists)
+    weights.firstMatch.tap()
+    XCTAssertTrue(app.buttons["numberPadDigit_5"].waitForExistence(timeout: 5))
+    XCTAssertEqual(app.alerts.count, 0)
+  }
+
   @MainActor func testBodyWeightCanBeRecordedFromResults() {
     let app = launch()
     app.buttons["navigationTab_2"].tap()

@@ -1667,6 +1667,40 @@
         }
       }
     },
+    "Вес, %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вес, %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weight, %@"
+          }
+        }
+      }
+    },
+    "Вес: %@ %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вес: %@ %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weight: %@ %@"
+          }
+        }
+      }
+    },
     "Весы": {
       "extractionState": "manual",
       "localizations": {
@@ -7392,6 +7426,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pull-ups"
+          }
+        }
+      }
+    },
+    "Подход": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Подход"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set"
           }
         }
       }

@@ -15,13 +15,13 @@ struct WorkoutSetGroupView: View {
       row(set, index: index)
       if let stages = set.dropStages {
         ForEach(Array(stages.enumerated()), id: \.element.id) { offset, stage in
-          Divider().padding(.leading, 52)
+          Divider().padding(.leading, 64)
           row(
             WorkoutSet(
               id: stage.id, repetitions: stage.repetitions, weightKG: stage.weightKG,
               completedAt: stage.completedAt), index: offset, marker: "↓\(offset + 1)"
           )
-          .padding(.leading, 12).accessibilityIdentifier("dropStage")
+          .accessibilityIdentifier("dropStage")
           if workout.status == .completed, stage.completedAt == nil {
             Text(L10n.text("Не выполнено", locale: locale)).font(.caption).foregroundStyle(
               .secondary
@@ -32,7 +32,6 @@ struct WorkoutSetGroupView: View {
           .font(.caption).foregroundStyle(.secondary).padding(.leading, 52).padding(.bottom, 10)
       }
     }
-    .padding(.horizontal, set.isDropSet ? 8 : 0)
     .background(set.isDropSet ? FitTheme.card.opacity(0.5) : .clear, in: .rect(cornerRadius: 16))
     .accessibilityIdentifier(set.isDropSet ? "dropSetGroup" : "workoutSetGroup")
   }

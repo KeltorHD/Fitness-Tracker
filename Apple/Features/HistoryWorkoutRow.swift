@@ -37,7 +37,7 @@ struct HistoryWorkoutRow: View {
                 String(L10n.text(unit.rawValue, locale: locale)),
                 L10n.countText(workout.completedSets, kind: "set", locale: locale), locale: locale)
             )
-            .font(.subheadline).foregroundStyle(.primary)
+            .font(.subheadline).foregroundStyle(.secondary)
           }.frame(maxWidth: .infinity, alignment: .leading).fitCard()
         }.buttonStyle(.plain)
           .contextMenu {
