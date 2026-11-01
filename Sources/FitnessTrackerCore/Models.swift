@@ -111,19 +111,21 @@ public struct WorkoutTemplate: Identifiable, Codable, Equatable, Sendable {
   public var exercises: [TemplateExercise]
   public var restSeconds: Int
   public var muscleGroups: Set<MuscleGroup>
+  public var preferredWeekdays: Set<WorkoutWeekday>
   public init(
     id: UUID = UUID(), name: String, exercises: [TemplateExercise], restSeconds: Int = 0,
-    muscleGroups: Set<MuscleGroup> = []
+    muscleGroups: Set<MuscleGroup> = [], preferredWeekdays: Set<WorkoutWeekday> = []
   ) {
     self.id = id
     self.name = name
     self.exercises = exercises
     self.restSeconds = restSeconds
     self.muscleGroups = muscleGroups
+    self.preferredWeekdays = preferredWeekdays
   }
 
   private enum CodingKeys: String, CodingKey {
-    case id, name, exercises, restSeconds, muscleGroups
+    case id, name, exercises, restSeconds, muscleGroups, preferredWeekdays
   }
 
   public init(from decoder: Decoder) throws {
@@ -132,8 +134,10 @@ public struct WorkoutTemplate: Identifiable, Codable, Equatable, Sendable {
     name = try container.decode(String.self, forKey: .name)
     exercises = try container.decode([TemplateExercise].self, forKey: .exercises)
     restSeconds = try container.decode(Int.self, forKey: .restSeconds)
-    // Additive migration: existing templates have no preferred muscle filter.
+    // Additive migration: existing templates have no preferred filters or training days.
     muscleGroups = try container.decodeIfPresent(Set<MuscleGroup>.self, forKey: .muscleGroups) ?? []
+    preferredWeekdays =
+      try container.decodeIfPresent(Set<WorkoutWeekday>.self, forKey: .preferredWeekdays) ?? []
   }
 
   public func start(at date: Date = Date()) throws -> Workout {

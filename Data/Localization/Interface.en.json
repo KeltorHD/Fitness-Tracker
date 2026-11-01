@@ -626,5 +626,16 @@
   "Параметры выполнения": "Workout parameters",
   "Произвольный": "As needed",
   "По таймеру": "Timed",
-  "Отдых общий для всех упражнений. При произвольном отдыхе таймер не запускается.": "Rest applies to all exercises. No timer starts when resting as needed."
+  "Отдых общий для всех упражнений. При произвольном отдыхе таймер не запускается.": "Rest applies to all exercises. No timer starts when resting as needed.",
+  "Дни тренировок": "Training days",
+  "На сегодня": "For today",
+  "Другие шаблоны": "Other templates",
+  "Необязательно. В выбранные дни шаблон будет показываться первым при начале тренировки.": "Optional. On selected days, this template will appear first when starting a workout.",
+  "Понедельник": "Monday",
+  "Вторник": "Tuesday",
+  "Среда": "Wednesday",
+  "Четверг": "Thursday",
+  "Пятница": "Friday",
+  "Суббота": "Saturday",
+  "Воскресенье": "Sunday"
 }

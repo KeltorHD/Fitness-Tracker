@@ -220,6 +220,7 @@ struct TemplateEditor: View {
         }
         Section {
           DisclosureGroup(L10n.text("Параметры выполнения", locale: locale)) {
+            TemplateTrainingDays(selection: $template.preferredWeekdays)
             Picker(
               L10n.text("Отдых между подходами", locale: locale),
               selection: Binding(
@@ -281,6 +282,34 @@ struct TemplateEditor: View {
       .archiveTransferPresenter(when: store.showingTemplateEditor && !picking)
       .safeAreaInset(edge: .top) { if store.isDemoMode { DemoModeBanner() } }
     }
+  }
+}
+
+private struct TemplateTrainingDays: View {
+  @Environment(\.locale) private var locale
+  @Environment(\.calendar) private var calendar
+  @Binding var selection: Set<WorkoutWeekday>
+
+  var body: some View {
+    VStack(alignment: .leading, spacing: 12) {
+      Text(L10n.text("Дни тренировок", locale: locale)).font(.headline)
+      ForEach(WorkoutWeekday.ordered(in: calendar), id: \.self) { day in
+        Toggle(
+          L10n.text(day.title, locale: locale),
+          isOn: Binding(
+            get: { selection.contains(day) },
+            set: { selected in
+              if selected { selection.insert(day) } else { selection.remove(day) }
+            })
+        )
+        .accessibilityIdentifier("templateWeekday_\(day.rawValue)")
+      }
+      Text(
+        L10n.text(
+          "Необязательно. В выбранные дни шаблон будет показываться первым при начале тренировки.",
+          locale: locale)
+      ).font(.caption).foregroundStyle(.secondary)
+    }.padding(.vertical, 4)
   }
 }
 

@@ -1,5 +1,6 @@
 import FitnessTrackerCore
 import SwiftUI
+import UIKit
 
 enum WorkoutStartSelection {
   case empty
@@ -9,6 +10,10 @@ enum WorkoutStartSelection {
 struct WorkoutStartView: View {
   @Environment(AppStore.self) private var store
   @Environment(\.locale) private var locale
+  @Environment(\.calendar) private var calendar
+  @Environment(\.timeZone) private var timeZone
+  @Environment(\.scenePhase) private var phase
+  @State private var currentDate = Date()
   @Environment(\.dismiss) private var dismiss
   @State private var selectedIDs: [UUID] = []
   let onSelect: (WorkoutStartSelection) -> Void
@@ -17,7 +22,15 @@ struct WorkoutStartView: View {
     selectedIDs.compactMap { id in store.templates.first { $0.id == id } }
   }
 
+  private var localCalendar: Calendar {
+    var value = calendar
+    value.timeZone = timeZone
+    return value
+  }
+
   var body: some View {
+    let suggestions = WorkoutTemplateSuggestions(
+      templates: store.templates, date: currentDate, calendar: localCalendar)
     NavigationStack {
       ScrollView {
         LazyVStack(alignment: .leading, spacing: 16) {
@@ -66,36 +79,17 @@ struct WorkoutStartView: View {
             .font(.subheadline).foregroundStyle(.secondary)
             .accessibilityIdentifier("workoutStartEmptyTemplates")
           }
-          ForEach(store.templates) { template in
-            let selectionIndex = selectedIDs.firstIndex(of: template.id)
-            Button {
-              if let selectionIndex {
-                selectedIDs.remove(at: selectionIndex)
-              } else {
-                selectedIDs.append(template.id)
-              }
-            } label: {
-              HStack(spacing: 14) {
-                Image(systemName: "dumbbell").foregroundStyle(FitTheme.accent)
-                  .accessibilityHidden(true)
-                VStack(alignment: .leading, spacing: 4) {
-                  Text(template.name).font(.headline)
-                  TemplateMuscleGroups(template: template)
-                  if let selectionIndex {
-                    Text(L10n.format("Порядок: %@", String(selectionIndex + 1), locale: locale))
-                      .font(.caption).foregroundStyle(.secondary)
-                  }
-                }.frame(maxWidth: .infinity, alignment: .leading)
-                Image(systemName: selectionIndex == nil ? "circle" : "checkmark.circle.fill")
-                  .foregroundStyle(selectionIndex == nil ? FitTheme.muted : FitTheme.accent)
-                  .accessibilityHidden(true)
-              }
-              .padding(18).frame(minHeight: 64)
-              .background(FitTheme.card, in: .rect(cornerRadius: FitTheme.radius))
-              .contentShape(.rect)
+          if !suggestions.today.isEmpty {
+            templateHeading("На сегодня")
+            ForEach(suggestions.today) { template in
+              templateRow(template)
             }
-            .buttonStyle(.plain).accessibilityIdentifier("startWorkoutTemplate_\(template.id)")
-            .accessibilityAddTraits(selectionIndex == nil ? [] : [.isSelected])
+            if !suggestions.others.isEmpty {
+              templateHeading("Другие шаблоны")
+            }
+          }
+          ForEach(suggestions.others) { template in
+            templateRow(template)
           }
         }
         .padding(16)
@@ -122,6 +116,14 @@ struct WorkoutStartView: View {
           .background(FitTheme.paper)
         }
       }
+      .onChange(of: phase) {
+        if phase == .active { currentDate = Date() }
+      }
+      .onReceive(
+        NotificationCenter.default.publisher(for: UIApplication.significantTimeChangeNotification)
+      ) { _ in
+        currentDate = Date()
+      }
       .onChange(of: store.templates.map(\.id)) {
         let availableIDs = Set(store.templates.map(\.id))
         selectedIDs.removeAll { !availableIDs.contains($0) }
@@ -134,4 +136,43 @@ struct WorkoutStartView: View {
       }
     }
   }
+
+  private func templateHeading(_ title: String) -> some View {
+    Text(L10n.text(title, locale: locale))
+      .font(.headline).foregroundStyle(.secondary).padding(.top, 8)
+      .accessibilityAddTraits(.isHeader)
+  }
+
+  private func templateRow(_ template: WorkoutTemplate) -> some View {
+    let selectionIndex = selectedIDs.firstIndex(of: template.id)
+    return Button {
+      if let selectionIndex {
+        selectedIDs.remove(at: selectionIndex)
+      } else {
+        selectedIDs.append(template.id)
+      }
+    } label: {
+      HStack(spacing: 14) {
+        Image(systemName: "dumbbell").foregroundStyle(FitTheme.accent)
+          .accessibilityHidden(true)
+        VStack(alignment: .leading, spacing: 4) {
+          Text(template.name).font(.headline)
+          TemplateMuscleGroups(template: template)
+          if let selectionIndex {
+            Text(L10n.format("Порядок: %@", String(selectionIndex + 1), locale: locale))
+              .font(.caption).foregroundStyle(.secondary)
+          }
+        }.frame(maxWidth: .infinity, alignment: .leading)
+        Image(systemName: selectionIndex == nil ? "circle" : "checkmark.circle.fill")
+          .foregroundStyle(selectionIndex == nil ? FitTheme.muted : FitTheme.accent)
+          .accessibilityHidden(true)
+      }
+      .padding(18).frame(minHeight: 64)
+      .background(FitTheme.card, in: .rect(cornerRadius: FitTheme.radius))
+      .contentShape(.rect)
+    }
+    .buttonStyle(.plain).accessibilityIdentifier("startWorkoutTemplate_\(template.id)")
+    .accessibilityAddTraits(selectionIndex == nil ? [] : [.isSelected])
+  }
+
 }

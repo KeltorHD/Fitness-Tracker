@@ -1837,6 +1837,23 @@
         }
       }
     },
+    "Воскресенье": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Воскресенье"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sunday"
+          }
+        }
+      }
+    },
     "Воспроизвести анимацию": {
       "extractionState": "manual",
       "localizations": {
@@ -2088,6 +2105,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Full body · B"
+          }
+        }
+      }
+    },
+    "Вторник": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вторник"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tuesday"
           }
         }
       }
@@ -2976,6 +3010,23 @@
         }
       }
     },
+    "Дни тренировок": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Дни тренировок"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Training days"
+          }
+        }
+      }
+    },
     "Добавить": {
       "extractionState": "manual",
       "localizations": {
@@ -3295,6 +3346,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "A drop set must have 1 to 5 weight drops. Each weight must be lower than the previous one. Warm-ups are recorded separately."
+          }
+        }
+      }
+    },
+    "Другие шаблоны": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Другие шаблоны"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Other templates"
           }
         }
       }
@@ -4659,6 +4727,23 @@
         }
       }
     },
+    "На сегодня": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "На сегодня"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For today"
+          }
+        }
+      }
+    },
     "На этой неделе": {
       "extractionState": "manual",
       "localizations": {
@@ -5811,6 +5896,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Invalid workout time."
+          }
+        }
+      }
+    },
+    "Необязательно. В выбранные дни шаблон будет показываться первым при начале тренировки.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Необязательно. В выбранные дни шаблон будет показываться первым при начале тренировки."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Optional. On selected days, this template will appear first when starting a workout."
           }
         }
       }
@@ -7498,6 +7600,23 @@
         }
       }
     },
+    "Понедельник": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Понедельник"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Monday"
+          }
+        }
+      }
+    },
     "Понятно": {
       "extractionState": "manual",
       "localizations": {
@@ -8208,6 +8327,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Heart rate monitor connected"
+          }
+        }
+      }
+    },
+    "Пятница": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пятница"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Friday"
           }
         }
       }
@@ -9232,6 +9368,23 @@
         }
       }
     },
+    "Среда": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Среда"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wednesday"
+          }
+        }
+      }
+    },
     "Средний": {
       "extractionState": "manual",
       "localizations": {
@@ -9330,6 +9483,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Row %@: check the “%@” field."
+          }
+        }
+      }
+    },
+    "Суббота": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Суббота"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saturday"
           }
         }
       }
@@ -10180,6 +10350,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Weekly goal: %@"
+          }
+        }
+      }
+    },
+    "Четверг": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Четверг"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thursday"
           }
         }
       }
