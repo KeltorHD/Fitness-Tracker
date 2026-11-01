@@ -137,3 +137,5 @@ Watch записывает отдельный стартовый план и п�
 Множественный фильтр инвентаря: **Implemented**. Меню поддерживает независимые отметки нескольких типов; объединение типов пересекается с группами мышц и поиском, пустой выбор означает весь инвентарь. Core search: **Linux-tested**; переносимая модель — Swift 6 type-check и исполнение с реальным Core (объединение типов, поиск/мышцы, язык, снятие отметки и сброс). SwiftUI/Apple XCTest: **Requires Xcode validation**.
 
 Дни тренировок шаблона: **Implemented**. Необязательный набор preferredWeekdays с additive migration старых payloads; выбор в «Параметрах выполнения», группы «На сегодня»/«Другие шаблоны» без дублей и без автоматического выбора, обновление дня/foreground. Core schedule/archive/repository/legacy/timezone/DST: **Linux-tested**. SwiftUI и системные события времени: **Requires Xcode validation**.
+
+WorkoutNavigationBar contrast environment: **Implemented** — ключ исправлен на официальный colorSchemeContrast, чтение и сравнение используют одноимённое свойство. Linux syntax parse/lint; **Requires Xcode validation** для SDK-компиляции и Increase Contrast.

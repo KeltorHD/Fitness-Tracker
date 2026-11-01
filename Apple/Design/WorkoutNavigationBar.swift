@@ -4,7 +4,7 @@ import SwiftUI
 struct WorkoutNavigationBar: View {
   @Environment(\.locale) private var locale
   @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
-  @Environment(\.accessibilityContrast) private var contrast
+  @Environment(\.colorSchemeContrast) private var colorSchemeContrast
   @Environment(\.dynamicTypeSize) private var dynamicTypeSize
   @ScaledMetric(relativeTo: .caption2) private var labelHeight: CGFloat = 18
   @Binding var selection: Int
@@ -55,7 +55,7 @@ struct WorkoutNavigationBar: View {
       }
       .glassEffect(.regular, in: WorkoutNavigationShape())
       .overlay {
-        if contrast == .increased {
+        if colorSchemeContrast == .increased {
           WorkoutNavigationShape().stroke(FitTheme.muted, lineWidth: 1)
             .allowsHitTesting(false)
         }
