@@ -16,6 +16,10 @@
 
 `Apple/Design/Components.swift` содержит панель действий и таймер. `Apple/Features` и Watch используют нативные button styles. Deployment targets — 26.0, fallback blur и режим совместимости старого дизайна не применяются. Reduce Motion выключает инициируемую приложением morph-анимацию. Визуальные результаты пока не проверены.
 
+## Интерактивная панель навигации
+
+Выделение вкладки использует glassEffectID/glassEffectTransition из раздела Liquid Glass выше. CGRect кнопок измеряются официальным [onGeometryChange(for:of:action:)](https://developer.apple.com/documentation/swiftui/view/ongeometrychange(for:of:action:)); [highPriorityGesture(_:including:)](https://developer.apple.com/documentation/swiftui/view/highprioritygesture(_:including:)) отделяет drag от обычного нажатия кнопки. Это собственный SwiftUI-контрол с настоящим стеклом; идентичность поведения системному TabView не заявляется. Проверка рендеринга/жестов требует Xcode.
+
 ## Persistence и Apple-интеграции
 
 - [ModelConfiguration.CloudKitDatabase](https://developer.apple.com/documentation/swiftdata/modelconfiguration/cloudkitdatabase-swift.struct) — `.none` и `.private(String)`; [Syncing model data across a person's devices](https://developer.apple.com/documentation/swiftdata/syncing-model-data-across-a-persons-devices) — ограничения CloudKit-моделей и подготовка schema.

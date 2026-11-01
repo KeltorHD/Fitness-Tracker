@@ -21,6 +21,32 @@ final class FitnessTrackerUITests: XCTestCase {
     }
   }
 
+  @MainActor func testNavigationGlassCanBeDraggedAcrossTabsWithoutStartingWorkout() {
+    let app = launch()
+    let diary = app.buttons["navigationTab_0"]
+    let templates = app.buttons["navigationTab_1"]
+    let results = app.buttons["navigationTab_2"]
+    let settings = app.buttons["navigationTab_3"]
+    let start = app.buttons["workoutStartAction"]
+    XCTAssertTrue(diary.waitForExistence(timeout: 10))
+    diary.press(forDuration: 0.1, thenDragTo: results)
+    XCTAssertTrue(results.isSelected)
+    XCTAssertFalse(app.buttons["startWorkoutWithoutTemplate"].exists)
+    results.press(forDuration: 0.1, thenDragTo: settings)
+    XCTAssertTrue(settings.isSelected)
+    settings.press(forDuration: 0.1, thenDragTo: start)
+    XCTAssertTrue(settings.isSelected)
+    XCTAssertFalse(app.buttons["startWorkoutWithoutTemplate"].exists)
+    settings.press(forDuration: 0.1, thenDragTo: diary)
+    XCTAssertTrue(diary.isSelected)
+    templates.tap()
+    XCTAssertTrue(templates.isSelected)
+    start.tap()
+    XCTAssertTrue(app.buttons["startWorkoutWithoutTemplate"].waitForExistence(timeout: 5))
+    app.buttons["closeWorkoutStart"].tap()
+    XCTAssertTrue(templates.isSelected)
+  }
+
   @MainActor func testCenterActionStartsEmptyWorkoutAndResumesIt() {
     let app = launch()
     let start = app.buttons["workoutStartAction"]

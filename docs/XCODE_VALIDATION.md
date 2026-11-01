@@ -29,6 +29,10 @@
 
 ## Центральная кнопка начала тренировки
 
+- [ ] Пересобрать панель с подвижной капсулой выделения: нажатия плавно перемещают настоящий glassEffect через glassEffectID/glassEffectTransition; перетаскивание между вкладками следует пальцу и переключает экран при отпускании. Проверить оба направления, начало на неактивной вкладке, отмену системным жестом, отпускание за панелью/над центральной кнопкой — без смены вкладки и без старта; перетаскивание с центральной кнопки не выбирает вкладку. Выбор по VoiceOver и обычное нажатие работают отдельно.
+- [ ] Запустить testNavigationGlassCanBeDraggedAcrossTabsWithoutStartingWorkout и существующие start/navigation UI tests. Проверить круг старта 52 pt, плавный подъём контура 12 pt, отсутствие двойного ободка, активную сессию, узкий iPhone/iPad/landscape, RTL, AX Dynamic Type, Reduce Motion (без пружины/морфинга), Reduce Transparency и Increase Contrast. На Linux проверены только синтаксис, lint и структура; эффект и жесты требуют iOS 26 SDK/Simulator/устройства.
+
+
 - [ ] Пересобрать WorkoutNavigationBar после замены неверного environment key accessibilityContrast на colorSchemeContrast. Проверить отсутствие diagnostics на @Environment и сравнении с .increased; включить Increase Contrast и проверить контур панели. На Linux доступны только parser/lint, Apple SDK compilation не выполнена. [Apple: colorSchemeContrast](https://developer.apple.com/documentation/swiftui/environmentvalues/colorschemecontrast).
 
 - [ ] Выбор шаблонов: без выбора запуск по шаблонам отключён, свободный старт доступен; можно выбрать несколько строк, снять отметку и выбрать заново. Видны порядок выбора, счётчик и отметки, запуск выполняется отдельной кнопкой; закрытие крестиком/свайпом не сохраняет выбор и не создаёт сессию.
