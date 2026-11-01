@@ -2,7 +2,9 @@ import SwiftUI
 
 /// Cosmetic preferences stay in the Apple layer and never alter workout data.
 enum FitnessColorTheme: String, CaseIterable, Sendable {
-  case indigo, ocean, forest, rose, amber
+  case forest, indigo, ocean, rose, amber
+
+  static let defaultTheme = FitnessColorTheme.forest
 
   var title: String {
     switch self {
@@ -36,7 +38,7 @@ enum FitnessColorTheme: String, CaseIterable, Sendable {
 }
 
 private struct FitnessColorThemeKey: EnvironmentKey {
-  static let defaultValue = FitnessColorTheme.indigo
+  static let defaultValue = FitnessColorTheme.defaultTheme
 }
 
 extension EnvironmentValues {

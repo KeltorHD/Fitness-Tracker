@@ -7,7 +7,7 @@ struct SettingsView: View {
   @Environment(AppStore.self) private var store
   @AppStorage("weightUnit") private var unit: WeightUnit = .kilograms
   @AppStorage("weeklyGoal") private var goal = 3
-  @AppStorage("colorTheme") private var storedColorTheme = FitnessColorTheme.indigo.rawValue
+  @AppStorage("colorTheme") private var storedColorTheme = FitnessColorTheme.defaultTheme.rawValue
   @AppStorage("appearance") private var appearance = "auto"
   @AppStorage("appLanguage") private var language: AppLanguage = .system
   @AppStorage("keepScreenAwake") private var keepScreenAwake = false
@@ -78,7 +78,7 @@ struct SettingsView: View {
           NavigationLink {
             ColorThemePicker(
               selection: Binding(
-                get: { FitnessColorTheme(rawValue: storedColorTheme) ?? .indigo },
+                get: { FitnessColorTheme(rawValue: storedColorTheme) ?? .defaultTheme },
                 set: { storedColorTheme = $0.rawValue }))
           } label: {
             HStack {

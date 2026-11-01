@@ -125,9 +125,8 @@ struct ProgressScreen: View {
           }
           ToolbarItem(placement: .topBarTrailing) {
             Button(L10n.text("Начать тренировку", locale: locale), systemImage: "plus") {
-              store.start()
-            }.foregroundStyle(
-              .primary)
+              store.presentWorkoutStart()
+            }.foregroundStyle(.primary).accessibilityIdentifier("startWorkoutFromResults")
           }
         }
         .onChange(of: store.workouts, initial: true) { refresh() }

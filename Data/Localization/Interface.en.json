@@ -684,5 +684,18 @@
   "Упражнение %@": "Exercise %@",
   "Убрать упражнение: %@": "Remove exercise: %@",
   "Индивидуальные параметры": "Individual targets",
-  "Действия шаблона": "Template actions"
+  "Действия шаблона": "Template actions",
+  "Все шаблоны": "All templates",
+  "Только на сегодня": "Today only",
+  "Без расписания": "Unscheduled",
+  "Нет подходящих шаблонов": "No matching templates",
+  "Измените поиск или сбросьте фильтры.": "Change your search or reset the filters.",
+  "Название шаблона или упражнения": "Template or exercise name",
+  "Начать тренировку с пустым списком упражнений.": "Start a workout with an empty exercise list.",
+  "Расписание": "Schedule",
+  "Фильтры включены": "Filters active",
+  "Фильтры": "Filters",
+  "Выбрано вне фильтра: %@": "Selected outside the filter: %@",
+  "Упражнения: %@": "Exercises: %@",
+  "Выберите один или несколько шаблонов.": "Select one or more templates."
 }

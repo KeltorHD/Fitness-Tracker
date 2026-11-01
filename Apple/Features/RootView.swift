@@ -45,11 +45,7 @@ struct RootView: View {
     }
     .safeAreaInset(edge: .bottom, spacing: 0) {
       WorkoutNavigationBar(selection: $tab, hasActiveWorkout: store.active != nil) {
-        if store.active != nil {
-          store.start()
-        } else {
-          store.showingWorkoutStart = true
-        }
+        store.presentWorkoutStart()
       }
     }
     .id(store.workspaceID)
@@ -78,7 +74,7 @@ struct RootView: View {
       }
       .environment(store)
       .tint(colorTheme.accent)
-      .presentationDetents(store.showSession || presentingSession ? [.large] : [.medium, .large])
+      .presentationDetents([.large])
       .presentationDragIndicator(.visible)
       .safeAreaInset(edge: .top) { if store.isDemoMode { DemoModeBanner() } }
     }

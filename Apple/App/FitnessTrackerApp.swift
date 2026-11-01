@@ -7,11 +7,11 @@ import WidgetKit
   @State private var store: AppStore?
   @State private var startupError: String?
   @State private var pendingFileURL: URL?
-  @AppStorage("colorTheme") private var storedColorTheme = FitnessColorTheme.indigo.rawValue
+  @AppStorage("colorTheme") private var storedColorTheme = FitnessColorTheme.defaultTheme.rawValue
   @AppStorage("appearance") private var appearance = "auto"
   @AppStorage("appLanguage") private var language: AppLanguage = .system
   private var colorTheme: FitnessColorTheme {
-    FitnessColorTheme(rawValue: storedColorTheme) ?? .indigo
+    FitnessColorTheme(rawValue: storedColorTheme) ?? .defaultTheme
   }
 
   var body: some Scene {

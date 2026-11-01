@@ -268,6 +268,16 @@ import WidgetKit
         message: "Не удалось сохранить стартовые планы. Попробуйте ещё раз.")
     }
   }
+  /// All general start buttons use the picker; resuming never replaces the active session.
+  func presentWorkoutStart() {
+    if active != nil {
+      showingWorkoutStart = false
+      showSession = true
+    } else {
+      showingWorkoutStart = true
+    }
+  }
+
   func start(template: WorkoutTemplate? = nil) {
     start(templates: template.map { [$0] } ?? [])
   }

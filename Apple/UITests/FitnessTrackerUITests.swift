@@ -21,6 +21,33 @@ final class FitnessTrackerUITests: XCTestCase {
     }
   }
 
+  @MainActor func testDiaryStartOpensTemplatePickerAndSearchKeepsSelection() {
+    let app = launch()
+    let start = app.buttons["startWorkout"]
+    XCTAssertTrue(start.waitForExistence(timeout: 10))
+    start.tap()
+    let first = app.buttons["startWorkoutTemplate_20000000-0000-0000-0000-000000000001"]
+    XCTAssertTrue(first.waitForExistence(timeout: 5))
+    first.tap()
+    let search = app.searchFields.firstMatch
+    search.tap()
+    search.typeText("несуществующий шаблон")
+    XCTAssertTrue(app.staticTexts["Нет подходящих шаблонов"].waitForExistence(timeout: 5))
+    XCTAssertTrue(app.staticTexts["Выбрано вне фильтра: 1"].exists)
+    XCTAssertTrue(app.buttons["startSelectedTemplates"].isEnabled)
+    let reset = app.buttons["resetWorkoutTemplateFilters"]
+    reveal(reset, in: app)
+    reset.tap()
+    XCTAssertTrue(first.waitForExistence(timeout: 5))
+    XCTAssertTrue(first.isSelected)
+    app.buttons["closeWorkoutStart"].tap()
+    XCTAssertFalse(app.buttons["addExercise"].exists)
+    app.buttons["navigationTab_2"].tap()
+    app.buttons["startWorkoutFromResults"].tap()
+    XCTAssertTrue(first.waitForExistence(timeout: 5))
+    XCTAssertFalse(app.buttons["startSelectedTemplates"].isEnabled)
+  }
+
   @MainActor func testNavigationGlassCanBeDraggedAcrossTabsWithoutStartingWorkout() {
     let app = launch()
     let diary = app.buttons["navigationTab_0"]
@@ -186,6 +213,7 @@ final class FitnessTrackerUITests: XCTestCase {
     let app = launch()
     XCTAssertTrue(app.buttons["startWorkout"].waitForExistence(timeout: 10))
     app.buttons["startWorkout"].tap()
+    chooseFreeWorkout(in: app)
     app.buttons["addExercise"].tap()
     app.searchFields.firstMatch.tap()
     app.searchFields.firstMatch.typeText("Приседания")
@@ -226,6 +254,7 @@ final class FitnessTrackerUITests: XCTestCase {
     let app = launch()
     XCTAssertTrue(app.buttons["startWorkout"].waitForExistence(timeout: 10))
     app.buttons["startWorkout"].tap()
+    chooseFreeWorkout(in: app)
     app.buttons["addExercise"].tap()
     app.searchFields.firstMatch.tap()
     app.searchFields.firstMatch.typeText("Приседания")
@@ -320,6 +349,7 @@ final class FitnessTrackerUITests: XCTestCase {
     let app = launch()
     XCTAssertTrue(app.buttons["startWorkout"].waitForExistence(timeout: 10))
     app.buttons["startWorkout"].tap()
+    chooseFreeWorkout(in: app)
     let edit = app.buttons["editWorkoutBodyWeight"]
     reveal(edit, in: app)
     edit.tap()
@@ -416,6 +446,7 @@ final class FitnessTrackerUITests: XCTestCase {
     let app = launch()
     XCTAssertTrue(app.buttons["startWorkout"].waitForExistence(timeout: 10))
     app.buttons["startWorkout"].tap()
+    chooseFreeWorkout(in: app)
     app.buttons["addExercise"].tap()
     app.searchFields.firstMatch.tap()
     app.searchFields.firstMatch.typeText("Приседания")
@@ -433,6 +464,13 @@ final class FitnessTrackerUITests: XCTestCase {
     reveal(progress, in: app)
     progress.tap()
     XCTAssertTrue(app.staticTexts["Нет данных за выбранный период"].waitForExistence(timeout: 5))
+  }
+
+  @MainActor private func chooseFreeWorkout(in app: XCUIApplication) {
+    let choice = app.buttons["startWorkoutWithoutTemplate"]
+    XCTAssertTrue(choice.waitForExistence(timeout: 5))
+    choice.tap()
+    XCTAssertTrue(app.buttons["addExercise"].waitForExistence(timeout: 5))
   }
 
   @MainActor private func reveal(_ element: XCUIElement, in app: XCUIApplication) {
@@ -640,6 +678,7 @@ final class FitnessTrackerUITests: XCTestCase {
     let start = app.buttons["startWorkout"]
     XCTAssertTrue(start.waitForExistence(timeout: 10))
     start.tap()
+    chooseFreeWorkout(in: app)
     let finish = app.buttons["finishWorkout"]
     XCTAssertTrue(finish.waitForExistence(timeout: 5))
     XCTAssertTrue(finish.isHittable)
@@ -679,6 +718,7 @@ final class FitnessTrackerUITests: XCTestCase {
     let app = launch()
     XCTAssertTrue(app.buttons["startWorkout"].waitForExistence(timeout: 10))
     app.buttons["startWorkout"].tap()
+    chooseFreeWorkout(in: app)
     app.buttons["Свернуть"].tap()
     app.buttons["startWorkout"].tap()
     XCTAssertTrue(app.buttons["addExercise"].waitForExistence(timeout: 5))
@@ -692,6 +732,7 @@ final class FitnessTrackerUITests: XCTestCase {
     let app = launch()
     XCTAssertTrue(app.buttons["startWorkout"].waitForExistence(timeout: 10))
     app.buttons["startWorkout"].tap()
+    chooseFreeWorkout(in: app)
     app.buttons["addExercise"].tap()
     app.searchFields.firstMatch.tap()
     app.searchFields.firstMatch.typeText("Приседания")

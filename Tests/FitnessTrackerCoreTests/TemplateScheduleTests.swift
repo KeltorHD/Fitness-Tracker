@@ -116,3 +116,86 @@ private func scheduledTemplate(_ name: String, days: Set<WorkoutWeekday> = []) -
     WorkoutTemplate.self, from: JSONSerialization.data(withJSONObject: object))
   #expect(originalFormat == template)
 }
+
+@Test func templateSearchMatchesTemplateExerciseAndEnglishNamesWithoutChangingRecords() throws {
+  let date = try scheduleDate("2026-11-02T12:00:00Z")
+  let calendar = try scheduleCalendar()
+  let template = WorkoutTemplate(
+    name: "Силовая А", exercises: [TemplateExercise(exercise: ExerciseCatalog.all[0])],
+    preferredWeekdays: [.monday])
+  var filter = WorkoutTemplateFilter()
+  for query in ["силовая", "ПРИСЕДАНИЯ", "Barbell Squat", " силовая   приседания "] {
+    filter.query = query
+    let result = filter.apply(to: [template], date: date, calendar: calendar)
+    #expect(result.today == [template] && result.others.isEmpty)
+  }
+  filter.query = "несуществующий шаблон"
+  let noMatches = filter.apply(to: [template], date: date, calendar: calendar)
+  #expect(noMatches.today.isEmpty && noMatches.others.isEmpty)
+  #expect(template.preferredWeekdays == [.monday])
+}
+
+@Test func templateScheduleFiltersRespectLocalDayAndUnscheduledPlans() throws {
+  let monday = scheduledTemplate("Понедельник", days: [.monday])
+  let sunday = scheduledTemplate("Воскресенье", days: [.sunday])
+  let unscheduled = scheduledTemplate("Без расписания")
+  let date = try scheduleDate("2026-11-01T23:30:00Z")
+  var filter = WorkoutTemplateFilter()
+  filter.schedule = .today
+  let utc = filter.apply(
+    to: [monday, unscheduled, sunday], date: date, calendar: try scheduleCalendar())
+  #expect(utc.today == [sunday] && utc.others.isEmpty)
+  let tokyo = filter.apply(
+    to: [monday, unscheduled, sunday], date: date, calendar: try scheduleCalendar("Asia/Tokyo"))
+  #expect(tokyo.today == [monday] && tokyo.others.isEmpty)
+  filter.schedule = .unscheduled
+  let onlyUnscheduled = filter.apply(
+    to: [monday, unscheduled, sunday], date: date, calendar: try scheduleCalendar())
+  #expect(onlyUnscheduled.today.isEmpty && onlyUnscheduled.others == [unscheduled])
+}
+
+@Test func templateMuscleFiltersUseExplicitTargetsAndInferLegacyExerciseMuscles() throws {
+  var explicit = scheduledTemplate("Бицепс")
+  explicit.muscleSelection = ExerciseMuscleSelection(muscles: [.biceps])
+  let legacyLegs = scheduledTemplate("Ноги")
+  var filter = WorkoutTemplateFilter()
+  filter.muscles = ExerciseMuscleSelection(groups: [.arms])
+  let date = try scheduleDate("2026-11-02T12:00:00Z")
+  let calendar = try scheduleCalendar()
+  #expect(
+    filter.apply(to: [explicit, legacyLegs], date: date, calendar: calendar).others == [explicit])
+  filter.muscles = ExerciseMuscleSelection(muscles: [.quadriceps])
+  #expect(
+    filter.apply(to: [explicit, legacyLegs], date: date, calendar: calendar).others == [legacyLegs])
+  let custom = WorkoutTemplate(
+    name: "Своё упражнение",
+    exercises: [TemplateExercise(exercise: Exercise(name: "Своё", muscle: .arms))])
+  filter.muscles = ExerciseMuscleSelection(muscles: [.biceps])
+  #expect(filter.apply(to: [custom], date: date, calendar: calendar).others.isEmpty)
+  filter.muscles = ExerciseMuscleSelection(groups: [.arms])
+  #expect(filter.apply(to: [custom], date: date, calendar: calendar).others == [custom])
+}
+
+@Test func templateFiltersCombineEquipmentSearchScheduleAndPreserveGroupOrder() throws {
+  let monday = WorkoutTemplate(
+    name: "Силовая", exercises: [TemplateExercise(exercise: ExerciseCatalog.all[0])],
+    preferredWeekdays: [.monday])
+  let other = WorkoutTemplate(name: "Другой день", exercises: monday.exercises)
+  var filter = WorkoutTemplateFilter()
+  filter.query = "присед"
+  filter.schedule = .today
+  filter.equipment = [.barbell, .dumbbell]
+  filter.muscles = ExerciseMuscleSelection(groups: [.legs])
+  #expect(filter.isActive && filter.hasFilters)
+  let date = try scheduleDate("2026-11-02T12:00:00Z")
+  let calendar = try scheduleCalendar()
+  let matching = filter.apply(to: [other, monday], date: date, calendar: calendar)
+  #expect(matching.today == [monday] && matching.others.isEmpty)
+  filter.equipment = [.bands]
+  let empty = filter.apply(to: [other, monday], date: date, calendar: calendar)
+  #expect(empty.today.isEmpty && empty.others.isEmpty)
+  filter = WorkoutTemplateFilter()
+  #expect(!filter.isActive && !filter.hasFilters)
+  let all = filter.apply(to: [other, monday], date: date, calendar: calendar)
+  #expect(all.today == [monday] && all.others == [other])
+}

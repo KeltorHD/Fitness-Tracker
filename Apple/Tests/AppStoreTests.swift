@@ -49,6 +49,30 @@ import XCTest
 }
 
 @MainActor final class AppStoreTests: XCTestCase {
+  func testGeneralStartPresentsPickerWithoutSavingAndResumesExistingSession() throws {
+    let repository = FailingWorkoutRepository()
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    repository.failSaves = true
+    store.presentWorkoutStart()
+    store.presentWorkoutStart()
+    XCTAssertTrue(store.showingWorkoutStart)
+    XCTAssertFalse(store.showSession)
+    XCTAssertNil(store.active)
+    XCTAssertNil(store.error)
+    XCTAssertTrue(try repository.workouts().isEmpty)
+    store.showingWorkoutStart = false
+    repository.failSaves = false
+    store.start()
+    let active = try XCTUnwrap(store.active)
+    store.showSession = false
+    store.presentWorkoutStart()
+    XCTAssertTrue(store.showSession)
+    XCTAssertFalse(store.showingWorkoutStart)
+    XCTAssertEqual(store.active, active)
+    XCTAssertEqual(try repository.workouts(), [active])
+  }
+
   func testCombinedTemplateStartPersistsOneSessionAndResumesWithoutReplacement() throws {
     let repository = MemoryWorkoutRepository()
     let first = ExerciseCatalog.starterTemplates[0]

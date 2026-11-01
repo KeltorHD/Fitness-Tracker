@@ -19,7 +19,7 @@ struct HistoryView: View {
         weekStrip.cardListRow()
         if let active = store.active {
           Button {
-            store.start()
+            store.presentWorkoutStart()
           } label: {
             HStack {
               Image(systemName: "play.circle.fill").font(.title2)
@@ -55,7 +55,7 @@ struct HistoryView: View {
             Text(L10n.text("Завершённые тренировки появятся здесь по неделям.", locale: locale))
           } actions: {
             Button(L10n.text("Начать тренировку", locale: locale), systemImage: "plus") {
-              store.start()
+              store.presentWorkoutStart()
             }
             .buttonStyle(.glassProminent).controlSize(.large).accessibilityIdentifier(
               "startEmptyWorkout")
@@ -104,7 +104,7 @@ struct HistoryView: View {
             Image(systemName: "ellipsis").foregroundStyle(.primary)
           }
           Button(L10n.text("Начать тренировку", locale: locale), systemImage: "plus") {
-            store.start()
+            store.presentWorkoutStart()
           }
           .foregroundStyle(.primary).accessibilityIdentifier("startWorkout")
         }
