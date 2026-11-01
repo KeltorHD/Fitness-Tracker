@@ -136,3 +136,26 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   #expect(decoded.entries.count == 100)
   #expect(decoded.entries.allSatisfy { $0.generatedMedia == nil && $0.translationAutomatic == nil })
 }
+
+@Test func multipleEquipmentFiltersUseUnionAndIntersectWithMuscleAndSearch() {
+  let equipment: Set<ExerciseEquipment> = [.barbell, .dumbbell]
+  let combined = ExerciseLibrary.search(equipment: equipment)
+  let barbell = ExerciseLibrary.search(equipment: .barbell)
+  let dumbbell = ExerciseLibrary.search(equipment: .dumbbell)
+  #expect(!barbell.isEmpty && !dumbbell.isEmpty)
+  #expect(Set(combined.map(\.id)) == Set((barbell + dumbbell).map(\.id)))
+  let groups: Set<MuscleGroup> = [.chest, .shoulders]
+  let filtered = ExerciseLibrary.search("жим", groups: groups, equipment: equipment)
+  let expected = ExerciseLibrary.search("жим", groups: groups)
+    .filter { equipment.contains($0.equipment) }
+  #expect(!filtered.isEmpty)
+  #expect(Set(filtered.map(\.equipment)) == equipment)
+  #expect(filtered == expected)
+  let english = ExerciseLibrary.search(
+    "жим", groups: groups, equipment: equipment, language: .english)
+  #expect(Set(english.map(\.id)) == Set(filtered.map(\.id)))
+  #expect(ExerciseLibrary.search(equipment: []).count == ExerciseLibrary.entries.count)
+  #expect(
+    ExerciseLibrary.search("жим", groups: groups, equipment: [])
+      == ExerciseLibrary.search("жим", groups: groups))
+}

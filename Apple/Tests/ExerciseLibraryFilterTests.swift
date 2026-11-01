@@ -7,7 +7,7 @@ import XCTest
   func testBodySelectionCombinesWithSearchEquipmentAndLanguage() {
     let model = ExerciseLibraryViewModel()
     model.search = "жим"
-    model.equipment = .barbell
+    model.equipment = [.barbell]
     model.groups = [.chest]
     XCTAssertFalse(model.results.isEmpty)
     XCTAssertTrue(model.results.allSatisfy { $0.group == .chest && $0.equipment == .barbell })
@@ -16,11 +16,11 @@ import XCTest
     XCTAssertEqual(Set(model.results.map(\.id)), selectedIDs)
     model.groups = []
     XCTAssertEqual(model.search, "жим")
-    XCTAssertEqual(model.equipment, .barbell)
+    XCTAssertEqual(model.equipment, [.barbell])
     XCTAssertTrue(selectedIDs.isSubset(of: Set(model.results.map(\.id))))
     model.reset()
     XCTAssertTrue(model.groups.isEmpty)
-    XCTAssertNil(model.equipment)
+    XCTAssertTrue(model.equipment.isEmpty)
     XCTAssertEqual(model.results.count, ExerciseLibrary.entries.count)
   }
 }
@@ -33,7 +33,7 @@ extension ExerciseLibraryFilterTests {
     XCTAssertFalse(model.results.isEmpty)
     XCTAssertEqual(Set(model.results.map(\.group)), groups)
     model.search = "жим"
-    model.equipment = .barbell
+    model.equipment = [.barbell]
     XCTAssertFalse(model.results.isEmpty)
     XCTAssertTrue(
       model.results.allSatisfy { groups.contains($0.group) && $0.equipment == .barbell })
@@ -43,9 +43,36 @@ extension ExerciseLibraryFilterTests {
     model.groups = [.legs]
     XCTAssertEqual(model.groups, [.legs])
     XCTAssertEqual(model.search, "жим")
-    XCTAssertEqual(model.equipment, .barbell)
+    XCTAssertEqual(model.equipment, [.barbell])
     model.reset()
     XCTAssertTrue(model.groups.isEmpty)
+    XCTAssertEqual(model.results.count, ExerciseLibrary.entries.count)
+  }
+}
+
+extension ExerciseLibraryFilterTests {
+  func testMultipleEquipmentSelectionCanBeChangedAndClearedIndependently() {
+    let model = ExerciseLibraryViewModel(groups: [.chest])
+    model.search = "жим"
+    model.equipment = [.barbell, .dumbbell]
+    XCTAssertFalse(model.results.isEmpty)
+    XCTAssertEqual(Set(model.results.map(\.equipment)), [.barbell, .dumbbell])
+    XCTAssertTrue(model.results.allSatisfy { $0.group == .chest })
+    let ids = Set(model.results.map(\.id))
+    model.language = .english
+    XCTAssertEqual(Set(model.results.map(\.id)), ids)
+    model.equipment.remove(.barbell)
+    XCTAssertFalse(model.results.isEmpty)
+    XCTAssertTrue(model.results.allSatisfy { $0.equipment == .dumbbell })
+    model.equipment = []
+    XCTAssertEqual(model.search, "жим")
+    XCTAssertEqual(model.groups, [.chest])
+    XCTAssertTrue(ids.isSubset(of: Set(model.results.map(\.id))))
+    model.equipment = [.bodyWeight, .bands]
+    model.reset()
+    XCTAssertTrue(model.equipment.isEmpty)
+    XCTAssertTrue(model.groups.isEmpty)
+    XCTAssertEqual(model.search, "")
     XCTAssertEqual(model.results.count, ExerciseLibrary.entries.count)
   }
 }

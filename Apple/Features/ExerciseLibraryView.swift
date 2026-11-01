@@ -37,14 +37,27 @@ struct ExerciseLibraryView: View {
           }
           Spacer()
           Menu {
-            Button(L10n.text("Весь инвентарь", locale: locale)) { model.equipment = nil }
+            Button(L10n.text("Весь инвентарь", locale: locale)) { model.equipment = [] }
             ForEach(ExerciseEquipment.allCases, id: \.self) { value in
-              Button(L10n.text(value.title, locale: locale)) { model.equipment = value }
+              Toggle(
+                L10n.text(value.title, locale: locale),
+                isOn: Binding(
+                  get: { model.equipment.contains(value) },
+                  set: { selected in
+                    if selected {
+                      model.equipment.insert(value)
+                    } else {
+                      model.equipment.remove(value)
+                    }
+                  }))
             }
           } label: {
             Label(
-              model.equipment.map { L10n.text($0.title, locale: locale) }
-                ?? L10n.text("Инвентарь", locale: locale), systemImage: "line.3.horizontal.decrease"
+              model.equipment.isEmpty
+                ? L10n.text("Весь инвентарь", locale: locale)
+                : ExerciseEquipment.allCases.filter { model.equipment.contains($0) }
+                  .map { L10n.text($0.title, locale: locale) }.joined(separator: ", "),
+              systemImage: "line.3.horizontal.decrease"
             )
           }
         }.font(.subheadline)

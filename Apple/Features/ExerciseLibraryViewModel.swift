@@ -5,17 +5,17 @@ import Observation
 @MainActor @Observable final class ExerciseLibraryViewModel {
   var search = "" { didSet { refresh() } }
   var groups: Set<MuscleGroup> { didSet { refresh() } }
-  var equipment: ExerciseEquipment? { didSet { refresh() } }
+  var equipment: Set<ExerciseEquipment> = [] { didSet { refresh() } }
   var language: AppLanguage = .russian { didSet { refresh() } }
   private(set) var results: [ExerciseLibraryEntry]
   private(set) var loadingError = ExerciseLibrary.loadingError
   @ObservationIgnored private let find:
-    (String, Set<MuscleGroup>, ExerciseEquipment?, AppLanguage) -> [ExerciseLibraryEntry]
+    (String, Set<MuscleGroup>, Set<ExerciseEquipment>, AppLanguage) -> [ExerciseLibraryEntry]
 
   init(
     groups: Set<MuscleGroup> = [],
     find:
-      @escaping (String, Set<MuscleGroup>, ExerciseEquipment?, AppLanguage) ->
+      @escaping (String, Set<MuscleGroup>, Set<ExerciseEquipment>, AppLanguage) ->
       [ExerciseLibraryEntry] =
       {
         ExerciseLibrary.search($0, groups: $1, equipment: $2, language: $3)
@@ -23,12 +23,12 @@ import Observation
   ) {
     self.find = find
     self.groups = groups
-    results = find("", groups, nil, .russian)
+    results = find("", groups, [], .russian)
   }
   func reset() {
     search = ""
     groups = []
-    equipment = nil
+    equipment = []
   }
   private func refresh() {
     do {
