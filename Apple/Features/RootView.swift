@@ -2,6 +2,7 @@ import SwiftUI
 import UIKit
 
 struct RootView: View {
+  @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
   @Environment(AppStore.self) private var store
   @Environment(\.scenePhase) private var phase
@@ -14,14 +15,14 @@ struct RootView: View {
     @Bindable var store = store
     TabView(selection: $tab) {
       Tab(value: 0) {
-        DashboardView().tint(FitTheme.accent)
+        DashboardView().tint(colorTheme.accent)
           .toolbar(.hidden, for: .tabBar)
       } label: {
         Label(L10n.text("Дневник", locale: locale), systemImage: "book")
           .environment(\.symbolVariants, SymbolVariants.none)
       }
       Tab(value: 1) {
-        TemplatesView().tint(FitTheme.accent)
+        TemplatesView().tint(colorTheme.accent)
           .toolbar(.hidden, for: .tabBar)
       } label: {
         Label(L10n.text("Шаблоны", locale: locale), systemImage: "dumbbell")
@@ -35,7 +36,7 @@ struct RootView: View {
           .environment(\.symbolVariants, SymbolVariants.none)
       }
       Tab(value: 3) {
-        SettingsView(model: store.settings).tint(FitTheme.accent)
+        SettingsView(model: store.settings).tint(colorTheme.accent)
           .toolbar(.hidden, for: .tabBar)
       } label: {
         Label(L10n.text("Настройки", locale: locale), systemImage: "gearshape")
@@ -76,7 +77,7 @@ struct RootView: View {
         }
       }
       .environment(store)
-      .tint(FitTheme.accent)
+      .tint(colorTheme.accent)
       .presentationDetents(store.showSession || presentingSession ? [.large] : [.medium, .large])
       .presentationDragIndicator(.visible)
       .safeAreaInset(edge: .top) { if store.isDemoMode { DemoModeBanner() } }

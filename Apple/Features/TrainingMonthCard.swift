@@ -103,6 +103,7 @@ struct TrainingMonthPager: View {
 }
 
 private struct TrainingMonthCalendar: View {
+  @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
   let date: Date
   let summary: TrainingMonthSummary
@@ -120,7 +121,7 @@ private struct TrainingMonthCalendar: View {
           Circle().fill(.clear).aspectRatio(1, contentMode: .fit)
             .overlay {
               if day.hasWorkout {
-                Circle().fill(FitTheme.accent)
+                Circle().fill(colorTheme.accent)
               } else if day.isInMonth {
                 Circle().stroke(FitTheme.separator, lineWidth: 1)
               }
@@ -145,6 +146,7 @@ private struct TrainingMonthCalendar: View {
 }
 
 private struct TrainingMonthStatistics: View {
+  @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
   @Environment(\.dynamicTypeSize) private var typeSize
   let summary: TrainingMonthSummary
@@ -178,7 +180,7 @@ private struct TrainingMonthStatistics: View {
     ZStack {
       Circle().stroke(FitTheme.separator, lineWidth: 12)
       Circle().trim(from: 0, to: summary.trainingDayFraction)
-        .stroke(FitTheme.accent, style: StrokeStyle(lineWidth: 12, lineCap: .round))
+        .stroke(colorTheme.accent, style: StrokeStyle(lineWidth: 12, lineCap: .round))
         .rotationEffect(.degrees(-90))
     }.frame(width: 52, height: 52).padding(6)
       .accessibilityLabel(L10n.text("Дни с тренировками в выбранном месяце", locale: locale))

@@ -215,3 +215,7 @@ xcodebuild -project FitnessTracker.xcodeproj -scheme FitnessTracker \
 ## Пульс на экране блокировки и в Dynamic Island
 
 Обновите проект через xcodegen generate и соберите app/widgets. WorkoutLiveState теперь содержит optional HeartRateReading, совместимый со старыми ActivityKit payloads. На реальном iPhone проверьте все размеры Island, lock screen, свежесть и system staleDate, pause/resume/skip и отсутствие фонового создания activity. Источники и их ограничения — в docs/XCODE_VALIDATION.md. Новых capabilities/permissions нет; фоновые обновления не гарантируются вне существующей доставки измерений.
+
+## Цветовые темы
+
+После обновления выполните `xcodegen generate`: добавлен `Apple/Design/FitnessColorTheme.swift`. Настройки → «Цветовая тема» предлагает Индиго, Океан, Лес, Роза и Янтарь; выбор сохраняется отдельно от Авто/Светлая/Тёмная и применяется без перезапуска. Проверьте все темы с iOS SDK в обеих схемах отображения и Increase Contrast, сохранение навигации/активной сессии и testColorThemeSwitchingKeepsActiveWorkoutAndPersistsChoice. Watch/widgets/Live Activity пока используют базовый индиго. [Сценарии](docs/XCODE_VALIDATION.md#цветовые-темы-приложения).

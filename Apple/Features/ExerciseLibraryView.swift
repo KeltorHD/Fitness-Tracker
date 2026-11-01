@@ -129,6 +129,7 @@ struct ExerciseLibraryView: View {
 }
 
 struct ExerciseDetailView: View {
+  @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
   let exercise: Exercise
   var onSelect: ((Exercise) -> Void)? = nil
@@ -219,7 +220,7 @@ struct ExerciseDetailView: View {
             HStack(alignment: .top, spacing: 12) {
               Text("\(index + 1)").font(.headline).foregroundStyle(.tint)
                 .frame(width: 30, height: 30).background(
-                  Color.accentColor.opacity(0.12), in: .circle)
+                  colorTheme.accent.opacity(0.12), in: .circle)
               Text(text).frame(maxWidth: .infinity, alignment: .leading)
             }.accessibilityElement(children: .combine)
           }

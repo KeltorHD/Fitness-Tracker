@@ -467,6 +467,41 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertEqual(app.alerts.count, 0)
   }
 
+  @MainActor func testColorThemeSwitchingKeepsActiveWorkoutAndPersistsChoice() {
+    let app = launch()
+    let start = app.buttons["workoutStartAction"]
+    XCTAssertTrue(start.waitForExistence(timeout: 10))
+    start.tap()
+    app.buttons["startWorkoutWithoutTemplate"].tap()
+    XCTAssertTrue(app.buttons["addExercise"].waitForExistence(timeout: 5))
+    app.buttons["Свернуть"].tap()
+    app.buttons["navigationTab_3"].tap()
+    let themes = app.buttons["openColorThemePicker"]
+    reveal(themes, in: app)
+    themes.tap()
+    for name in ["forest", "rose", "amber", "indigo", "ocean"] {
+      let option = app.buttons["colorTheme_\(name)"]
+      reveal(option, in: app)
+      option.tap()
+      XCTAssertTrue(option.isSelected)
+    }
+    // The navigation stack and the active session survive an environment update.
+    XCTAssertTrue(app.buttons["colorTheme_ocean"].exists)
+    start.tap()
+    XCTAssertTrue(app.buttons["addExercise"].waitForExistence(timeout: 5))
+    XCTAssertFalse(app.buttons["startWorkoutWithoutTemplate"].exists)
+    app.buttons["Свернуть"].tap()
+    app.terminate()
+    app.launch()
+    XCTAssertTrue(app.buttons["navigationTab_3"].waitForExistence(timeout: 10))
+    app.buttons["navigationTab_3"].tap()
+    let restoredThemes = app.buttons["openColorThemePicker"]
+    reveal(restoredThemes, in: app)
+    restoredThemes.tap()
+    XCTAssertTrue(app.buttons["colorTheme_ocean"].isSelected)
+    app.buttons["colorTheme_indigo"].tap()
+  }
+
   @MainActor func testLanguageCanBeChangedWithoutRelaunchingTheApp() {
     let app = launch()
     let settings = app.buttons["navigationTab_3"]

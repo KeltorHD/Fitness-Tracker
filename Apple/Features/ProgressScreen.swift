@@ -3,6 +3,7 @@ import FitnessTrackerCore
 import SwiftUI
 
 struct ProgressScreen: View {
+  @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
   @Environment(AppStore.self) private var store
   @AppStorage("weightUnit") private var unit: WeightUnit = .kilograms
@@ -72,7 +73,7 @@ struct ProgressScreen: View {
                   x: .value(L10n.text("Неделя", locale: locale), week.week, unit: .weekOfYear),
                   y: .value(L10n.text("Объём", locale: locale), unit.display(week.volume))
                 )
-                .foregroundStyle(FitTheme.accent).cornerRadius(3)
+                .foregroundStyle(colorTheme.accent).cornerRadius(3)
               }.frame(height: 180).chartYAxis { AxisMarks(position: .trailing) }
             }.resultsCard()
           }

@@ -168,6 +168,7 @@ struct ArchiveTransferView: View {
 }
 
 private struct ArchiveTransferPresenter: ViewModifier {
+  @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(AppStore.self) private var store
   let eligible: Bool
 
@@ -178,7 +179,7 @@ private struct ArchiveTransferPresenter: ViewModifier {
         get: { eligible && model.isPresented },
         set: { if eligible { model.isPresented = $0 } })
     ) {
-      ArchiveTransferView(model: model).tint(FitTheme.accent)
+      ArchiveTransferView(model: model).tint(colorTheme.accent)
     }
   }
 }

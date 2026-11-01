@@ -8,6 +8,7 @@ enum WorkoutStartSelection {
 }
 
 struct WorkoutStartView: View {
+  @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(AppStore.self) private var store
   @Environment(\.locale) private var locale
   @Environment(\.calendar) private var calendar
@@ -39,7 +40,7 @@ struct WorkoutStartView: View {
           } label: {
             HStack(spacing: 14) {
               Image(systemName: "play.circle")
-                .font(.largeTitle).foregroundStyle(FitTheme.accent)
+                .font(.largeTitle).foregroundStyle(colorTheme.accent)
                 .accessibilityHidden(true)
               VStack(alignment: .leading, spacing: 4) {
                 Text(L10n.text("Без шаблона", locale: locale)).font(.headline)
@@ -51,7 +52,7 @@ struct WorkoutStartView: View {
                 .accessibilityHidden(true)
             }
             .padding(18).frame(maxWidth: .infinity, alignment: .leading)
-            .background(FitTheme.accent.opacity(0.08), in: .rect(cornerRadius: FitTheme.radius))
+            .background(colorTheme.accent.opacity(0.08), in: .rect(cornerRadius: FitTheme.radius))
             .contentShape(.rect)
           }
           .buttonStyle(.plain).accessibilityIdentifier("startWorkoutWithoutTemplate")
@@ -153,7 +154,7 @@ struct WorkoutStartView: View {
       }
     } label: {
       HStack(spacing: 14) {
-        Image(systemName: "dumbbell").foregroundStyle(FitTheme.accent)
+        Image(systemName: "dumbbell").foregroundStyle(colorTheme.accent)
           .accessibilityHidden(true)
         VStack(alignment: .leading, spacing: 4) {
           Text(template.name).font(.headline)
@@ -164,7 +165,7 @@ struct WorkoutStartView: View {
           }
         }.frame(maxWidth: .infinity, alignment: .leading)
         Image(systemName: selectionIndex == nil ? "circle" : "checkmark.circle.fill")
-          .foregroundStyle(selectionIndex == nil ? FitTheme.muted : FitTheme.accent)
+          .foregroundStyle(selectionIndex == nil ? FitTheme.muted : colorTheme.accent)
           .accessibilityHidden(true)
       }
       .padding(18).frame(minHeight: 64)

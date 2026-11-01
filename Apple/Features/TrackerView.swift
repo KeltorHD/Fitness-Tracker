@@ -3,6 +3,7 @@ import SwiftUI
 import UIKit
 
 struct TrackerView: View {
+  @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
   @Environment(\.calendar) private var calendar
   @Environment(\.openURL) private var openURL
@@ -90,7 +91,7 @@ struct TrackerView: View {
       }
     }
     .navigationTitle(L10n.text("Трекер", locale: locale))
-    .tint(FitTheme.accent)
+    .tint(colorTheme.accent)
     .task(id: request) {
       if request > 0 { await model.readHealth(day: day, calendar: calendar) }
     }

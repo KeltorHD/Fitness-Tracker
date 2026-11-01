@@ -2,6 +2,7 @@ import FitnessTrackerCore
 import SwiftUI
 
 struct HistoryView: View {
+  @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
   @Environment(AppStore.self) private var store
   @AppStorage("weightUnit") private var unit: WeightUnit = .kilograms
@@ -34,8 +35,9 @@ struct HistoryView: View {
                 }
                 Spacer()
                 Image(systemName: "chevron.right")
-              }.foregroundStyle(FitTheme.accent).padding(18)
-                .background(FitTheme.accent.opacity(0.08), in: .rect(cornerRadius: FitTheme.radius))
+              }.foregroundStyle(colorTheme.accent).padding(18)
+                .background(
+                  colorTheme.accent.opacity(0.08), in: .rect(cornerRadius: FitTheme.radius))
             }.buttonStyle(.plain).accessibilityIdentifier("resumeWorkout")
           }
           if let date = model.filterDate {
@@ -117,7 +119,7 @@ struct HistoryView: View {
               repeatAfterDismiss = $0
               selected = nil
             }
-          ).tint(FitTheme.accent)
+          ).tint(colorTheme.accent)
             .onAppear { store.showingWorkoutDetail = true }
         }
         .presentationDetents([.large])
@@ -156,15 +158,16 @@ struct HistoryView: View {
             ZStack {
               Circle().stroke(trained ? .clear : Color.gray.opacity(0.2), lineWidth: 1.5)
               if trained {
-                Circle().fill(FitTheme.accent)
-                Image(systemName: "checkmark").font(.headline).foregroundStyle(.white)
+                Circle().fill(colorTheme.accent)
+                Image(systemName: "checkmark").font(.headline).foregroundStyle(
+                  FitTheme.accentForeground)
               } else {
                 Text(day, format: .dateTime.day()).font(.subheadline)
               }
             }.frame(width: 34, height: 34)
-          }.foregroundStyle(highlighted ? FitTheme.accent : FitTheme.muted)
+          }.foregroundStyle(highlighted ? colorTheme.accent : FitTheme.muted)
             .frame(maxWidth: .infinity).padding(.vertical, 10)
-            .background(highlighted ? FitTheme.accent.opacity(0.12) : .clear, in: .capsule)
+            .background(highlighted ? colorTheme.accent.opacity(0.12) : .clear, in: .capsule)
         }.buttonStyle(.plain).accessibilityLabel(
           day.formatted(.dateTime.locale(locale).weekday(.wide).day().month(.wide).year()))
       }

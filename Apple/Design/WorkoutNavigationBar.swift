@@ -2,6 +2,7 @@ import SwiftUI
 
 /// The center action shares the glass outline but does not change the selected tab.
 struct WorkoutNavigationBar: View {
+  @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
   @Environment(\.accessibilityReduceMotion) private var reduceMotion
   @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
@@ -26,7 +27,7 @@ struct WorkoutNavigationBar: View {
               .font(.system(size: 22, weight: .semibold))
               .foregroundStyle(FitTheme.accentForeground)
               .frame(width: 52, height: 52)
-              .glassEffect(.regular.tint(FitTheme.accent).interactive(), in: .circle)
+              .glassEffect(.regular.tint(colorTheme.accent).interactive(), in: .circle)
               .glassEffectID("workoutStart", in: selectionGlass)
               .accessibilityHidden(true)
             if !dynamicTypeSize.isAccessibilitySize {

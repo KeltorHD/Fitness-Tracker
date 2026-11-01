@@ -3,6 +3,7 @@ import SwiftUI
 
 /// A schematic map of the catalog's muscle groups, rather than an anatomical atlas.
 struct ExerciseBodyPicker: View {
+  @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
   @Binding var selection: Set<MuscleGroup>
   @State private var showsBack = false
@@ -33,7 +34,7 @@ struct ExerciseBodyPicker: View {
             } label: {
               BodyMusclePatch()
                 .fill(
-                  selection.contains(region.group) ? FitTheme.accent : FitTheme.muted.opacity(0.4)
+                  selection.contains(region.group) ? colorTheme.accent : FitTheme.muted.opacity(0.4)
                 )
                 .overlay {
                   BodyMusclePatch().strokeBorder(

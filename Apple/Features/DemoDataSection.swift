@@ -78,10 +78,11 @@ struct DemoDataSection: View {
 }
 
 struct DemoModeBanner: View {
+  @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
   var body: some View {
     Label(L10n.text("Демо-режим · данные вымышлены", locale: locale), systemImage: "sparkles")
       .font(.caption.weight(.semibold)).frame(maxWidth: .infinity).padding(8)
-      .background(FitTheme.accent.opacity(0.12)).accessibilityIdentifier("demoModeBanner")
+      .background(colorTheme.accent.opacity(0.12)).accessibilityIdentifier("demoModeBanner")
   }
 }

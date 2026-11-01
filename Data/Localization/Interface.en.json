@@ -640,5 +640,17 @@
   "Воскресенье": "Sunday",
   "Подход": "Set",
   "Вес, %@": "Weight, %@",
-  "Вес: %@ %@": "Weight: %@ %@"
+  "Вес: %@ %@": "Weight: %@ %@",
+  "Индиго": "Indigo",
+  "Океан": "Ocean",
+  "Лес": "Forest",
+  "Роза": "Rose",
+  "Янтарь": "Amber",
+  "Сине-фиолетовые акценты": "Blue-violet accents",
+  "Морские синие акценты": "Ocean-blue accents",
+  "Зелёные акценты": "Green accents",
+  "Розовые акценты": "Rose accents",
+  "Тёплые золотистые акценты": "Warm golden accents",
+  "Цветовая тема": "Color theme",
+  "Режим оформления": "Appearance"
 }

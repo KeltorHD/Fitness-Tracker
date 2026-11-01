@@ -2,6 +2,7 @@ import FitnessTrackerCore
 import SwiftUI
 
 struct WorkoutNumberPad: View {
+  @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
   @ScaledMetric(relativeTo: .title2) private var keyHeight: CGFloat = 48
   let model: WorkoutNumberPadModel
@@ -93,7 +94,7 @@ struct WorkoutNumberPad: View {
           }.accessibilityLabel(L10n.text("Скрыть цифровую панель", locale: locale))
             .accessibilityIdentifier("numberPadHide")
             .keyboardShortcut(.escape, modifiers: [])
-        }.frame(width: keyHeight * 1.1).foregroundStyle(FitTheme.accent).background(FitTheme.card)
+        }.frame(width: keyHeight * 1.1).foregroundStyle(colorTheme.accent).background(FitTheme.card)
       }
       .font(.title2).monospacedDigit().buttonStyle(.plain)
       .frame(maxWidth: 600)

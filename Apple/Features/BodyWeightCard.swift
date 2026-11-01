@@ -2,6 +2,7 @@ import FitnessTrackerCore
 import SwiftUI
 
 struct BodyWeightCard: View {
+  @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
   @Environment(\.dynamicTypeSize) private var typeSize
   @AppStorage("weightUnit") private var unit: WeightUnit = .kilograms
@@ -61,7 +62,7 @@ struct BodyWeightCard: View {
               strategy: .always()))
           return "\(number) \(L10n.text(unit.rawValue, locale: locale))"
         } ?? "—"
-      ).font(.title2.weight(.medium)).monospacedDigit().foregroundStyle(FitTheme.accent)
+      ).font(.title2.weight(.medium)).monospacedDigit().foregroundStyle(colorTheme.accent)
       Text(L10n.text("К предыдущей записи", locale: locale)).font(.caption).foregroundStyle(
         .secondary)
     }
@@ -77,7 +78,7 @@ struct BodyWeightCard: View {
   }
   private var recordButton: some View {
     Button(L10n.text("Записать", locale: locale)) { recording = true }
-      .font(.headline).buttonStyle(.glassProminent).controlSize(.large).tint(FitTheme.accent)
+      .font(.headline).buttonStyle(.glassProminent).controlSize(.large).tint(colorTheme.accent)
       .accessibilityIdentifier("recordBodyWeight")
   }
   private func formatted(_ weight: Double?) -> String {

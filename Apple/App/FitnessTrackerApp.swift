@@ -7,8 +7,13 @@ import WidgetKit
   @State private var store: AppStore?
   @State private var startupError: String?
   @State private var pendingFileURL: URL?
+  @AppStorage("colorTheme") private var storedColorTheme = FitnessColorTheme.indigo.rawValue
   @AppStorage("appearance") private var appearance = "auto"
   @AppStorage("appLanguage") private var language: AppLanguage = .system
+  private var colorTheme: FitnessColorTheme {
+    FitnessColorTheme(rawValue: storedColorTheme) ?? .indigo
+  }
+
   var body: some Scene {
     WindowGroup {
       Group {
@@ -29,7 +34,8 @@ import WidgetKit
           ProgressView("FitnessTracker")
         }
       }
-      .tint(FitTheme.accent)
+      .tint(colorTheme.accent)
+      .environment(\.fitnessColorTheme, colorTheme)
       .environment(\.locale, language.locale())
       .environment(\.calendar, presentationCalendar)
       .preferredColorScheme(appearance == "light" ? .light : appearance == "dark" ? .dark : nil)

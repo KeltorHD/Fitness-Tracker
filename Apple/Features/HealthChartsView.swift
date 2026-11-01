@@ -3,6 +3,7 @@ import FitnessTrackerCore
 import SwiftUI
 
 struct HealthChartsView: View {
+  @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
   @Environment(AppStore.self) private var store
 
@@ -74,7 +75,7 @@ struct HealthChartsView: View {
                       x: .value(L10n.text("День", locale: locale), day.date, unit: .day),
                       y: .value(L10n.text("Шаги", locale: locale), count)
                     )
-                    .foregroundStyle(FitTheme.accent)
+                    .foregroundStyle(colorTheme.accent)
                   }
                 }.frame(height: 200).accessibilityIdentifier("dailyStepsChart")
                 ForEach(snapshot.steps) { day in
@@ -103,6 +104,7 @@ struct HealthChartsView: View {
 }
 
 struct HeartRateLineChart: View {
+  @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
   let points: [HeartRateChartPoint]
   @State private var rawSelectedDate: Date?
@@ -159,7 +161,7 @@ struct HeartRateLineChart: View {
           .symbolSize(75).accessibilityHidden(true)
         }
       }
-      .foregroundStyle(FitTheme.accent)
+      .foregroundStyle(colorTheme.accent)
       .chartYScale(domain: .automatic(includesZero: false))
       .chartXSelection(value: $rawSelectedDate)
       .accessibilityLabel(L10n.text("Пульс", locale: locale))
@@ -201,6 +203,7 @@ struct HeartRateLineChart: View {
 }
 
 struct CurrentHeartRateView: View {
+  @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
   let tracker: TrackerViewModel
   let health: HealthChartsViewModel
@@ -229,7 +232,7 @@ struct CurrentHeartRateView: View {
         if compact {
           HStack(spacing: 8) {
             Label(L10n.text("Пульс", locale: locale), systemImage: "heart.fill")
-              .foregroundStyle(FitTheme.accent)
+              .foregroundStyle(colorTheme.accent)
             Spacer(minLength: 4)
             if let reading, isFresh(at: timeline.date) {
               Text(reading.beatsPerMinute, format: .number.precision(.fractionLength(0)))
@@ -253,7 +256,7 @@ struct CurrentHeartRateView: View {
               }
               let fresh = isFresh(at: timeline.date)
               Text(L10n.text(fresh ? "Свежее измерение" : "Последнее измерение", locale: locale))
-                .font(.caption).foregroundStyle(fresh ? FitTheme.accent : FitTheme.muted)
+                .font(.caption).foregroundStyle(fresh ? colorTheme.accent : FitTheme.muted)
               Text(
                 reading.date, format: .dateTime.day().month(.abbreviated).hour().minute().second()
               )

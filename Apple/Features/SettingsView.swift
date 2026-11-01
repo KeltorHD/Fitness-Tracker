@@ -2,10 +2,12 @@ import FitnessTrackerCore
 import SwiftUI
 
 struct SettingsView: View {
+  @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
   @Environment(AppStore.self) private var store
   @AppStorage("weightUnit") private var unit: WeightUnit = .kilograms
   @AppStorage("weeklyGoal") private var goal = 3
+  @AppStorage("colorTheme") private var storedColorTheme = FitnessColorTheme.indigo.rawValue
   @AppStorage("appearance") private var appearance = "auto"
   @AppStorage("appLanguage") private var language: AppLanguage = .system
   @AppStorage("keepScreenAwake") private var keepScreenAwake = false
@@ -70,8 +72,24 @@ struct SettingsView: View {
             Text(L10n.text("Тёмная", locale: locale)).tag("dark")
           } label: {
             SettingsLabel(
-              title: L10n.text("Тема", locale: locale), symbol: "circle.lefthalf.filled")
+              title: L10n.text("Режим оформления", locale: locale), symbol: "circle.lefthalf.filled"
+            )
           }
+          NavigationLink {
+            ColorThemePicker(
+              selection: Binding(
+                get: { FitnessColorTheme(rawValue: storedColorTheme) ?? .indigo },
+                set: { storedColorTheme = $0.rawValue }))
+          } label: {
+            HStack {
+              SettingsLabel(
+                title: L10n.text("Цветовая тема", locale: locale), symbol: "paintpalette")
+              Spacer()
+              Text(L10n.text(colorTheme.title, locale: locale)).foregroundStyle(.secondary)
+            }
+          }
+          .accessibilityIdentifier("openColorThemePicker")
+          .accessibilityValue(L10n.text(colorTheme.title, locale: locale))
           Picker(selection: $unit) {
             ForEach(WeightUnit.allCases, id: \.self) {
               Text(L10n.text($0.rawValue, locale: locale)).tag($0)
@@ -186,7 +204,7 @@ struct SettingsView: View {
       .scrollContentBackground(.hidden).background(FitTheme.grouped).navigationTitle(
         L10n.text("Настройки", locale: locale)
       )
-      .tint(FitTheme.accent)
+      .tint(colorTheme.accent)
       .task(id: cloudRequest) {
         if cloudRequest > 0 && AppCapabilities.current.supportsCloudSync {
           await model.checkCloudAccount()
@@ -217,5 +235,40 @@ private struct SettingsLabel: View {
         .frame(width: 28, height: 28).background(color, in: .rect(cornerRadius: 7))
       Text(title).foregroundStyle(.primary)
     }
+  }
+}
+
+private struct ColorThemePicker: View {
+  @Environment(\.locale) private var locale
+  @Binding var selection: FitnessColorTheme
+
+  var body: some View {
+    List {
+      ForEach(FitnessColorTheme.allCases, id: \.self) { theme in
+        Button {
+          selection = theme
+        } label: {
+          HStack(spacing: 14) {
+            Circle().fill(theme.accent).frame(width: 32, height: 32)
+              .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 4) {
+              Text(L10n.text(theme.title, locale: locale)).font(.headline)
+                .foregroundStyle(.primary)
+              Text(L10n.text(theme.detail, locale: locale)).font(.subheadline)
+                .foregroundStyle(.secondary)
+            }.frame(maxWidth: .infinity, alignment: .leading)
+            if selection == theme {
+              Image(systemName: "checkmark").font(.body.weight(.semibold))
+                .foregroundStyle(theme.accent).accessibilityHidden(true)
+            }
+          }.padding(.vertical, 8).contentShape(.rect)
+        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(selection == theme ? [.isSelected] : [])
+        .accessibilityIdentifier("colorTheme_\(theme.rawValue)")
+      }
+    }
+    .navigationTitle(L10n.text("Цветовая тема", locale: locale))
+    .navigationBarTitleDisplayMode(.inline)
   }
 }

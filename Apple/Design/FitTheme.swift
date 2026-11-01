@@ -1,8 +1,7 @@
 import SwiftUI
 
-/// Shared journal surfaces and adaptive indigo accents; all cards keep rounded native shapes.
+/// Shared neutral journal surfaces. Accent colors come from the inherited FitnessColorTheme.
 enum FitTheme {
-  static let accent = Color("AccentColor")
   static let accentForeground = Color("AccentForeground")
   static let paper = Color(.systemBackground)
   static let card = Color(.secondarySystemBackground)

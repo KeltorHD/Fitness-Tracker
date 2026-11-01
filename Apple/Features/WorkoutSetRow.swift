@@ -31,6 +31,7 @@ struct WorkoutSetTableHeader: View {
 }
 
 struct WorkoutSetRow: View {
+  @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
   @Environment(\.dynamicTypeSize) private var typeSize
   let set: WorkoutSet
@@ -52,7 +53,7 @@ struct WorkoutSetRow: View {
       HStack(spacing: WorkoutSetTableLayout.spacing) {
         Button(action: select) {
           Text(marker ?? String(index + 1)).font(.callout.weight(selected ? .semibold : .regular))
-            .monospacedDigit().foregroundStyle(selected ? FitTheme.accent : FitTheme.muted)
+            .monospacedDigit().foregroundStyle(selected ? colorTheme.accent : FitTheme.muted)
             .frame(maxWidth: .infinity, minHeight: 44)
             .contentShape(.rect)
         }
@@ -89,7 +90,7 @@ struct WorkoutSetRow: View {
           .font(.body)
           .foregroundStyle(
             set.completedAt != nil
-              ? FitTheme.muted : selected ? FitTheme.accent : FitTheme.separator
+              ? FitTheme.muted : selected ? colorTheme.accent : FitTheme.separator
           )
           .frame(width: WorkoutSetTableLayout.statusWidth)
           .accessibilityLabel(
@@ -106,7 +107,9 @@ struct WorkoutSetRow: View {
     }
     .padding(.horizontal, WorkoutSetTableLayout.horizontalPadding)
     .padding(.vertical, typeSize.isAccessibilitySize ? 16 : 8)
-    .background(selected ? FitTheme.accent.opacity(0.09) : Color.clear, in: .rect(cornerRadius: 16))
+    .background(
+      selected ? colorTheme.accent.opacity(0.09) : Color.clear, in: .rect(cornerRadius: 16)
+    )
     .contextMenu {
       if editable && showsWarmupAction && !set.isDropSet {
         Button(
@@ -119,13 +122,14 @@ struct WorkoutSetRow: View {
   @ViewBuilder private var metadata: some View {
     if set.isWarmup {
       Label(L10n.text("Разминка", locale: locale), systemImage: "flame")
-        .foregroundStyle(FitTheme.accent).padding(.horizontal, 8).padding(.vertical, 4)
-        .background(FitTheme.accent.opacity(0.1), in: .capsule).accessibilityIdentifier("warmupSet")
+        .foregroundStyle(colorTheme.accent).padding(.horizontal, 8).padding(.vertical, 4)
+        .background(colorTheme.accent.opacity(0.1), in: .capsule).accessibilityIdentifier(
+          "warmupSet")
     }
     if set.isDropSet {
       Text(L10n.format("Дропсет · этапов: %@", String(set.stages.count), locale: locale))
-        .foregroundStyle(FitTheme.accent).padding(.horizontal, 8).padding(.vertical, 4)
-        .background(FitTheme.accent.opacity(0.1), in: .capsule)
+        .foregroundStyle(colorTheme.accent).padding(.horizontal, 8).padding(.vertical, 4)
+        .background(colorTheme.accent.opacity(0.1), in: .capsule)
     }
     if let multiplier = set.loadMultiplier, multiplier > 1 {
       Text(L10n.format("Множитель веса: %@", String(multiplier), locale: locale))
@@ -183,7 +187,7 @@ struct WorkoutSetRow: View {
         )
         .padding(.bottom, 4)
         .overlay(alignment: .bottom) {
-          if active { Capsule().fill(FitTheme.accent).frame(height: 3) }
+          if active { Capsule().fill(colorTheme.accent).frame(height: 3) }
         }
         .frame(maxWidth: .infinity, minHeight: 44)
         .contentShape(.rect)

@@ -182,6 +182,7 @@ struct WorkoutDetailView: View {
 }
 
 struct WorkoutEditorView: View {
+  @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
   @Environment(AppStore.self) private var store
   @Environment(\.dismiss) private var dismiss
@@ -226,6 +227,6 @@ struct WorkoutEditorView: View {
         }
       }
       .archiveTransferPresenter(when: true)
-    }.tint(FitTheme.accent)
+    }.tint(colorTheme.accent)
   }
 }

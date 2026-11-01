@@ -3860,6 +3860,23 @@
         }
       }
     },
+    "Зелёные акценты": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Зелёные акценты"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Green accents"
+          }
+        }
+      }
+    },
     "Изменение": {
       "extractionState": "manual",
       "localizations": {
@@ -4077,6 +4094,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Equipment"
+          }
+        }
+      }
+    },
+    "Индиго": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Индиго"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Indigo"
           }
         }
       }
@@ -4489,6 +4523,23 @@
         }
       }
     },
+    "Лес": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Лес"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forest"
+          }
+        }
+      }
+    },
     "Лицензия": {
       "extractionState": "manual",
       "localizations": {
@@ -4689,6 +4740,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "My templates"
+          }
+        }
+      }
+    },
+    "Морские синие акценты": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Морские синие акценты"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ocean-blue accents"
           }
         }
       }
@@ -6355,6 +6423,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Exercise volume by workout"
+          }
+        }
+      }
+    },
+    "Океан": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Океан"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ocean"
           }
         }
       }
@@ -8654,6 +8739,23 @@
         }
       }
     },
+    "Режим оформления": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Режим оформления"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appearance"
+          }
+        }
+      }
+    },
     "Режим трекера": {
       "extractionState": "manual",
       "localizations": {
@@ -8684,6 +8786,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Progress"
+          }
+        }
+      }
+    },
+    "Роза": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Роза"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rose"
+          }
+        }
+      }
+    },
+    "Розовые акценты": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Розовые акценты"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rose accents"
           }
         }
       }
@@ -9007,6 +9143,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Back"
+          }
+        }
+      }
+    },
+    "Сине-фиолетовые акценты": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сине-фиолетовые акценты"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blue-violet accents"
           }
         }
       }
@@ -9895,6 +10048,23 @@
         }
       }
     },
+    "Тёплые золотистые акценты": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Тёплые золотистые акценты"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warm golden accents"
+          }
+        }
+      }
+    },
     "УПРАЖНЕНИЕ": {
       "extractionState": "manual",
       "localizations": {
@@ -10388,6 +10558,23 @@
         }
       }
     },
+    "Цветовая тема": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Цветовая тема"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Color theme"
+          }
+        }
+      }
+    },
     "Цель на неделю: %@": {
       "extractionState": "manual",
       "localizations": {
@@ -10758,6 +10945,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "App language"
+          }
+        }
+      }
+    },
+    "Янтарь": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Янтарь"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amber"
           }
         }
       }

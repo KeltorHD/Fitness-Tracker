@@ -2,6 +2,7 @@ import FitnessTrackerCore
 import SwiftUI
 
 struct BodyWeightEditor: View {
+  @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
   @Environment(\.dismiss) private var dismiss
   @Environment(AppStore.self) private var store
@@ -70,7 +71,7 @@ struct BodyWeightEditor: View {
       }
       .safeAreaInset(edge: .top) { if store.isDemoMode { DemoModeBanner() } }
     }
-    .tint(FitTheme.accent)
+    .tint(colorTheme.accent)
     .onAppear { store.showingBodyWeightEditor = true }
     .onDisappear { store.showingBodyWeightEditor = false }
   }

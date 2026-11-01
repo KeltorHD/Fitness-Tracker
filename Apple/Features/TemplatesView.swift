@@ -2,6 +2,7 @@ import FitnessTrackerCore
 import SwiftUI
 
 struct TemplatesView: View {
+  @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
   @Environment(AppStore.self) private var store
   @State private var creating = false
@@ -21,7 +22,7 @@ struct TemplatesView: View {
             } label: {
               HStack(spacing: 12) {
                 Image(systemName: "figure.strengthtraining.traditional").foregroundStyle(
-                  FitTheme.accent)
+                  colorTheme.accent)
                 VStack(alignment: .leading, spacing: 4) {
                   Text(template.name).font(.title3.weight(.semibold)).foregroundStyle(.primary)
                   TemplateMuscleGroups(template: template)

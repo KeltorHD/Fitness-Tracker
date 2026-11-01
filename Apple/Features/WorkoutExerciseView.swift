@@ -2,6 +2,7 @@ import FitnessTrackerCore
 import SwiftUI
 
 struct WorkoutExerciseView: View {
+  @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
   @Environment(AppStore.self) private var store
   @Environment(\.dismiss) private var dismiss
@@ -63,7 +64,7 @@ struct WorkoutExerciseView: View {
         WorkoutNumberPad(model: numberPad, workout: workout)
       }
     }
-    .tint(FitTheme.accent).accessibilityIdentifier("workoutExerciseScreen")
+    .tint(colorTheme.accent).accessibilityIdentifier("workoutExerciseScreen")
     .onChange(of: workout) { _, value in
       if let value { model.refresh(value) }
       numberPad.reconcile(value)
@@ -308,6 +309,7 @@ struct WorkoutExerciseView: View {
 }
 
 struct WorkoutExerciseSheet: View {
+  @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(AppStore.self) private var store
   let workout: Workout
   let exerciseID: UUID
@@ -317,7 +319,7 @@ struct WorkoutExerciseSheet: View {
     NavigationStack {
       WorkoutExerciseView(workout: workout, exerciseID: exerciseID, unit: unit)
     }
-    .tint(FitTheme.accent)
+    .tint(colorTheme.accent)
     .presentationDetents([.large])
     .presentationDragIndicator(.visible)
     .safeAreaInset(edge: .top) { if store.isDemoMode { DemoModeBanner() } }
