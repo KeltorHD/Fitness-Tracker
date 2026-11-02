@@ -177,7 +177,7 @@ struct WorkoutSetCompletion {
   {
     guard workout.id == workoutID, workout.status == .active,
       let set = exercise(in: workout)?.sets.first(where: { $0.id == (setID ?? selectedSetID) }),
-      set.completedAt == nil
+      set.completedAt == nil || (adding && set.isDropSet && !set.isFullyCompleted)
     else { throw TrainingError.invalidState }
     if !adding {
       var plain = set

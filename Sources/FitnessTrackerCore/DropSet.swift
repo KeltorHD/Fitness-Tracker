@@ -38,8 +38,20 @@ extension WorkoutEngine {
       throw TrainingError.missingSet
     }
     var set = workout.exercises[e].sets[s]
-    guard set.completedAt == nil, stages.allSatisfy({ $0.completedAt == nil }) else {
-      throw TrainingError.invalidState
+    if set.completedAt != nil {
+      // A started group may only grow by one pending stage. Recorded work stays immutable.
+      let original = set.dropStages ?? []
+      guard set.isDropSet, !set.isFullyCompleted,
+        repetitions == set.repetitions, weightKG == set.weightKG,
+        stages.count == original.count + 1, stages.last?.completedAt == nil
+      else { throw TrainingError.invalidState }
+      for (old, new) in zip(original, stages) {
+        guard old.id == new.id, old.completedAt == new.completedAt,
+          old.completedAt == nil || old == new
+        else { throw TrainingError.invalidState }
+      }
+    } else {
+      guard stages.allSatisfy({ $0.completedAt == nil }) else { throw TrainingError.invalidState }
     }
     guard !set.isWarmup || stages.isEmpty else { throw TrainingError.invalidDropSet }
     set.repetitions = repetitions

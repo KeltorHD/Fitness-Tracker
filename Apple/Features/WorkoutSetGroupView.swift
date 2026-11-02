@@ -33,12 +33,28 @@ struct WorkoutSetGroupView: View {
             ).padding(.leading, 64)
           }
         }
-        Text(L10n.text("Без отдыха между этапами", locale: locale))
-          .font(.caption).foregroundStyle(.secondary).padding(.leading, 52).padding(.bottom, 10)
+        HStack(spacing: 8) {
+          Text(L10n.text("Без отдыха между этапами", locale: locale))
+            .font(.caption).foregroundStyle(.secondary)
+          Spacer(minLength: 0)
+          if workout.status == .active, !set.isFullyCompleted {
+            Button {
+              configureDrop(true)
+            } label: {
+              Image(systemName: "plus.circle").frame(width: 44, height: 44)
+            }.buttonStyle(.plain).foregroundStyle(colorTheme.accent)
+              .disabled(stages.count >= 5)
+              .accessibilityLabel(L10n.text("Добавить снижение веса", locale: locale))
+              .accessibilityIdentifier("appendDropStage_\(set.id)")
+          }
+        }
+        .padding(.leading, 50).padding(.trailing, 4).padding(.bottom, 6)
+        .overlay(alignment: .leading) { groupRail }
+        .listRowSeparator(.hidden)
       }
     }
     .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-    .listRowBackground(Color.clear)
+    .listRowBackground(set.isDropSet ? colorTheme.accent.opacity(0.06) : Color.clear)
   }
   private func row(_ value: WorkoutSet, index: Int, marker: String? = nil) -> some View {
     WorkoutSetRow(
@@ -54,6 +70,8 @@ struct WorkoutSetGroupView: View {
       }, advance: { numberPad.advance(in: workout) },
       openNote: marker == nil ? openNote : nil, contextActions: { contextActions }
     )
+    .overlay(alignment: .leading) { if set.isDropSet { groupRail } }
+    .listRowSeparator(set.isDropSet ? .hidden : .automatic)
     .id("number-\(value.id.uuidString)")
     .swipeActions(edge: .leading, allowsFullSwipe: false) {
       if workout.status == .active, numberPad.field == nil {
@@ -71,6 +89,11 @@ struct WorkoutSetGroupView: View {
     }
   }
 
+  private var groupRail: some View {
+    Rectangle().fill(colorTheme.accent.opacity(0.45)).frame(width: 2)
+      .allowsHitTesting(false).accessibilityHidden(true)
+  }
+
   @ViewBuilder private var contextActions: some View {
     Button(action: openNote) {
       Label(L10n.text("Заметка к подходу", locale: locale), systemImage: "note.text")
@@ -86,19 +109,18 @@ struct WorkoutSetGroupView: View {
             action: toggleWarmup
           ).accessibilityIdentifier("toggleSetWarmup")
         }
-        if !set.isWarmup {
-          Button(
-            L10n.text(
-              set.isDropSet ? "Добавить снижение веса" : "Сделать дропсетом", locale: locale)
-          ) {
-            configureDrop(true)
-          }.disabled((set.dropStages ?? []).count >= 5)
-            .accessibilityIdentifier("addDropStage")
-          if set.isDropSet {
-            Button(L10n.text("Убрать дропсет", locale: locale)) { configureDrop(false) }
-              .accessibilityIdentifier("removeDropSet")
-          }
+        if set.isDropSet {
+          Button(L10n.text("Убрать дропсет", locale: locale)) { configureDrop(false) }
+            .accessibilityIdentifier("removeDropSet")
         }
+      }
+      if !set.isWarmup, !set.isFullyCompleted {
+        Button(
+          L10n.text(set.isDropSet ? "Добавить снижение веса" : "Сделать дропсетом", locale: locale)
+        ) {
+          configureDrop(true)
+        }.disabled((set.dropStages ?? []).count >= 5)
+          .accessibilityIdentifier("addDropStage")
       }
       Button(role: .destructive, action: remove) {
         Label(L10n.text("Удалить подход", locale: locale), systemImage: "trash")

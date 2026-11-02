@@ -455,6 +455,17 @@ final class FitnessTrackerUITests: XCTestCase {
     ).firstMatch.press(forDuration: 1)
     app.buttons["removeDropSet"].tap()
     XCTAssertFalse(group.exists)
+    app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "setIndex_")
+    ).firstMatch.press(forDuration: 1)
+    app.buttons["addDropStage"].tap()
+    app.buttons["completeSet"].tap()
+    let append = app.buttons.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "appendDropStage_")
+    ).firstMatch
+    XCTAssertTrue(append.waitForExistence(timeout: 5))
+    append.tap()
+    XCTAssertTrue(app.staticTexts["Дропсет · этапов: 3"].waitForExistence(timeout: 5))
     XCTAssertEqual(app.alerts.count, 0)
   }
   @MainActor func testNumberPadClearsValuesAndCopiesFollowingRepetitions() {

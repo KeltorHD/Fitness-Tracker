@@ -118,9 +118,37 @@ private func rejects(_ action: () throws -> Void) throws {
       "History summary includes completed sets only")
     try checkDrops(at: date)
     try checkContextTarget(at: date)
+    try checkStartedGroupAppend(at: date)
     print(
       "Portable workout exercise presentation: localized/strict input, pounds precision, draft retention, repeated exercise identity, paging/reordering/removal, completion, pause/history guards and summaries passed (no Apple SDK)."
     )
+  }
+
+  @MainActor private static func checkStartedGroupAppend(at date: Date) throws {
+    let set = WorkoutSet(repetitions: 10, weightKG: 50, dropStages: [DropSetStage(weightKG: 40)])
+    let row = WorkoutExercise(exercise: Exercise(name: "Append", muscle: .back), sets: [set])
+    var workout = Workout(name: "Append", startedAt: date, exercises: [row])
+    try WorkoutEngine.completeSet(
+      in: &workout, exerciseID: row.id, setID: set.id, repetitions: 10, weightKG: 50, at: date)
+    let editor = WorkoutExercisePresentation(
+      workout: workout, exerciseID: row.id, unit: .kilograms, locale: Locale(identifier: "en_US"))
+    let stage = try requireStage(set)
+    editor.editWeight("35", setID: stage.id)
+    let configured = try editor.configuredDropSet(in: workout, adding: true, setID: set.id)
+    try expect(
+      configured.dropStages?.last?.weightKG == 28 && configured.completedAt == date,
+      "Appending a started group uses pending drafts and preserves the performed base")
+    try rejects { _ = try editor.configuredDropSet(in: workout, adding: false, setID: set.id) }
+    try WorkoutEngine.configureDropSet(
+      in: &workout, exerciseID: row.id, setID: set.id, repetitions: configured.repetitions,
+      weightKG: configured.weightKG, stages: configured.dropStages ?? [])
+    try expect(
+      workout.exercises[0].sets[0].dropStages?.count == 2 && workout.volume == 500
+        && workout.restEndsAt == nil, "A new pending drop does not perform work or start rest")
+  }
+  private static func requireStage(_ set: WorkoutSet) throws -> DropSetStage {
+    guard let stage = set.dropStages?.first else { throw Failure(message: "Missing drop") }
+    return stage
   }
 
   @MainActor private static func checkContextTarget(at date: Date) throws {

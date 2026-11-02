@@ -115,9 +115,7 @@ struct WorkoutSetRow<ContextActions: View>: View {
     .padding(.horizontal, WorkoutSetTableLayout.horizontalPadding)
     .padding(.vertical, typeSize.isAccessibilitySize ? 16 : 8)
     .background(
-      selected
-        ? colorTheme.accent.opacity(0.09)
-        : set.completedAt != nil ? colorTheme.accent.opacity(0.04) : Color.clear,
+      selected && set.completedAt == nil ? colorTheme.accent.opacity(0.09) : Color.clear,
       in: .rect(cornerRadius: 16)
     )
   }
@@ -130,10 +128,12 @@ struct WorkoutSetRow<ContextActions: View>: View {
             .font(.caption).lineLimit(2).truncationMode(.tail)
             .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
             .contentShape(.rect)
-        }.buttonStyle(.plain).foregroundStyle(colorTheme.accent)
-          .accessibilityLabel(L10n.text("Заметка к подходу", locale: locale))
-          .accessibilityValue(note)
-          .accessibilityIdentifier("setNote_\(set.id)")
+        }.buttonStyle(.plain).foregroundStyle(
+          set.completedAt != nil ? Color.primary : selected ? colorTheme.accent : .secondary
+        )
+        .accessibilityLabel(L10n.text("Заметка к подходу", locale: locale))
+        .accessibilityValue(note)
+        .accessibilityIdentifier("setNote_\(set.id)")
       } else {
         Color.clear.frame(maxWidth: .infinity, minHeight: 44).accessibilityHidden(true)
       }
@@ -142,9 +142,11 @@ struct WorkoutSetRow<ContextActions: View>: View {
 
   private var indexLabel: some View {
     Text(marker ?? String(index + 1))
-      .font(.callout.weight(selected || set.completedAt != nil ? .semibold : .regular))
+      .font(.callout.weight(selected ? .semibold : .regular))
       .monospacedDigit()
-      .foregroundStyle(selected || set.completedAt != nil ? colorTheme.accent : FitTheme.muted)
+      .foregroundStyle(
+        selected ? colorTheme.accent : set.completedAt != nil ? Color.primary : FitTheme.muted
+      )
       .frame(maxWidth: .infinity, minHeight: 44)
       .contentShape(.rect)
   }
