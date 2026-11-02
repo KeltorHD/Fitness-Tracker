@@ -1361,6 +1361,23 @@
         }
       }
     },
+    "В шаблоне нет упражнений.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "В шаблоне нет упражнений."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This template has no exercises."
+          }
+        }
+      }
+    },
     "В этой тренировке уже есть пульс другого источника. Он не будет заменён новой записью.": {
       "extractionState": "manual",
       "localizations": {
@@ -8144,6 +8161,23 @@
         }
       }
     },
+    "Показать упражнения": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Показать упражнения"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show exercises"
+          }
+        }
+      }
+    },
     "Показываем доступные источники: Apple Watch, AirPods, приложения браслетов и iPhone. Частота обновлений зависит от устройства и синхронизации с «Здоровьем».": {
       "extractionState": "manual",
       "localizations": {
@@ -9755,6 +9789,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Crunches"
+          }
+        }
+      }
+    },
+    "Скрыть упражнения": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Скрыть упражнения"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hide exercises"
           }
         }
       }
@@ -11880,6 +11931,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "level"
+          }
+        }
+      }
+    },
+    "№ %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "№ %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "#%@"
           }
         }
       }

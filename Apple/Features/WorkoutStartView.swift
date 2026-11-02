@@ -18,6 +18,7 @@ struct WorkoutStartView: View {
   @Environment(\.dismiss) private var dismiss
   @State private var currentDate = Date()
   @State private var selectedIDs: [UUID] = []
+  @State private var expandedIDs: Set<UUID> = []
   @State private var filter = WorkoutTemplateFilter()
   @State private var suggestions = WorkoutTemplateSuggestions(
     templates: [], date: .now, calendar: .current)
@@ -95,6 +96,7 @@ struct WorkoutStartView: View {
       .onChange(of: store.templates) {
         let availableIDs = Set(store.templates.map(\.id))
         selectedIDs.removeAll { !availableIDs.contains($0) }
+        expandedIDs.formIntersection(availableIDs)
         refresh()
       }
       .toolbar {
@@ -212,33 +214,115 @@ struct WorkoutStartView: View {
 
   private func templateRow(_ template: WorkoutTemplate) -> some View {
     let selectionIndex = selectedIDs.firstIndex(of: template.id)
-    return Button {
-      if let selectionIndex {
-        selectedIDs.remove(at: selectionIndex)
+    return WorkoutStartTemplateCard(
+      template: template, selectionIndex: selectionIndex,
+      isExpanded: Binding(
+        get: { expandedIDs.contains(template.id) },
+        set: { expanded in
+          if expanded { expandedIDs.insert(template.id) } else { expandedIDs.remove(template.id) }
+        })
+    ) {
+      guard store.templates.contains(where: { $0.id == template.id }) else { return }
+      if let currentIndex = selectedIDs.firstIndex(of: template.id) {
+        selectedIDs.remove(at: currentIndex)
       } else {
         selectedIDs.append(template.id)
       }
-    } label: {
-      HStack(spacing: 14) {
-        Image(systemName: "dumbbell").foregroundStyle(colorTheme.accent).accessibilityHidden(true)
-        VStack(alignment: .leading, spacing: 4) {
-          Text(template.name).font(.headline)
-          TemplateMuscleGroups(template: template)
-          Text(L10n.format("Упражнения: %@", String(template.exercises.count), locale: locale))
-            .font(.caption).foregroundStyle(.secondary)
-          if let selectionIndex {
-            Text(L10n.format("Порядок: %@", String(selectionIndex + 1), locale: locale))
-              .font(.caption).foregroundStyle(.secondary)
-          }
-        }.frame(maxWidth: .infinity, alignment: .leading)
-        Image(systemName: selectionIndex == nil ? "circle" : "checkmark.circle.fill")
-          .foregroundStyle(selectionIndex == nil ? FitTheme.muted : colorTheme.accent)
-          .accessibilityHidden(true)
-      }
-      .padding(18).frame(minHeight: 64)
-      .background(FitTheme.card, in: .rect(cornerRadius: FitTheme.radius)).contentShape(.rect)
     }
-    .buttonStyle(.plain).accessibilityIdentifier("startWorkoutTemplate_\(template.id)")
-    .accessibilityAddTraits(selectionIndex == nil ? [] : [.isSelected])
+  }
+}
+
+private struct WorkoutStartTemplateCard: View {
+  @Environment(\.fitnessColorTheme) private var colorTheme
+  @Environment(\.locale) private var locale
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
+  let template: WorkoutTemplate
+  let selectionIndex: Int?
+  @Binding var isExpanded: Bool
+  let toggleSelection: () -> Void
+
+  var body: some View {
+    HStack(alignment: .center, spacing: 12) {
+      if let selectionIndex {
+        Text(L10n.format("№ %@", String(selectionIndex + 1), locale: locale))
+          .font(.headline).monospacedDigit()
+          .foregroundStyle(FitTheme.accentForeground)
+          .padding(.horizontal, 10).frame(minHeight: 44)
+          .background(colorTheme.accent, in: .capsule)
+          .fixedSize(horizontal: true, vertical: false)
+          .accessibilityLabel(
+            L10n.format("Порядок: %@", String(selectionIndex + 1), locale: locale)
+          )
+          .accessibilityIdentifier("templateSelectionOrder_\(template.id)")
+          .transition(.move(edge: .leading).combined(with: .opacity))
+      }
+      VStack(alignment: .leading, spacing: 8) {
+        Button(action: toggleSelection) {
+          HStack(spacing: 12) {
+            VStack(alignment: .leading, spacing: 4) {
+              Text(template.name).font(.headline).foregroundStyle(.primary)
+              TemplateMuscleGroups(template: template)
+            }.frame(maxWidth: .infinity, alignment: .leading)
+            Image(systemName: selectionIndex == nil ? "circle" : "checkmark.circle.fill")
+              .foregroundStyle(selectionIndex == nil ? FitTheme.muted : colorTheme.accent)
+              .accessibilityHidden(true)
+          }
+          .frame(minHeight: 44).contentShape(.rect)
+        }
+        .buttonStyle(.plain).accessibilityIdentifier("startWorkoutTemplate_\(template.id)")
+        .accessibilityAddTraits(selectionIndex == nil ? [] : [.isSelected])
+        Button {
+          withAnimation(reduceMotion ? nil : .snappy(duration: 0.24)) {
+            isExpanded.toggle()
+          }
+        } label: {
+          HStack(spacing: 8) {
+            Text(L10n.format("Упражнения: %@", String(template.exercises.count), locale: locale))
+            Spacer(minLength: 0)
+            Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
+              .accessibilityHidden(true)
+          }
+          .font(.subheadline).foregroundStyle(.secondary)
+          .frame(minHeight: 44).contentShape(.rect)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(
+          L10n.text(isExpanded ? "Скрыть упражнения" : "Показать упражнения", locale: locale)
+        )
+        .accessibilityValue(String(template.exercises.count))
+        .accessibilityIdentifier("expandStartTemplate_\(template.id)")
+        if isExpanded {
+          Divider()
+          exercisePreview
+        }
+      }.frame(maxWidth: .infinity, alignment: .leading)
+    }
+    .padding(16)
+    .background(FitTheme.card, in: .rect(cornerRadius: FitTheme.radius))
+    .accessibilityElement(children: .contain)
+    .accessibilityIdentifier("startTemplateCard_\(template.id)")
+    .animation(reduceMotion ? nil : .snappy(duration: 0.24), value: selectionIndex)
+  }
+
+  private var exercisePreview: some View {
+    LazyVStack(alignment: .leading, spacing: 12) {
+      if template.exercises.isEmpty {
+        Text(L10n.text("В шаблоне нет упражнений.", locale: locale))
+          .font(.subheadline).foregroundStyle(.secondary)
+      }
+      ForEach(Array(template.exercises.enumerated()), id: \.element.id) { index, item in
+        HStack(alignment: .top, spacing: 10) {
+          Text(String(index + 1)).monospacedDigit().foregroundStyle(.secondary)
+            .accessibilityHidden(true)
+          Text(L10n.exerciseName(item.exercise, locale: locale))
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .fixedSize(horizontal: false, vertical: true)
+          WorkoutExerciseThumbnail(exercise: item.exercise)
+        }
+        .font(.subheadline).foregroundStyle(.primary)
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("startTemplateExercise_\(item.id)")
+      }
+    }
   }
 }

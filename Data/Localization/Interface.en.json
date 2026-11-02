@@ -697,5 +697,9 @@
   "Фильтры": "Filters",
   "Выбрано вне фильтра: %@": "Selected outside the filter: %@",
   "Упражнения: %@": "Exercises: %@",
-  "Выберите один или несколько шаблонов.": "Select one or more templates."
+  "Выберите один или несколько шаблонов.": "Select one or more templates.",
+  "№ %@": "#%@",
+  "Скрыть упражнения": "Hide exercises",
+  "Показать упражнения": "Show exercises",
+  "В шаблоне нет упражнений.": "This template has no exercises."
 }

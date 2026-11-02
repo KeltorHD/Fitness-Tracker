@@ -21,6 +21,70 @@ final class FitnessTrackerUITests: XCTestCase {
     }
   }
 
+  @MainActor func testTemplateOrderBadgeMovesContentAndRenumbersAfterDeselection() {
+    let app = launch()
+    XCTAssertTrue(app.buttons["workoutStartAction"].waitForExistence(timeout: 10))
+    app.buttons["workoutStartAction"].tap()
+    let firstID = "20000000-0000-0000-0000-000000000001"
+    let secondID = "20000000-0000-0000-0000-000000000002"
+    let first = app.buttons["startWorkoutTemplate_\(firstID)"]
+    let second = app.buttons["startWorkoutTemplate_\(secondID)"]
+    XCTAssertTrue(first.waitForExistence(timeout: 5))
+    let initialLeading = first.frame.minX
+    first.tap()
+    let firstBadge = app.staticTexts["templateSelectionOrder_\(firstID)"]
+    XCTAssertTrue(firstBadge.waitForExistence(timeout: 5))
+    XCTAssertEqual(firstBadge.label, "Порядок: 1")
+    XCTAssertGreaterThan(first.frame.minX, initialLeading)
+    XCTAssertLessThan(firstBadge.frame.maxX, first.frame.minX)
+    let card = app.descendants(matching: .any)
+      .matching(identifier: "startTemplateCard_\(firstID)").firstMatch
+    XCTAssertEqual(firstBadge.frame.midY, card.frame.midY, accuracy: 4)
+    reveal(second, in: app)
+    second.tap()
+    let secondBadge = app.staticTexts["templateSelectionOrder_\(secondID)"]
+    XCTAssertEqual(secondBadge.label, "Порядок: 2")
+    for _ in 0..<10 where !first.isHittable { app.swipeDown() }
+    XCTAssertTrue(first.isHittable)
+    first.tap()
+    XCTAssertTrue(firstBadge.waitForNonExistence(timeout: 5))
+    XCTAssertEqual(secondBadge.label, "Порядок: 1")
+  }
+
+  @MainActor func testTemplateExercisesExpandWithoutChangingSelectionAndSurviveSearch() {
+    let app = launch()
+    XCTAssertTrue(app.buttons["workoutStartAction"].waitForExistence(timeout: 10))
+    app.buttons["workoutStartAction"].tap()
+    let templateID = "20000000-0000-0000-0000-000000000001"
+    let select = app.buttons["startWorkoutTemplate_\(templateID)"]
+    let expand = app.buttons["expandStartTemplate_\(templateID)"]
+    XCTAssertTrue(expand.waitForExistence(timeout: 5))
+    expand.tap()
+    let preview = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "startTemplateExercise_")
+    ).firstMatch
+    XCTAssertTrue(preview.waitForExistence(timeout: 5))
+    XCTAssertEqual(preview.label, "Приседания")
+    XCTAssertFalse(select.isSelected)
+    XCTAssertFalse(app.buttons["startSelectedTemplates"].isEnabled)
+    select.tap()
+    let search = app.searchFields.firstMatch
+    search.tap()
+    search.typeText("несуществующий шаблон")
+    let reset = app.buttons["resetWorkoutTemplateFilters"]
+    reveal(reset, in: app)
+    reset.tap()
+    XCTAssertTrue(select.waitForExistence(timeout: 5))
+    XCTAssertTrue(select.isSelected)
+    XCTAssertTrue(preview.exists)
+    expand.tap()
+    XCTAssertTrue(preview.waitForNonExistence(timeout: 5))
+    XCTAssertTrue(select.isSelected)
+    app.buttons["startSelectedTemplates"].tap()
+    XCTAssertTrue(app.buttons["openWorkoutExercise"].firstMatch.waitForExistence(timeout: 5))
+    XCTAssertEqual(app.buttons.matching(identifier: "openWorkoutExercise").count, 3)
+  }
+
   @MainActor func testDiaryStartOpensTemplatePickerAndSearchKeepsSelection() {
     let app = launch()
     let start = app.buttons["startWorkout"]
