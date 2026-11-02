@@ -283,11 +283,15 @@ struct WorkoutLiveHeartRateChart: View {
   let workoutID: UUID
   var isExpanded = true
   var onToggle: (() -> Void)? = nil
+  let openSettings: () -> Void
+  let openCharts: () -> Void
+  var compactHeader = false
+  var chartHeight: CGFloat = 170
   var body: some View {
     VStack(alignment: .leading, spacing: 12) {
       HStack(alignment: isExpanded ? .top : .center, spacing: 8) {
         CurrentHeartRateView(
-          tracker: store.tracker, health: store.healthCharts, compact: !isExpanded
+          tracker: store.tracker, health: store.healthCharts, compact: compactHeader || !isExpanded
         )
         .frame(maxWidth: .infinity, alignment: .leading)
         if let onToggle {
@@ -306,27 +310,28 @@ struct WorkoutLiveHeartRateChart: View {
       }
       if isExpanded {
         if store.tracker.recording?.workoutID == workoutID, !store.tracker.chartPoints.isEmpty {
-          HeartRateLineChart(points: store.tracker.chartPoints).frame(height: 170)
+          HeartRateLineChart(points: store.tracker.chartPoints).frame(height: chartHeight)
             .accessibilityIdentifier("liveWorkoutHeartRateChart")
         } else if !store.healthCharts.workoutPoints.isEmpty {
-          HeartRateLineChart(points: store.healthCharts.workoutPoints).frame(height: 170)
+          HeartRateLineChart(points: store.healthCharts.workoutPoints).frame(height: chartHeight)
             .accessibilityIdentifier("liveWorkoutHeartRateChart")
         }
         if let error = store.tracker.error {
           Text(L10n.text(error, locale: locale)).font(.caption).foregroundStyle(.red)
         }
-        HStack {
-          NavigationLink(L10n.text("Пульс и шаги", locale: locale)) {
-            HealthChartsView().toolbar(.visible, for: .navigationBar)
-          }
-          .accessibilityIdentifier("openHealthCharts")
-          Spacer(minLength: 8)
-          NavigationLink(L10n.text("Трекер", locale: locale)) {
-            TrackerView(model: store.tracker).toolbar(.visible, for: .navigationBar)
-          }
-          .accessibilityIdentifier("openWorkoutTracker")
-        }
       }
+      HStack(spacing: 12) {
+        Button(action: openSettings) {
+          Label(L10n.text("Настройки пульса", locale: locale), systemImage: "slider.horizontal.3")
+            .font(.caption).frame(minHeight: 44)
+        }.accessibilityIdentifier("openWorkoutTracker")
+        Spacer(minLength: 0)
+        if isExpanded {
+          Button(L10n.text("Пульс и шаги", locale: locale), action: openCharts)
+            .font(.caption).frame(minHeight: 44)
+            .accessibilityIdentifier("openHealthCharts")
+        }
+      }.buttonStyle(.plain).foregroundStyle(.secondary)
     }
   }
 }

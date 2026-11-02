@@ -117,9 +117,36 @@ private func rejects(_ action: () throws -> Void) throws {
       summary.contains("42,5") && summary.contains("11") && !summary.contains("45"),
       "History summary includes completed sets only")
     try checkDrops(at: date)
+    try checkContextTarget(at: date)
     print(
       "Portable workout exercise presentation: localized/strict input, pounds precision, draft retention, repeated exercise identity, paging/reordering/removal, completion, pause/history guards and summaries passed (no Apple SDK)."
     )
+  }
+
+  @MainActor private static func checkContextTarget(at date: Date) throws {
+    let first = WorkoutSet(weightKG: 40)
+    let second = WorkoutSet(weightKG: 80, note: "Target note")
+    let row = WorkoutExercise(
+      exercise: Exercise(name: "Context target", muscle: .back), sets: [first, second])
+    var workout = Workout(name: "Context", startedAt: date, exercises: [row])
+    let editor = WorkoutExercisePresentation(
+      workout: workout, exerciseID: row.id, unit: .kilograms, locale: Locale(identifier: "en_US"))
+    editor.editWeight("60", setID: second.id)
+    let configured = try editor.configuredDropSet(in: workout, adding: true, setID: second.id)
+    try expect(
+      configured.id == second.id && configured.weightKG == 60
+        && configured.dropStages?.first?.weightKG == 48,
+      "Context action uses the pressed set and its own draft")
+    try expect(
+      configured.note == second.note && editor.selectedSetID == first.id
+        && workout.exercises[0].sets == [first, second],
+      "Preparing another set preserves note, selection and persisted values")
+    let stale = UUID()
+    try rejects { _ = try editor.configuredDropSet(in: workout, adding: true, setID: stale) }
+    workout.exercises[0].sets[1].completedAt = date
+    try rejects { _ = try editor.configuredDropSet(in: workout, adding: true, setID: second.id) }
+    workout.status = .paused
+    try rejects { _ = try editor.configuredDropSet(in: workout, adding: true, setID: first.id) }
   }
 
   @MainActor private static func checkDrops(at date: Date) throws {

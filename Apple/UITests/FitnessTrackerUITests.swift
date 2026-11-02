@@ -390,22 +390,42 @@ final class FitnessTrackerUITests: XCTestCase {
     app.buttons["numberPadDigit_5"].tap()
     app.buttons["numberPadDigit_0"].tap()
     app.buttons["numberPadHide"].tap()
-    let menu = app.buttons["Действия упражнения"]
-    menu.tap()
+    XCTAssertFalse(app.buttons["Действия упражнения"].exists)
+    let header = app.staticTexts["activeExerciseTitle"]
+    let headerTop = header.frame.minY
+    let pulse = app.descendants(matching: .any).matching(identifier: "exerciseHeartRateCard")
+      .firstMatch
+    XCTAssertTrue(pulse.exists)
+    XCTAssertTrue(app.buttons["openWorkoutTracker"].exists)
+    let visibility = app.buttons["toggleExerciseHeartRateVisibility"]
+    visibility.tap()
+    XCTAssertTrue(pulse.waitForNonExistence(timeout: 5))
+    visibility.tap()
+    XCTAssertTrue(pulse.waitForExistence(timeout: 5))
+    XCTAssertFalse(
+      app.descendants(matching: .any).matching(identifier: "liveWorkoutHeartRateChart").firstMatch
+        .exists)
+    XCTAssertTrue(app.buttons["openExerciseTechnique"].exists)
+    let complete = app.buttons["completeSet"]
+    XCTAssertEqual(
+      complete.frame.height, app.buttons["pauseExerciseWorkout"].frame.height, accuracy: 1)
+    XCTAssertEqual(complete.frame.height, app.buttons["addWorkoutSet"].frame.height, accuracy: 1)
+    XCTAssertEqual(header.frame.minY, headerTop, accuracy: 1)
+    weight.press(forDuration: 1)
     app.buttons["toggleSetWarmup"].tap()
     XCTAssertTrue(
       app.descendants(matching: .any).matching(identifier: "warmupSet").firstMatch.waitForExistence(
         timeout: 5))
-    menu.tap()
+    weight.press(forDuration: 1)
     app.buttons["toggleSetWarmup"].tap()
-    menu.tap()
+    weight.press(forDuration: 1)
     app.buttons["addDropStage"].tap()
     let group = app.descendants(matching: .any).matching(identifier: "dropSetGroup").firstMatch
     XCTAssertTrue(group.waitForExistence(timeout: 5))
-    menu.tap()
+    weight.press(forDuration: 1)
     app.buttons["addDropStage"].tap()
     XCTAssertTrue(app.staticTexts["Дропсет · этапов: 3"].waitForExistence(timeout: 5))
-    menu.tap()
+    weight.press(forDuration: 1)
     app.buttons["removeDropSet"].tap()
     XCTAssertFalse(group.exists)
     XCTAssertEqual(app.alerts.count, 0)

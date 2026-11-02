@@ -7,8 +7,10 @@ struct ActiveWorkoutView: View {
   @Environment(AppStore.self) private var store
   @Environment(\.dismiss) private var dismiss
   @AppStorage("weightUnit") private var unit: WeightUnit = .kilograms
-  // Keep the saved preference: previously hidden cards now open in compact form.
-  @AppStorage("showWorkoutHeartRate") private var heartRateExpanded = true
+  @State private var heartRateExpanded = false
+  @State private var showingHeartRateSettings = false
+  @State private var showingHealthCharts = false
+  @AppStorage("workoutHeartRateVisible") private var showsHeartRate = true
   @State private var insertion: InsertionRequest?
   @State private var templateAddition: TemplateAdditionRequest?
   @State private var pendingRemoval: RemovalRequest?
@@ -36,6 +38,12 @@ struct ActiveWorkoutView: View {
     NavigationStack {
       if let workout = store.active {
         overview(workout)
+          .navigationDestination(isPresented: $showingHeartRateSettings) {
+            TrackerView(model: store.tracker).toolbar(.visible, for: .navigationBar)
+          }
+          .navigationDestination(isPresented: $showingHealthCharts) {
+            HealthChartsView().toolbar(.visible, for: .navigationBar)
+          }
           .navigationTitle("").navigationBarTitleDisplayMode(.inline)
           .safeAreaInset(edge: .bottom, spacing: 0) {
             SessionControls(workout: workout) {
@@ -94,10 +102,13 @@ struct ActiveWorkoutView: View {
                 if !store.isDemoMode {
                   Button(
                     L10n.text(
-                      heartRateExpanded ? "Свернуть карточку пульса" : "Развернуть карточку пульса",
+                      showsHeartRate ? "Скрыть пульс" : "Показать пульс",
                       locale: locale),
-                    systemImage: heartRateExpanded ? "chevron.up" : "chevron.down"
-                  ) { heartRateExpanded.toggle() }
+                    systemImage: showsHeartRate ? "heart.slash" : "heart"
+                  ) {
+                    showsHeartRate.toggle()
+                    heartRateExpanded = false
+                  }
                   .accessibilityIdentifier("toggleWorkoutHeartRate")
                 }
                 Button(
@@ -180,6 +191,8 @@ struct ActiveWorkoutView: View {
         && !confirmCancel
         && pendingRemoval == nil && !store.showingBodyWeightEditor
     )
+    .onChange(of: store.tracker.recording?.workoutID) { heartRateExpanded = false }
+    .onChange(of: store.tracker.deviceProfile) { heartRateExpanded = false }
     .onChange(of: store.active?.id) { _, id in
       if insertion?.workoutID != id { insertion = nil }
       if templateAddition?.id != id { templateAddition = nil }
@@ -207,10 +220,12 @@ struct ActiveWorkoutView: View {
       Section {
         WorkoutSessionSummary(workout: workout, unit: unit, showsDuration: false).padding(
           .vertical, 16)
-        if !store.isDemoMode {
+        if showsHeartRate, !store.isDemoMode {
           WorkoutLiveHeartRateChart(
             workoutID: workout.id, isExpanded: heartRateExpanded,
-            onToggle: { heartRateExpanded.toggle() }
+            onToggle: { heartRateExpanded.toggle() },
+            openSettings: { showingHeartRateSettings = true },
+            openCharts: { showingHealthCharts = true }
           )
           .padding(.horizontal, FitTheme.cardPadding)
           .padding(.vertical, heartRateExpanded ? FitTheme.cardPadding : 4)

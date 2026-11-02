@@ -5679,6 +5679,23 @@
         }
       }
     },
+    "Настройки пульса": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Настройки пульса"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate settings"
+          }
+        }
+      }
+    },
     "Начальный": {
       "extractionState": "manual",
       "localizations": {
@@ -8433,6 +8450,23 @@
         }
       }
     },
+    "Показать пульс": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Показать пульс"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show heart rate"
+          }
+        }
+      }
+    },
     "Показать упражнения": {
       "extractionState": "manual",
       "localizations": {
@@ -10061,6 +10095,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Crunches"
+          }
+        }
+      }
+    },
+    "Скрыть пульс": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Скрыть пульс"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hide heart rate"
           }
         }
       }

@@ -10,6 +10,7 @@ struct WorkoutSetGroupView: View {
   let model: WorkoutExercisePresentation
   let numberPad: WorkoutNumberPadModel
   let toggleWarmup: () -> Void
+  let configureDrop: (Bool) -> Void
   let addAfter: () -> Void
   let remove: () -> Void
   let openNote: () -> Void
@@ -62,9 +63,9 @@ struct WorkoutSetGroupView: View {
     }
     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
       if workout.status == .active {
-        Button(role: .destructive, action: remove) {
+        Button(action: remove) {
           Label(L10n.text("Удалить подход", locale: locale), systemImage: "trash")
-        }.disabled((model.exercise(in: workout)?.sets.count ?? 0) <= 1)
+        }.tint(.red).disabled((model.exercise(in: workout)?.sets.count ?? 0) <= 1)
       }
     }
     .contextMenu {
@@ -75,10 +76,26 @@ struct WorkoutSetGroupView: View {
         Button(action: addAfter) {
           Label(L10n.text("Добавить подход после", locale: locale), systemImage: "plus")
         }.disabled((model.exercise(in: workout)?.sets.count ?? 30) >= 30)
-        if value.completedAt == nil, marker == nil, !set.isDropSet {
-          Button(
-            L10n.text(set.isWarmup ? "Рабочий подход" : "Разминочный подход", locale: locale),
-            action: toggleWarmup)
+        if set.completedAt == nil {
+          if !set.isDropSet {
+            Button(
+              L10n.text(set.isWarmup ? "Рабочий подход" : "Разминочный подход", locale: locale),
+              action: toggleWarmup
+            ).accessibilityIdentifier("toggleSetWarmup")
+          }
+          if !set.isWarmup {
+            Button(
+              L10n.text(
+                set.isDropSet ? "Добавить снижение веса" : "Сделать дропсетом", locale: locale)
+            ) {
+              configureDrop(true)
+            }.disabled((set.dropStages ?? []).count >= 5)
+              .accessibilityIdentifier("addDropStage")
+            if set.isDropSet {
+              Button(L10n.text("Убрать дропсет", locale: locale)) { configureDrop(false) }
+                .accessibilityIdentifier("removeDropSet")
+            }
+          }
         }
         Button(role: .destructive, action: remove) {
           Label(L10n.text("Удалить подход", locale: locale), systemImage: "trash")

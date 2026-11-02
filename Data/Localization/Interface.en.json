@@ -722,5 +722,8 @@
   "Добавить шаблоны": "Add templates",
   "Без выбора шаблона начнётся свободная тренировка.": "Starting without a template creates a free workout.",
   "Упражнения шаблонов добавятся в конец. Записанные подходы и параметры текущей тренировки сохранятся.": "Template exercises will be appended. Recorded sets and current workout settings will be preserved.",
-  "Длительность тренировки": "Workout duration"
+  "Длительность тренировки": "Workout duration",
+  "Настройки пульса": "Heart rate settings",
+  "Скрыть пульс": "Hide heart rate",
+  "Показать пульс": "Show heart rate"
 }

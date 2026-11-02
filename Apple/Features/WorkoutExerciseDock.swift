@@ -3,6 +3,7 @@ import SwiftUI
 
 struct WorkoutExerciseDock: View {
   @Environment(\.locale) private var locale
+  @Environment(\.fitnessColorTheme) private var colorTheme
   @ScaledMetric(relativeTo: .headline) private var actionRowHeight = 56
   let workout: Workout
   let exerciseIndex: Int
@@ -57,14 +58,14 @@ struct WorkoutExerciseDock: View {
     HStack(spacing: 0) {
       Button(action: pause) {
         Image(systemName: workout.status == .paused ? "play.fill" : "pause.fill")
-          .frame(width: 44, height: 44)
+          .frame(width: 44, height: actionRowHeight).contentShape(.rect)
       }
       .accessibilityLabel(
         L10n.text(workout.status == .paused ? "Продолжить" : "Пауза", locale: locale)
       )
       .accessibilityIdentifier("pauseExerciseWorkout")
       Button(action: finish) {
-        Image(systemName: "stop.fill").frame(width: 44, height: 44)
+        Image(systemName: "stop.fill").frame(width: 44, height: actionRowHeight).contentShape(.rect)
       }
       .disabled(workout.completedSets == 0)
       .accessibilityLabel(L10n.text("Завершить тренировку", locale: locale))
@@ -81,13 +82,12 @@ struct WorkoutExerciseDock: View {
 
   private var primaryAction: some View {
     Button(action: isOngoing ? complete : close) {
-      ViewThatFits(in: .horizontal) {
-        Text(L10n.text(isOngoing ? "Готово" : "К списку упражнений", locale: locale)).fixedSize()
-        Image(systemName: isOngoing ? "checkmark" : "chevron.down")
-      }
-      .font(.headline).frame(maxWidth: .infinity, minHeight: 44)
+      Image(systemName: isOngoing ? "checkmark" : "chevron.down")
+        .font(.title2.weight(.semibold))
+        .frame(width: actionRowHeight, height: actionRowHeight).contentShape(.circle)
     }
-    .buttonStyle(.glassProminent).buttonBorderShape(.capsule)
+    .buttonStyle(.plain)
+    .glassEffect(.regular.tint(colorTheme.accent.opacity(0.3)).interactive(), in: .circle)
     .disabled(isOngoing && !canComplete).accessibilityLabel(actionTitle)
     .accessibilityIdentifier("completeSet")
   }
@@ -119,8 +119,9 @@ struct WorkoutExerciseDock: View {
 
   private func icon(_ name: String, title: String, action: @escaping () -> Void) -> some View {
     Button(action: action) {
-      Image(systemName: name).font(.body.weight(.semibold)).frame(minWidth: 44, minHeight: 44)
-    }.buttonStyle(.glass).buttonBorderShape(.circle)
+      Image(systemName: name).font(.body.weight(.semibold))
+        .frame(width: actionRowHeight, height: actionRowHeight).contentShape(.circle)
+    }.buttonStyle(.plain).glassEffect(.regular.interactive(), in: .circle)
       .accessibilityLabel(L10n.text(title, locale: locale))
   }
 }

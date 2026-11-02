@@ -173,9 +173,10 @@ struct WorkoutSetCompletion {
     return WorkoutSetCompletion(
       exerciseID: row.id, set: try preparedSet(set), stageID: selectedStageID)
   }
-  func configuredDropSet(in workout: Workout, adding: Bool) throws -> WorkoutSet {
+  func configuredDropSet(in workout: Workout, adding: Bool, setID: UUID? = nil) throws -> WorkoutSet
+  {
     guard workout.id == workoutID, workout.status == .active,
-      let set = exercise(in: workout)?.sets.first(where: { $0.id == selectedSetID }),
+      let set = exercise(in: workout)?.sets.first(where: { $0.id == (setID ?? selectedSetID) }),
       set.completedAt == nil
     else { throw TrainingError.invalidState }
     if !adding {

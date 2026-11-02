@@ -11,6 +11,9 @@ struct WorkoutExerciseView: View {
   @State private var noteRequest: SetNoteRequest?
   @State private var removal: WorkoutSet?
   @State private var heartRateExpanded = false
+  @State private var showingHeartRateSettings = false
+  @State private var showingHealthCharts = false
+  @AppStorage("exerciseHeartRateVisible") private var showsHeartRate = true
   @State private var movingForward = true
   @State private var lastCompletion: ContinuousClock.Instant?
   @State private var numberPad: WorkoutNumberPadModel
@@ -67,6 +70,12 @@ struct WorkoutExerciseView: View {
         }
       }
     }
+    .navigationDestination(isPresented: $showingHeartRateSettings) {
+      TrackerView(model: store.tracker).toolbar(.visible, for: .navigationBar)
+    }
+    .navigationDestination(isPresented: $showingHealthCharts) {
+      HealthChartsView().toolbar(.visible, for: .navigationBar)
+    }
     .toolbar(.hidden, for: .navigationBar)
     .safeAreaInset(edge: .bottom, spacing: 0) {
       if let workout, numberPad.field != nil {
@@ -79,6 +88,8 @@ struct WorkoutExerciseView: View {
       numberPad.reconcile(value)
     }
     .onDisappear { numberPad.dismiss() }
+    .onChange(of: store.tracker.recording?.workoutID) { heartRateExpanded = false }
+    .onChange(of: store.tracker.deviceProfile) { heartRateExpanded = false }
     .sheet(item: $noteRequest) { request in
       SetNoteSheet(request: request) { text in
         guard let workout else { return false }
@@ -143,75 +154,68 @@ struct WorkoutExerciseView: View {
       .accessibilityIdentifier("closeWorkoutExercise")
     }.padding(.horizontal, 8).padding(.top, 8)
   }
+  private func exerciseHeading(_ row: WorkoutExercise, workout: Workout) -> some View {
+    VStack(spacing: 8) {
+      HStack(alignment: .top, spacing: 8) {
+        VStack(alignment: .leading, spacing: 4) {
+          Text(L10n.exerciseName(row.exercise, locale: locale)).font(.title2.bold())
+            .foregroundStyle(.primary).accessibilityAddTraits(.isHeader)
+            .accessibilityIdentifier("activeExerciseTitle")
+          Text(primaryMuscleNames(row.exercise)).font(.subheadline).foregroundStyle(.secondary)
+        }.frame(maxWidth: .infinity, alignment: .leading)
+        if !store.isDemoMode, store.active?.id == workout.id {
+          Button {
+            withAnimation(reduceMotion ? nil : .smooth) {
+              showsHeartRate.toggle()
+              heartRateExpanded = false
+            }
+          } label: {
+            Image(systemName: showsHeartRate ? "heart.fill" : "heart.slash")
+              .frame(width: 44, height: 44)
+          }.buttonStyle(.plain).foregroundStyle(.secondary)
+            .accessibilityLabel(
+              L10n.text(showsHeartRate ? "Скрыть пульс" : "Показать пульс", locale: locale)
+            )
+            .accessibilityIdentifier("toggleExerciseHeartRateVisibility")
+        }
+      }
+      if showsHeartRate, !store.isDemoMode, store.active?.id == workout.id {
+        WorkoutLiveHeartRateChart(
+          workoutID: workout.id, isExpanded: heartRateExpanded && numberPad.field == nil,
+          onToggle: {
+            numberPad.dismiss()
+            withAnimation(reduceMotion ? nil : .smooth) { heartRateExpanded.toggle() }
+          },
+          openSettings: {
+            numberPad.dismiss()
+            showingHeartRateSettings = true
+          },
+          openCharts: {
+            numberPad.dismiss()
+            showingHealthCharts = true
+          },
+          compactHeader: true, chartHeight: 100
+        )
+        .padding(.horizontal, 12).padding(.vertical, 4)
+        .background(FitTheme.card, in: .rect(cornerRadius: 18))
+        .accessibilityIdentifier("exerciseHeartRateCard")
+      }
+    }
+  }
+
   private func exerciseCard(_ row: WorkoutExercise, workout: Workout) -> some View {
-    VStack(spacing: 16) {
+    VStack(spacing: 12) {
+      exerciseHeading(row, workout: workout)
       ScrollViewReader { proxy in
         List {
           Group {
-            HStack(alignment: .top) {
-              VStack(alignment: .leading, spacing: 6) {
-                Text(L10n.exerciseName(row.exercise, locale: locale)).font(.title2.bold())
-                  .foregroundStyle(.primary).accessibilityAddTraits(.isHeader)
-                Text(primaryMuscleNames(row.exercise)).font(.subheadline).foregroundStyle(
-                  .secondary)
-              }.frame(maxWidth: .infinity, alignment: .leading)
-              Menu {
-                NavigationLink {
-                  ExerciseDetailView(exercise: row.exercise).toolbar(.visible, for: .navigationBar)
-                } label: {
-                  Label(L10n.text("Техника выполнения", locale: locale), systemImage: "info.circle")
-                }
-                if let set = row.sets.first(where: { $0.id == model.selectedSetID }),
-                  workout.status == .active, set.completedAt == nil
-                {
-                  if !set.isDropSet {
-                    Button(
-                      L10n.text(
-                        set.isWarmup ? "Рабочий подход" : "Разминочный подход", locale: locale)
-                    ) { toggleWarmup(set, row: row, workout: workout) }
-                    .accessibilityIdentifier("toggleSetWarmup")
-                  }
-                  if !set.isWarmup {
-                    Button(
-                      L10n.text(
-                        set.isDropSet ? "Добавить снижение веса" : "Сделать дропсетом",
-                        locale: locale
-                      )
-                    ) { configureDrop(workout, adding: true) }
-                    .disabled((set.dropStages ?? []).count >= 5).accessibilityIdentifier(
-                      "addDropStage")
-                    if set.isDropSet {
-                      Button(L10n.text("Убрать дропсет", locale: locale)) {
-                        configureDrop(workout, adding: false)
-                      }
-                      .accessibilityIdentifier("removeDropSet")
-                    }
-                  }
-                }
-              } label: {
-                Image(systemName: "ellipsis").font(.title3.weight(.semibold)).frame(
-                  width: 44, height: 44)
-              }
-              .accessibilityLabel(L10n.text("Действия упражнения", locale: locale))
-            }.foregroundStyle(.secondary)
-            if !store.isDemoMode, store.active?.id == workout.id {
-              WorkoutLiveHeartRateChart(
-                workoutID: workout.id, isExpanded: heartRateExpanded,
-                onToggle: {
-                  withAnimation(reduceMotion ? nil : .smooth) { heartRateExpanded.toggle() }
-                }
-              )
-              .padding(.horizontal, 14).padding(.vertical, heartRateExpanded ? 14 : 6)
-              .background(FitTheme.card, in: .rect(cornerRadius: 18))
-              .listRowSeparator(.hidden)
-              .accessibilityIdentifier("exerciseHeartRateCard")
-            }
             WorkoutSetTableHeader(unit: model.unit)
             Group {
               ForEach(Array(row.sets.enumerated()), id: \.element.id) { index, set in
                 WorkoutSetGroupView(
                   set: set, index: index, workout: workout, model: model, numberPad: numberPad,
                   toggleWarmup: { toggleWarmup(set, row: row, workout: workout) },
+                  configureDrop: { configureDrop(workout, setID: set.id, adding: $0) },
                   addAfter: {
                     numberPad.dismiss()
                     mutate(workout) {
@@ -281,15 +285,14 @@ struct WorkoutExerciseView: View {
         .frame(minWidth: 44, minHeight: 44)
         .accessibilityLabel(L10n.text("Прогресс упражнения", locale: locale))
         .accessibilityIdentifier("openExerciseProgress")
-        Spacer()
         NavigationLink {
           ExerciseDetailView(exercise: row.exercise).toolbar(.visible, for: .navigationBar)
         } label: {
-          HStack {
-            WorkoutExerciseThumbnail(exercise: row.exercise)
-            Image(systemName: "info").font(.title2)
-          }
-        }.frame(minHeight: 44).accessibilityLabel(L10n.text("Техника выполнения", locale: locale))
+          Image(systemName: "info.circle").font(.title2)
+        }.frame(minWidth: 44, minHeight: 44)
+          .accessibilityLabel(L10n.text("Техника выполнения", locale: locale))
+          .accessibilityIdentifier("openExerciseTechnique")
+        Spacer()
       }.foregroundStyle(.secondary)
     }
   }
@@ -322,6 +325,7 @@ struct WorkoutExerciseView: View {
     mutate(workout) { try WorkoutEngine.addSet(exerciseID: model.exerciseID, to: &$0) }
   }
   private func toggleWarmup(_ set: WorkoutSet, row: WorkoutExercise, workout: Workout) {
+    numberPad.dismiss()
     mutate(workout) {
       try WorkoutEngine.setWarmup(!set.isWarmup, in: &$0, exerciseID: row.id, setID: set.id)
     }
@@ -367,10 +371,10 @@ struct WorkoutExerciseView: View {
       if saved { lastCompletion = ContinuousClock().now }
     } catch { self.error = error.localizedDescription }
   }
-  private func configureDrop(_ workout: Workout, adding: Bool) {
+  private func configureDrop(_ workout: Workout, setID: UUID, adding: Bool) {
     numberPad.dismiss()
     do {
-      let set = try model.configuredDropSet(in: workout, adding: adding)
+      let set = try model.configuredDropSet(in: workout, adding: adding, setID: setID)
       error = nil
       mutate(workout) {
         try WorkoutEngine.configureDropSet(
