@@ -727,5 +727,13 @@
   "Скрыть пульс": "Hide heart rate",
   "Показать пульс": "Show heart rate",
   "Открыть фото и анимацию упражнения": "Open exercise photos and animation",
-  "Очистить значение": "Clear value"
+  "Очистить значение": "Clear value",
+  "Повт.": "Reps",
+  "Изменить выполненный подход": "Edit completed set",
+  "Удалить этап дропсета": "Delete drop stage",
+  "Удалить этап дропсета?": "Delete drop stage?",
+  "Удалить группу дропсета": "Delete drop-set group",
+  "Удалить группу дропсета?": "Delete drop-set group?",
+  "Будет удалён только этот этап дропсета.": "Only this drop stage will be deleted.",
+  "Действия группы дропсета": "Drop-set group actions"
 }

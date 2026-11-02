@@ -121,6 +121,48 @@ import XCTest
     XCTAssertEqual(try repository.workouts().first, store.active)
   }
 
+  func testCompletedCorrectionAndChildDeletionRollbackOnSaveFailure() throws {
+    let repository = FailingWorkoutRepository()
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    store.start(template: ExerciseCatalog.starterTemplates[0])
+    let initial = try XCTUnwrap(store.active)
+    let row = initial.exercises[0]
+    let set = row.sets[0]
+    XCTAssertTrue(
+      store.mutate {
+        try WorkoutEngine.configureDropSet(
+          in: &$0, exerciseID: row.id, setID: set.id, repetitions: 10, weightKG: 50,
+          stages: [DropSetStage(weightKG: 40)])
+        try WorkoutEngine.completeSet(
+          in: &$0, exerciseID: row.id, setID: set.id, repetitions: 10, weightKG: 50)
+      })
+    let original = try XCTUnwrap(store.active)
+    let stage = try XCTUnwrap(original.exercises[0].sets[0].dropStages?.first)
+    repository.failSaves = true
+    XCTAssertFalse(
+      store.mutate {
+        try WorkoutEngine.correctCompletedTarget(
+          in: &$0, exerciseID: row.id, targetID: set.id, repetitions: 12, weightKG: 50)
+      })
+    XCTAssertEqual(store.active, original)
+    XCTAssertFalse(
+      store.mutate {
+        try WorkoutEngine.removeDropStage(
+          in: &$0, exerciseID: row.id, setID: set.id, stageID: stage.id)
+      })
+    XCTAssertEqual(store.active, original)
+    XCTAssertEqual(try repository.workouts().first, original)
+    repository.failSaves = false
+    XCTAssertTrue(
+      store.mutate {
+        try WorkoutEngine.correctCompletedTarget(
+          in: &$0, exerciseID: row.id, targetID: set.id, repetitions: 12, weightKG: 50)
+      })
+    XCTAssertEqual(
+      store.active?.exercises[0].sets[0].completedAt, original.exercises[0].sets[0].completedAt)
+  }
+
   func testGeneralStartPresentsPickerWithoutSavingAndResumesExistingSession() throws {
     let repository = FailingWorkoutRepository()
     let store = AppStore(

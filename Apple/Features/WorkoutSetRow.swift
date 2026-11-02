@@ -22,7 +22,7 @@ struct WorkoutSetTableHeader: View {
         HStack(spacing: WorkoutSetTableLayout.spacing) {
           Text(L10n.format("Вес, %@", L10n.text(unit.rawValue, locale: locale), locale: locale))
             .frame(width: weightWidth)
-          Text(L10n.text("Повторения", locale: locale)).frame(width: repetitionsWidth)
+          Text(L10n.text("Повт.", locale: locale)).lineLimit(1).frame(width: repetitionsWidth)
           Text(L10n.text("Заметка", locale: locale)).frame(maxWidth: .infinity)
         }.frame(maxWidth: .infinity)
       }
@@ -45,6 +45,8 @@ struct WorkoutSetRow<ContextActions: View>: View {
   var marker: String? = nil
   let unit: WeightUnit
   let editable: Bool
+  var showsDropMetadata = true
+  var canCorrectCompleted = false
   let selected: Bool
   let weight: String
   let repetitions: String
@@ -52,6 +54,7 @@ struct WorkoutSetRow<ContextActions: View>: View {
   let edit: (WorkoutSetField) -> Void
   let select: () -> Void
   let advance: () -> Void
+  let editCompleted: () -> Void
   var openNote: (() -> Void)? = nil
   @ViewBuilder let contextActions: () -> ContextActions
 
@@ -102,7 +105,7 @@ struct WorkoutSetRow<ContextActions: View>: View {
         }.frame(maxWidth: .infinity)
         if typeSize.isAccessibilitySize { noteField.frame(minWidth: 64, maxWidth: .infinity) }
       }
-      if set.isWarmup || set.isDropSet || (set.loadMultiplier ?? 1) > 1 {
+      if set.isWarmup || (showsDropMetadata && set.isDropSet) || (set.loadMultiplier ?? 1) > 1 {
         ViewThatFits(in: .horizontal) {
           HStack(spacing: 8) { metadata }
           VStack(alignment: .leading, spacing: 6) { metadata }
@@ -158,7 +161,7 @@ struct WorkoutSetRow<ContextActions: View>: View {
         .background(colorTheme.accent.opacity(0.1), in: .capsule).accessibilityIdentifier(
           "warmupSet")
     }
-    if set.isDropSet {
+    if showsDropMetadata && set.isDropSet {
       Text(L10n.format("Дропсет · этапов: %@", String(set.stages.count), locale: locale))
         .foregroundStyle(colorTheme.accent).padding(.horizontal, 8).padding(.vertical, 4)
         .background(colorTheme.accent.opacity(0.1), in: .capsule)
@@ -175,6 +178,16 @@ struct WorkoutSetRow<ContextActions: View>: View {
           .accessibilityIdentifier("setWeight_\(set.id)")
           .accessibilityLabel(
             L10n.format("Вес в %@", L10n.text(unit.rawValue, locale: locale), locale: locale))
+      } else if canCorrectCompleted && set.completedAt != nil {
+        Button(action: editCompleted) {
+          Text(formattedWeight).frame(maxWidth: .infinity, minHeight: 44).contentShape(.rect)
+        }
+        .buttonStyle(.plain).accessibilityLabel(
+          L10n.format("Вес в %@", L10n.text(unit.rawValue, locale: locale), locale: locale)
+        )
+        .accessibilityHint(L10n.text("Изменить выполненный подход", locale: locale))
+        .accessibilityValue(formattedWeight)
+        .accessibilityIdentifier("correctSetWeight_\(set.id)")
       } else {
         Text(formattedWeight).frame(maxWidth: .infinity, minHeight: 44)
           .accessibilityLabel(
@@ -198,6 +211,15 @@ struct WorkoutSetRow<ContextActions: View>: View {
         valueButton(repetitions, field: .repetitions(set.id))
           .accessibilityIdentifier("setRepetitions_\(set.id)")
           .accessibilityLabel(L10n.text("Повторения", locale: locale))
+      } else if canCorrectCompleted && set.completedAt != nil {
+        Button(action: editCompleted) {
+          Text(String(set.repetitions)).frame(maxWidth: .infinity, minHeight: 44).contentShape(
+            .rect)
+        }
+        .buttonStyle(.plain).accessibilityLabel(L10n.text("Повторения", locale: locale))
+        .accessibilityHint(L10n.text("Изменить выполненный подход", locale: locale))
+        .accessibilityValue(String(set.repetitions))
+        .accessibilityIdentifier("correctSetRepetitions_\(set.id)")
       } else {
         Text(String(set.repetitions)).frame(maxWidth: .infinity, minHeight: 44)
           .accessibilityLabel(

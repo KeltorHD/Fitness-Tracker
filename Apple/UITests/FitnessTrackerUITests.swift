@@ -84,7 +84,7 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(next.waitForExistence(timeout: 5))
     XCTAssertFalse(previous.isEnabled)
     XCTAssertGreaterThanOrEqual(next.frame.height, 44)
-    XCTAssertEqual(next.frame.width, 52, accuracy: 1)
+    XCTAssertGreaterThanOrEqual(next.frame.width, 56)
     let completion = app.buttons["completeSet"]
     XCTAssertEqual(next.frame.midY, completion.frame.midY, accuracy: 1)
     XCTAssertEqual(previous.frame.midY, completion.frame.midY, accuracy: 1)
@@ -466,6 +466,20 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(append.waitForExistence(timeout: 5))
     append.tap()
     XCTAssertTrue(app.staticTexts["Дропсет · этапов: 3"].waitForExistence(timeout: 5))
+    let correction = app.buttons.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "correctSetWeight_")
+    ).firstMatch
+    XCTAssertTrue(correction.waitForExistence(timeout: 5))
+    correction.tap()
+    XCTAssertTrue(app.textFields["correctCompletedWeight"].waitForExistence(timeout: 5))
+    app.buttons["saveCompletedSetCorrection"].tap()
+    let child = app.cells.containing(.any, identifier: "dropStage").firstMatch
+    XCTAssertTrue(child.waitForExistence(timeout: 5))
+    child.swipeLeft()
+    app.buttons["Удалить этап дропсета"].firstMatch.tap()
+    app.buttons["Удалить этап дропсета"].firstMatch.tap()
+    XCTAssertTrue(app.staticTexts["Дропсет · этапов: 2"].waitForExistence(timeout: 5))
+    XCTAssertTrue(group.exists)
     XCTAssertEqual(app.alerts.count, 0)
   }
   @MainActor func testNumberPadClearsValuesAndCopiesFollowingRepetitions() {

@@ -1242,6 +1242,23 @@
         }
       }
     },
+    "Будет удалён только этот этап дропсета.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Будет удалён только этот этап дропсета."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Only this drop stage will be deleted."
+          }
+        }
+      }
+    },
     "В CSV нет тренировок для импорта.": {
       "extractionState": "manual",
       "localizations": {
@@ -2925,6 +2942,23 @@
         }
       }
     },
+    "Действия группы дропсета": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Действия группы дропсета"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drop-set group actions"
+          }
+        }
+      }
+    },
     "Действия тренировки": {
       "extractionState": "manual",
       "localizations": {
@@ -4400,6 +4434,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Edit weight"
+          }
+        }
+      }
+    },
+    "Изменить выполненный подход": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Изменить выполненный подход"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit completed set"
           }
         }
       }
@@ -7991,6 +8042,23 @@
         }
       }
     },
+    "Повт.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Повт."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reps"
+          }
+        }
+      }
+    },
     "Повторения": {
       "extractionState": "manual",
       "localizations": {
@@ -11204,6 +11272,40 @@
         }
       }
     },
+    "Удалить группу дропсета": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Удалить группу дропсета"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete drop-set group"
+          }
+        }
+      }
+    },
+    "Удалить группу дропсета?": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Удалить группу дропсета?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete drop-set group?"
+          }
+        }
+      }
+    },
     "Удалить запись веса?": {
       "extractionState": "manual",
       "localizations": {
@@ -11336,6 +11438,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Delete template?"
+          }
+        }
+      }
+    },
+    "Удалить этап дропсета": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Удалить этап дропсета"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete drop stage"
+          }
+        }
+      }
+    },
+    "Удалить этап дропсета?": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Удалить этап дропсета?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete drop stage?"
           }
         }
       }

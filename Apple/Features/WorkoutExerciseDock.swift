@@ -42,43 +42,32 @@ struct WorkoutExerciseDock: View {
 
   private var balancedControls: some View {
     HStack(spacing: 2) {
-      Color.clear.overlay(alignment: .leading) {
-        HStack(spacing: 2) {
-          previousButton(height: actionRowHeight)
-          sessionActions(height: actionRowHeight)
-        }
-      }
+      previousButton(height: actionRowHeight, width: 72)
+      Spacer(minLength: 0)
+      sessionActions(height: actionRowHeight)
       primaryAction(height: actionRowHeight + 8)
-      Color.clear.overlay(alignment: .trailing) {
-        HStack(spacing: 2) {
-          addButton(height: actionRowHeight)
-          nextButton(height: actionRowHeight)
-        }
-      }
-    }
-    // Symmetric side slots keep the completion button centered on regular phone widths.
-    .frame(minWidth: 296 + actionRowHeight, maxWidth: .infinity)
-    .frame(height: actionRowHeight + 8)
+      addButton(height: 44)
+      Spacer(minLength: 0)
+      nextButton(height: actionRowHeight, width: 72)
+    }.frame(minWidth: 296 + actionRowHeight, maxWidth: .infinity)
+      .frame(height: actionRowHeight + 8)
   }
-
   private var compactControls: some View {
     HStack(spacing: 2) {
-      previousButton(height: 44)
-      Spacer(minLength: 0)
+      previousButton(height: 44, width: 56)
       sessionActions(height: 44)
       primaryAction(height: 52)
       addButton(height: 44)
-      Spacer(minLength: 0)
-      nextButton(height: 44)
+      nextButton(height: 44, width: 56)
     }.frame(height: 52)
   }
 
-  private func previousButton(height: CGFloat) -> some View {
-    navigationButton(forward: false, height: height, action: previous)
+  private func previousButton(height: CGFloat, width: CGFloat = 72) -> some View {
+    navigationButton(forward: false, height: height, width: width, action: previous)
       .disabled(exerciseIndex == 0).accessibilityIdentifier("previousWorkoutExercise")
   }
-  private func nextButton(height: CGFloat) -> some View {
-    navigationButton(forward: true, height: height, action: next)
+  private func nextButton(height: CGFloat, width: CGFloat = 72) -> some View {
+    navigationButton(forward: true, height: height, width: width, action: next)
       .disabled(exerciseIndex >= workout.exercises.count - 1)
       .accessibilityIdentifier("nextWorkoutExercise")
   }
@@ -148,13 +137,15 @@ struct WorkoutExerciseDock: View {
       locale: locale)
   }
 
-  private func navigationButton(forward: Bool, height: CGFloat, action: @escaping () -> Void)
+  private func navigationButton(
+    forward: Bool, height: CGFloat, width: CGFloat, action: @escaping () -> Void
+  )
     -> some View
   {
     Button(action: action) {
       Image(systemName: forward ? "chevron.right" : "chevron.left")
         .font(.system(size: 16, weight: .semibold))
-        .frame(width: 52, height: height).contentShape(.capsule)
+        .frame(width: width, height: height).contentShape(.capsule)
     }
     .buttonStyle(.plain).glassEffect(.regular.interactive(), in: .capsule)
     .accessibilityLabel(
