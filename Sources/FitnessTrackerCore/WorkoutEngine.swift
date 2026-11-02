@@ -152,6 +152,19 @@ public enum WorkoutEngine {
     workout.exercises.insert(WorkoutExercise(exercise: exercise), at: index)
   }
 
+  /// Reorders workout rows without changing exercise, set or completion identities.
+  /// A stale order that omits or introduces rows is rejected before mutation.
+  public static func reorderExercises(_ rowIDs: [UUID], in workout: inout Workout) throws {
+    guard workout.status == .active else { throw TrainingError.invalidState }
+    guard Set(rowIDs).count == rowIDs.count else { throw TrainingError.duplicateID }
+    guard rowIDs.count == workout.exercises.count,
+      Set(rowIDs) == Set(workout.exercises.map(\.id))
+    else { throw TrainingError.missingExercise }
+    let rows = Dictionary(
+      workout.exercises.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+    workout.exercises = rowIDs.compactMap { rows[$0] }
+  }
+
   public static func removeExercise(id: UUID, from workout: inout Workout) throws {
     guard workout.status == .active else { throw TrainingError.invalidState }
     guard let index = workout.exercises.firstIndex(where: { $0.id == id }) else {

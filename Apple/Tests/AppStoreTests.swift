@@ -78,6 +78,23 @@ import XCTest
     XCTAssertEqual(try repository.workouts(), [original])
   }
 
+  func testExerciseOrderRollsBackWhenSaveFails() throws {
+    let repository = FailingWorkoutRepository()
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    store.start(template: ExerciseCatalog.starterTemplates[0])
+    let original = try XCTUnwrap(store.active)
+    let order = original.exercises.reversed().map(\.id)
+    repository.failSaves = true
+    XCTAssertFalse(store.mutate { try WorkoutEngine.reorderExercises(order, in: &$0) })
+    XCTAssertEqual(store.active, original)
+    XCTAssertEqual(try repository.workouts(), [original])
+    repository.failSaves = false
+    XCTAssertTrue(store.mutate { try WorkoutEngine.reorderExercises(order, in: &$0) })
+    XCTAssertEqual(store.active?.exercises.map(\.id), order)
+    XCTAssertEqual(try repository.workouts().first?.exercises.map(\.id), order)
+  }
+
   func testGeneralStartPresentsPickerWithoutSavingAndResumesExistingSession() throws {
     let repository = FailingWorkoutRepository()
     let store = AppStore(

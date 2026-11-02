@@ -3,6 +3,7 @@ import SwiftUI
 
 private enum WorkoutSetTableLayout {
   static let indexWidth: CGFloat = 44
+  static let noteWidth: CGFloat = 44
   static let spacing: CGFloat = 12
   static let horizontalPadding: CGFloat = 8
 }
@@ -19,6 +20,7 @@ struct WorkoutSetTableHeader: View {
         Text(L10n.format("Вес, %@", L10n.text(unit.rawValue, locale: locale), locale: locale))
           .frame(maxWidth: .infinity)
         Text(L10n.text("Повторения", locale: locale)).frame(maxWidth: .infinity)
+        Image(systemName: "note.text").frame(width: WorkoutSetTableLayout.noteWidth)
       }
       .font(.caption).foregroundStyle(.secondary).multilineTextAlignment(.center)
       .padding(.horizontal, WorkoutSetTableLayout.horizontalPadding)
@@ -63,13 +65,6 @@ struct WorkoutSetRow: View {
           .accessibilityAddTraits(selected ? .isSelected : [])
           .accessibilityValue(
             L10n.text(set.completedAt != nil ? "Подход выполнен" : "Не выполнено", locale: locale))
-          if set.note != nil, let openNote {
-            Button(action: openNote) {
-              Image(systemName: "note.text").font(.caption).frame(width: 44, height: 44)
-            }.buttonStyle(.plain).foregroundStyle(colorTheme.accent)
-              .accessibilityLabel(L10n.text("Заметка к подходу", locale: locale))
-              .accessibilityIdentifier("setNote_\(set.id)")
-          }
         }.frame(width: WorkoutSetTableLayout.indexWidth)
         Group {
           if typeSize.isAccessibilitySize {
@@ -94,6 +89,17 @@ struct WorkoutSetRow: View {
             }
           }
         }.frame(maxWidth: .infinity)
+        Group {
+          if set.note != nil, let openNote {
+            Button(action: openNote) {
+              Image(systemName: "note.text").font(.caption).frame(width: 44, height: 44)
+            }.buttonStyle(.plain).foregroundStyle(colorTheme.accent)
+              .accessibilityLabel(L10n.text("Заметка к подходу", locale: locale))
+              .accessibilityIdentifier("setNote_\(set.id)")
+          } else {
+            Color.clear.frame(height: 44).accessibilityHidden(true)
+          }
+        }.frame(width: WorkoutSetTableLayout.noteWidth)
       }
       if set.isWarmup || set.isDropSet || (set.loadMultiplier ?? 1) > 1 {
         ViewThatFits(in: .horizontal) {

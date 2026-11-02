@@ -21,7 +21,7 @@ final class FitnessTrackerUITests: XCTestCase {
     }
   }
 
-  @MainActor func testWorkoutContextMenuInsertsAroundAnchorAndConfirmsRemoval() {
+  @MainActor func testWorkoutSwipesInsertAroundAnchorAndConfirmRemoval() {
     let app = launch()
     XCTAssertTrue(app.buttons["workoutStartAction"].waitForExistence(timeout: 10))
     app.buttons["workoutStartAction"].tap()
@@ -32,30 +32,68 @@ final class FitnessTrackerUITests: XCTestCase {
     let rows = app.buttons.matching(identifier: "openWorkoutExercise")
     XCTAssertTrue(rows.firstMatch.waitForExistence(timeout: 5))
     reveal(rows.firstMatch, in: app)
-    rows.firstMatch.press(forDuration: 1)
+    rows.firstMatch.swipeRight()
     app.buttons["insertWorkoutExerciseBefore"].tap()
     addCustomExercise("Вставка перед", in: app)
     XCTAssertEqual(rows.count, 4)
     XCTAssertTrue(rows.element(boundBy: 0).label.contains("Вставка перед"))
     XCTAssertTrue(rows.element(boundBy: 1).label.contains("Приседания"))
     reveal(rows.element(boundBy: 1), in: app)
-    rows.element(boundBy: 1).press(forDuration: 1)
+    rows.element(boundBy: 1).swipeRight()
     app.buttons["insertWorkoutExerciseAfter"].tap()
     addCustomExercise("Вставка после", in: app)
     XCTAssertEqual(rows.count, 5)
     XCTAssertTrue(rows.element(boundBy: 2).label.contains("Вставка после"))
     reveal(rows.element(boundBy: 2), in: app)
-    rows.element(boundBy: 2).press(forDuration: 1)
+    rows.element(boundBy: 2).swipeLeft()
     app.buttons["removeWorkoutExercise"].tap()
     XCTAssertTrue(app.buttons["confirmRemoveWorkoutExercise"].waitForExistence(timeout: 5))
     app.buttons["Отмена"].tap()
     XCTAssertEqual(rows.count, 5)
-    rows.element(boundBy: 2).press(forDuration: 1)
+    rows.element(boundBy: 2).swipeLeft()
     app.buttons["removeWorkoutExercise"].tap()
     app.buttons["confirmRemoveWorkoutExercise"].tap()
     XCTAssertEqual(rows.count, 4)
     XCTAssertTrue(rows.element(boundBy: 2).label.contains("Жим лёжа"))
     XCTAssertEqual(app.alerts.count, 0)
+  }
+
+  @MainActor func testWorkoutLongPressReordersAndExerciseNavigationKeepsDrafts() {
+    let app = launch()
+    XCTAssertTrue(app.buttons["workoutStartAction"].waitForExistence(timeout: 10))
+    app.buttons["workoutStartAction"].tap()
+    let template = app.buttons["startWorkoutTemplate_20000000-0000-0000-0000-000000000001"]
+    XCTAssertTrue(template.waitForExistence(timeout: 5))
+    template.tap()
+    app.buttons["startSelectedTemplates"].tap()
+    let rows = app.buttons.matching(identifier: "openWorkoutExercise")
+    XCTAssertTrue(rows.firstMatch.waitForExistence(timeout: 5))
+    reveal(rows.element(boundBy: 1), in: app)
+    let first = rows.element(boundBy: 0)
+    let second = rows.element(boundBy: 1)
+    first.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+      .press(
+        forDuration: 1,
+        thenDragTo: second.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.9)))
+    XCTAssertTrue(rows.firstMatch.label.contains("Жим лёжа"))
+    XCTAssertFalse(app.buttons["insertWorkoutExerciseBefore"].exists)
+    rows.firstMatch.tap()
+    let previous = app.buttons["previousWorkoutExercise"]
+    let next = app.buttons["nextWorkoutExercise"]
+    XCTAssertTrue(next.waitForExistence(timeout: 5))
+    XCTAssertFalse(previous.isEnabled)
+    XCTAssertGreaterThanOrEqual(next.frame.height, 48)
+    XCTAssertGreaterThan(next.frame.width, 80)
+    let weight = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "setWeight_"))
+      .firstMatch
+    weight.tap()
+    app.buttons["numberPadDigit_9"].tap()
+    app.buttons["numberPadHide"].tap()
+    next.tap()
+    XCTAssertTrue(app.staticTexts["Приседания"].waitForExistence(timeout: 5))
+    previous.tap()
+    XCTAssertTrue(app.staticTexts["Жим лёжа"].waitForExistence(timeout: 5))
+    XCTAssertEqual(weight.value as? String, "9")
   }
 
   @MainActor private func addCustomExercise(_ name: String, in app: XCUIApplication) {
@@ -866,7 +904,8 @@ final class FitnessTrackerUITests: XCTestCase {
       .press(
         forDuration: 0.05,
         thenDragTo: exerciseScroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.95)))
-    let workoutScroll = app.scrollViews["activeWorkoutScroll"]
+    let workoutScroll = app.descendants(matching: .any).matching(identifier: "activeWorkoutScroll")
+      .firstMatch
     XCTAssertTrue(exerciseScroll.waitForNonExistence(timeout: 5))
     XCTAssertTrue(workoutScroll.waitForExistence(timeout: 5))
     XCTAssertTrue(app.buttons["finishWorkout"].isEnabled)

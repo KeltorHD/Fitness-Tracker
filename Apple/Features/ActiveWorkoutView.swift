@@ -3,6 +3,7 @@ import SwiftUI
 
 struct ActiveWorkoutView: View {
   @Environment(\.locale) private var locale
+  @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(AppStore.self) private var store
   @Environment(\.dismiss) private var dismiss
   @AppStorage("weightUnit") private var unit: WeightUnit = .kilograms
@@ -10,6 +11,7 @@ struct ActiveWorkoutView: View {
   @AppStorage("showWorkoutHeartRate") private var heartRateExpanded = true
   @State private var insertion: InsertionRequest?
   @State private var pendingRemoval: RemovalRequest?
+  @State private var reorderRevision = 0
   @State private var selectedExercise: WorkoutExercise?
   @State private var confirmCancel = false
   @State private var renaming = false
@@ -162,97 +164,118 @@ struct ActiveWorkoutView: View {
     }
   }
   private func overview(_ workout: Workout) -> some View {
-    ScrollView {
-      VStack(spacing: 0) {
-        VStack(spacing: 0) {
-          WorkoutSessionSummary(workout: workout, unit: unit).padding(.vertical, 16)
-          if !store.isDemoMode {
-            WorkoutLiveHeartRateChart(
-              workoutID: workout.id, isExpanded: heartRateExpanded,
-              onToggle: { heartRateExpanded.toggle() }
-            )
-            .padding(.horizontal, FitTheme.cardPadding)
-            .padding(.vertical, heartRateExpanded ? FitTheme.cardPadding : 4)
-            .background(FitTheme.card, in: .rect(cornerRadius: FitTheme.radius))
-            .padding(.bottom, 16)
-            .accessibilityIdentifier("workoutHeartRateCard")
-          }
-          if let end = workout.restEndsAt, end > .now {
-            HStack {
-              RestPill(end: end)
-              Button(L10n.text("Пропустить отдых", locale: locale)) {
-                store.mutate {
-                  _ = try WorkoutLiveAction.skipRest(expectedEnd: end).apply(
-                    to: &$0, expectedWorkoutID: workout.id)
-                }
+    List {
+      Section {
+        WorkoutSessionSummary(workout: workout, unit: unit).padding(.vertical, 16)
+        if !store.isDemoMode {
+          WorkoutLiveHeartRateChart(
+            workoutID: workout.id, isExpanded: heartRateExpanded,
+            onToggle: { heartRateExpanded.toggle() }
+          )
+          .padding(.horizontal, FitTheme.cardPadding)
+          .padding(.vertical, heartRateExpanded ? FitTheme.cardPadding : 4)
+          .background(FitTheme.card, in: .rect(cornerRadius: FitTheme.radius))
+          .padding(.bottom, 16)
+          .accessibilityIdentifier("workoutHeartRateCard")
+        }
+        if let end = workout.restEndsAt, end > .now {
+          HStack {
+            RestPill(end: end)
+            Button(L10n.text("Пропустить отдых", locale: locale)) {
+              store.mutate {
+                _ = try WorkoutLiveAction.skipRest(expectedEnd: end).apply(
+                  to: &$0, expectedWorkoutID: workout.id)
               }
-            }.padding(.bottom, 12)
+            }
+          }.padding(.bottom, 12)
+        }
+        if workout.status == .paused {
+          Label(L10n.text("Тренировка на паузе", locale: locale), systemImage: "pause.circle")
+            .font(.subheadline).foregroundStyle(.secondary).padding(.bottom, 12)
+        }
+        if workout.exercises.isEmpty {
+          ContentUnavailableView(
+            L10n.text("Добавьте первое упражнение", locale: locale), systemImage: "dumbbell",
+            description: Text(
+              L10n.text("Откройте упражнение из списка, чтобы записать подходы.", locale: locale))
+          )
+        }
+      }
+      .listRowSeparator(.hidden)
+      .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
+      .listRowBackground(FitTheme.paper)
+      Section {
+        ForEach(Array(workout.exercises.enumerated()), id: \.element.id) { index, row in
+          Button {
+            selectedExercise = row
+          } label: {
+            WorkoutExerciseListRow(row: row, index: index, unit: unit, completedOnly: false)
           }
-          if workout.status == .paused {
-            Label(L10n.text("Тренировка на паузе", locale: locale), systemImage: "pause.circle")
-              .font(.subheadline).foregroundStyle(.secondary).padding(.bottom, 12)
-          }
-          if workout.exercises.isEmpty {
-            ContentUnavailableView(
-              L10n.text("Добавьте первое упражнение", locale: locale), systemImage: "dumbbell",
-              description: Text(
-                L10n.text("Откройте упражнение из списка, чтобы записать подходы.", locale: locale))
-            )
-          }
-          ForEach(Array(workout.exercises.enumerated()), id: \.element.id) { index, row in
-            Button {
-              selectedExercise = row
-            } label: {
-              WorkoutExerciseListRow(row: row, index: index, unit: unit, completedOnly: false)
-            }.buttonStyle(.plain).accessibilityIdentifier("openWorkoutExercise")
-              .contextMenu {
-                Button(L10n.text("Добавить перед", locale: locale), systemImage: "arrow.up.to.line")
-                {
-                  insertion = InsertionRequest(workoutID: workout.id, position: .before(row.id))
-                }
-                .disabled(workout.status != .active)
-                .accessibilityIdentifier("insertWorkoutExerciseBefore")
-                Button(
-                  L10n.text("Добавить после", locale: locale), systemImage: "arrow.down.to.line"
-                ) {
-                  insertion = InsertionRequest(workoutID: workout.id, position: .after(row.id))
-                }
-                .disabled(workout.status != .active)
-                .accessibilityIdentifier("insertWorkoutExerciseAfter")
-                Divider()
-                Button(
-                  L10n.text("Удалить упражнение", locale: locale), systemImage: "trash",
-                  role: .destructive
-                ) {
-                  pendingRemoval = RemovalRequest(workoutID: workout.id, row: row)
-                }
-                .disabled(workout.status != .active)
-                .accessibilityIdentifier("removeWorkoutExercise")
-              }
-            Divider().padding(.leading, 34)
-          }
-          Button(L10n.text("Добавить упражнение", locale: locale), systemImage: "plus.circle") {
-            insertion = InsertionRequest(workoutID: workout.id, position: .end)
-          }
-          .disabled(workout.status != .active).accessibilityIdentifier("addExercise")
-          .font(.headline).frame(maxWidth: .infinity, alignment: .leading).padding(.vertical, 20)
-          VStack(spacing: 16) {
-            WorkoutBodyWeightRow(workout: workout).fitCard()
-            TextField(
-              L10n.text("Заметка о тренировке", locale: locale),
-              text: Binding(
-                get: { store.active?.notes ?? "" },
-                set: { text in store.mutate { $0.notes = text } }), axis: .vertical
-            )
-            .padding().background(FitTheme.card, in: .rect(cornerRadius: FitTheme.radius))
-            Button(L10n.text("Отменить тренировку", locale: locale), role: .destructive) {
-              confirmCancel = true
+          .buttonStyle(.plain).accessibilityIdentifier("openWorkoutExercise")
+          .moveDisabled(workout.status != .active)
+          .swipeActions(edge: .leading, allowsFullSwipe: false) {
+            if workout.status == .active {
+              Button(L10n.text("Добавить перед", locale: locale), systemImage: "arrow.up.to.line") {
+                insertion = InsertionRequest(workoutID: workout.id, position: .before(row.id))
+              }.tint(colorTheme.accent).accessibilityIdentifier("insertWorkoutExerciseBefore")
+              Button(L10n.text("Добавить после", locale: locale), systemImage: "arrow.down.to.line")
+              {
+                insertion = InsertionRequest(workoutID: workout.id, position: .after(row.id))
+              }.tint(.secondary).accessibilityIdentifier("insertWorkoutExerciseAfter")
             }
           }
-        }.padding(.horizontal, 16).padding(.bottom, 20)
+          .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+            if workout.status == .active {
+              Button(
+                L10n.text("Удалить упражнение", locale: locale), systemImage: "trash"
+              ) {
+                pendingRemoval = RemovalRequest(workoutID: workout.id, row: row)
+              }.tint(.red).accessibilityIdentifier("removeWorkoutExercise")
+            }
+          }
+        }
+        .onMove { source, destination in
+          var reordered = workout.exercises
+          reordered.move(fromOffsets: source, toOffset: destination)
+          let saved = store.mutate { current in
+            guard current.id == workout.id else { throw TrainingError.invalidState }
+            try WorkoutEngine.reorderExercises(reordered.map(\.id), in: &current)
+          }
+          // Rebuild the native list after a failed save to discard its temporary drag order.
+          if !saved { reorderRevision += 1 }
+        }
       }
-    }.background(FitTheme.paper).scrollDismissesKeyboard(.interactively)
-      .accessibilityIdentifier("activeWorkoutScroll")
+      .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
+      .listRowBackground(FitTheme.paper)
+      Section {
+        Button(L10n.text("Добавить упражнение", locale: locale), systemImage: "plus.circle") {
+          insertion = InsertionRequest(workoutID: workout.id, position: .end)
+        }
+        .disabled(workout.status != .active).accessibilityIdentifier("addExercise")
+        .font(.headline).frame(maxWidth: .infinity, alignment: .leading).padding(.vertical, 20)
+        VStack(spacing: 16) {
+          WorkoutBodyWeightRow(workout: workout).fitCard()
+          TextField(
+            L10n.text("Заметка о тренировке", locale: locale),
+            text: Binding(
+              get: { store.active?.notes ?? "" },
+              set: { text in store.mutate { $0.notes = text } }), axis: .vertical
+          )
+          .padding().background(FitTheme.card, in: .rect(cornerRadius: FitTheme.radius))
+          Button(L10n.text("Отменить тренировку", locale: locale), role: .destructive) {
+            confirmCancel = true
+          }
+        }
+      }
+      .listRowSeparator(.hidden)
+      .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
+      .listRowBackground(FitTheme.paper)
+    }
+    .id(reorderRevision)
+    .listStyle(.plain).scrollContentBackground(.hidden)
+    .listSectionSpacing(0)
+    .background(FitTheme.paper).scrollDismissesKeyboard(.interactively)
+    .accessibilityIdentifier("activeWorkoutScroll")
   }
 }
 

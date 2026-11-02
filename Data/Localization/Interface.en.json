@@ -716,5 +716,7 @@
   "Данные этого подхода будут удалены из тренировки.": "This set and its recorded data will be deleted from the workout.",
   "Нет заметки": "No note",
   "Не удалось сохранить заметку. Попробуйте ещё раз.": "Could not save the note. Please try again.",
-  "Заметка к подходу должна быть не длиннее 2000 символов.": "Set notes must be no longer than 2000 characters."
+  "Заметка к подходу должна быть не длиннее 2000 символов.": "Set notes must be no longer than 2000 characters.",
+  "Назад": "Back",
+  "Далее": "Next"
 }

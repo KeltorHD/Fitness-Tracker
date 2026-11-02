@@ -11,6 +11,7 @@ struct WorkoutExerciseView: View {
   @State private var noteRequest: SetNoteRequest?
   @State private var removal: WorkoutSet?
   @State private var heartRateExpanded = false
+  @State private var movingForward = true
   @State private var lastCompletion: ContinuousClock.Instant?
   @State private var numberPad: WorkoutNumberPadModel
   @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -33,7 +34,19 @@ struct WorkoutExerciseView: View {
       if let workout, let exercise = model.exercise(in: workout) {
         VStack(spacing: 16) {
           sessionHeader(workout)
-          exerciseCard(exercise, workout: workout)
+          ZStack {
+            exerciseCard(exercise, workout: workout)
+              .id(exercise.id)
+              .transition(
+                reduceMotion
+                  ? .identity
+                  : .asymmetric(
+                    insertion: .move(edge: movingForward ? .trailing : .leading).combined(
+                      with: .opacity),
+                    removal: .move(edge: movingForward ? .leading : .trailing).combined(
+                      with: .opacity)
+                  ))
+          }.clipped()
           if numberPad.field == nil {
             WorkoutExerciseDock(
               workout: workout, exerciseIndex: model.index(in: workout) ?? 0,
@@ -291,7 +304,12 @@ struct WorkoutExerciseView: View {
   private func move(_ offset: Int, in workout: Workout) {
     numberPad.dismiss()
     error = nil
-    model.move(offset, in: workout)
+    guard let index = model.index(in: workout), workout.exercises.indices.contains(index + offset)
+    else { return }
+    movingForward = offset > 0
+    withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.24)) {
+      model.move(offset, in: workout)
+    }
   }
   @discardableResult
   private func mutate(_ workout: Workout, action: (inout Workout) throws -> Void) -> Bool {

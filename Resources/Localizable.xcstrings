@@ -2721,6 +2721,23 @@
         }
       }
     },
+    "Далее": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Далее"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next"
+          }
+        }
+      }
+    },
     "Далее: подход %@": {
       "extractionState": "manual",
       "localizations": {
@@ -5403,6 +5420,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tap an area of the body to select a muscle group."
+          }
+        }
+      }
+    },
+    "Назад": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Назад"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back"
           }
         }
       }

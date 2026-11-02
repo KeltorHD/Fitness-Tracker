@@ -469,3 +469,41 @@ func exerciseStructureChangesRejectNonActiveWorkouts(_ status: WorkoutStatus) th
   }
   #expect(workout == snapshot)
 }
+
+@Test func exerciseReorderingPreservesRowsAndRejectsStaleOrders() throws {
+  var workout = session()
+  let first = workout.exercises[0]
+  // Two occurrences of one exercise must keep independent set IDs and notes.
+  var second = WorkoutExercise(exercise: first.exercise, sets: [WorkoutSet(note: "Second row")])
+  second.sets[0].completedAt = epoch
+  workout.exercises.append(second)
+  workout.restEndsAt = epoch.addingTimeInterval(90)
+  let original = workout
+  try WorkoutEngine.reorderExercises([second.id, first.id], in: &workout)
+  #expect(workout.exercises == [second, first])
+  #expect(workout.restEndsAt == original.restEndsAt && workout.volume == original.volume)
+  try WorkoutEngine.reorderExercises([first.id, second.id], in: &workout)
+  #expect(workout == original)
+  #expect(throws: TrainingError.duplicateID) {
+    try WorkoutEngine.reorderExercises([first.id, first.id], in: &workout)
+  }
+  #expect(throws: TrainingError.missingExercise) {
+    try WorkoutEngine.reorderExercises([first.id], in: &workout)
+  }
+  #expect(throws: TrainingError.missingExercise) {
+    try WorkoutEngine.reorderExercises([first.id, UUID()], in: &workout)
+  }
+  #expect(workout == original)
+}
+
+@Test(arguments: [WorkoutStatus.paused, .completed, .cancelled])
+func exerciseReorderingRejectsNonActiveSessions(_ status: WorkoutStatus) {
+  var workout = session()
+  workout.status = status
+  let original = workout
+  let ids = workout.exercises.map(\.id)
+  #expect(throws: TrainingError.invalidState) {
+    try WorkoutEngine.reorderExercises(ids, in: &workout)
+  }
+  #expect(workout == original)
+}
