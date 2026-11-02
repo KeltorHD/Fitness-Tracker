@@ -8,6 +8,9 @@ struct WorkoutExerciseView: View {
   @Environment(\.dismiss) private var dismiss
   @State private var model: WorkoutExercisePresentation
   @State private var error: String?
+  @State private var noteRequest: SetNoteRequest?
+  @State private var removal: WorkoutSet?
+  @State private var heartRateExpanded = false
   @State private var lastCompletion: ContinuousClock.Instant?
   @State private var numberPad: WorkoutNumberPadModel
   @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -39,14 +42,7 @@ struct WorkoutExerciseView: View {
                 == true,
               previous: { move(-1, in: workout) }, next: { move(1, in: workout) },
               add: { addSet(in: workout) }, complete: { complete(in: workout) },
-              pause: { pause(workout) }, close: { dismiss() })
-            if [.active, .paused].contains(workout.status) {
-              Button(
-                L10n.text("Завершить тренировку", locale: locale), systemImage: "checkmark.circle"
-              ) { finish(workout) }
-              .buttonStyle(.glass).disabled(workout.completedSets == 0).accessibilityIdentifier(
-                "finishWorkout")
-            }
+              pause: { pause(workout) }, close: { dismiss() }, finish: { finish(workout) })
           }
         }.padding(.horizontal, 12).padding(.bottom, 8)
       } else {
@@ -70,6 +66,36 @@ struct WorkoutExerciseView: View {
       numberPad.reconcile(value)
     }
     .onDisappear { numberPad.dismiss() }
+    .sheet(item: $noteRequest) { request in
+      SetNoteSheet(request: request) { text in
+        guard let workout else { return false }
+        return mutate(workout) {
+          try WorkoutEngine.setNote(
+            text, exerciseID: request.exerciseID, setID: request.id, in: &$0)
+        }
+      }
+    }
+    .confirmationDialog(
+      L10n.text("Удалить подход?", locale: locale),
+      isPresented: Binding(
+        get: { removal != nil }, set: { if !$0 { removal = nil } }
+      ), titleVisibility: .visible, presenting: removal
+    ) { set in
+      Button(L10n.text("Удалить подход", locale: locale), role: .destructive) {
+        if let workout {
+          mutate(workout) {
+            try WorkoutEngine.removeSet(exerciseID: model.exerciseID, setID: set.id, from: &$0)
+          }
+        }
+        removal = nil
+      }
+    } message: { set in
+      Text(
+        L10n.text(
+          set.isDropSet
+            ? "Будет удалён весь подход со всеми этапами дропсета."
+            : "Данные этого подхода будут удалены из тренировки.", locale: locale))
+    }
   }
   private func primaryMuscleNames(_ exercise: Exercise) -> String {
     let language = AppLanguage.system.resolved(preferredLanguages: [locale.identifier])
@@ -107,8 +133,8 @@ struct WorkoutExerciseView: View {
   private func exerciseCard(_ row: WorkoutExercise, workout: Workout) -> some View {
     VStack(spacing: 16) {
       ScrollViewReader { proxy in
-        ScrollView {
-          VStack(spacing: 16) {
+        List {
+          Group {
             HStack(alignment: .top) {
               VStack(alignment: .leading, spacing: 6) {
                 Text(L10n.exerciseName(row.exercise, locale: locale)).font(.title2.bold())
@@ -156,15 +182,39 @@ struct WorkoutExerciseView: View {
               .accessibilityLabel(L10n.text("Действия упражнения", locale: locale))
             }.foregroundStyle(.secondary)
             if !store.isDemoMode, store.active?.id == workout.id {
-              WorkoutLiveHeartRateChart(workoutID: workout.id)
+              WorkoutLiveHeartRateChart(
+                workoutID: workout.id, isExpanded: heartRateExpanded,
+                onToggle: {
+                  withAnimation(reduceMotion ? nil : .smooth) { heartRateExpanded.toggle() }
+                }
+              )
+              .padding(.horizontal, 14).padding(.vertical, heartRateExpanded ? 14 : 6)
+              .background(FitTheme.card, in: .rect(cornerRadius: 18))
+              .listRowSeparator(.hidden)
+              .accessibilityIdentifier("exerciseHeartRateCard")
             }
             WorkoutSetTableHeader(unit: model.unit)
-            LazyVStack(spacing: 0) {
+            Group {
               ForEach(Array(row.sets.enumerated()), id: \.element.id) { index, set in
                 WorkoutSetGroupView(
                   set: set, index: index, workout: workout, model: model, numberPad: numberPad,
-                  toggleWarmup: { toggleWarmup(set, row: row, workout: workout) })
-                if index < row.sets.count - 1 { Divider() }
+                  toggleWarmup: { toggleWarmup(set, row: row, workout: workout) },
+                  addAfter: {
+                    numberPad.dismiss()
+                    mutate(workout) {
+                      try WorkoutEngine.addSet(exerciseID: row.id, to: &$0, after: set.id)
+                    }
+                  },
+                  remove: {
+                    numberPad.dismiss()
+                    removal = set
+                  },
+                  openNote: {
+                    numberPad.dismiss()
+                    noteRequest = SetNoteRequest(
+                      id: set.id, exerciseID: row.id, text: set.note ?? "",
+                      editable: [.active, .paused].contains(workout.status))
+                  })
               }
               if let error = error ?? store.error {
                 Text(L10n.text(error, locale: locale)).font(.footnote).foregroundStyle(.red)
@@ -174,7 +224,11 @@ struct WorkoutExerciseView: View {
             }
             .accessibilityIdentifier("workoutSetTable")
           }
+          .listRowInsets(EdgeInsets(top: 6, leading: 0, bottom: 6, trailing: 0))
+          .listRowBackground(Color.clear)
         }
+        .listStyle(.plain).scrollContentBackground(.hidden)
+        .environment(\.defaultMinListRowHeight, 0)
         .accessibilityIdentifier("workoutExerciseScroll")
         .onChange(of: numberPad.field) { _, field in
           if let field {
@@ -239,8 +293,9 @@ struct WorkoutExerciseView: View {
     error = nil
     model.move(offset, in: workout)
   }
-  private func mutate(_ workout: Workout, action: (inout Workout) throws -> Void) {
-    _ = store.mutate { value in
+  @discardableResult
+  private func mutate(_ workout: Workout, action: (inout Workout) throws -> Void) -> Bool {
+    store.mutate { value in
       guard value.id == workout.id else { throw TrainingError.invalidState }
       try action(&value)
     }
@@ -330,5 +385,64 @@ struct WorkoutExerciseSheet: View {
     .presentationDetents([.large])
     .presentationDragIndicator(.visible)
     .safeAreaInset(edge: .top) { if store.isDemoMode { DemoModeBanner() } }
+  }
+}
+
+private struct SetNoteRequest: Identifiable {
+  let id: UUID
+  let exerciseID: UUID
+  let text: String
+  let editable: Bool
+}
+
+private struct SetNoteSheet: View {
+  @Environment(\.dismiss) private var dismiss
+  @Environment(\.locale) private var locale
+  let request: SetNoteRequest
+  let save: (String) -> Bool
+  @State private var text: String
+  @State private var failed = false
+
+  init(request: SetNoteRequest, save: @escaping (String) -> Bool) {
+    self.request = request
+    self.save = save
+    _text = State(initialValue: request.text)
+  }
+
+  var body: some View {
+    NavigationStack {
+      Form {
+        if request.editable {
+          TextEditor(text: $text).frame(minHeight: 180)
+            .accessibilityLabel(L10n.text("Заметка к подходу", locale: locale))
+            .accessibilityIdentifier("setNoteEditor")
+          Text("\(text.count) / 2000").font(.caption).foregroundStyle(
+            text.count > 2000 ? .red : .secondary)
+        } else {
+          Text(text.isEmpty ? L10n.text("Нет заметки", locale: locale) : text)
+            .textSelection(.enabled)
+        }
+        if failed {
+          Text(L10n.text("Не удалось сохранить заметку. Попробуйте ещё раз.", locale: locale))
+            .foregroundStyle(.red)
+        }
+      }
+      .navigationTitle(L10n.text("Заметка к подходу", locale: locale))
+      .navigationBarTitleDisplayMode(.inline)
+      .toolbar {
+        ToolbarItem(placement: .cancellationAction) {
+          Button(L10n.text("Закрыть", locale: locale)) { dismiss() }
+        }
+        if request.editable {
+          ToolbarItem(placement: .confirmationAction) {
+            Button(L10n.text("Сохранить", locale: locale)) {
+              if save(text) { dismiss() } else { failed = true }
+            }.disabled(text.trimmingCharacters(in: .whitespacesAndNewlines).count > 2000)
+              .accessibilityIdentifier("saveSetNote")
+          }
+        }
+      }
+    }
+    .presentationDetents([.medium, .large])
   }
 }

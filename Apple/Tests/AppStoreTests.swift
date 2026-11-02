@@ -297,6 +297,33 @@ import XCTest
     XCTAssertNil(store.notice)
   }
 
+  func testFailedSetChangesPreserveSavedSession() throws {
+    let repository = FailingWorkoutRepository()
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    store.start(template: ExerciseCatalog.starterTemplates[0])
+    let workout = try XCTUnwrap(store.active)
+    let row = workout.exercises[0].id
+    let set = workout.exercises[0].sets[0].id
+    repository.failSaves = true
+    XCTAssertFalse(
+      store.mutate {
+        try WorkoutEngine.setNote("private note", exerciseID: row, setID: set, in: &$0)
+      })
+    XCTAssertEqual(store.active, workout)
+    XCTAssertFalse(store.mutate { try WorkoutEngine.addSet(exerciseID: row, to: &$0, after: set) })
+    XCTAssertEqual(store.active, workout)
+    XCTAssertFalse(
+      store.mutate { try WorkoutEngine.removeSet(exerciseID: row, setID: set, from: &$0) })
+    XCTAssertEqual(store.active, workout)
+    XCTAssertEqual(try repository.workouts(), [workout])
+    repository.failSaves = false
+    XCTAssertTrue(
+      store.mutate { try WorkoutEngine.setNote("saved note", exerciseID: row, setID: set, in: &$0) }
+    )
+    XCTAssertEqual(store.active?.exercises[0].sets[0].note, "saved note")
+  }
+
   func testFailedReloadKeepsTheEntirePreviousSnapshot() throws {
     let repository = FailingWorkoutRepository()
     let store = AppStore(

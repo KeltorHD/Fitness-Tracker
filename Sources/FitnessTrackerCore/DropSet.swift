@@ -21,7 +21,7 @@ extension WorkoutSet {
     }
     return WorkoutSet(
       repetitions: repetitions, weightKG: weightKG, isWarmup: isWarmup,
-      loadMultiplier: loadMultiplier, dropStages: stages.isEmpty ? nil : stages)
+      loadMultiplier: loadMultiplier, dropStages: stages.isEmpty ? nil : stages, note: note)
   }
 }
 

@@ -858,7 +858,9 @@ final class FitnessTrackerUITests: XCTestCase {
     app.buttons["addWorkoutSet"].tap()
     app.buttons["completeSet"].firstMatch.tap()
 
-    let exerciseScroll = app.scrollViews["workoutExerciseScroll"]
+    let exerciseScroll = app.descendants(matching: .any).matching(
+      identifier: "workoutExerciseScroll"
+    ).firstMatch
     XCTAssertTrue(exerciseScroll.waitForExistence(timeout: 5))
     exerciseScroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.15))
       .press(
@@ -892,7 +894,9 @@ final class FitnessTrackerUITests: XCTestCase {
     let exercise = app.buttons["openWorkoutExercise"].firstMatch
     XCTAssertTrue(exercise.waitForExistence(timeout: 5))
     exercise.tap()
-    let exerciseScroll = app.scrollViews["workoutExerciseScroll"]
+    let exerciseScroll = app.descendants(matching: .any).matching(
+      identifier: "workoutExerciseScroll"
+    ).firstMatch
     XCTAssertTrue(exerciseScroll.waitForExistence(timeout: 5))
     exerciseScroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.15))
       .press(
@@ -911,4 +915,46 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertFalse(exercise.exists)
     XCTAssertTrue(workout.exists)
   }
+  @MainActor func testSetNoteAndContextInsertion() {
+    let app = launch()
+    XCTAssertTrue(app.buttons["startWorkout"].waitForExistence(timeout: 10))
+    app.buttons["startWorkout"].tap()
+    chooseFreeWorkout(in: app)
+    app.buttons["addExercise"].tap()
+    app.searchFields.firstMatch.tap()
+    app.searchFields.firstMatch.typeText("Приседания")
+    app.buttons.containing(.staticText, identifier: "Приседания").firstMatch.tap()
+    XCTAssertTrue(app.buttons["selectLibraryExercise"].waitForExistence(timeout: 5))
+    app.buttons["selectLibraryExercise"].tap()
+    app.buttons["openWorkoutExercise"].firstMatch.tap()
+    let weight = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "setWeight_"))
+      .firstMatch
+    XCTAssertTrue(weight.waitForExistence(timeout: 5))
+    weight.press(forDuration: 1)
+    app.buttons["Заметка к подходу"].tap()
+    let editor = app.textViews["setNoteEditor"]
+    XCTAssertTrue(editor.waitForExistence(timeout: 5))
+    editor.tap()
+    editor.typeText("Keep elbows close")
+    app.buttons["saveSetNote"].tap()
+    let note = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "setNote_"))
+      .firstMatch
+    XCTAssertTrue(note.waitForExistence(timeout: 5))
+    note.tap()
+    XCTAssertTrue(editor.waitForExistence(timeout: 5))
+    XCTAssertEqual(editor.value as? String, "Keep elbows close")
+    app.buttons["Закрыть"].tap()
+    let count = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "setWeight_"))
+      .count
+    weight.press(forDuration: 1)
+    app.buttons["Добавить подход после"].tap()
+    XCTAssertEqual(
+      app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "setWeight_")).count,
+      count + 1)
+    weight.swipeLeft()
+    app.buttons["Удалить подход"].firstMatch.tap()
+    app.buttons["Удалить подход"].firstMatch.tap()
+    XCTAssertFalse(note.exists)
+  }
+
 }

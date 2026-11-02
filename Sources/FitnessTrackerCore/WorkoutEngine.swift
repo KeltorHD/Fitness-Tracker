@@ -126,7 +126,7 @@ public enum WorkoutEngine {
       return TemplateExercise(
         exercise: item.exercise, setCount: completed.count, repetitions: first.repetitions,
         weightKG: first.weightKG, loadMultiplier: first.loadMultiplier,
-        plannedSets: completed.contains(where: \.isDropSet)
+        plannedSets: completed.contains(where: { $0.isDropSet || $0.note != nil })
           ? completed.map { $0.freshCopy(performedOnly: true) } : nil)
     }
     let template = WorkoutTemplate(
@@ -173,15 +173,65 @@ public enum WorkoutEngine {
       .map { $0.addingTimeInterval(Double(seconds)) }
   }
 
-  public static func addSet(exerciseID: UUID, to workout: inout Workout) throws {
+  public static func addSet(
+    exerciseID: UUID, to workout: inout Workout, after setID: UUID? = nil
+  ) throws {
     guard workout.status == .active else { throw TrainingError.invalidState }
     guard let i = workout.exercises.firstIndex(where: { $0.id == exerciseID }) else {
       throw TrainingError.missingExercise
     }
     guard workout.exercises[i].sets.count < 30 else { throw TrainingError.invalidSetCount }
-    let last = workout.exercises[i].sets.last ?? WorkoutSet()
-    var copy = last.freshCopy()
+    let index: Int
+    if let setID {
+      guard let anchor = workout.exercises[i].sets.firstIndex(where: { $0.id == setID }) else {
+        throw TrainingError.missingSet
+      }
+      index = anchor + 1
+    } else {
+      index = workout.exercises[i].sets.endIndex
+    }
+    let source = index > 0 ? workout.exercises[i].sets[index - 1] : WorkoutSet()
+    var copy = source.freshCopy()
     copy.isWarmup = false
-    workout.exercises[i].sets.append(copy)
+    copy.note = nil
+    workout.exercises[i].sets.insert(copy, at: index)
+  }
+
+  public static func removeSet(exerciseID: UUID, setID: UUID, from workout: inout Workout) throws {
+    guard workout.status == .active else { throw TrainingError.invalidState }
+    guard let row = workout.exercises.firstIndex(where: { $0.id == exerciseID }) else {
+      throw TrainingError.missingExercise
+    }
+    guard let index = workout.exercises[row].sets.firstIndex(where: { $0.id == setID }) else {
+      throw TrainingError.missingSet
+    }
+    guard workout.exercises[row].sets.count > 1 else { throw TrainingError.invalidSetCount }
+    let set = workout.exercises[row].sets[index]
+    let deadline =
+      set.isFullyCompleted
+      ? set.stages.last?.completedAt?.addingTimeInterval(Double(workout.restSeconds)) : nil
+    workout.exercises[row].sets.remove(at: index)
+    if let deadline, workout.restEndsAt == deadline,
+      !workout.exercises.contains(where: {
+        restDeadline(for: $0, seconds: workout.restSeconds) == deadline
+      })
+    {
+      workout.restEndsAt = nil
+    }
+  }
+
+  public static func setNote(
+    _ note: String, exerciseID: UUID, setID: UUID, in workout: inout Workout
+  ) throws {
+    guard [.active, .paused].contains(workout.status) else { throw TrainingError.invalidState }
+    guard let row = workout.exercises.firstIndex(where: { $0.id == exerciseID }) else {
+      throw TrainingError.missingExercise
+    }
+    guard let set = workout.exercises[row].sets.firstIndex(where: { $0.id == setID }) else {
+      throw TrainingError.missingSet
+    }
+    let trimmed = note.trimmingCharacters(in: .whitespacesAndNewlines)
+    guard trimmed.count <= 2000 else { throw TrainingError.invalidSetNote }
+    workout.exercises[row].sets[set].note = trimmed.isEmpty ? nil : trimmed
   }
 }

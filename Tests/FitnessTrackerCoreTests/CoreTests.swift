@@ -344,3 +344,128 @@ func exerciseStructureChangesRejectNonActiveWorkouts(_ status: WorkoutStatus) th
   try WorkoutEngine.removeExercise(id: rows[1].id, from: &workout)
   #expect(workout.restEndsAt == nil)
 }
+
+@Test func setNoteCompatibilityAndRoundTrip() throws {
+  let original = WorkoutSet(repetitions: 8, weightKG: 40)
+  let data = try JSONEncoder().encode(original)
+  let legacy = try JSONDecoder().decode(WorkoutSet.self, from: data)
+  #expect(legacy.note == nil)
+  var workout = session()
+  let row = workout.exercises[0].id
+  let set = workout.exercises[0].sets[0].id
+  try WorkoutEngine.setNote("  Keep elbows close \n", exerciseID: row, setID: set, in: &workout)
+  #expect(workout.exercises[0].sets[0].note == "Keep elbows close")
+  let restored = try JSONDecoder().decode(Workout.self, from: JSONEncoder().encode(workout))
+  #expect(restored == workout)
+  try WorkoutEngine.setNote(" \n", exerciseID: row, setID: set, in: &workout)
+  #expect(workout.exercises[0].sets[0].note == nil)
+  #expect(throws: TrainingError.invalidSetNote) {
+    try WorkoutEngine.setNote(
+      String(repeating: "x", count: 2001), exerciseID: row, setID: set, in: &workout)
+  }
+  #expect(throws: TrainingError.invalidSetNote) {
+    try Validation.set(WorkoutSet(note: String(repeating: "x", count: 2001)))
+  }
+}
+
+@Test func setNotesPreservePerformanceAndFollowRepeatAndTemplate() throws {
+  var workout = try finished()
+  let row = workout.exercises[0].id
+  let set = workout.exercises[0].sets[0].id
+  #expect(throws: TrainingError.invalidState) {
+    try WorkoutEngine.setNote("readonly", exerciseID: row, setID: set, in: &workout)
+  }
+  workout.status = .active
+  workout.endedAt = nil
+  let volume = workout.volume
+  try WorkoutEngine.setNote("Technique", exerciseID: row, setID: set, in: &workout)
+  #expect(workout.volume == volume)
+  try WorkoutEngine.pause(&workout, at: epoch.addingTimeInterval(61))
+  try WorkoutEngine.setNote("Technique updated", exerciseID: row, setID: set, in: &workout)
+  try WorkoutEngine.finish(&workout, at: epoch.addingTimeInterval(62))
+  let repeated = try WorkoutEngine.repeatWorkout(workout, at: epoch.addingTimeInterval(100))
+  #expect(repeated.exercises[0].sets[0].note == "Technique updated")
+  #expect(repeated.exercises[0].sets[0].completedAt == nil)
+  #expect(repeated.exercises[0].sets[0].id != set)
+  let template = try WorkoutEngine.makeTemplate(from: workout)
+  #expect(template.exercises[0].plannedSets?.first?.note == "Technique updated")
+}
+
+@Test func insertingSetUsesAnchorTargetsWithoutCopyingNoteOrCompletion() throws {
+  var workout = session()
+  let row = workout.exercises[0].id
+  let anchor = workout.exercises[0].sets[0].id
+  workout.exercises[0].sets[0].note = "Only this set"
+  workout.exercises[0].sets.append(WorkoutSet(repetitions: 12, weightKG: 20))
+  let last = workout.exercises[0].sets[1].id
+  try WorkoutEngine.addSet(exerciseID: row, to: &workout, after: anchor)
+  let added = workout.exercises[0].sets[1]
+  #expect(added.repetitions == 5 && added.weightKG == 100)
+  #expect(added.note == nil && added.completedAt == nil && added.id != anchor)
+  #expect(workout.exercises[0].sets[2].id == last)
+  let snapshot = workout
+  #expect(throws: TrainingError.missingSet) {
+    try WorkoutEngine.addSet(exerciseID: row, to: &workout, after: UUID())
+  }
+  #expect(workout == snapshot)
+}
+
+@Test func removingCompletedSetUpdatesVolumeAndRestAndProtectsLastSet() throws {
+  var workout = session()
+  let row = workout.exercises[0].id
+  let set = workout.exercises[0].sets[0].id
+  try WorkoutEngine.addSet(exerciseID: row, to: &workout)
+  try WorkoutEngine.completeSet(
+    in: &workout, exerciseID: row, setID: set, repetitions: 5, weightKG: 100, at: epoch)
+  #expect(workout.restEndsAt != nil && workout.volume == 500)
+  try WorkoutEngine.removeSet(exerciseID: row, setID: set, from: &workout)
+  #expect(workout.restEndsAt == nil && workout.volume == 0)
+  let last = workout.exercises[0].sets[0].id
+  #expect(throws: TrainingError.invalidSetCount) {
+    try WorkoutEngine.removeSet(exerciseID: row, setID: last, from: &workout)
+  }
+  try WorkoutEngine.pause(&workout, at: epoch)
+  #expect(throws: TrainingError.invalidState) {
+    try WorkoutEngine.addSet(exerciseID: row, to: &workout)
+  }
+  #expect(throws: TrainingError.invalidState) {
+    try WorkoutEngine.removeSet(exerciseID: row, setID: last, from: &workout)
+  }
+}
+
+@Test func removingSetPreservesRestSharedByAnotherRow() throws {
+  var workout = session()
+  workout.exercises.append(WorkoutExercise(exercise: ExerciseCatalog.all[1], sets: [WorkoutSet()]))
+  let row = workout.exercises[0].id
+  let set = workout.exercises[0].sets[0].id
+  try WorkoutEngine.addSet(exerciseID: row, to: &workout)
+  for exercise in workout.exercises {
+    try WorkoutEngine.completeSet(
+      in: &workout, exerciseID: exercise.id, setID: exercise.sets[0].id, repetitions: 5,
+      weightKG: 40, at: epoch)
+  }
+  let deadline = workout.restEndsAt
+  try WorkoutEngine.removeSet(exerciseID: row, setID: set, from: &workout)
+  #expect(workout.restEndsAt == deadline)
+}
+
+@Test func setLimitAndDropSetRemovalAreAtomic() throws {
+  var workout = session()
+  let row = workout.exercises[0].id
+  let set = workout.exercises[0].sets[0].id
+  workout.exercises[0].sets[0].dropStages = [DropSetStage(repetitions: 8, weightKG: 60)]
+  for _ in 1..<30 { try WorkoutEngine.addSet(exerciseID: row, to: &workout) }
+  let original = workout
+  #expect(throws: TrainingError.invalidSetCount) {
+    try WorkoutEngine.addSet(exerciseID: row, to: &workout)
+  }
+  #expect(workout == original)
+  try WorkoutEngine.removeSet(exerciseID: row, setID: set, from: &workout)
+  #expect(workout.exercises[0].sets.count == 29)
+  #expect(!workout.exercises[0].sets.contains { $0.id == set })
+  let snapshot = workout
+  #expect(throws: TrainingError.missingSet) {
+    try WorkoutEngine.removeSet(exerciseID: row, setID: set, from: &workout)
+  }
+  #expect(workout == snapshot)
+}

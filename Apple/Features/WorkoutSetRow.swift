@@ -3,7 +3,6 @@ import SwiftUI
 
 private enum WorkoutSetTableLayout {
   static let indexWidth: CGFloat = 44
-  static let statusWidth: CGFloat = 24
   static let spacing: CGFloat = 12
   static let horizontalPadding: CGFloat = 8
 }
@@ -16,11 +15,10 @@ struct WorkoutSetTableHeader: View {
   var body: some View {
     if !typeSize.isAccessibilitySize {
       HStack(spacing: WorkoutSetTableLayout.spacing) {
-        Text(L10n.text("Подход", locale: locale)).frame(width: WorkoutSetTableLayout.indexWidth)
+        Color.clear.frame(width: WorkoutSetTableLayout.indexWidth, height: 1)
         Text(L10n.format("Вес, %@", L10n.text(unit.rawValue, locale: locale), locale: locale))
           .frame(maxWidth: .infinity)
         Text(L10n.text("Повторения", locale: locale)).frame(maxWidth: .infinity)
-        Image(systemName: "checkmark").frame(width: WorkoutSetTableLayout.statusWidth)
       }
       .font(.caption).foregroundStyle(.secondary).multilineTextAlignment(.center)
       .padding(.horizontal, WorkoutSetTableLayout.horizontalPadding)
@@ -37,7 +35,6 @@ struct WorkoutSetRow: View {
   let set: WorkoutSet
   let index: Int
   var marker: String? = nil
-  var showsWarmupAction = true
   let unit: WeightUnit
   let editable: Bool
   let selected: Bool
@@ -46,23 +43,34 @@ struct WorkoutSetRow: View {
   let numberPad: WorkoutNumberPadModel
   let edit: (WorkoutSetField) -> Void
   let select: () -> Void
-  let toggleWarmup: () -> Void
+  var openNote: (() -> Void)? = nil
 
   var body: some View {
     VStack(alignment: .leading, spacing: 8) {
       HStack(spacing: WorkoutSetTableLayout.spacing) {
-        Button(action: select) {
-          Text(marker ?? String(index + 1)).font(.callout.weight(selected ? .semibold : .regular))
-            .monospacedDigit().foregroundStyle(selected ? colorTheme.accent : FitTheme.muted)
-            .frame(maxWidth: .infinity, minHeight: 44)
-            .contentShape(.rect)
-        }
-        .buttonStyle(.plain).frame(width: WorkoutSetTableLayout.indexWidth).disabled(!editable)
-        .accessibilityLabel(
-          L10n.format(
-            marker == nil ? "Подход %@" : "Снижение веса %@", String(index + 1), locale: locale)
-        )
-        .accessibilityAddTraits(selected ? .isSelected : [])
+        VStack(spacing: 0) {
+          Group {
+            if editable {
+              Button(action: select) { indexLabel }.buttonStyle(.plain)
+            } else {
+              indexLabel
+            }
+          }
+          .accessibilityLabel(
+            L10n.format(
+              marker == nil ? "Подход %@" : "Снижение веса %@", String(index + 1), locale: locale)
+          )
+          .accessibilityAddTraits(selected ? .isSelected : [])
+          .accessibilityValue(
+            L10n.text(set.completedAt != nil ? "Подход выполнен" : "Не выполнено", locale: locale))
+          if set.note != nil, let openNote {
+            Button(action: openNote) {
+              Image(systemName: "note.text").font(.caption).frame(width: 44, height: 44)
+            }.buttonStyle(.plain).foregroundStyle(colorTheme.accent)
+              .accessibilityLabel(L10n.text("Заметка к подходу", locale: locale))
+              .accessibilityIdentifier("setNote_\(set.id)")
+          }
+        }.frame(width: WorkoutSetTableLayout.indexWidth)
         Group {
           if typeSize.isAccessibilitySize {
             VStack(alignment: .leading, spacing: 12) {
@@ -86,15 +94,6 @@ struct WorkoutSetRow: View {
             }
           }
         }.frame(maxWidth: .infinity)
-        Image(systemName: set.completedAt != nil ? "checkmark.circle.fill" : "circle")
-          .font(.body)
-          .foregroundStyle(
-            set.completedAt != nil
-              ? FitTheme.muted : selected ? colorTheme.accent : FitTheme.separator
-          )
-          .frame(width: WorkoutSetTableLayout.statusWidth)
-          .accessibilityLabel(
-            L10n.text(set.completedAt != nil ? "Подход выполнен" : "Не выполнено", locale: locale))
       }
       if set.isWarmup || set.isDropSet || (set.loadMultiplier ?? 1) > 1 {
         ViewThatFits(in: .horizontal) {
@@ -108,15 +107,20 @@ struct WorkoutSetRow: View {
     .padding(.horizontal, WorkoutSetTableLayout.horizontalPadding)
     .padding(.vertical, typeSize.isAccessibilitySize ? 16 : 8)
     .background(
-      selected ? colorTheme.accent.opacity(0.09) : Color.clear, in: .rect(cornerRadius: 16)
+      selected
+        ? colorTheme.accent.opacity(0.09)
+        : set.completedAt != nil ? colorTheme.accent.opacity(0.04) : Color.clear,
+      in: .rect(cornerRadius: 16)
     )
-    .contextMenu {
-      if editable && showsWarmupAction && !set.isDropSet {
-        Button(
-          L10n.text(set.isWarmup ? "Рабочий подход" : "Разминочный подход", locale: locale),
-          action: toggleWarmup)
-      }
-    }
+  }
+
+  private var indexLabel: some View {
+    Text(marker ?? String(index + 1))
+      .font(.callout.weight(selected || set.completedAt != nil ? .semibold : .regular))
+      .monospacedDigit()
+      .foregroundStyle(selected || set.completedAt != nil ? colorTheme.accent : FitTheme.muted)
+      .frame(maxWidth: .infinity, minHeight: 44)
+      .contentShape(.rect)
   }
 
   @ViewBuilder private var metadata: some View {
@@ -152,7 +156,7 @@ struct WorkoutSetRow: View {
       }
     }
     .font(.title2.weight(.medium)).monospacedDigit()
-    .foregroundStyle(set.completedAt != nil ? Color.secondary : .primary)
+    .foregroundStyle(set.completedAt != nil || selected ? Color.primary : .secondary)
   }
 
   private var formattedWeight: String {
@@ -173,7 +177,7 @@ struct WorkoutSetRow: View {
       }
     }
     .font(.title2.weight(.medium)).monospacedDigit()
-    .foregroundStyle(set.completedAt != nil ? Color.secondary : .primary)
+    .foregroundStyle(set.completedAt != nil || selected ? Color.primary : .secondary)
   }
 
   private func valueButton(_ value: String, field: WorkoutSetField) -> some View {
@@ -183,7 +187,8 @@ struct WorkoutSetRow: View {
     } label: {
       Text(value.isEmpty ? "0" : value)
         .foregroundStyle(
-          (active && numberPad.replacesOnInput) || value.isEmpty ? FitTheme.muted : Color.primary
+          (active && numberPad.replacesOnInput) || value.isEmpty
+            ? FitTheme.muted : selected ? Color.primary : Color.secondary
         )
         .padding(.bottom, 4)
         .overlay(alignment: .bottom) {

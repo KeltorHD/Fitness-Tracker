@@ -38,10 +38,12 @@ public struct WorkoutSet: Identifiable, Codable, Equatable, Sendable {
   public var completedAt: Date?
   public var loadMultiplier: Int?
   public var dropStages: [DropSetStage]?
+  /// Optional for backward-compatible workout archives and installed stores.
+  public var note: String?
   public init(
     id: UUID = UUID(), repetitions: Int = 8, weightKG: Double = 0,
     isWarmup: Bool = false, completedAt: Date? = nil, loadMultiplier: Int? = nil,
-    dropStages: [DropSetStage]? = nil
+    dropStages: [DropSetStage]? = nil, note: String? = nil
   ) {
     self.id = id
     self.repetitions = repetitions
@@ -50,6 +52,7 @@ public struct WorkoutSet: Identifiable, Codable, Equatable, Sendable {
     self.completedAt = completedAt
     self.loadMultiplier = loadMultiplier
     self.dropStages = dropStages
+    self.note = note
   }
   public var isDropSet: Bool { !(dropStages ?? []).isEmpty }
   public var isFullyCompleted: Bool {

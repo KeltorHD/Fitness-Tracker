@@ -707,5 +707,14 @@
   "Удалить упражнение": "Delete exercise",
   "Удалить упражнение из тренировки?": "Delete this exercise from the workout?",
   "Записанные подходы этого упражнения тоже будут удалены.": "Recorded sets for this exercise will also be deleted.",
-  "Будет удалено только это упражнение из текущей тренировки.": "Only this exercise will be removed from the current workout."
+  "Будет удалено только это упражнение из текущей тренировки.": "Only this exercise will be removed from the current workout.",
+  "Заметка к подходу": "Set note",
+  "Добавить подход после": "Add set after",
+  "Удалить подход": "Delete set",
+  "Удалить подход?": "Delete set?",
+  "Будет удалён весь подход со всеми этапами дропсета.": "The entire set, including all drop stages, will be deleted.",
+  "Данные этого подхода будут удалены из тренировки.": "This set and its recorded data will be deleted from the workout.",
+  "Нет заметки": "No note",
+  "Не удалось сохранить заметку. Попробуйте ещё раз.": "Could not save the note. Please try again.",
+  "Заметка к подходу должна быть не длиннее 2000 символов.": "Set notes must be no longer than 2000 characters."
 }

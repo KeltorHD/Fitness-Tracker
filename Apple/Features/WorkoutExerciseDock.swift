@@ -13,53 +13,68 @@ struct WorkoutExerciseDock: View {
   let complete: () -> Void
   let pause: () -> Void
   let close: () -> Void
+  let finish: () -> Void
   private var isOngoing: Bool { [.active, .paused].contains(workout.status) }
+
   var body: some View {
-    GlassEffectContainer(spacing: 10) {
-      HStack(spacing: 8) {
-        icon("chevron.left", title: "Предыдущее упражнение", action: previous)
-          .disabled(exerciseIndex == 0).accessibilityIdentifier("previousWorkoutExercise")
-        Spacer(minLength: 0)
-        if isOngoing {
-          icon("plus", title: "Добавить подход", action: add).disabled(workout.status != .active)
-            .accessibilityIdentifier("addWorkoutSet")
-          Spacer(minLength: 0)
-          Button(action: complete) {
-            Image(systemName: "checkmark").font(.system(size: 28, weight: .semibold)).frame(
-              minWidth: 52, minHeight: 52)
-          }.buttonStyle(.glassProminent).buttonBorderShape(.circle)
-            .disabled(!canComplete).accessibilityLabel(
+    GlassEffectContainer(spacing: 12) {
+      VStack(spacing: 12) {
+        HStack(spacing: 12) {
+          Button(action: isOngoing ? complete : close) {
+            Label(
               L10n.text(
-                completingDrop ? "Выполнить этап дропсета" : "Выполнить подход", locale: locale)
-            )
-            .accessibilityIdentifier("completeSet")
-          Spacer(minLength: 0)
-          icon(
-            workout.status == .paused ? "play" : "pause",
-            title: workout.status == .paused ? "Продолжить" : "Пауза", action: pause
-          )
-          .accessibilityIdentifier("pauseExerciseWorkout")
-          Spacer(minLength: 0)
-        } else {
-          Button(action: close) {
-            Image(systemName: "chevron.down").font(.system(size: 28)).frame(
-              minWidth: 52, minHeight: 52)
+                isOngoing
+                  ? (completingDrop ? "Выполнить этап дропсета" : "Выполнить подход")
+                  : "К списку упражнений", locale: locale),
+              systemImage: isOngoing ? "checkmark" : "chevron.down"
+            ).font(.headline).frame(maxWidth: .infinity, minHeight: 44)
           }
-          .buttonStyle(.glassProminent).buttonBorderShape(.circle)
-          .accessibilityLabel(L10n.text("К списку упражнений", locale: locale))
-          Spacer(minLength: 0)
+          .buttonStyle(.glassProminent).buttonBorderShape(.capsule)
+          .disabled(isOngoing && !canComplete).accessibilityIdentifier("completeSet")
+          if isOngoing {
+            icon("plus", title: "Добавить подход", action: add)
+              .disabled(
+                workout.status != .active
+                  || (workout.exercises.indices.contains(exerciseIndex)
+                    && workout.exercises[exerciseIndex].sets.count >= 30)
+              )
+              .accessibilityIdentifier("addWorkoutSet")
+          }
         }
-        icon("chevron.right", title: "Следующее упражнение", action: next)
-          .disabled(exerciseIndex >= workout.exercises.count - 1).accessibilityIdentifier(
-            "nextWorkoutExercise")
-      }.controlSize(.large)
+        HStack(spacing: 12) {
+          HStack(spacing: 0) {
+            Button(action: previous) {
+              Image(systemName: "chevron.left").frame(width: 44, height: 44)
+            }.disabled(exerciseIndex == 0)
+              .accessibilityLabel(L10n.text("Предыдущее упражнение", locale: locale))
+              .accessibilityIdentifier("previousWorkoutExercise")
+            Text("\(exerciseIndex + 1) / \(workout.exercises.count)")
+              .font(.subheadline.weight(.medium)).monospacedDigit().padding(.horizontal, 4)
+            Button(action: next) {
+              Image(systemName: "chevron.right").frame(width: 44, height: 44)
+            }.disabled(exerciseIndex >= workout.exercises.count - 1)
+              .accessibilityLabel(L10n.text("Следующее упражнение", locale: locale))
+              .accessibilityIdentifier("nextWorkoutExercise")
+          }.buttonStyle(.plain).glassEffect(.regular, in: .capsule)
+          Spacer(minLength: 0)
+          if isOngoing {
+            icon(
+              workout.status == .paused ? "play.fill" : "pause.fill",
+              title: workout.status == .paused ? "Продолжить" : "Пауза", action: pause
+            )
+            .accessibilityIdentifier("pauseExerciseWorkout")
+            icon("stop.fill", title: "Завершить тренировку", action: finish)
+              .disabled(workout.completedSets == 0).accessibilityIdentifier("finishWorkout")
+          }
+        }
+      }
     }.padding(.vertical, 8)
   }
+
   private func icon(_ name: String, title: String, action: @escaping () -> Void) -> some View {
     Button(action: action) {
-      Image(systemName: name).font(.system(size: 20)).frame(minWidth: 28, minHeight: 32)
-    }
-    .buttonStyle(.glass).buttonBorderShape(.circle).accessibilityLabel(
-      L10n.text(title, locale: locale))
+      Image(systemName: name).font(.body.weight(.semibold)).frame(minWidth: 44, minHeight: 44)
+    }.buttonStyle(.glass).buttonBorderShape(.circle)
+      .accessibilityLabel(L10n.text(title, locale: locale))
   }
 }

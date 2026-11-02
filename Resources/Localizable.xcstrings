@@ -1208,6 +1208,23 @@
         }
       }
     },
+    "Будет удалён весь подход со всеми этапами дропсета.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Будет удалён весь подход со всеми этапами дропсета."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The entire set, including all drop stages, will be deleted."
+          }
+        }
+      }
+    },
     "В CSV нет тренировок для импорта.": {
       "extractionState": "manual",
       "localizations": {
@@ -2772,6 +2789,23 @@
         }
       }
     },
+    "Данные этого подхода будут удалены из тренировки.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Данные этого подхода будут удалены из тренировки."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This set and its recorded data will be deleted from the workout."
+          }
+        }
+      }
+    },
     "Дата": {
       "extractionState": "manual",
       "localizations": {
@@ -3312,6 +3346,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Add set"
+          }
+        }
+      }
+    },
+    "Добавить подход после": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Добавить подход после"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add set after"
           }
         }
       }
@@ -3958,6 +4009,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Note"
+          }
+        }
+      }
+    },
+    "Заметка к подходу": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Заметка к подходу"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set note"
+          }
+        }
+      }
+    },
+    "Заметка к подходу должна быть не длиннее 2000 символов.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Заметка к подходу должна быть не длиннее 2000 символов."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set notes must be no longer than 2000 characters."
           }
         }
       }
@@ -6189,6 +6274,23 @@
         }
       }
     },
+    "Не удалось сохранить заметку. Попробуйте ещё раз.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось сохранить заметку. Попробуйте ещё раз."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not save the note. Please try again."
+          }
+        }
+      }
+    },
     "Не удалось сохранить изменения тренировки. Попробуйте ещё раз.": {
       "extractionState": "manual",
       "localizations": {
@@ -6593,6 +6695,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "No data is available. Check your tracker app’s sync and FitnessTracker permissions in Health."
+          }
+        }
+      }
+    },
+    "Нет заметки": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нет заметки"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No note"
           }
         }
       }
@@ -10928,6 +11047,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Delete weight entry?"
+          }
+        }
+      }
+    },
+    "Удалить подход": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Удалить подход"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete set"
+          }
+        }
+      }
+    },
+    "Удалить подход?": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Удалить подход?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete set?"
           }
         }
       }
