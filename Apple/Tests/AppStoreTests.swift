@@ -49,6 +49,100 @@ import XCTest
 }
 
 @MainActor final class AppStoreTests: XCTestCase {
+  func testGeneralStartPresentsPickerWithoutSavingAndResumesExistingSession() throws {
+    let repository = FailingWorkoutRepository()
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    repository.failSaves = true
+    store.presentWorkoutStart()
+    store.presentWorkoutStart()
+    XCTAssertTrue(store.showingWorkoutStart)
+    XCTAssertFalse(store.showSession)
+    XCTAssertNil(store.active)
+    XCTAssertNil(store.error)
+    XCTAssertTrue(try repository.workouts().isEmpty)
+    store.showingWorkoutStart = false
+    repository.failSaves = false
+    store.start()
+    let active = try XCTUnwrap(store.active)
+    store.showSession = false
+    store.presentWorkoutStart()
+    XCTAssertTrue(store.showSession)
+    XCTAssertFalse(store.showingWorkoutStart)
+    XCTAssertEqual(store.active, active)
+    XCTAssertEqual(try repository.workouts(), [active])
+  }
+
+  func testCombinedTemplateStartPersistsOneSessionAndResumesWithoutReplacement() throws {
+    let repository = MemoryWorkoutRepository()
+    let first = ExerciseCatalog.starterTemplates[0]
+    var second = ExerciseCatalog.starterTemplates[1]
+    second.exercises.insert(first.exercises[0], at: 0)
+    try repository.saveTemplate(first)
+    try repository.saveTemplate(second)
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    store.start(templates: [first, second])
+    let active = try XCTUnwrap(store.active)
+    XCTAssertEqual(active.exercises.count, 6)
+    XCTAssertEqual(Set(active.exercises.map(\.exercise.id)).count, 6)
+    XCTAssertEqual(try repository.workouts(), [active])
+    XCTAssertEqual(try repository.templates().count, 2)
+    XCTAssertTrue(store.showSession)
+    store.showSession = false
+    store.start(templates: [second, first])
+    XCTAssertEqual(store.active, active)
+    XCTAssertEqual(try repository.workouts(), [active])
+    XCTAssertTrue(store.showSession)
+  }
+
+  func testCombinedTemplateSaveFailureDoesNotLeaveAPartialSession() throws {
+    let repository = FailingWorkoutRepository()
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    repository.failSaves = true
+    store.start(templates: ExerciseCatalog.starterTemplates)
+    XCTAssertNil(store.active)
+    XCTAssertFalse(store.showSession)
+    XCTAssertTrue(try repository.workouts().isEmpty)
+    XCTAssertNotNil(store.error)
+    repository.failSaves = false
+    store.start(templates: ExerciseCatalog.starterTemplates)
+    XCTAssertEqual(store.active?.exercises.count, 6)
+    XCTAssertEqual(try repository.workouts().count, 1)
+    XCTAssertTrue(store.showSession)
+  }
+
+  func testFailedWorkoutStartDoesNotPresentOrCreateSession() throws {
+    let repository = FailingWorkoutRepository()
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    repository.failSaves = true
+    store.start()
+    XCTAssertNil(store.active)
+    XCTAssertFalse(store.showSession)
+    XCTAssertTrue(try repository.workouts().isEmpty)
+    XCTAssertNotNil(store.error)
+    repository.failSaves = false
+    store.start()
+    XCTAssertNotNil(store.active)
+    XCTAssertTrue(store.showSession)
+    XCTAssertEqual(try repository.workouts().count, 1)
+  }
+
+  func testStartingAnotherTemplateResumesExistingSessionWithoutReplacingIt() throws {
+    let repository = MemoryWorkoutRepository()
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    store.start(template: ExerciseCatalog.starterTemplates[0])
+    let original = try XCTUnwrap(store.active)
+    store.showSession = false
+    store.start(template: ExerciseCatalog.starterTemplates[1])
+    XCTAssertEqual(store.active, original)
+    XCTAssertTrue(store.showSession)
+    XCTAssertEqual(try repository.workouts(), [original])
+  }
+
   func testUnknownImportedDurationNeverRequestsHealthWritePermission() async throws {
     let repository = MemoryWorkoutRepository()
     var workout = Workout(name: "CSV fixture", startedAt: Date(timeIntervalSince1970: 100))

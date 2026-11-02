@@ -4,35 +4,56 @@ import SwiftUI
 struct ExerciseLibraryView: View {
   @Environment(\.locale) private var locale
   var onSelect: ((Exercise) -> Void)? = nil
-  @State private var model = ExerciseLibraryViewModel()
+  @State private var model: ExerciseLibraryViewModel
+
+  init(
+    initialGroups: Set<MuscleGroup> = [], initialMuscles: Set<ExerciseMuscle> = [],
+    onSelect: ((Exercise) -> Void)? = nil
+  ) {
+    self.onSelect = onSelect
+    _model = State(
+      initialValue: ExerciseLibraryViewModel(groups: initialGroups, muscles: initialMuscles))
+  }
+
   var body: some View {
     @Bindable var model = model
     List {
       Section {
-        HStack {
-          Menu {
-            Button(L10n.text("Все мышцы", locale: locale)) { model.group = nil }
-            ForEach(MuscleGroup.allCases, id: \.self) { value in
-              Button(value.title) { model.group = value }
-            }
-          } label: {
-            Label(
-              model.group?.title ?? L10n.text("Все мышцы", locale: locale),
-              systemImage: "figure.strengthtraining.traditional")
+        NavigationLink {
+          MuscleSelectionView(selection: $model.muscleSelection, showsDoneButton: true)
+        } label: {
+          Label(
+            MuscleSelectionText.compactSummary(model.muscleSelection, locale: locale),
+            systemImage: "figure.strengthtraining.traditional")
+        }
+        .font(.subheadline)
+        .accessibilityIdentifier("chooseExerciseMuscles")
+        .accessibilityValue(MuscleSelectionText.summary(model.muscleSelection, locale: locale))
+        Menu {
+          Button(L10n.text("Весь инвентарь", locale: locale)) { model.equipment = [] }
+          ForEach(ExerciseEquipment.allCases, id: \.self) { value in
+            Toggle(
+              L10n.text(value.title, locale: locale),
+              isOn: Binding(
+                get: { model.equipment.contains(value) },
+                set: { selected in
+                  if selected {
+                    model.equipment.insert(value)
+                  } else {
+                    model.equipment.remove(value)
+                  }
+                }))
           }
-          Spacer()
-          Menu {
-            Button(L10n.text("Весь инвентарь", locale: locale)) { model.equipment = nil }
-            ForEach(ExerciseEquipment.allCases, id: \.self) { value in
-              Button(L10n.text(value.title, locale: locale)) { model.equipment = value }
-            }
-          } label: {
-            Label(
-              model.equipment.map { L10n.text($0.title, locale: locale) }
-                ?? L10n.text("Инвентарь", locale: locale), systemImage: "line.3.horizontal.decrease"
-            )
-          }
-        }.font(.subheadline)
+        } label: {
+          Label(
+            model.equipment.isEmpty
+              ? L10n.text("Весь инвентарь", locale: locale)
+              : ExerciseEquipment.allCases.filter { model.equipment.contains($0) }
+                .map { L10n.text($0.title, locale: locale) }.joined(separator: ", "),
+            systemImage: "line.3.horizontal.decrease"
+          )
+        }
+        .font(.subheadline)
       } footer: {
         Text(
           L10n.format(
@@ -41,7 +62,7 @@ struct ExerciseLibraryView: View {
       }
       Section {
         DisclosureGroup(L10n.text("Выбрать на схеме тела", locale: locale)) {
-          ExerciseBodyPicker(selection: $model.group)
+          ExerciseBodyPicker(selection: $model.muscleSelection)
             .padding(.vertical, 8)
         }
         .accessibilityIdentifier("exerciseBodyPicker")
@@ -73,7 +94,7 @@ struct ExerciseLibraryView: View {
             VStack(alignment: .leading, spacing: 5) {
               Text(entry.name).font(.headline).foregroundStyle(.primary)
               Text(
-                "\(L10n.text(entry.group.title, locale: locale)) · \(L10n.text(entry.equipment.title, locale: locale))"
+                "\(entry.primaryMuscles.joined(separator: ", ")) · \(L10n.text(entry.equipment.title, locale: locale))"
               )
               .font(.caption).foregroundStyle(.secondary)
             }
@@ -101,6 +122,7 @@ struct ExerciseLibraryView: View {
 }
 
 struct ExerciseDetailView: View {
+  @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
   let exercise: Exercise
   var onSelect: ((Exercise) -> Void)? = nil
@@ -191,7 +213,7 @@ struct ExerciseDetailView: View {
             HStack(alignment: .top, spacing: 12) {
               Text("\(index + 1)").font(.headline).foregroundStyle(.tint)
                 .frame(width: 30, height: 30).background(
-                  Color.accentColor.opacity(0.12), in: .circle)
+                  colorTheme.accent.opacity(0.12), in: .circle)
               Text(text).frame(maxWidth: .infinity, alignment: .leading)
             }.accessibilityElement(children: .combine)
           }

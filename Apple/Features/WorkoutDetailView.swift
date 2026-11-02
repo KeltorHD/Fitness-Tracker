@@ -65,18 +65,14 @@ struct WorkoutDetailView: View {
     .accessibilityIdentifier("workoutDetailScroll")
     .background(FitTheme.paper).navigationBarTitleDisplayMode(.inline)
     .safeAreaInset(edge: .top) { if store.isDemoMode { DemoModeBanner() } }
-    .toolbarBackground(FitTheme.accent, for: .navigationBar).toolbarBackground(
-      .visible, for: .navigationBar
-    )
-    .toolbarColorScheme(.dark, for: .navigationBar)
     .toolbar {
       ToolbarItem(placement: .principal) {
         Text(session.startedAt, format: .dateTime.weekday(.wide).hour().minute())
-          .font(.subheadline).textCase(.uppercase).foregroundStyle(.white)
+          .font(.subheadline).foregroundStyle(.secondary)
       }
       ToolbarItem(placement: .topBarLeading) {
         Button(L10n.text("Закрыть", locale: locale), systemImage: "chevron.down") { dismiss() }
-          .foregroundStyle(.white)
+          .foregroundStyle(.primary)
       }
       ToolbarItem(placement: .topBarTrailing) {
         Menu {
@@ -96,7 +92,7 @@ struct WorkoutDetailView: View {
             confirmDelete = true
           }
         } label: {
-          Image(systemName: "ellipsis.circle.fill").foregroundStyle(.white)
+          Image(systemName: "ellipsis.circle.fill").foregroundStyle(.primary)
         }
       }
     }
@@ -186,6 +182,7 @@ struct WorkoutDetailView: View {
 }
 
 struct WorkoutEditorView: View {
+  @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
   @Environment(AppStore.self) private var store
   @Environment(\.dismiss) private var dismiss
@@ -210,6 +207,13 @@ struct WorkoutEditorView: View {
                 .subheadline
               ).foregroundStyle(.secondary)
             }
+            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+              Button(role: .destructive) {
+                workout.exercises.removeAll { $0.id == item.id }
+              } label: {
+                Label(L10n.text("Убрать упражнение", locale: locale), systemImage: "minus.circle")
+              }
+            }
           }
           .onMove { workout.exercises.move(fromOffsets: $0, toOffset: $1) }
           .onDelete { workout.exercises.remove(atOffsets: $0) }
@@ -230,6 +234,6 @@ struct WorkoutEditorView: View {
         }
       }
       .archiveTransferPresenter(when: true)
-    }.tint(FitTheme.accent)
+    }.tint(colorTheme.accent)
   }
 }

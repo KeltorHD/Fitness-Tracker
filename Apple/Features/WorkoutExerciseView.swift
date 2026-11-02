@@ -2,6 +2,7 @@ import FitnessTrackerCore
 import SwiftUI
 
 struct WorkoutExerciseView: View {
+  @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
   @Environment(AppStore.self) private var store
   @Environment(\.dismiss) private var dismiss
@@ -26,7 +27,6 @@ struct WorkoutExerciseView: View {
   var body: some View {
     ZStack(alignment: .top) {
       FitTheme.grouped.ignoresSafeArea()
-      FitTheme.header.frame(height: 230).ignoresSafeArea(edges: .top)
       if let workout, let exercise = model.exercise(in: workout) {
         VStack(spacing: 16) {
           sessionHeader(workout)
@@ -64,17 +64,23 @@ struct WorkoutExerciseView: View {
         WorkoutNumberPad(model: numberPad, workout: workout)
       }
     }
-    .tint(FitTheme.accent).accessibilityIdentifier("workoutExerciseScreen")
+    .tint(colorTheme.accent).accessibilityIdentifier("workoutExerciseScreen")
     .onChange(of: workout) { _, value in
       if let value { model.refresh(value) }
       numberPad.reconcile(value)
     }
     .onDisappear { numberPad.dismiss() }
   }
+  private func primaryMuscleNames(_ exercise: Exercise) -> String {
+    let language = AppLanguage.system.resolved(preferredLanguages: [locale.identifier])
+    return ExerciseLibrary.entry(for: exercise.id, language: language)
+      .map { $0.primaryMuscles.joined(separator: ", ") } ?? exercise.muscle.title
+  }
+
   private func sessionHeader(_ workout: Workout) -> some View {
     HStack {
       Text("\((model.index(in: workout) ?? 0) + 1)/\(workout.exercises.count)")
-        .font(.body).foregroundStyle(.white.opacity(0.8))
+        .font(.subheadline).foregroundStyle(.secondary)
       Spacer()
       TimelineView(.periodic(from: .now, by: 1)) { timeline in
         Text(
@@ -83,14 +89,14 @@ struct WorkoutExerciseView: View {
             : Duration.seconds(workout.duration(at: timeline.date)).formatted(
               .time(pattern: .hourMinuteSecond))
         )
-        .font(.largeTitle).monospacedDigit().foregroundStyle(.white).lineLimit(1)
+        .font(.title2.weight(.semibold)).monospacedDigit().foregroundStyle(.primary).lineLimit(1)
         .minimumScaleFactor(0.6)
       }
       Spacer()
       Button {
         dismiss()
       } label: {
-        Image(systemName: "chevron.down").foregroundStyle(.white)
+        Image(systemName: "chevron.down").foregroundStyle(.primary)
       }
       .frame(minWidth: 44, minHeight: 44).accessibilityLabel(
         L10n.text("К списку упражнений", locale: locale)
@@ -104,14 +110,12 @@ struct WorkoutExerciseView: View {
         ScrollView {
           VStack(spacing: 16) {
             HStack(alignment: .top) {
-              Button {
-                dismiss()
-              } label: {
-                Image(systemName: "chevron.down").font(.title3.weight(.semibold))
-              }
-              .frame(minWidth: 44, minHeight: 44).accessibilityLabel(
-                L10n.text("К списку упражнений", locale: locale))
-              Spacer()
+              VStack(alignment: .leading, spacing: 6) {
+                Text(L10n.exerciseName(row.exercise, locale: locale)).font(.title2.bold())
+                  .foregroundStyle(.primary).accessibilityAddTraits(.isHeader)
+                Text(primaryMuscleNames(row.exercise)).font(.subheadline).foregroundStyle(
+                  .secondary)
+              }.frame(maxWidth: .infinity, alignment: .leading)
               Menu {
                 NavigationLink {
                   ExerciseDetailView(exercise: row.exercise).toolbar(.visible, for: .navigationBar)
@@ -151,17 +155,10 @@ struct WorkoutExerciseView: View {
               }
               .accessibilityLabel(L10n.text("Действия упражнения", locale: locale))
             }.foregroundStyle(.secondary)
-            VStack(spacing: 10) {
-              Text(L10n.exerciseName(row.exercise, locale: locale)).font(.title2.bold())
-                .foregroundStyle(
-                  FitTheme.accent)
-              Text(row.exercise.muscle.title).font(.subheadline).foregroundStyle(.secondary)
-                .textCase(
-                  .uppercase)
-            }.multilineTextAlignment(.center).padding(.horizontal, 12)
             if !store.isDemoMode, store.active?.id == workout.id {
               WorkoutLiveHeartRateChart(workoutID: workout.id)
             }
+            WorkoutSetTableHeader(unit: model.unit)
             LazyVStack(spacing: 0) {
               ForEach(Array(row.sets.enumerated()), id: \.element.id) { index, set in
                 WorkoutSetGroupView(
@@ -175,6 +172,7 @@ struct WorkoutExerciseView: View {
                     .top, 12)
               }
             }
+            .accessibilityIdentifier("workoutSetTable")
           }
         }
         .accessibilityIdentifier("workoutExerciseScroll")
@@ -187,7 +185,8 @@ struct WorkoutExerciseView: View {
         }
       }
       if numberPad.field == nil { cardFooter(row, workout: workout) }
-    }.padding(12).background(FitTheme.paper, in: .rect(cornerRadius: FitTheme.exerciseCardRadius))
+    }.padding(FitTheme.cardPadding).background(
+      FitTheme.paper, in: .rect(cornerRadius: FitTheme.exerciseCardRadius))
   }
   private func cardFooter(_ row: WorkoutExercise, workout: Workout) -> some View {
     VStack(spacing: 12) {
@@ -317,6 +316,7 @@ struct WorkoutExerciseView: View {
 }
 
 struct WorkoutExerciseSheet: View {
+  @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(AppStore.self) private var store
   let workout: Workout
   let exerciseID: UUID
@@ -326,7 +326,7 @@ struct WorkoutExerciseSheet: View {
     NavigationStack {
       WorkoutExerciseView(workout: workout, exerciseID: exerciseID, unit: unit)
     }
-    .tint(FitTheme.accent)
+    .tint(colorTheme.accent)
     .presentationDetents([.large])
     .presentationDragIndicator(.visible)
     .safeAreaInset(edge: .top) { if store.isDemoMode { DemoModeBanner() } }

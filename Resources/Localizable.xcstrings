@@ -1072,6 +1072,40 @@
         }
       }
     },
+    "Без расписания": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Без расписания"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unscheduled"
+          }
+        }
+      }
+    },
+    "Без шаблона": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Без шаблона"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Without a template"
+          }
+        }
+      }
+    },
     "Библиотека FitnessTracker": {
       "extractionState": "manual",
       "localizations": {
@@ -1119,6 +1153,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Exercise library"
+          }
+        }
+      }
+    },
+    "Бицепс": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Бицепс"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Biceps"
           }
         }
       }
@@ -1650,6 +1701,40 @@
         }
       }
     },
+    "Вес, %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вес, %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weight, %@"
+          }
+        }
+      }
+    },
+    "Вес: %@ %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вес: %@ %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weight: %@ %@"
+          }
+        }
+      }
+    },
     "Весы": {
       "extractionState": "manual",
       "localizations": {
@@ -1820,6 +1905,23 @@
         }
       }
     },
+    "Воскресенье": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Воскресенье"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sunday"
+          }
+        }
+      }
+    },
     "Воспроизвести анимацию": {
       "extractionState": "manual",
       "localizations": {
@@ -1901,6 +2003,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "All FitnessTracker features are free."
+          }
+        }
+      }
+    },
+    "Все шаблоны": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Все шаблоны"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All templates"
           }
         }
       }
@@ -2075,6 +2194,23 @@
         }
       }
     },
+    "Вторник": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вторник"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tuesday"
+          }
+        }
+      }
+    },
     "Выберите другой период или завершите тренировку с рабочими подходами этого упражнения.": {
       "extractionState": "manual",
       "localizations": {
@@ -2088,6 +2224,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Choose another period or finish a workout with working sets of this exercise."
+          }
+        }
+      }
+    },
+    "Выберите один или несколько шаблонов.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выберите один или несколько шаблонов."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Select one or more templates."
+          }
+        }
+      }
+    },
+    "Выберите один или несколько шаблонов. Повторяющиеся упражнения добавятся один раз.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выберите один или несколько шаблонов. Повторяющиеся упражнения добавятся один раз."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Select one or more templates. Duplicate exercises will be added only once."
           }
         }
       }
@@ -2160,6 +2330,40 @@
         }
       }
     },
+    "Выбрано вне фильтра: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выбрано вне фильтра: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selected outside the filter: %@"
+          }
+        }
+      }
+    },
+    "Выбрано шаблонов: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выбрано шаблонов: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selected templates: %@"
+          }
+        }
+      }
+    },
     "Выбрать Apple «Здоровье»": {
       "extractionState": "manual",
       "localizations": {
@@ -2173,6 +2377,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Choose Apple Health"
+          }
+        }
+      }
+    },
+    "Выбрать всю группу: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выбрать всю группу: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Select entire group: %@"
           }
         }
       }
@@ -2330,6 +2551,23 @@
         }
       }
     },
+    "Грудные мышцы": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Грудные мышцы"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chest"
+          }
+        }
+      }
+    },
     "Грудь": {
       "extractionState": "manual",
       "localizations": {
@@ -2360,6 +2598,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Muscle group"
+          }
+        }
+      }
+    },
+    "Группы и мышцы": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Группы и мышцы"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Groups and muscles"
           }
         }
       }
@@ -2598,6 +2853,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Exercise actions"
+          }
+        }
+      }
+    },
+    "Действия шаблона": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Действия шаблона"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Template actions"
+          }
+        }
+      }
+    },
+    "Дельтовидные мышцы": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Дельтовидные мышцы"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shoulders"
           }
         }
       }
@@ -2925,6 +3214,23 @@
         }
       }
     },
+    "Дни тренировок": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Дни тренировок"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Training days"
+          }
+        }
+      }
+    },
     "Добавить": {
       "extractionState": "manual",
       "localizations": {
@@ -3040,6 +3346,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Workouts added: %@, templates: %@. Skipped: %@."
+          }
+        }
+      }
+    },
+    "Добавляйте упражнения по ходу": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Добавляйте упражнения по ходу"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add exercises as you go"
           }
         }
       }
@@ -3227,6 +3550,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "A drop set must have 1 to 5 weight drops. Each weight must be lower than the previous one. Warm-ups are recorded separately."
+          }
+        }
+      }
+    },
+    "Другие шаблоны": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Другие шаблоны"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Other templates"
           }
         }
       }
@@ -3503,6 +3843,23 @@
         }
       }
     },
+    "Задняя поверхность бедра": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Задняя поверхность бедра"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hamstrings"
+          }
+        }
+      }
+    },
     "Закрыть": {
       "extractionState": "manual",
       "localizations": {
@@ -3690,6 +4047,23 @@
         }
       }
     },
+    "Зелёные акценты": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Зелёные акценты"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Green accents"
+          }
+        }
+      }
+    },
     "Изменение": {
       "extractionState": "manual",
       "localizations": {
@@ -3737,6 +4111,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Changes in the demo profile will be discarded. Your personal history will remain unchanged."
+          }
+        }
+      }
+    },
+    "Измените поиск или сбросьте фильтры.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Измените поиск или сбросьте фильтры."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Change your search or reset the filters."
           }
         }
       }
@@ -3826,6 +4217,23 @@
         }
       }
     },
+    "Икроножные мышцы": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Икроножные мышцы"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calves"
+          }
+        }
+      }
+    },
     "Иллюстрация движения, созданная ИИ.": {
       "extractionState": "manual",
       "localizations": {
@@ -3907,6 +4315,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Equipment"
+          }
+        }
+      }
+    },
+    "Индивидуальные параметры": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Индивидуальные параметры"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Individual targets"
+          }
+        }
+      }
+    },
+    "Индиго": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Индиго"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Indigo"
           }
         }
       }
@@ -4285,6 +4727,23 @@
         }
       }
     },
+    "Квадрицепс": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Квадрицепс"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quadriceps"
+          }
+        }
+      }
+    },
     "Контролируйте движение и сохраняйте устойчивую опору. Используйте комфортную амплитуду.": {
       "extractionState": "manual",
       "localizations": {
@@ -4315,6 +4774,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "The heart rate copy in FitnessTracker stays on this iPhone and is excluded from iCloud, widgets and export files. iOS manages Apple Health data and its synchronization."
+          }
+        }
+      }
+    },
+    "Лес": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Лес"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forest"
           }
         }
       }
@@ -4506,6 +4982,108 @@
         }
       }
     },
+    "Мои шаблоны": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Мои шаблоны"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "My templates"
+          }
+        }
+      }
+    },
+    "Морские синие акценты": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Морские синие акценты"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ocean-blue accents"
+          }
+        }
+      }
+    },
+    "Мышцы живота": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Мышцы живота"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abdominals"
+          }
+        }
+      }
+    },
+    "Мышцы предплечья": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Мышцы предплечья"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forearms"
+          }
+        }
+      }
+    },
+    "Мышцы шеи": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Мышцы шеи"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neck"
+          }
+        }
+      }
+    },
+    "Мышцы: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Мышцы: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Muscles: %@"
+          }
+        }
+      }
+    },
     "На Mi Band 10 откройте Настройки → Share HR и включите передачу пульса. Держите браслет рядом с iPhone.": {
       "extractionState": "manual",
       "localizations": {
@@ -4570,6 +5148,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Paused · Resume"
+          }
+        }
+      }
+    },
+    "На сегодня": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "На сегодня"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For today"
           }
         }
       }
@@ -4710,6 +5305,23 @@
         }
       }
     },
+    "Название шаблона или упражнения": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Название шаблона или упражнения"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Template or exercise name"
+          }
+        }
+      }
+    },
     "Название, мышца или инвентарь": {
       "extractionState": "manual",
       "localizations": {
@@ -4829,6 +5441,23 @@
         }
       }
     },
+    "Начать": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Начать"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start"
+          }
+        }
+      }
+    },
     "Начать · Всё тело A": {
       "extractionState": "manual",
       "localizations": {
@@ -4863,6 +5492,23 @@
         }
       }
     },
+    "Начать тренировку с пустым списком упражнений.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Начать тренировку с пустым списком упражнений."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start a workout with an empty exercise list."
+          }
+        }
+      }
+    },
     "Начните свой дневник": {
       "extractionState": "manual",
       "localizations": {
@@ -4893,6 +5539,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Start a workout and select AirPods Pro 3 in Apple Health mode."
+          }
+        }
+      }
+    },
+    "Не выбраны": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не выбраны"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "None selected"
           }
         }
       }
@@ -5713,6 +6376,57 @@
         }
       }
     },
+    "Необязательно. В выбранные дни шаблон будет показываться первым при начале тренировки.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Необязательно. В выбранные дни шаблон будет показываться первым при начале тренировки."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Optional. On selected days, this template will appear first when starting a workout."
+          }
+        }
+      }
+    },
+    "Необязательно. Выбор включит фильтр по основным мышцам при добавлении упражнений.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Необязательно. Выбор включит фильтр по основным мышцам при добавлении упражнений."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Optional. Your selection will filter exercises by their primary muscles when adding them."
+          }
+        }
+      }
+    },
+    "Необязательно. Выбранные группы включат фильтр при добавлении упражнений.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Необязательно. Выбранные группы включат фильтр при добавлении упражнений."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Optional. Selected groups will filter exercises when adding them."
+          }
+        }
+      }
+    },
     "Нет активной тренировки": {
       "extractionState": "manual",
       "localizations": {
@@ -5845,6 +6559,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "No new records to import."
+          }
+        }
+      }
+    },
+    "Нет подходящих шаблонов": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нет подходящих шаблонов"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No matching templates"
           }
         }
       }
@@ -6104,6 +6835,23 @@
         }
       }
     },
+    "Океан": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Океан"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ocean"
+          }
+        }
+      }
+    },
     "Окончание отдыха": {
       "extractionState": "manual",
       "localizations": {
@@ -6168,6 +6916,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "General"
+          }
+        }
+      }
+    },
+    "Основные группы мышц": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Основные группы мышц"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Primary muscle groups"
           }
         }
       }
@@ -6240,6 +7005,23 @@
         }
       }
     },
+    "Отводящие мышцы бедра": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Отводящие мышцы бедра"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abductors"
+          }
+        }
+      }
+    },
     "Отдых": {
       "extractionState": "manual",
       "localizations": {
@@ -6304,6 +7086,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rest between sets"
+          }
+        }
+      }
+    },
+    "Отдых общий для всех упражнений. При произвольном отдыхе таймер не запускается.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Отдых общий для всех упражнений. При произвольном отдыхе таймер не запускается."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rest applies to all exercises. No timer starts when resting as needed."
           }
         }
       }
@@ -6546,6 +7345,23 @@
         }
       }
     },
+    "Отметьте группу целиком или раскройте её и выберите отдельные мышцы.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Отметьте группу целиком или раскройте её и выберите отдельные мышцы."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Select a whole group or expand it to choose individual muscles."
+          }
+        }
+      }
+    },
     "Ошибка": {
       "extractionState": "manual",
       "localizations": {
@@ -6610,6 +7426,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "SKIPPED"
+          }
+        }
+      }
+    },
+    "Параметры выполнения": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Параметры выполнения"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workout parameters"
           }
         }
       }
@@ -6763,6 +7596,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Shoulders"
+          }
+        }
+      }
+    },
+    "Плечи и шея": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Плечи и шея"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shoulders and neck"
+          }
+        }
+      }
+    },
+    "По таймеру": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "По таймеру"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Timed"
           }
         }
       }
@@ -7107,6 +7974,23 @@
         }
       }
     },
+    "Подход": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Подход"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set"
+          }
+        }
+      }
+    },
     "Подход %@": {
       "extractionState": "manual",
       "localizations": {
@@ -7311,6 +8195,23 @@
         }
       }
     },
+    "Понедельник": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Понедельник"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Monday"
+          }
+        }
+      }
+    },
     "Понятно": {
       "extractionState": "manual",
       "localizations": {
@@ -7324,6 +8225,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "OK"
+          }
+        }
+      }
+    },
+    "Порядок: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Порядок: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Order: %@"
           }
         }
       }
@@ -7426,6 +8344,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Core"
+          }
+        }
+      }
+    },
+    "При объединении параметры упражнения берутся из первого вхождения, отдых — из первого выбранного шаблона.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "При объединении параметры упражнения берутся из первого вхождения, отдых — из первого выбранного шаблона."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When combining templates, exercise targets come from the first occurrence, and rest comes from the first selected template."
+          }
+        }
+      }
+    },
+    "Приводящие мышцы бедра": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Приводящие мышцы бедра"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adductors"
           }
         }
       }
@@ -7736,6 +8688,23 @@
         }
       }
     },
+    "Произвольный": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Произвольный"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As needed"
+          }
+        }
+      }
+    },
     "Пропустить отдых": {
       "extractionState": "manual",
       "localizations": {
@@ -7974,6 +8943,23 @@
         }
       }
     },
+    "Пятница": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пятница"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Friday"
+          }
+        }
+      }
+    },
     "Работающие мышцы": {
       "extractionState": "manual",
       "localizations": {
@@ -8072,6 +9058,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Expand heart rate card"
+          }
+        }
+      }
+    },
+    "Разгибатели спины": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Разгибатели спины"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lower back"
           }
         }
       }
@@ -8212,6 +9215,23 @@
         }
       }
     },
+    "Расписание": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Расписание"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schedule"
+          }
+        }
+      }
+    },
     "Расчётный 1ПМ": {
       "extractionState": "manual",
       "localizations": {
@@ -8225,6 +9245,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Estimated 1RM"
+          }
+        }
+      }
+    },
+    "Режим оформления": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Режим оформления"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appearance"
           }
         }
       }
@@ -8259,6 +9296,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Progress"
+          }
+        }
+      }
+    },
+    "Роза": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Роза"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rose"
+          }
+        }
+      }
+    },
+    "Розовые акценты": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Розовые акценты"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rose accents"
           }
         }
       }
@@ -8344,6 +9415,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Reset"
+          }
+        }
+      }
+    },
+    "Сбросить выбор": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сбросить выбор"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear selection"
           }
         }
       }
@@ -8586,6 +9674,23 @@
         }
       }
     },
+    "Сине-фиолетовые акценты": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сине-фиолетовые акценты"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blue-violet accents"
+          }
+        }
+      }
+    },
     "Синхронизация iCloud": {
       "extractionState": "manual",
       "localizations": {
@@ -8824,6 +9929,23 @@
         }
       }
     },
+    "Снять выбор группы: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Снять выбор группы: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear group: %@"
+          }
+        }
+      }
+    },
     "Собственный вес": {
       "extractionState": "manual",
       "localizations": {
@@ -8994,6 +10116,23 @@
         }
       }
     },
+    "Среда": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Среда"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wednesday"
+          }
+        }
+      }
+    },
     "Средний": {
       "extractionState": "manual",
       "localizations": {
@@ -9024,6 +10163,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Average: %@"
+          }
+        }
+      }
+    },
+    "Средняя часть спины": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Средняя часть спины"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Middle back"
           }
         }
       }
@@ -9092,6 +10248,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Row %@: check the “%@” field."
+          }
+        }
+      }
+    },
+    "Суббота": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Суббота"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saturday"
           }
         }
       }
@@ -9283,6 +10456,40 @@
         }
       }
     },
+    "Только на сегодня": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Только на сегодня"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today only"
+          }
+        }
+      }
+    },
+    "Трапециевидные мышцы": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Трапециевидные мышцы"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Traps"
+          }
+        }
+      }
+    },
     "Трекер": {
       "extractionState": "manual",
       "localizations": {
@@ -9402,6 +10609,23 @@
         }
       }
     },
+    "Трицепс": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Трицепс"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Triceps"
+          }
+        }
+      }
+    },
     "Тяга в наклоне": {
       "extractionState": "manual",
       "localizations": {
@@ -9432,6 +10656,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dark"
+          }
+        }
+      }
+    },
+    "Тёплые золотистые акценты": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Тёплые золотистые акценты"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warm golden accents"
           }
         }
       }
@@ -9500,6 +10741,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Remove exercise"
+          }
+        }
+      }
+    },
+    "Убрать упражнение: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Убрать упражнение: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove exercise: %@"
           }
         }
       }
@@ -9674,6 +10932,23 @@
         }
       }
     },
+    "Упражнение %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Упражнение %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exercise %@"
+          }
+        }
+      }
+    },
     "Упражнение не найдено.": {
       "extractionState": "manual",
       "localizations": {
@@ -9704,6 +10979,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Exercises"
+          }
+        }
+      }
+    },
+    "Упражнения: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Упражнения: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exercises: %@"
           }
         }
       }
@@ -9827,6 +11119,57 @@
         }
       }
     },
+    "Фильтр учитывает основные мышцы упражнения.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Фильтр учитывает основные мышцы упражнения."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The filter uses the primary muscles of each exercise."
+          }
+        }
+      }
+    },
+    "Фильтры": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Фильтры"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Filters"
+          }
+        }
+      }
+    },
+    "Фильтры включены": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Фильтры включены"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Filters active"
+          }
+        }
+      }
+    },
     "Фитбол": {
       "extractionState": "manual",
       "localizations": {
@@ -9929,6 +11272,23 @@
         }
       }
     },
+    "Цветовая тема": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Цветовая тема"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Color theme"
+          }
+        }
+      }
+    },
     "Цель на неделю: %@": {
       "extractionState": "manual",
       "localizations": {
@@ -9942,6 +11302,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Weekly goal: %@"
+          }
+        }
+      }
+    },
+    "Частично выбрано": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Частично выбрано"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partially selected"
+          }
+        }
+      }
+    },
+    "Четверг": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Четверг"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thursday"
           }
         }
       }
@@ -10031,6 +11425,40 @@
         }
       }
     },
+    "Шаблонов пока нет. Их можно создать в разделе «Шаблоны».": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Шаблонов пока нет. Их можно создать в разделе «Шаблоны»."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No templates yet. Create one in the Templates tab."
+          }
+        }
+      }
+    },
+    "Шаблоны": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Шаблоны"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Templates"
+          }
+        }
+      }
+    },
     "Шаги": {
       "extractionState": "manual",
       "localizations": {
@@ -10061,6 +11489,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Steps over 7 days"
+          }
+        }
+      }
+    },
+    "Широчайшие мышцы спины": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Широчайшие мышцы спины"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lats"
           }
         }
       }
@@ -10218,6 +11663,23 @@
         }
       }
     },
+    "Ягодичные мышцы": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ягодичные мышцы"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Glutes"
+          }
+        }
+      }
+    },
     "Язык": {
       "extractionState": "manual",
       "localizations": {
@@ -10248,6 +11710,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "App language"
+          }
+        }
+      }
+    },
+    "Янтарь": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Янтарь"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amber"
           }
         }
       }

@@ -13,6 +13,7 @@ import WidgetKit
   var error: String?
   var notice: String?
   var showSession = false
+  var showingWorkoutStart = false
   var showingWorkoutDetail = false
   var showingTemplateEditor = false
   var showingBodyWeightEditor = false
@@ -126,7 +127,7 @@ import WidgetKit
       // Finish the personal workspace's last notification/widget update before switching data.
       await previous?.value
       try Task.checkCancellation()
-      guard !showSession, !showingWorkoutDetail, !showingTemplateEditor,
+      guard !showSession, !showingWorkoutStart, !showingWorkoutDetail, !showingTemplateEditor,
         !showingBodyWeightEditor,
         !archiveTransfer.isPresented, !archiveTransfer.isSaving
       else { throw TrainingError.invalidState }
@@ -168,6 +169,7 @@ import WidgetKit
     error = nil
     notice = nil
     showSession = false
+    showingWorkoutStart = false
     showingWorkoutDetail = false
     showingTemplateEditor = false
     showingBodyWeightEditor = false
@@ -266,15 +268,34 @@ import WidgetKit
         message: "Не удалось сохранить стартовые планы. Попробуйте ещё раз.")
     }
   }
+  /// All general start buttons use the picker; resuming never replaces the active session.
+  func presentWorkoutStart() {
+    if active != nil {
+      showingWorkoutStart = false
+      showSession = true
+    } else {
+      showingWorkoutStart = true
+    }
+  }
+
   func start(template: WorkoutTemplate? = nil) {
+    start(templates: template.map { [$0] } ?? [])
+  }
+  func start(templates: [WorkoutTemplate]) {
     guard active == nil else {
       showSession = true
       return
     }
     do {
-      let workout =
-        try template?.start()
-        ?? Workout(name: L10n.text(isDemoMode ? "Демо-тренировка" : "Свободная тренировка"))
+      let workout: Workout
+      switch templates.count {
+      case 0:
+        workout = Workout(name: L10n.text(isDemoMode ? "Демо-тренировка" : "Свободная тренировка"))
+      case 1:
+        workout = try templates[0].start()
+      default:
+        workout = try WorkoutTemplate.start(combining: templates)
+      }
       try activate(workout)
     } catch {
       report(

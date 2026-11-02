@@ -37,8 +37,12 @@ struct BodyWeightHistoryView: View {
               .font(.caption).foregroundStyle(.secondary)
           }
         }
-        .swipeActions(allowsFullSwipe: false) {
-          Button(L10n.text("Удалить", locale: locale), role: .destructive) { deleting = item.point }
+        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+          Button {
+            deleting = item.point
+          } label: {
+            Label(L10n.text("Удалить", locale: locale), systemImage: "trash")
+          }.tint(.red)
         }
       }
     }

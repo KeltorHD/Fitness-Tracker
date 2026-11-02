@@ -1,11 +1,13 @@
 # Статусы модулей
 
-Последняя проверка: 2026-10-31, Ubuntu 24.04 x86_64, Swift 6.2.1, Swift language mode 6.
+Последняя проверка: 2026-11-01, Ubuntu 24.04 x86_64, Swift 6.2.1, Swift language mode 6.
 
 **Implemented** означает наличие реализации в исходниках. **Linux-tested** означает выполнение функциональных тестов соответствующего Core-кода. Синтаксический разбор Apple-файлов и проверка ресурсов не считаются функциональным тестированием SwiftUI или Apple SDK.
 
 | Модуль | Implemented | Linux-tested | Requires Xcode validation | Requires Apple Developer configuration |
 | --- | --- | --- | --- | --- |
+| Объединение шаблонов при старте | Implemented: множественный выбор с явным запуском; объединение по exercise UUID в порядке выбора, параметры первого вхождения и отдых первого шаблона; исходные шаблоны не меняются | Linux-tested: Core order/dedup/targets, новые row/set/stage IDs, валидация всех входов и ограничение имени; Apple UI только parser/lint | Requires Xcode validation: выбор/снятие/отмена, обновление списка, сохранение/ошибка, VoiceOver, RU/EN и Dynamic Type; новые XCTest/UI tests не запускались | Нет |
+| Центральная кнопка начала тренировки | Implemented: выступающая круглая кнопка в общей Liquid Glass панели, выбор сохранённого шаблона/свободного старта; активная сессия продолжается без дубликата | Core regression suite; Apple-исходники только parser/lint, структура и RU/EN ресурсы; новые XCTest/UI tests на Linux не запускались | Requires Xcode validation: геометрия стекла, tab navigation, sheet transitions, отмена, пустой каталог, ошибка сохранения, активная сессия, доступность | Нет новых capabilities |
 | Сворачивание верхней карточки пульса в тренировке | Implemented: компактная строка пульса со стрелкой; график/детали раскрываются, карточка остаётся на месте; AppStorage сохраняет вид | Linux-tested: parser/lint/структура/локализация; Apple UI не запускался | Requires Xcode validation: свернуть/развернуть, relaunch, прежняя настройка false, свежесть, demo mode, VoiceOver; запись/Live Activity продолжаются | Нет |
 | Единая карточка пульса в активной тренировке | Implemented: нижний WorkoutTrackerCard удалён; текущее значение, график и ошибки сверху, прямой переход в Трекер для подключения/live controls | Linux-tested: parser/lint/структура/локализация; Apple UI не запускался | Requires Xcode validation: одна карточка, переходы и Bluetooth/AirPods controls | Без новых permissions |
 | Заголовок активной тренировки в navigation bar | Implemented: отдельные Image/Text для значка и видимого названия над временем, без toolbar Label style; отдельный WorkoutHero убран | Linux-tested: syntax, lint, project/localization; Apple UI не запускался | Requires Xcode validation: длинное название, rename, Dynamic Type, VoiceOver и узкий экран | Нет |
@@ -21,7 +23,7 @@
 | State machine, валидация, паузы, отдых | Да | Да | Поведение UI отдельно | Нет |
 | Volume, 1ПМ, records, недели, streak | Да | Да | Charts отдельно | Нет |
 | Repository protocols и Memory repository | Да | Да | Нет для Core | Нет |
-| SwiftUI: Дневник, Каталог/editor, Session, History/detail, Результаты, Настройки | Да | Нет, только syntax parse | Да | Signing для устройства |
+| SwiftUI: Дневник, Шаблоны/editor, Session, History/detail, Результаты, Настройки | Да | Нет, только syntax parse | Да | Signing для устройства |
 | Liquid Glass: container, effect, ID, transition, glass buttons | Да | Нет, только syntax parse | Да, включая rendering/accessibility | Signing для устройства |
 | SwiftData repository и восстановление сессии | Да | Нет, Apple unit tests не запускались | Да, macro expansion/round-trip/ошибки | Нет для локального store |
 | CloudKit через SwiftData, проверка аккаунта | Да | Нет | Да, два устройства и production schema | Да, iCloud container, Push, profiles |
@@ -127,3 +129,25 @@ Watch записывает отдельный стартовый план и п�
 Дропсеты и разминка: [DROP_SETS.md](DROP_SETS.md). Полная запись и частичное завершение не создают фиктивно выполненных этапов.
 
 Цифровая панель: [NUMBER_ENTRY.md](NUMBER_ENTRY.md); два новых ввода и общий макет — демонстрационные SVG/PNG.
+
+Группы мышц шаблона: **Implemented**. Несколько необязательных групп сохраняются в Codable payload с additive migration старых шаблонов; подписи видны в каталоге/обзоре/выборе, каталог упражнений сразу фильтруется по объединению групп. Core compatibility/archive/repository/search: **Linux-tested**. SwiftUI и Apple unit tests: **Requires Xcode validation** (сценарии в XCODE_VALIDATION.md).
+
+Параметры выполнения шаблона: **Implemented**. Отдых, подходы, повторения, вес и сводки plannedSets перенесены в общий свёрнутый DisclosureGroup. Новый шаблон использует произвольный отдых (restSeconds = 0, без автоматического таймера); сохранённые значения не меняются. Core default/start/timed-rest compatibility: **Linux-tested**. SwiftUI: **Requires Xcode validation**.
+
+Множественный фильтр инвентаря: **Implemented**. Меню поддерживает независимые отметки нескольких типов; объединение типов пересекается с группами мышц и поиском, пустой выбор означает весь инвентарь. Core search: **Linux-tested**; переносимая модель — Swift 6 type-check и исполнение с реальным Core (объединение типов, поиск/мышцы, язык, снятие отметки и сброс). SwiftUI/Apple XCTest: **Requires Xcode validation**.
+
+Дни тренировок шаблона: **Implemented**. Необязательный набор preferredWeekdays с additive migration старых payloads; выбор в «Параметрах выполнения», группы «На сегодня»/«Другие шаблоны» без дублей и без автоматического выбора, обновление дня/foreground. Core schedule/archive/repository/legacy/timezone/DST: **Linux-tested**. SwiftUI и системные события времени: **Requires Xcode validation**.
+
+WorkoutNavigationBar contrast environment: **Implemented** — ключ исправлен на официальный colorSchemeContrast, чтение и сравнение используют одноимённое свойство. Linux syntax parse/lint; **Requires Xcode validation** для SDK-компиляции и Increase Contrast.
+
+Панель навигации с центральным стартом: **Implemented** — выбранная капсула использует настоящий glassEffect/ID/matchedGeometry, drag-preview через GestureState и переключение по отпусканию над вкладкой; при отмене/отпускании вне вкладок выбор сохраняется. Старт уменьшен до 52 pt, подъём контура до 12 pt, убраны непрозрачная подложка и белый ободок, центральная кнопка остаётся отдельным действием. Reduce Motion отключает анимации. Linux: syntax/lint/structure; **Requires Xcode validation**, добавлен UI test (не запускался).
+
+Стиль журнала с индиго: **Implemented**. Общий адаптивный AccentColor для app/widgets/Watch, AccentForeground для сплошных акцентных поверхностей и светлый AccentOnDark для чёрного фона Live Activity/Island; спокойные заголовки вместо цветных шапок; округлые карточки сохранены, метрики объединены в одну сводку. Подходы показываются по колонкам с активной строкой/readonly completion, AX перестроением и выровненными дроп-этапами. Linux: syntax/lint/structure/resources/localization; **Requires Xcode validation** для SDK, Asset Catalog compilation, цветов стекла, layout, VoiceOver и UI tests.
+
+Цветовые темы iOS-приложения: **Implemented**. К базовому Индиго добавлены Океан, Лес, Роза и Янтарь с light/dark/high-contrast assets. Выбор хранится в UserDefaults, передаётся через Environment и меняет явные акценты без смены identity экранов; режим оформления независим. Watch/widgets/Live Activity используют базовую палитру. Linux: syntax/lint/structure/resources/localization; **Requires Xcode validation**, новый UI test не запускался.
+
+Подробный выбор мышц: **Implemented**. 17 стабильных ExerciseMuscle IDs из free-exercise-db, группировка в существующие области, единый selector целой группы/мышц и частичное состояние; фильтрация по primaryMuscles совместно с поиском/инвентарём, частичная подсветка схемы. Шаблон сохраняет отдельные muscles аддитивно к прежним muscleGroups, использует их при добавлении, показывает подробную подпись; Exercise.muscle и UUID не меняются. Core source coverage RU/EN, union/partial selection, legacy/archive/repository: **Linux-tested**. SwiftUI/Apple tests: **Requires Xcode validation**.
+
+Карточки упражнений шаблона и нативные свайпы: **Implemented**. Название/номер в шапке, реальные мышцы/инвентарь, краткие цели, техника и миниатюрный минус; удаление черновика адресуется row ID. Свайп влево раскрывает действие без full-swipe удаления: TemplateEditor, шаблоны, дневник, WorkoutEditor, история веса. Сохранённые записи удаляются после подтверждения. List используется вместо ScrollView там, где нужны штатные iOS 26 swipeActions. Linux: syntax/lint/structure/localization/Core; **Requires Xcode validation** для жестов, layout, ошибок сохранения и новых UI tests.
+
+Старт с приоритетом шаблонов: **Implemented**. Общие кнопки дневника/результатов/панели используют presentWorkoutStart без записи новой сессии; полноразмерный picker показывает шаблоны и компактный free-start сверху. Поиск и фильтры расписания/мышц/инвентаря сохраняют выбор, указывают скрытые выбранные строки, пересчитывают проекцию только при изменении данных/фильтра/дня. Core search/filter/calendar: **Linux-tested**. Default/fallback палитра — Лес, явная настройка сохранена. SwiftUI/AppStore tests: **Requires Xcode validation**. Новых файлов/изменений project.yml нет.

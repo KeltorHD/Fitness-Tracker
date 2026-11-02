@@ -5,7 +5,10 @@ import Testing
 
 private let start = Date(timeIntervalSince1970: 1_700_000_000)
 private func liveWorkout() throws -> Workout {
-  try ExerciseCatalog.starterTemplates[0].start(at: start)
+  var template = ExerciseCatalog.starterTemplates[0]
+  // These tests exercise timed rest, independently of new-template defaults.
+  template.restSeconds = 90
+  return try template.start(at: start)
 }
 
 @Test func liveStateFindsNextSetAndRestDeadline() throws {

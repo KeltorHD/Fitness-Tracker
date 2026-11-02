@@ -16,6 +16,10 @@
 
 `Apple/Design/Components.swift` содержит панель действий и таймер. `Apple/Features` и Watch используют нативные button styles. Deployment targets — 26.0, fallback blur и режим совместимости старого дизайна не применяются. Reduce Motion выключает инициируемую приложением morph-анимацию. Визуальные результаты пока не проверены.
 
+## Интерактивная панель навигации
+
+Выделение вкладки использует glassEffectID/glassEffectTransition из раздела Liquid Glass выше. CGRect кнопок измеряются официальным [onGeometryChange(for:of:action:)](https://developer.apple.com/documentation/swiftui/view/ongeometrychange(for:of:action:)); [highPriorityGesture(_:including:)](https://developer.apple.com/documentation/swiftui/view/highprioritygesture(_:including:)) отделяет drag от обычного нажатия кнопки. Это собственный SwiftUI-контрол с настоящим стеклом; идентичность поведения системному TabView не заявляется. Проверка рендеринга/жестов требует Xcode.
+
 ## Persistence и Apple-интеграции
 
 - [ModelConfiguration.CloudKitDatabase](https://developer.apple.com/documentation/swiftdata/modelconfiguration/cloudkitdatabase-swift.struct) — `.none` и `.private(String)`; [Syncing model data across a person's devices](https://developer.apple.com/documentation/swiftdata/syncing-model-data-across-a-persons-devices) — ограничения CloudKit-моделей и подготовка schema.
@@ -56,3 +60,7 @@ Capabilities выражены настоящими entitlement keys: [HealthKit]
 - [NSFileCoordinator coordinated read](https://developer.apple.com/documentation/foundation/nsfilecoordinator/coordinate(readingitemat:options:error:byaccessor:)) — синхронное coordinated чтение на worker actor, используется переданный accessor URL. Данные ограничиваются до 20 МиБ. Отмена проверяется перед/после coordination и между блоками чтения; ожидание file provider может завершиться позже отмены UI.
 
 Новые document APIs iOS 27 не требуются. File association и фактическое поведение диалогов остаются в Xcode validation checklist.
+
+## Удаление свайпом и техника упражнения
+
+Штатные [swipeActions(edge:allowsFullSwipe:content:)](https://developer.apple.com/documentation/swiftui/view/swipeactions(edge:allowsfullswipe:content:)) размещены на строках List; `allowsFullSwipe: false` раскрывает действие без автоматического выполнения. Навигация к технике карточки использует [navigationDestination(item:destination:)](https://developer.apple.com/documentation/swiftui/view/navigationdestination(item:destination:)) на стабильном корне экрана, вне ленивых строк. SwipeActionsContainer требует iOS 27 по Apple DocC metadata и не используется при deployment iOS 26. Проверка native gestures/SDK остаётся за Xcode.

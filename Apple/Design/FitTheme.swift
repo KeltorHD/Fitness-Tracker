@@ -1,15 +1,12 @@
 import SwiftUI
 
-/// Visual constants measured from the supplied reference screens; system colors adapt to Dark Mode.
+/// Shared neutral journal surfaces. Accent colors come from the inherited FitnessColorTheme.
 enum FitTheme {
-  static let accent = Color(red: 1, green: 0.31, blue: 0.20)
+  static let accentForeground = Color("AccentForeground")
   static let paper = Color(.systemBackground)
   static let card = Color(.secondarySystemBackground)
   static let grouped = Color(.systemGroupedBackground)
   static let muted = Color(.secondaryLabel)
-  static let header = LinearGradient(
-    colors: [Color(red: 1, green: 0.36, blue: 0.22), Color(red: 1, green: 0.18, blue: 0.10)],
-    startPoint: .top, endPoint: .bottom)
   static let radius: CGFloat = 25
   static let cardPadding: CGFloat = 16
   static let resultsRadius: CGFloat = 28
@@ -20,6 +17,11 @@ enum FitTheme {
 }
 
 extension View {
+  func cardListRow() -> some View {
+    listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+      .listRowSeparator(.hidden).listRowBackground(Color.clear)
+  }
+
   func resultsCard(padding: CGFloat = FitTheme.resultsPadding) -> some View {
     self.padding(padding)
       .background(FitTheme.resultsSurface, in: .rect(cornerRadius: FitTheme.resultsRadius))
@@ -42,16 +44,35 @@ struct SummaryChip: View {
   }
 }
 
-struct SummaryMetric: View {
-  let title: String
-  let value: String
+struct WorkoutSummaryCard: View {
+  @Environment(\.dynamicTypeSize) private var typeSize
+  let metrics: [(title: String, value: String)]
+
   var body: some View {
-    VStack(spacing: 4) {
-      Text(title).font(.subheadline).foregroundStyle(.secondary)
-      Text(value).font(.headline).monospacedDigit().lineLimit(1).minimumScaleFactor(0.75)
-    }.frame(maxWidth: .infinity).padding(.vertical, 13)
-      .background(FitTheme.card, in: .rect(cornerRadius: 16))
-      .accessibilityElement(children: .combine)
+    Group {
+      if typeSize.isAccessibilitySize {
+        VStack(alignment: .leading, spacing: 12) {
+          ForEach(Array(metrics.enumerated()), id: \.offset) { index, metric in
+            if index > 0 { Divider() }
+            metricView(metric)
+          }
+        }
+      } else {
+        HStack(alignment: .top, spacing: 12) {
+          ForEach(Array(metrics.enumerated()), id: \.offset) { _, metric in
+            metricView(metric).frame(maxWidth: .infinity, alignment: .leading)
+          }
+        }
+      }
+    }.frame(maxWidth: .infinity, alignment: .leading).fitCard()
+  }
+
+  private func metricView(_ metric: (title: String, value: String)) -> some View {
+    VStack(alignment: .leading, spacing: 6) {
+      Text(metric.title).font(.caption).foregroundStyle(.secondary)
+      Text(metric.value).font(.headline).monospacedDigit().foregroundStyle(.primary)
+        .fixedSize(horizontal: false, vertical: true)
+    }.accessibilityElement(children: .combine)
   }
 }
 
@@ -70,7 +91,7 @@ struct WorkoutHero: View {
   var date: Date? = nil
   var showsDate = true
   var body: some View {
-    VStack(alignment: .leading, spacing: 24) {
+    VStack(alignment: .leading, spacing: 8) {
       if showsDate {
         Group {
           if let date {
@@ -78,12 +99,12 @@ struct WorkoutHero: View {
           } else {
             Text(L10n.text("Шаблон тренировки", locale: locale))
           }
-        }.font(.subheadline).textCase(.uppercase).frame(maxWidth: .infinity)
+        }.font(.subheadline).foregroundStyle(.secondary)
       }
-      Rectangle().fill(.white.opacity(0.25)).frame(height: 0.5)
-      Label(title, systemImage: "figure.strengthtraining.traditional")
-        .font(.largeTitle.bold()).frame(maxWidth: .infinity, alignment: .leading)
-    }.foregroundStyle(.white).padding(.horizontal, 18).padding(.top, 8).padding(.bottom, 24)
-      .background(FitTheme.header)
+      Text(title).font(.title.bold()).foregroundStyle(.primary)
+        .accessibilityAddTraits(.isHeader)
+    }
+    .frame(maxWidth: .infinity, alignment: .leading)
+    .padding(.horizontal, 20).padding(.top, 20).padding(.bottom, 8)
   }
 }

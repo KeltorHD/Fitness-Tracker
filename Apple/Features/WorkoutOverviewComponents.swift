@@ -7,22 +7,24 @@ struct WorkoutSessionSummary: View {
   let unit: WeightUnit
   var body: some View {
     TimelineView(.periodic(from: .now, by: 1)) { timeline in
-      HStack(spacing: 8) {
-        SummaryMetric(
+      WorkoutSummaryCard(metrics: [
+        (
           title: L10n.text("Время", locale: locale),
           value: [.active, .paused].contains(workout.status)
             ? workout.duration(at: timeline.date).formattedWorkoutDuration(locale: locale)
-            : workout.formattedRecordedDuration(locale: locale))
-        SummaryMetric(
+            : workout.formattedRecordedDuration(locale: locale)
+        ),
+        (
           title: L10n.text("Объём", locale: locale),
           value:
             "\(unit.display(workout.volume).formatted(.number.locale(L10n.numberLocale).precision(.fractionLength(0)))) \(L10n.text(unit.rawValue, locale: locale))"
-        )
-        SummaryMetric(
+        ),
+        (
           title: L10n.text("Подходы", locale: locale),
           value: workout.status == .completed
-            ? String(workout.completedSets) : "\(workout.fullyCompletedSets)/\(workout.totalSets)")
-      }
+            ? String(workout.completedSets) : "\(workout.fullyCompletedSets)/\(workout.totalSets)"
+        ),
+      ])
     }
   }
 }

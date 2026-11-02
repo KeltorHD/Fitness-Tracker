@@ -21,7 +21,7 @@ struct MetricView: View {
   let symbol: String
   var body: some View {
     VStack(alignment: .leading, spacing: 8) {
-      Image(systemName: symbol).foregroundStyle(Color.accentColor)
+      Image(systemName: symbol).foregroundStyle(.tint)
       Text(value).font(.title2.bold()).monospacedDigit()
       Text(title).font(.caption).foregroundStyle(.secondary)
     }

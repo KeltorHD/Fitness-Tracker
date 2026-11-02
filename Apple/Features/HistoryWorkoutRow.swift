@@ -2,6 +2,7 @@ import FitnessTrackerCore
 import SwiftUI
 
 struct HistoryWorkoutRow: View {
+  @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
   let workout: Workout
   let unit: WeightUnit
@@ -15,7 +16,7 @@ struct HistoryWorkoutRow: View {
         Circle().fill(.gray.opacity(0.55)).frame(width: 7, height: 7)
         Rectangle().fill(FitTheme.card).frame(width: 3, height: 14)
         Image(systemName: "figure.strengthtraining.traditional").font(.title3)
-          .foregroundStyle(FitTheme.accent)
+          .foregroundStyle(colorTheme.accent)
         Rectangle().fill(FitTheme.card).frame(width: 3).frame(minHeight: 30)
       }.frame(width: 26)
       VStack(alignment: .leading, spacing: 8) {
@@ -37,7 +38,7 @@ struct HistoryWorkoutRow: View {
                 String(L10n.text(unit.rawValue, locale: locale)),
                 L10n.countText(workout.completedSets, kind: "set", locale: locale), locale: locale)
             )
-            .font(.subheadline).foregroundStyle(.primary)
+            .font(.subheadline).foregroundStyle(.secondary)
           }.frame(maxWidth: .infinity, alignment: .leading).fitCard()
         }.buttonStyle(.plain)
           .contextMenu {

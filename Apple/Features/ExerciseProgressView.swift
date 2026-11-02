@@ -61,6 +61,7 @@ struct ExerciseProgressSection: View {
 }
 
 private struct ExerciseMetricChart: View {
+  @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
   let metric: ExerciseProgressMetric
   let points: [ExerciseMetricPoint]
@@ -92,12 +93,12 @@ private struct ExerciseMetricChart: View {
               LineMark(
                 x: .value(L10n.text("Дата", locale: locale), point.date),
                 y: .value(L10n.text(metric.title, locale: locale), display(point.value))
-              ).foregroundStyle(FitTheme.accent).accessibilityHidden(true)
+              ).foregroundStyle(colorTheme.accent).accessibilityHidden(true)
               PointMark(
                 x: .value(L10n.text("Дата", locale: locale), point.date),
                 y: .value(L10n.text(metric.title, locale: locale), display(point.value))
               )
-              .foregroundStyle(FitTheme.accent)
+              .foregroundStyle(colorTheme.accent)
               .accessibilityLabel(
                 Text(point.date, format: .dateTime.day().month().year().hour().minute())
               )
@@ -107,7 +108,7 @@ private struct ExerciseMetricChart: View {
                 x: .value(L10n.text("Дата", locale: locale), point.date),
                 y: .value(L10n.text(metric.title, locale: locale), display(point.value))
               )
-              .foregroundStyle(FitTheme.accent).cornerRadius(3)
+              .foregroundStyle(colorTheme.accent).cornerRadius(3)
               .accessibilityLabel(
                 Text(point.date, format: .dateTime.day().month().year().hour().minute())
               )
