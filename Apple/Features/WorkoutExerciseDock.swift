@@ -21,95 +21,76 @@ struct WorkoutExerciseDock: View {
   private var isOngoing: Bool { [.active, .paused].contains(workout.status) }
 
   var body: some View {
-    GlassEffectContainer(spacing: 2) {
-      if isOngoing {
-        ViewThatFits(in: .horizontal) {
-          balancedControls
-          compactControls
-        }
-      } else {
-        HStack(spacing: 8) {
-          previousButton(height: 44)
-          Spacer(minLength: 0)
-          primaryAction(height: actionRowHeight + 8)
-          Spacer(minLength: 0)
-          nextButton(height: 44)
-        }
+    GlassEffectContainer(spacing: 4) {
+      ViewThatFits(in: .horizontal) {
+        controls(height: actionRowHeight, navigationWidth: 64, plusWidth: 60)
+          .frame(minWidth: isOngoing ? 292 + actionRowHeight : 240)
+        controls(height: 52, navigationWidth: 44, plusWidth: 56)
       }
-    }.padding(.vertical, 8)
-      .sensoryFeedback(.success, trigger: completionTrigger)
+    }
+    .padding(.vertical, 8)
+    .sensoryFeedback(.success, trigger: completionTrigger)
   }
 
-  private var balancedControls: some View {
-    HStack(spacing: 2) {
-      previousButton(height: actionRowHeight, width: 72)
-      Spacer(minLength: 0)
-      sessionActions(height: actionRowHeight)
-      primaryAction(height: actionRowHeight + 8)
-      addButton(height: 44)
-      Spacer(minLength: 0)
-      nextButton(height: actionRowHeight, width: 72)
-    }.frame(minWidth: 296 + actionRowHeight, maxWidth: .infinity)
-      .frame(height: actionRowHeight + 8)
-  }
-  private var compactControls: some View {
-    HStack(spacing: 2) {
-      previousButton(height: 44, width: 56)
-      sessionActions(height: 44)
-      primaryAction(height: 52)
-      addButton(height: 44)
-      nextButton(height: 44, width: 56)
-    }.frame(height: 52)
+  private func controls(height: CGFloat, navigationWidth: CGFloat, plusWidth: CGFloat) -> some View
+  {
+    HStack(spacing: 4) {
+      navigationButton(forward: false, height: height + 8, width: navigationWidth, action: previous)
+        .disabled(exerciseIndex == 0).accessibilityIdentifier("previousWorkoutExercise")
+      actionBlock(height: height, plusWidth: plusWidth)
+      navigationButton(forward: true, height: height + 8, width: navigationWidth, action: next)
+        .disabled(exerciseIndex >= workout.exercises.count - 1)
+        .accessibilityIdentifier("nextWorkoutExercise")
+    }
   }
 
-  private func previousButton(height: CGFloat, width: CGFloat = 72) -> some View {
-    navigationButton(forward: false, height: height, width: width, action: previous)
-      .disabled(exerciseIndex == 0).accessibilityIdentifier("previousWorkoutExercise")
-  }
-  private func nextButton(height: CGFloat, width: CGFloat = 72) -> some View {
-    navigationButton(forward: true, height: height, width: width, action: next)
-      .disabled(exerciseIndex >= workout.exercises.count - 1)
-      .accessibilityIdentifier("nextWorkoutExercise")
-  }
-  private func addButton(height: CGFloat) -> some View {
-    Button(action: add) {
-      Image(systemName: "plus").font(.system(size: 18, weight: .semibold))
-        .frame(width: height, height: height).contentShape(.circle)
-    }.buttonStyle(.plain).glassEffect(.regular.interactive(), in: .circle)
-      .disabled(
-        workout.status != .active
-          || (workout.exercises.indices.contains(exerciseIndex)
-            && workout.exercises[exerciseIndex].sets.count >= 30)
-      )
-      .accessibilityLabel(L10n.text("Добавить подход", locale: locale))
-      .accessibilityIdentifier("addWorkoutSet")
-  }
-
-  private func sessionActions(height: CGFloat) -> some View {
+  private func actionBlock(height: CGFloat, plusWidth: CGFloat) -> some View {
     HStack(spacing: 0) {
-      Button(action: pause) {
-        Image(systemName: workout.status == .paused ? "play.fill" : "pause.fill")
-          .frame(width: 44, height: height).contentShape(.rect)
+      if isOngoing {
+        Button(action: pause) {
+          Image(systemName: workout.status == .paused ? "play.fill" : "pause.fill")
+            .frame(minWidth: 44, maxWidth: .infinity, minHeight: height)
+            .contentShape(.rect)
+        }
+        .accessibilityLabel(
+          L10n.text(workout.status == .paused ? "Продолжить" : "Пауза", locale: locale)
+        )
+        .accessibilityIdentifier("pauseExerciseWorkout")
+        Button(action: finish) {
+          Image(systemName: "stop.fill")
+            .frame(minWidth: 44, maxWidth: .infinity, minHeight: height).contentShape(.rect)
+        }
+        .disabled(workout.completedSets == 0)
+        .accessibilityLabel(L10n.text("Завершить тренировку", locale: locale))
+        .accessibilityHint(
+          workout.completedSets == 0
+            ? L10n.text("Для завершения отметьте хотя бы один выполненный подход.", locale: locale)
+            : ""
+        )
+        .accessibilityIdentifier("finishWorkout")
       }
-      .accessibilityLabel(
-        L10n.text(workout.status == .paused ? "Продолжить" : "Пауза", locale: locale)
-      )
-      .accessibilityIdentifier("pauseExerciseWorkout")
-      Button(action: finish) {
-        Image(systemName: "stop.fill").frame(width: 44, height: height)
-          .contentShape(.rect)
+      primaryAction(height: height).frame(maxWidth: .infinity)
+      if isOngoing {
+        Button(action: add) {
+          Image(systemName: "plus").font(.system(size: 21, weight: .semibold))
+            .frame(minWidth: plusWidth, maxWidth: .infinity, minHeight: height)
+            .background(colorTheme.accent.opacity(0.08), in: .capsule)
+            .contentShape(.capsule)
+        }
+        .disabled(
+          workout.status != .active
+            || (workout.exercises.indices.contains(exerciseIndex)
+              && workout.exercises[exerciseIndex].sets.count >= 30)
+        )
+        .accessibilityLabel(L10n.text("Добавить подход", locale: locale))
+        .accessibilityIdentifier("addWorkoutSet")
       }
-      .disabled(workout.completedSets == 0)
-      .accessibilityLabel(L10n.text("Завершить тренировку", locale: locale))
-      .accessibilityHint(
-        workout.completedSets == 0
-          ? L10n.text("Для завершения отметьте хотя бы один выполненный подход.", locale: locale)
-          : ""
-      )
-      .accessibilityIdentifier("finishWorkout")
     }
     .font(.system(size: 16, weight: .semibold)).buttonStyle(.plain)
+    .padding(4)
     .glassEffect(.regular.interactive(), in: .capsule)
+    .accessibilityElement(children: .contain)
+    .accessibilityIdentifier("exerciseActionBlock")
   }
 
   private func primaryAction(height: CGFloat) -> some View {
@@ -122,10 +103,10 @@ struct WorkoutExerciseDock: View {
         }
       }
       .font(.system(size: isOngoing ? 27 : 22, weight: .bold))
-      .frame(width: height, height: height).contentShape(.circle)
+      .foregroundStyle(colorTheme.accent)
+      .frame(width: height, height: height)
+      .background(colorTheme.accent.opacity(0.18), in: .circle).contentShape(.circle)
     }
-    .buttonStyle(.plain)
-    .glassEffect(.regular.tint(colorTheme.accent.opacity(0.65)).interactive(), in: .circle)
     .disabled(isOngoing && !canComplete).accessibilityLabel(actionTitle)
     .accessibilityIdentifier("completeSet")
   }
@@ -139,9 +120,7 @@ struct WorkoutExerciseDock: View {
 
   private func navigationButton(
     forward: Bool, height: CGFloat, width: CGFloat, action: @escaping () -> Void
-  )
-    -> some View
-  {
+  ) -> some View {
     Button(action: action) {
       Image(systemName: forward ? "chevron.right" : "chevron.left")
         .font(.system(size: 16, weight: .semibold))

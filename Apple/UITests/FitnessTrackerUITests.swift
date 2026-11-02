@@ -84,7 +84,7 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(next.waitForExistence(timeout: 5))
     XCTAssertFalse(previous.isEnabled)
     XCTAssertGreaterThanOrEqual(next.frame.height, 44)
-    XCTAssertGreaterThanOrEqual(next.frame.width, 56)
+    XCTAssertGreaterThanOrEqual(next.frame.width, 44)
     let completion = app.buttons["completeSet"]
     XCTAssertEqual(next.frame.midY, completion.frame.midY, accuracy: 1)
     XCTAssertEqual(previous.frame.midY, completion.frame.midY, accuracy: 1)
@@ -234,6 +234,12 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(diary.isSelected)
     templates.tap()
     XCTAssertTrue(templates.isSelected)
+    for index in [0, 3, 1, 2, 0, 1] {
+      let tab = app.buttons["navigationTab_\(index)"]
+      tab.tap()
+      XCTAssertTrue(tab.isSelected)
+      XCTAssertFalse(app.buttons["startSelectedTemplates"].exists)
+    }
     start.tap()
     XCTAssertTrue(app.buttons["startSelectedTemplates"].waitForExistence(timeout: 5))
     app.buttons["closeWorkoutStart"].tap()
@@ -425,8 +431,13 @@ final class FitnessTrackerUITests: XCTestCase {
     app.buttons["closeExerciseMedia"].tap()
     XCTAssertTrue(app.buttons["completeSet"].waitForExistence(timeout: 5))
     let complete = app.buttons["completeSet"]
-    XCTAssertGreaterThan(complete.frame.height, app.buttons["pauseExerciseWorkout"].frame.height)
-    XCTAssertGreaterThan(complete.frame.height, app.buttons["addWorkoutSet"].frame.height)
+    XCTAssertEqual(complete.frame.midY, app.buttons["pauseExerciseWorkout"].frame.midY, accuracy: 1)
+    let plus = app.buttons["addWorkoutSet"]
+    XCTAssertEqual(complete.frame.midY, plus.frame.midY, accuracy: 1)
+    XCTAssertGreaterThanOrEqual(plus.frame.width, 56)
+    XCTAssertGreaterThanOrEqual(plus.frame.height, 52)
+    XCTAssertTrue(
+      app.descendants(matching: .any).matching(identifier: "exerciseActionBlock").firstMatch.exists)
     XCTAssertEqual(header.frame.minY, headerTop, accuracy: 1)
     app.descendants(matching: .any).matching(
       NSPredicate(format: "identifier BEGINSWITH %@", "setIndex_")
