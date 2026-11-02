@@ -3,6 +3,7 @@ import SwiftUI
 
 struct WorkoutExerciseDock: View {
   @Environment(\.locale) private var locale
+  @ScaledMetric(relativeTo: .headline) private var actionRowHeight = 56
   let workout: Workout
   let exerciseIndex: Int
   let canComplete: Bool
@@ -19,37 +20,23 @@ struct WorkoutExerciseDock: View {
   var body: some View {
     GlassEffectContainer(spacing: 12) {
       VStack(spacing: 12) {
-        HStack(spacing: 12) {
-          Button(action: isOngoing ? complete : close) {
-            ViewThatFits(in: .horizontal) {
-              Label(actionTitle, systemImage: isOngoing ? "checkmark" : "chevron.down")
-                .fixedSize()
-              Label(
-                L10n.text(isOngoing ? "Готово" : "Закрыть", locale: locale),
-                systemImage: isOngoing ? "checkmark" : "chevron.down"
-              )
-              .fixedSize()
-              Image(systemName: isOngoing ? "checkmark" : "chevron.down")
-            }.font(.headline).frame(maxWidth: .infinity, minHeight: 44)
-          }
-          .buttonStyle(.glassProminent).buttonBorderShape(.capsule)
-          .disabled(isOngoing && !canComplete).accessibilityLabel(actionTitle)
-          .accessibilityIdentifier("completeSet")
-          if isOngoing {
-            icon("plus", title: "Добавить подход", action: add)
-              .disabled(
-                workout.status != .active
-                  || (workout.exercises.indices.contains(exerciseIndex)
-                    && workout.exercises[exerciseIndex].sets.count >= 30)
-              )
-              .accessibilityIdentifier("addWorkoutSet")
-            icon(
-              workout.status == .paused ? "play.fill" : "pause.fill",
-              title: workout.status == .paused ? "Продолжить" : "Пауза", action: pause
-            ).accessibilityIdentifier("pauseExerciseWorkout")
-            icon("stop.fill", title: "Завершить тренировку", action: finish)
-              .disabled(workout.completedSets == 0).accessibilityIdentifier("finishWorkout")
-          }
+        if isOngoing {
+          // Equal layout slots keep completion centered independently of the icon counts.
+          HStack(spacing: 8) {
+            Color.clear.overlay(alignment: .leading) { sessionActions }
+            Color.clear.overlay { primaryAction }
+            Color.clear.overlay(alignment: .trailing) {
+              icon("plus", title: "Добавить подход", action: add)
+                .disabled(
+                  workout.status != .active
+                    || (workout.exercises.indices.contains(exerciseIndex)
+                      && workout.exercises[exerciseIndex].sets.count >= 30)
+                )
+                .accessibilityIdentifier("addWorkoutSet")
+            }
+          }.frame(height: actionRowHeight)
+        } else {
+          primaryAction
         }
         HStack(spacing: 10) {
           navigationButton(forward: false, action: previous)
@@ -64,6 +51,45 @@ struct WorkoutExerciseDock: View {
         }
       }
     }.padding(.vertical, 8)
+  }
+
+  private var sessionActions: some View {
+    HStack(spacing: 0) {
+      Button(action: pause) {
+        Image(systemName: workout.status == .paused ? "play.fill" : "pause.fill")
+          .frame(width: 44, height: 44)
+      }
+      .accessibilityLabel(
+        L10n.text(workout.status == .paused ? "Продолжить" : "Пауза", locale: locale)
+      )
+      .accessibilityIdentifier("pauseExerciseWorkout")
+      Button(action: finish) {
+        Image(systemName: "stop.fill").frame(width: 44, height: 44)
+      }
+      .disabled(workout.completedSets == 0)
+      .accessibilityLabel(L10n.text("Завершить тренировку", locale: locale))
+      .accessibilityHint(
+        workout.completedSets == 0
+          ? L10n.text("Для завершения отметьте хотя бы один выполненный подход.", locale: locale)
+          : ""
+      )
+      .accessibilityIdentifier("finishWorkout")
+    }
+    .font(.body.weight(.semibold)).buttonStyle(.plain)
+    .glassEffect(.regular.interactive(), in: .capsule)
+  }
+
+  private var primaryAction: some View {
+    Button(action: isOngoing ? complete : close) {
+      ViewThatFits(in: .horizontal) {
+        Text(L10n.text(isOngoing ? "Готово" : "К списку упражнений", locale: locale)).fixedSize()
+        Image(systemName: isOngoing ? "checkmark" : "chevron.down")
+      }
+      .font(.headline).frame(maxWidth: .infinity, minHeight: 44)
+    }
+    .buttonStyle(.glassProminent).buttonBorderShape(.capsule)
+    .disabled(isOngoing && !canComplete).accessibilityLabel(actionTitle)
+    .accessibilityIdentifier("completeSet")
   }
 
   private var actionTitle: String {
