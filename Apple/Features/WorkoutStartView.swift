@@ -242,61 +242,63 @@ private struct WorkoutStartTemplateCard: View {
   let toggleSelection: () -> Void
 
   var body: some View {
-    HStack(alignment: .center, spacing: 12) {
-      if let selectionIndex {
-        Text(L10n.format("№ %@", String(selectionIndex + 1), locale: locale))
-          .font(.headline).monospacedDigit()
-          .foregroundStyle(FitTheme.accentForeground)
-          .padding(.horizontal, 10).frame(minHeight: 44)
-          .background(colorTheme.accent, in: .capsule)
-          .fixedSize(horizontal: true, vertical: false)
-          .accessibilityLabel(
-            L10n.format("Порядок: %@", String(selectionIndex + 1), locale: locale)
-          )
-          .accessibilityIdentifier("templateSelectionOrder_\(template.id)")
-          .transition(.move(edge: .leading).combined(with: .opacity))
-      }
-      VStack(alignment: .leading, spacing: 8) {
-        Button(action: toggleSelection) {
-          HStack(spacing: 12) {
-            VStack(alignment: .leading, spacing: 4) {
+    VStack(alignment: .leading, spacing: 8) {
+      Button(action: toggleSelection) {
+        HStack(spacing: 12) {
+          VStack(alignment: .leading, spacing: 4) {
+            HStack(alignment: .firstTextBaseline, spacing: 8) {
+              if let selectionIndex {
+                Text(String(selectionIndex + 1))
+                  .font(.caption.weight(.bold)).monospacedDigit()
+                  .foregroundStyle(FitTheme.accentForeground)
+                  .padding(.horizontal, 7).padding(.vertical, 3)
+                  .background(colorTheme.accent, in: .capsule)
+                  .fixedSize()
+                  .accessibilityLabel(
+                    L10n.format("Порядок: %@", String(selectionIndex + 1), locale: locale)
+                  )
+                  .accessibilityIdentifier("templateSelectionOrder_\(template.id)")
+                  .transition(.opacity.combined(with: .scale(scale: 0.85, anchor: .leading)))
+              }
               Text(template.name).font(.headline).foregroundStyle(.primary)
-              TemplateMuscleGroups(template: template)
-            }.frame(maxWidth: .infinity, alignment: .leading)
-            Image(systemName: selectionIndex == nil ? "circle" : "checkmark.circle.fill")
-              .foregroundStyle(selectionIndex == nil ? FitTheme.muted : colorTheme.accent)
-              .accessibilityHidden(true)
-          }
-          .frame(minHeight: 44).contentShape(.rect)
+                .accessibilityIdentifier("startTemplateTitle_\(template.id)")
+            }
+            TemplateMuscleGroups(template: template)
+          }.frame(maxWidth: .infinity, alignment: .leading)
+          Image(systemName: selectionIndex == nil ? "circle" : "checkmark.circle.fill")
+            .foregroundStyle(selectionIndex == nil ? FitTheme.muted : colorTheme.accent)
+            .accessibilityHidden(true)
         }
-        .buttonStyle(.plain).accessibilityIdentifier("startWorkoutTemplate_\(template.id)")
-        .accessibilityAddTraits(selectionIndex == nil ? [] : [.isSelected])
-        Button {
-          withAnimation(reduceMotion ? nil : .snappy(duration: 0.24)) {
-            isExpanded.toggle()
-          }
-        } label: {
-          HStack(spacing: 8) {
-            Text(L10n.format("Упражнения: %@", String(template.exercises.count), locale: locale))
-            Spacer(minLength: 0)
-            Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
-              .accessibilityHidden(true)
-          }
-          .font(.subheadline).foregroundStyle(.secondary)
-          .frame(minHeight: 44).contentShape(.rect)
+        .frame(minHeight: 44).contentShape(.rect)
+      }
+      .buttonStyle(.plain).accessibilityIdentifier("startWorkoutTemplate_\(template.id)")
+      .accessibilityAddTraits(selectionIndex == nil ? [] : [.isSelected])
+      Button {
+        withAnimation(reduceMotion ? nil : .snappy(duration: 0.24)) {
+          isExpanded.toggle()
         }
-        .buttonStyle(.plain)
-        .accessibilityLabel(
-          L10n.text(isExpanded ? "Скрыть упражнения" : "Показать упражнения", locale: locale)
-        )
-        .accessibilityValue(String(template.exercises.count))
-        .accessibilityIdentifier("expandStartTemplate_\(template.id)")
-        if isExpanded {
-          Divider()
-          exercisePreview
+      } label: {
+        HStack(spacing: 8) {
+          Text(L10n.format("Упражнения: %@", String(template.exercises.count), locale: locale))
+          Spacer(minLength: 0)
+          Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
+            .accessibilityHidden(true)
         }
-      }.frame(maxWidth: .infinity, alignment: .leading)
+        .font(.subheadline).foregroundStyle(.secondary)
+        .frame(minHeight: 44).contentShape(.rect)
+      }
+      .buttonStyle(.plain)
+      .accessibilityLabel(
+        L10n.text(isExpanded ? "Скрыть упражнения" : "Показать упражнения", locale: locale)
+      )
+      .accessibilityValue(String(template.exercises.count))
+      .accessibilityIdentifier("expandStartTemplate_\(template.id)")
+      if isExpanded {
+        Divider()
+        exercisePreview
+      }
     }
+    .frame(maxWidth: .infinity, alignment: .leading)
     .padding(16)
     .background(FitTheme.card, in: .rect(cornerRadius: FitTheme.radius))
     .accessibilityElement(children: .contain)

@@ -108,7 +108,7 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(app.buttons["openWorkoutExercise"].firstMatch.waitForExistence(timeout: 5))
   }
 
-  @MainActor func testTemplateOrderBadgeMovesContentAndRenumbersAfterDeselection() {
+  @MainActor func testTemplateOrderBadgeShiftsOnlyTitleAndRenumbersAfterDeselection() {
     let app = launch()
     XCTAssertTrue(app.buttons["workoutStartAction"].waitForExistence(timeout: 10))
     app.buttons["workoutStartAction"].tap()
@@ -117,16 +117,24 @@ final class FitnessTrackerUITests: XCTestCase {
     let first = app.buttons["startWorkoutTemplate_\(firstID)"]
     let second = app.buttons["startWorkoutTemplate_\(secondID)"]
     XCTAssertTrue(first.waitForExistence(timeout: 5))
+    let title = app.staticTexts["startTemplateTitle_\(firstID)"]
+    let expansion = app.buttons["expandStartTemplate_\(firstID)"]
     let initialLeading = first.frame.minX
+    let titleLeading = title.frame.minX
+    let expansionLeading = expansion.frame.minX
     first.tap()
     let firstBadge = app.staticTexts["templateSelectionOrder_\(firstID)"]
     XCTAssertTrue(firstBadge.waitForExistence(timeout: 5))
     XCTAssertEqual(firstBadge.label, "Порядок: 1")
-    XCTAssertGreaterThan(first.frame.minX, initialLeading)
-    XCTAssertLessThan(firstBadge.frame.maxX, first.frame.minX)
+    XCTAssertEqual(first.frame.minX, initialLeading, accuracy: 1)
+    XCTAssertGreaterThan(title.frame.minX, titleLeading)
+    XCTAssertLessThan(title.frame.minX - titleLeading, 40)
+    XCTAssertLessThan(firstBadge.frame.maxX, title.frame.minX)
+    XCTAssertEqual(expansion.frame.minX, expansionLeading, accuracy: 1)
     let card = app.descendants(matching: .any)
       .matching(identifier: "startTemplateCard_\(firstID)").firstMatch
-    XCTAssertEqual(firstBadge.frame.midY, card.frame.midY, accuracy: 4)
+    XCTAssertLessThan(firstBadge.frame.midY, card.frame.midY)
+    XCTAssertEqual(firstBadge.frame.minX, initialLeading, accuracy: 1)
     reveal(second, in: app)
     second.tap()
     let secondBadge = app.staticTexts["templateSelectionOrder_\(secondID)"]
