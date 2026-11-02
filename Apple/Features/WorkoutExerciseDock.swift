@@ -4,11 +4,13 @@ import SwiftUI
 struct WorkoutExerciseDock: View {
   @Environment(\.locale) private var locale
   @Environment(\.fitnessColorTheme) private var colorTheme
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
   @ScaledMetric(relativeTo: .headline) private var actionRowHeight = 56
   let workout: Workout
   let exerciseIndex: Int
   let canComplete: Bool
   var completingDrop = false
+  var completionTrigger: ContinuousClock.Instant? = nil
   let previous: () -> Void
   let next: () -> Void
   let add: () -> Void
@@ -19,7 +21,7 @@ struct WorkoutExerciseDock: View {
   private var isOngoing: Bool { [.active, .paused].contains(workout.status) }
 
   var body: some View {
-    GlassEffectContainer(spacing: 4) {
+    GlassEffectContainer(spacing: 2) {
       if isOngoing {
         ViewThatFits(in: .horizontal) {
           balancedControls
@@ -29,45 +31,46 @@ struct WorkoutExerciseDock: View {
         HStack(spacing: 8) {
           previousButton(height: 44)
           Spacer(minLength: 0)
-          primaryAction(height: actionRowHeight)
+          primaryAction(height: actionRowHeight + 8)
           Spacer(minLength: 0)
           nextButton(height: 44)
         }
       }
     }.padding(.vertical, 8)
+      .sensoryFeedback(.success, trigger: completionTrigger)
   }
 
   private var balancedControls: some View {
-    HStack(spacing: 4) {
+    HStack(spacing: 2) {
       Color.clear.overlay(alignment: .leading) {
-        HStack(spacing: 4) {
+        HStack(spacing: 2) {
           previousButton(height: actionRowHeight)
           sessionActions(height: actionRowHeight)
         }
       }
-      primaryAction(height: actionRowHeight)
+      primaryAction(height: actionRowHeight + 8)
       Color.clear.overlay(alignment: .trailing) {
-        HStack(spacing: 4) {
+        HStack(spacing: 2) {
           addButton(height: actionRowHeight)
           nextButton(height: actionRowHeight)
         }
       }
     }
     // Symmetric side slots keep the completion button centered on regular phone widths.
-    .frame(minWidth: 280 + actionRowHeight, maxWidth: .infinity)
-    .frame(height: actionRowHeight)
+    .frame(minWidth: 296 + actionRowHeight, maxWidth: .infinity)
+    .frame(height: actionRowHeight + 8)
   }
 
   private var compactControls: some View {
-    HStack(spacing: 4) {
+    HStack(spacing: 2) {
       previousButton(height: 44)
       Spacer(minLength: 0)
       sessionActions(height: 44)
-      primaryAction(height: 44)
+      primaryAction(height: 52)
       addButton(height: 44)
       Spacer(minLength: 0)
       nextButton(height: 44)
-    }.frame(height: 44)
+    }.frame(height: 52)
   }
 
   private func previousButton(height: CGFloat) -> some View {
@@ -122,12 +125,18 @@ struct WorkoutExerciseDock: View {
 
   private func primaryAction(height: CGFloat) -> some View {
     Button(action: isOngoing ? complete : close) {
-      Image(systemName: isOngoing ? "checkmark" : "chevron.down")
-        .font(.system(size: 22, weight: .semibold))
-        .frame(width: height, height: height).contentShape(.circle)
+      Group {
+        if isOngoing && !reduceMotion {
+          Image(systemName: "checkmark").symbolEffect(.bounce, value: completionTrigger)
+        } else {
+          Image(systemName: isOngoing ? "checkmark" : "chevron.down")
+        }
+      }
+      .font(.system(size: isOngoing ? 27 : 22, weight: .bold))
+      .frame(width: height, height: height).contentShape(.circle)
     }
     .buttonStyle(.plain)
-    .glassEffect(.regular.tint(colorTheme.accent.opacity(0.3)).interactive(), in: .circle)
+    .glassEffect(.regular.tint(colorTheme.accent.opacity(0.65)).interactive(), in: .circle)
     .disabled(isOngoing && !canComplete).accessibilityLabel(actionTitle)
     .accessibilityIdentifier("completeSet")
   }
@@ -144,8 +153,8 @@ struct WorkoutExerciseDock: View {
   {
     Button(action: action) {
       Image(systemName: forward ? "chevron.right" : "chevron.left")
-        .font(.system(size: 14, weight: .semibold))
-        .frame(width: 44, height: height).contentShape(.capsule)
+        .font(.system(size: 16, weight: .semibold))
+        .frame(width: 52, height: height).contentShape(.capsule)
     }
     .buttonStyle(.plain).glassEffect(.regular.interactive(), in: .capsule)
     .accessibilityLabel(

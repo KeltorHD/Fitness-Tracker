@@ -56,12 +56,12 @@ struct WorkoutExerciseView: View {
               workout: workout, exerciseIndex: model.index(in: workout) ?? 0,
               canComplete: workout.status == .active && model.selectedSetID != nil,
               completingDrop: exercise.sets.first { $0.id == model.selectedSetID }?.isDropSet
-                == true,
+                == true, completionTrigger: lastCompletion,
               previous: { move(-1, in: workout) }, next: { move(1, in: workout) },
               add: { addSet(in: workout) }, complete: { complete(in: workout) },
               pause: { pause(workout) }, close: { dismiss() }, finish: { finish(workout) })
           }
-        }.padding(.horizontal, 12).padding(.bottom, 8)
+        }.padding(.horizontal, 8).padding(.bottom, 8)
       } else {
         ContentUnavailableView(
           L10n.text("Упражнение не найдено.", locale: locale), systemImage: "dumbbell"
@@ -154,7 +154,7 @@ struct WorkoutExerciseView: View {
         L10n.text("К списку упражнений", locale: locale)
       )
       .accessibilityIdentifier("closeWorkoutExercise")
-    }.padding(.horizontal, 8).padding(.top, 8)
+    }.padding(.horizontal, 4).padding(.top, 8)
   }
   private func exerciseHeading(_ row: WorkoutExercise, workout: Workout) -> some View {
     VStack(spacing: 8) {
@@ -210,7 +210,7 @@ struct WorkoutExerciseView: View {
       exerciseHeading(row, workout: workout)
       setTable(row, workout: workout)
       if numberPad.field == nil { cardFooter(row, workout: workout) }
-    }.padding(FitTheme.cardPadding).background(
+    }.padding(.horizontal, 12).padding(.vertical, FitTheme.cardPadding).background(
       FitTheme.paper, in: .rect(cornerRadius: FitTheme.exerciseCardRadius))
   }
   private func setTable(_ row: WorkoutExercise, workout: Workout) -> some View {

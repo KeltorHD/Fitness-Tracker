@@ -84,7 +84,7 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(next.waitForExistence(timeout: 5))
     XCTAssertFalse(previous.isEnabled)
     XCTAssertGreaterThanOrEqual(next.frame.height, 44)
-    XCTAssertEqual(next.frame.width, 44, accuracy: 1)
+    XCTAssertEqual(next.frame.width, 52, accuracy: 1)
     let completion = app.buttons["completeSet"]
     XCTAssertEqual(next.frame.midY, completion.frame.midY, accuracy: 1)
     XCTAssertEqual(previous.frame.midY, completion.frame.midY, accuracy: 1)
@@ -425,9 +425,8 @@ final class FitnessTrackerUITests: XCTestCase {
     app.buttons["closeExerciseMedia"].tap()
     XCTAssertTrue(app.buttons["completeSet"].waitForExistence(timeout: 5))
     let complete = app.buttons["completeSet"]
-    XCTAssertEqual(
-      complete.frame.height, app.buttons["pauseExerciseWorkout"].frame.height, accuracy: 1)
-    XCTAssertEqual(complete.frame.height, app.buttons["addWorkoutSet"].frame.height, accuracy: 1)
+    XCTAssertGreaterThan(complete.frame.height, app.buttons["pauseExerciseWorkout"].frame.height)
+    XCTAssertGreaterThan(complete.frame.height, app.buttons["addWorkoutSet"].frame.height)
     XCTAssertEqual(header.frame.minY, headerTop, accuracy: 1)
     app.descendants(matching: .any).matching(
       NSPredicate(format: "identifier BEGINSWITH %@", "setIndex_")
