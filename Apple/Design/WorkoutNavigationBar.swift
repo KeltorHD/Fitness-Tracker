@@ -171,12 +171,14 @@ private struct NavigationSelectionDrag {
 }
 
 /// A rounded floating bar with a shallow rise around the play button.
-private struct WorkoutNavigationShape: Shape {
+struct WorkoutNavigationShape: Shape {
+  var rise: CGFloat = 12
+  var shoulderWidth: CGFloat = 44
   func path(in rect: CGRect) -> Path {
-    let top = rect.minY + 12
-    let radius = min(32, (rect.height - 12) / 2)
+    let top = rect.minY + rise
+    let radius = min(32, (rect.height - rise) / 2)
     let center = rect.midX
-    let shoulder = min(44, max(0, rect.width / 2 - radius))
+    let shoulder = min(shoulderWidth, max(0, rect.width / 2 - radius))
     var path = Path()
     path.move(to: CGPoint(x: rect.minX + radius, y: top))
     path.addLine(to: CGPoint(x: center - shoulder, y: top))

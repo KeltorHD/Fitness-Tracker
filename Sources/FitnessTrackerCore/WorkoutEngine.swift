@@ -163,6 +163,33 @@ public enum WorkoutEngine {
     workout = candidate
   }
 
+  /// Replaces an unused row in place. Recorded work remains attributed to its original exercise;
+  /// in that case a fresh replacement row is inserted immediately after it.
+  @discardableResult
+  public static func replaceExercise(id: UUID, with exercise: Exercise, in workout: inout Workout)
+    throws -> UUID
+  {
+    guard workout.status == .active else { throw TrainingError.invalidState }
+    try Validation.name(exercise.name)
+    guard let index = workout.exercises.firstIndex(where: { $0.id == id }) else {
+      throw TrainingError.missingExercise
+    }
+    let original = workout.exercises[index]
+    if original.exercise.id == exercise.id { return original.id }
+    var candidate = workout
+    let hasRecordedWork = original.sets.contains { !$0.performedStages.isEmpty }
+    let replacement = WorkoutExercise(
+      id: hasRecordedWork ? UUID() : original.id, exercise: exercise)
+    if hasRecordedWork {
+      candidate.exercises.insert(replacement, at: index + 1)
+    } else {
+      candidate.exercises[index] = replacement
+    }
+    try Validation.workout(candidate)
+    workout = candidate
+    return replacement.id
+  }
+
   /// Reorders workout rows without changing exercise, set or completion identities.
   /// A stale order that omits or introduces rows is rejected before mutation.
   public static func reorderExercises(_ rowIDs: [UUID], in workout: inout Workout) throws {

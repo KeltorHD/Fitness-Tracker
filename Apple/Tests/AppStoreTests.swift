@@ -163,6 +163,27 @@ import XCTest
       store.active?.exercises[0].sets[0].completedAt, original.exercises[0].sets[0].completedAt)
   }
 
+  func testExerciseReplacementRollsBackOnSaveFailure() throws {
+    let repository = FailingWorkoutRepository()
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    store.start(template: ExerciseCatalog.starterTemplates[0])
+    let original = try XCTUnwrap(store.active)
+    let rowID = original.exercises[0].id
+    let exercise = ExerciseCatalog.all.first { $0.id != original.exercises[0].exercise.id }
+    let replacement = try XCTUnwrap(exercise)
+    repository.failSaves = true
+    XCTAssertFalse(
+      store.mutate { _ = try WorkoutEngine.replaceExercise(id: rowID, with: replacement, in: &$0) })
+    XCTAssertEqual(store.active, original)
+    XCTAssertEqual(try repository.workouts().first, original)
+    repository.failSaves = false
+    XCTAssertTrue(
+      store.mutate { _ = try WorkoutEngine.replaceExercise(id: rowID, with: replacement, in: &$0) })
+    XCTAssertEqual(store.active?.exercises[0].exercise, replacement)
+    XCTAssertEqual(store.active?.id, original.id)
+  }
+
   func testGeneralStartPresentsPickerWithoutSavingAndResumesExistingSession() throws {
     let repository = FailingWorkoutRepository()
     let store = AppStore(

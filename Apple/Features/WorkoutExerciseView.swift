@@ -12,6 +12,7 @@ struct WorkoutExerciseView: View {
   @State private var mediaExercise: Exercise?
   @State private var removal: SetRemovalRequest?
   @State private var correction: CompletedSetRequest?
+  @State private var exerciseAction: ExerciseActionRequest?
   @State private var heartRateExpanded = false
   @State private var showingHeartRateSettings = false
   @State private var showingHealthCharts = false
@@ -60,7 +61,7 @@ struct WorkoutExerciseView: View {
                 == true, completionTrigger: lastCompletion,
               previous: { move(-1, in: workout) }, next: { move(1, in: workout) },
               add: { addSet(in: workout) }, complete: { complete(in: workout) },
-              pause: { pause(workout) }, close: { dismiss() }, finish: { finish(workout) })
+              pause: { pause(workout) }, close: { dismiss() })
           }
         }.padding(.horizontal, 8).padding(.bottom, 8)
       } else {
@@ -93,6 +94,30 @@ struct WorkoutExerciseView: View {
     .onChange(of: store.tracker.recording?.workoutID) { heartRateExpanded = false }
     .onChange(of: store.tracker.deviceProfile) { heartRateExpanded = false }
     .fullScreenCover(item: $mediaExercise) { ExerciseMediaViewer(exercise: $0) }
+    .sheet(item: $exerciseAction) { request in
+      ExercisePicker(
+        selectionHint: request.kind == .replace
+          ? "При замене записанные подходы останутся у прежнего упражнения. Новое упражнение начнётся с начальных параметров."
+          : nil
+      ) { exercise in
+        var replacementID: UUID?
+        let saved = store.mutate { current in
+          guard current.id == request.workoutID else { throw TrainingError.invalidState }
+          switch request.kind {
+          case .before:
+            try WorkoutEngine.addExercise(exercise, to: &current, position: .before(request.rowID))
+          case .after:
+            try WorkoutEngine.addExercise(exercise, to: &current, position: .after(request.rowID))
+          case .replace:
+            replacementID = try WorkoutEngine.replaceExercise(
+              id: request.rowID, with: exercise, in: &current)
+          }
+        }
+        if saved, let replacementID, let current = store.active {
+          model.showExercise(replacementID, in: current)
+        }
+      }
+    }
     .sheet(item: $noteRequest) { request in
       SetNoteSheet(request: request) { text in
         guard let workout else { return false }
@@ -167,32 +192,75 @@ struct WorkoutExerciseView: View {
   }
 
   private func sessionHeader(_ workout: Workout) -> some View {
-    HStack {
+    HStack(spacing: 8) {
+      Button {
+        numberPad.dismiss()
+        dismiss()
+      } label: {
+        Image(systemName: "chevron.down").frame(width: 44, height: 44).contentShape(.rect)
+      }.accessibilityLabel(L10n.text("К списку упражнений", locale: locale))
+        .accessibilityIdentifier("closeWorkoutExercise")
       Text("\((model.index(in: workout) ?? 0) + 1)/\(workout.exercises.count)")
         .font(.subheadline).foregroundStyle(.secondary)
-      Spacer()
+        .accessibilityIdentifier("activeExercisePosition")
+      Spacer(minLength: 0)
       TimelineView(.periodic(from: .now, by: 1)) { timeline in
         Text(
           workout.durationIsKnown == false
             ? "—"
             : Duration.seconds(workout.duration(at: timeline.date)).formatted(
-              .time(pattern: .hourMinuteSecond))
+              .time(pattern: .hourMinuteSecond(padHourToLength: 2)))
         )
-        .font(.title2.weight(.semibold)).monospacedDigit().foregroundStyle(.primary).lineLimit(1)
-        .minimumScaleFactor(0.6)
+        .font(.title2.weight(.semibold)).monospacedDigit().lineLimit(1).minimumScaleFactor(0.6)
       }
-      Spacer()
-      Button {
-        dismiss()
+      Spacer(minLength: 0)
+      Menu {
+        if workout.status == .active {
+          Button(L10n.text("Добавить перед", locale: locale), systemImage: "arrow.up.to.line") {
+            openExerciseAction(.before, workout: workout)
+          }
+          .accessibilityIdentifier("addExerciseBeforeCurrent")
+          Button(L10n.text("Добавить после", locale: locale), systemImage: "arrow.down.to.line") {
+            openExerciseAction(.after, workout: workout)
+          }
+          .accessibilityIdentifier("addExerciseAfterCurrent")
+          Button(
+            L10n.text("Заменить упражнение", locale: locale),
+            systemImage: "arrow.triangle.2.circlepath"
+          ) { openExerciseAction(.replace, workout: workout) }
+          .accessibilityIdentifier("replaceCurrentExercise")
+        }
+        if !store.isDemoMode, store.active?.id == workout.id {
+          Button(
+            L10n.text(showsHeartRate ? "Скрыть пульс" : "Показать пульс", locale: locale),
+            systemImage: "heart"
+          ) {
+            withAnimation(reduceMotion ? nil : .smooth) {
+              showsHeartRate.toggle()
+              heartRateExpanded = false
+            }
+          }
+        }
+        if let exercise = model.exercise(in: workout)?.exercise {
+          NavigationLink {
+            ExerciseDetailView(exercise: exercise).toolbar(.visible, for: .navigationBar)
+          } label: {
+            Label(L10n.text("Техника выполнения", locale: locale), systemImage: "info.circle")
+          }
+        }
       } label: {
-        Image(systemName: "chevron.down").foregroundStyle(.primary)
-      }
-      .frame(minWidth: 44, minHeight: 44).accessibilityLabel(
-        L10n.text("К списку упражнений", locale: locale)
-      )
-      .accessibilityIdentifier("closeWorkoutExercise")
-    }.padding(.horizontal, 4).padding(.top, 8)
+        Image(systemName: "ellipsis").frame(width: 44, height: 44).contentShape(.rect)
+      }.accessibilityLabel(L10n.text("Действия упражнения", locale: locale))
+        .accessibilityIdentifier("activeExerciseActions")
+    }.buttonStyle(.plain).foregroundStyle(.primary).padding(.horizontal, 4).padding(.top, 8)
   }
+
+  private func openExerciseAction(_ kind: ExerciseActionRequest.Kind, workout: Workout) {
+    numberPad.dismiss()
+    exerciseAction = ExerciseActionRequest(
+      workoutID: workout.id, rowID: model.exerciseID, kind: kind)
+  }
+
   private func exerciseHeading(_ row: WorkoutExercise, workout: Workout) -> some View {
     VStack(spacing: 8) {
       HStack(alignment: .top, spacing: 8) {
@@ -251,8 +319,12 @@ struct WorkoutExerciseView: View {
       FitTheme.paper, in: .rect(cornerRadius: FitTheme.exerciseCardRadius))
   }
   private func setTable(_ row: WorkoutExercise, workout: Workout) -> some View {
-    VStack(spacing: 0) {
-      WorkoutSetTableHeader(unit: model.unit).padding(.top, 12).padding(.bottom, 8)
+    let showsNotes = row.sets.contains {
+      $0.note?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false
+    }
+    return VStack(spacing: 0) {
+      WorkoutSetTableHeader(unit: model.unit, showsNotes: showsNotes).padding(.top, 12).padding(
+        .bottom, 8)
       Divider()
       ScrollViewReader { proxy in
         List {
@@ -261,6 +333,7 @@ struct WorkoutExerciseView: View {
               ForEach(Array(row.sets.enumerated()), id: \.element.id) { index, set in
                 WorkoutSetGroupView(
                   set: set, index: index, workout: workout, model: model, numberPad: numberPad,
+                  showsNotes: showsNotes,
                   toggleWarmup: { toggleWarmup(set, row: row, workout: workout) },
                   configureDrop: { configureDrop(workout, setID: set.id, adding: $0) },
                   addAfter: {
@@ -317,6 +390,7 @@ struct WorkoutExerciseView: View {
     .overlay {
       RoundedRectangle(cornerRadius: FitTheme.radius).stroke(FitTheme.separator, lineWidth: 0.5)
     }
+    .animation(reduceMotion ? nil : .snappy(duration: 0.28), value: showsNotes)
     .accessibilityIdentifier("workoutSetTableCard")
   }
 
@@ -457,13 +531,7 @@ struct WorkoutExerciseView: View {
       }
     } catch { self.error = error.localizedDescription }
   }
-  private func finish(_ workout: Workout) {
-    guard store.active?.id == workout.id else {
-      error = TrainingError.invalidState.localizedDescription
-      return
-    }
-    store.finish()
-  }
+
 }
 
 struct WorkoutExerciseSheet: View {
@@ -601,4 +669,12 @@ private struct CompletedSetEditor: View {
       }
     }.presentationDetents([.medium, .large])
   }
+}
+
+private struct ExerciseActionRequest: Identifiable {
+  enum Kind { case before, after, replace }
+  let id = UUID()
+  let workoutID: UUID
+  let rowID: UUID
+  let kind: Kind
 }

@@ -341,6 +341,7 @@ struct ExercisePicker: View {
   @Environment(\.locale) private var locale
   @Environment(\.dismiss) private var dismiss
   @State private var custom = false
+  var selectionHint: String? = nil
   var initialGroups: Set<MuscleGroup> = []
   var initialMuscles: Set<ExerciseMuscle> = []
   let select: (Exercise) -> Void
@@ -350,6 +351,12 @@ struct ExercisePicker: View {
         exercise in
         select(exercise)
         dismiss()
+      }
+      .safeAreaInset(edge: .top, spacing: 0) {
+        if let selectionHint {
+          Text(L10n.text(selectionHint, locale: locale)).font(.footnote).foregroundStyle(.secondary)
+            .frame(maxWidth: .infinity, alignment: .leading).padding(16).background(FitTheme.paper)
+        }
       }
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {

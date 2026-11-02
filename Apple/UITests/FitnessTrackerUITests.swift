@@ -86,8 +86,8 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertGreaterThanOrEqual(next.frame.height, 44)
     XCTAssertGreaterThanOrEqual(next.frame.width, 44)
     let completion = app.buttons["completeSet"]
-    XCTAssertEqual(next.frame.midY, completion.frame.midY, accuracy: 1)
-    XCTAssertEqual(previous.frame.midY, completion.frame.midY, accuracy: 1)
+    XCTAssertLessThan(abs(next.frame.midY - completion.frame.midY), 12)
+    XCTAssertLessThan(abs(previous.frame.midY - completion.frame.midY), 12)
     let weight = app.textFields.matching(
       NSPredicate(format: "identifier BEGINSWITH %@", "setWeight_")
     )
@@ -101,6 +101,34 @@ final class FitnessTrackerUITests: XCTestCase {
     previous.tap()
     XCTAssertTrue(app.staticTexts["Жим лёжа"].waitForExistence(timeout: 5))
     XCTAssertEqual(weight.value as? String, "9")
+  }
+
+  @MainActor func testExerciseHeaderCanReplaceUnusedExercise() {
+    let app = launch()
+    app.buttons["workoutStartAction"].tap()
+    let template = app.buttons["startWorkoutTemplate_20000000-0000-0000-0000-000000000001"]
+    XCTAssertTrue(template.waitForExistence(timeout: 5))
+    template.tap()
+    app.buttons["startSelectedTemplates"].tap()
+    app.buttons["openWorkoutExercise"].firstMatch.tap()
+    let actions = app.buttons["activeExerciseActions"]
+    XCTAssertTrue(actions.waitForExistence(timeout: 5))
+    XCTAssertLessThan(
+      app.buttons["closeWorkoutExercise"].frame.minX,
+      app.staticTexts["activeExercisePosition"].frame.minX)
+    actions.tap()
+    app.buttons["replaceCurrentExercise"].tap()
+    let custom = app.buttons["Своё упражнение"]
+    XCTAssertTrue(custom.waitForExistence(timeout: 5))
+    custom.tap()
+    let name = app.textFields["customExerciseName"]
+    XCTAssertTrue(name.waitForExistence(timeout: 5))
+    name.tap()
+    name.typeText("Новое упражнение")
+    app.buttons["saveCustomExercise"].tap()
+    XCTAssertTrue(app.staticTexts["activeExerciseTitle"].waitForExistence(timeout: 5))
+    XCTAssertEqual(app.staticTexts["activeExerciseTitle"].label, "Новое упражнение")
+    XCTAssertFalse(app.buttons["finishWorkout"].exists)
   }
 
   @MainActor private func addCustomExercise(_ name: String, in app: XCUIApplication) {
@@ -405,7 +433,7 @@ final class FitnessTrackerUITests: XCTestCase {
     app.buttons["numberPadDigit_5"].tap()
     app.buttons["numberPadDigit_0"].tap()
     app.buttons["numberPadHide"].tap()
-    XCTAssertFalse(app.buttons["Действия упражнения"].exists)
+    XCTAssertTrue(app.buttons["activeExerciseActions"].exists)
     let header = app.staticTexts["activeExerciseTitle"]
     let headerTop = header.frame.minY
     let pulse = app.descendants(matching: .any).matching(identifier: "exerciseHeartRateCard")
@@ -431,9 +459,11 @@ final class FitnessTrackerUITests: XCTestCase {
     app.buttons["closeExerciseMedia"].tap()
     XCTAssertTrue(app.buttons["completeSet"].waitForExistence(timeout: 5))
     let complete = app.buttons["completeSet"]
-    XCTAssertEqual(complete.frame.midY, app.buttons["pauseExerciseWorkout"].frame.midY, accuracy: 1)
+    XCTAssertLessThan(complete.frame.midY, app.buttons["pauseExerciseWorkout"].frame.midY)
     let plus = app.buttons["addWorkoutSet"]
-    XCTAssertEqual(complete.frame.midY, plus.frame.midY, accuracy: 1)
+    XCTAssertLessThan(complete.frame.midY, plus.frame.midY)
+    XCTAssertGreaterThan(complete.frame.height, plus.frame.height)
+    XCTAssertFalse(app.buttons["finishWorkout"].exists)
     XCTAssertGreaterThanOrEqual(plus.frame.width, 56)
     XCTAssertGreaterThanOrEqual(plus.frame.height, 52)
     XCTAssertTrue(
@@ -1108,6 +1138,7 @@ final class FitnessTrackerUITests: XCTestCase {
     )
     .firstMatch
     XCTAssertTrue(weight.waitForExistence(timeout: 5))
+    let initialWeightWidth = weight.frame.width
     app.descendants(matching: .any).matching(
       NSPredicate(format: "identifier BEGINSWITH %@", "setIndex_")
     ).firstMatch.press(forDuration: 1)
@@ -1120,6 +1151,7 @@ final class FitnessTrackerUITests: XCTestCase {
     let note = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "setNote_"))
       .firstMatch
     XCTAssertTrue(note.waitForExistence(timeout: 5))
+    XCTAssertLessThan(weight.frame.width, initialWeightWidth)
     note.tap()
     XCTAssertTrue(editor.waitForExistence(timeout: 5))
     XCTAssertEqual(editor.value as? String, "Keep elbows close")

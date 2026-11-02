@@ -119,9 +119,32 @@ private func rejects(_ action: () throws -> Void) throws {
     try checkDrops(at: date)
     try checkContextTarget(at: date)
     try checkStartedGroupAppend(at: date)
+    try checkReplacementFocus(at: date)
     print(
       "Portable workout exercise presentation: localized/strict input, pounds precision, draft retention, repeated exercise identity, paging/reordering/removal, completion, pause/history guards and summaries passed (no Apple SDK)."
     )
+  }
+
+  @MainActor private static func checkReplacementFocus(at date: Date) throws {
+    let first = WorkoutExercise(
+      exercise: Exercise(name: "Old", muscle: .back), sets: [WorkoutSet(weightKG: 40)])
+    var workout = Workout(name: "Focus", startedAt: date, exercises: [first])
+    let model = WorkoutExercisePresentation(
+      workout: workout, exerciseID: first.id, unit: .kilograms, locale: Locale(identifier: "en_US"))
+    let id = try WorkoutEngine.replaceExercise(
+      id: first.id, with: Exercise(name: "New", muscle: .legs), in: &workout)
+    model.showExercise(id, in: workout)
+    try expect(
+      model.exerciseID == id && model.exercise(in: workout)?.exercise.name == "New",
+      "Replacement focuses the actual new exercise")
+    try expect(
+      model.drafts[first.sets[0].id] == nil
+        && model.selectedSetID == workout.exercises[0].sets[0].id,
+      "Fresh replacement cannot reuse old numeric drafts or targets")
+    var foreign = workout
+    foreign.id = UUID()
+    model.showExercise(UUID(), in: foreign)
+    try expect(model.exerciseID == id, "A foreign or missing row cannot steal selection")
   }
 
   @MainActor private static func checkStartedGroupAppend(at date: Date) throws {

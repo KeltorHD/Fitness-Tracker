@@ -99,6 +99,15 @@ struct WorkoutSetCompletion {
     selectedSetID = nil
     refresh(workout)
   }
+  func showExercise(_ id: UUID, in workout: Workout) {
+    guard workout.id == workoutID, workout.exercises.contains(where: { $0.id == id }) else {
+      return
+    }
+    exerciseID = id
+    selectedSetID = nil
+    selectedStageID = nil
+    refresh(workout)
+  }
   func select(_ targetID: UUID, in workout: Workout) {
     guard
       let set = exercise(in: workout)?.sets.first(where: {

@@ -735,5 +735,7 @@
   "Удалить группу дропсета": "Delete drop-set group",
   "Удалить группу дропсета?": "Delete drop-set group?",
   "Будет удалён только этот этап дропсета.": "Only this drop stage will be deleted.",
-  "Действия группы дропсета": "Drop-set group actions"
+  "Действия группы дропсета": "Drop-set group actions",
+  "Заменить упражнение": "Replace exercise",
+  "При замене записанные подходы останутся у прежнего упражнения. Новое упражнение начнётся с начальных параметров.": "Recorded sets will stay with the original exercise. The replacement exercise will start with default targets."
 }

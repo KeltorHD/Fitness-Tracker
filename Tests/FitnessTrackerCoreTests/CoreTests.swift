@@ -563,3 +563,65 @@ func templateAdditionRejectsNonActiveSessions(_ status: WorkoutStatus) {
   }
   #expect(workout == original)
 }
+
+@Test func replacingUnusedExerciseKeepsPositionAndStartsFreshTargets() throws {
+  var workout = session()
+  let original = workout
+  let row = workout.exercises[0]
+  let replacement = ExerciseCatalog.all[1]
+  let id = try WorkoutEngine.replaceExercise(id: row.id, with: replacement, in: &workout)
+  #expect(
+    id == row.id && workout.exercises.count == 1 && workout.exercises[0].exercise == replacement)
+  #expect(workout.exercises[0].sets[0].id != row.sets[0].id)
+  #expect(
+    workout.exercises[0].sets[0].weightKG == 0 && workout.exercises[0].sets[0].completedAt == nil)
+  #expect(
+    workout.id == original.id && workout.startedAt == original.startedAt
+      && workout.restSeconds == original.restSeconds)
+  let unchanged = workout
+  try WorkoutEngine.replaceExercise(id: id, with: replacement, in: &workout)
+  #expect(workout == unchanged)
+}
+
+@Test func replacingRecordedExerciseKeepsItsAttributionAndRest() throws {
+  var workout = session()
+  let row = workout.exercises[0]
+  try WorkoutEngine.completeSet(
+    in: &workout, exerciseID: row.id, setID: row.sets[0].id, repetitions: 5, weightKG: 100,
+    at: epoch)
+  workout.exercises[0].sets[0].note = "Original exercise note"
+  let original = workout
+  let replacement = ExerciseCatalog.all[1]
+  let id = try WorkoutEngine.replaceExercise(id: row.id, with: replacement, in: &workout)
+  #expect(workout.exercises.count == 2 && workout.exercises[0] == original.exercises[0])
+  #expect(
+    workout.exercises[1].id == id && id != row.id && workout.exercises[1].exercise == replacement)
+  #expect(workout.exercises[1].sets.allSatisfy { $0.completedAt == nil && $0.note == nil })
+  #expect(workout.volume == original.volume && workout.restEndsAt == original.restEndsAt)
+  #expect(workout.name == original.name && workout.startedAt == original.startedAt)
+}
+
+@Test func replacementRejectsStaleTargetAndInvalidExerciseAtomically() throws {
+  var workout = session()
+  let original = workout
+  #expect(throws: TrainingError.missingExercise) {
+    try WorkoutEngine.replaceExercise(id: UUID(), with: ExerciseCatalog.all[1], in: &workout)
+  }
+  #expect(throws: TrainingError.invalidName) {
+    try WorkoutEngine.replaceExercise(
+      id: original.exercises[0].id, with: Exercise(name: "", muscle: .back), in: &workout)
+  }
+  #expect(workout == original)
+}
+
+@Test(arguments: [WorkoutStatus.paused, .completed, .cancelled])
+func replacementRequiresActiveSession(_ status: WorkoutStatus) {
+  var workout = session()
+  workout.status = status
+  let original = workout
+  #expect(throws: TrainingError.invalidState) {
+    try WorkoutEngine.replaceExercise(
+      id: original.exercises[0].id, with: ExerciseCatalog.all[1], in: &workout)
+  }
+  #expect(workout == original)
+}

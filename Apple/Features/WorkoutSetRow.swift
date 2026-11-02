@@ -12,6 +12,7 @@ struct WorkoutSetTableHeader: View {
   @Environment(\.locale) private var locale
   @Environment(\.dynamicTypeSize) private var typeSize
   let unit: WeightUnit
+  var showsNotes = true
   @ScaledMetric(relativeTo: .body) private var weightWidth: CGFloat = 60
   @ScaledMetric(relativeTo: .body) private var repetitionsWidth: CGFloat = 52
 
@@ -21,9 +22,15 @@ struct WorkoutSetTableHeader: View {
         Color.clear.frame(width: WorkoutSetTableLayout.indexWidth, height: 1)
         HStack(spacing: WorkoutSetTableLayout.spacing) {
           Text(L10n.format("Вес, %@", L10n.text(unit.rawValue, locale: locale), locale: locale))
-            .frame(width: weightWidth)
-          Text(L10n.text("Повт.", locale: locale)).lineLimit(1).frame(width: repetitionsWidth)
-          Text(L10n.text("Заметка", locale: locale)).frame(maxWidth: .infinity)
+            .frame(width: showsNotes ? weightWidth : nil).frame(
+              maxWidth: showsNotes ? nil : .infinity)
+          Text(L10n.text("Повт.", locale: locale)).lineLimit(1).frame(
+            width: showsNotes ? repetitionsWidth : nil
+          ).frame(maxWidth: showsNotes ? nil : .infinity)
+          if showsNotes {
+            Text(L10n.text("Заметка", locale: locale)).frame(maxWidth: .infinity).transition(
+              .opacity.combined(with: .scale(scale: 0.95, anchor: .trailing)))
+          }
         }.frame(maxWidth: .infinity)
       }
       .font(.caption).foregroundStyle(.secondary).multilineTextAlignment(.center)
@@ -44,6 +51,7 @@ struct WorkoutSetRow<ContextActions: View>: View {
   let index: Int
   var marker: String? = nil
   let unit: WeightUnit
+  var showsNotes = true
   let editable: Bool
   var showsDropMetadata = true
   var canCorrectCompleted = false
@@ -97,13 +105,20 @@ struct WorkoutSetRow<ContextActions: View>: View {
             }
           } else {
             HStack(spacing: WorkoutSetTableLayout.spacing) {
-              weightField.frame(width: weightWidth)
-              repetitionsField.frame(width: repetitionsWidth)
-              noteField
+              weightField.frame(width: showsNotes ? weightWidth : nil).frame(
+                maxWidth: showsNotes ? nil : .infinity)
+              repetitionsField.frame(width: showsNotes ? repetitionsWidth : nil).frame(
+                maxWidth: showsNotes ? nil : .infinity)
+              if showsNotes {
+                noteField.transition(
+                  .opacity.combined(with: .scale(scale: 0.95, anchor: .trailing)))
+              }
             }
           }
         }.frame(maxWidth: .infinity)
-        if typeSize.isAccessibilitySize { noteField.frame(minWidth: 64, maxWidth: .infinity) }
+        if typeSize.isAccessibilitySize && showsNotes {
+          noteField.frame(minWidth: 64, maxWidth: .infinity)
+        }
       }
       if set.isWarmup || (showsDropMetadata && set.isDropSet) || (set.loadMultiplier ?? 1) > 1 {
         ViewThatFits(in: .horizontal) {

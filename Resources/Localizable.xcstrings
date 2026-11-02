@@ -4098,6 +4098,23 @@
         }
       }
     },
+    "Заменить упражнение": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Заменить упражнение"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Replace exercise"
+          }
+        }
+      }
+    },
     "Заметка": {
       "extractionState": "manual",
       "localizations": {
@@ -8786,6 +8803,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Core"
+          }
+        }
+      }
+    },
+    "При замене записанные подходы останутся у прежнего упражнения. Новое упражнение начнётся с начальных параметров.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "При замене записанные подходы останутся у прежнего упражнения. Новое упражнение начнётся с начальных параметров."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recorded sets will stay with the original exercise. The replacement exercise will start with default targets."
           }
         }
       }
