@@ -208,7 +208,15 @@ struct WorkoutExerciseView: View {
   private func exerciseCard(_ row: WorkoutExercise, workout: Workout) -> some View {
     VStack(spacing: 12) {
       exerciseHeading(row, workout: workout)
-      WorkoutSetTableHeader(unit: model.unit)
+      setTable(row, workout: workout)
+      if numberPad.field == nil { cardFooter(row, workout: workout) }
+    }.padding(FitTheme.cardPadding).background(
+      FitTheme.paper, in: .rect(cornerRadius: FitTheme.exerciseCardRadius))
+  }
+  private func setTable(_ row: WorkoutExercise, workout: Workout) -> some View {
+    VStack(spacing: 0) {
+      WorkoutSetTableHeader(unit: model.unit).padding(.top, 12).padding(.bottom, 8)
+      Divider()
       ScrollViewReader { proxy in
         List {
           Group {
@@ -257,10 +265,16 @@ struct WorkoutExerciseView: View {
           }
         }
       }
-      if numberPad.field == nil { cardFooter(row, workout: workout) }
-    }.padding(FitTheme.cardPadding).background(
-      FitTheme.paper, in: .rect(cornerRadius: FitTheme.exerciseCardRadius))
+    }
+    .padding(.horizontal, 6).padding(.bottom, 6)
+    .background(FitTheme.card, in: .rect(cornerRadius: FitTheme.radius))
+    .clipShape(.rect(cornerRadius: FitTheme.radius))
+    .overlay {
+      RoundedRectangle(cornerRadius: FitTheme.radius).stroke(FitTheme.separator, lineWidth: 0.5)
+    }
+    .accessibilityIdentifier("workoutSetTableCard")
   }
+
   private func cardFooter(_ row: WorkoutExercise, workout: Workout) -> some View {
     VStack(spacing: 12) {
       if let end = workout.restEndsAt, end > .now {

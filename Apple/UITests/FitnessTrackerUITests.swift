@@ -83,8 +83,11 @@ final class FitnessTrackerUITests: XCTestCase {
     let next = app.buttons["nextWorkoutExercise"]
     XCTAssertTrue(next.waitForExistence(timeout: 5))
     XCTAssertFalse(previous.isEnabled)
-    XCTAssertGreaterThanOrEqual(next.frame.height, 48)
-    XCTAssertGreaterThan(next.frame.width, 80)
+    XCTAssertGreaterThanOrEqual(next.frame.height, 44)
+    XCTAssertEqual(next.frame.width, 44, accuracy: 1)
+    let completion = app.buttons["completeSet"]
+    XCTAssertEqual(next.frame.midY, completion.frame.midY, accuracy: 1)
+    XCTAssertEqual(previous.frame.midY, completion.frame.midY, accuracy: 1)
     let weight = app.textFields.matching(
       NSPredicate(format: "identifier BEGINSWITH %@", "setWeight_")
     )
