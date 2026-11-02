@@ -24,7 +24,12 @@ struct WorkoutExerciseDock: View {
         if isOngoing {
           // Equal layout slots keep completion centered independently of the icon counts.
           HStack(spacing: 8) {
-            Color.clear.overlay(alignment: .leading) { sessionActions }
+            Color.clear.overlay(alignment: .leading) {
+              ViewThatFits(in: .horizontal) {
+                sessionActions(buttonWidth: 52)
+                sessionActions(buttonWidth: 44)
+              }
+            }
             Color.clear.overlay { primaryAction }
             Color.clear.overlay(alignment: .trailing) {
               icon("plus", title: "Добавить подход", action: add)
@@ -54,18 +59,19 @@ struct WorkoutExerciseDock: View {
     }.padding(.vertical, 8)
   }
 
-  private var sessionActions: some View {
+  private func sessionActions(buttonWidth: CGFloat) -> some View {
     HStack(spacing: 0) {
       Button(action: pause) {
         Image(systemName: workout.status == .paused ? "play.fill" : "pause.fill")
-          .frame(width: 44, height: actionRowHeight).contentShape(.rect)
+          .frame(width: buttonWidth, height: actionRowHeight).contentShape(.rect)
       }
       .accessibilityLabel(
         L10n.text(workout.status == .paused ? "Продолжить" : "Пауза", locale: locale)
       )
       .accessibilityIdentifier("pauseExerciseWorkout")
       Button(action: finish) {
-        Image(systemName: "stop.fill").frame(width: 44, height: actionRowHeight).contentShape(.rect)
+        Image(systemName: "stop.fill").frame(width: buttonWidth, height: actionRowHeight)
+          .contentShape(.rect)
       }
       .disabled(workout.completedSets == 0)
       .accessibilityLabel(L10n.text("Завершить тренировку", locale: locale))

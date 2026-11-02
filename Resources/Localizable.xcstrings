@@ -7532,6 +7532,23 @@
         }
       }
     },
+    "Открыть фото и анимацию упражнения": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Открыть фото и анимацию упражнения"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open exercise photos and animation"
+          }
+        }
+      }
+    },
     "Открыть цифровую панель": {
       "extractionState": "manual",
       "localizations": {

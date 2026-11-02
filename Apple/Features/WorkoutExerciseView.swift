@@ -9,6 +9,7 @@ struct WorkoutExerciseView: View {
   @State private var model: WorkoutExercisePresentation
   @State private var error: String?
   @State private var noteRequest: SetNoteRequest?
+  @State private var mediaExercise: Exercise?
   @State private var removal: WorkoutSet?
   @State private var heartRateExpanded = false
   @State private var showingHeartRateSettings = false
@@ -90,6 +91,7 @@ struct WorkoutExerciseView: View {
     .onDisappear { numberPad.dismiss() }
     .onChange(of: store.tracker.recording?.workoutID) { heartRateExpanded = false }
     .onChange(of: store.tracker.deviceProfile) { heartRateExpanded = false }
+    .fullScreenCover(item: $mediaExercise) { ExerciseMediaViewer(exercise: $0) }
     .sheet(item: $noteRequest) { request in
       SetNoteSheet(request: request) { text in
         guard let workout else { return false }
@@ -206,10 +208,10 @@ struct WorkoutExerciseView: View {
   private func exerciseCard(_ row: WorkoutExercise, workout: Workout) -> some View {
     VStack(spacing: 12) {
       exerciseHeading(row, workout: workout)
+      WorkoutSetTableHeader(unit: model.unit)
       ScrollViewReader { proxy in
         List {
           Group {
-            WorkoutSetTableHeader(unit: model.unit)
             Group {
               ForEach(Array(row.sets.enumerated()), id: \.element.id) { index, set in
                 WorkoutSetGroupView(
@@ -285,6 +287,20 @@ struct WorkoutExerciseView: View {
         .frame(minWidth: 44, minHeight: 44)
         .accessibilityLabel(L10n.text("Прогресс упражнения", locale: locale))
         .accessibilityIdentifier("openExerciseProgress")
+        Spacer()
+        if let entry = ExerciseLibrary.entry(for: row.exercise.id),
+          entry.generatedMedia != nil || !entry.images.isEmpty
+        {
+          Button {
+            numberPad.dismiss()
+            mediaExercise = row.exercise
+          } label: {
+            WorkoutExerciseThumbnail(exercise: row.exercise)
+              .frame(minWidth: 44, minHeight: 44).contentShape(.rect)
+          }.buttonStyle(.plain)
+            .accessibilityLabel(L10n.text("Открыть фото и анимацию упражнения", locale: locale))
+            .accessibilityIdentifier("openExerciseMedia")
+        }
         NavigationLink {
           ExerciseDetailView(exercise: row.exercise).toolbar(.visible, for: .navigationBar)
         } label: {
@@ -292,7 +308,6 @@ struct WorkoutExerciseView: View {
         }.frame(minWidth: 44, minHeight: 44)
           .accessibilityLabel(L10n.text("Техника выполнения", locale: locale))
           .accessibilityIdentifier("openExerciseTechnique")
-        Spacer()
       }.foregroundStyle(.secondary)
     }
   }

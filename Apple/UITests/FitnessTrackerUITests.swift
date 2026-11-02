@@ -406,6 +406,15 @@ final class FitnessTrackerUITests: XCTestCase {
       app.descendants(matching: .any).matching(identifier: "liveWorkoutHeartRateChart").firstMatch
         .exists)
     XCTAssertTrue(app.buttons["openExerciseTechnique"].exists)
+    let media = app.buttons["openExerciseMedia"]
+    XCTAssertTrue(media.exists)
+    media.tap()
+    let viewer = app.descendants(matching: .any).matching(identifier: "exerciseMediaViewer")
+      .firstMatch
+    XCTAssertTrue(viewer.waitForExistence(timeout: 5))
+    XCTAssertFalse(app.buttons["selectLibraryExercise"].exists)
+    app.buttons["closeExerciseMedia"].tap()
+    XCTAssertTrue(app.buttons["completeSet"].waitForExistence(timeout: 5))
     let complete = app.buttons["completeSet"]
     XCTAssertEqual(
       complete.frame.height, app.buttons["pauseExerciseWorkout"].frame.height, accuracy: 1)

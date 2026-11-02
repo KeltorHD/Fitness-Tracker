@@ -3,9 +3,8 @@ import SwiftUI
 
 private enum WorkoutSetTableLayout {
   static let indexWidth: CGFloat = 44
-  static let noteWidth: CGFloat = 44
-  static let spacing: CGFloat = 12
-  static let horizontalPadding: CGFloat = 8
+  static let spacing: CGFloat = 6
+  static let horizontalPadding: CGFloat = 2
 }
 
 struct WorkoutSetTableHeader: View {
@@ -17,10 +16,12 @@ struct WorkoutSetTableHeader: View {
     if !typeSize.isAccessibilitySize {
       HStack(spacing: WorkoutSetTableLayout.spacing) {
         Color.clear.frame(width: WorkoutSetTableLayout.indexWidth, height: 1)
-        Text(L10n.format("Вес, %@", L10n.text(unit.rawValue, locale: locale), locale: locale))
-          .frame(maxWidth: .infinity)
-        Text(L10n.text("Повторения", locale: locale)).frame(maxWidth: .infinity)
-        Image(systemName: "note.text").frame(width: WorkoutSetTableLayout.noteWidth)
+        HStack(spacing: WorkoutSetTableLayout.spacing) {
+          Text(L10n.format("Вес, %@", L10n.text(unit.rawValue, locale: locale), locale: locale))
+            .frame(maxWidth: .infinity)
+          Text(L10n.text("Повторения", locale: locale)).frame(maxWidth: .infinity)
+          Text(L10n.text("Заметка", locale: locale)).frame(maxWidth: .infinity)
+        }.frame(maxWidth: .infinity)
       }
       .font(.caption).foregroundStyle(.secondary).multilineTextAlignment(.center)
       .padding(.horizontal, WorkoutSetTableLayout.horizontalPadding)
@@ -86,20 +87,11 @@ struct WorkoutSetRow: View {
             HStack(spacing: WorkoutSetTableLayout.spacing) {
               weightField
               repetitionsField
+              noteField
             }
           }
         }.frame(maxWidth: .infinity)
-        Group {
-          if set.note != nil, let openNote {
-            Button(action: openNote) {
-              Image(systemName: "note.text").font(.caption).frame(width: 44, height: 44)
-            }.buttonStyle(.plain).foregroundStyle(colorTheme.accent)
-              .accessibilityLabel(L10n.text("Заметка к подходу", locale: locale))
-              .accessibilityIdentifier("setNote_\(set.id)")
-          } else {
-            Color.clear.frame(height: 44).accessibilityHidden(true)
-          }
-        }.frame(width: WorkoutSetTableLayout.noteWidth)
+        if typeSize.isAccessibilitySize { noteField.frame(minWidth: 64, maxWidth: .infinity) }
       }
       if set.isWarmup || set.isDropSet || (set.loadMultiplier ?? 1) > 1 {
         ViewThatFits(in: .horizontal) {
@@ -118,6 +110,24 @@ struct WorkoutSetRow: View {
         : set.completedAt != nil ? colorTheme.accent.opacity(0.04) : Color.clear,
       in: .rect(cornerRadius: 16)
     )
+  }
+
+  private var noteField: some View {
+    Group {
+      if let note = set.note, let openNote {
+        Button(action: openNote) {
+          Text(note.replacingOccurrences(of: "\n", with: " "))
+            .font(.caption).lineLimit(2).truncationMode(.tail)
+            .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+            .contentShape(.rect)
+        }.buttonStyle(.plain).foregroundStyle(colorTheme.accent)
+          .accessibilityLabel(L10n.text("Заметка к подходу", locale: locale))
+          .accessibilityValue(note)
+          .accessibilityIdentifier("setNote_\(set.id)")
+      } else {
+        Color.clear.frame(maxWidth: .infinity, minHeight: 44).accessibilityHidden(true)
+      }
+    }.frame(maxWidth: .infinity)
   }
 
   private var indexLabel: some View {
@@ -161,7 +171,7 @@ struct WorkoutSetRow: View {
               locale: locale))
       }
     }
-    .font(.title2.weight(.medium)).monospacedDigit()
+    .font(.title3.weight(.medium)).monospacedDigit().lineLimit(1).minimumScaleFactor(0.65)
     .foregroundStyle(set.completedAt != nil || selected ? Color.primary : .secondary)
   }
 
@@ -182,7 +192,7 @@ struct WorkoutSetRow: View {
             L10n.format("Повторения: %@", String(set.repetitions), locale: locale))
       }
     }
-    .font(.title2.weight(.medium)).monospacedDigit()
+    .font(.title3.weight(.medium)).monospacedDigit().lineLimit(1).minimumScaleFactor(0.65)
     .foregroundStyle(set.completedAt != nil || selected ? Color.primary : .secondary)
   }
 

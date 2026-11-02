@@ -267,11 +267,12 @@ struct CurrentHeartRateView: View {
             }
           }
         }
-      }.accessibilityElement(children: .combine).accessibilityIdentifier("currentHeartRate")
+      }.transaction { $0.animation = nil }
+        .accessibilityElement(children: .combine).accessibilityIdentifier("currentHeartRate")
     }
   }
   private func isFresh(at date: Date) -> Bool {
-    reading?.isFresh(at: date) == true
+    reading?.isFreshForDisplay(at: date) == true
       && (tracker.bluetooth.connection == .connected || tracker.live.state == .running
         || health.observing)
   }
@@ -294,6 +295,13 @@ struct WorkoutLiveHeartRateChart: View {
           tracker: store.tracker, health: store.healthCharts, compact: compactHeader || !isExpanded
         )
         .frame(maxWidth: .infinity, alignment: .leading)
+        if !isExpanded {
+          Button(action: openSettings) {
+            Image(systemName: "slider.horizontal.3").frame(width: 44, height: 44)
+          }.buttonStyle(.plain).foregroundStyle(.secondary)
+            .accessibilityLabel(L10n.text("Настройки пульса", locale: locale))
+            .accessibilityIdentifier("openWorkoutTracker")
+        }
         if let onToggle {
           Button(action: onToggle) {
             Image(systemName: isExpanded ? "chevron.up" : "chevron.down").frame(
@@ -320,18 +328,18 @@ struct WorkoutLiveHeartRateChart: View {
           Text(L10n.text(error, locale: locale)).font(.caption).foregroundStyle(.red)
         }
       }
-      HStack(spacing: 12) {
-        Button(action: openSettings) {
-          Label(L10n.text("Настройки пульса", locale: locale), systemImage: "slider.horizontal.3")
-            .font(.caption).frame(minHeight: 44)
-        }.accessibilityIdentifier("openWorkoutTracker")
-        Spacer(minLength: 0)
-        if isExpanded {
+      if isExpanded {
+        HStack(spacing: 12) {
+          Button(action: openSettings) {
+            Label(L10n.text("Настройки пульса", locale: locale), systemImage: "slider.horizontal.3")
+              .font(.caption).frame(minHeight: 44)
+          }.accessibilityIdentifier("openWorkoutTracker")
+          Spacer(minLength: 0)
           Button(L10n.text("Пульс и шаги", locale: locale), action: openCharts)
             .font(.caption).frame(minHeight: 44)
             .accessibilityIdentifier("openHealthCharts")
-        }
-      }.buttonStyle(.plain).foregroundStyle(.secondary)
+        }.buttonStyle(.plain).foregroundStyle(.secondary)
+      }
     }
   }
 }
