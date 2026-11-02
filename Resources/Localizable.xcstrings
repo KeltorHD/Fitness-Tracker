@@ -2534,6 +2534,23 @@
         }
       }
     },
+    "Выполнено этапов: %@ из %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выполнено этапов: %@ из %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stages completed: %@ of %@"
+          }
+        }
+      }
+    },
     "Выполните хотя бы один подход перед завершением.": {
       "extractionState": "manual",
       "localizations": {
@@ -3397,6 +3414,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Add"
+          }
+        }
+      }
+    },
+    "Добавить заметку к подходу": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Добавить заметку к подходу"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add set note"
           }
         }
       }

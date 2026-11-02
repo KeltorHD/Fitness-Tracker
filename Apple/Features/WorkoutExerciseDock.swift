@@ -34,15 +34,19 @@ struct WorkoutExerciseDock: View {
 
   private func controls(height: CGFloat, navigationWidth: CGFloat, plusWidth: CGFloat) -> some View
   {
-    HStack(spacing: 4) {
+    HStack(alignment: .bottom, spacing: 4) {
       navigationButton(
-        forward: false, height: height + 20, width: navigationWidth, action: previous
+        forward: false, height: height + (height >= 56 ? 12 : 8), width: navigationWidth,
+        action: previous
       )
       .disabled(exerciseIndex == 0).accessibilityIdentifier("previousWorkoutExercise")
       actionBlock(height: height, plusWidth: plusWidth)
-      navigationButton(forward: true, height: height + 20, width: navigationWidth, action: next)
-        .disabled(exerciseIndex >= workout.exercises.count - 1)
-        .accessibilityIdentifier("nextWorkoutExercise")
+      navigationButton(
+        forward: true, height: height + (height >= 56 ? 12 : 8), width: navigationWidth,
+        action: next
+      )
+      .disabled(exerciseIndex >= workout.exercises.count - 1)
+      .accessibilityIdentifier("nextWorkoutExercise")
     }
   }
 
@@ -79,7 +83,7 @@ struct WorkoutExerciseDock: View {
         Spacer(minLength: 0)
       }
     }
-    .font(.system(size: 18, weight: .semibold)).buttonStyle(.plain)
+    .font(.system(size: 18, weight: .semibold)).buttonStyle(WorkoutControlPressStyle())
     .padding(.horizontal, 8).padding(.top, 4).padding(.bottom, 8)
     .glassEffect(.regular, in: WorkoutNavigationShape(rise: 16, shoulderWidth: 48))
     .accessibilityElement(children: .contain)
@@ -101,10 +105,38 @@ struct WorkoutExerciseDock: View {
       .glassEffect(.regular.tint(colorTheme.accent).interactive(), in: .circle)
       .glassEffectID("completeSet", in: controlsGlass)
       .glassEffectTransition(.matchedGeometry)
+      .overlay {
+        if isOngoing {
+          ZStack {
+            Circle().stroke(FitTheme.accentForeground.opacity(0.18), lineWidth: 1)
+            Circle().trim(from: 0, to: stageProgress.fraction)
+              .stroke(
+                FitTheme.accentForeground.opacity(0.85),
+                style: StrokeStyle(lineWidth: 2, lineCap: .round)
+              )
+              .rotationEffect(.degrees(-90))
+          }.padding(5).allowsHitTesting(false).accessibilityHidden(true)
+            .animation(reduceMotion ? nil : .smooth(duration: 0.28), value: stageProgress.fraction)
+        }
+      }
       .contentShape(.circle)
     }
     .disabled(isOngoing && !canComplete).accessibilityLabel(actionTitle)
+    .accessibilityValue(
+      isOngoing
+        ? L10n.format(
+          "Выполнено этапов: %@ из %@", String(stageProgress.completed),
+          String(stageProgress.total), locale: locale) : ""
+    )
     .accessibilityIdentifier("completeSet")
+  }
+
+  private var stageProgress: (completed: Int, total: Int, fraction: Double) {
+    guard workout.exercises.indices.contains(exerciseIndex) else { return (0, 0, 0) }
+    let sets = workout.exercises[exerciseIndex].sets
+    let total = sets.reduce(0) { $0 + $1.stages.count }
+    let completed = sets.reduce(0) { $0 + $1.performedStages.count }
+    return (completed, total, total > 0 ? Double(completed) / Double(total) : 0)
   }
 
   private var actionTitle: String {
@@ -122,8 +154,22 @@ struct WorkoutExerciseDock: View {
         .font(.system(size: 16, weight: .semibold))
         .frame(width: width, height: height).contentShape(.capsule)
     }
-    .buttonStyle(.plain).glassEffect(.regular.interactive(), in: .capsule)
+    .buttonStyle(WorkoutControlPressStyle()).glassEffect(.regular.interactive(), in: .capsule)
     .accessibilityLabel(
       L10n.text(forward ? "Следующее упражнение" : "Предыдущее упражнение", locale: locale))
+  }
+}
+
+private struct WorkoutControlPressStyle: ButtonStyle {
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
+  @Environment(\.isEnabled) private var isEnabled
+
+  func makeBody(configuration: Configuration) -> some View {
+    configuration.label
+      .scaleEffect(reduceMotion ? 1 : configuration.isPressed ? 0.94 : 1)
+      .opacity(isEnabled ? (configuration.isPressed ? 0.86 : 1) : 0.4)
+      .animation(
+        reduceMotion ? nil : .spring(response: 0.22, dampingFraction: 0.76),
+        value: configuration.isPressed)
   }
 }

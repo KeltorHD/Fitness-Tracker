@@ -12,9 +12,9 @@ struct WorkoutSetTableHeader: View {
   @Environment(\.locale) private var locale
   @Environment(\.dynamicTypeSize) private var typeSize
   let unit: WeightUnit
-  var showsNotes = true
-  @ScaledMetric(relativeTo: .body) private var weightWidth: CGFloat = 60
-  @ScaledMetric(relativeTo: .body) private var repetitionsWidth: CGFloat = 52
+  var notesExpanded = false
+  @ScaledMetric(relativeTo: .caption) private var expandedNoteWidth: CGFloat = 84
+  private var noteColumnWidth: CGFloat { notesExpanded ? min(expandedNoteWidth, 112) : 44 }
 
   var body: some View {
     if !typeSize.isAccessibilitySize {
@@ -22,15 +22,10 @@ struct WorkoutSetTableHeader: View {
         Color.clear.frame(width: WorkoutSetTableLayout.indexWidth, height: 1)
         HStack(spacing: WorkoutSetTableLayout.spacing) {
           Text(L10n.format("Вес, %@", L10n.text(unit.rawValue, locale: locale), locale: locale))
-            .frame(width: showsNotes ? weightWidth : nil).frame(
-              maxWidth: showsNotes ? nil : .infinity)
-          Text(L10n.text("Повт.", locale: locale)).lineLimit(1).frame(
-            width: showsNotes ? repetitionsWidth : nil
-          ).frame(maxWidth: showsNotes ? nil : .infinity)
-          if showsNotes {
-            Text(L10n.text("Заметка", locale: locale)).frame(maxWidth: .infinity).transition(
-              .opacity.combined(with: .scale(scale: 0.95, anchor: .trailing)))
-          }
+            .frame(maxWidth: .infinity)
+          Text(L10n.text("Повт.", locale: locale)).lineLimit(1).frame(maxWidth: .infinity)
+          Text(L10n.text("Заметка", locale: locale)).lineLimit(1).minimumScaleFactor(0.8)
+            .frame(width: noteColumnWidth)
         }.frame(maxWidth: .infinity)
       }
       .font(.caption).foregroundStyle(.secondary).multilineTextAlignment(.center)
@@ -45,13 +40,13 @@ struct WorkoutSetRow<ContextActions: View>: View {
   @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
   @Environment(\.dynamicTypeSize) private var typeSize
-  @ScaledMetric(relativeTo: .body) private var weightWidth: CGFloat = 60
-  @ScaledMetric(relativeTo: .body) private var repetitionsWidth: CGFloat = 52
+  @ScaledMetric(relativeTo: .caption) private var expandedNoteWidth: CGFloat = 84
+  private var noteColumnWidth: CGFloat { notesExpanded ? min(expandedNoteWidth, 112) : 44 }
   let set: WorkoutSet
   let index: Int
   var marker: String? = nil
   let unit: WeightUnit
-  var showsNotes = true
+  var notesExpanded = false
   let editable: Bool
   var showsDropMetadata = true
   var canCorrectCompleted = false
@@ -105,20 +100,13 @@ struct WorkoutSetRow<ContextActions: View>: View {
             }
           } else {
             HStack(spacing: WorkoutSetTableLayout.spacing) {
-              weightField.frame(width: showsNotes ? weightWidth : nil).frame(
-                maxWidth: showsNotes ? nil : .infinity)
-              repetitionsField.frame(width: showsNotes ? repetitionsWidth : nil).frame(
-                maxWidth: showsNotes ? nil : .infinity)
-              if showsNotes {
-                noteField.transition(
-                  .opacity.combined(with: .scale(scale: 0.95, anchor: .trailing)))
-              }
+              weightField
+              repetitionsField
+              noteField.frame(width: noteColumnWidth)
             }
           }
         }.frame(maxWidth: .infinity)
-        if typeSize.isAccessibilitySize && showsNotes {
-          noteField.frame(minWidth: 64, maxWidth: .infinity)
-        }
+        if typeSize.isAccessibilitySize { noteField.frame(width: noteColumnWidth) }
       }
       if set.isWarmup || (showsDropMetadata && set.isDropSet) || (set.loadMultiplier ?? 1) > 1 {
         ViewThatFits(in: .horizontal) {
@@ -140,27 +128,39 @@ struct WorkoutSetRow<ContextActions: View>: View {
 
   private var noteField: some View {
     Group {
-      if let note = set.note, let openNote {
+      if let openNote, set.note != nil || editable || canCorrectCompleted {
         Button(action: openNote) {
-          Text(note.replacingOccurrences(of: "\n", with: " "))
-            .font(.caption).lineLimit(2).truncationMode(.tail)
-            .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
-            .contentShape(.rect)
+          Group {
+            if let note = set.note, !note.isEmpty {
+              Text(note.replacingOccurrences(of: "\n", with: " "))
+                .font(.caption.weight(selected ? .semibold : .regular)).lineLimit(2).truncationMode(
+                  .tail)
+            } else {
+              Image(systemName: "square.and.pencil").font(.caption)
+            }
+          }
+          .frame(
+            maxWidth: .infinity, minHeight: 44, alignment: set.note == nil ? .center : .leading
+          )
+          .contentShape(.rect)
         }.buttonStyle(.plain).foregroundStyle(
-          set.completedAt != nil ? Color.primary : selected ? colorTheme.accent : .secondary
+          selected ? colorTheme.accent : set.completedAt != nil ? .primary : .secondary
         )
-        .accessibilityLabel(L10n.text("Заметка к подходу", locale: locale))
-        .accessibilityValue(note)
+        .accessibilityLabel(
+          L10n.text(
+            set.note == nil ? "Добавить заметку к подходу" : "Заметка к подходу", locale: locale)
+        )
+        .accessibilityValue(set.note ?? "")
         .accessibilityIdentifier("setNote_\(set.id)")
       } else {
         Color.clear.frame(maxWidth: .infinity, minHeight: 44).accessibilityHidden(true)
       }
-    }.frame(maxWidth: .infinity)
+    }
   }
 
   private var indexLabel: some View {
     Text(marker ?? String(index + 1))
-      .font(.callout.weight(selected ? .semibold : .regular))
+      .font(.callout.weight(selected ? .bold : set.completedAt != nil ? .semibold : .regular))
       .monospacedDigit()
       .foregroundStyle(
         selected ? colorTheme.accent : set.completedAt != nil ? Color.primary : FitTheme.muted
@@ -211,8 +211,9 @@ struct WorkoutSetRow<ContextActions: View>: View {
               locale: locale))
       }
     }
-    .font(.title3.weight(.medium)).monospacedDigit().lineLimit(1).minimumScaleFactor(0.65)
-    .foregroundStyle(set.completedAt != nil || selected ? Color.primary : .secondary)
+    .font(.title3.weight(selected ? .bold : set.completedAt != nil ? .semibold : .regular))
+    .monospacedDigit().lineLimit(1).minimumScaleFactor(0.65)
+    .foregroundStyle(selected ? colorTheme.accent : set.completedAt != nil ? .primary : .secondary)
   }
 
   private var formattedWeight: String {
@@ -241,15 +242,18 @@ struct WorkoutSetRow<ContextActions: View>: View {
             L10n.format("Повторения: %@", String(set.repetitions), locale: locale))
       }
     }
-    .font(.title3.weight(.medium)).monospacedDigit().lineLimit(1).minimumScaleFactor(0.65)
-    .foregroundStyle(set.completedAt != nil || selected ? Color.primary : .secondary)
+    .font(.title3.weight(selected ? .bold : set.completedAt != nil ? .semibold : .regular))
+    .monospacedDigit().lineLimit(1).minimumScaleFactor(0.65)
+    .foregroundStyle(selected ? colorTheme.accent : set.completedAt != nil ? .primary : .secondary)
   }
 
   private func valueButton(_ value: String, field: WorkoutSetField) -> some View {
     let active = numberPad.field == field
     return WorkoutNumericField(
       value: value, field: field, numberPad: numberPad,
-      tint: UIColor(colorTheme.accent), foreground: active || selected ? .label : .secondaryLabel,
+      tint: UIColor(colorTheme.accent),
+      foreground: selected ? UIColor(colorTheme.accent) : active ? .label : .secondaryLabel,
+      fontWeight: selected ? .bold : active ? .medium : .regular,
       begin: { edit(field) }, advance: advance
     )
     .frame(maxWidth: .infinity, minHeight: 44)
@@ -268,6 +272,7 @@ private struct WorkoutNumericField: UIViewRepresentable {
   let numberPad: WorkoutNumberPadModel
   let tint: UIColor
   let foreground: UIColor
+  let fontWeight: UIFont.Weight
   let begin: () -> Void
   let advance: () -> Void
 
@@ -291,7 +296,8 @@ private struct WorkoutNumericField: UIViewRepresentable {
   func updateUIView(_ view: UITextField, context: Context) {
     context.coordinator.parent = self
     context.coordinator.synchronize(view)
-    view.font = UIFont.preferredFont(forTextStyle: .title3, compatibleWith: view.traitCollection)
+    view.font = UIFontMetrics(forTextStyle: .title3).scaledFont(
+      for: .systemFont(ofSize: 20, weight: fontWeight), compatibleWith: view.traitCollection)
     view.tintColor = tint
     view.textColor = foreground
     if numberPad.field == field {

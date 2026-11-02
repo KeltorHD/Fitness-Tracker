@@ -113,6 +113,9 @@ final class FitnessTrackerUITests: XCTestCase {
     app.buttons["openWorkoutExercise"].firstMatch.tap()
     let actions = app.buttons["activeExerciseActions"]
     XCTAssertTrue(actions.waitForExistence(timeout: 5))
+    let clock = app.staticTexts["activeExerciseDuration"]
+    XCTAssertTrue(clock.exists)
+    XCTAssertEqual(clock.frame.midX, app.frame.midX, accuracy: 1)
     XCTAssertLessThan(
       app.buttons["closeWorkoutExercise"].frame.minX,
       app.staticTexts["activeExercisePosition"].frame.minX)
@@ -1152,6 +1155,8 @@ final class FitnessTrackerUITests: XCTestCase {
       .firstMatch
     XCTAssertTrue(note.waitForExistence(timeout: 5))
     XCTAssertLessThan(weight.frame.width, initialWeightWidth)
+    XCTAssertEqual(note.value as? String, "Keep elbows close")
+    XCTAssertLessThanOrEqual(note.frame.width, 112)
     note.tap()
     XCTAssertTrue(editor.waitForExistence(timeout: 5))
     XCTAssertEqual(editor.value as? String, "Keep elbows close")

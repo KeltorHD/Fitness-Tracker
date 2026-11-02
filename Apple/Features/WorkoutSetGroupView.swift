@@ -8,7 +8,7 @@ struct WorkoutSetGroupView: View {
   let workout: Workout
   let model: WorkoutExercisePresentation
   let numberPad: WorkoutNumberPadModel
-  let showsNotes: Bool
+  let notesExpanded: Bool
   let toggleWarmup: () -> Void
   let configureDrop: (Bool) -> Void
   let addAfter: () -> Void
@@ -67,7 +67,7 @@ struct WorkoutSetGroupView: View {
   private func row(_ value: WorkoutSet, index: Int, marker: String? = nil) -> some View {
     let child = marker != nil
     return WorkoutSetRow(
-      set: value, index: index, marker: marker, unit: model.unit, showsNotes: showsNotes,
+      set: value, index: index, marker: marker, unit: model.unit, notesExpanded: notesExpanded,
       editable: workout.status == .active && value.completedAt == nil,
       showsDropMetadata: false, canCorrectCompleted: [.active, .paused].contains(workout.status),
       selected: value.id == model.selectedTargetID && workout.status == .active,

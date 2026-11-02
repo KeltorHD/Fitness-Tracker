@@ -21,6 +21,7 @@ struct WorkoutExerciseView: View {
   @State private var lastCompletion: ContinuousClock.Instant?
   @State private var numberPad: WorkoutNumberPadModel
   @Environment(\.accessibilityReduceMotion) private var reduceMotion
+  @Environment(\.dynamicTypeSize) private var typeSize
   private let workoutID: UUID
   private var workout: Workout? {
     if store.active?.id == workoutID { return store.active }
@@ -192,7 +193,28 @@ struct WorkoutExerciseView: View {
   }
 
   private func sessionHeader(_ workout: Workout) -> some View {
-    HStack(spacing: 8) {
+    Group {
+      if typeSize.isAccessibilitySize {
+        VStack(spacing: 4) {
+          workoutClock(workout).frame(maxWidth: .infinity)
+          HStack {
+            headerLeading(workout)
+            exerciseMenu(workout)
+          }
+        }
+      } else {
+        // Equal side slots keep the clock centered independently of the counter width.
+        HStack(spacing: 0) {
+          headerLeading(workout).frame(width: 96)
+          workoutClock(workout).frame(maxWidth: .infinity)
+          exerciseMenu(workout).frame(width: 96, alignment: .trailing)
+        }
+      }
+    }.buttonStyle(.plain).foregroundStyle(.primary).padding(.horizontal, 4).padding(.top, 8)
+  }
+
+  private func headerLeading(_ workout: Workout) -> some View {
+    HStack(spacing: 4) {
       Button {
         numberPad.dismiss()
         dismiss()
@@ -201,58 +223,66 @@ struct WorkoutExerciseView: View {
       }.accessibilityLabel(L10n.text("К списку упражнений", locale: locale))
         .accessibilityIdentifier("closeWorkoutExercise")
       Text("\((model.index(in: workout) ?? 0) + 1)/\(workout.exercises.count)")
-        .font(.subheadline).foregroundStyle(.secondary)
+        .font(.subheadline).foregroundStyle(.secondary).lineLimit(1).minimumScaleFactor(0.6)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .accessibilityIdentifier("activeExercisePosition")
-      Spacer(minLength: 0)
-      TimelineView(.periodic(from: .now, by: 1)) { timeline in
-        Text(
-          workout.durationIsKnown == false
-            ? "—"
-            : Duration.seconds(workout.duration(at: timeline.date)).formatted(
-              .time(pattern: .hourMinuteSecond(padHourToLength: 2)))
-        )
-        .font(.title2.weight(.semibold)).monospacedDigit().lineLimit(1).minimumScaleFactor(0.6)
+    }
+  }
+
+  private func workoutClock(_ workout: Workout) -> some View {
+    TimelineView(.periodic(from: .now, by: 1)) { timeline in
+      let duration =
+        workout.durationIsKnown == false
+        ? "—"
+        : Duration.seconds(workout.duration(at: timeline.date)).formatted(
+          .time(pattern: .hourMinuteSecond(padHourToLength: 2)))
+      Text(duration).font(.title2.weight(.semibold)).monospacedDigit().lineLimit(1)
+        .minimumScaleFactor(0.4)
+        .accessibilityLabel(L10n.text("Длительность тренировки", locale: locale))
+        .accessibilityValue(duration)
+        .accessibilityIdentifier("activeExerciseDuration")
+    }
+  }
+
+  private func exerciseMenu(_ workout: Workout) -> some View {
+    Menu {
+      if workout.status == .active {
+        Button(L10n.text("Добавить перед", locale: locale), systemImage: "arrow.up.to.line") {
+          openExerciseAction(.before, workout: workout)
+        }
+        .accessibilityIdentifier("addExerciseBeforeCurrent")
+        Button(L10n.text("Добавить после", locale: locale), systemImage: "arrow.down.to.line") {
+          openExerciseAction(.after, workout: workout)
+        }
+        .accessibilityIdentifier("addExerciseAfterCurrent")
+        Button(
+          L10n.text("Заменить упражнение", locale: locale),
+          systemImage: "arrow.triangle.2.circlepath"
+        ) { openExerciseAction(.replace, workout: workout) }
+        .accessibilityIdentifier("replaceCurrentExercise")
       }
-      Spacer(minLength: 0)
-      Menu {
-        if workout.status == .active {
-          Button(L10n.text("Добавить перед", locale: locale), systemImage: "arrow.up.to.line") {
-            openExerciseAction(.before, workout: workout)
-          }
-          .accessibilityIdentifier("addExerciseBeforeCurrent")
-          Button(L10n.text("Добавить после", locale: locale), systemImage: "arrow.down.to.line") {
-            openExerciseAction(.after, workout: workout)
-          }
-          .accessibilityIdentifier("addExerciseAfterCurrent")
-          Button(
-            L10n.text("Заменить упражнение", locale: locale),
-            systemImage: "arrow.triangle.2.circlepath"
-          ) { openExerciseAction(.replace, workout: workout) }
-          .accessibilityIdentifier("replaceCurrentExercise")
-        }
-        if !store.isDemoMode, store.active?.id == workout.id {
-          Button(
-            L10n.text(showsHeartRate ? "Скрыть пульс" : "Показать пульс", locale: locale),
-            systemImage: "heart"
-          ) {
-            withAnimation(reduceMotion ? nil : .smooth) {
-              showsHeartRate.toggle()
-              heartRateExpanded = false
-            }
+      if !store.isDemoMode, store.active?.id == workout.id {
+        Button(
+          L10n.text(showsHeartRate ? "Скрыть пульс" : "Показать пульс", locale: locale),
+          systemImage: "heart"
+        ) {
+          withAnimation(reduceMotion ? nil : .smooth) {
+            showsHeartRate.toggle()
+            heartRateExpanded = false
           }
         }
-        if let exercise = model.exercise(in: workout)?.exercise {
-          NavigationLink {
-            ExerciseDetailView(exercise: exercise).toolbar(.visible, for: .navigationBar)
-          } label: {
-            Label(L10n.text("Техника выполнения", locale: locale), systemImage: "info.circle")
-          }
+      }
+      if let exercise = model.exercise(in: workout)?.exercise {
+        NavigationLink {
+          ExerciseDetailView(exercise: exercise).toolbar(.visible, for: .navigationBar)
+        } label: {
+          Label(L10n.text("Техника выполнения", locale: locale), systemImage: "info.circle")
         }
-      } label: {
-        Image(systemName: "ellipsis").frame(width: 44, height: 44).contentShape(.rect)
-      }.accessibilityLabel(L10n.text("Действия упражнения", locale: locale))
-        .accessibilityIdentifier("activeExerciseActions")
-    }.buttonStyle(.plain).foregroundStyle(.primary).padding(.horizontal, 4).padding(.top, 8)
+      }
+    } label: {
+      Image(systemName: "ellipsis").frame(width: 44, height: 44).contentShape(.rect)
+    }.accessibilityLabel(L10n.text("Действия упражнения", locale: locale))
+      .accessibilityIdentifier("activeExerciseActions")
   }
 
   private func openExerciseAction(_ kind: ExerciseActionRequest.Kind, workout: Workout) {
@@ -319,12 +349,13 @@ struct WorkoutExerciseView: View {
       FitTheme.paper, in: .rect(cornerRadius: FitTheme.exerciseCardRadius))
   }
   private func setTable(_ row: WorkoutExercise, workout: Workout) -> some View {
-    let showsNotes = row.sets.contains {
+    let notesExpanded = row.sets.contains {
       $0.note?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false
     }
     return VStack(spacing: 0) {
-      WorkoutSetTableHeader(unit: model.unit, showsNotes: showsNotes).padding(.top, 12).padding(
-        .bottom, 8)
+      WorkoutSetTableHeader(unit: model.unit, notesExpanded: notesExpanded).padding(.top, 12)
+        .padding(
+          .bottom, 8)
       Divider()
       ScrollViewReader { proxy in
         List {
@@ -333,7 +364,7 @@ struct WorkoutExerciseView: View {
               ForEach(Array(row.sets.enumerated()), id: \.element.id) { index, set in
                 WorkoutSetGroupView(
                   set: set, index: index, workout: workout, model: model, numberPad: numberPad,
-                  showsNotes: showsNotes,
+                  notesExpanded: notesExpanded,
                   toggleWarmup: { toggleWarmup(set, row: row, workout: workout) },
                   configureDrop: { configureDrop(workout, setID: set.id, adding: $0) },
                   addAfter: {
@@ -390,7 +421,7 @@ struct WorkoutExerciseView: View {
     .overlay {
       RoundedRectangle(cornerRadius: FitTheme.radius).stroke(FitTheme.separator, lineWidth: 0.5)
     }
-    .animation(reduceMotion ? nil : .snappy(duration: 0.28), value: showsNotes)
+    .animation(reduceMotion ? nil : .snappy(duration: 0.28), value: notesExpanded)
     .accessibilityIdentifier("workoutSetTableCard")
   }
 
