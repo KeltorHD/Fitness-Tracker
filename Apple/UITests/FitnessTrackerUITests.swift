@@ -521,7 +521,7 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(child.waitForExistence(timeout: 5))
     child.swipeLeft()
     app.buttons["Удалить этап дропсета"].firstMatch.tap()
-    app.buttons["Удалить этап дропсета"].firstMatch.tap()
+    XCTAssertFalse(app.buttons["Удалить этап дропсета"].exists)
     XCTAssertTrue(app.staticTexts["Дропсет · этапов: 2"].waitForExistence(timeout: 5))
     XCTAssertTrue(group.exists)
     XCTAssertEqual(app.alerts.count, 0)
@@ -1174,7 +1174,7 @@ final class FitnessTrackerUITests: XCTestCase {
       count + 1)
     app.cells.containing(.textField, identifier: weight.identifier).firstMatch.swipeLeft()
     app.buttons["Удалить подход"].firstMatch.tap()
-    app.buttons["Удалить подход"].firstMatch.tap()
+    XCTAssertFalse(app.buttons["Удалить подход"].exists)
     XCTAssertFalse(note.exists)
   }
 

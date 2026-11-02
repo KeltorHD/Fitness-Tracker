@@ -10,7 +10,7 @@ struct WorkoutExerciseView: View {
   @State private var error: String?
   @State private var noteRequest: SetNoteRequest?
   @State private var mediaExercise: Exercise?
-  @State private var removal: SetRemovalRequest?
+  @State private var removal: DropGroupRemovalRequest?
   @State private var correction: CompletedSetRequest?
   @State private var exerciseAction: ExerciseActionRequest?
   @State private var heartRateExpanded = false
@@ -148,42 +148,21 @@ struct WorkoutExerciseView: View {
       }
     }
     .confirmationDialog(
-      L10n.text(
-        removal?.stageID != nil
-          ? "Удалить этап дропсета?"
-          : removal?.set.isDropSet == true ? "Удалить группу дропсета?" : "Удалить подход?",
-        locale: locale),
+      L10n.text("Удалить группу дропсета?", locale: locale),
       isPresented: Binding(get: { removal != nil }, set: { if !$0 { removal = nil } }),
       titleVisibility: .visible, presenting: removal
     ) { request in
-      Button(
-        L10n.text(
-          request.stageID != nil
-            ? "Удалить этап дропсета"
-            : request.set.isDropSet ? "Удалить группу дропсета" : "Удалить подход", locale: locale),
-        role: .destructive
-      ) {
+      Button(L10n.text("Удалить группу дропсета", locale: locale), role: .destructive) {
         if let workout {
           mutate(workout) {
-            if let stageID = request.stageID {
-              try WorkoutEngine.removeDropStage(
-                in: &$0, exerciseID: request.exerciseID, setID: request.set.id, stageID: stageID)
-            } else {
-              try WorkoutEngine.removeSet(
-                exerciseID: request.exerciseID, setID: request.set.id, from: &$0)
-            }
+            try WorkoutEngine.removeSet(
+              exerciseID: request.exerciseID, setID: request.setID, from: &$0)
           }
         }
         removal = nil
       }
-    } message: { request in
-      Text(
-        L10n.text(
-          request.stageID != nil
-            ? "Будет удалён только этот этап дропсета."
-            : request.set.isDropSet
-              ? "Будет удалён весь подход со всеми этапами дропсета."
-              : "Данные этого подхода будут удалены из тренировки.", locale: locale))
+    } message: { _ in
+      Text(L10n.text("Будет удалён весь подход со всеми этапами дропсета.", locale: locale))
     }
   }
   private func primaryMuscleNames(_ exercise: Exercise) -> String {
@@ -375,11 +354,20 @@ struct WorkoutExerciseView: View {
                   },
                   remove: {
                     numberPad.dismiss()
-                    removal = SetRemovalRequest(exerciseID: row.id, set: set, stageID: nil)
+                    if set.isDropSet {
+                      removal = DropGroupRemovalRequest(exerciseID: row.id, setID: set.id)
+                    } else {
+                      mutate(workout) {
+                        try WorkoutEngine.removeSet(exerciseID: row.id, setID: set.id, from: &$0)
+                      }
+                    }
                   },
                   removeStage: { stageID in
                     numberPad.dismiss()
-                    removal = SetRemovalRequest(exerciseID: row.id, set: set, stageID: stageID)
+                    mutate(workout) {
+                      try WorkoutEngine.removeDropStage(
+                        in: &$0, exerciseID: row.id, setID: set.id, stageID: stageID)
+                    }
                   },
                   editCompleted: { target in
                     numberPad.dismiss()
@@ -642,10 +630,9 @@ private struct SetNoteSheet: View {
   }
 }
 
-private struct SetRemovalRequest {
+private struct DropGroupRemovalRequest {
   let exerciseID: UUID
-  let set: WorkoutSet
-  let stageID: UUID?
+  let setID: UUID
 }
 
 private struct CompletedSetRequest: Identifiable {
