@@ -51,56 +51,58 @@ struct WorkoutSetGroupView: View {
       select: {
         numberPad.dismiss()
         model.select(value.id, in: workout)
-      }, openNote: marker == nil ? openNote : nil
+      }, advance: { numberPad.advance(in: workout) },
+      openNote: marker == nil ? openNote : nil, contextActions: { contextActions }
     )
     .id("number-\(value.id.uuidString)")
     .swipeActions(edge: .leading, allowsFullSwipe: false) {
-      if workout.status == .active {
+      if workout.status == .active, numberPad.field == nil {
         Button(action: addAfter) {
           Label(L10n.text("Добавить подход после", locale: locale), systemImage: "plus")
         }.tint(colorTheme.accent).disabled((model.exercise(in: workout)?.sets.count ?? 30) >= 30)
       }
     }
     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-      if workout.status == .active {
+      if workout.status == .active, numberPad.field == nil {
         Button(action: remove) {
           Label(L10n.text("Удалить подход", locale: locale), systemImage: "trash")
         }.tint(.red).disabled((model.exercise(in: workout)?.sets.count ?? 0) <= 1)
       }
     }
-    .contextMenu {
-      Button(action: openNote) {
-        Label(L10n.text("Заметка к подходу", locale: locale), systemImage: "note.text")
-      }
-      if workout.status == .active {
-        Button(action: addAfter) {
-          Label(L10n.text("Добавить подход после", locale: locale), systemImage: "plus")
-        }.disabled((model.exercise(in: workout)?.sets.count ?? 30) >= 30)
-        if set.completedAt == nil {
-          if !set.isDropSet {
-            Button(
-              L10n.text(set.isWarmup ? "Рабочий подход" : "Разминочный подход", locale: locale),
-              action: toggleWarmup
-            ).accessibilityIdentifier("toggleSetWarmup")
-          }
-          if !set.isWarmup {
-            Button(
-              L10n.text(
-                set.isDropSet ? "Добавить снижение веса" : "Сделать дропсетом", locale: locale)
-            ) {
-              configureDrop(true)
-            }.disabled((set.dropStages ?? []).count >= 5)
-              .accessibilityIdentifier("addDropStage")
-            if set.isDropSet {
-              Button(L10n.text("Убрать дропсет", locale: locale)) { configureDrop(false) }
-                .accessibilityIdentifier("removeDropSet")
-            }
+  }
+
+  @ViewBuilder private var contextActions: some View {
+    Button(action: openNote) {
+      Label(L10n.text("Заметка к подходу", locale: locale), systemImage: "note.text")
+    }
+    if workout.status == .active {
+      Button(action: addAfter) {
+        Label(L10n.text("Добавить подход после", locale: locale), systemImage: "plus")
+      }.disabled((model.exercise(in: workout)?.sets.count ?? 30) >= 30)
+      if set.completedAt == nil {
+        if !set.isDropSet {
+          Button(
+            L10n.text(set.isWarmup ? "Рабочий подход" : "Разминочный подход", locale: locale),
+            action: toggleWarmup
+          ).accessibilityIdentifier("toggleSetWarmup")
+        }
+        if !set.isWarmup {
+          Button(
+            L10n.text(
+              set.isDropSet ? "Добавить снижение веса" : "Сделать дропсетом", locale: locale)
+          ) {
+            configureDrop(true)
+          }.disabled((set.dropStages ?? []).count >= 5)
+            .accessibilityIdentifier("addDropStage")
+          if set.isDropSet {
+            Button(L10n.text("Убрать дропсет", locale: locale)) { configureDrop(false) }
+              .accessibilityIdentifier("removeDropSet")
           }
         }
-        Button(role: .destructive, action: remove) {
-          Label(L10n.text("Удалить подход", locale: locale), systemImage: "trash")
-        }.disabled((model.exercise(in: workout)?.sets.count ?? 0) <= 1)
       }
+      Button(role: .destructive, action: remove) {
+        Label(L10n.text("Удалить подход", locale: locale), systemImage: "trash")
+      }.disabled((model.exercise(in: workout)?.sets.count ?? 0) <= 1)
     }
   }
 }

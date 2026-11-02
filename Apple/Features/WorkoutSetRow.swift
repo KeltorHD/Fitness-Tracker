@@ -1,5 +1,6 @@
 import FitnessTrackerCore
 import SwiftUI
+import UIKit
 
 private enum WorkoutSetTableLayout {
   static let indexWidth: CGFloat = 44
@@ -11,6 +12,8 @@ struct WorkoutSetTableHeader: View {
   @Environment(\.locale) private var locale
   @Environment(\.dynamicTypeSize) private var typeSize
   let unit: WeightUnit
+  @ScaledMetric(relativeTo: .body) private var weightWidth: CGFloat = 60
+  @ScaledMetric(relativeTo: .body) private var repetitionsWidth: CGFloat = 52
 
   var body: some View {
     if !typeSize.isAccessibilitySize {
@@ -18,8 +21,8 @@ struct WorkoutSetTableHeader: View {
         Color.clear.frame(width: WorkoutSetTableLayout.indexWidth, height: 1)
         HStack(spacing: WorkoutSetTableLayout.spacing) {
           Text(L10n.format("Вес, %@", L10n.text(unit.rawValue, locale: locale), locale: locale))
-            .frame(maxWidth: .infinity)
-          Text(L10n.text("Повторения", locale: locale)).frame(maxWidth: .infinity)
+            .frame(width: weightWidth)
+          Text(L10n.text("Повторения", locale: locale)).frame(width: repetitionsWidth)
           Text(L10n.text("Заметка", locale: locale)).frame(maxWidth: .infinity)
         }.frame(maxWidth: .infinity)
       }
@@ -31,10 +34,12 @@ struct WorkoutSetTableHeader: View {
   }
 }
 
-struct WorkoutSetRow: View {
+struct WorkoutSetRow<ContextActions: View>: View {
   @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
   @Environment(\.dynamicTypeSize) private var typeSize
+  @ScaledMetric(relativeTo: .body) private var weightWidth: CGFloat = 60
+  @ScaledMetric(relativeTo: .body) private var repetitionsWidth: CGFloat = 52
   let set: WorkoutSet
   let index: Int
   var marker: String? = nil
@@ -46,7 +51,9 @@ struct WorkoutSetRow: View {
   let numberPad: WorkoutNumberPadModel
   let edit: (WorkoutSetField) -> Void
   let select: () -> Void
+  let advance: () -> Void
   var openNote: (() -> Void)? = nil
+  @ViewBuilder let contextActions: () -> ContextActions
 
   var body: some View {
     VStack(alignment: .leading, spacing: 8) {
@@ -67,6 +74,8 @@ struct WorkoutSetRow: View {
           .accessibilityValue(
             L10n.text(set.completedAt != nil ? "Подход выполнен" : "Не выполнено", locale: locale))
         }.frame(width: WorkoutSetTableLayout.indexWidth)
+          .accessibilityIdentifier("setIndex_\(set.id)")
+          .contextMenu { contextActions() }
         Group {
           if typeSize.isAccessibilitySize {
             VStack(alignment: .leading, spacing: 12) {
@@ -85,8 +94,8 @@ struct WorkoutSetRow: View {
             }
           } else {
             HStack(spacing: WorkoutSetTableLayout.spacing) {
-              weightField
-              repetitionsField
+              weightField.frame(width: weightWidth)
+              repetitionsField.frame(width: repetitionsWidth)
               noteField
             }
           }
@@ -100,6 +109,7 @@ struct WorkoutSetRow: View {
         }
         .font(.caption).foregroundStyle(.secondary)
         .padding(.leading, WorkoutSetTableLayout.indexWidth + WorkoutSetTableLayout.spacing)
+        .contentShape(.rect).contextMenu { contextActions() }
       }
     }
     .padding(.horizontal, WorkoutSetTableLayout.horizontalPadding)
@@ -198,23 +208,115 @@ struct WorkoutSetRow: View {
 
   private func valueButton(_ value: String, field: WorkoutSetField) -> some View {
     let active = numberPad.field == field
-    return Button {
-      edit(field)
-    } label: {
-      Text(value.isEmpty ? "0" : value)
-        .foregroundStyle(
-          (active && numberPad.replacesOnInput) || value.isEmpty
-            ? FitTheme.muted : selected ? Color.primary : Color.secondary
-        )
-        .padding(.bottom, 4)
-        .overlay(alignment: .bottom) {
-          if active { Capsule().fill(colorTheme.accent).frame(height: 3) }
-        }
-        .frame(maxWidth: .infinity, minHeight: 44)
-        .contentShape(.rect)
-    }.buttonStyle(.plain).lineLimit(1).minimumScaleFactor(0.65)
-      .accessibilityValue(value.isEmpty ? "0" : value)
-      .accessibilityHint(L10n.text("Открыть цифровую панель", locale: locale))
-      .accessibilityAddTraits(active ? .isSelected : [])
+    return WorkoutNumericField(
+      value: value, field: field, numberPad: numberPad,
+      tint: UIColor(colorTheme.accent), foreground: active || selected ? .label : .secondaryLabel,
+      begin: { edit(field) }, advance: advance
+    )
+    .frame(maxWidth: .infinity, minHeight: 44)
+    .overlay(alignment: .bottom) {
+      if active { Capsule().fill(colorTheme.accent).frame(height: 3) }
+    }
+    .accessibilityHint(L10n.text("Открыть цифровую панель", locale: locale))
+  }
+}
+
+/// UITextField provides native caret/selection while inputView suppresses the system keyboard;
+/// the existing safe-area number pad remains the only onscreen keyboard.
+private struct WorkoutNumericField: UIViewRepresentable {
+  let value: String
+  let field: WorkoutSetField
+  let numberPad: WorkoutNumberPadModel
+  let tint: UIColor
+  let foreground: UIColor
+  let begin: () -> Void
+  let advance: () -> Void
+
+  func makeCoordinator() -> Coordinator { Coordinator(self) }
+  func makeUIView(context: Context) -> UITextField {
+    let view = UITextField()
+    view.delegate = context.coordinator
+    view.inputView = UIView(frame: .zero)
+    view.inputAssistantItem.leadingBarButtonGroups = []
+    view.inputAssistantItem.trailingBarButtonGroups = []
+    view.textAlignment = .center
+    view.autocorrectionType = .no
+    view.spellCheckingType = .no
+    view.smartInsertDeleteType = .no
+    view.keyboardType = field.isWeight ? .decimalPad : .numberPad
+    view.adjustsFontForContentSizeCategory = true
+    view.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+    view.setContentHuggingPriority(.defaultLow, for: .horizontal)
+    return view
+  }
+  func updateUIView(_ view: UITextField, context: Context) {
+    context.coordinator.parent = self
+    context.coordinator.synchronize(view)
+    view.font = UIFont.preferredFont(forTextStyle: .title3, compatibleWith: view.traitCollection)
+    view.tintColor = tint
+    view.textColor = foreground
+    if numberPad.field == field {
+      if view.window != nil && !view.isFirstResponder { view.becomeFirstResponder() }
+    } else if view.isFirstResponder {
+      view.resignFirstResponder()
+    }
+  }
+  func sizeThatFits(_ proposal: ProposedViewSize, uiView: UITextField, context: Context) -> CGSize?
+  {
+    CGSize(width: proposal.width ?? 60, height: max(44, uiView.font?.lineHeight ?? 24))
+  }
+
+  @MainActor final class Coordinator: NSObject, UITextFieldDelegate {
+    var parent: WorkoutNumericField
+    private var synchronizing = false
+    init(_ parent: WorkoutNumericField) { self.parent = parent }
+    func synchronize(_ view: UITextField) {
+      synchronizing = true
+      defer { synchronizing = false }
+      let active = parent.numberPad.field == parent.field
+      let text = active ? parent.numberPad.text : parent.value
+      if view.text != text { view.text = text }
+      guard active,
+        let start = view.position(
+          from: view.beginningOfDocument, offset: parent.numberPad.selection.location),
+        let end = view.position(from: start, offset: parent.numberPad.selection.length)
+      else { return }
+      if selectedRange(in: view) != parent.numberPad.selection {
+        view.selectedTextRange = view.textRange(from: start, to: end)
+      }
+    }
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+      parent.begin()
+      return parent.numberPad.field == parent.field
+    }
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+      guard parent.numberPad.field == parent.field else { return false }
+      parent.advance()
+      return false
+    }
+    func textFieldDidEndEditing(_ textField: UITextField) {
+      if parent.numberPad.field == parent.field { parent.numberPad.dismiss() }
+    }
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+      guard !synchronizing, parent.numberPad.field == parent.field,
+        let range = selectedRange(in: textField)
+      else { return }
+      parent.numberPad.selectText(range)
+    }
+    func textField(
+      _ textField: UITextField, shouldChangeCharactersIn range: NSRange,
+      replacementString string: String
+    ) -> Bool {
+      guard parent.numberPad.field == parent.field else { return false }
+      parent.numberPad.replaceCharacters(in: range, with: string)
+      synchronize(textField)
+      return false
+    }
+    private func selectedRange(in view: UITextField) -> NSRange? {
+      guard let range = view.selectedTextRange else { return nil }
+      return NSRange(
+        location: view.offset(from: view.beginningOfDocument, to: range.start),
+        length: view.offset(from: range.start, to: range.end))
+    }
   }
 }

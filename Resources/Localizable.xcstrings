@@ -7685,6 +7685,23 @@
         }
       }
     },
+    "Очистить значение": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Очистить значение"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear value"
+          }
+        }
+      }
+    },
     "Ошибка": {
       "extractionState": "manual",
       "localizations": {

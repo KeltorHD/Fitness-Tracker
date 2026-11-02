@@ -228,7 +228,8 @@ struct ActiveWorkoutView: View {
             openCharts: { showingHealthCharts = true }
           )
           .padding(.horizontal, FitTheme.cardPadding)
-          .padding(.vertical, heartRateExpanded ? FitTheme.cardPadding : 4)
+          .padding(.vertical, 4)
+          .padding(.bottom, heartRateExpanded ? FitTheme.cardPadding - 4 : 0)
           .background(FitTheme.card, in: .rect(cornerRadius: FitTheme.radius))
           .padding(.bottom, 16)
           .accessibilityIdentifier("workoutHeartRateCard")

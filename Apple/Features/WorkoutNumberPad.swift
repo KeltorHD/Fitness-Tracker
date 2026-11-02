@@ -58,6 +58,12 @@ struct WorkoutNumberPad: View {
         }.frame(maxWidth: .infinity).foregroundStyle(.primary)
         VStack(spacing: 0) {
           Button {
+            model.clear()
+          } label: {
+            Text("C").frame(maxWidth: .infinity, minHeight: keyHeight).contentShape(.rect)
+          }.accessibilityLabel(L10n.text("Очистить значение", locale: locale))
+            .accessibilityIdentifier("numberPadClear")
+          Button {
             model.advance(in: workout)
           } label: {
             Image(systemName: "chevron.right").frame(maxWidth: .infinity, minHeight: keyHeight)
@@ -73,7 +79,7 @@ struct WorkoutNumberPad: View {
               Image(systemName: "arrow.down")
               Image(systemName: "equal").font(.body)
             }
-            .frame(maxWidth: .infinity, minHeight: keyHeight * 1.5)
+            .frame(maxWidth: .infinity, minHeight: keyHeight)
             .contentShape(.rect)
           }.disabled(!model.canCopy(in: workout))
             .opacity(model.canCopy(in: workout) ? 1 : 0.35)
@@ -88,7 +94,7 @@ struct WorkoutNumberPad: View {
             model.dismiss()
           } label: {
             Image(systemName: "keyboard.chevron.compact.down").frame(
-              maxWidth: .infinity, minHeight: keyHeight * 1.5
+              maxWidth: .infinity, minHeight: keyHeight
             )
             .contentShape(.rect)
           }.accessibilityLabel(L10n.text("Скрыть цифровую панель", locale: locale))

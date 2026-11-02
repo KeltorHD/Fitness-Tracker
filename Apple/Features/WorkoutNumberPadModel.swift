@@ -18,7 +18,7 @@ enum WorkoutSetField: Hashable, Sendable {
 /// A field editor over the existing unsaved drafts; it never completes or persists a set.
 @MainActor @Observable final class WorkoutNumberPadModel {
   private(set) var field: WorkoutSetField?
-  private(set) var replacesOnInput = false
+  private(set) var selection = NSRange(location: 0, length: 0)
   private(set) var error: String?
   private(set) var copiedRows: Int?
   let decimalSeparator: String
@@ -34,14 +34,14 @@ enum WorkoutSetField: Hashable, Sendable {
   }
   func begin(_ field: WorkoutSetField, in workout: Workout) {
     guard fields(in: workout).contains(field) else { return }
+    guard self.field != field else { return }
     self.field = field
-    replacesOnInput = true
+    selection = NSRange(location: (text as NSString).length, length: 0)
     clearFeedback()
-    editor.select(field.setID, in: workout)
   }
   func dismiss() {
     field = nil
-    replacesOnInput = false
+    selection = NSRange(location: 0, length: 0)
     clearFeedback()
   }
   func reconcile(_ workout: Workout?) {
@@ -50,28 +50,71 @@ enum WorkoutSetField: Hashable, Sendable {
       dismiss()
       return
     }
+    selectText(selection)
+  }
+  func selectText(_ range: NSRange) {
+    let count = (text as NSString).length
+    let start = min(range.location, count)
+    let newSelection = NSRange(location: start, length: min(range.length, count - start))
+    if selection != newSelection { selection = newSelection }
   }
   func digit(_ digit: Int) {
-    guard (0...9).contains(digit), let field, editor.drafts[field.setID] != nil else { return }
-    let previous = replacesOnInput ? "" : text
-    let value = previous == "0" ? String(digit) : previous + String(digit)
-    guard value.count <= (field.isWeight ? 20 : 4) else {
+    guard (0...9).contains(digit) else { return }
+    let range =
+      text == "0" && selection == NSRange(location: 1, length: 0)
+      ? NSRange(location: 0, length: 1) : selection
+    replaceCharacters(in: range, with: String(digit))
+  }
+  func decimal() {
+    guard field?.isWeight == true else { return }
+    let remaining = (text as NSString).replacingCharacters(in: selection, with: "")
+    guard !remaining.contains(where: { String($0) == decimalSeparator }) else { return }
+    let prefix = (text as NSString).substring(to: selection.location)
+    replaceCharacters(in: selection, with: (prefix.isEmpty ? "0" : "") + decimalSeparator)
+  }
+  func delete() {
+    guard field != nil else { return }
+    if selection.length > 0 {
+      replaceCharacters(in: selection, with: "")
+    } else if selection.location > 0 {
+      let range = (text as NSString).rangeOfComposedCharacterSequence(at: selection.location - 1)
+      replaceCharacters(in: range, with: "")
+    }
+  }
+  func clear() {
+    guard field != nil else { return }
+    write("")
+  }
+  /// Also handles native paste and hardware keyboard edits using UITextInput's UTF-16 ranges.
+  func replaceCharacters(in range: NSRange, with replacement: String) {
+    guard let field, editor.drafts[field.setID] != nil else { return }
+    let original = text as NSString
+    guard range.location <= original.length, range.length <= original.length - range.location else {
+      return
+    }
+    var normalized = ""
+    for character in replacement {
+      if let digit = character.wholeNumberValue, (0...9).contains(digit) {
+        normalized += String(digit)
+      } else if field.isWeight
+        && (character == "." || character == "," || String(character) == decimalSeparator)
+      {
+        normalized += decimalSeparator
+      } else {
+        error =
+          (field.isWeight ? TrainingError.invalidWeight : .invalidRepetitions).localizedDescription
+        return
+      }
+    }
+    let value = original.replacingCharacters(in: range, with: normalized)
+    guard value.count <= (field.isWeight ? 20 : 4),
+      value.filter({ String($0) == decimalSeparator }).count <= 1
+    else {
       error =
         (field.isWeight ? TrainingError.invalidWeight : .invalidRepetitions).localizedDescription
       return
     }
-    write(value)
-  }
-  func decimal() {
-    guard field?.isWeight == true else { return }
-    let previous = replacesOnInput ? "" : text
-    guard !previous.contains(where: { $0 == "." || $0 == "," || String($0) == decimalSeparator })
-    else { return }
-    write((previous.isEmpty ? "0" : previous) + decimalSeparator)
-  }
-  func delete() {
-    guard field != nil else { return }
-    write(replacesOnInput ? "" : String(text.dropLast()))
+    write(value, cursor: range.location + (normalized as NSString).length)
   }
   func advance(in workout: Workout) {
     guard let field else { return }
@@ -132,14 +175,14 @@ enum WorkoutSetField: Hashable, Sendable {
       _ = try draft.repetitionCount()
     }
   }
-  private func write(_ value: String) {
+  private func write(_ value: String, cursor: Int = 0) {
     guard let field, editor.drafts[field.setID] != nil else { return }
     if field.isWeight {
       editor.editWeight(value, setID: field.setID)
     } else {
       editor.editRepetitions(value, setID: field.setID)
     }
-    replacesOnInput = false
+    selection = NSRange(location: cursor, length: 0)
     clearFeedback()
   }
   private func clearFeedback() {
