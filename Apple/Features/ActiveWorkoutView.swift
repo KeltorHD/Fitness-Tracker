@@ -8,11 +8,23 @@ struct ActiveWorkoutView: View {
   @AppStorage("weightUnit") private var unit: WeightUnit = .kilograms
   // Keep the saved preference: previously hidden cards now open in compact form.
   @AppStorage("showWorkoutHeartRate") private var heartRateExpanded = true
-  @State private var pickingExercise = false
+  @State private var insertion: InsertionRequest?
+  @State private var pendingRemoval: RemovalRequest?
   @State private var selectedExercise: WorkoutExercise?
   @State private var confirmCancel = false
   @State private var renaming = false
   @State private var workoutName = ""
+  private struct InsertionRequest: Identifiable {
+    let id = UUID()
+    let workoutID: UUID
+    let position: WorkoutExerciseInsertion
+  }
+
+  private struct RemovalRequest {
+    let workoutID: UUID
+    let row: WorkoutExercise
+  }
+
   var body: some View {
     NavigationStack {
       if let workout = store.active {
@@ -49,8 +61,8 @@ struct ActiveWorkoutView: View {
                   renaming = true
                 }
                 Button(L10n.text("Добавить упражнение", locale: locale), systemImage: "plus") {
-                  pickingExercise = true
-                }
+                  insertion = InsertionRequest(workoutID: workout.id, position: .end)
+                }.disabled(workout.status != .active)
                 if !store.isDemoMode {
                   Button(
                     L10n.text(
@@ -77,13 +89,39 @@ struct ActiveWorkoutView: View {
             }
             Button(L10n.text("Отмена", locale: locale), role: .cancel) {}
           }
-          .sheet(isPresented: $pickingExercise) {
+          .sheet(item: $insertion) { request in
             ExercisePicker { exercise in
-              store.mutate { try WorkoutEngine.addExercise(exercise, to: &$0) }
+              store.mutate { current in
+                guard current.id == request.workoutID else { throw TrainingError.invalidState }
+                try WorkoutEngine.addExercise(exercise, to: &current, position: request.position)
+              }
             }
           }
           .sheet(item: $selectedExercise) { row in
             WorkoutExerciseSheet(workout: workout, exerciseID: row.id, unit: unit)
+          }
+          .confirmationDialog(
+            L10n.text("Удалить упражнение из тренировки?", locale: locale),
+            isPresented: Binding(
+              get: { pendingRemoval != nil }, set: { if !$0 { pendingRemoval = nil } }),
+            titleVisibility: .visible, presenting: pendingRemoval
+          ) { request in
+            Button(L10n.text("Удалить упражнение", locale: locale), role: .destructive) {
+              pendingRemoval = nil
+              store.mutate { current in
+                guard current.id == request.workoutID else { throw TrainingError.invalidState }
+                try WorkoutEngine.removeExercise(id: request.row.id, from: &current)
+              }
+            }.accessibilityIdentifier("confirmRemoveWorkoutExercise")
+            Button(L10n.text("Отмена", locale: locale), role: .cancel) { pendingRemoval = nil }
+          } message: { request in
+            Text(
+              L10n.exerciseName(request.row.exercise, locale: locale) + "\n"
+                + L10n.text(
+                  request.row.sets.contains { !$0.performedStages.isEmpty }
+                    ? "Записанные подходы этого упражнения тоже будут удалены."
+                    : "Будет удалено только это упражнение из текущей тренировки.",
+                  locale: locale))
           }
           .confirmationDialog(
             L10n.text(
@@ -100,16 +138,21 @@ struct ActiveWorkoutView: View {
       }
     }
     .archiveTransferPresenter(
-      when: selectedExercise == nil && !pickingExercise && !renaming && !confirmCancel
-        && !store.showingBodyWeightEditor
+      when: selectedExercise == nil && insertion == nil && !renaming && !confirmCancel
+        && pendingRemoval == nil && !store.showingBodyWeightEditor
     )
+    .onChange(of: store.active?.id) { _, id in
+      if insertion?.workoutID != id { insertion = nil }
+      if pendingRemoval?.workoutID != id { pendingRemoval = nil }
+    }
     .alert(
       L10n.text("Ошибка", locale: locale),
       isPresented: Binding(
         get: {
-          store.error != nil && selectedExercise == nil && !pickingExercise && !renaming
+          store.error != nil && selectedExercise == nil && insertion == nil && !renaming
             && !confirmCancel
-            && !store.archiveTransfer.isPresented && !store.showingBodyWeightEditor
+            && pendingRemoval == nil && !store.archiveTransfer.isPresented
+            && !store.showingBodyWeightEditor
         },
         set: { if !$0 { store.error = nil } })
     ) {
@@ -162,10 +205,34 @@ struct ActiveWorkoutView: View {
             } label: {
               WorkoutExerciseListRow(row: row, index: index, unit: unit, completedOnly: false)
             }.buttonStyle(.plain).accessibilityIdentifier("openWorkoutExercise")
+              .contextMenu {
+                Button(L10n.text("Добавить перед", locale: locale), systemImage: "arrow.up.to.line")
+                {
+                  insertion = InsertionRequest(workoutID: workout.id, position: .before(row.id))
+                }
+                .disabled(workout.status != .active)
+                .accessibilityIdentifier("insertWorkoutExerciseBefore")
+                Button(
+                  L10n.text("Добавить после", locale: locale), systemImage: "arrow.down.to.line"
+                ) {
+                  insertion = InsertionRequest(workoutID: workout.id, position: .after(row.id))
+                }
+                .disabled(workout.status != .active)
+                .accessibilityIdentifier("insertWorkoutExerciseAfter")
+                Divider()
+                Button(
+                  L10n.text("Удалить упражнение", locale: locale), systemImage: "trash",
+                  role: .destructive
+                ) {
+                  pendingRemoval = RemovalRequest(workoutID: workout.id, row: row)
+                }
+                .disabled(workout.status != .active)
+                .accessibilityIdentifier("removeWorkoutExercise")
+              }
             Divider().padding(.leading, 34)
           }
           Button(L10n.text("Добавить упражнение", locale: locale), systemImage: "plus.circle") {
-            pickingExercise = true
+            insertion = InsertionRequest(workoutID: workout.id, position: .end)
           }
           .disabled(workout.status != .active).accessibilityIdentifier("addExercise")
           .font(.headline).frame(maxWidth: .infinity, alignment: .leading).padding(.vertical, 20)
@@ -234,6 +301,7 @@ private struct CustomExerciseView: View {
     NavigationStack {
       Form {
         TextField(L10n.text("Название", locale: locale), text: $name)
+          .accessibilityIdentifier("customExerciseName")
         Picker(L10n.text("Группа мышц", locale: locale), selection: $muscle) {
           ForEach(MuscleGroup.allCases, id: \.self) { Text($0.title).tag($0) }
         }
@@ -251,6 +319,7 @@ private struct CustomExerciseView: View {
                 dismiss()
               } catch { message = error.localizedDescription }
             }
+            .accessibilityIdentifier("saveCustomExercise")
           }
         }
     }

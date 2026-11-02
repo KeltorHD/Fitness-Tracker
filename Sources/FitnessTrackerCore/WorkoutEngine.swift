@@ -1,5 +1,12 @@
 import Foundation
 
+/// Anchors are workout row IDs, so repeated occurrences of the same exercise remain distinct.
+public enum WorkoutExerciseInsertion: Equatable, Sendable {
+  case end
+  case before(UUID)
+  case after(UUID)
+}
+
 /// Value-based state machine. Callers persist a new value only after a successful mutation.
 public enum WorkoutEngine {
   public static func setBodyWeight(_ weightKG: Double?, in workout: inout Workout) throws {
@@ -128,11 +135,44 @@ public enum WorkoutEngine {
     return template
   }
 
-  public static func addExercise(_ exercise: Exercise, to workout: inout Workout) throws {
+  public static func addExercise(
+    _ exercise: Exercise, to workout: inout Workout, position: WorkoutExerciseInsertion = .end
+  ) throws {
     guard workout.status == .active else { throw TrainingError.invalidState }
     try Validation.name(exercise.name)
-    workout.exercises.append(WorkoutExercise(exercise: exercise))
+    let index: Int
+    switch position {
+    case .end: index = workout.exercises.endIndex
+    case .before(let id), .after(let id):
+      guard let anchor = workout.exercises.firstIndex(where: { $0.id == id }) else {
+        throw TrainingError.missingExercise
+      }
+      index = position == .before(id) ? anchor : anchor + 1
+    }
+    workout.exercises.insert(WorkoutExercise(exercise: exercise), at: index)
   }
+
+  public static func removeExercise(id: UUID, from workout: inout Workout) throws {
+    guard workout.status == .active else { throw TrainingError.invalidState }
+    guard let index = workout.exercises.firstIndex(where: { $0.id == id }) else {
+      throw TrainingError.missingExercise
+    }
+    let removedDeadline = restDeadline(for: workout.exercises[index], seconds: workout.restSeconds)
+    workout.exercises.remove(at: index)
+    if let removedDeadline, workout.restEndsAt == removedDeadline,
+      !workout.exercises.contains(where: {
+        restDeadline(for: $0, seconds: workout.restSeconds) == removedDeadline
+      })
+    {
+      workout.restEndsAt = nil
+    }
+  }
+
+  private static func restDeadline(for row: WorkoutExercise, seconds: Int) -> Date? {
+    row.sets.filter(\.isFullyCompleted).compactMap { $0.stages.last?.completedAt }.max()
+      .map { $0.addingTimeInterval(Double(seconds)) }
+  }
+
   public static func addSet(exerciseID: UUID, to workout: inout Workout) throws {
     guard workout.status == .active else { throw TrainingError.invalidState }
     guard let i = workout.exercises.firstIndex(where: { $0.id == exerciseID }) else {

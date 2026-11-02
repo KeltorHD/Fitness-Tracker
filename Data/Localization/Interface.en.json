@@ -701,5 +701,11 @@
   "№ %@": "#%@",
   "Скрыть упражнения": "Hide exercises",
   "Показать упражнения": "Show exercises",
-  "В шаблоне нет упражнений.": "This template has no exercises."
+  "В шаблоне нет упражнений.": "This template has no exercises.",
+  "Добавить перед": "Add before",
+  "Добавить после": "Add after",
+  "Удалить упражнение": "Delete exercise",
+  "Удалить упражнение из тренировки?": "Delete this exercise from the workout?",
+  "Записанные подходы этого упражнения тоже будут удалены.": "Recorded sets for this exercise will also be deleted.",
+  "Будет удалено только это упражнение из текущей тренировки.": "Only this exercise will be removed from the current workout."
 }

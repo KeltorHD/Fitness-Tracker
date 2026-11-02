@@ -1191,6 +1191,23 @@
         }
       }
     },
+    "Будет удалено только это упражнение из текущей тренировки.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Будет удалено только это упражнение из текущей тренировки."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Only this exercise will be removed from the current workout."
+          }
+        }
+      }
+    },
     "В CSV нет тренировок для импорта.": {
       "extractionState": "manual",
       "localizations": {
@@ -3265,6 +3282,23 @@
         }
       }
     },
+    "Добавить перед": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Добавить перед"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add before"
+          }
+        }
+      }
+    },
     "Добавить подход": {
       "extractionState": "manual",
       "localizations": {
@@ -3278,6 +3312,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Add set"
+          }
+        }
+      }
+    },
+    "Добавить после": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Добавить после"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add after"
           }
         }
       }
@@ -3924,6 +3975,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Workout notes"
+          }
+        }
+      }
+    },
+    "Записанные подходы этого упражнения тоже будут удалены.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Записанные подходы этого упражнения тоже будут удалены."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recorded sets for this exercise will also be deleted."
           }
         }
       }
@@ -10877,6 +10945,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Delete workout?"
+          }
+        }
+      }
+    },
+    "Удалить упражнение": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Удалить упражнение"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete exercise"
+          }
+        }
+      }
+    },
+    "Удалить упражнение из тренировки?": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Удалить упражнение из тренировки?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete this exercise from the workout?"
           }
         }
       }

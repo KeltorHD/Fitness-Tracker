@@ -21,6 +21,55 @@ final class FitnessTrackerUITests: XCTestCase {
     }
   }
 
+  @MainActor func testWorkoutContextMenuInsertsAroundAnchorAndConfirmsRemoval() {
+    let app = launch()
+    XCTAssertTrue(app.buttons["workoutStartAction"].waitForExistence(timeout: 10))
+    app.buttons["workoutStartAction"].tap()
+    let template = app.buttons["startWorkoutTemplate_20000000-0000-0000-0000-000000000001"]
+    XCTAssertTrue(template.waitForExistence(timeout: 5))
+    template.tap()
+    app.buttons["startSelectedTemplates"].tap()
+    let rows = app.buttons.matching(identifier: "openWorkoutExercise")
+    XCTAssertTrue(rows.firstMatch.waitForExistence(timeout: 5))
+    reveal(rows.firstMatch, in: app)
+    rows.firstMatch.press(forDuration: 1)
+    app.buttons["insertWorkoutExerciseBefore"].tap()
+    addCustomExercise("Вставка перед", in: app)
+    XCTAssertEqual(rows.count, 4)
+    XCTAssertTrue(rows.element(boundBy: 0).label.contains("Вставка перед"))
+    XCTAssertTrue(rows.element(boundBy: 1).label.contains("Приседания"))
+    reveal(rows.element(boundBy: 1), in: app)
+    rows.element(boundBy: 1).press(forDuration: 1)
+    app.buttons["insertWorkoutExerciseAfter"].tap()
+    addCustomExercise("Вставка после", in: app)
+    XCTAssertEqual(rows.count, 5)
+    XCTAssertTrue(rows.element(boundBy: 2).label.contains("Вставка после"))
+    reveal(rows.element(boundBy: 2), in: app)
+    rows.element(boundBy: 2).press(forDuration: 1)
+    app.buttons["removeWorkoutExercise"].tap()
+    XCTAssertTrue(app.buttons["confirmRemoveWorkoutExercise"].waitForExistence(timeout: 5))
+    app.buttons["Отмена"].tap()
+    XCTAssertEqual(rows.count, 5)
+    rows.element(boundBy: 2).press(forDuration: 1)
+    app.buttons["removeWorkoutExercise"].tap()
+    app.buttons["confirmRemoveWorkoutExercise"].tap()
+    XCTAssertEqual(rows.count, 4)
+    XCTAssertTrue(rows.element(boundBy: 2).label.contains("Жим лёжа"))
+    XCTAssertEqual(app.alerts.count, 0)
+  }
+
+  @MainActor private func addCustomExercise(_ name: String, in app: XCUIApplication) {
+    let custom = app.buttons["Своё упражнение"]
+    XCTAssertTrue(custom.waitForExistence(timeout: 5))
+    custom.tap()
+    let field = app.textFields["customExerciseName"]
+    XCTAssertTrue(field.waitForExistence(timeout: 5))
+    field.tap()
+    field.typeText(name)
+    app.buttons["saveCustomExercise"].tap()
+    XCTAssertTrue(app.buttons["openWorkoutExercise"].firstMatch.waitForExistence(timeout: 5))
+  }
+
   @MainActor func testTemplateOrderBadgeMovesContentAndRenumbersAfterDeselection() {
     let app = launch()
     XCTAssertTrue(app.buttons["workoutStartAction"].waitForExistence(timeout: 10))

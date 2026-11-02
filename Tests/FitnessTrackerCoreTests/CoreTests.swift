@@ -208,3 +208,139 @@ func invalidWeightsAreRejected(_ weight: Double) {
   try repo.deleteTemplate(id: template.id)
   #expect(try repo.templates().isEmpty)
 }
+
+@Test func exerciseInsertionUsesRowIdentityAndPreservesExistingTargets() throws {
+  let shared = ExerciseCatalog.all[0]
+  let first = WorkoutExercise(exercise: shared, sets: [WorkoutSet(repetitions: 5, weightKG: 80)])
+  let second = WorkoutExercise(exercise: shared, sets: [WorkoutSet(repetitions: 10, weightKG: 40)])
+  var workout = Workout(name: "План", startedAt: epoch, exercises: [first, second])
+  try WorkoutEngine.addExercise(ExerciseCatalog.all[1], to: &workout, position: .before(second.id))
+  let beforeID = workout.exercises[1].id
+  try WorkoutEngine.addExercise(ExerciseCatalog.all[2], to: &workout, position: .after(second.id))
+  let afterID = workout.exercises[3].id
+  #expect(workout.exercises.map(\.id) == [first.id, beforeID, second.id, afterID])
+  #expect(workout.exercises[0] == first && workout.exercises[2] == second)
+  try WorkoutEngine.addExercise(shared, to: &workout, position: .before(first.id))
+  #expect(workout.exercises[0].exercise.id == shared.id)
+  try WorkoutEngine.addExercise(shared, to: &workout)
+  #expect(workout.exercises.last?.exercise.id == shared.id)
+  #expect(Set(workout.exercises.map(\.id)).count == 6)
+  #expect(Set(workout.exercises.flatMap(\.sets).map(\.id)).count == 6)
+  try Validation.workout(workout)
+}
+
+@Test func staleExerciseAnchorAndRepeatedRemovalDoNotMutateWorkout() throws {
+  var workout = session()
+  let removedID = workout.exercises[0].id
+  try WorkoutEngine.removeExercise(id: removedID, from: &workout)
+  let original = workout
+  for position in [WorkoutExerciseInsertion.before(removedID), .after(removedID)] {
+    #expect(throws: TrainingError.missingExercise) {
+      try WorkoutEngine.addExercise(ExerciseCatalog.all[1], to: &workout, position: position)
+    }
+    #expect(workout == original)
+  }
+  #expect(throws: TrainingError.missingExercise) {
+    try WorkoutEngine.removeExercise(id: removedID, from: &workout)
+  }
+  #expect(workout == original)
+  try WorkoutEngine.addExercise(ExerciseCatalog.all[1], to: &workout)
+  #expect(workout.exercises.count == 1)
+}
+
+@Test(arguments: [WorkoutStatus.paused, .completed, .cancelled])
+func exerciseStructureChangesRejectNonActiveWorkouts(_ status: WorkoutStatus) throws {
+  var workout = session()
+  switch status {
+  case .paused: try WorkoutEngine.pause(&workout, at: epoch)
+  case .completed: workout = try finished()
+  case .cancelled: try WorkoutEngine.cancel(&workout, at: epoch)
+  case .active: return
+  }
+  let original = workout
+  let id = workout.exercises[0].id
+  #expect(throws: TrainingError.invalidState) {
+    try WorkoutEngine.addExercise(ExerciseCatalog.all[1], to: &workout, position: .before(id))
+  }
+  #expect(throws: TrainingError.invalidState) {
+    try WorkoutEngine.removeExercise(id: id, from: &workout)
+  }
+  #expect(workout == original)
+}
+
+@Test func removingExercisePreservesOtherRowsAndTheirRestTimer() throws {
+  var workout = session()
+  let first = workout.exercises[0]
+  try WorkoutEngine.addExercise(first.exercise, to: &workout)
+  let second = workout.exercises[1]
+  try WorkoutEngine.completeSet(
+    in: &workout, exerciseID: first.id, setID: first.sets[0].id,
+    repetitions: 5, weightKG: 80, at: epoch)
+  try WorkoutEngine.completeSet(
+    in: &workout, exerciseID: second.id, setID: second.sets[0].id,
+    repetitions: 4, weightKG: 20, at: epoch.addingTimeInterval(20))
+  let retained = workout.exercises[1]
+  let restEnd = workout.restEndsAt
+  try WorkoutEngine.removeExercise(id: first.id, from: &workout)
+  #expect(workout.exercises == [retained])
+  #expect(workout.volume == 80 && workout.completedSets == 1)
+  #expect(workout.restEndsAt == restEnd)
+  try Validation.workout(workout)
+}
+
+@Test func removingLastExerciseClearsItsRestAndReturnsToValidEmptySession() throws {
+  var workout = session()
+  let row = workout.exercises[0]
+  try WorkoutEngine.completeSet(
+    in: &workout, exerciseID: row.id, setID: row.sets[0].id,
+    repetitions: 5, weightKG: 80, at: epoch)
+  #expect(workout.restEndsAt != nil)
+  try WorkoutEngine.removeExercise(id: row.id, from: &workout)
+  #expect(workout.exercises.isEmpty && workout.volume == 0 && workout.completedSets == 0)
+  #expect(workout.restEndsAt == nil && workout.status == .active)
+  try Validation.workout(workout)
+  #expect(throws: TrainingError.emptyWorkout) { try WorkoutEngine.finish(&workout, at: epoch) }
+}
+
+@Test func removingCompletedDropExerciseClearsRestFromItsFinalStage() throws {
+  let stage = DropSetStage(repetitions: 8, weightKG: 20)
+  let set = WorkoutSet(repetitions: 8, weightKG: 40, dropStages: [stage])
+  let row = WorkoutExercise(exercise: ExerciseCatalog.all[0], sets: [set])
+  var workout = Workout(name: "Дропсет", startedAt: epoch, exercises: [row])
+  try WorkoutEngine.completeSet(
+    in: &workout, exerciseID: row.id, setID: set.id, repetitions: 8, weightKG: 40, at: epoch)
+  try WorkoutEngine.completeDropStage(
+    in: &workout, exerciseID: row.id, setID: set.id, stageID: stage.id,
+    repetitions: 8, weightKG: 20, at: epoch.addingTimeInterval(10))
+  #expect(workout.restEndsAt == epoch.addingTimeInterval(100))
+  try WorkoutEngine.removeExercise(id: row.id, from: &workout)
+  #expect(workout.restEndsAt == nil)
+  try Validation.workout(workout)
+}
+
+@Test func insertingInvalidExerciseDoesNotChangeRowOrder() {
+  var workout = session()
+  let original = workout
+  #expect(throws: TrainingError.invalidName) {
+    try WorkoutEngine.addExercise(
+      Exercise(name: " ", muscle: .chest), to: &workout,
+      position: .after(original.exercises[0].id))
+  }
+  #expect(workout == original)
+}
+
+@Test func removalPreservesRestSharedByAnotherCompletionAtTheSameInstant() throws {
+  var workout = session()
+  try WorkoutEngine.addExercise(ExerciseCatalog.all[1], to: &workout)
+  let rows = workout.exercises
+  for row in rows {
+    try WorkoutEngine.completeSet(
+      in: &workout, exerciseID: row.id, setID: row.sets[0].id,
+      repetitions: 5, weightKG: 20, at: epoch)
+  }
+  let deadline = workout.restEndsAt
+  try WorkoutEngine.removeExercise(id: rows[0].id, from: &workout)
+  #expect(workout.restEndsAt == deadline)
+  try WorkoutEngine.removeExercise(id: rows[1].id, from: &workout)
+  #expect(workout.restEndsAt == nil)
+}

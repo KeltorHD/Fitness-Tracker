@@ -49,6 +49,35 @@ import XCTest
 }
 
 @MainActor final class AppStoreTests: XCTestCase {
+  func testFailedExerciseInsertionAndRemovalKeepPersistedSessionIntact() throws {
+    let repository = FailingWorkoutRepository()
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    store.start(template: ExerciseCatalog.starterTemplates[0])
+    let original = try XCTUnwrap(store.active)
+    let anchor = original.exercises[0].id
+    repository.failSaves = true
+    XCTAssertFalse(
+      store.mutate {
+        try WorkoutEngine.addExercise(ExerciseCatalog.all[7], to: &$0, position: .before(anchor))
+      })
+    XCTAssertEqual(store.active, original)
+    XCTAssertEqual(try repository.workouts(), [original])
+    XCTAssertFalse(store.mutate { try WorkoutEngine.removeExercise(id: anchor, from: &$0) })
+    XCTAssertEqual(store.active, original)
+    XCTAssertEqual(try repository.workouts(), [original])
+    repository.failSaves = false
+    XCTAssertTrue(
+      store.mutate {
+        try WorkoutEngine.addExercise(ExerciseCatalog.all[7], to: &$0, position: .before(anchor))
+      })
+    XCTAssertEqual(store.active?.exercises[1].id, anchor)
+    let inserted = try XCTUnwrap(store.active?.exercises.first?.id)
+    XCTAssertTrue(store.mutate { try WorkoutEngine.removeExercise(id: inserted, from: &$0) })
+    XCTAssertEqual(store.active, original)
+    XCTAssertEqual(try repository.workouts(), [original])
+  }
+
   func testGeneralStartPresentsPickerWithoutSavingAndResumesExistingSession() throws {
     let repository = FailingWorkoutRepository()
     let store = AppStore(
