@@ -95,6 +95,32 @@ import XCTest
     XCTAssertEqual(try repository.workouts().first?.exercises.map(\.id), order)
   }
 
+  func testAddingTemplatesPreservesSessionAndCanRetryAfterSaveFailure() throws {
+    let repository = FailingWorkoutRepository()
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    store.start()
+    let original = try XCTUnwrap(store.active)
+    XCTAssertTrue(original.exercises.isEmpty)
+    repository.failSaves = true
+    XCTAssertFalse(
+      store.mutate {
+        try WorkoutEngine.addTemplates([ExerciseCatalog.starterTemplates[0]], to: &$0)
+      })
+    XCTAssertEqual(store.active, original)
+    XCTAssertEqual(try repository.workouts(), [original])
+    repository.failSaves = false
+    XCTAssertTrue(
+      store.mutate {
+        try WorkoutEngine.addTemplates([ExerciseCatalog.starterTemplates[0]], to: &$0)
+      })
+    XCTAssertEqual(store.active?.id, original.id)
+    XCTAssertEqual(store.active?.startedAt, original.startedAt)
+    XCTAssertEqual(store.active?.restSeconds, original.restSeconds)
+    XCTAssertEqual(store.active?.exercises.count, 3)
+    XCTAssertEqual(try repository.workouts().first, store.active)
+  }
+
   func testGeneralStartPresentsPickerWithoutSavingAndResumesExistingSession() throws {
     let repository = FailingWorkoutRepository()
     let store = AppStore(

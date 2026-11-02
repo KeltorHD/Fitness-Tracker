@@ -152,6 +152,17 @@ public enum WorkoutEngine {
     workout.exercises.insert(WorkoutExercise(exercise: exercise), at: index)
   }
 
+  /// Adds fresh template rows without replacing recorded work or session-wide settings.
+  public static func addTemplates(_ templates: [WorkoutTemplate], to workout: inout Workout) throws
+  {
+    guard workout.status == .active else { throw TrainingError.invalidState }
+    let additions = try WorkoutTemplate.start(combining: templates, at: workout.startedAt)
+    var candidate = workout
+    candidate.exercises.append(contentsOf: additions.exercises)
+    try Validation.workout(candidate)
+    workout = candidate
+  }
+
   /// Reorders workout rows without changing exercise, set or completion identities.
   /// A stale order that omits or introduces rows is rejected before mutation.
   public static func reorderExercises(_ rowIDs: [UUID], in workout: inout Workout) throws {

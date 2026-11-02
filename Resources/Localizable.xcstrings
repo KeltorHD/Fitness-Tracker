@@ -1021,6 +1021,23 @@
         }
       }
     },
+    "Без выбора шаблона начнётся свободная тренировка.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Без выбора шаблона начнётся свободная тренировка."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starting without a template creates a free workout."
+          }
+        }
+      }
+    },
     "Без выполненных подходов: %@. Сессии сохранятся как отменённые.": {
       "extractionState": "manual",
       "localizations": {
@@ -3129,6 +3146,23 @@
         }
       }
     },
+    "Длительность тренировки": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Длительность тренировки"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workout duration"
+          }
+        }
+      }
+    },
     "Для Apple Watch выберите Apple «Здоровье». Часы не подключаются как обычный Bluetooth-пульсометр.": {
       "extractionState": "manual",
       "localizations": {
@@ -3431,6 +3465,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Add exercise"
+          }
+        }
+      }
+    },
+    "Добавить шаблоны": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Добавить шаблоны"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add templates"
           }
         }
       }
@@ -11319,6 +11370,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Exercises"
+          }
+        }
+      }
+    },
+    "Упражнения шаблонов добавятся в конец. Записанные подходы и параметры текущей тренировки сохранятся.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Упражнения шаблонов добавятся в конец. Записанные подходы и параметры текущей тренировки сохранятся."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Template exercises will be appended. Recorded sets and current workout settings will be preserved."
           }
         }
       }

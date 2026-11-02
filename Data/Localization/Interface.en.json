@@ -718,5 +718,9 @@
   "Не удалось сохранить заметку. Попробуйте ещё раз.": "Could not save the note. Please try again.",
   "Заметка к подходу должна быть не длиннее 2000 символов.": "Set notes must be no longer than 2000 characters.",
   "Назад": "Back",
-  "Далее": "Next"
+  "Далее": "Next",
+  "Добавить шаблоны": "Add templates",
+  "Без выбора шаблона начнётся свободная тренировка.": "Starting without a template creates a free workout.",
+  "Упражнения шаблонов добавятся в конец. Записанные подходы и параметры текущей тренировки сохранятся.": "Template exercises will be appended. Recorded sets and current workout settings will be preserved.",
+  "Длительность тренировки": "Workout duration"
 }

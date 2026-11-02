@@ -14,7 +14,6 @@ struct WorkoutStartView: View {
   @Environment(\.calendar) private var calendar
   @Environment(\.timeZone) private var timeZone
   @Environment(\.scenePhase) private var phase
-  @Environment(\.dynamicTypeSize) private var typeSize
   @Environment(\.dismiss) private var dismiss
   @State private var currentDate = Date()
   @State private var selectedIDs: [UUID] = []
@@ -22,6 +21,7 @@ struct WorkoutStartView: View {
   @State private var filter = WorkoutTemplateFilter()
   @State private var suggestions = WorkoutTemplateSuggestions(
     templates: [], date: .now, calendar: .current)
+  var addingToWorkout = false
   let onSelect: (WorkoutStartSelection) -> Void
 
   private var selectedTemplates: [WorkoutTemplate] {
@@ -72,16 +72,14 @@ struct WorkoutStartView: View {
       }
       .scrollDismissesKeyboard(.interactively)
       .background(FitTheme.paper)
-      .navigationTitle(L10n.text("Шаблоны", locale: locale))
+      .navigationTitle(L10n.text(addingToWorkout ? "Добавить шаблоны" : "Шаблоны", locale: locale))
       .navigationBarTitleDisplayMode(.inline)
       .searchable(
         text: $filter.query, placement: .navigationBarDrawer(displayMode: .always),
         prompt: L10n.text("Название шаблона или упражнения", locale: locale)
       )
       .safeAreaInset(edge: .top, spacing: 0) { filterBar }
-      .safeAreaInset(edge: .bottom) {
-        if !store.templates.isEmpty { startControls }
-      }
+      .safeAreaInset(edge: .bottom) { startControls }
       .onChange(of: filter, initial: true) { refresh() }
       .onChange(of: localCalendar) { refresh() }
       .onChange(of: currentDate) { refresh() }
@@ -104,23 +102,7 @@ struct WorkoutStartView: View {
           Button(L10n.text("Закрыть", locale: locale), systemImage: "xmark") { dismiss() }
             .labelStyle(.iconOnly).accessibilityIdentifier("closeWorkoutStart")
         }
-        ToolbarItem(placement: .topBarTrailing) {
-          Button {
-            onSelect(.empty)
-          } label: {
-            if typeSize.isAccessibilitySize {
-              Image(systemName: "plus")
-            } else {
-              Label(L10n.text("Без шаблона", locale: locale), systemImage: "plus")
-            }
-          }
-          .font(.subheadline).buttonStyle(.glass).controlSize(.small)
-          .accessibilityLabel(L10n.text("Без шаблона", locale: locale))
-          .accessibilityHint(
-            L10n.text("Начать тренировку с пустым списком упражнений.", locale: locale)
-          )
-          .accessibilityIdentifier("startWorkoutWithoutTemplate")
-        }
+
       }
     }
   }
@@ -175,7 +157,10 @@ struct WorkoutStartView: View {
     VStack(spacing: 8) {
       Text(
         selectedTemplates.isEmpty
-          ? L10n.text("Выберите один или несколько шаблонов.", locale: locale)
+          ? L10n.text(
+            addingToWorkout
+              ? "Выберите один или несколько шаблонов."
+              : "Без выбора шаблона начнётся свободная тренировка.", locale: locale)
           : L10n.format("Выбрано шаблонов: %@", String(selectedTemplates.count), locale: locale)
       )
       .font(.subheadline).foregroundStyle(.secondary)
@@ -183,21 +168,37 @@ struct WorkoutStartView: View {
         Text(L10n.format("Выбрано вне фильтра: %@", String(hiddenSelectionCount), locale: locale))
           .font(.caption).foregroundStyle(.secondary)
       }
-      if selectedTemplates.count > 1 {
+      if addingToWorkout {
+        Text(
+          L10n.text(
+            "Упражнения шаблонов добавятся в конец. Записанные подходы и параметры текущей тренировки сохранятся.",
+            locale: locale)
+        )
+        .font(.caption).foregroundStyle(.secondary)
+        if let error = store.error {
+          Text(L10n.text(error, locale: locale)).font(.footnote).foregroundStyle(.red)
+        }
+      } else if selectedTemplates.count > 1 {
         Text(
           L10n.text(
             "При объединении параметры упражнения берутся из первого вхождения, отдых — из первого выбранного шаблона.",
             locale: locale)
         ).font(.caption).foregroundStyle(.secondary)
       }
-      Button(L10n.text("Начать тренировку", locale: locale), systemImage: "play.fill") {
+      Button(
+        L10n.text(addingToWorkout ? "Добавить шаблоны" : "Начать тренировку", locale: locale),
+        systemImage: addingToWorkout ? "plus" : "play.fill"
+      ) {
         let templates = selectedTemplates
-        guard !templates.isEmpty else { return }
-        onSelect(.templates(templates))
+        if templates.isEmpty {
+          if !addingToWorkout { onSelect(.empty) }
+        } else {
+          onSelect(.templates(templates))
+        }
       }
       .buttonStyle(.glassProminent).controlSize(.large)
-      .disabled(selectedTemplates.isEmpty)
-      .accessibilityIdentifier("startSelectedTemplates")
+      .disabled(addingToWorkout && selectedTemplates.isEmpty)
+      .accessibilityIdentifier(addingToWorkout ? "addSelectedTemplates" : "startSelectedTemplates")
     }
     .frame(maxWidth: .infinity).padding(16).background(FitTheme.paper)
   }

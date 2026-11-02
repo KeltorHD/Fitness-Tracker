@@ -507,3 +507,59 @@ func exerciseReorderingRejectsNonActiveSessions(_ status: WorkoutStatus) {
   }
   #expect(workout == original)
 }
+
+@Test func appendingTemplatesPreservesRecordedWorkAndSessionSettings() throws {
+  var workout = session()
+  let row = workout.exercises[0].id
+  let set = workout.exercises[0].sets[0].id
+  try WorkoutEngine.completeSet(
+    in: &workout, exerciseID: row, setID: set, repetitions: 5, weightKG: 100, at: epoch)
+  workout.notes = "Session note"
+  workout.exercises[0].sets[0].note = "Recorded note"
+  workout.restSeconds = 120
+  workout.restEndsAt = epoch.addingTimeInterval(120)
+  let original = workout
+  let template = WorkoutTemplate(
+    name: "Additional",
+    exercises: [
+      TemplateExercise(
+        exercise: workout.exercises[0].exercise, setCount: 2, repetitions: 12, weightKG: 20)
+    ], restSeconds: 30)
+  try WorkoutEngine.addTemplates([template], to: &workout)
+  #expect(workout.exercises.count == 2)
+  #expect(workout.exercises[0] == original.exercises[0])
+  #expect(workout.exercises[1].exercise == original.exercises[0].exercise)
+  #expect(workout.exercises[1].id != row)
+  #expect(
+    workout.exercises[1].sets.allSatisfy {
+      $0.id != set && $0.completedAt == nil && $0.repetitions == 12
+    })
+  #expect(workout.volume == original.volume)
+  workout.exercises.removeLast()
+  #expect(workout == original)
+}
+
+@Test func invalidTemplateAdditionDoesNotPartiallyAppend() throws {
+  var workout = session()
+  let original = workout
+  let valid = WorkoutTemplate(
+    name: "Valid", exercises: [TemplateExercise(exercise: ExerciseCatalog.all[1])])
+  let invalid = WorkoutTemplate(name: "Invalid", exercises: [])
+  #expect(throws: TrainingError.emptyWorkout) {
+    try WorkoutEngine.addTemplates([valid, invalid], to: &workout)
+  }
+  #expect(workout == original)
+  #expect(throws: TrainingError.emptyWorkout) { try WorkoutEngine.addTemplates([], to: &workout) }
+  #expect(workout == original)
+}
+
+@Test(arguments: [WorkoutStatus.paused, .completed, .cancelled])
+func templateAdditionRejectsNonActiveSessions(_ status: WorkoutStatus) {
+  var workout = session()
+  workout.status = status
+  let original = workout
+  #expect(throws: TrainingError.invalidState) {
+    try WorkoutEngine.addTemplates(ExerciseCatalog.starterTemplates, to: &workout)
+  }
+  #expect(workout == original)
+}

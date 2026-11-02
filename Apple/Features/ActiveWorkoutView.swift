@@ -10,6 +10,7 @@ struct ActiveWorkoutView: View {
   // Keep the saved preference: previously hidden cards now open in compact form.
   @AppStorage("showWorkoutHeartRate") private var heartRateExpanded = true
   @State private var insertion: InsertionRequest?
+  @State private var templateAddition: TemplateAdditionRequest?
   @State private var pendingRemoval: RemovalRequest?
   @State private var reorderRevision = 0
   @State private var selectedExercise: WorkoutExercise?
@@ -22,6 +23,10 @@ struct ActiveWorkoutView: View {
     let position: WorkoutExerciseInsertion
   }
 
+  private struct TemplateAdditionRequest: Identifiable {
+    let id: UUID
+  }
+
   private struct RemovalRequest {
     let workoutID: UUID
     let row: WorkoutExercise
@@ -32,7 +37,11 @@ struct ActiveWorkoutView: View {
       if let workout = store.active {
         overview(workout)
           .navigationTitle("").navigationBarTitleDisplayMode(.inline)
-          .safeAreaInset(edge: .bottom, spacing: 0) { SessionControls(workout: workout) }
+          .safeAreaInset(edge: .bottom, spacing: 0) {
+            SessionControls(workout: workout) {
+              insertion = InsertionRequest(workoutID: workout.id, position: .end)
+            }
+          }
           .toolbar {
             ToolbarItem(placement: .topBarLeading) {
               Button(L10n.text("Свернуть", locale: locale), systemImage: "chevron.down") {
@@ -48,8 +57,19 @@ struct ActiveWorkoutView: View {
                     .accessibilityIdentifier("activeWorkoutTitle")
                 }
                 .font(.headline)
-                Text(workout.startedAt, format: .dateTime.weekday(.wide).hour().minute())
-                  .font(.caption2).foregroundStyle(.secondary).lineLimit(1)
+                TimelineView(.periodic(from: .now, by: 1)) { timeline in
+                  let duration =
+                    workout.durationIsKnown == false
+                    ? "—"
+                    : Duration.seconds(workout.duration(at: timeline.date))
+                      .formatted(.time(pattern: .hourMinuteSecond(padHourToLength: 2)))
+                  Text(duration)
+                    .font(.subheadline.weight(.medium)).monospacedDigit()
+                    .foregroundStyle(.secondary).lineLimit(1)
+                    .accessibilityLabel(L10n.text("Длительность тренировки", locale: locale))
+                    .accessibilityValue(duration)
+                    .accessibilityIdentifier("activeWorkoutDuration")
+                }
               }
               .foregroundStyle(.primary)
               .accessibilityElement(children: .combine)
@@ -64,6 +84,12 @@ struct ActiveWorkoutView: View {
                 }
                 Button(L10n.text("Добавить упражнение", locale: locale), systemImage: "plus") {
                   insertion = InsertionRequest(workoutID: workout.id, position: .end)
+                }.disabled(workout.status != .active)
+                Button(
+                  L10n.text("Добавить шаблоны", locale: locale),
+                  systemImage: "rectangle.stack.badge.plus"
+                ) {
+                  templateAddition = TemplateAdditionRequest(id: workout.id)
                 }.disabled(workout.status != .active)
                 if !store.isDemoMode {
                   Button(
@@ -97,6 +123,16 @@ struct ActiveWorkoutView: View {
                 guard current.id == request.workoutID else { throw TrainingError.invalidState }
                 try WorkoutEngine.addExercise(exercise, to: &current, position: request.position)
               }
+            }
+          }
+          .sheet(item: $templateAddition) { request in
+            WorkoutStartView(addingToWorkout: true) { selection in
+              guard case .templates(let templates) = selection else { return }
+              let saved = store.mutate { current in
+                guard current.id == request.id else { throw TrainingError.invalidState }
+                try WorkoutEngine.addTemplates(templates, to: &current)
+              }
+              if saved { templateAddition = nil }
             }
           }
           .sheet(item: $selectedExercise) { row in
@@ -140,18 +176,21 @@ struct ActiveWorkoutView: View {
       }
     }
     .archiveTransferPresenter(
-      when: selectedExercise == nil && insertion == nil && !renaming && !confirmCancel
+      when: selectedExercise == nil && insertion == nil && templateAddition == nil && !renaming
+        && !confirmCancel
         && pendingRemoval == nil && !store.showingBodyWeightEditor
     )
     .onChange(of: store.active?.id) { _, id in
       if insertion?.workoutID != id { insertion = nil }
+      if templateAddition?.id != id { templateAddition = nil }
       if pendingRemoval?.workoutID != id { pendingRemoval = nil }
     }
     .alert(
       L10n.text("Ошибка", locale: locale),
       isPresented: Binding(
         get: {
-          store.error != nil && selectedExercise == nil && insertion == nil && !renaming
+          store.error != nil && selectedExercise == nil && insertion == nil
+            && templateAddition == nil && !renaming
             && !confirmCancel
             && pendingRemoval == nil && !store.archiveTransfer.isPresented
             && !store.showingBodyWeightEditor
@@ -166,7 +205,8 @@ struct ActiveWorkoutView: View {
   private func overview(_ workout: Workout) -> some View {
     List {
       Section {
-        WorkoutSessionSummary(workout: workout, unit: unit).padding(.vertical, 16)
+        WorkoutSessionSummary(workout: workout, unit: unit, showsDuration: false).padding(
+          .vertical, 16)
         if !store.isDemoMode {
           WorkoutLiveHeartRateChart(
             workoutID: workout.id, isExpanded: heartRateExpanded,
@@ -248,10 +288,12 @@ struct ActiveWorkoutView: View {
       .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
       .listRowBackground(FitTheme.paper)
       Section {
-        Button(L10n.text("Добавить упражнение", locale: locale), systemImage: "plus.circle") {
-          insertion = InsertionRequest(workoutID: workout.id, position: .end)
+        Button(
+          L10n.text("Добавить шаблоны", locale: locale), systemImage: "rectangle.stack.badge.plus"
+        ) {
+          templateAddition = TemplateAdditionRequest(id: workout.id)
         }
-        .disabled(workout.status != .active).accessibilityIdentifier("addExercise")
+        .disabled(workout.status != .active).accessibilityIdentifier("addWorkoutTemplates")
         .font(.headline).frame(maxWidth: .infinity, alignment: .leading).padding(.vertical, 20)
         VStack(spacing: 16) {
           WorkoutBodyWeightRow(workout: workout).fitCard()
