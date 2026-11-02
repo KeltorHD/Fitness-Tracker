@@ -117,9 +117,87 @@ private func rejects(_ action: () throws -> Void) throws {
       summary.contains("42,5") && summary.contains("11") && !summary.contains("45"),
       "History summary includes completed sets only")
     try checkDrops(at: date)
+    try checkContextTarget(at: date)
+    try checkStartedGroupAppend(at: date)
+    try checkReplacementFocus(at: date)
     print(
       "Portable workout exercise presentation: localized/strict input, pounds precision, draft retention, repeated exercise identity, paging/reordering/removal, completion, pause/history guards and summaries passed (no Apple SDK)."
     )
+  }
+
+  @MainActor private static func checkReplacementFocus(at date: Date) throws {
+    let first = WorkoutExercise(
+      exercise: Exercise(name: "Old", muscle: .back), sets: [WorkoutSet(weightKG: 40)])
+    var workout = Workout(name: "Focus", startedAt: date, exercises: [first])
+    let model = WorkoutExercisePresentation(
+      workout: workout, exerciseID: first.id, unit: .kilograms, locale: Locale(identifier: "en_US"))
+    let id = try WorkoutEngine.replaceExercise(
+      id: first.id, with: Exercise(name: "New", muscle: .legs), in: &workout)
+    model.showExercise(id, in: workout)
+    try expect(
+      model.exerciseID == id && model.exercise(in: workout)?.exercise.name == "New",
+      "Replacement focuses the actual new exercise")
+    try expect(
+      model.drafts[first.sets[0].id] == nil
+        && model.selectedSetID == workout.exercises[0].sets[0].id,
+      "Fresh replacement cannot reuse old numeric drafts or targets")
+    var foreign = workout
+    foreign.id = UUID()
+    model.showExercise(UUID(), in: foreign)
+    try expect(model.exerciseID == id, "A foreign or missing row cannot steal selection")
+  }
+
+  @MainActor private static func checkStartedGroupAppend(at date: Date) throws {
+    let set = WorkoutSet(repetitions: 10, weightKG: 50, dropStages: [DropSetStage(weightKG: 40)])
+    let row = WorkoutExercise(exercise: Exercise(name: "Append", muscle: .back), sets: [set])
+    var workout = Workout(name: "Append", startedAt: date, exercises: [row])
+    try WorkoutEngine.completeSet(
+      in: &workout, exerciseID: row.id, setID: set.id, repetitions: 10, weightKG: 50, at: date)
+    let editor = WorkoutExercisePresentation(
+      workout: workout, exerciseID: row.id, unit: .kilograms, locale: Locale(identifier: "en_US"))
+    let stage = try requireStage(set)
+    editor.editWeight("35", setID: stage.id)
+    let configured = try editor.configuredDropSet(in: workout, adding: true, setID: set.id)
+    try expect(
+      configured.dropStages?.last?.weightKG == 28 && configured.completedAt == date,
+      "Appending a started group uses pending drafts and preserves the performed base")
+    try rejects { _ = try editor.configuredDropSet(in: workout, adding: false, setID: set.id) }
+    try WorkoutEngine.configureDropSet(
+      in: &workout, exerciseID: row.id, setID: set.id, repetitions: configured.repetitions,
+      weightKG: configured.weightKG, stages: configured.dropStages ?? [])
+    try expect(
+      workout.exercises[0].sets[0].dropStages?.count == 2 && workout.volume == 500
+        && workout.restEndsAt == nil, "A new pending drop does not perform work or start rest")
+  }
+  private static func requireStage(_ set: WorkoutSet) throws -> DropSetStage {
+    guard let stage = set.dropStages?.first else { throw Failure(message: "Missing drop") }
+    return stage
+  }
+
+  @MainActor private static func checkContextTarget(at date: Date) throws {
+    let first = WorkoutSet(weightKG: 40)
+    let second = WorkoutSet(weightKG: 80, note: "Target note")
+    let row = WorkoutExercise(
+      exercise: Exercise(name: "Context target", muscle: .back), sets: [first, second])
+    var workout = Workout(name: "Context", startedAt: date, exercises: [row])
+    let editor = WorkoutExercisePresentation(
+      workout: workout, exerciseID: row.id, unit: .kilograms, locale: Locale(identifier: "en_US"))
+    editor.editWeight("60", setID: second.id)
+    let configured = try editor.configuredDropSet(in: workout, adding: true, setID: second.id)
+    try expect(
+      configured.id == second.id && configured.weightKG == 60
+        && configured.dropStages?.first?.weightKG == 48,
+      "Context action uses the pressed set and its own draft")
+    try expect(
+      configured.note == second.note && editor.selectedSetID == first.id
+        && workout.exercises[0].sets == [first, second],
+      "Preparing another set preserves note, selection and persisted values")
+    let stale = UUID()
+    try rejects { _ = try editor.configuredDropSet(in: workout, adding: true, setID: stale) }
+    workout.exercises[0].sets[1].completedAt = date
+    try rejects { _ = try editor.configuredDropSet(in: workout, adding: true, setID: second.id) }
+    workout.status = .paused
+    try rejects { _ = try editor.configuredDropSet(in: workout, adding: true, setID: first.id) }
   }
 
   @MainActor private static func checkDrops(at date: Date) throws {

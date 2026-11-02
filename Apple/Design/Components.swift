@@ -37,11 +37,13 @@ struct SessionControls: View {
   @Environment(\.accessibilityReduceMotion) private var reduceMotion
   @Namespace private var controls
   let workout: Workout
+  let addExercise: () -> Void
   var body: some View {
     GlassEffectContainer(spacing: 8) {
       HStack(spacing: 8) {
         pauseButton
         finishButton
+        addExerciseButton
       }
       .font(.subheadline.weight(.semibold))
       .controlSize(.regular)
@@ -75,6 +77,17 @@ struct SessionControls: View {
     .glassEffectID("pause", in: controls)
     .accessibilityIdentifier("pauseWorkout")
   }
+  private var addExerciseButton: some View {
+    Button(action: addExercise) {
+      Image(systemName: "plus").frame(minWidth: 44, minHeight: 44)
+    }
+    .buttonStyle(.glass).buttonBorderShape(.circle)
+    .glassEffectID("addExercise", in: controls)
+    .disabled(workout.status != .active)
+    .accessibilityLabel(L10n.text("Добавить упражнение", locale: locale))
+    .accessibilityIdentifier("addExercise")
+  }
+
   private var finishButton: some View {
     Button {
       store.finish()

@@ -49,6 +49,141 @@ import XCTest
 }
 
 @MainActor final class AppStoreTests: XCTestCase {
+  func testFailedExerciseInsertionAndRemovalKeepPersistedSessionIntact() throws {
+    let repository = FailingWorkoutRepository()
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    store.start(template: ExerciseCatalog.starterTemplates[0])
+    let original = try XCTUnwrap(store.active)
+    let anchor = original.exercises[0].id
+    repository.failSaves = true
+    XCTAssertFalse(
+      store.mutate {
+        try WorkoutEngine.addExercise(ExerciseCatalog.all[7], to: &$0, position: .before(anchor))
+      })
+    XCTAssertEqual(store.active, original)
+    XCTAssertEqual(try repository.workouts(), [original])
+    XCTAssertFalse(store.mutate { try WorkoutEngine.removeExercise(id: anchor, from: &$0) })
+    XCTAssertEqual(store.active, original)
+    XCTAssertEqual(try repository.workouts(), [original])
+    repository.failSaves = false
+    XCTAssertTrue(
+      store.mutate {
+        try WorkoutEngine.addExercise(ExerciseCatalog.all[7], to: &$0, position: .before(anchor))
+      })
+    XCTAssertEqual(store.active?.exercises[1].id, anchor)
+    let inserted = try XCTUnwrap(store.active?.exercises.first?.id)
+    XCTAssertTrue(store.mutate { try WorkoutEngine.removeExercise(id: inserted, from: &$0) })
+    XCTAssertEqual(store.active, original)
+    XCTAssertEqual(try repository.workouts(), [original])
+  }
+
+  func testExerciseOrderRollsBackWhenSaveFails() throws {
+    let repository = FailingWorkoutRepository()
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    store.start(template: ExerciseCatalog.starterTemplates[0])
+    let original = try XCTUnwrap(store.active)
+    let order = original.exercises.reversed().map(\.id)
+    repository.failSaves = true
+    XCTAssertFalse(store.mutate { try WorkoutEngine.reorderExercises(order, in: &$0) })
+    XCTAssertEqual(store.active, original)
+    XCTAssertEqual(try repository.workouts(), [original])
+    repository.failSaves = false
+    XCTAssertTrue(store.mutate { try WorkoutEngine.reorderExercises(order, in: &$0) })
+    XCTAssertEqual(store.active?.exercises.map(\.id), order)
+    XCTAssertEqual(try repository.workouts().first?.exercises.map(\.id), order)
+  }
+
+  func testAddingTemplatesPreservesSessionAndCanRetryAfterSaveFailure() throws {
+    let repository = FailingWorkoutRepository()
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    store.start()
+    let original = try XCTUnwrap(store.active)
+    XCTAssertTrue(original.exercises.isEmpty)
+    repository.failSaves = true
+    XCTAssertFalse(
+      store.mutate {
+        try WorkoutEngine.addTemplates([ExerciseCatalog.starterTemplates[0]], to: &$0)
+      })
+    XCTAssertEqual(store.active, original)
+    XCTAssertEqual(try repository.workouts(), [original])
+    repository.failSaves = false
+    XCTAssertTrue(
+      store.mutate {
+        try WorkoutEngine.addTemplates([ExerciseCatalog.starterTemplates[0]], to: &$0)
+      })
+    XCTAssertEqual(store.active?.id, original.id)
+    XCTAssertEqual(store.active?.startedAt, original.startedAt)
+    XCTAssertEqual(store.active?.restSeconds, original.restSeconds)
+    XCTAssertEqual(store.active?.exercises.count, 3)
+    XCTAssertEqual(try repository.workouts().first, store.active)
+  }
+
+  func testCompletedCorrectionAndChildDeletionRollbackOnSaveFailure() throws {
+    let repository = FailingWorkoutRepository()
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    store.start(template: ExerciseCatalog.starterTemplates[0])
+    let initial = try XCTUnwrap(store.active)
+    let row = initial.exercises[0]
+    let set = row.sets[0]
+    XCTAssertTrue(
+      store.mutate {
+        try WorkoutEngine.configureDropSet(
+          in: &$0, exerciseID: row.id, setID: set.id, repetitions: 10, weightKG: 50,
+          stages: [DropSetStage(weightKG: 40)])
+        try WorkoutEngine.completeSet(
+          in: &$0, exerciseID: row.id, setID: set.id, repetitions: 10, weightKG: 50)
+      })
+    let original = try XCTUnwrap(store.active)
+    let stage = try XCTUnwrap(original.exercises[0].sets[0].dropStages?.first)
+    repository.failSaves = true
+    XCTAssertFalse(
+      store.mutate {
+        try WorkoutEngine.correctCompletedTarget(
+          in: &$0, exerciseID: row.id, targetID: set.id, repetitions: 12, weightKG: 50)
+      })
+    XCTAssertEqual(store.active, original)
+    XCTAssertFalse(
+      store.mutate {
+        try WorkoutEngine.removeDropStage(
+          in: &$0, exerciseID: row.id, setID: set.id, stageID: stage.id)
+      })
+    XCTAssertEqual(store.active, original)
+    XCTAssertEqual(try repository.workouts().first, original)
+    repository.failSaves = false
+    XCTAssertTrue(
+      store.mutate {
+        try WorkoutEngine.correctCompletedTarget(
+          in: &$0, exerciseID: row.id, targetID: set.id, repetitions: 12, weightKG: 50)
+      })
+    XCTAssertEqual(
+      store.active?.exercises[0].sets[0].completedAt, original.exercises[0].sets[0].completedAt)
+  }
+
+  func testExerciseReplacementRollsBackOnSaveFailure() throws {
+    let repository = FailingWorkoutRepository()
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    store.start(template: ExerciseCatalog.starterTemplates[0])
+    let original = try XCTUnwrap(store.active)
+    let rowID = original.exercises[0].id
+    let exercise = ExerciseCatalog.all.first { $0.id != original.exercises[0].exercise.id }
+    let replacement = try XCTUnwrap(exercise)
+    repository.failSaves = true
+    XCTAssertFalse(
+      store.mutate { _ = try WorkoutEngine.replaceExercise(id: rowID, with: replacement, in: &$0) })
+    XCTAssertEqual(store.active, original)
+    XCTAssertEqual(try repository.workouts().first, original)
+    repository.failSaves = false
+    XCTAssertTrue(
+      store.mutate { _ = try WorkoutEngine.replaceExercise(id: rowID, with: replacement, in: &$0) })
+    XCTAssertEqual(store.active?.exercises[0].exercise, replacement)
+    XCTAssertEqual(store.active?.id, original.id)
+  }
+
   func testGeneralStartPresentsPickerWithoutSavingAndResumesExistingSession() throws {
     let repository = FailingWorkoutRepository()
     let store = AppStore(
@@ -266,6 +401,33 @@ import XCTest
     XCTAssertNotNil(store.error)
     XCTAssertFalse(store.error?.contains("private diagnostic") ?? true)
     XCTAssertNil(store.notice)
+  }
+
+  func testFailedSetChangesPreserveSavedSession() throws {
+    let repository = FailingWorkoutRepository()
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    store.start(template: ExerciseCatalog.starterTemplates[0])
+    let workout = try XCTUnwrap(store.active)
+    let row = workout.exercises[0].id
+    let set = workout.exercises[0].sets[0].id
+    repository.failSaves = true
+    XCTAssertFalse(
+      store.mutate {
+        try WorkoutEngine.setNote("private note", exerciseID: row, setID: set, in: &$0)
+      })
+    XCTAssertEqual(store.active, workout)
+    XCTAssertFalse(store.mutate { try WorkoutEngine.addSet(exerciseID: row, to: &$0, after: set) })
+    XCTAssertEqual(store.active, workout)
+    XCTAssertFalse(
+      store.mutate { try WorkoutEngine.removeSet(exerciseID: row, setID: set, from: &$0) })
+    XCTAssertEqual(store.active, workout)
+    XCTAssertEqual(try repository.workouts(), [workout])
+    repository.failSaves = false
+    XCTAssertTrue(
+      store.mutate { try WorkoutEngine.setNote("saved note", exerciseID: row, setID: set, in: &$0) }
+    )
+    XCTAssertEqual(store.active?.exercises[0].sets[0].note, "saved note")
   }
 
   func testFailedReloadKeepsTheEntirePreviousSnapshot() throws {

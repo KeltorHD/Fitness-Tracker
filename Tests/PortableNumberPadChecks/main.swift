@@ -27,10 +27,14 @@ private func expect(_ condition: Bool, _ message: String) throws {
     let pad = WorkoutNumberPadModel(editor: editor, locale: Locale(identifier: "ru_RU"))
     pad.begin(.repetitions(first.id), in: workout)
     try expect(
-      pad.text == "12" && pad.replacesOnInput, "Existing value is selected for replacement")
+      pad.text == "12" && pad.selection.length == 0
+        && pad.selection == NSRange(location: 2, length: 0),
+      "Opening leaves an insertion caret at the end")
+    pad.clear()
     pad.digit(3)
     pad.digit(0)
-    try expect(pad.text == "30" && !pad.replacesOnInput, "First digit replaces the old number")
+    try expect(
+      pad.text == "30" && pad.selection.length == 0, "C clears before entering a new value")
     pad.delete()
     try expect(pad.text == "3", "Delete removes one entered digit")
     pad.decimal()
@@ -40,6 +44,7 @@ private func expect(_ condition: Bool, _ message: String) throws {
     pad.advance(in: workout)
     try expect(pad.field == .repetitions(second.id), "Weight advances to repetitions")
     pad.begin(.weight(first.id), in: workout)
+    pad.clear()
     pad.digit(4)
     pad.digit(5)
     pad.decimal()
@@ -56,6 +61,7 @@ private func expect(_ condition: Bool, _ message: String) throws {
         && editor.drafts[completed.id] == nil,
       "Copy cannot change drop weights, another exercise or completed rows")
     pad.begin(.repetitions(first.id), in: workout)
+    pad.clear()
     pad.digit(2)
     pad.digit(0)
     pad.copyDown(in: workout)
@@ -77,8 +83,12 @@ private func expect(_ condition: Bool, _ message: String) throws {
     pad.advance(in: workout)
     try expect(pad.field == nil, "Next closes the panel after the last field")
     pad.begin(.weight(first.id), in: workout)
+    let beforeDelete = pad.text
     pad.delete()
-    try expect(pad.text.isEmpty, "Backspace clears the initially selected value")
+    try expect(
+      pad.text == String(beforeDelete.dropLast()),
+      "Backspace deletes only the character before the initial caret")
+    pad.clear()
     pad.advance(in: workout)
     try expect(
       pad.field == .weight(first.id) && pad.error != nil, "Invalid empty input cannot advance")
@@ -86,6 +96,7 @@ private func expect(_ condition: Bool, _ message: String) throws {
     pad.advance(in: workout)
     try expect(
       pad.field == .repetitions(first.id) && pad.error == nil, "Zero added weight is valid")
+    pad.clear()
     pad.digit(1)
     pad.digit(0)
     pad.digit(0)
@@ -95,6 +106,7 @@ private func expect(_ condition: Bool, _ message: String) throws {
     pad.delete()
     try expect(pad.text == "100" && pad.error == nil, "Editing clears validation feedback")
     pad.begin(.weight(first.id), in: workout)
+    pad.clear()
     pad.digit(1)
     pad.digit(5)
     pad.digit(0)
@@ -134,10 +146,66 @@ private func expect(_ condition: Bool, _ message: String) throws {
     pad.begin(.weight(second.id), in: foreign)
     try expect(pad.field == nil, "Another workout cannot reuse the editor")
     try checkLegacyAndPounds(date: date)
+    try checkCursor(date: date)
     print(
-      "Portable number pad: replacement, decimal/delete/bounds, field traversal, copy isolation, draft-only changes, immutable completions, pause/removal, legacy zero reps and pounds precision passed (no Apple SDK)."
+      "Portable number pad: native caret, range replacement, C/backspace, decimal/bounds, field traversal, copy isolation, draft-only changes, immutable completions, pause/removal, legacy zero reps and pounds precision passed (no Apple SDK)."
     )
   }
+  @MainActor private static func checkCursor(date: Date) throws {
+    let row = WorkoutExercise(
+      exercise: Exercise(name: "Caret", muscle: .legs),
+      sets: [WorkoutSet(weightKG: 123.5), WorkoutSet(weightKG: 20)])
+    let workout = Workout(name: "Caret", startedAt: date, exercises: [row])
+    let editor = WorkoutExercisePresentation(
+      workout: workout, exerciseID: row.id, unit: .kilograms, locale: Locale(identifier: "ru_RU"))
+    let pad = WorkoutNumberPadModel(editor: editor, locale: Locale(identifier: "ru_RU"))
+    pad.begin(.weight(row.sets[0].id), in: workout)
+    pad.selectText(NSRange(location: 1, length: 0))
+    pad.digit(9)
+    try expect(
+      pad.text == "1923,5" && pad.selection.location == 2, "Digits insert at the native caret")
+    pad.delete()
+    try expect(
+      pad.text == "123,5" && pad.selection.location == 1,
+      "Backspace removes only the preceding character")
+    pad.selectText(NSRange(location: 0, length: 0))
+    pad.delete()
+    try expect(pad.text == "123,5", "Backspace at the start leaves the value intact")
+    pad.selectText(NSRange(location: 1, length: 2))
+    pad.digit(8)
+    try expect(
+      pad.text == "18,5" && pad.selection.location == 2 && pad.selection.length == 0,
+      "Typing replaces an explicitly selected range")
+    pad.selectText(NSRange(location: 0, length: 0))
+    pad.begin(.weight(row.sets[0].id), in: workout)
+    try expect(pad.selection.location == 0, "Refocusing the same cell preserves its caret")
+    pad.selectText(NSRange(location: 1, length: 1))
+    pad.delete()
+    try expect(pad.text == "1,5", "Backspace removes an explicitly selected range")
+    let before = pad.text
+    pad.replaceCharacters(in: NSRange(location: 0, length: 0), with: "x")
+    try expect(
+      pad.text == before && pad.error != nil, "Invalid pasted text does not overwrite the draft")
+    pad.clear()
+    try expect(
+      pad.text.isEmpty && pad.selection.location == 0 && pad.error == nil,
+      "C clears the entire value and resets the caret")
+    pad.replaceCharacters(in: NSRange(location: 0, length: 0), with: "42.5")
+    try expect(pad.text == "42,5", "Hardware and pasted separators normalize to the current locale")
+    pad.selectText(NSRange(location: 100, length: 100))
+    try expect(
+      pad.selection == NSRange(location: 4, length: 0), "Stale native selections clamp safely")
+    let selected = editor.selectedSetID
+    pad.begin(.weight(row.sets[1].id), in: workout)
+    pad.delete()
+    try expect(
+      pad.text == "2" && editor.selectedSetID == selected,
+      "Editing another row never switches the completion target")
+    try expect(
+      workout.exercises == [row],
+      "Cursor editing never persists or performs a set")
+  }
+
   @MainActor private static func checkLegacyAndPounds(date: Date) throws {
     let zero = WorkoutSet(repetitions: 0)
     let row = WorkoutExercise(exercise: Exercise(name: "Legacy", muscle: .legs), sets: [zero])
@@ -170,6 +238,7 @@ private func expect(_ condition: Bool, _ message: String) throws {
       try poundsEditor.completion(in: poundsWorkout).set.weightKG == precise.weightKG,
       "Opening and advancing unchanged pounds preserves exact kilograms")
     poundsPad.begin(.weight(precise.id), in: poundsWorkout)
+    poundsPad.clear()
     poundsPad.digit(1)
     poundsPad.digit(0)
     poundsPad.digit(0)

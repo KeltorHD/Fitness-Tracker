@@ -1,5 +1,12 @@
 import Foundation
 
+/// Anchors are workout row IDs, so repeated occurrences of the same exercise remain distinct.
+public enum WorkoutExerciseInsertion: Equatable, Sendable {
+  case end
+  case before(UUID)
+  case after(UUID)
+}
+
 /// Value-based state machine. Callers persist a new value only after a successful mutation.
 public enum WorkoutEngine {
   public static func setBodyWeight(_ weightKG: Double?, in workout: inout Workout) throws {
@@ -119,7 +126,7 @@ public enum WorkoutEngine {
       return TemplateExercise(
         exercise: item.exercise, setCount: completed.count, repetitions: first.repetitions,
         weightKG: first.weightKG, loadMultiplier: first.loadMultiplier,
-        plannedSets: completed.contains(where: \.isDropSet)
+        plannedSets: completed.contains(where: { $0.isDropSet || $0.note != nil })
           ? completed.map { $0.freshCopy(performedOnly: true) } : nil)
     }
     let template = WorkoutTemplate(
@@ -128,20 +135,154 @@ public enum WorkoutEngine {
     return template
   }
 
-  public static func addExercise(_ exercise: Exercise, to workout: inout Workout) throws {
+  public static func addExercise(
+    _ exercise: Exercise, to workout: inout Workout, position: WorkoutExerciseInsertion = .end
+  ) throws {
     guard workout.status == .active else { throw TrainingError.invalidState }
     try Validation.name(exercise.name)
-    workout.exercises.append(WorkoutExercise(exercise: exercise))
+    let index: Int
+    switch position {
+    case .end: index = workout.exercises.endIndex
+    case .before(let id), .after(let id):
+      guard let anchor = workout.exercises.firstIndex(where: { $0.id == id }) else {
+        throw TrainingError.missingExercise
+      }
+      index = position == .before(id) ? anchor : anchor + 1
+    }
+    workout.exercises.insert(WorkoutExercise(exercise: exercise), at: index)
   }
-  public static func addSet(exerciseID: UUID, to workout: inout Workout) throws {
+
+  /// Adds fresh template rows without replacing recorded work or session-wide settings.
+  public static func addTemplates(_ templates: [WorkoutTemplate], to workout: inout Workout) throws
+  {
+    guard workout.status == .active else { throw TrainingError.invalidState }
+    let additions = try WorkoutTemplate.start(combining: templates, at: workout.startedAt)
+    var candidate = workout
+    candidate.exercises.append(contentsOf: additions.exercises)
+    try Validation.workout(candidate)
+    workout = candidate
+  }
+
+  /// Replaces an unused row in place. Recorded work remains attributed to its original exercise;
+  /// in that case a fresh replacement row is inserted immediately after it.
+  @discardableResult
+  public static func replaceExercise(id: UUID, with exercise: Exercise, in workout: inout Workout)
+    throws -> UUID
+  {
+    guard workout.status == .active else { throw TrainingError.invalidState }
+    try Validation.name(exercise.name)
+    guard let index = workout.exercises.firstIndex(where: { $0.id == id }) else {
+      throw TrainingError.missingExercise
+    }
+    let original = workout.exercises[index]
+    if original.exercise.id == exercise.id { return original.id }
+    var candidate = workout
+    let hasRecordedWork = original.sets.contains { !$0.performedStages.isEmpty }
+    let replacement = WorkoutExercise(
+      id: hasRecordedWork ? UUID() : original.id, exercise: exercise)
+    if hasRecordedWork {
+      candidate.exercises.insert(replacement, at: index + 1)
+    } else {
+      candidate.exercises[index] = replacement
+    }
+    try Validation.workout(candidate)
+    workout = candidate
+    return replacement.id
+  }
+
+  /// Reorders workout rows without changing exercise, set or completion identities.
+  /// A stale order that omits or introduces rows is rejected before mutation.
+  public static func reorderExercises(_ rowIDs: [UUID], in workout: inout Workout) throws {
+    guard workout.status == .active else { throw TrainingError.invalidState }
+    guard Set(rowIDs).count == rowIDs.count else { throw TrainingError.duplicateID }
+    guard rowIDs.count == workout.exercises.count,
+      Set(rowIDs) == Set(workout.exercises.map(\.id))
+    else { throw TrainingError.missingExercise }
+    let rows = Dictionary(
+      workout.exercises.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+    workout.exercises = rowIDs.compactMap { rows[$0] }
+  }
+
+  public static func removeExercise(id: UUID, from workout: inout Workout) throws {
+    guard workout.status == .active else { throw TrainingError.invalidState }
+    guard let index = workout.exercises.firstIndex(where: { $0.id == id }) else {
+      throw TrainingError.missingExercise
+    }
+    let removedDeadline = restDeadline(for: workout.exercises[index], seconds: workout.restSeconds)
+    workout.exercises.remove(at: index)
+    if let removedDeadline, workout.restEndsAt == removedDeadline,
+      !workout.exercises.contains(where: {
+        restDeadline(for: $0, seconds: workout.restSeconds) == removedDeadline
+      })
+    {
+      workout.restEndsAt = nil
+    }
+  }
+
+  private static func restDeadline(for row: WorkoutExercise, seconds: Int) -> Date? {
+    row.sets.filter(\.isFullyCompleted).compactMap { $0.stages.last?.completedAt }.max()
+      .map { $0.addingTimeInterval(Double(seconds)) }
+  }
+
+  public static func addSet(
+    exerciseID: UUID, to workout: inout Workout, after setID: UUID? = nil
+  ) throws {
     guard workout.status == .active else { throw TrainingError.invalidState }
     guard let i = workout.exercises.firstIndex(where: { $0.id == exerciseID }) else {
       throw TrainingError.missingExercise
     }
     guard workout.exercises[i].sets.count < 30 else { throw TrainingError.invalidSetCount }
-    let last = workout.exercises[i].sets.last ?? WorkoutSet()
-    var copy = last.freshCopy()
+    let index: Int
+    if let setID {
+      guard let anchor = workout.exercises[i].sets.firstIndex(where: { $0.id == setID }) else {
+        throw TrainingError.missingSet
+      }
+      index = anchor + 1
+    } else {
+      index = workout.exercises[i].sets.endIndex
+    }
+    let source = index > 0 ? workout.exercises[i].sets[index - 1] : WorkoutSet()
+    var copy = source.freshCopy()
     copy.isWarmup = false
-    workout.exercises[i].sets.append(copy)
+    copy.note = nil
+    workout.exercises[i].sets.insert(copy, at: index)
+  }
+
+  public static func removeSet(exerciseID: UUID, setID: UUID, from workout: inout Workout) throws {
+    guard workout.status == .active else { throw TrainingError.invalidState }
+    guard let row = workout.exercises.firstIndex(where: { $0.id == exerciseID }) else {
+      throw TrainingError.missingExercise
+    }
+    guard let index = workout.exercises[row].sets.firstIndex(where: { $0.id == setID }) else {
+      throw TrainingError.missingSet
+    }
+    guard workout.exercises[row].sets.count > 1 else { throw TrainingError.invalidSetCount }
+    let set = workout.exercises[row].sets[index]
+    let deadline =
+      set.isFullyCompleted
+      ? set.stages.last?.completedAt?.addingTimeInterval(Double(workout.restSeconds)) : nil
+    workout.exercises[row].sets.remove(at: index)
+    if let deadline, workout.restEndsAt == deadline,
+      !workout.exercises.contains(where: {
+        restDeadline(for: $0, seconds: workout.restSeconds) == deadline
+      })
+    {
+      workout.restEndsAt = nil
+    }
+  }
+
+  public static func setNote(
+    _ note: String, exerciseID: UUID, setID: UUID, in workout: inout Workout
+  ) throws {
+    guard [.active, .paused].contains(workout.status) else { throw TrainingError.invalidState }
+    guard let row = workout.exercises.firstIndex(where: { $0.id == exerciseID }) else {
+      throw TrainingError.missingExercise
+    }
+    guard let set = workout.exercises[row].sets.firstIndex(where: { $0.id == setID }) else {
+      throw TrainingError.missingSet
+    }
+    let trimmed = note.trimmingCharacters(in: .whitespacesAndNewlines)
+    guard trimmed.count <= 2000 else { throw TrainingError.invalidSetNote }
+    workout.exercises[row].sets[set].note = trimmed.isEmpty ? nil : trimmed
   }
 }

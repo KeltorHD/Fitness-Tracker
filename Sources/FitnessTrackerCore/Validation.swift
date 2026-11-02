@@ -5,7 +5,7 @@ public enum TrainingError: Error, Equatable, LocalizedError, Sendable {
   case invalidDate, invalidState, emptyWorkout, missingExercise, missingSet, duplicateID
   case invalidBodyWeight, invalidMeasurementDate
   case invalidLoadMultiplier
-  case invalidDropSet, invalidDropStageOrder
+  case invalidDropSet, invalidDropStageOrder, invalidSetNote
   public var errorDescription: String? {
     switch self {
     case .invalidName: "Введите название (1–80 символов)."
@@ -22,6 +22,7 @@ public enum TrainingError: Error, Equatable, LocalizedError, Sendable {
     case .invalidBodyWeight: "Вес тела должен быть больше 0 и не превышать 1000 кг."
     case .invalidMeasurementDate: "Некорректная дата взвешивания."
     case .invalidLoadMultiplier: "Множитель веса должен быть от 1 до 10."
+    case .invalidSetNote: "Заметка к подходу должна быть не длиннее 2000 символов."
     case .invalidDropSet:
       "Дропсет должен содержать от 1 до 5 снижений веса. Каждый следующий вес должен быть меньше предыдущего. Разминка оформляется отдельно."
     case .invalidDropStageOrder: "Сначала выполните предыдущий этап дропсета."
@@ -47,6 +48,7 @@ public enum Validation {
     }
   }
   public static func set(_ value: WorkoutSet, allowUnperformed: Bool = false) throws {
+    guard (value.note?.count ?? 0) <= 2000 else { throw TrainingError.invalidSetNote }
     guard
       (1...1000).contains(value.repetitions)
         || (allowUnperformed && value.repetitions == 0 && value.completedAt == nil)

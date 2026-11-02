@@ -11,6 +11,7 @@ struct ExerciseAnimation: View {
   @Environment(\.accessibilityReduceMotion) private var reduceMotion
   @Environment(\.locale) private var locale
   let media: ExerciseGeneratedMedia
+  var fillsAvailableSpace = false
   @State private var frames: [UIImage] = []
   @State private var failed = false
   @State private var playing = true
@@ -39,7 +40,8 @@ struct ExerciseAnimation: View {
             .scaledToFit()
         }
       }
-      .frame(height: 270)
+      .frame(height: fillsAvailableSpace ? nil : 270)
+      .frame(maxHeight: fillsAvailableSpace ? .infinity : nil)
       .frame(maxWidth: .infinity)
       .background(Color(.secondarySystemGroupedBackground), in: .rect(cornerRadius: 20))
       .accessibilityLabel(L10n.text("Иллюстрация движения, созданная ИИ.", locale: locale))
@@ -123,6 +125,73 @@ struct ExercisePhoto: View {
       let model = ExercisePhotoViewModel(loader: loader)
       self.model = model
       await model.load(path: path)
+    }
+  }
+}
+
+/// Visual-only presentation; workout data and technique text stay on their own screens.
+struct ExerciseMediaViewer: View {
+  @Environment(\.dismiss) private var dismiss
+  @Environment(\.locale) private var locale
+  let exercise: Exercise
+  @State private var photo = 0
+  private var entry: ExerciseLibraryEntry? { ExerciseLibrary.entry(for: exercise.id) }
+
+  var body: some View {
+    NavigationStack {
+      Group {
+        if let generated = entry?.generatedMedia {
+          ExerciseAnimation(media: generated, fillsAvailableSpace: true).padding(12)
+        } else if let images = entry?.images, !images.isEmpty {
+          VStack(spacing: 12) {
+            TabView(selection: $photo) {
+              ForEach(Array(images.enumerated()), id: \.offset) { index, path in
+                ExercisePhoto(path: path).padding(12).tag(index)
+                  .accessibilityLabel(
+                    L10n.format(
+                      "Фото %@ из %@: %@", String(index + 1), String(images.count),
+                      L10n.exerciseName(exercise, locale: locale), locale: locale))
+              }
+            }.tabViewStyle(.page(indexDisplayMode: .never))
+            HStack {
+              Button {
+                photo = max(0, photo - 1)
+              } label: {
+                Image(systemName: "chevron.left").frame(width: 44, height: 44)
+              }.disabled(photo == 0)
+                .accessibilityLabel(L10n.text("Предыдущее фото", locale: locale))
+              Spacer()
+              Text(
+                L10n.format(
+                  "Положение %@ из %@", String(photo + 1), String(images.count), locale: locale)
+              )
+              .font(.caption).monospacedDigit()
+              Spacer()
+              Button {
+                photo = min(images.count - 1, photo + 1)
+              } label: {
+                Image(systemName: "chevron.right").frame(width: 44, height: 44)
+              }.disabled(photo == images.count - 1)
+                .accessibilityLabel(L10n.text("Следующее фото", locale: locale))
+            }.buttonStyle(.glass).padding(16)
+          }
+        } else {
+          ContentUnavailableView(
+            L10n.text("Фото недоступно", locale: locale), systemImage: "photo.badge.exclamationmark"
+          )
+        }
+      }
+      .frame(maxWidth: .infinity, maxHeight: .infinity)
+      .background(FitTheme.paper)
+      .navigationTitle(L10n.exerciseName(exercise, locale: locale))
+      .navigationBarTitleDisplayMode(.inline)
+      .toolbar {
+        ToolbarItem(placement: .cancellationAction) {
+          Button(L10n.text("Закрыть", locale: locale), systemImage: "xmark") { dismiss() }
+            .labelStyle(.iconOnly).accessibilityIdentifier("closeExerciseMedia")
+        }
+      }
+      .accessibilityIdentifier("exerciseMediaViewer")
     }
   }
 }
