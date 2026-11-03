@@ -91,9 +91,12 @@ struct WorkoutDetailView: View {
           Button(L10n.text("Удалить", locale: locale), systemImage: "trash", role: .destructive) {
             confirmDelete = true
           }
+          Section { SettingsLink() }
         } label: {
           Image(systemName: "ellipsis.circle.fill").foregroundStyle(.primary)
         }
+        .accessibilityLabel(L10n.text("Действия тренировки", locale: locale))
+        .accessibilityIdentifier("workoutDetailActions")
       }
     }
     .safeAreaInset(edge: .bottom) {

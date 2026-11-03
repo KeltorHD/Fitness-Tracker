@@ -115,10 +115,12 @@ struct ActiveWorkoutView: View {
                   L10n.text("Отменить тренировку", locale: locale), systemImage: "trash",
                   role: .destructive
                 ) { confirmCancel = true }
+                Section { SettingsLink() }
               } label: {
                 Image(systemName: "ellipsis").foregroundStyle(.primary)
               }
               .accessibilityLabel(L10n.text("Действия тренировки", locale: locale))
+              .accessibilityIdentifier("activeWorkoutActions")
             }
           }
           .alert(L10n.text("Название тренировки", locale: locale), isPresented: $renaming) {

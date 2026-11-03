@@ -36,10 +36,18 @@ struct RootView: View {
           .environment(\.symbolVariants, SymbolVariants.none)
       }
       Tab(value: 3) {
-        SettingsView(model: store.settings).tint(colorTheme.accent)
-          .toolbar(.hidden, for: .tabBar)
+        NavigationStack {
+          ContentUnavailableView(
+            L10n.text("Справка", locale: locale), systemImage: "questionmark",
+            description: Text(L10n.text("Раздел пока в разработке.", locale: locale))
+          )
+          .navigationTitle(L10n.text("Справка", locale: locale))
+          .toolbar { SettingsToolbar() }
+        }
+        .tint(colorTheme.accent)
+        .toolbar(.hidden, for: .tabBar)
       } label: {
-        Label(L10n.text("Настройки", locale: locale), systemImage: "gearshape")
+        Label(L10n.text("Справка", locale: locale), systemImage: "questionmark")
           .environment(\.symbolVariants, SymbolVariants.none)
       }
     }

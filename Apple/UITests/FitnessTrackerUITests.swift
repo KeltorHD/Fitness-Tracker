@@ -1,6 +1,86 @@
 import XCTest
 
 final class FitnessTrackerUITests: XCTestCase {
+  @MainActor func testSettingsFromWorkoutMenusKeepTheSessionAndExerciseDraft() {
+    let app = launch()
+    XCTAssertTrue(app.buttons["workoutStartAction"].waitForExistence(timeout: 10))
+    app.buttons["workoutStartAction"].tap()
+    chooseFreeWorkout(in: app)
+    let title = app.staticTexts["activeWorkoutTitle"].label
+    app.buttons["activeWorkoutActions"].tap()
+    openSettingsAndReturn(in: app)
+    XCTAssertTrue(app.buttons["activeWorkoutActions"].waitForExistence(timeout: 5))
+    XCTAssertEqual(app.staticTexts["activeWorkoutTitle"].label, title)
+    app.buttons["addExercise"].tap()
+    addCustomExercise("Проверка настроек", in: app)
+    app.buttons["openWorkoutExercise"].firstMatch.tap()
+    let weight = app.textFields.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "setWeight_")
+    ).firstMatch
+    XCTAssertTrue(weight.waitForExistence(timeout: 5))
+    weight.tap()
+    app.buttons["numberPadClear"].tap()
+    app.buttons["numberPadDigit_1"].tap()
+    app.buttons["numberPadDigit_2"].tap()
+    app.buttons["numberPadHide"].tap()
+    app.buttons["activeExerciseActions"].tap()
+    openSettingsAndReturn(in: app)
+    XCTAssertTrue(app.buttons["activeExerciseActions"].waitForExistence(timeout: 5))
+    XCTAssertEqual(weight.value as? String, "12")
+    XCTAssertTrue(app.buttons["completeSet"].exists)
+  }
+
+  @MainActor func testSettingsFromTemplateMenuReturnToTheTemplate() {
+    let app = launch()
+    XCTAssertTrue(app.buttons["navigationTab_1"].waitForExistence(timeout: 10))
+    app.buttons["navigationTab_1"].tap()
+    let bar = app.navigationBars["Шаблоны"]
+    XCTAssertTrue(bar.buttons["Упражнения"].exists)
+    XCTAssertTrue(bar.buttons["Создать тренировку"].exists)
+    XCTAssertTrue(bar.buttons["openSettings"].exists)
+    let template = app.buttons["templateRow_20000000-0000-0000-0000-000000000001"]
+    XCTAssertTrue(template.waitForExistence(timeout: 5))
+    template.tap()
+    app.buttons["templateActions"].tap()
+    openSettingsAndReturn(in: app)
+    XCTAssertTrue(app.buttons["templateActions"].waitForExistence(timeout: 5))
+    app.buttons["templateActions"].tap()
+    XCTAssertTrue(app.buttons["editTemplate"].waitForExistence(timeout: 5))
+  }
+
+  @MainActor private func openSettingsAndReturn(in app: XCUIApplication) {
+    let settings = app.buttons["openSettings"]
+    XCTAssertTrue(settings.waitForExistence(timeout: 5))
+    settings.tap()
+    XCTAssertTrue(app.buttons["appLanguagePicker"].waitForExistence(timeout: 5))
+    app.navigationBars["Настройки"].buttons.element(boundBy: 0).tap()
+    XCTAssertTrue(app.buttons["appLanguagePicker"].waitForNonExistence(timeout: 5))
+  }
+
+  @MainActor func testSettingsOpenFromEveryMainTabAndReturnToTheSameTab() {
+    let app = launch()
+    for index in 0...3 {
+      let tab = app.buttons["navigationTab_\(index)"]
+      XCTAssertTrue(tab.waitForExistence(timeout: 10))
+      tab.tap()
+      if index == 3 {
+        XCTAssertEqual(tab.label, "Справка")
+        XCTAssertTrue(app.staticTexts["Раздел пока в разработке."].exists)
+        XCTAssertFalse(app.buttons["appLanguagePicker"].exists)
+      }
+      let settings = app.buttons["openSettings"]
+      XCTAssertTrue(settings.waitForExistence(timeout: 5))
+      XCTAssertEqual(settings.label, "Настройки")
+      settings.tap()
+      XCTAssertTrue(app.buttons["appLanguagePicker"].waitForExistence(timeout: 5))
+      XCTAssertTrue(tab.isSelected)
+      app.navigationBars["Настройки"].buttons.element(boundBy: 0).tap()
+      XCTAssertTrue(settings.waitForExistence(timeout: 5))
+      XCTAssertTrue(tab.isSelected)
+      XCTAssertFalse(app.buttons["appLanguagePicker"].exists)
+    }
+  }
+
   @MainActor func testWorkoutStartCanBeCancelledFromEveryTab() {
     let app = launch()
     let start = app.buttons["workoutStartAction"]
@@ -15,7 +95,7 @@ final class FitnessTrackerUITests: XCTestCase {
       reveal(first, in: app)
       first.tap()
       XCTAssertTrue(app.buttons["startSelectedTemplates"].isEnabled)
-      app.buttons["closeWorkoutStart"].tap()
+      dismissWorkoutStart(in: app)
       XCTAssertTrue(start.waitForExistence(timeout: 5))
       XCTAssertEqual(start.label, "Начать тренировку")
       XCTAssertFalse(app.buttons["addExercise"].exists)
@@ -237,7 +317,7 @@ final class FitnessTrackerUITests: XCTestCase {
     reset.tap()
     XCTAssertTrue(first.waitForExistence(timeout: 5))
     XCTAssertTrue(first.isSelected)
-    app.buttons["closeWorkoutStart"].tap()
+    dismissWorkoutStart(in: app)
     XCTAssertFalse(app.buttons["addExercise"].exists)
     app.buttons["navigationTab_2"].tap()
     app.buttons["startWorkoutFromResults"].tap()
@@ -250,18 +330,18 @@ final class FitnessTrackerUITests: XCTestCase {
     let diary = app.buttons["navigationTab_0"]
     let templates = app.buttons["navigationTab_1"]
     let results = app.buttons["navigationTab_2"]
-    let settings = app.buttons["navigationTab_3"]
+    let help = app.buttons["navigationTab_3"]
     let start = app.buttons["workoutStartAction"]
     XCTAssertTrue(diary.waitForExistence(timeout: 10))
     diary.press(forDuration: 0.1, thenDragTo: results)
     XCTAssertTrue(results.isSelected)
     XCTAssertFalse(app.buttons["startSelectedTemplates"].exists)
-    results.press(forDuration: 0.1, thenDragTo: settings)
-    XCTAssertTrue(settings.isSelected)
-    settings.press(forDuration: 0.1, thenDragTo: start)
-    XCTAssertTrue(settings.isSelected)
+    results.press(forDuration: 0.1, thenDragTo: help)
+    XCTAssertTrue(help.isSelected)
+    help.press(forDuration: 0.1, thenDragTo: start)
+    XCTAssertTrue(help.isSelected)
     XCTAssertFalse(app.buttons["startSelectedTemplates"].exists)
-    settings.press(forDuration: 0.1, thenDragTo: diary)
+    help.press(forDuration: 0.1, thenDragTo: diary)
     XCTAssertTrue(diary.isSelected)
     templates.tap()
     XCTAssertTrue(templates.isSelected)
@@ -273,7 +353,7 @@ final class FitnessTrackerUITests: XCTestCase {
     }
     start.tap()
     XCTAssertTrue(app.buttons["startSelectedTemplates"].waitForExistence(timeout: 5))
-    app.buttons["closeWorkoutStart"].tap()
+    dismissWorkoutStart(in: app)
     XCTAssertTrue(templates.isSelected)
   }
 
@@ -783,6 +863,18 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(app.buttons["addExercise"].waitForExistence(timeout: 5))
   }
 
+  @MainActor private func dismissWorkoutStart(in app: XCUIApplication) {
+    XCTAssertFalse(app.buttons["closeWorkoutStart"].exists)
+    let titleBar = app.navigationBars["Шаблоны"]
+    XCTAssertTrue(titleBar.waitForExistence(timeout: 5))
+    titleBar.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+      .press(
+        forDuration: 0.05,
+        thenDragTo: app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.95)))
+    XCTAssertTrue(app.buttons["workoutStartAction"].waitForExistence(timeout: 5))
+    XCTAssertFalse(app.buttons["startSelectedTemplates"].exists)
+  }
+
   @MainActor private func reveal(_ element: XCUIElement, in app: XCUIApplication) {
     for _ in 0..<10 where !element.isHittable { app.swipeUp() }
     XCTAssertTrue(element.waitForExistence(timeout: 5))
@@ -790,7 +882,7 @@ final class FitnessTrackerUITests: XCTestCase {
   }
 
   @MainActor private func openDemoProfile(in app: XCUIApplication) {
-    let settings = app.buttons["navigationTab_3"]
+    let settings = app.buttons["openSettings"]
     XCTAssertTrue(settings.waitForExistence(timeout: 10))
     settings.tap()
     let load = app.buttons["loadDemoData"]
@@ -806,7 +898,7 @@ final class FitnessTrackerUITests: XCTestCase {
 
   @MainActor func testDemoProfileCanBeOpenedAndClosedWithoutChangingPersonalHistory() {
     let app = launch()
-    let settings = app.buttons["navigationTab_3"]
+    let settings = app.buttons["openSettings"]
     XCTAssertTrue(settings.waitForExistence(timeout: 10))
     settings.tap()
     let load = app.buttons["loadDemoData"]
@@ -830,7 +922,7 @@ final class FitnessTrackerUITests: XCTestCase {
   }
   @MainActor func testTrackerOffersBothModesWithoutRequestingPermissionsOnOpen() {
     let app = launch()
-    let settings = app.buttons["navigationTab_3"]
+    let settings = app.buttons["openSettings"]
     XCTAssertTrue(settings.waitForExistence(timeout: 10))
     settings.tap()
     let tracker = app.buttons["openTracker"]
@@ -852,7 +944,7 @@ final class FitnessTrackerUITests: XCTestCase {
   }
   @MainActor func testAirPodsSetupRequiresAnExplicitActiveWorkout() {
     let app = launch()
-    app.buttons["navigationTab_3"].tap()
+    app.buttons["openSettings"].tap()
     let tracker = app.buttons["openTracker"]
     reveal(tracker, in: app)
     tracker.tap()
@@ -919,7 +1011,7 @@ final class FitnessTrackerUITests: XCTestCase {
     app.buttons["startSelectedTemplates"].tap()
     XCTAssertTrue(app.buttons["addExercise"].waitForExistence(timeout: 5))
     app.buttons["Свернуть"].tap()
-    app.buttons["navigationTab_3"].tap()
+    app.buttons["openSettings"].tap()
     let themes = app.buttons["openColorThemePicker"]
     reveal(themes, in: app)
     themes.tap()
@@ -937,8 +1029,8 @@ final class FitnessTrackerUITests: XCTestCase {
     app.buttons["Свернуть"].tap()
     app.terminate()
     app.launch()
-    XCTAssertTrue(app.buttons["navigationTab_3"].waitForExistence(timeout: 10))
-    app.buttons["navigationTab_3"].tap()
+    XCTAssertTrue(app.buttons["openSettings"].waitForExistence(timeout: 10))
+    app.buttons["openSettings"].tap()
     let restoredThemes = app.buttons["openColorThemePicker"]
     reveal(restoredThemes, in: app)
     restoredThemes.tap()
@@ -948,7 +1040,7 @@ final class FitnessTrackerUITests: XCTestCase {
 
   @MainActor func testLanguageCanBeChangedWithoutRelaunchingTheApp() {
     let app = launch()
-    let settings = app.buttons["navigationTab_3"]
+    let settings = app.buttons["openSettings"]
     XCTAssertTrue(settings.waitForExistence(timeout: 10))
     settings.tap()
     let language = app.buttons["appLanguagePicker"]
@@ -956,17 +1048,17 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(language.waitForExistence(timeout: 5))
     language.tap()
     app.buttons["English"].tap()
-    XCTAssertTrue(app.buttons["Settings"].waitForExistence(timeout: 5))
+    XCTAssertTrue(app.navigationBars["Settings"].waitForExistence(timeout: 5))
     XCTAssertTrue(app.buttons["Journal"].exists)
     let selectedLanguage = app.buttons["appLanguagePicker"]
     selectedLanguage.tap()
     app.buttons["Русский"].tap()
-    XCTAssertTrue(app.buttons["Настройки"].waitForExistence(timeout: 5))
+    XCTAssertTrue(app.navigationBars["Настройки"].waitForExistence(timeout: 5))
   }
 
   @MainActor func testArchiveToolsAreAvailableFromSettings() {
     let app = launch()
-    let settings = app.buttons["navigationTab_3"]
+    let settings = app.buttons["openSettings"]
     XCTAssertTrue(settings.waitForExistence(timeout: 10))
     settings.tap()
     let tools = app.buttons["openArchiveTransfer"]

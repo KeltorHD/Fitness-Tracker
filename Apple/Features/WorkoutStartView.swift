@@ -14,7 +14,6 @@ struct WorkoutStartView: View {
   @Environment(\.calendar) private var calendar
   @Environment(\.timeZone) private var timeZone
   @Environment(\.scenePhase) private var phase
-  @Environment(\.dismiss) private var dismiss
   @State private var currentDate = Date()
   @State private var selectedIDs: [UUID] = []
   @State private var expandedIDs: Set<UUID> = []
@@ -96,13 +95,6 @@ struct WorkoutStartView: View {
         selectedIDs.removeAll { !availableIDs.contains($0) }
         expandedIDs.formIntersection(availableIDs)
         refresh()
-      }
-      .toolbar {
-        ToolbarItem(placement: .cancellationAction) {
-          Button(L10n.text("Закрыть", locale: locale), systemImage: "xmark") { dismiss() }
-            .labelStyle(.iconOnly).accessibilityIdentifier("closeWorkoutStart")
-        }
-
       }
     }
   }

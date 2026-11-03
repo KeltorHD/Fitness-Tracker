@@ -102,6 +102,7 @@ struct HistoryView: View {
           }
           .foregroundStyle(.primary).accessibilityIdentifier("startWorkout")
         }
+        SettingsToolbar()
       }
       .sheet(
         item: $selected,
