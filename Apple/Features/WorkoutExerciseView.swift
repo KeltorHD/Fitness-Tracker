@@ -258,6 +258,7 @@ struct WorkoutExerciseView: View {
           Label(L10n.text("Техника выполнения", locale: locale), systemImage: "info.circle")
         }
       }
+      Section { SettingsLink() }
     } label: {
       Image(systemName: "ellipsis").frame(width: 44, height: 44).contentShape(.rect)
     }.accessibilityLabel(L10n.text("Действия упражнения", locale: locale))

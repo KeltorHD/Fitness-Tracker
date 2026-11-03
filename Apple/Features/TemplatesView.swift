@@ -60,19 +60,7 @@ struct TemplatesView: View {
             Text(L10n.text("Упражнения", locale: locale)).foregroundStyle(.primary)
           }
         }
-        ToolbarItemGroup(placement: .topBarTrailing) {
-          Menu {
-            Button(L10n.text("Создать тренировку", locale: locale), systemImage: "plus") {
-              creating = true
-            }
-            NavigationLink {
-              ExerciseLibraryView()
-            } label: {
-              Label(L10n.text("Упражнения", locale: locale), systemImage: "dumbbell")
-            }
-          } label: {
-            Image(systemName: "ellipsis").foregroundStyle(.primary)
-          }
+        ToolbarItem(placement: .topBarTrailing) {
           Button(L10n.text("Создать тренировку", locale: locale), systemImage: "plus") {
             creating = true
           }.foregroundStyle(
@@ -153,6 +141,7 @@ struct TemplateOverviewView: View {
             Button(L10n.text("Удалить", locale: locale), systemImage: "trash", role: .destructive) {
               confirmDelete = true
             }
+            Section { SettingsLink() }
           } label: {
             Image(systemName: "ellipsis")
           }

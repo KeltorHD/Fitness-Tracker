@@ -1,6 +1,62 @@
 import XCTest
 
 final class FitnessTrackerUITests: XCTestCase {
+  @MainActor func testSettingsFromWorkoutMenusKeepTheSessionAndExerciseDraft() {
+    let app = launch()
+    XCTAssertTrue(app.buttons["workoutStartAction"].waitForExistence(timeout: 10))
+    app.buttons["workoutStartAction"].tap()
+    chooseFreeWorkout(in: app)
+    let title = app.staticTexts["activeWorkoutTitle"].label
+    app.buttons["activeWorkoutActions"].tap()
+    openSettingsAndReturn(in: app)
+    XCTAssertTrue(app.buttons["activeWorkoutActions"].waitForExistence(timeout: 5))
+    XCTAssertEqual(app.staticTexts["activeWorkoutTitle"].label, title)
+    app.buttons["addExercise"].tap()
+    addCustomExercise("Проверка настроек", in: app)
+    app.buttons["openWorkoutExercise"].firstMatch.tap()
+    let weight = app.textFields.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "setWeight_")
+    ).firstMatch
+    XCTAssertTrue(weight.waitForExistence(timeout: 5))
+    weight.tap()
+    app.buttons["numberPadClear"].tap()
+    app.buttons["numberPadDigit_1"].tap()
+    app.buttons["numberPadDigit_2"].tap()
+    app.buttons["numberPadHide"].tap()
+    app.buttons["activeExerciseActions"].tap()
+    openSettingsAndReturn(in: app)
+    XCTAssertTrue(app.buttons["activeExerciseActions"].waitForExistence(timeout: 5))
+    XCTAssertEqual(weight.value as? String, "12")
+    XCTAssertTrue(app.buttons["completeSet"].exists)
+  }
+
+  @MainActor func testSettingsFromTemplateMenuReturnToTheTemplate() {
+    let app = launch()
+    XCTAssertTrue(app.buttons["navigationTab_1"].waitForExistence(timeout: 10))
+    app.buttons["navigationTab_1"].tap()
+    let bar = app.navigationBars["Шаблоны"]
+    XCTAssertTrue(bar.buttons["Упражнения"].exists)
+    XCTAssertTrue(bar.buttons["Создать тренировку"].exists)
+    XCTAssertTrue(bar.buttons["openSettings"].exists)
+    let template = app.buttons["templateRow_20000000-0000-0000-0000-000000000001"]
+    XCTAssertTrue(template.waitForExistence(timeout: 5))
+    template.tap()
+    app.buttons["templateActions"].tap()
+    openSettingsAndReturn(in: app)
+    XCTAssertTrue(app.buttons["templateActions"].waitForExistence(timeout: 5))
+    app.buttons["templateActions"].tap()
+    XCTAssertTrue(app.buttons["editTemplate"].waitForExistence(timeout: 5))
+  }
+
+  @MainActor private func openSettingsAndReturn(in app: XCUIApplication) {
+    let settings = app.buttons["openSettings"]
+    XCTAssertTrue(settings.waitForExistence(timeout: 5))
+    settings.tap()
+    XCTAssertTrue(app.buttons["appLanguagePicker"].waitForExistence(timeout: 5))
+    app.navigationBars["Настройки"].buttons.element(boundBy: 0).tap()
+    XCTAssertTrue(app.buttons["appLanguagePicker"].waitForNonExistence(timeout: 5))
+  }
+
   @MainActor func testSettingsOpenFromEveryMainTabAndReturnToTheSameTab() {
     let app = launch()
     for index in 0...3 {

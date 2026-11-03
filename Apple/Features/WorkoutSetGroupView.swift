@@ -35,6 +35,7 @@ struct WorkoutSetGroupView: View {
           }
           Menu {
             contextActions(for: set, isChild: false)
+            Section { SettingsLink() }
           } label: {
             Image(systemName: "ellipsis").frame(width: 44, height: 44)
           }.accessibilityLabel(L10n.text("Действия группы дропсета", locale: locale))

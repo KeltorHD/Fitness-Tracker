@@ -272,19 +272,26 @@ private struct ColorThemePicker: View {
 }
 
 struct SettingsToolbar: ToolbarContent {
+  var body: some ToolbarContent {
+    ToolbarItem(placement: .topBarTrailing) {
+      SettingsLink()
+        .labelStyle(.iconOnly)
+        .foregroundStyle(.primary)
+    }
+  }
+}
+
+struct SettingsLink: View {
   @Environment(\.locale) private var locale
   @Environment(AppStore.self) private var store
 
-  var body: some ToolbarContent {
-    ToolbarItem(placement: .topBarTrailing) {
-      NavigationLink {
-        SettingsView(model: store.settings)
-      } label: {
-        Label(L10n.text("Настройки", locale: locale), systemImage: "gearshape")
-      }
-      .labelStyle(.iconOnly)
-      .foregroundStyle(.primary)
-      .accessibilityIdentifier("openSettings")
+  var body: some View {
+    NavigationLink {
+      SettingsView(model: store.settings)
+        .toolbar(.visible, for: .navigationBar)
+    } label: {
+      Label(L10n.text("Настройки", locale: locale), systemImage: "gearshape")
     }
+    .accessibilityIdentifier("openSettings")
   }
 }
