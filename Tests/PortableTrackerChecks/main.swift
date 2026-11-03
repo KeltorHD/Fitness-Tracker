@@ -96,6 +96,18 @@ private actor RecordingStub: HeartRateRecordingRepository {
       throw CheckFailure(message: "URL fixture")
     }
     try expect(!AppCompatibility.acceptsURL(foreignURL), "Unrelated URLs are not app routes")
+    let tick = Date(timeIntervalSince1970: 1_700_000_000)
+    let betweenTicks = HeartRateReading(date: tick.addingTimeInterval(0.6), beatsPerMinute: 90)
+    try expect(!betweenTicks.isFresh(at: tick), "A scheduled tick may precede a new valid reading")
+    try expect(
+      betweenTicks.isFreshForDisplay(at: tick, now: tick.addingTimeInterval(0.7)),
+      "A new reading remains visible between timer ticks")
+    try expect(
+      !betweenTicks.isFreshForDisplay(at: tick, now: tick.addingTimeInterval(17)),
+      "Actual age still expires stale measurements")
+    try expect(
+      !betweenTicks.isFreshForDisplay(at: tick, now: tick.addingTimeInterval(0.2)),
+      "Truly future measurements stay invalid")
     let suite = "FitnessTracker.PortableTrackerTests.\(UUID().uuidString)"
     guard let defaults = UserDefaults(suiteName: suite) else {
       throw CheckFailure(message: "defaults")

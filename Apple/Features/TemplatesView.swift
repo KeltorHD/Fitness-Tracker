@@ -160,12 +160,6 @@ struct TemplateOverviewView: View {
           .accessibilityIdentifier("templateActions")
         }
       }
-      .safeAreaInset(edge: .bottom) {
-        Button(L10n.text("Начать тренировку", locale: locale), systemImage: "play.fill") {
-          store.start(template: current)
-        }
-        .font(.headline).buttonStyle(.glassProminent).controlSize(.large).padding()
-      }
       .sheet(isPresented: $editing, onDismiss: { store.showingTemplateEditor = false }) {
         TemplateEditor(template: current).onAppear { store.showingTemplateEditor = true }
       }

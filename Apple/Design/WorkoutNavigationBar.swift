@@ -50,6 +50,7 @@ struct WorkoutNavigationBar: View {
         tab("Результаты", symbol: "chart.bar.xaxis", value: 2)
         tab("Справка", symbol: "questionmark", value: 3)
       }
+      .background(alignment: .topLeading) { selectionIndicator }
       .coordinateSpace(name: "workoutNavigationBar")
       .padding(.horizontal, 8)
       .padding(.top, 4)
@@ -94,18 +95,6 @@ struct WorkoutNavigationBar: View {
       .foregroundStyle(highlightedTab == value ? Color.primary : FitTheme.muted)
       .multilineTextAlignment(.center)
       .frame(maxWidth: .infinity, minHeight: 62)
-      .background {
-        if (drag?.source ?? selection) == value {
-          Capsule()
-            .fill(reduceTransparency ? FitTheme.card : Color.clear)
-            .glassEffect(.regular.interactive(), in: .capsule)
-            .glassEffectID("selectedTab", in: selectionGlass)
-            .glassEffectTransition(.matchedGeometry)
-            .offset(x: selectionOffset)
-            .allowsHitTesting(false)
-            .accessibilityHidden(true)
-        }
-      }
       .contentShape(.rect)
     }
     .buttonStyle(.plain)
@@ -118,6 +107,21 @@ struct WorkoutNavigationBar: View {
       tabFrames[value] = frame
     }
     .highPriorityGesture(selectionDrag)
+  }
+
+  @ViewBuilder private var selectionIndicator: some View {
+    if let frame = tabFrames[drag?.source ?? selection] {
+      // One persistent surface slides on taps instead of being recreated in another label.
+      Capsule()
+        .fill(reduceTransparency ? FitTheme.card : Color.clear)
+        .frame(width: frame.width, height: frame.height)
+        .glassEffect(.regular.interactive(), in: .capsule)
+        .glassEffectID("selectedTab", in: selectionGlass)
+        .glassEffectTransition(.matchedGeometry)
+        .offset(x: frame.minX + selectionOffset, y: frame.minY)
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
+    }
   }
 
   private var highlightedTab: Int {
@@ -167,12 +171,14 @@ private struct NavigationSelectionDrag {
 }
 
 /// A rounded floating bar with a shallow rise around the play button.
-private struct WorkoutNavigationShape: Shape {
+struct WorkoutNavigationShape: Shape {
+  var rise: CGFloat = 12
+  var shoulderWidth: CGFloat = 44
   func path(in rect: CGRect) -> Path {
-    let top = rect.minY + 12
-    let radius = min(32, (rect.height - 12) / 2)
+    let top = rect.minY + rise
+    let radius = min(32, (rect.height - rise) / 2)
     let center = rect.midX
-    let shoulder = min(44, max(0, rect.width / 2 - radius))
+    let shoulder = min(shoulderWidth, max(0, rect.width / 2 - radius))
     var path = Path()
     path.move(to: CGPoint(x: rect.minX + radius, y: top))
     path.addLine(to: CGPoint(x: center - shoulder, y: top))

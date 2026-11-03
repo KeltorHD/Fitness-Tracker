@@ -296,3 +296,237 @@ private func completeDrop(_ index: Int, in workout: inout Workout, seconds: Doub
     weightKG: 0, at: dropDate.addingTimeInterval(2))
   #expect(workout.volume == 1000 && workout.exercises[0].sets[0].performedRepetitions == 25)
 }
+
+@Test func startedDropGroupCanAppendPendingStageWithoutRewritingRecordedWork() throws {
+  var workout = dropWorkout()
+  workout.exercises[0].sets[0].note = "Keep technique"
+  try completeBase(&workout)
+  try completeDrop(0, in: &workout, seconds: 2)
+  let original = workout
+  let row = workout.exercises[0]
+  let set = row.sets[0]
+  var stages = try #require(set.dropStages)
+  let additional = DropSetStage(repetitions: 6, weightKG: 20)
+  stages.append(additional)
+  try WorkoutEngine.configureDropSet(
+    in: &workout, exerciseID: row.id, setID: set.id, repetitions: set.repetitions,
+    weightKG: set.weightKG, stages: stages)
+  let updated = workout.exercises[0].sets[0]
+  #expect(
+    updated.id == set.id && updated.completedAt == set.completedAt && updated.note == set.note)
+  #expect(updated.performedStages == set.performedStages && workout.volume == original.volume)
+  #expect(updated.dropStages == stages && additional.completedAt == nil)
+  #expect(workout.restEndsAt == nil && workout.totalSets == 1)
+  try completeDrop(1, in: &workout, seconds: 3)
+  #expect(workout.restEndsAt == nil)
+  try completeDrop(2, in: &workout, seconds: 4)
+  #expect(workout.fullyCompletedSets == 1 && workout.restEndsAt == dropDate.addingTimeInterval(64))
+  let finishedGroup = workout
+  var extra = stages
+  extra.append(DropSetStage(weightKG: 10))
+  #expect(throws: TrainingError.invalidState) {
+    try WorkoutEngine.configureDropSet(
+      in: &workout, exerciseID: row.id, setID: set.id, repetitions: set.repetitions,
+      weightKG: set.weightKG, stages: extra)
+  }
+  #expect(workout == finishedGroup)
+}
+
+@Test func appendingDropCannotOverwriteRecordedStagesOrChangeTheirOrder() throws {
+  var workout = dropWorkout()
+  try completeBase(&workout)
+  try completeDrop(0, in: &workout, seconds: 2)
+  let original = workout
+  let row = workout.exercises[0]
+  let set = row.sets[0]
+  let existing = try #require(set.dropStages)
+  for attempt in 0..<5 {
+    var stages = existing + [DropSetStage(weightKG: 20)]
+    var repetitions = set.repetitions
+    switch attempt {
+    case 0: stages[0].weightKG = 39
+    case 1: stages[0].completedAt = dropDate.addingTimeInterval(3)
+    case 2: stages.swapAt(0, 1)
+    case 3: stages[2].completedAt = dropDate.addingTimeInterval(4)
+    default: repetitions += 1
+    }
+    #expect(throws: TrainingError.invalidState) {
+      try WorkoutEngine.configureDropSet(
+        in: &workout, exerciseID: row.id, setID: set.id, repetitions: repetitions,
+        weightKG: set.weightKG, stages: stages)
+    }
+    #expect(workout == original)
+  }
+  #expect(throws: TrainingError.invalidState) {
+    try WorkoutEngine.configureDropSet(
+      in: &workout, exerciseID: row.id, setID: set.id, repetitions: set.repetitions,
+      weightKG: set.weightKG, stages: [])
+  }
+  #expect(workout == original)
+}
+
+@Test func startedDropGroupKeepsStageLimitAndStrictlyDecreasingWeights() throws {
+  var workout = dropWorkout()
+  try completeBase(&workout)
+  let row = workout.exercises[0]
+  let set = row.sets[0]
+  var stages = try #require(set.dropStages)
+  for weight in [24.0, 18, 12] {
+    stages.append(DropSetStage(weightKG: weight))
+    try WorkoutEngine.configureDropSet(
+      in: &workout, exerciseID: row.id, setID: set.id, repetitions: set.repetitions,
+      weightKG: set.weightKG, stages: stages)
+  }
+  let original = workout
+  stages.append(DropSetStage(weightKG: 6))
+  #expect(throws: TrainingError.invalidDropSet) {
+    try WorkoutEngine.configureDropSet(
+      in: &workout, exerciseID: row.id, setID: set.id, repetitions: set.repetitions,
+      weightKG: set.weightKG, stages: stages)
+  }
+  #expect(workout == original)
+}
+
+@Test(arguments: [WorkoutStatus.paused, .completed, .cancelled])
+func dropGroupAppendRequiresActiveSession(_ status: WorkoutStatus) throws {
+  var workout = dropWorkout()
+  try completeBase(&workout)
+  workout.status = status
+  let original = workout
+  let row = workout.exercises[0]
+  let set = row.sets[0]
+  let stages = (set.dropStages ?? []) + [DropSetStage(weightKG: 20)]
+  #expect(throws: TrainingError.invalidState) {
+    try WorkoutEngine.configureDropSet(
+      in: &workout, exerciseID: row.id, setID: set.id, repetitions: set.repetitions,
+      weightKG: set.weightKG, stages: stages)
+  }
+  #expect(workout == original)
+}
+
+@Test func removingChildDropPreservesParentAndOtherStages() throws {
+  var workout = dropWorkout()
+  workout.exercises[0].sets[0].note = "Group note"
+  try completeBase(&workout)
+  try completeDrop(0, in: &workout, seconds: 2)
+  let row = workout.exercises[0]
+  let set = row.sets[0]
+  let stages = try #require(set.dropStages)
+  try WorkoutEngine.removeDropStage(
+    in: &workout, exerciseID: row.id, setID: set.id, stageID: stages[0].id)
+  #expect(workout.exercises.count == 1 && workout.exercises[0].sets.count == 1)
+  #expect(
+    workout.exercises[0].sets[0].id == set.id && workout.exercises[0].sets[0].note == set.note)
+  #expect(workout.exercises[0].sets[0].dropStages == [stages[1]])
+  #expect(workout.volume == 1000 && workout.restEndsAt == nil)
+  let snapshot = workout
+  #expect(throws: TrainingError.missingSet) {
+    try WorkoutEngine.removeDropStage(
+      in: &workout, exerciseID: row.id, setID: set.id, stageID: set.id)
+  }
+  #expect(workout == snapshot)
+  try WorkoutEngine.removeDropStage(
+    in: &workout, exerciseID: row.id, setID: set.id, stageID: stages[1].id)
+  #expect(
+    !workout.exercises[0].sets[0].isDropSet
+      && workout.exercises[0].sets[0].completedAt == set.completedAt)
+  #expect(
+    workout.exercises[0].sets[0].id == set.id
+      && workout.restEndsAt == dropDate.addingTimeInterval(61))
+}
+
+@Test(arguments: [false, true])
+func deletingLastRecordedDropReconcilesOnlyItsOwnRest(shared: Bool) throws {
+  var workout = dropWorkout()
+  try completeBase(&workout)
+  try completeDrop(0, in: &workout, seconds: 2)
+  try completeDrop(1, in: &workout, seconds: 3)
+  if shared {
+    workout.exercises.append(
+      WorkoutExercise(
+        exercise: ExerciseCatalog.all[0],
+        sets: [WorkoutSet(completedAt: dropDate.addingTimeInterval(3))]))
+  }
+  let row = workout.exercises[0]
+  let set = row.sets[0]
+  let stage = try #require(set.dropStages?.last)
+  try WorkoutEngine.removeDropStage(
+    in: &workout, exerciseID: row.id, setID: set.id, stageID: stage.id)
+  #expect(workout.restEndsAt == dropDate.addingTimeInterval(shared ? 63 : 62))
+  #expect(workout.exercises[0].sets[0].isFullyCompleted)
+}
+
+@Test func completedValuesCanBeCorrectedWithoutRepeatingCompletion() throws {
+  var workout = dropWorkout()
+  workout.exercises[0].sets[0].dropStages = nil
+  workout.exercises[0].sets[0].note = "Recorded note"
+  try completeBase(&workout)
+  let original = workout
+  let row = workout.exercises[0]
+  let set = row.sets[0]
+  try WorkoutEngine.correctCompletedTarget(
+    in: &workout, exerciseID: row.id, targetID: set.id, repetitions: 12, weightKG: 45)
+  #expect(workout.volume == 1080 && workout.completedSets == original.completedSets)
+  #expect(
+    workout.exercises[0].sets[0].completedAt == set.completedAt
+      && workout.restEndsAt == original.restEndsAt)
+  #expect(
+    workout.exercises[0].sets[0].note == set.note && workout.exercises[0].sets[0].id == set.id)
+  let snapshot = workout
+  #expect(throws: TrainingError.invalidRepetitions) {
+    try WorkoutEngine.correctCompletedTarget(
+      in: &workout, exerciseID: row.id, targetID: set.id, repetitions: 0, weightKG: 45)
+  }
+  #expect(workout == snapshot)
+  try WorkoutEngine.pause(&workout, at: dropDate.addingTimeInterval(4))
+  try WorkoutEngine.correctCompletedTarget(
+    in: &workout, exerciseID: row.id, targetID: set.id, repetitions: 10, weightKG: 40)
+  #expect(workout.status == .paused && workout.restEndsAt == nil)
+  try WorkoutEngine.finish(&workout, at: dropDate.addingTimeInterval(5))
+  #expect(throws: TrainingError.invalidState) {
+    try WorkoutEngine.correctCompletedTarget(
+      in: &workout, exerciseID: row.id, targetID: set.id, repetitions: 12, weightKG: 45)
+  }
+}
+
+@Test func correctingDropPreservesOrderAndRejectsPendingTargets() throws {
+  var workout = dropWorkout()
+  try completeBase(&workout)
+  try completeDrop(0, in: &workout, seconds: 2)
+  let row = workout.exercises[0]
+  let set = row.sets[0]
+  let stages = try #require(set.dropStages)
+  try WorkoutEngine.correctCompletedTarget(
+    in: &workout, exerciseID: row.id, targetID: stages[0].id, repetitions: 8, weightKG: 35)
+  #expect(workout.volume == 1560)
+  #expect(workout.exercises[0].sets[0].dropStages?.first?.completedAt == stages[0].completedAt)
+  let snapshot = workout
+  #expect(throws: TrainingError.invalidDropSet) {
+    try WorkoutEngine.correctCompletedTarget(
+      in: &workout, exerciseID: row.id, targetID: set.id, repetitions: 10, weightKG: 25)
+  }
+  #expect(throws: TrainingError.invalidDropSet) {
+    try WorkoutEngine.correctCompletedTarget(
+      in: &workout, exerciseID: row.id, targetID: stages[0].id, repetitions: 8, weightKG: 60)
+  }
+  #expect(throws: TrainingError.invalidState) {
+    try WorkoutEngine.correctCompletedTarget(
+      in: &workout, exerciseID: row.id, targetID: stages[1].id, repetitions: 8, weightKG: 20)
+  }
+  #expect(workout == snapshot)
+}
+
+@Test(arguments: [WorkoutStatus.paused, .completed, .cancelled])
+func removingChildDropRejectsInactiveSession(_ status: WorkoutStatus) throws {
+  var workout = dropWorkout()
+  workout.status = status
+  let original = workout
+  let row = workout.exercises[0]
+  let set = row.sets[0]
+  let stage = try #require(set.dropStages?.first)
+  #expect(throws: TrainingError.invalidState) {
+    try WorkoutEngine.removeDropStage(
+      in: &workout, exerciseID: row.id, setID: set.id, stageID: stage.id)
+  }
+  #expect(workout == original)
+}

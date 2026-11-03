@@ -19,3 +19,11 @@ struct LiveHeartRateSnapshot: Sendable {
   func resume()
   func stop()
 }
+
+extension HeartRateReading {
+  /// Observation may deliver a measurement between TimelineView ticks.
+  /// Compare freshness with the actual update time, never just the earlier scheduled tick.
+  func isFreshForDisplay(at timelineDate: Date, now: Date = Date()) -> Bool {
+    isFresh(at: max(timelineDate, now))
+  }
+}
