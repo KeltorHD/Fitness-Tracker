@@ -69,6 +69,23 @@
         }
       }
     },
+    "%@ г": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ г"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ g"
+          }
+        }
+      }
+    },
     "%@ кг": {
       "extractionState": "manual",
       "localizations": {
@@ -82,6 +99,57 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ kg"
+          }
+        }
+      }
+    },
+    "%@ ккал": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ ккал"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ kcal"
+          }
+        }
+      }
+    },
+    "%@ ккал на 100 г": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ ккал на 100 г"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ kcal per 100 g"
+          }
+        }
+      }
+    },
+    "%@ ккал на 100 мл": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ ккал на 100 мл"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ kcal per 100 ml"
           }
         }
       }
@@ -1021,6 +1089,40 @@
         }
       }
     },
+    "База заполняется сообществом. Проверяйте КБЖУ на упаковке; не все продукты имеют фото и полные данные.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "База заполняется сообществом. Проверяйте КБЖУ на упаковке; не все продукты имеют фото и полные данные."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This community database may have missing photos or nutrition. Check values against the packaging."
+          }
+        }
+      }
+    },
+    "База продуктов вернула некорректный ответ. Повторите позже.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "База продуктов вернула некорректный ответ. Повторите позже."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The food database returned an invalid response. Try again later."
+          }
+        }
+      }
+    },
     "Без выполненных подходов: %@. Сессии сохранятся как отменённые.": {
       "extractionState": "manual",
       "localizations": {
@@ -1102,6 +1204,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Without a template"
+          }
+        }
+      }
+    },
+    "Белки": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Белки"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Protein"
+          }
+        }
+      }
+    },
+    "Белки, г": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Белки, г"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Protein, g"
           }
         }
       }
@@ -1510,6 +1646,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Enter a name (1–80 characters)."
+          }
+        }
+      }
+    },
+    "Введите название от 2 символов или штрихкод из 8–14 цифр.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Введите название от 2 символов или штрихкод из 8–14 цифр."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter a name with at least 2 characters or an 8–14 digit barcode."
+          }
+        }
+      }
+    },
+    "Ввести продукт вручную": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ввести продукт вручную"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter food manually"
           }
         }
       }
@@ -2432,6 +2602,23 @@
         }
       }
     },
+    "Выбрать фото еды": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выбрать фото еды"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a meal photo"
+          }
+        }
+      }
+    },
     "Выполнено %@ из %@ подходов": {
       "extractionState": "manual",
       "localizations": {
@@ -2738,6 +2925,23 @@
         }
       }
     },
+    "Данные: ODbL 1.0": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Данные: ODbL 1.0"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data: ODbL 1.0"
+          }
+        }
+      }
+    },
     "Дата": {
       "extractionState": "manual",
       "localizations": {
@@ -2768,6 +2972,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Weigh-in date"
+          }
+        }
+      }
+    },
+    "Дата и время": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Дата и время"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Date and time"
           }
         }
       }
@@ -3095,6 +3316,23 @@
         }
       }
     },
+    "Для поиска нужен интернет. Недавние продукты и ручной ввод доступны без сети.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Для поиска нужен интернет. Недавние продукты и ручной ввод доступны без сети."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search requires internet. Recent foods and manual entry work offline."
+          }
+        }
+      }
+    },
     "Для приёма нужен доступ к пульсу и тренировкам в «Здоровье». Запись тренировки в «Здоровье» остаётся отдельным действием.": {
       "extractionState": "manual",
       "localizations": {
@@ -3180,6 +3418,23 @@
         }
       }
     },
+    "Дневная цель калорий": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Дневная цель калорий"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daily calorie goal"
+          }
+        }
+      }
+    },
     "Дневник": {
       "extractionState": "manual",
       "localizations": {
@@ -3248,6 +3503,40 @@
         }
       }
     },
+    "Добавить в блюдо": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Добавить в блюдо"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add to meal"
+          }
+        }
+      }
+    },
+    "Добавить еду": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Добавить еду"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log food"
+          }
+        }
+      }
+    },
     "Добавить подход": {
       "extractionState": "manual",
       "localizations": {
@@ -3261,6 +3550,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Add set"
+          }
+        }
+      }
+    },
+    "Добавить продукт": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Добавить продукт"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add food"
           }
         }
       }
@@ -3397,6 +3703,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Add your first exercise"
+          }
+        }
+      }
+    },
+    "Добавьте продукт или фотографию и проверьте название записи.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Добавьте продукт или фотографию и проверьте название записи."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add a food or photo and check the entry title."
+          }
+        }
+      }
+    },
+    "Добавьте продукты или сохраните фото, чтобы заполнить КБЖУ позже.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Добавьте продукты или сохраните фото, чтобы заполнить КБЖУ позже."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add foods or save a photo and enter nutrition later."
           }
         }
       }
@@ -3622,6 +3962,23 @@
         }
       }
     },
+    "Единицы на упаковке": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Единицы на упаковке"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Units on the packaging"
+          }
+        }
+      }
+    },
     "Если вес относится к тренировке, будет убрано только её значение веса тела.": {
       "extractionState": "manual",
       "localizations": {
@@ -3673,6 +4030,23 @@
         }
       }
     },
+    "Есть фото без КБЖУ — итог неполный": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Есть фото без КБЖУ — итог неполный"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Some photos have no nutrition yet — totals are incomplete"
+          }
+        }
+      }
+    },
     "Жим лёжа": {
       "extractionState": "manual",
       "localizations": {
@@ -3703,6 +4077,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Overhead press"
+          }
+        }
+      }
+    },
+    "Жиры": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Жиры"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fat"
+          }
+        }
+      }
+    },
+    "Жиры, г": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Жиры, г"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fat, g"
           }
         }
       }
@@ -3805,6 +4213,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Completed workouts will appear here, grouped by week."
+          }
+        }
+      }
+    },
+    "Завтрак": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Завтрак"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Breakfast"
           }
         }
       }
@@ -3945,6 +4370,23 @@
         }
       }
     },
+    "Записать еду или фото перекуса": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Записать еду или фото перекуса"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log food or a snack photo"
+          }
+        }
+      }
+    },
     "Запись веса больше недоступна.": {
       "extractionState": "manual",
       "localizations": {
@@ -3975,6 +4417,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Recording runs only during an active workout, including rest between sets. Pausing suspends recording. Bluetooth monitors with heart rate broadcasting are supported."
+          }
+        }
+      }
+    },
+    "Запись питания": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Запись питания"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Food entry"
           }
         }
       }
@@ -4370,6 +4829,23 @@
         }
       }
     },
+    "Искать в базе продуктов": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Искать в базе продуктов"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search food database"
+          }
+        }
+      }
+    },
     "История": {
       "extractionState": "manual",
       "localizations": {
@@ -4485,6 +4961,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Source and license"
+          }
+        }
+      }
+    },
+    "Источник продукта": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Источник продукта"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Product source"
           }
         }
       }
@@ -4642,6 +5135,23 @@
         }
       }
     },
+    "КБЖУ не заполнены": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "КБЖУ не заполнены"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutrition not entered"
+          }
+        }
+      }
+    },
     "Каждая точка — одна завершённая тренировка. Нажмите на график, чтобы посмотреть значения.": {
       "extractionState": "manual",
       "localizations": {
@@ -4689,6 +5199,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Calories and heart rate are not inferred from lifting weights. Only workout type, duration and pauses are exported to Health."
+          }
+        }
+      }
+    },
+    "Калории, ккал": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Калории, ккал"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calories, kcal"
           }
         }
       }
@@ -4897,6 +5424,23 @@
         }
       }
     },
+    "Масса, г": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Масса, г"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weight, g"
+          }
+        }
+      }
+    },
     "Массажный ролик": {
       "extractionState": "manual",
       "localizations": {
@@ -5084,6 +5628,40 @@
         }
       }
     },
+    "На 100 г продукта": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "На 100 г продукта"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Per 100 g of food"
+          }
+        }
+      }
+    },
+    "На 100 мл продукта": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "На 100 мл продукта"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Per 100 ml of food"
+          }
+        }
+      }
+    },
     "На Mi Band 10 откройте Настройки → Share HR и включите передачу пульса. Держите браслет рядом с iPhone.": {
       "extractionState": "manual",
       "localizations": {
@@ -5254,6 +5832,23 @@
         }
       }
     },
+    "Название блюда": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Название блюда"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meal name"
+          }
+        }
+      }
+    },
     "Название и заметка": {
       "extractionState": "manual",
       "localizations": {
@@ -5271,6 +5866,23 @@
         }
       }
     },
+    "Название или штрихкод": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Название или штрихкод"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name or barcode"
+          }
+        }
+      }
+    },
     "Название плана": {
       "extractionState": "manual",
       "localizations": {
@@ -5284,6 +5896,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Template name"
+          }
+        }
+      }
+    },
+    "Название продукта": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Название продукта"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Food name"
           }
         }
       }
@@ -5764,6 +6393,23 @@
         }
       }
     },
+    "Не удалось обработать фото. Выберите другое изображение.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось обработать фото. Выберите другое изображение."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not process this photo. Choose another image."
+          }
+        }
+      }
+    },
     "Не удалось определить состояние iCloud. Попробуйте ещё раз.": {
       "extractionState": "manual",
       "localizations": {
@@ -6002,6 +6648,23 @@
         }
       }
     },
+    "Не удалось прочитать дневник питания. Повторите загрузку.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось прочитать дневник питания. Повторите загрузку."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not read your food diary. Try loading it again."
+          }
+        }
+      }
+    },
     "Не удалось прочитать историю. Попробуйте открыть приложение ещё раз.": {
       "extractionState": "manual",
       "localizations": {
@@ -6138,6 +6801,23 @@
         }
       }
     },
+    "Не удалось сохранить питание. Попробуйте ещё раз.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось сохранить питание. Попробуйте ещё раз."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not save the food entry. Try again."
+          }
+        }
+      }
+    },
     "Не удалось сохранить план. Попробуйте ещё раз.": {
       "extractionState": "manual",
       "localizations": {
@@ -6223,6 +6903,23 @@
         }
       }
     },
+    "Не удалось сохранить цель. Проверьте значения и повторите.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось сохранить цель. Проверьте значения и повторите."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not save the goal. Check the values and try again."
+          }
+        }
+      }
+    },
     "Не удалось удалить запись веса. Попробуйте ещё раз.": {
       "extractionState": "manual",
       "localizations": {
@@ -6236,6 +6933,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Could not delete the weight entry. Please try again."
+          }
+        }
+      }
+    },
+    "Не удалось удалить запись питания. Попробуйте ещё раз.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось удалить запись питания. Попробуйте ещё раз."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not delete the food entry. Try again."
           }
         }
       }
@@ -6304,6 +7018,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Not specified"
+          }
+        }
+      }
+    },
+    "Недавние продукты": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Недавние продукты"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recent foods"
           }
         }
       }
@@ -6716,6 +7447,23 @@
         }
       }
     },
+    "Обед": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Обед"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lunch"
+          }
+        }
+      }
+    },
     "Обнаружены повторяющиеся идентификаторы.": {
       "extractionState": "manual",
       "localizations": {
@@ -6835,6 +7583,23 @@
         }
       }
     },
+    "Объём, мл": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Объём, мл"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Volume, ml"
+          }
+        }
+      }
+    },
     "Океан": {
       "extractionState": "manual",
       "localizations": {
@@ -6950,6 +7715,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rest remaining"
+          }
+        }
+      }
+    },
+    "Осталось: %@ ккал": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Осталось: %@ ккал"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remaining: %@ kcal"
           }
         }
       }
@@ -7532,6 +8314,23 @@
         }
       }
     },
+    "Перекус": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Перекус"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snack"
+          }
+        }
+      }
+    },
     "Период графиков": {
       "extractionState": "manual",
       "localizations": {
@@ -7562,6 +8361,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "History period"
+          }
+        }
+      }
+    },
+    "Питание": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Питание"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutrition"
+          }
+        }
+      }
+    },
+    "Питание и фотографии еды не входят в архив тренировок.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Питание и фотографии еды не входят в архив тренировок."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutrition and meal photos are not included in workout archives."
           }
         }
       }
@@ -7749,6 +8582,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Reload photo"
+          }
+        }
+      }
+    },
+    "Повторить на другую дату": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Повторить на другую дату"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy to another date"
           }
         }
       }
@@ -8076,6 +8926,23 @@
         }
       }
     },
+    "Поиск недоступен. Проверьте интернет или добавьте продукт вручную.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Поиск недоступен. Проверьте интернет или добавьте продукт вручную."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search is unavailable. Check your connection or enter food manually."
+          }
+        }
+      }
+    },
     "Поиск пульсометров…": {
       "extractionState": "manual",
       "localizations": {
@@ -8106,6 +8973,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "No weight entries yet"
+          }
+        }
+      }
+    },
+    "Пока нет записей питания": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пока нет записей питания"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No food entries yet"
           }
         }
       }
@@ -8225,6 +9109,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "OK"
+          }
+        }
+      }
+    },
+    "Порция": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Порция"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Portion"
           }
         }
       }
@@ -8399,6 +9300,23 @@
         }
       }
     },
+    "Приём пищи": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Приём пищи"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meal"
+          }
+        }
+      }
+    },
     "Приём пульса включён. Если измерения нет, проверьте посадку AirPods и доступ к пульсу.": {
       "extractionState": "manual",
       "localizations": {
@@ -8531,6 +9449,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Check complete: no new data."
+          }
+        }
+      }
+    },
+    "Проверьте КБЖУ: нужны конечные неотрицательные значения на 100 г или 100 мл.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Проверьте КБЖУ: нужны конечные неотрицательные значения на 100 г или 100 мл."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check nutrition: enter finite, nonnegative values per 100 g or 100 ml."
           }
         }
       }
@@ -8684,6 +9619,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Resume workout"
+          }
+        }
+      }
+    },
+    "Продукты с полными КБЖУ не найдены. Попробуйте другое название или ручной ввод.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Продукты с полными КБЖУ не найдены. Попробуйте другое название или ручной ввод."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No foods with complete nutrition were found. Try another name or enter food manually."
           }
         }
       }
@@ -9300,6 +10252,23 @@
         }
       }
     },
+    "Результаты поиска": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Результаты поиска"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search results"
+          }
+        }
+      }
+    },
     "Роза": {
       "extractionState": "manual",
       "localizations": {
@@ -9504,6 +10473,23 @@
         }
       }
     },
+    "Сверх цели: %@ ккал": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сверх цели: %@ ккал"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Over goal: %@ kcal"
+          }
+        }
+      }
+    },
     "Светлая": {
       "extractionState": "manual",
       "localizations": {
@@ -9585,6 +10571,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "The summary includes available Apple Health sources, not just your selected tracker. Sleep covers noon on the previous day to noon on the selected day."
+          }
+        }
+      }
+    },
+    "Свой продукт": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Свой продукт"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Custom food"
           }
         }
       }
@@ -9861,6 +10864,23 @@
         }
       }
     },
+    "Слишком много запросов. Подождите минуту и повторите поиск.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Слишком много запросов. Подождите минуту и повторите поиск."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Too many requests. Wait a minute and search again."
+          }
+        }
+      }
+    },
     "Сначала выполните предыдущий этап дропсета.": {
       "extractionState": "manual",
       "localizations": {
@@ -10014,6 +11034,23 @@
         }
       }
     },
+    "Состав": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Состав"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ingredients"
+          }
+        }
+      }
+    },
     "Сохранение…": {
       "extractionState": "manual",
       "localizations": {
@@ -10048,6 +11085,40 @@
         }
       }
     },
+    "Сохранить блюдо": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сохранить блюдо"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save meal"
+          }
+        }
+      }
+    },
+    "Сохранить блюдо для повтора": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сохранить блюдо для повтора"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save meal for reuse"
+          }
+        }
+      }
+    },
     "Сохранить как шаблон": {
       "extractionState": "manual",
       "localizations": {
@@ -10078,6 +11149,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Save file"
+          }
+        }
+      }
+    },
+    "Сохранённые блюда": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сохранённые блюда"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saved meals"
           }
         }
       }
@@ -10728,6 +11816,40 @@
         }
       }
     },
+    "Убрать из сохранённых блюд": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Убрать из сохранённых блюд"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove from saved meals"
+          }
+        }
+      }
+    },
+    "Убрать продукт": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Убрать продукт"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove food"
+          }
+        }
+      }
+    },
     "Убрать упражнение": {
       "extractionState": "manual",
       "localizations": {
@@ -10762,6 +11884,40 @@
         }
       }
     },
+    "Убрать фото": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Убрать фото"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove photo"
+          }
+        }
+      }
+    },
+    "Убрать цель": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Убрать цель"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove goal"
+          }
+        }
+      }
+    },
     "Уведомления": {
       "extractionState": "manual",
       "localizations": {
@@ -10775,6 +11931,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Notifications"
+          }
+        }
+      }
+    },
+    "Углеводы": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Углеводы"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Carbohydrates"
+          }
+        }
+      }
+    },
+    "Углеводы, г": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Углеводы, г"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Carbohydrates, g"
           }
         }
       }
@@ -10809,6 +11999,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Delete weight entry?"
+          }
+        }
+      }
+    },
+    "Удалить запись питания?": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Удалить запись питания?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete this food entry?"
           }
         }
       }
@@ -10894,6 +12101,74 @@
           "stringUnit": {
             "state": "translated",
             "value": "Already in the app"
+          }
+        }
+      }
+    },
+    "Ужин": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ужин"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dinner"
+          }
+        }
+      }
+    },
+    "Укажите положительную цель калорий. Необязательные цели БЖУ тоже должны быть больше нуля.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Укажите положительную цель калорий. Необязательные цели БЖУ тоже должны быть больше нуля."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter a positive calorie goal. Optional macro goals must also be greater than zero."
+          }
+        }
+      }
+    },
+    "Укажите размер порции больше нуля и не больше 10 000.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Укажите размер порции больше нуля и не больше 10 000."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter a portion size greater than zero and no more than 10,000."
+          }
+        }
+      }
+    },
+    "Укажите собственную дневную цель. Цели БЖУ необязательны. Калории тренировок не вычитаются из съеденного.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Укажите собственную дневную цель. Цели БЖУ необязательны. Калории тренировок не вычитаются из съеденного."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter your own daily goal. Macro goals are optional. Workout calories are not subtracted from food intake."
           }
         }
       }
@@ -11221,6 +12496,23 @@
         }
       }
     },
+    "Фото еды": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Фото еды"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meal photo"
+          }
+        }
+      }
+    },
     "Фото недоступно": {
       "extractionState": "manual",
       "localizations": {
@@ -11234,6 +12526,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Photo unavailable"
+          }
+        }
+      }
+    },
+    "Фото продуктов: CC BY-SA 3.0": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Фото продуктов: CC BY-SA 3.0"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Product photos: CC BY-SA 3.0"
+          }
+        }
+      }
+    },
+    "Фото хранится в вашем дневнике и не отправляется в базу продуктов. КБЖУ заполните по составу или упаковке.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Фото хранится в вашем дневнике и не отправляется в базу продуктов. КБЖУ заполните по составу или упаковке."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your photo stays in your diary and is not sent to the food database. Enter nutrition using ingredients or packaging."
           }
         }
       }
@@ -11289,6 +12615,23 @@
         }
       }
     },
+    "Цели питания": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Цели питания"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutrition goals"
+          }
+        }
+      }
+    },
     "Цель на неделю: %@": {
       "extractionState": "manual",
       "localizations": {
@@ -11302,6 +12645,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Weekly goal: %@"
+          }
+        }
+      }
+    },
+    "Цель: %@ ккал": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Цель: %@ ккал"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goal: %@ kcal"
           }
         }
       }
@@ -11731,6 +13091,23 @@
         }
       }
     },
+    "г": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "г"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "g"
+          }
+        }
+      }
+    },
     "да": {
       "extractionState": "manual",
       "localizations": {
@@ -11761,6 +13138,57 @@
           "stringUnit": {
             "state": "translated",
             "value": "equipment"
+          }
+        }
+      }
+    },
+    "кг": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "кг"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "kg"
+          }
+        }
+      }
+    },
+    "л": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "л"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "l"
+          }
+        }
+      }
+    },
+    "мл": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "мл"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ml"
           }
         }
       }
