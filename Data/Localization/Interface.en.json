@@ -825,5 +825,10 @@
   "Заменить упражнение": "Replace exercise",
   "При замене записанные подходы останутся у прежнего упражнения. Новое упражнение начнётся с начальных параметров.": "Recorded sets will stay with the original exercise. The replacement exercise will start with default targets.",
   "Добавить заметку к подходу": "Add set note",
-  "Выполнено этапов: %@ из %@": "Stages completed: %@ of %@"
+  "Выполнено этапов: %@ из %@": "Stages completed: %@ of %@",
+  "Вес и сила": "Weight and strength",
+  "Подходы и повторы": "Sets and reps",
+  "Графики": "Charts",
+  "История упражнения": "Exercise history",
+  "Здесь появятся дата и выполненные подходы после завершения тренировки с этим упражнением.": "Dates and performed sets will appear here after you finish a workout with this exercise."
 }

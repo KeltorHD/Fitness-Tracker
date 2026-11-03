@@ -34,6 +34,9 @@ private func expect(_ condition: Bool, _ message: String) throws {
     model.refresh(workouts: [recent, bodyweight, old], calendar: calendar)
     model.selectedExerciseID = exercise.id
     try expect(model.points.map(\.id) == [recent.id], "Default period must filter old points")
+    try expect(
+      model.historyEntries.map(\.id) == [recent.id, old.id],
+      "History must keep all sessions newest first independently of the chart period")
     try expect(model.series.count == 5, "All five metrics must be prepared")
     model.period = .allTime
     try expect(
@@ -42,6 +45,9 @@ private func expect(_ condition: Bool, _ message: String) throws {
     try expect(
       model.selectedPoint?.id == old.id, "Chart selection must resolve the nearest workout")
     model.period = .fourWeeks
+    try expect(
+      model.historyEntries.map(\.id) == [recent.id, old.id],
+      "Changing the chart period must not hide recorded sets")
     try expect(
       model.selectedPoint == nil && model.displayedPoint?.id == recent.id,
       "Period changes must reset selection")
@@ -58,6 +64,7 @@ private func expect(_ condition: Bool, _ message: String) throws {
     try expect(
       model.history == nil && model.points.isEmpty && model.displayedPoint == nil,
       "Empty history must clear old chart data")
+    try expect(model.historyEntries.isEmpty, "Deleted sessions must disappear from the history")
 
     let fixed = ExerciseProgressViewModel(
       exerciseID: exercise.id, workoutID: old.id, period: .allTime, now: { now })
@@ -68,6 +75,19 @@ private func expect(_ condition: Bool, _ message: String) throws {
     try expect(
       fixed.history == nil && fixed.points.isEmpty,
       "A fixed exercise must never show another exercise's data")
+    try expect(fixed.historyEntries.isEmpty, "Fixed history must not contain another exercise")
+
+    var warmup = recent
+    warmup.exercises[0].sets[0].isWarmup = true
+    fixed.refresh(workouts: [warmup], calendar: calendar)
+    try expect(
+      fixed.points.isEmpty && fixed.historyEntries.first?.id == warmup.id,
+      "Warmup-only sessions must remain in history even without working-set chart data")
+    warmup.exercises[0].sets[0].note = "Updated saved note"
+    fixed.refresh(workouts: [warmup], calendar: calendar)
+    try expect(
+      fixed.historyEntries.first?.rows.first?.sets.first?.set.note == "Updated saved note",
+      "Refreshing saved sessions must rebuild their historical snapshots")
 
     var sameTime = recent
     sameTime.id = UUID()

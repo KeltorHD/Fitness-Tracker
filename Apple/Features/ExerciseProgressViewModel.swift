@@ -31,6 +31,7 @@ struct ExerciseMetricPoint: Identifiable, Equatable {
   var selectedDate: Date? { didSet { updateSelection() } }
   private(set) var histories: [ExerciseProgressHistory] = []
   private(set) var history: ExerciseProgressHistory?
+  private(set) var historyEntries: [ExerciseWorkoutHistoryEntry] = []
   private(set) var points: [ExerciseProgressPoint] = []
   private(set) var series: [ExerciseProgressMetric: [ExerciseMetricPoint]] = [:]
   private(set) var selectedPoint: ExerciseProgressPoint?
@@ -39,6 +40,7 @@ struct ExerciseMetricPoint: Identifiable, Equatable {
   @ObservationIgnored private var pendingWorkoutID: UUID?
   @ObservationIgnored private var calendar: Calendar = .current
   @ObservationIgnored private let now: () -> Date
+  @ObservationIgnored private var workouts: [Workout] = []
 
   init(
     exerciseID: UUID? = nil, workoutID: UUID? = nil,
@@ -52,6 +54,7 @@ struct ExerciseMetricPoint: Identifiable, Equatable {
   }
 
   func refresh(workouts: [Workout], calendar: Calendar) {
+    self.workouts = workouts
     self.calendar = calendar
     histories = ExerciseProgressReport(workouts: workouts, now: now()).exercises
     if fixedExerciseID == nil, !histories.contains(where: { $0.id == selectedExerciseID }) {
@@ -62,8 +65,13 @@ struct ExerciseMetricPoint: Identifiable, Equatable {
   }
 
   private func rebuild(clearSelection: Bool) {
+    let date = now()
+    historyEntries =
+      selectedExerciseID.map {
+        ExerciseWorkoutHistoryEntry.entries(for: $0, workouts: workouts, now: date)
+      } ?? []
     history = histories.first { $0.id == selectedExerciseID }
-    points = history?.points(in: period, relativeTo: now(), calendar: calendar) ?? []
+    points = history?.points(in: period, relativeTo: date, calendar: calendar) ?? []
     series = Dictionary(
       uniqueKeysWithValues: ExerciseProgressMetric.allCases.map { metric in
         (

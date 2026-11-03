@@ -435,10 +435,10 @@ struct WorkoutExerciseView: View {
           )
           .toolbar(.visible, for: .navigationBar)
         } label: {
-          Image(systemName: "chart.xyaxis.line").font(.title2)
+          Image(systemName: "clock").font(.title2)
         }
         .frame(minWidth: 44, minHeight: 44)
-        .accessibilityLabel(L10n.text("Прогресс упражнения", locale: locale))
+        .accessibilityLabel(L10n.text("История упражнения", locale: locale))
         .accessibilityIdentifier("openExerciseProgress")
         Spacer()
         if let entry = ExerciseLibrary.entry(for: row.exercise.id),

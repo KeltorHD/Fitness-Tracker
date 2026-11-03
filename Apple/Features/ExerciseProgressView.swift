@@ -7,6 +7,7 @@ struct ExerciseProgressSection: View {
   @AppStorage("weightUnit") private var unit: WeightUnit = .kilograms
   @Bindable var model: ExerciseProgressViewModel
   var showsExercisePicker = true
+  @State private var expandedGroups: Set<ExerciseChartGroup> = []
 
   var body: some View {
     LazyVStack(alignment: .leading, spacing: 16) {
@@ -38,11 +39,28 @@ struct ExerciseProgressSection: View {
             "Каждая точка — одна завершённая тренировка. Нажмите на график, чтобы посмотреть значения.",
             locale: locale)
         ).font(.footnote).foregroundStyle(.secondary)
-        ForEach(ExerciseProgressMetric.allCases) { metric in
-          ExerciseMetricChart(
-            metric: metric, points: model.series[metric] ?? [],
-            displayedPoint: model.displayedPoint, selectedPoint: model.selectedPoint,
-            selectedDate: $model.selectedDate, unit: unit)
+        ForEach(ExerciseChartGroup.allCases) { group in
+          DisclosureGroup(
+            isExpanded: Binding(
+              get: { expandedGroups.contains(group) },
+              set: { expanded in
+                if expanded { expandedGroups.insert(group) } else { expandedGroups.remove(group) }
+              })
+          ) {
+            if expandedGroups.contains(group) {
+              VStack(spacing: 16) {
+                ForEach(group.metrics) { metric in
+                  ExerciseMetricChart(
+                    metric: metric, points: model.series[metric] ?? [],
+                    displayedPoint: model.displayedPoint, selectedPoint: model.selectedPoint,
+                    selectedDate: $model.selectedDate, unit: unit)
+                }
+              }.padding(.top, 12)
+            }
+          } label: {
+            Text(L10n.text(group.title, locale: locale)).font(.headline).foregroundStyle(.primary)
+          }
+          .resultsCard().accessibilityIdentifier("exerciseChartGroup_\(group.rawValue)")
         }
       }
       Text(
@@ -56,6 +74,26 @@ struct ExerciseProgressSection: View {
           locale: locale)
       )
       .font(.caption).foregroundStyle(.secondary)
+    }
+    .onChange(of: model.selectedExerciseID) { expandedGroups = [] }
+  }
+}
+
+private enum ExerciseChartGroup: String, CaseIterable, Identifiable {
+  case strength, volume, repetitions
+  var id: String { rawValue }
+  var title: String {
+    switch self {
+    case .strength: "Вес и сила"
+    case .volume: "Объём"
+    case .repetitions: "Подходы и повторы"
+    }
+  }
+  var metrics: [ExerciseProgressMetric] {
+    switch self {
+    case .strength: [.maximumWeight, .oneRepMax]
+    case .volume: [.volume]
+    case .repetitions: [.sets, .repetitions]
     }
   }
 }
@@ -186,6 +224,7 @@ struct ExerciseProgressScreen: View {
   let exercise: Exercise
   let showsDemoBanner: Bool
   @State private var model: ExerciseProgressViewModel
+  @State private var section = ExerciseHistorySection.history
 
   init(exercise: Exercise, workoutID: UUID? = nil, showsDemoBanner: Bool = true) {
     self.exercise = exercise
@@ -197,10 +236,31 @@ struct ExerciseProgressScreen: View {
 
   var body: some View {
     ScrollView {
-      VStack(alignment: .leading, spacing: 20) {
+      LazyVStack(alignment: .leading, spacing: 20) {
+        Picker(L10n.text("История упражнения", locale: locale), selection: $section) {
+          Text(L10n.text("История", locale: locale)).tag(ExerciseHistorySection.history)
+          Text(L10n.text("Графики", locale: locale)).tag(ExerciseHistorySection.charts)
+        }
+        .pickerStyle(.segmented).accessibilityIdentifier("exerciseHistorySection")
         Text(L10n.text("История упражнения по завершённым тренировкам", locale: locale))
           .font(.subheadline).foregroundStyle(.secondary)
-        ExerciseProgressSection(model: model, showsExercisePicker: false)
+        switch section {
+        case .history:
+          if model.historyEntries.isEmpty {
+            ContentUnavailableView(
+              L10n.text("Нет выполненных подходов", locale: locale), systemImage: "clock",
+              description: Text(
+                L10n.text(
+                  "Здесь появятся дата и выполненные подходы после завершения тренировки с этим упражнением.",
+                  locale: locale)))
+          } else {
+            ForEach(model.historyEntries) { entry in
+              ExerciseWorkoutHistoryCard(entry: entry)
+            }
+          }
+        case .charts:
+          ExerciseProgressSection(model: model, showsExercisePicker: false)
+        }
       }.padding(16)
     }
     .background(FitTheme.paper)
@@ -216,4 +276,76 @@ struct ExerciseProgressScreen: View {
   }
 
   private func refresh() { model.refresh(workouts: store.workouts, calendar: calendar) }
+}
+
+private enum ExerciseHistorySection: Hashable { case history, charts }
+
+private struct ExerciseWorkoutHistoryCard: View {
+  @Environment(\.locale) private var locale
+  @AppStorage("weightUnit") private var unit: WeightUnit = .kilograms
+  let entry: ExerciseWorkoutHistoryEntry
+
+  var body: some View {
+    VStack(alignment: .leading, spacing: 16) {
+      VStack(alignment: .leading, spacing: 4) {
+        Text(entry.date, format: .dateTime.day().month(.wide).year().hour().minute())
+          .font(.headline).accessibilityIdentifier("exerciseHistoryDate_\(entry.id)")
+        Text(entry.name).font(.subheadline).foregroundStyle(.secondary)
+      }.accessibilityAddTraits(.isHeader)
+      ForEach(entry.rows) { row in
+        VStack(alignment: .leading, spacing: 12) {
+          if entry.rows.count > 1 {
+            Text(L10n.format("№ %@", String(row.position), locale: locale) + " · " + row.name)
+              .font(.subheadline.weight(.semibold))
+          }
+          ForEach(row.sets) { recorded in
+            setDetails(recorded)
+          }
+        }.accessibilityIdentifier("exerciseHistoryRow_\(row.id)")
+      }
+    }
+    .frame(maxWidth: .infinity, alignment: .leading)
+    .resultsCard().accessibilityIdentifier("exerciseHistoryWorkout_\(entry.id)")
+  }
+
+  private func setDetails(_ recorded: ExerciseWorkoutHistorySet) -> some View {
+    let set = recorded.set
+    return VStack(alignment: .leading, spacing: 6) {
+      Divider()
+      Text(L10n.format("Подход %@", String(recorded.position), locale: locale))
+        .font(.subheadline.weight(.semibold))
+      if set.isWarmup {
+        Label(L10n.text("Разминка", locale: locale), systemImage: "flame")
+          .font(.caption).foregroundStyle(.secondary)
+      } else if set.isDropSet {
+        Text(L10n.text("Дропсет", locale: locale)).font(.caption).foregroundStyle(.secondary)
+      }
+      ForEach(Array(set.stages.enumerated()), id: \.element.id) { index, stage in
+        if let completedAt = stage.completedAt {
+          VStack(alignment: .leading, spacing: 2) {
+            let weight = unit.display(stage.weightKG).formatted(
+              .number.locale(L10n.numberLocale).precision(.fractionLength(0...1)))
+            Text(
+              (index == 0 ? "" : "↳ ")
+                + "\(weight) \(L10n.text(unit.rawValue, locale: locale)) × \(stage.repetitions)"
+            )
+            .font(.body.monospacedDigit())
+            Text(completedAt, format: .dateTime.day().month().hour().minute())
+              .font(.caption).foregroundStyle(.secondary)
+          }
+          .accessibilityElement(children: .combine)
+          .accessibilityIdentifier("exerciseHistoryStage_\(stage.id)")
+        }
+      }
+      if let multiplier = set.loadMultiplier, multiplier > 1 {
+        Text(L10n.format("Множитель веса: %@", String(multiplier), locale: locale))
+          .font(.caption).foregroundStyle(.secondary)
+      }
+      if let note = set.note, !note.isEmpty {
+        Label(note, systemImage: "note.text").font(.subheadline).foregroundStyle(.secondary)
+      }
+    }
+    .frame(maxWidth: .infinity, alignment: .leading)
+    .accessibilityIdentifier("exerciseHistorySet_\(set.id)")
+  }
 }

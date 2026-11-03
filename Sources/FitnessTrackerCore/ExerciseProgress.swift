@@ -1,5 +1,50 @@
 import Foundation
 
+/// Recorded sets retain their original position and snapshot, including warmups and notes.
+public struct ExerciseWorkoutHistorySet: Identifiable, Equatable, Sendable {
+  public var id: UUID { self.set.id }
+  public let position: Int
+  public let set: WorkoutSet
+}
+
+public struct ExerciseWorkoutHistoryRow: Identifiable, Equatable, Sendable {
+  public let id: UUID
+  public let position: Int
+  public let name: String
+  public let sets: [ExerciseWorkoutHistorySet]
+}
+
+public struct ExerciseWorkoutHistoryEntry: Identifiable, Equatable, Sendable {
+  public let id: UUID
+  public let date: Date
+  public let name: String
+  public let rows: [ExerciseWorkoutHistoryRow]
+
+  /// Uses saved sessions only; template and catalog edits cannot rewrite recorded targets.
+  public static func entries(
+    for exerciseID: UUID, workouts: [Workout], now: Date = Date()
+  ) -> [Self] {
+    workouts.compactMap { workout -> Self? in
+      guard workout.status == .completed, workout.startedAt <= now else { return nil }
+      let rows = workout.exercises.enumerated().compactMap {
+        index, row -> ExerciseWorkoutHistoryRow? in
+        guard row.exercise.id == exerciseID else { return nil }
+        let sets = row.sets.enumerated().compactMap { index, set -> ExerciseWorkoutHistorySet? in
+          guard !set.performedStages.isEmpty else { return nil }
+          return ExerciseWorkoutHistorySet(position: index + 1, set: set)
+        }
+        guard !sets.isEmpty else { return nil }
+        return ExerciseWorkoutHistoryRow(
+          id: row.id, position: index + 1, name: row.exercise.name, sets: sets)
+      }
+      guard !rows.isEmpty else { return nil }
+      return Self(id: workout.id, date: workout.startedAt, name: workout.name, rows: rows)
+    }.sorted {
+      $0.date == $1.date ? $0.id.uuidString < $1.id.uuidString : $0.date > $1.date
+    }
+  }
+}
+
 public enum ExerciseProgressPeriod: String, CaseIterable, Identifiable, Sendable {
   case fourWeeks, twelveWeeks, twentySixWeeks, allTime
   public var id: String { rawValue }

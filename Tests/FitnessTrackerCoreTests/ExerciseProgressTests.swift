@@ -161,3 +161,115 @@ private func progressWorkout(_ date: Date, sets: [WorkoutSet], exercise: Exercis
   #expect(history.points(in: .fourWeeks, relativeTo: now).isEmpty)
   #expect(history.points(in: .allTime, relativeTo: now).count == 1)
 }
+
+@Test func exerciseWorkoutHistoryPreservesSnapshotsPositionsAndRepeatedRows() throws {
+  let date = try progressDate(10, 1)
+  let exercise = ExerciseCatalog.all[0]
+  let warmup = WorkoutSet(
+    repetitions: 6, weightKG: 20, isWarmup: true, completedAt: date,
+    note: "Разминка перед рабочими")
+  let pending = WorkoutSet(repetitions: 12, weightKG: 99)
+  let working = WorkoutSet(
+    repetitions: 8, weightKG: 40, completedAt: date.addingTimeInterval(20),
+    loadMultiplier: 2, note: "С паузой")
+  let repeated = WorkoutSet(
+    repetitions: 5, weightKG: 45, completedAt: date.addingTimeInterval(10))
+  let sameName = Exercise(name: exercise.name, muscle: exercise.muscle)
+  var workout = Workout(
+    name: "Сохранённая тренировка", startedAt: date,
+    exercises: [
+      WorkoutExercise(exercise: sameName, sets: [warmup]),
+      WorkoutExercise(exercise: exercise, sets: [warmup, pending, working]),
+      WorkoutExercise(exercise: exercise, sets: [repeated]),
+    ])
+  try WorkoutEngine.finish(&workout, at: date.addingTimeInterval(60))
+  let archived = try JSONDecoder().decode(Workout.self, from: JSONEncoder().encode(workout))
+  let entries = ExerciseWorkoutHistoryEntry.entries(
+    for: exercise.id, workouts: [archived], now: date)
+  let entry = try #require(entries.first)
+  #expect(entry.id == workout.id && entry.date == date && entry.name == workout.name)
+  #expect(entry.rows.map(\.id) == Array(workout.exercises.dropFirst()).map(\.id))
+  #expect(entry.rows.map(\.position) == [2, 3])
+  #expect(entry.rows[0].sets.map(\.position) == [1, 3])
+  #expect(entry.rows[0].sets.map(\.set) == [warmup, working])
+  #expect(entry.rows[1].sets.map(\.set) == [repeated])
+  #expect(entry.rows[0].sets[1].set.loadMultiplier == 2)
+  #expect(entry.rows[0].sets[1].set.note == "С паузой")
+  #expect(workout.exercises[1].sets == [warmup, pending, working])
+}
+
+@Test func exerciseWorkoutHistoryRetainsOnlyPerformedDropStagesAndZeroLoad() throws {
+  let date = try progressDate(10, 1)
+  let completed = DropSetStage(repetitions: 12, weightKG: 30, completedAt: date)
+  let pending = DropSetStage(repetitions: 15, weightKG: 20)
+  let set = WorkoutSet(
+    repetitions: 8, weightKG: 40, completedAt: date, dropStages: [completed, pending],
+    note: "Последнее снижение пропущено")
+  let bodyweight = WorkoutSet(repetitions: 15, weightKG: 0, completedAt: date)
+  let workout = try progressWorkout(date, sets: [set, bodyweight])
+  let entry = try #require(
+    ExerciseWorkoutHistoryEntry.entries(
+      for: ExerciseCatalog.all[0].id, workouts: [workout], now: date
+    ).first)
+  let recorded = try #require(entry.rows.first?.sets.first?.set)
+  #expect(recorded.id == set.id && recorded.isDropSet)
+  #expect(recorded.performedStages.map(\.id) == [set.id, completed.id])
+  #expect(recorded.performedStages.map(\.repetitions) == [8, 12])
+  #expect(recorded.performedStages.map(\.weightKG) == [40, 30])
+  #expect(entry.rows.first?.sets.last?.set.weightKG == 0)
+  #expect(entry.rows.first?.sets.last?.set.note == nil)
+}
+
+@Test func exerciseWorkoutHistoryIncludesWarmupsButExcludesUnfinishedAndOtherExercises() throws {
+  let date = try progressDate(10, 1)
+  let exercise = ExerciseCatalog.all[0]
+  let warmup = try progressWorkout(
+    date, sets: [WorkoutSet(weightKG: 20, isWarmup: true, completedAt: date)])
+  var active = warmup
+  active.id = UUID()
+  active.status = .active
+  var paused = active
+  paused.id = UUID()
+  paused.status = .paused
+  var cancelled = active
+  cancelled.id = UUID()
+  cancelled.status = .cancelled
+  var future = warmup
+  future.id = UUID()
+  future.startedAt = date.addingTimeInterval(100)
+  let other = try progressWorkout(
+    date, sets: [WorkoutSet(weightKG: 50, completedAt: date)], exercise: ExerciseCatalog.all[1])
+  var unperformed = warmup
+  unperformed.id = UUID()
+  unperformed.exercises[0].sets = [WorkoutSet(weightKG: 90)]
+  let entries = ExerciseWorkoutHistoryEntry.entries(
+    for: exercise.id, workouts: [active, other, paused, future, cancelled, unperformed, warmup],
+    now: date)
+  #expect(entries.map(\.id) == [warmup.id])
+  #expect(entries.first?.rows.first?.sets.first?.set.isWarmup == true)
+  #expect(ExerciseWorkoutHistoryEntry.entries(for: exercise.id, workouts: []).isEmpty)
+}
+
+@Test func exerciseWorkoutHistoryUsesNewestFirstAndKeepsStoredNamesAcrossSessions() throws {
+  let date = try progressDate(10, 1)
+  let exercise = Exercise(name: "Название в старой тренировке", muscle: .legs)
+  let old = try progressWorkout(
+    date, sets: [WorkoutSet(weightKG: 40, completedAt: date)], exercise: exercise)
+  var renamed = exercise
+  renamed.name = "Новое название"
+  let later = date.addingTimeInterval(3600)
+  var recent = try progressWorkout(
+    later, sets: [WorkoutSet(weightKG: 50, completedAt: later)], exercise: renamed)
+  recent.id = try #require(UUID(uuidString: "00000000-0000-4000-8000-000000000002"))
+  var sameTime = recent
+  sameTime.id = try #require(UUID(uuidString: "00000000-0000-4000-8000-000000000001"))
+  let entries = ExerciseWorkoutHistoryEntry.entries(
+    for: exercise.id, workouts: [old, recent, sameTime], now: later)
+  #expect(entries.map(\.id) == [sameTime.id, recent.id, old.id])
+  #expect(entries.last?.rows.first?.name == "Название в старой тренировке")
+  #expect(entries.first?.rows.first?.name == "Новое название")
+  #expect(
+    entries
+      == ExerciseWorkoutHistoryEntry.entries(
+        for: exercise.id, workouts: [sameTime, recent, old], now: later))
+}

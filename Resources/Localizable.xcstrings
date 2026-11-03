@@ -1888,6 +1888,23 @@
         }
       }
     },
+    "Вес и сила": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вес и сила"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weight and strength"
+          }
+        }
+      }
+    },
     "Вес и этапы можно изменить после запуска тренировки.": {
       "extractionState": "manual",
       "localizations": {
@@ -2836,6 +2853,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Done"
+          }
+        }
+      }
+    },
+    "Графики": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Графики"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Charts"
           }
         }
       }
@@ -4812,6 +4846,23 @@
         }
       }
     },
+    "Здесь появятся дата и выполненные подходы после завершения тренировки с этим упражнением.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Здесь появятся дата и выполненные подходы после завершения тренировки с этим упражнением."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dates and performed sets will appear here after you finish a workout with this exercise."
+          }
+        }
+      }
+    },
     "Здоровье": {
       "extractionState": "manual",
       "localizations": {
@@ -5216,6 +5267,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Weight history"
+          }
+        }
+      }
+    },
+    "История упражнения": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "История упражнения"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exercise history"
           }
         }
       }
@@ -9364,6 +9432,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sets"
+          }
+        }
+      }
+    },
+    "Подходы и повторы": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Подходы и повторы"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sets and reps"
           }
         }
       }
