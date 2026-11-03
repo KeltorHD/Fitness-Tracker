@@ -45,6 +45,62 @@ public struct ExerciseWorkoutHistoryEntry: Identifiable, Equatable, Sendable {
   }
 }
 
+public struct ExerciseWorkoutHistoryFilter: Equatable, Sendable {
+  public enum SortOrder: String, CaseIterable, Sendable { case newest, oldest }
+  public enum SetKind: String, CaseIterable, Sendable { case all, working, warmup, dropSet }
+
+  public var query = ""
+  public var period = ExerciseProgressPeriod.allTime
+  public var setKind = SetKind.all
+  public var sortOrder = SortOrder.newest
+
+  public init() {}
+
+  public var hasFilters: Bool { period != .allTime || setKind != .all }
+  public var isActive: Bool {
+    hasFilters || !query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+  }
+  public var isModified: Bool { isActive || sortOrder != .newest }
+
+  public func apply(
+    to entries: [ExerciseWorkoutHistoryEntry], now: Date, calendar: Calendar
+  ) -> [ExerciseWorkoutHistoryEntry] {
+    let start = period.startDate(relativeTo: now, calendar: calendar)
+    let tokens = Self.normalize(query).split(whereSeparator: \.isWhitespace)
+    return entries.compactMap { entry -> ExerciseWorkoutHistoryEntry? in
+      let name = Self.normalize(entry.name)
+      guard entry.date <= now, start.map({ entry.date >= $0 }) ?? true,
+        tokens.allSatisfy({ name.contains($0) })
+      else { return nil }
+      guard setKind != .all else { return entry }
+      let rows = entry.rows.compactMap { row -> ExerciseWorkoutHistoryRow? in
+        let sets = row.sets.filter { recorded in
+          switch setKind {
+          case .all: true
+          case .working: !recorded.set.isWarmup
+          case .warmup: recorded.set.isWarmup
+          case .dropSet: recorded.set.isDropSet
+          }
+        }
+        guard !sets.isEmpty else { return nil }
+        return ExerciseWorkoutHistoryRow(
+          id: row.id, position: row.position, name: row.name, sets: sets)
+      }
+      guard !rows.isEmpty else { return nil }
+      return ExerciseWorkoutHistoryEntry(
+        id: entry.id, date: entry.date, name: entry.name, rows: rows)
+    }.sorted {
+      if $0.date == $1.date { return $0.id.uuidString < $1.id.uuidString }
+      return sortOrder == .newest ? $0.date > $1.date : $0.date < $1.date
+    }
+  }
+
+  private static func normalize(_ value: String) -> String {
+    value.folding(
+      options: [.caseInsensitive, .diacriticInsensitive], locale: Locale(identifier: "ru_RU"))
+  }
+}
+
 public enum ExerciseProgressPeriod: String, CaseIterable, Identifiable, Sendable {
   case fourWeeks, twelveWeeks, twentySixWeeks, allTime
   public var id: String { rawValue }

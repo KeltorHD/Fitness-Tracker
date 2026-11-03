@@ -2245,6 +2245,23 @@
         }
       }
     },
+    "Все подходы": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Все подходы"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All sets"
+          }
+        }
+      }
+    },
     "Все подходы записаны": {
       "extractionState": "manual",
       "localizations": {
@@ -4179,6 +4196,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "A drop set must have 1 to 5 weight drops. Each weight must be lower than the previous one. Warm-ups are recorded separately."
+          }
+        }
+      }
+    },
+    "Дропсеты": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Дропсеты"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drop sets"
           }
         }
       }
@@ -6274,6 +6308,23 @@
         }
       }
     },
+    "Название занятия": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Название занятия"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workout name"
+          }
+        }
+      }
+    },
     "Название и заметка": {
       "extractionState": "manual",
       "localizations": {
@@ -7770,6 +7821,23 @@
         }
       }
     },
+    "Нет подходящих занятий": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нет подходящих занятий"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No matching workouts"
+          }
+        }
+      }
+    },
     "Нет подходящих шаблонов": {
       "extractionState": "manual",
       "localizations": {
@@ -8650,6 +8718,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Clear value"
+          }
+        }
+      }
+    },
+    "Очистить поиск": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Очистить поиск"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear search"
           }
         }
       }
@@ -11578,6 +11663,40 @@
         }
       }
     },
+    "Сначала новые": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сначала новые"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Newest first"
+          }
+        }
+      }
+    },
+    "Сначала старые": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сначала старые"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oldest first"
+          }
+        }
+      }
+    },
     "Снижение веса %@": {
       "extractionState": "manual",
       "localizations": {
@@ -11676,6 +11795,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Night’s sleep"
+          }
+        }
+      }
+    },
+    "Сортировка": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сортировка"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sort order"
           }
         }
       }
@@ -12203,6 +12339,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Instructions from free-exercise-db. Photos show individual positions, rather than a video recording."
+          }
+        }
+      }
+    },
+    "Тип подходов": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Тип подходов"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set type"
           }
         }
       }

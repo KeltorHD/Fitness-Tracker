@@ -273,3 +273,90 @@ private func progressWorkout(_ date: Date, sets: [WorkoutSet], exercise: Exercis
       == ExerciseWorkoutHistoryEntry.entries(
         for: exercise.id, workouts: [sameTime, recent, old], now: later))
 }
+
+@Test func exerciseHistoryFiltersComposeAndKeepOriginalRowsSetsAndStages() throws {
+  let date = try progressDate(10, 1)
+  let warmup = WorkoutSet(weightKG: 20, isWarmup: true, completedAt: date)
+  let working = WorkoutSet(weightKG: 40, completedAt: date)
+  let drop = WorkoutSet(
+    weightKG: 50, completedAt: date,
+    dropStages: [DropSetStage(weightKG: 30, completedAt: date)])
+  var workout = try progressWorkout(date, sets: [warmup, working, drop])
+  workout.name = "Тяжёлая тренировка — НОГИ"
+  var other = workout
+  other.id = UUID()
+  other.name = "Верх тела"
+  var old = workout
+  old.id = UUID()
+  old.startedAt = try progressDate(1, 1)
+  let entries = ExerciseWorkoutHistoryEntry.entries(
+    for: ExerciseCatalog.all[0].id, workouts: [old, workout, other], now: date)
+  var filter = ExerciseWorkoutHistoryFilter()
+  filter.query = "  ноги ТЯЖЕЛАЯ\n"
+  filter.period = .fourWeeks
+  filter.setKind = .working
+  let result = filter.apply(to: entries, now: date, calendar: Calendar(identifier: .gregorian))
+  #expect(result.map(\.id) == [workout.id])
+  #expect(result.first?.rows.first?.id == workout.exercises.first?.id)
+  #expect(result.first?.rows.first?.sets.map(\.position) == [2, 3])
+  #expect(result.first?.rows.first?.sets.map(\.set) == [working, drop])
+  filter.setKind = .dropSet
+  #expect(
+    filter.apply(to: entries, now: date, calendar: .current).first?.rows.first?.sets.map(\.set)
+      == [drop])
+  filter.setKind = .warmup
+  #expect(
+    filter.apply(to: entries, now: date, calendar: .current).first?.rows.first?.sets.map(\.set)
+      == [warmup])
+  #expect(
+    entries.first { $0.id == workout.id }?.rows.first?.sets.map(\.set) == [warmup, working, drop])
+  filter.query = "Неизвестное занятие"
+  #expect(filter.apply(to: entries, now: date, calendar: .current).isEmpty)
+}
+
+@Test func exerciseHistorySortingKeepsSessionsSeparateAndTiesStable() throws {
+  let date = try progressDate(10, 1)
+  var first = try progressWorkout(date, sets: [WorkoutSet(weightKG: 40, completedAt: date)])
+  first.id = try #require(UUID(uuidString: "00000000-0000-4000-8000-000000000001"))
+  var sameDate = first
+  sameDate.id = try #require(UUID(uuidString: "00000000-0000-4000-8000-000000000002"))
+  var later = first
+  later.id = UUID()
+  later.startedAt = date.addingTimeInterval(60)
+  let entries = ExerciseWorkoutHistoryEntry.entries(
+    for: ExerciseCatalog.all[0].id, workouts: [sameDate, later, first], now: later.startedAt)
+  var filter = ExerciseWorkoutHistoryFilter()
+  #expect(
+    filter.apply(to: Array(entries.reversed()), now: later.startedAt, calendar: .current).map(\.id)
+      == [later.id, first.id, sameDate.id])
+  filter.sortOrder = .oldest
+  #expect(filter.isModified && !filter.isActive)
+  #expect(
+    filter.apply(to: entries, now: later.startedAt, calendar: .current).map(\.id)
+      == [first.id, sameDate.id, later.id])
+}
+
+@Test func exerciseHistoryPeriodUsesCalendarBoundaryAcrossDSTAndEmptyRowsAreRemoved() throws {
+  var calendar = Calendar(identifier: .gregorian)
+  calendar.timeZone = try #require(TimeZone(identifier: "America/New_York"))
+  let now = try progressDate(3, 30)
+  let boundary = try #require(
+    ExerciseProgressPeriod.fourWeeks.startDate(relativeTo: now, calendar: calendar))
+  let workouts = try [boundary.addingTimeInterval(-1), boundary, now].map {
+    try progressWorkout($0, sets: [WorkoutSet(weightKG: 20, isWarmup: true, completedAt: $0)])
+  }
+  let entries = ExerciseWorkoutHistoryEntry.entries(
+    for: ExerciseCatalog.all[0].id, workouts: workouts, now: now)
+  var filter = ExerciseWorkoutHistoryFilter()
+  filter.period = .fourWeeks
+  #expect(
+    filter.apply(to: entries, now: now, calendar: calendar).map(\.id) == [
+      workouts[2].id, workouts[1].id,
+    ])
+  filter.setKind = .working
+  #expect(filter.apply(to: entries, now: now, calendar: calendar).isEmpty)
+  filter = ExerciseWorkoutHistoryFilter()
+  filter.query = " \n "
+  #expect(!filter.isModified)
+  #expect(filter.apply(to: entries, now: now, calendar: calendar).count == 3)
+}

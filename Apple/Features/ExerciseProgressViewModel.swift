@@ -29,9 +29,11 @@ struct ExerciseMetricPoint: Identifiable, Equatable {
   var selectedExerciseID: UUID? { didSet { rebuild(clearSelection: true) } }
   var period: ExerciseProgressPeriod { didSet { rebuild(clearSelection: true) } }
   var selectedDate: Date? { didSet { updateSelection() } }
+  var historyFilter = ExerciseWorkoutHistoryFilter() { didSet { filterHistory() } }
   private(set) var histories: [ExerciseProgressHistory] = []
   private(set) var history: ExerciseProgressHistory?
   private(set) var historyEntries: [ExerciseWorkoutHistoryEntry] = []
+  private(set) var filteredHistoryEntries: [ExerciseWorkoutHistoryEntry] = []
   private(set) var points: [ExerciseProgressPoint] = []
   private(set) var series: [ExerciseProgressMetric: [ExerciseMetricPoint]] = [:]
   private(set) var selectedPoint: ExerciseProgressPoint?
@@ -70,6 +72,7 @@ struct ExerciseMetricPoint: Identifiable, Equatable {
       selectedExerciseID.map {
         ExerciseWorkoutHistoryEntry.entries(for: $0, workouts: workouts, now: date)
       } ?? []
+    filterHistory()
     history = histories.first { $0.id == selectedExerciseID }
     points = history?.points(in: period, relativeTo: date, calendar: calendar) ?? []
     series = Dictionary(
@@ -109,5 +112,9 @@ struct ExerciseMetricPoint: Identifiable, Equatable {
     } else {
       selectedPoint = nearest
     }
+  }
+
+  private func filterHistory() {
+    filteredHistoryEntries = historyFilter.apply(to: historyEntries, now: now(), calendar: calendar)
   }
 }

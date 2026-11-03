@@ -38,6 +38,24 @@ private func expect(_ condition: Bool, _ message: String) throws {
       model.historyEntries.map(\.id) == [recent.id, old.id],
       "History must keep all sessions newest first independently of the chart period")
     try expect(model.series.count == 5, "All five metrics must be prepared")
+    model.historyFilter.sortOrder = .oldest
+    model.historyFilter.query = "fixture"
+    try expect(
+      model.filteredHistoryEntries.map(\.id) == [old.id, recent.id],
+      "History search and sorting must apply without changing chronological snapshots")
+    model.historyFilter.period = .fourWeeks
+    try expect(
+      model.filteredHistoryEntries.map(\.id) == [recent.id] && model.historyEntries.count == 2,
+      "History period filters must preserve source snapshots")
+    model.historyFilter.setKind = .warmup
+    model.refresh(workouts: [recent, bodyweight, old], calendar: calendar)
+    try expect(
+      model.filteredHistoryEntries.isEmpty && model.points.map(\.id) == [recent.id],
+      "Refreshing history must preserve its filters without filtering chart data")
+    model.historyFilter = ExerciseWorkoutHistoryFilter()
+    try expect(
+      model.filteredHistoryEntries.map(\.id) == [recent.id, old.id],
+      "Resetting history filters must restore all entries newest first")
     model.period = .allTime
     try expect(
       model.points.map(\.id) == [old.id, recent.id], "All-time period must retain all history")
@@ -65,6 +83,7 @@ private func expect(_ condition: Bool, _ message: String) throws {
       model.history == nil && model.points.isEmpty && model.displayedPoint == nil,
       "Empty history must clear old chart data")
     try expect(model.historyEntries.isEmpty, "Deleted sessions must disappear from the history")
+    try expect(model.filteredHistoryEntries.isEmpty, "Deletion must clear the filtered list too")
 
     let fixed = ExerciseProgressViewModel(
       exerciseID: exercise.id, workoutID: old.id, period: .allTime, now: { now })

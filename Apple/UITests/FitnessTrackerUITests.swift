@@ -849,6 +849,43 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(recordedSet.exists)
   }
 
+  @MainActor func testExerciseHistorySearchSortAndTypeFiltersCanBeReset() {
+    let app = launch()
+    openDemoProfile(in: app)
+    app.buttons["navigationTab_0"].tap()
+    let workout = app.buttons.containing(NSPredicate(format: "label CONTAINS %@", "ДЕМО ·"))
+      .firstMatch
+    reveal(workout, in: app)
+    workout.tap()
+    let exercise = app.buttons["openWorkoutExercise"].firstMatch
+    reveal(exercise, in: app)
+    exercise.tap()
+    let progress = app.buttons["openExerciseProgress"].firstMatch
+    reveal(progress, in: app)
+    progress.tap()
+    let cards = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "exerciseHistoryWorkout_"))
+    XCTAssertTrue(cards.firstMatch.waitForExistence(timeout: 5))
+    let newestID = cards.firstMatch.identifier
+    let search = app.textFields["exerciseHistorySearch"]
+    search.tap()
+    search.typeText("несуществующее занятие\n")
+    XCTAssertTrue(app.staticTexts["Нет подходящих занятий"].waitForExistence(timeout: 5))
+    XCTAssertFalse(cards.firstMatch.exists)
+    app.buttons["resetExerciseHistoryFilters"].tap()
+    XCTAssertTrue(cards.firstMatch.waitForExistence(timeout: 5))
+    XCTAssertEqual(cards.firstMatch.identifier, newestID)
+    app.buttons["exerciseHistorySort"].tap()
+    app.buttons["Сначала старые"].tap()
+    XCTAssertNotEqual(cards.firstMatch.identifier, newestID)
+    app.buttons["exerciseHistoryFilters"].tap()
+    app.buttons["Дропсеты"].tap()
+    XCTAssertTrue(app.staticTexts["Нет подходящих занятий"].waitForExistence(timeout: 5))
+    app.buttons["resetExerciseHistoryFilters"].tap()
+    XCTAssertTrue(cards.firstMatch.waitForExistence(timeout: 5))
+    XCTAssertEqual(cards.firstMatch.identifier, newestID)
+  }
+
   @MainActor func testActiveExerciseCanOpenAnEmptyProgressHistory() {
     let app = launch()
     XCTAssertTrue(app.buttons["startWorkout"].waitForExistence(timeout: 10))
