@@ -45,7 +45,7 @@ python3 -m pip install -r requirements-dev.txt
 bash scripts/check-linux.sh
 ```
 
-Если `venv` отсутствует, установите пакет `python3-venv`; вместо venv можно использовать системный `python3-yaml`.
+Если `venv` отсутствует, установите пакет `python3-venv`; вместо venv можно использовать системные пакеты `python3-yaml` и `python3-pil`.
 Для другого дистрибутива установите подходящий toolchain с [Swift.org](https://www.swift.org/install/linux/).
 Проверка не требует сторонних Swift-пакетов и доступа к Apple SDK.
 
