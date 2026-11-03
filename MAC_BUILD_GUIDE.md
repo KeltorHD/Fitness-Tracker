@@ -4,6 +4,8 @@
 
 После добавления питания повторите `xcodegen generate`: новые файлы входят только в основной iOS target. Запустите `NutritionTests` и `testDiaryCanLogManualFoodWithoutNetwork`, затем проверьте PhotosPicker и запись с фото в SwiftData/CloudKit по [чек-листу](docs/XCODE_VALIDATION.md). На Linux эти Apple-сценарии не выполнялись. Дополнительные ключи API и разрешения медиатеки для системного выбора фото не требуются.
 
+После объединения дневников снова выполните `xcodegen generate`: добавлены `FoodBarcodeScanner.swift` и `NutritionToolsView.swift`. В «Дневнике» проверьте свайп между тренировками и питанием, общую дату, ручное добавление/избранное, воду и копирование дня. Для сканера нужен поддерживаемый физический iPhone/iPad: VisionKit + разрешение камеры `NSCameraUsageDescription` (локализовано RU/EN). На Simulator/при отказе доступен ручной ввод кода; дополнительная capability камеры не требуется. Кадры сканера не сохраняются/не отправляются. Сканирование EAN-8/EAN-13, camera lifecycle и SwiftData/CloudKit round-trip новых kinds требуют Xcode/устройства.
+
 ## 1. Инструменты
 
 Установите **полный Xcode 26 или новее**, совместимый с вашей версией macOS, с iOS 26 и watchOS 26 SDK. Одних Command Line Tools недостаточно. Версию macOS выбирайте по [таблице совместимости Xcode](https://developer.apple.com/support/xcode/). Откройте Xcode, примите лицензию и установите iPhone/watchOS Simulator runtimes через Settings → Components.

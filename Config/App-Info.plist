@@ -156,5 +156,7 @@
 	</array>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>Подключать Bluetooth-пульсометр, например Mi Band или HUAWEI WATCH, и записывать пульс во время тренировки.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Сканировать штрихкоды упаковок, чтобы найти продукт и добавить его в дневник питания.</string>
 </dict>
 </plist>

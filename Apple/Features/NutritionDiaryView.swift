@@ -2,64 +2,36 @@ import FitnessTrackerCore
 import SwiftUI
 import UIKit
 
-struct NutritionDiaryCard: View {
-  @Environment(\.locale) private var locale
-  @Environment(\.calendar) private var calendar
-  let model: NutritionDiaryModel
-  let date: Date
-  var body: some View {
-    NavigationLink {
-      NutritionDiaryView(model: model, date: date).id(model.workspaceID)
-    } label: {
-      VStack(alignment: .leading, spacing: 12) {
-        HStack {
-          Label(L10n.text("Питание", locale: locale), systemImage: "fork.knife").font(
-            .title2.bold())
-          Spacer()
-          Image(systemName: "chevron.right").font(.subheadline)
-        }
-        Text(date, format: .dateTime.day().month(.wide)).font(.subheadline).foregroundStyle(
-          .secondary)
-        if model.loaded {
-          NutritionSummary(
-            day: NutritionDay(entries: model.entries, date: date, calendar: calendar),
-            goal: model.goal)
-        } else {
-          Text(
-            L10n.text("Не удалось прочитать дневник питания. Повторите загрузку.", locale: locale))
-        }
-        Text(L10n.text("Записать еду или фото перекуса", locale: locale)).font(.subheadline)
-      }.foregroundStyle(.primary).fitCard()
-    }.buttonStyle(.plain).accessibilityIdentifier("nutritionDiary")
-  }
-}
-
 struct NutritionSummary: View {
   @Environment(\.locale) private var locale
   let day: NutritionDay
   let goal: NutritionGoal?
   var body: some View {
     VStack(alignment: .leading, spacing: 10) {
-      Text(
-        L10n.format(
-          "%@ ккал", day.total.calories.formatted(.number.precision(.fractionLength(0))),
-          locale: locale)
-      )
-      .font(.title.bold()).monospacedDigit()
-      if let goal {
-        ProgressView(value: min(day.total.calories / goal.calories, 1))
-          .accessibilityLabel(L10n.text("Дневная цель калорий", locale: locale))
-        Text(L10n.format("Цель: %@ ккал", goal.calories.formatted(), locale: locale)).font(
-          .subheadline)
+      if day.entries.isEmpty || day.entries.count > day.incompleteCount {
         Text(
           L10n.format(
-            day.total.calories > goal.calories ? "Сверх цели: %@ ккал" : "Осталось: %@ ккал",
-            abs(goal.calories - day.total.calories).formatted(
-              .number.precision(.fractionLength(0))), locale: locale)
+            "%@ ккал", day.total.calories.formatted(.number.precision(.fractionLength(0))),
+            locale: locale)
         )
-        .font(.subheadline).foregroundStyle(.secondary)
+        .font(.title.bold()).monospacedDigit()
+        if let goal {
+          ProgressView(value: min(day.total.calories / goal.calories, 1))
+            .accessibilityLabel(L10n.text("Дневная цель калорий", locale: locale))
+          Text(L10n.format("Цель: %@ ккал", goal.calories.formatted(), locale: locale)).font(
+            .subheadline)
+          Text(
+            L10n.format(
+              day.total.calories > goal.calories ? "Сверх цели: %@ ккал" : "Осталось: %@ ккал",
+              abs(goal.calories - day.total.calories).formatted(
+                .number.precision(.fractionLength(0))), locale: locale)
+          )
+          .font(.subheadline).foregroundStyle(.secondary)
+        }
+        NutrientValues(value: day.total, goal: goal)
+      } else {
+        Text(L10n.text("КБЖУ не заполнены", locale: locale)).font(.headline)
       }
-      NutrientValues(value: day.total, goal: goal)
       if day.incompleteCount > 0 {
         Label(
           L10n.text("Есть фото без КБЖУ — итог неполный", locale: locale),
@@ -94,50 +66,83 @@ struct NutrientValues: View {
   }
 }
 
+private enum NutritionSheet: Identifiable {
+  case food(FoodEntry)
+  case water
+  case copy(MealKind?)
+  var id: String {
+    switch self {
+    case .food(let entry): "food_\(entry.id)"
+    case .water: "water"
+    case .copy(let meal): "copy_\(meal?.rawValue ?? "all")"
+    }
+  }
+}
+
 struct NutritionDiaryView: View {
   @Environment(\.locale) private var locale
   @Environment(\.calendar) private var calendar
   @Environment(\.scenePhase) private var phase
   @Bindable var model: NutritionDiaryModel
-  @State var date: Date
-  @State private var editing: FoodEntry?
+  @Binding var date: Date
+  var isSelected: Bool
+  @State private var sheet: NutritionSheet?
   @State private var pendingDelete: FoodEntry?
+
   var body: some View {
-    let day = NutritionDay(entries: model.entries, date: date, calendar: calendar)
     List {
-      DatePicker(L10n.text("Дата", locale: locale), selection: $date, displayedComponents: .date)
       if let error = model.error {
-        Section {
+        VStack(alignment: .leading, spacing: 8) {
           Text(L10n.text(error, locale: locale)).foregroundStyle(.red)
           Button(L10n.text("Повторить", locale: locale)) { model.reload() }
-        }
+        }.cardListRow()
+      }
+      if let notice = model.notice {
+        HStack {
+          Label(L10n.text(notice, locale: locale), systemImage: "checkmark.circle")
+          Spacer()
+          Button(L10n.text("Закрыть", locale: locale), systemImage: "xmark") { model.notice = nil }
+            .labelStyle(.iconOnly)
+        }.font(.subheadline).cardListRow()
       }
       if model.loaded {
-        NutritionSummary(day: day, goal: model.goal).cardListRow()
-        NavigationLink(L10n.text("Цели питания", locale: locale)) {
-          NutritionGoalEditor(model: model)
-        }
-        if day.entries.isEmpty {
-          ContentUnavailableView(
-            L10n.text("Пока нет записей питания", locale: locale), systemImage: "fork.knife",
-            description: Text(
-              L10n.text(
-                "Добавьте продукты или сохраните фото, чтобы заполнить КБЖУ позже.", locale: locale)
-            ))
-        }
+        NutritionSummary(day: model.day, goal: model.goal).fitCard().cardListRow()
+        HStack {
+          NavigationLink {
+            NutritionGoalEditor(model: model)
+          } label: {
+            Label(L10n.text("Цели питания", locale: locale), systemImage: "target")
+          }
+          .accessibilityIdentifier("nutritionGoals")
+          Spacer(minLength: 8)
+          NavigationLink {
+            NutritionWeekView(model: model)
+          } label: {
+            Label(L10n.text("За 7 дней", locale: locale), systemImage: "chart.bar")
+          }
+          .accessibilityIdentifier("nutritionWeek")
+        }.buttonStyle(.bordered).controlSize(.small).cardListRow()
+        NutritionWaterCard(model: model, date: date) { sheet = .water }.cardListRow()
         ForEach(MealKind.allCases, id: \.self) { meal in
           Section {
-            ForEach(day.entries.filter { $0.meal == meal }) { entry in
+            let entries = model.meals[meal] ?? []
+            if entries.isEmpty {
+              Text(L10n.text("Пока нет записей", locale: locale)).font(.subheadline)
+                .foregroundStyle(.secondary).cardListRow()
+            }
+            ForEach(entries) { entry in
               Button {
-                editing = entry
+                sheet = .food(entry)
               } label: {
-                FoodEntryRow(entry: entry)
+                FoodEntryRow(entry: entry).fitCard()
               }
-              .buttonStyle(.plain)
+              .buttonStyle(.plain).cardListRow().accessibilityIdentifier("foodEntry_\(entry.id)")
               .contextMenu {
-                Button(L10n.text("Изменить", locale: locale)) { editing = entry }
+                Button(L10n.text("Изменить", locale: locale)) { sheet = .food(entry) }
                 Button(L10n.text("Повторить на другую дату", locale: locale)) {
-                  editing = entry.repeated(on: date)
+                  sheet = .food(
+                    entry.repeated(
+                      on: NutritionCalendar.date(on: date, timeOf: entry.date, calendar: calendar)))
                 }
                 Button(
                   L10n.text(
@@ -154,60 +159,106 @@ struct NutritionDiaryView: View {
                 Button(L10n.text("Удалить", locale: locale)) { pendingDelete = entry }.tint(.red)
               }
             }
-            Button(L10n.text("Добавить еду", locale: locale), systemImage: "plus") {
-              editing = FoodEntry(date: date, meal: meal)
-            }.accessibilityIdentifier("addFood_\(meal.rawValue)")
+            Button(L10n.text("Добавить еду", locale: locale), systemImage: "plus.circle.fill") {
+              sheet = .food(
+                FoodEntry(
+                  date: NutritionCalendar.date(on: date, timeOf: .now, calendar: calendar),
+                  meal: meal))
+            }.accessibilityIdentifier("addFood_\(meal.rawValue)").cardListRow()
           } header: {
             HStack {
-              Text(L10n.text(meal.title, locale: locale))
+              Text(L10n.text(meal.title, locale: locale)).font(.headline)
               Spacer()
-              let total = day.entries.filter { $0.meal == meal }.reduce(0) {
-                $0 + $1.nutrients.calories
+              if let entries = model.meals[meal], !entries.isEmpty,
+                entries.allSatisfy(\.needsNutrition)
+              {
+                Text("—")
+              } else {
+                Text(
+                  L10n.format(
+                    "%@ ккал",
+                    (model.meals[meal] ?? []).reduce(0) { $0 + $1.nutrients.calories }
+                      .formatted(.number.precision(.fractionLength(0))), locale: locale))
               }
-              Text(
-                L10n.format(
-                  "%@ ккал", total.formatted(.number.precision(.fractionLength(0))), locale: locale)
-              )
-            }
+              Menu {
+                Button(
+                  L10n.text("Скопировать приём пищи", locale: locale), systemImage: "doc.on.doc"
+                ) { sheet = .copy(meal) }
+                .disabled((model.meals[meal] ?? []).isEmpty)
+              } label: {
+                Image(systemName: "ellipsis")
+              }
+              .accessibilityLabel(L10n.text("Скопировать приём пищи", locale: locale))
+            }.textCase(nil)
           }
         }
         if !model.savedMeals.isEmpty {
-          Section(L10n.text("Сохранённые блюда", locale: locale)) {
+          DisclosureGroup(L10n.text("Сохранённые блюда", locale: locale)) {
             ForEach(model.savedMeals) { entry in
               Button {
-                editing = entry.repeated(on: date)
+                sheet = .food(
+                  entry.repeated(
+                    on: NutritionCalendar.date(on: date, timeOf: .now, calendar: calendar)))
               } label: {
                 FoodEntryRow(entry: entry)
-              }
-              .buttonStyle(.plain)
+              }.buttonStyle(.plain)
             }
-          }
+          }.cardListRow()
         }
         Section { FoodDatabaseAttribution() }
       }
-    }.navigationTitle(L10n.text("Питание", locale: locale))
-      .refreshable { model.reload() }
-      .onAppear {
-        model.isPresenting = true
-        model.reload()
-      }
-      .onDisappear { if editing == nil { model.isPresenting = false } }
-      .onChange(of: phase) { if phase == .active { model.reload() } }
-      .sheet(item: $editing, onDismiss: { model.isPresenting = true }) { entry in
-        FoodEntryEditor(diary: model, entry: entry)
-      }
-      .confirmationDialog(
-        L10n.text("Удалить запись питания?", locale: locale),
-        isPresented: Binding(
-          get: { pendingDelete != nil }, set: { if !$0 { pendingDelete = nil } }),
-        titleVisibility: .visible
-      ) {
-        Button(L10n.text("Удалить", locale: locale), role: .destructive) {
-          if let pendingDelete { model.delete(pendingDelete) }
-          pendingDelete = nil
+    }
+    .listStyle(.plain).scrollContentBackground(.hidden).background(FitTheme.paper)
+    .scrollDismissesKeyboard(.interactively)
+    .refreshable { model.reload() }
+    .toolbar {
+      if isSelected {
+        ToolbarItem(placement: .topBarTrailing) {
+          Menu {
+            Button(
+              L10n.text("Скопировать питание за день", locale: locale), systemImage: "doc.on.doc"
+            ) { sheet = .copy(nil) }
+            .disabled(model.day.entries.isEmpty)
+            Button(L10n.text("Обновить", locale: locale), systemImage: "arrow.clockwise") {
+              model.reload()
+            }
+          } label: {
+            Image(systemName: "ellipsis")
+          }
+          .accessibilityLabel(L10n.text("Действия питания", locale: locale))
         }
-        Button(L10n.text("Отмена", locale: locale), role: .cancel) { pendingDelete = nil }
       }
+    }
+    .onAppear {
+      model.selectDay(date, calendar: calendar)
+      model.reload()
+    }
+    .onDisappear { if sheet == nil { model.isPresenting = false } }
+    .onChange(of: date) { model.selectDay(date, calendar: calendar) }
+    .onChange(of: calendar) { model.selectDay(date, calendar: calendar) }
+    .onChange(of: phase) { if phase == .active && isSelected { model.reload() } }
+    .onChange(of: sheet?.id) { model.isPresenting = sheet != nil }
+    .sheet(item: $sheet, onDismiss: { model.isPresenting = false }) { value in
+      switch value {
+      case .food(let entry): FoodEntryEditor(diary: model, entry: entry)
+      case .water: NavigationStack { NutritionWaterEditor(model: model, date: date) }
+      case .copy(let meal):
+        NavigationStack {
+          NutritionCopyView(model: model, date: date, meal: meal, calendar: calendar)
+        }
+      }
+    }
+    .confirmationDialog(
+      L10n.text("Удалить запись питания?", locale: locale),
+      isPresented: Binding(get: { pendingDelete != nil }, set: { if !$0 { pendingDelete = nil } }),
+      titleVisibility: .visible
+    ) {
+      Button(L10n.text("Удалить", locale: locale), role: .destructive) {
+        if let pendingDelete { model.delete(pendingDelete) }
+        pendingDelete = nil
+      }
+      Button(L10n.text("Отмена", locale: locale), role: .cancel) { pendingDelete = nil }
+    }
   }
 }
 

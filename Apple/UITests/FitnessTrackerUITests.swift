@@ -1149,7 +1149,7 @@ final class FitnessTrackerUITests: XCTestCase {
   }
   @MainActor func testDiaryCanLogManualFoodWithoutNetwork() {
     let app = launch()
-    let nutrition = app.buttons["nutritionDiary"]
+    let nutrition = app.segmentedControls["diarySection"].buttons["Питание"]
     XCTAssertTrue(nutrition.waitForExistence(timeout: 10))
     nutrition.tap()
     let snack = app.buttons["addFood_snack"]
@@ -1175,6 +1175,35 @@ final class FitnessTrackerUITests: XCTestCase {
     save.tap()
     XCTAssertTrue(app.staticTexts["Тестовый продукт"].waitForExistence(timeout: 5))
     XCTAssertTrue(app.staticTexts["200 ккал"].firstMatch.exists)
+  }
+
+  @MainActor func testDiaryPagesShareDateAndWaterUndoDoesNotChangeWorkouts() {
+    let app = launch()
+    let section = app.segmentedControls["diarySection"]
+    XCTAssertTrue(section.waitForExistence(timeout: 10))
+    section.buttons["Питание"].tap()
+    let water = app.buttons["addWater_250"]
+    XCTAssertTrue(water.waitForExistence(timeout: 5))
+    water.tap()
+    XCTAssertTrue(app.staticTexts["waterTotal"].label.contains("250"))
+    app.buttons["previousDiaryDay"].tap()
+    XCTAssertFalse(app.buttons["undoWater"].exists)
+    app.buttons["diaryToday"].tap()
+    XCTAssertTrue(app.buttons["undoWater"].waitForExistence(timeout: 5))
+    app.buttons["undoWater"].tap()
+    XCTAssertFalse(app.buttons["undoWater"].exists)
+    app.swipeRight()
+    XCTAssertTrue(section.buttons["Тренировки"].isSelected)
+    XCTAssertTrue(app.buttons["startWorkout"].exists)
+    app.swipeLeft()
+    XCTAssertTrue(section.buttons["Питание"].isSelected)
+    let add = app.buttons["addFood_breakfast"]
+    reveal(add, in: app)
+    add.tap()
+    app.buttons["addProduct"].tap()
+    XCTAssertTrue(app.buttons["scanFoodBarcode"].waitForExistence(timeout: 5))
+    app.segmentedControls["foodPickerSource"].buttons["Избранное"].tap()
+    XCTAssertTrue(app.staticTexts["Пока нет избранных продуктов"].waitForExistence(timeout: 5))
   }
 
   @MainActor private func launch() -> XCUIApplication {

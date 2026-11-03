@@ -26,7 +26,7 @@ import Observation
       workouts.filter { $0.status == .completed && $0.startedAt <= date }.map {
         calendar.startOfDay(for: $0.startedAt)
       })
-    days = TrainingJournal.weekDays(containing: date, calendar: calendar).map {
+    days = TrainingJournal.weekDays(containing: filterDate ?? date, calendar: calendar).map {
       TrainingCalendarDay(date: $0, isInMonth: true, hasWorkout: trained.contains($0))
     }
   }

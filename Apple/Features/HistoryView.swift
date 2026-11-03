@@ -13,87 +13,92 @@ struct HistoryView: View {
   @State private var model = HistoryViewModel()
   @State private var pendingDelete: Workout?
   @State private var showWeekStats = true
+  @Binding var date: Date
+  var isSelected: Bool
   var body: some View {
-    NavigationStack {
-      List {
-        weekStrip.cardListRow()
-        if let nutrition = store.nutrition {
-          NutritionDiaryCard(model: nutrition, date: model.filterDate ?? .now).cardListRow()
-        }
-        if let active = store.active {
-          Button {
-            store.presentWorkoutStart()
-          } label: {
-            HStack {
-              Image(systemName: "play.circle.fill").font(.title2)
-              VStack(alignment: .leading, spacing: 4) {
-                Text(active.name).font(.headline)
-                Text(
-                  active.status == .paused
-                    ? L10n.text("На паузе · продолжить", locale: locale)
-                    : L10n.text("Продолжить тренировку", locale: locale)
-                ).font(.subheadline)
-              }
-              Spacer()
-              Image(systemName: "chevron.right")
-            }.foregroundStyle(colorTheme.accent).padding(18)
-              .background(colorTheme.accent.opacity(0.08), in: .rect(cornerRadius: FitTheme.radius))
-              .themeGlow(in: RoundedRectangle(cornerRadius: FitTheme.radius), emphasized: true)
-          }.buttonStyle(.plain).accessibilityIdentifier("resumeWorkout").cardListRow()
-        }
-        if let date = model.filterDate {
+    List {
+      weekStrip.cardListRow()
+      if let active = store.active {
+        Button {
+          store.presentWorkoutStart()
+        } label: {
           HStack {
-            Text(date, format: .dateTime.day().month(.wide)).font(.headline)
+            Image(systemName: "play.circle.fill").font(.title2)
+            VStack(alignment: .leading, spacing: 4) {
+              Text(active.name).font(.headline)
+              Text(
+                active.status == .paused
+                  ? L10n.text("На паузе · продолжить", locale: locale)
+                  : L10n.text("Продолжить тренировку", locale: locale)
+              ).font(.subheadline)
+            }
             Spacer()
-            Button(L10n.text("Вся история", locale: locale)) { model.filterDate = nil }
-          }.cardListRow()
-        }
-        if model.weeks.isEmpty {
-          ContentUnavailableView {
-            Label(
-              model.filterDate == nil
-                ? L10n.text("Начните свой дневник", locale: locale)
-                : L10n.text("В этот день нет тренировок", locale: locale),
-              systemImage: "book.closed")
-          } description: {
-            Text(L10n.text("Завершённые тренировки появятся здесь по неделям.", locale: locale))
-          }.cardListRow()
-        }
-        ForEach(model.weeks) { week in
-          VStack(alignment: .leading, spacing: 14) {
-            Text(weekTitle(week.start)).font(.title2.bold())
-            if showWeekStats {
-              HStack {
-                SummaryChip(
-                  text: L10n.countText(week.personalRecords, kind: "record", locale: locale),
-                  symbol: "trophy")
-                SummaryChip(text: workoutCount(week.workouts.count))
-              }
+            Image(systemName: "chevron.right")
+          }.foregroundStyle(colorTheme.accent).padding(18)
+            .background(colorTheme.accent.opacity(0.08), in: .rect(cornerRadius: FitTheme.radius))
+            .themeGlow(in: RoundedRectangle(cornerRadius: FitTheme.radius), emphasized: true)
+        }.buttonStyle(.plain).accessibilityIdentifier("resumeWorkout").cardListRow()
+      }
+      if let date = model.filterDate {
+        HStack {
+          Text(date, format: .dateTime.day().month(.wide)).font(.headline)
+          Spacer()
+          Button(L10n.text("Вся история", locale: locale)) { model.filterDate = nil }
+        }.cardListRow()
+      } else {
+        HStack {
+          Text(L10n.text("Все тренировки", locale: locale)).font(.headline)
+          Spacer()
+          Button(L10n.text("Выбранный день", locale: locale)) { model.filterDate = date }
+        }.cardListRow()
+      }
+      if model.weeks.isEmpty {
+        ContentUnavailableView {
+          Label(
+            model.filterDate == nil
+              ? L10n.text("Начните свой дневник", locale: locale)
+              : L10n.text("В этот день нет тренировок", locale: locale),
+            systemImage: "book.closed")
+        } description: {
+          Text(L10n.text("Завершённые тренировки появятся здесь по неделям.", locale: locale))
+        }.cardListRow()
+      }
+      ForEach(model.weeks) { week in
+        VStack(alignment: .leading, spacing: 14) {
+          Text(weekTitle(week.start)).font(.title2.bold())
+          if showWeekStats {
+            HStack {
+              SummaryChip(
+                text: L10n.countText(week.personalRecords, kind: "record", locale: locale),
+                symbol: "trophy")
+              SummaryChip(text: workoutCount(week.workouts.count))
             }
-          }.padding(.top, 12).cardListRow()
-          ForEach(week.workouts) { workout in
-            HistoryWorkoutRow(
-              workout: workout, unit: unit,
-              onSelect: { selected = workout },
-              onRepeat: { store.repeatWorkout(workout) },
-              onDelete: { pendingDelete = workout }
-            )
-            .cardListRow()
-            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-              Button {
-                pendingDelete = workout
-              } label: {
-                Label(L10n.text("Удалить", locale: locale), systemImage: "trash")
-              }.tint(.red)
-                .accessibilityIdentifier("swipeDeleteWorkout_\(workout.id)")
-            }
+          }
+        }.padding(.top, 12).cardListRow()
+        ForEach(week.workouts) { workout in
+          HistoryWorkoutRow(
+            workout: workout, unit: unit,
+            onSelect: { selected = workout },
+            onRepeat: { store.repeatWorkout(workout) },
+            onDelete: { pendingDelete = workout }
+          )
+          .cardListRow()
+          .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+            Button {
+              pendingDelete = workout
+            } label: {
+              Label(L10n.text("Удалить", locale: locale), systemImage: "trash")
+            }.tint(.red)
+              .accessibilityIdentifier("swipeDeleteWorkout_\(workout.id)")
           }
         }
       }
-      .listStyle(.plain).scrollContentBackground(.hidden)
-      .refreshable { store.reload() }
-      .background(FitTheme.paper).navigationTitle(L10n.text("Дневник", locale: locale))
-      .toolbar {
+    }
+    .listStyle(.plain).scrollContentBackground(.hidden)
+    .refreshable { store.reload() }
+    .background(FitTheme.paper)
+    .toolbar {
+      if isSelected {
         ToolbarItemGroup(placement: .topBarTrailing) {
           Menu {
             Toggle(L10n.text("Статистика за неделю", locale: locale), isOn: $showWeekStats)
@@ -106,47 +111,47 @@ struct HistoryView: View {
           }
           .foregroundStyle(.primary).accessibilityIdentifier("startWorkout")
         }
-        SettingsToolbar()
       }
-      .sheet(
-        item: $selected,
-        onDismiss: {
-          store.showingWorkoutDetail = false
-          if let workout = repeatAfterDismiss {
-            repeatAfterDismiss = nil
-            store.repeatWorkout(workout)
+    }
+    .sheet(
+      item: $selected,
+      onDismiss: {
+        store.showingWorkoutDetail = false
+        if let workout = repeatAfterDismiss {
+          repeatAfterDismiss = nil
+          store.repeatWorkout(workout)
+        }
+      }
+    ) { workout in
+      NavigationStack {
+        WorkoutDetailView(
+          workout: workout,
+          onRepeat: {
+            repeatAfterDismiss = $0
+            selected = nil
           }
-        }
-      ) { workout in
-        NavigationStack {
-          WorkoutDetailView(
-            workout: workout,
-            onRepeat: {
-              repeatAfterDismiss = $0
-              selected = nil
-            }
-          ).tint(colorTheme.accent)
-            .onAppear { store.showingWorkoutDetail = true }
-        }
-        .presentationDetents([.large])
-        .presentationDragIndicator(.visible)
+        ).tint(colorTheme.accent)
+          .onAppear { store.showingWorkoutDetail = true }
       }
-      .onChange(of: store.workouts, initial: true) { refresh() }
-      .onChange(of: calendar) { refresh() }
-      .onChange(of: phase) { if phase == .active { refresh() } }
-      .confirmationDialog(
-        L10n.text("Удалить тренировку?", locale: locale),
-        isPresented: Binding(
-          get: { pendingDelete != nil }, set: { if !$0 { pendingDelete = nil } }),
-        titleVisibility: .visible
-      ) {
-        Button(L10n.text("Удалить", locale: locale), role: .destructive) {
-          if let pendingDelete { store.delete(workout: pendingDelete) }
-          pendingDelete = nil
-        }
-        .accessibilityIdentifier("confirmDeleteWorkout")
-        Button(L10n.text("Отмена", locale: locale), role: .cancel) { pendingDelete = nil }
+      .presentationDetents([.large])
+      .presentationDragIndicator(.visible)
+    }
+    .onChange(of: store.workouts, initial: true) { refresh() }
+    .onChange(of: calendar) { refresh() }
+    .onChange(of: date) { model.filterDate = date }
+    .onChange(of: phase) { if phase == .active { refresh() } }
+    .confirmationDialog(
+      L10n.text("Удалить тренировку?", locale: locale),
+      isPresented: Binding(
+        get: { pendingDelete != nil }, set: { if !$0 { pendingDelete = nil } }),
+      titleVisibility: .visible
+    ) {
+      Button(L10n.text("Удалить", locale: locale), role: .destructive) {
+        if let pendingDelete { store.delete(workout: pendingDelete) }
+        pendingDelete = nil
       }
+      .accessibilityIdentifier("confirmDeleteWorkout")
+      Button(L10n.text("Отмена", locale: locale), role: .cancel) { pendingDelete = nil }
     }
   }
 
@@ -159,6 +164,7 @@ struct HistoryView: View {
         let trained = item.hasWorkout
         let highlighted = calendar.isDate(day, inSameDayAs: model.filterDate ?? .now)
         Button {
+          date = day
           model.filterDate = day
         } label: {
           VStack(spacing: 8) {
