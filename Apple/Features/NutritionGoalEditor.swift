@@ -67,6 +67,6 @@ struct NutritionGoalEditor: View {
         fat: optional(fat), carbohydrates: optional(carbs))
       try goal.validate()
       if model.saveGoal(goal) { dismiss() } else { error = model.error }
-    } catch { error = error.localizedDescription }
+    } catch { self.error = error.localizedDescription }
   }
 }
