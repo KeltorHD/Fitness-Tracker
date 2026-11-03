@@ -20,6 +20,7 @@ import WidgetKit
   private(set) var isDemoMode = false
   private(set) var switchingDemo = false
   private(set) var workspaceID = UUID()
+  let nutrition: NutritionDiaryModel?
   let settings: SettingsViewModel
   let tracker: TrackerViewModel
   let healthCharts: HealthChartsViewModel
@@ -65,6 +66,9 @@ import WidgetKit
     healthCharts: HealthChartsViewModel? = nil
   ) {
     self.repository = WorkoutWorkspaceRepository(personal: repository)
+    self.nutrition = (repository as? any NutritionRepository).map {
+      NutritionDiaryModel(repository: $0)
+    }
     self.health = health
     self.defaults = defaults
     self.platformServicesEnabled = platformServicesEnabled
@@ -106,6 +110,7 @@ import WidgetKit
     refreshIntegrations()
   }
   func reload() {
+    nutrition?.reload()
     do { try loadRepository() } catch {
       report(
         error, operation: "reload",
@@ -128,11 +133,12 @@ import WidgetKit
       await previous?.value
       try Task.checkCancellation()
       guard !showSession, !showingWorkoutStart, !showingWorkoutDetail, !showingTemplateEditor,
-        !showingBodyWeightEditor,
+        !showingBodyWeightEditor, nutrition?.isPresenting != true,
         !archiveTransfer.isPresented, !archiveTransfer.isSaving
       else { throw TrainingError.invalidState }
       try repository.openDemo(archive)
       isDemoMode = true
+      nutrition?.switchWorkspace(isDemo: true)
       tracker.disconnect()
       tracker.attach(nil)
       healthCharts.attach(nil)
@@ -147,13 +153,15 @@ import WidgetKit
     }
   }
   func leaveDemoMode() async {
-    guard isDemoMode, !switchingDemo, !showingBodyWeightEditor else { return }
+    guard isDemoMode, !switchingDemo, !showingBodyWeightEditor, nutrition?.isPresenting != true
+    else { return }
     switchingDemo = true
     defer { switchingDemo = false }
     do {
       try Task.checkCancellation()
       let snapshot = try repository.closeDemo()
       isDemoMode = false
+      nutrition?.switchWorkspace(isDemo: false)
       applySnapshot(
         workouts: snapshot.workouts, templates: snapshot.templates,
         bodyWeights: snapshot.bodyWeights)

@@ -17,6 +17,9 @@ struct HistoryView: View {
     NavigationStack {
       List {
         weekStrip.cardListRow()
+        if let nutrition = store.nutrition {
+          NutritionDiaryCard(model: nutrition, date: model.filterDate ?? .now).cardListRow()
+        }
         if let active = store.active {
           Button {
             store.presentWorkoutStart()

@@ -94,6 +94,13 @@ echo 'Portable presentation/data subset: Swift 6 type check passed (no Apple SDK
   Apple/Features/WorkoutExercisePresentation.swift Apple/Features/WorkoutNumberPadModel.swift \
   Tests/PortableNumberPadChecks/main.swift -o "$bin_path/portable-number-pad-checks"
 "$bin_path/portable-number-pad-checks"
+# Nutrition uses the real URLSession client with URLProtocol fixtures; no network requests.
+"$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
+  -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \
+  "$bin_path"/FitnessTrackerCore.build/*.swift.o \
+  Apple/Services/OpenFoodFactsClient.swift Apple/Features/NutritionDiaryModel.swift \
+  Tests/PortableNutritionChecks/main.swift -o "$bin_path/portable-nutrition-checks"
+"$bin_path/portable-nutrition-checks"
 python3 scripts/parse-apple.py "$swiftc_bin"
 if "$swift_bin" format --help >/dev/null 2>&1; then
   "$swift_bin" format lint --strict --recursive Sources Tests Apple Package.swift
