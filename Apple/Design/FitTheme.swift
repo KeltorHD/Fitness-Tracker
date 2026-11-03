@@ -22,13 +22,55 @@ extension View {
       .listRowSeparator(.hidden).listRowBackground(Color.clear)
   }
 
-  func resultsCard(padding: CGFloat = FitTheme.resultsPadding) -> some View {
+  func resultsCard(padding: CGFloat = FitTheme.resultsPadding, glowing: Bool = true) -> some View {
     self.padding(padding)
       .background(FitTheme.resultsSurface, in: .rect(cornerRadius: FitTheme.resultsRadius))
+      .themeGlow(in: RoundedRectangle(cornerRadius: FitTheme.resultsRadius), enabled: glowing)
   }
   func fitCard() -> some View {
     padding(FitTheme.cardPadding)
       .background(FitTheme.card, in: .rect(cornerRadius: FitTheme.radius))
+      .themeGlow(in: RoundedRectangle(cornerRadius: FitTheme.radius))
+  }
+
+  func themeGlow<S: Shape>(in shape: S, emphasized: Bool = false, enabled: Bool = true) -> some View
+  {
+    modifier(ThemeGlow(shape: shape, emphasized: emphasized, enabled: enabled))
+  }
+}
+
+private struct ThemeGlow<S: Shape>: ViewModifier {
+  @Environment(\.fitnessColorTheme) private var theme
+  @Environment(\.colorSchemeContrast) private var contrast
+  @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
+  @Environment(\.isEnabled) private var isEnabled
+  let shape: S
+  let emphasized: Bool
+  let enabled: Bool
+
+  func body(content: Content) -> some View {
+    content.overlay {
+      if enabled && isEnabled {
+        let strongOutline = contrast == .increased || reduceTransparency
+        let opacity = emphasized ? 0.75 : 0.42
+        shape.stroke(
+          LinearGradient(
+            colors: strongOutline
+              ? [theme.accent, theme.accent]
+              : [
+                theme.accent.opacity(opacity), theme.accent.opacity(opacity * 0.28),
+                theme.accent.opacity(opacity * 0.8),
+              ],
+            startPoint: .topLeading, endPoint: .bottomTrailing),
+          lineWidth: strongOutline ? 2 : 1
+        )
+        .shadow(
+          color: strongOutline ? .clear : theme.accent.opacity(emphasized ? 0.28 : 0.14),
+          radius: emphasized ? 5 : 3
+        )
+        .padding(1).allowsHitTesting(false).accessibilityHidden(true)
+      }
+    }
   }
 }
 

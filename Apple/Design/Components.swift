@@ -27,6 +27,7 @@ struct MetricView: View {
     }
     .frame(maxWidth: .infinity, alignment: .leading).padding(16)
     .background(Color(.secondarySystemGroupedBackground), in: .rect(cornerRadius: 22))
+    .themeGlow(in: RoundedRectangle(cornerRadius: 22))
     .accessibilityElement(children: .combine)
   }
 }
@@ -98,6 +99,7 @@ struct SessionControls: View {
     .buttonStyle(.glassProminent)
     .glassEffectID("finish", in: controls)
     .glassEffectTransition(.matchedGeometry)
+    .themeGlow(in: Capsule(), emphasized: true)
     .disabled(workout.completedSets == 0)
     .accessibilityLabel(L10n.text("Завершить тренировку", locale: locale))
     .accessibilityHint(
@@ -119,6 +121,7 @@ struct RestPill: View {
     }
     .font(.headline).padding(.horizontal, 20).padding(.vertical, 12)
     .glassEffect()
+    .themeGlow(in: Capsule(), emphasized: true)
     .accessibilityLabel(L10n.text("Таймер отдыха", locale: locale))
   }
 }

@@ -294,6 +294,9 @@ private struct WorkoutStartTemplateCard: View {
     .frame(maxWidth: .infinity, alignment: .leading)
     .padding(16)
     .background(FitTheme.card, in: .rect(cornerRadius: FitTheme.radius))
+    .themeGlow(
+      in: RoundedRectangle(cornerRadius: FitTheme.radius), emphasized: selectionIndex != nil
+    )
     .accessibilityElement(children: .contain)
     .accessibilityIdentifier("startTemplateCard_\(template.id)")
     .animation(reduceMotion ? nil : .snappy(duration: 0.24), value: selectionIndex)

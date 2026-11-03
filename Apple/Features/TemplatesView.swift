@@ -32,6 +32,7 @@ struct TemplatesView: View {
             }.padding(.horizontal, 18).padding(.vertical, 20)
               .frame(maxWidth: .infinity, alignment: .leading)
               .background(FitTheme.card, in: .capsule)
+              .themeGlow(in: Capsule())
           }
           .buttonStyle(.plain).cardListRow()
           .accessibilityIdentifier("templateRow_\(template.id)")

@@ -406,6 +406,7 @@ struct WorkoutExerciseView: View {
     }
     .padding(.horizontal, 6).padding(.bottom, 6)
     .background(FitTheme.card, in: .rect(cornerRadius: FitTheme.radius))
+    .themeGlow(in: RoundedRectangle(cornerRadius: FitTheme.radius))
     .clipShape(.rect(cornerRadius: FitTheme.radius))
     .overlay {
       RoundedRectangle(cornerRadius: FitTheme.radius).stroke(FitTheme.separator, lineWidth: 0.5)

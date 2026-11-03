@@ -179,7 +179,7 @@ private struct ExerciseMetricChart: View {
         .font(.caption).foregroundStyle(.secondary)
       }
     }
-    .resultsCard().accessibilityIdentifier("exerciseChart_\(metric.rawValue)")
+    .resultsCard(glowing: false).accessibilityIdentifier("exerciseChart_\(metric.rawValue)")
   }
 
   private func display(_ value: Double) -> Double {
@@ -430,12 +430,6 @@ private struct ExerciseWorkoutHistoryCard: View {
     }
     .frame(maxWidth: .infinity, alignment: .leading)
     .resultsCard(padding: FitTheme.cardPadding)
-    .overlay {
-      RoundedRectangle(cornerRadius: FitTheme.resultsRadius).stroke(
-        FitTheme.separator, lineWidth: 0.5
-      )
-      .allowsHitTesting(false).accessibilityHidden(true)
-    }
     .accessibilityIdentifier("exerciseHistoryWorkout_\(entry.id)")
   }
 

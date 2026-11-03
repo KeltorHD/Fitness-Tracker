@@ -38,6 +38,7 @@ struct HistoryView: View {
               Image(systemName: "chevron.right")
             }.foregroundStyle(colorTheme.accent).padding(18)
               .background(colorTheme.accent.opacity(0.08), in: .rect(cornerRadius: FitTheme.radius))
+              .themeGlow(in: RoundedRectangle(cornerRadius: FitTheme.radius), emphasized: true)
           }.buttonStyle(.plain).accessibilityIdentifier("resumeWorkout").cardListRow()
         }
         if let date = model.filterDate {

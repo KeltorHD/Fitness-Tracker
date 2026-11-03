@@ -29,6 +29,7 @@ struct WorkoutNavigationBar: View {
               .frame(width: 52, height: 52)
               .glassEffect(.regular.tint(colorTheme.accent).interactive(), in: .circle)
               .glassEffectID("workoutStart", in: selectionGlass)
+              .themeGlow(in: Circle(), emphasized: true)
               .accessibilityHidden(true)
             if !dynamicTypeSize.isAccessibilitySize {
               Text(L10n.text(hasActiveWorkout ? "Продолжить" : "Начать", locale: locale))
@@ -61,6 +62,7 @@ struct WorkoutNavigationBar: View {
         }
       }
       .glassEffect(.regular, in: WorkoutNavigationShape())
+      .themeGlow(in: WorkoutNavigationShape())
       .overlay {
         if colorSchemeContrast == .increased {
           WorkoutNavigationShape().stroke(FitTheme.muted, lineWidth: 1)
