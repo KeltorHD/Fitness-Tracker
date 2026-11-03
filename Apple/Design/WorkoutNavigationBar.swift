@@ -48,7 +48,7 @@ struct WorkoutNavigationBar: View {
         .accessibilityIdentifier("workoutStartAction")
         .zIndex(1)
         tab("Результаты", symbol: "chart.bar.xaxis", value: 2)
-        tab("Настройки", symbol: "gearshape", value: 3)
+        tab("Справка", symbol: "questionmark", value: 3)
       }
       .coordinateSpace(name: "workoutNavigationBar")
       .padding(.horizontal, 8)

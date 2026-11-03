@@ -78,6 +78,7 @@ struct TemplatesView: View {
           }.foregroundStyle(
             .primary)
         }
+        SettingsToolbar()
       }
       .sheet(isPresented: $creating, onDismiss: { store.showingTemplateEditor = false }) {
         TemplateEditor(

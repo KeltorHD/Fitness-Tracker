@@ -15,7 +15,6 @@ struct WorkoutStartView: View {
   @Environment(\.timeZone) private var timeZone
   @Environment(\.scenePhase) private var phase
   @Environment(\.dynamicTypeSize) private var typeSize
-  @Environment(\.dismiss) private var dismiss
   @State private var currentDate = Date()
   @State private var selectedIDs: [UUID] = []
   @State private var filter = WorkoutTemplateFilter()
@@ -98,10 +97,6 @@ struct WorkoutStartView: View {
         refresh()
       }
       .toolbar {
-        ToolbarItem(placement: .cancellationAction) {
-          Button(L10n.text("Закрыть", locale: locale), systemImage: "xmark") { dismiss() }
-            .labelStyle(.iconOnly).accessibilityIdentifier("closeWorkoutStart")
-        }
         ToolbarItem(placement: .topBarTrailing) {
           Button {
             onSelect(.empty)
