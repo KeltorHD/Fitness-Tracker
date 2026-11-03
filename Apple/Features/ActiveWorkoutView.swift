@@ -233,6 +233,7 @@ struct ActiveWorkoutView: View {
           .padding(.vertical, 4)
           .padding(.bottom, heartRateExpanded ? FitTheme.cardPadding - 4 : 0)
           .background(FitTheme.card, in: .rect(cornerRadius: FitTheme.radius))
+          .themeGlow(in: RoundedRectangle(cornerRadius: FitTheme.radius))
           .padding(.bottom, 16)
           .accessibilityIdentifier("workoutHeartRateCard")
         }

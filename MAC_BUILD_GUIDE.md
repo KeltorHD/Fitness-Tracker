@@ -138,6 +138,8 @@ xcodebuild -project FitnessTracker.xcodeproj -scheme FitnessTracker \
 
 Описание фонового поведения: [BACKGROUND_AND_DYNAMIC_ISLAND.md](docs/BACKGROUND_AND_DYNAMIC_ISLAND.md).
 
+После обновления темы Live Activity выполните `xcodegen generate`: в sources FitnessTrackerWidgets добавлен Apple/Design/FitnessColorTheme.swift, а в Assets — светлые варианты четырёх акцентов для чёрной поверхности Island. Соберите app и extension; проверьте смену пяти тем в текущей активности, контур/размер Lock Screen, compact/minimal/expanded, Always-On и обновление недельного виджета. [Сценарии проверки](docs/XCODE_VALIDATION.md#тема-и-оформление-live-activity--dynamic-island).
+
 ## Локальная библиотека и фотографии
 
 После `xcodegen generate` убедитесь, что `ExerciseMedia` копируется как folder reference в главный target, а `ExerciseLibrary.ru.json` и `ExerciseLibrary.en.json` включены в SPM resource bundle. Проверьте первый запуск в авиарежиме: каталог, инструкции RU/EN и обе фотографии должны работать без сети. Сценарии: [EXERCISE_LIBRARY.md](docs/EXERCISE_LIBRARY.md). PNG/SVG в `docs/previews` — макеты, не скриншоты запуска.

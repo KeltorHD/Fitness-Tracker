@@ -319,7 +319,11 @@ import WidgetKit
       defaults.object(forKey: "liveActivities") as? Bool != false
     {
       // Request synchronously while foregrounded, before notification/widget async work.
-      do { try liveActivity.startIfNeeded(for: workout, heartRate: currentLiveHeartRate) } catch {
+      do {
+        try liveActivity.startIfNeeded(
+          for: workout, heartRate: currentLiveHeartRate,
+          colorTheme: FitnessColorTheme.resolved(defaults.string(forKey: "colorTheme")))
+      } catch {
         report(
           error, operation: "startLiveActivity",
           message:
@@ -567,7 +571,8 @@ import WidgetKit
       do {
         try await liveActivity.update(
           for: defaults.object(forKey: "liveActivities") as? Bool == false ? nil : workout,
-          allowStart: canStart, heartRate: currentLiveHeartRate)
+          allowStart: canStart, heartRate: currentLiveHeartRate,
+          colorTheme: FitnessColorTheme.resolved(defaults.string(forKey: "colorTheme")))
       } catch {
         if firstError == nil {
           firstError = error

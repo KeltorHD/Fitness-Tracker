@@ -16,12 +16,15 @@ public struct WorkoutLiveState: Codable, Hashable, Sendable {
   public let nextDropStageNumber: Int?
   public let nextDropStageCount: Int?
   public let heartRate: HeartRateReading?
+  /// Optional display metadata keeps installed activities compatible with older payloads.
+  public let colorThemeID: String?
+  public let workoutName: String?
 
   public var heartRateStaleDate: Date? { heartRate?.date.addingTimeInterval(15) }
 
   public init(
     workout: Workout, at date: Date = Date(), languageCode: String? = nil,
-    heartRate: HeartRateReading? = nil
+    heartRate: HeartRateReading? = nil, colorThemeID: String? = nil
   ) {
     if workout.status == .active, let heartRate, heartRate.isFresh(at: date),
       heartRate.date >= workout.startedAt,
@@ -32,6 +35,8 @@ public struct WorkoutLiveState: Codable, Hashable, Sendable {
       self.heartRate = nil
     }
     self.languageCode = languageCode
+    self.colorThemeID = colorThemeID
+    workoutName = String(workout.name.prefix(80))
     completedSets = workout.fullyCompletedSets
     totalSets = workout.totalSets
     paused = workout.status == .paused

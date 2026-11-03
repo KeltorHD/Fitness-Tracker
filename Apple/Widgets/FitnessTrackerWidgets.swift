@@ -6,6 +6,7 @@ private struct WeeklyEntry: TimelineEntry {
   var date: Date
   var snapshot: WidgetSnapshot?
   var loadFailed = false
+  var colorThemeID: String?
 }
 private struct WeeklyProvider: TimelineProvider {
   func placeholder(in context: Context) -> WeeklyEntry { WeeklyEntry(date: .now, snapshot: .empty) }
@@ -23,11 +24,17 @@ private struct WeeklyProvider: TimelineProvider {
       Timeline(
         entries: [
           entry,
-          WeeklyEntry(date: nextWeek, snapshot: entry.snapshot, loadFailed: entry.loadFailed),
+          WeeklyEntry(
+            date: nextWeek, snapshot: entry.snapshot, loadFailed: entry.loadFailed,
+            colorThemeID: entry.colorThemeID),
         ], policy: .atEnd))
   }
   private func loadEntry(at date: Date) -> WeeklyEntry {
-    do { return WeeklyEntry(date: date, snapshot: try WidgetSnapshot.read()) } catch {
+    do {
+      return WeeklyEntry(
+        date: date, snapshot: try WidgetSnapshot.read(),
+        colorThemeID: try WidgetSnapshot.colorThemeID())
+    } catch {
       let diagnostic = error as NSError
       Logger(subsystem: "FitnessTracker", category: "Widget").error(
         "Snapshot unavailable: \(diagnostic.domain, privacy: .public), code \(diagnostic.code)")
@@ -38,10 +45,12 @@ private struct WeeklyProvider: TimelineProvider {
 private struct WeeklyWidgetView: View {
   @Environment(\.locale) private var locale
   let entry: WeeklyEntry
+  private var colorTheme: FitnessColorTheme { .resolved(entry.colorThemeID) }
   var body: some View {
     VStack(alignment: .leading, spacing: 10) {
       Label("FitnessTracker", systemImage: "figure.strengthtraining.traditional").font(
-        .caption.bold())
+        .caption.bold()
+      ).foregroundStyle(colorTheme.accent)
       if let snapshot = entry.snapshot {
         let sameWeek =
           Calendar.current.dateInterval(of: .weekOfYear, for: entry.date)?.contains(
@@ -51,7 +60,7 @@ private struct WeeklyWidgetView: View {
         Text(L10n.text("тренировок за неделю", locale: locale)).font(.caption).foregroundStyle(
           .secondary)
         ProgressView(value: Double(count), total: Double(max(count, snapshot.weeklyGoal)))
-          .tint(Color.accentColor)
+          .tint(colorTheme.accent)
       } else {
         Text(L10n.text("Ваша неделя", locale: locale)).font(.headline)
         Text(

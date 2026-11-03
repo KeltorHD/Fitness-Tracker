@@ -83,6 +83,7 @@ struct TemplateExerciseCard: View {
       }.padding(FitTheme.cardPadding)
     }
     .background(FitTheme.card, in: .rect(cornerRadius: FitTheme.exerciseCardRadius))
+    .themeGlow(in: RoundedRectangle(cornerRadius: FitTheme.exerciseCardRadius))
     .accessibilityIdentifier("templateExerciseCard_\(item.id)")
   }
 }

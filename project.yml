@@ -122,6 +122,7 @@ targets:
     sources:
       - Apple/Widgets
       - Apple/Shared
+      - Apple/Design/FitnessColorTheme.swift
       - path: Resources/Localizable.xcstrings
         buildPhase: resources
       - path: Resources/Assets.xcassets

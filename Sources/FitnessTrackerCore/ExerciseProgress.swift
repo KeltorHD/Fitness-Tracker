@@ -1,5 +1,106 @@
 import Foundation
 
+/// Recorded sets retain their original position and snapshot, including warmups and notes.
+public struct ExerciseWorkoutHistorySet: Identifiable, Equatable, Sendable {
+  public var id: UUID { self.set.id }
+  public let position: Int
+  public let set: WorkoutSet
+}
+
+public struct ExerciseWorkoutHistoryRow: Identifiable, Equatable, Sendable {
+  public let id: UUID
+  public let position: Int
+  public let name: String
+  public let sets: [ExerciseWorkoutHistorySet]
+}
+
+public struct ExerciseWorkoutHistoryEntry: Identifiable, Equatable, Sendable {
+  public let id: UUID
+  public let date: Date
+  public let name: String
+  public let rows: [ExerciseWorkoutHistoryRow]
+
+  /// Uses saved sessions only; template and catalog edits cannot rewrite recorded targets.
+  public static func entries(
+    for exerciseID: UUID, workouts: [Workout], now: Date = Date()
+  ) -> [Self] {
+    workouts.compactMap { workout -> Self? in
+      guard workout.status == .completed, workout.startedAt <= now else { return nil }
+      let rows = workout.exercises.enumerated().compactMap {
+        index, row -> ExerciseWorkoutHistoryRow? in
+        guard row.exercise.id == exerciseID else { return nil }
+        let sets = row.sets.enumerated().compactMap { index, set -> ExerciseWorkoutHistorySet? in
+          guard !set.performedStages.isEmpty else { return nil }
+          return ExerciseWorkoutHistorySet(position: index + 1, set: set)
+        }
+        guard !sets.isEmpty else { return nil }
+        return ExerciseWorkoutHistoryRow(
+          id: row.id, position: index + 1, name: row.exercise.name, sets: sets)
+      }
+      guard !rows.isEmpty else { return nil }
+      return Self(id: workout.id, date: workout.startedAt, name: workout.name, rows: rows)
+    }.sorted {
+      $0.date == $1.date ? $0.id.uuidString < $1.id.uuidString : $0.date > $1.date
+    }
+  }
+}
+
+public struct ExerciseWorkoutHistoryFilter: Equatable, Sendable {
+  public enum SortOrder: String, CaseIterable, Sendable { case newest, oldest }
+  public enum SetKind: String, CaseIterable, Sendable { case all, working, warmup, dropSet }
+
+  public var query = ""
+  public var period = ExerciseProgressPeriod.allTime
+  public var setKind = SetKind.all
+  public var sortOrder = SortOrder.newest
+
+  public init() {}
+
+  public var hasFilters: Bool { period != .allTime || setKind != .all }
+  public var isActive: Bool {
+    hasFilters || !query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+  }
+  public var isModified: Bool { isActive || sortOrder != .newest }
+
+  public func apply(
+    to entries: [ExerciseWorkoutHistoryEntry], now: Date, calendar: Calendar
+  ) -> [ExerciseWorkoutHistoryEntry] {
+    let start = period.startDate(relativeTo: now, calendar: calendar)
+    let tokens = Self.normalize(query).split(whereSeparator: \.isWhitespace)
+    return entries.compactMap { entry -> ExerciseWorkoutHistoryEntry? in
+      let name = Self.normalize(entry.name)
+      guard entry.date <= now, start.map({ entry.date >= $0 }) ?? true,
+        tokens.allSatisfy({ name.contains($0) })
+      else { return nil }
+      guard setKind != .all else { return entry }
+      let rows = entry.rows.compactMap { row -> ExerciseWorkoutHistoryRow? in
+        let sets = row.sets.filter { recorded in
+          switch setKind {
+          case .all: true
+          case .working: !recorded.set.isWarmup
+          case .warmup: recorded.set.isWarmup
+          case .dropSet: recorded.set.isDropSet
+          }
+        }
+        guard !sets.isEmpty else { return nil }
+        return ExerciseWorkoutHistoryRow(
+          id: row.id, position: row.position, name: row.name, sets: sets)
+      }
+      guard !rows.isEmpty else { return nil }
+      return ExerciseWorkoutHistoryEntry(
+        id: entry.id, date: entry.date, name: entry.name, rows: rows)
+    }.sorted {
+      if $0.date == $1.date { return $0.id.uuidString < $1.id.uuidString }
+      return sortOrder == .newest ? $0.date > $1.date : $0.date < $1.date
+    }
+  }
+
+  private static func normalize(_ value: String) -> String {
+    value.folding(
+      options: [.caseInsensitive, .diacriticInsensitive], locale: Locale(identifier: "ru_RU"))
+  }
+}
+
 public enum ExerciseProgressPeriod: String, CaseIterable, Identifiable, Sendable {
   case fourWeeks, twelveWeeks, twentySixWeeks, allTime
   public var id: String { rawValue }

@@ -1888,6 +1888,23 @@
         }
       }
     },
+    "Вес и сила": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вес и сила"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weight and strength"
+          }
+        }
+      }
+    },
     "Вес и этапы можно изменить после запуска тренировки.": {
       "extractionState": "manual",
       "localizations": {
@@ -2224,6 +2241,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "All muscles"
+          }
+        }
+      }
+    },
+    "Все подходы": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Все подходы"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All sets"
           }
         }
       }
@@ -2836,6 +2870,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Done"
+          }
+        }
+      }
+    },
+    "Графики": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Графики"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Charts"
           }
         }
       }
@@ -4149,6 +4200,23 @@
         }
       }
     },
+    "Дропсеты": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Дропсеты"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drop sets"
+          }
+        }
+      }
+    },
     "Другие шаблоны": {
       "extractionState": "manual",
       "localizations": {
@@ -4812,6 +4880,23 @@
         }
       }
     },
+    "Здесь появятся дата и выполненные подходы после завершения тренировки с этим упражнением.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Здесь появятся дата и выполненные подходы после завершения тренировки с этим упражнением."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dates and performed sets will appear here after you finish a workout with this exercise."
+          }
+        }
+      }
+    },
     "Здоровье": {
       "extractionState": "manual",
       "localizations": {
@@ -5216,6 +5301,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Weight history"
+          }
+        }
+      }
+    },
+    "История упражнения": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "История упражнения"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exercise history"
           }
         }
       }
@@ -6202,6 +6304,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Meal name"
+          }
+        }
+      }
+    },
+    "Название занятия": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Название занятия"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workout name"
           }
         }
       }
@@ -7702,6 +7821,23 @@
         }
       }
     },
+    "Нет подходящих занятий": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нет подходящих занятий"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No matching workouts"
+          }
+        }
+      }
+    },
     "Нет подходящих шаблонов": {
       "extractionState": "manual",
       "localizations": {
@@ -8586,6 +8722,23 @@
         }
       }
     },
+    "Очистить поиск": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Очистить поиск"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear search"
+          }
+        }
+      }
+    },
     "Ошибка": {
       "extractionState": "manual",
       "localizations": {
@@ -9364,6 +9517,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sets"
+          }
+        }
+      }
+    },
+    "Подходы и повторы": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Подходы и повторы"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sets and reps"
           }
         }
       }
@@ -11493,6 +11663,40 @@
         }
       }
     },
+    "Сначала новые": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сначала новые"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Newest first"
+          }
+        }
+      }
+    },
+    "Сначала старые": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сначала старые"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oldest first"
+          }
+        }
+      }
+    },
     "Снижение веса %@": {
       "extractionState": "manual",
       "localizations": {
@@ -11591,6 +11795,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Night’s sleep"
+          }
+        }
+      }
+    },
+    "Сортировка": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сортировка"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sort order"
           }
         }
       }
@@ -12118,6 +12339,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Instructions from free-exercise-db. Photos show individual positions, rather than a video recording."
+          }
+        }
+      }
+    },
+    "Тип подходов": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Тип подходов"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set type"
           }
         }
       }

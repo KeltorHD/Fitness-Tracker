@@ -777,15 +777,29 @@ final class FitnessTrackerUITests: XCTestCase {
     reveal(period, in: app)
     period.tap()
     app.buttons["Всё время"].tap()
-    for metric in ["maximumWeight", "volume", "oneRepMax", "repetitions", "sets"] {
-      let chart = app.descendants(matching: .any).matching(identifier: "exerciseChart_\(metric)")
-        .firstMatch
-      reveal(chart, in: app)
-      XCTAssertTrue(chart.exists)
+    for (title, metrics) in [
+      ("Вес и сила", ["maximumWeight", "oneRepMax"]),
+      ("Объём", ["volume"]),
+      ("Подходы и повторы", ["sets", "repetitions"]),
+    ] {
+      let group = app.buttons[title]
+      reveal(group, in: app)
+      for metric in metrics {
+        XCTAssertFalse(
+          app.descendants(matching: .any).matching(identifier: "exerciseChart_\(metric)")
+            .firstMatch.exists)
+      }
+      group.tap()
+      for metric in metrics {
+        let chart = app.descendants(matching: .any).matching(identifier: "exerciseChart_\(metric)")
+          .firstMatch
+        reveal(chart, in: app)
+        XCTAssertTrue(chart.exists)
+      }
     }
   }
 
-  @MainActor func testExerciseChartsCanBeOpenedFromCompletedWorkout() {
+  @MainActor func testExerciseHistoryDefaultsToRecordedSetsAndChartsExpandOnDemand() {
     let app = launch()
     openDemoProfile(in: app)
     app.buttons["navigationTab_0"].tap()
@@ -805,9 +819,71 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(
       app.descendants(matching: .any).matching(identifier: "exerciseProgressScreen").firstMatch
         .waitForExistence(timeout: 5))
-    XCTAssertTrue(
-      app.descendants(matching: .any).matching(identifier: "exerciseChart_maximumWeight").firstMatch
-        .exists)
+    let history = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "exerciseHistoryWorkout_")
+    ).firstMatch
+    XCTAssertTrue(history.waitForExistence(timeout: 5))
+    let recordedSet = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "exerciseHistorySet_")
+    ).firstMatch
+    XCTAssertTrue(recordedSet.exists)
+    XCTAssertTrue(app.staticTexts["Разминка"].firstMatch.exists)
+    let chart = app.descendants(matching: .any).matching(identifier: "exerciseChart_maximumWeight")
+      .firstMatch
+    XCTAssertFalse(chart.exists)
+    app.segmentedControls["exerciseHistorySection"].buttons["Графики"].tap()
+    XCTAssertFalse(history.exists)
+    XCTAssertFalse(chart.exists)
+    let group = app.buttons["Вес и сила"]
+    XCTAssertTrue(group.waitForExistence(timeout: 5))
+    group.tap()
+    reveal(chart, in: app)
+    XCTAssertTrue(chart.exists)
+    for _ in 0..<6 where !group.isHittable { app.swipeDown() }
+    group.tap()
+    XCTAssertTrue(chart.waitForNonExistence(timeout: 5))
+    let section = app.segmentedControls["exerciseHistorySection"]
+    for _ in 0..<6 where !section.isHittable { app.swipeDown() }
+    section.buttons["История"].tap()
+    XCTAssertTrue(history.waitForExistence(timeout: 5))
+    XCTAssertTrue(recordedSet.exists)
+  }
+
+  @MainActor func testExerciseHistorySearchSortAndTypeFiltersCanBeReset() {
+    let app = launch()
+    openDemoProfile(in: app)
+    app.buttons["navigationTab_0"].tap()
+    let workout = app.buttons.containing(NSPredicate(format: "label CONTAINS %@", "ДЕМО ·"))
+      .firstMatch
+    reveal(workout, in: app)
+    workout.tap()
+    let exercise = app.buttons["openWorkoutExercise"].firstMatch
+    reveal(exercise, in: app)
+    exercise.tap()
+    let progress = app.buttons["openExerciseProgress"].firstMatch
+    reveal(progress, in: app)
+    progress.tap()
+    let cards = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "exerciseHistoryWorkout_"))
+    XCTAssertTrue(cards.firstMatch.waitForExistence(timeout: 5))
+    let newestID = cards.firstMatch.identifier
+    let search = app.textFields["exerciseHistorySearch"]
+    search.tap()
+    search.typeText("несуществующее занятие\n")
+    XCTAssertTrue(app.staticTexts["Нет подходящих занятий"].waitForExistence(timeout: 5))
+    XCTAssertFalse(cards.firstMatch.exists)
+    app.buttons["resetExerciseHistoryFilters"].tap()
+    XCTAssertTrue(cards.firstMatch.waitForExistence(timeout: 5))
+    XCTAssertEqual(cards.firstMatch.identifier, newestID)
+    app.buttons["exerciseHistorySort"].tap()
+    app.buttons["Сначала старые"].tap()
+    XCTAssertNotEqual(cards.firstMatch.identifier, newestID)
+    app.buttons["exerciseHistoryFilters"].tap()
+    app.buttons["Дропсеты"].tap()
+    XCTAssertTrue(app.staticTexts["Нет подходящих занятий"].waitForExistence(timeout: 5))
+    app.buttons["resetExerciseHistoryFilters"].tap()
+    XCTAssertTrue(cards.firstMatch.waitForExistence(timeout: 5))
+    XCTAssertEqual(cards.firstMatch.identifier, newestID)
   }
 
   @MainActor func testActiveExerciseCanOpenAnEmptyProgressHistory() {
@@ -831,6 +907,8 @@ final class FitnessTrackerUITests: XCTestCase {
     let progress = app.buttons["openExerciseProgress"].firstMatch
     reveal(progress, in: app)
     progress.tap()
+    XCTAssertTrue(app.staticTexts["Нет выполненных подходов"].waitForExistence(timeout: 5))
+    app.segmentedControls["exerciseHistorySection"].buttons["Графики"].tap()
     XCTAssertTrue(app.staticTexts["Нет данных за выбранный период"].waitForExistence(timeout: 5))
   }
 

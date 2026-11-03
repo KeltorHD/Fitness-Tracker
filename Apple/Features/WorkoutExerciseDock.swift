@@ -86,6 +86,7 @@ struct WorkoutExerciseDock: View {
     .font(.system(size: 18, weight: .semibold)).buttonStyle(WorkoutControlPressStyle())
     .padding(.horizontal, 8).padding(.top, 4).padding(.bottom, 8)
     .glassEffect(.regular, in: WorkoutNavigationShape(rise: 16, shoulderWidth: 48))
+    .themeGlow(in: WorkoutNavigationShape(rise: 16, shoulderWidth: 48))
     .accessibilityElement(children: .contain)
     .accessibilityIdentifier("exerciseActionBlock")
   }
@@ -105,6 +106,7 @@ struct WorkoutExerciseDock: View {
       .glassEffect(.regular.tint(colorTheme.accent).interactive(), in: .circle)
       .glassEffectID("completeSet", in: controlsGlass)
       .glassEffectTransition(.matchedGeometry)
+      .themeGlow(in: Circle(), emphasized: true)
       .overlay {
         if isOngoing {
           ZStack {
