@@ -16,6 +16,10 @@ struct ArchiveTransferView: View {
             Text(workout.name).font(.headline)
           } else {
             Text(L10n.text("Вся история тренировок, планы и записи веса", locale: locale))
+            Text(
+              L10n.text("Питание и фотографии еды не входят в архив тренировок.", locale: locale)
+            )
+            .font(.footnote).foregroundStyle(.secondary)
           }
           Picker(L10n.text("Формат", locale: locale), selection: $model.format) {
             ForEach(ArchiveExportFormat.allCases) { format in

@@ -22,6 +22,7 @@ import Foundation
 @MainActor public final class MemoryWorkoutRepository: WorkoutRepository {
   private var sessions: [UUID: Workout] = [:]
   private var routines: [UUID: WorkoutTemplate] = [:]
+  private let nutrition = MemoryNutritionRepository()
   private var measurements: [UUID: BodyWeightEntry] = [:]
   public init() {}
   public func workouts() throws -> [Workout] {
@@ -65,5 +66,16 @@ import Foundation
     routines = nextRoutines
     measurements = nextMeasurements
     return plan.summary
+  }
+}
+
+// Used by UI tests with the same nutrition contract as the production repository.
+extension MemoryWorkoutRepository: NutritionRepository {
+  public func foodEntries() throws -> [FoodEntry] { try nutrition.foodEntries() }
+  public func saveFoodEntry(_ entry: FoodEntry) throws { try nutrition.saveFoodEntry(entry) }
+  public func deleteFoodEntry(id: UUID) throws { try nutrition.deleteFoodEntry(id: id) }
+  public func nutritionGoal() throws -> NutritionGoal? { try nutrition.nutritionGoal() }
+  public func saveNutritionGoal(_ goal: NutritionGoal?) throws {
+    try nutrition.saveNutritionGoal(goal)
   }
 }

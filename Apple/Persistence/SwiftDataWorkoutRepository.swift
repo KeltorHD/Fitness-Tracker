@@ -134,3 +134,36 @@ import SwiftData
     }
   }
 }
+
+extension SwiftDataWorkoutRepository: NutritionRepository {
+  func foodEntries() throws -> [FoodEntry] {
+    try records(kind: "foodEntry").map {
+      let entry = try JSONDecoder().decode(FoodEntry.self, from: $0.payload)
+      try entry.validate()
+      return entry
+    }
+  }
+  func saveFoodEntry(_ entry: FoodEntry) throws {
+    try entry.validate()
+    try upsert(id: entry.id, kind: "foodEntry", data: JSONEncoder().encode(entry))
+  }
+  func deleteFoodEntry(id: UUID) throws { try remove(id: id, kind: "foodEntry") }
+  func nutritionGoal() throws -> NutritionGoal? {
+    guard let record = try records(kind: "nutritionGoal").first else { return nil }
+    let goal = try JSONDecoder().decode(NutritionGoal.self, from: record.payload)
+    try goal.validate()
+    return goal
+  }
+  func saveNutritionGoal(_ goal: NutritionGoal?) throws {
+    // A stable aggregate ID keeps the same goal across launches and CloudKit devices.
+    guard let id = UUID(uuidString: "345B105D-8EFC-4EA2-99D3-770805C86F71") else {
+      throw NutritionError.invalidValues
+    }
+    if let goal {
+      try goal.validate()
+      try upsert(id: id, kind: "nutritionGoal", data: JSONEncoder().encode(goal))
+    } else {
+      try remove(id: id, kind: "nutritionGoal")
+    }
+  }
+}

@@ -1069,6 +1069,36 @@ final class FitnessTrackerUITests: XCTestCase {
     app.buttons["Готово"].tap()
     XCTAssertTrue(tools.waitForExistence(timeout: 5))
   }
+  @MainActor func testDiaryCanLogManualFoodWithoutNetwork() {
+    let app = launch()
+    let nutrition = app.buttons["nutritionDiary"]
+    XCTAssertTrue(nutrition.waitForExistence(timeout: 10))
+    nutrition.tap()
+    let snack = app.buttons["addFood_snack"]
+    reveal(snack, in: app)
+    snack.tap()
+    app.buttons["addProduct"].tap()
+    app.buttons["manualFood"].tap()
+    let fields = [
+      ("manualFoodName", "Тестовый продукт"), ("manualCalories", "200"),
+      ("manualProtein", "10"), ("manualFat", "8"), ("manualCarbs", "22"),
+    ]
+    for (identifier, value) in fields {
+      let field = app.textFields[identifier]
+      reveal(field, in: app)
+      field.tap()
+      field.typeText(value)
+    }
+    let add = app.buttons["saveManualFood"]
+    reveal(add, in: app)
+    add.tap()
+    let save = app.buttons["saveFoodEntry"]
+    XCTAssertTrue(save.waitForExistence(timeout: 5))
+    save.tap()
+    XCTAssertTrue(app.staticTexts["Тестовый продукт"].waitForExistence(timeout: 5))
+    XCTAssertTrue(app.staticTexts["200 ккал"].firstMatch.exists)
+  }
+
   @MainActor private func launch() -> XCUIApplication {
     let app = XCUIApplication()
     app.launchArguments = ["--ui-testing", "-AppleLanguages", "(ru)", "-AppleLocale", "ru_RU"]

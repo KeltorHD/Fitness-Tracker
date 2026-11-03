@@ -1,11 +1,12 @@
 # Статусы модулей
 
-Последняя проверка: 2026-11-01, Ubuntu 24.04 x86_64, Swift 6.2.1, Swift language mode 6.
+Последняя проверка: 2026-11-03, Ubuntu 24.04 x86_64, Swift 6.2.1, Swift language mode 6.
 
 **Implemented** означает наличие реализации в исходниках. **Linux-tested** означает выполнение функциональных тестов соответствующего Core-кода. Синтаксический разбор Apple-файлов и проверка ресурсов не считаются функциональным тестированием SwiftUI или Apple SDK.
 
 | Модуль | Implemented | Linux-tested | Requires Xcode validation | Requires Apple Developer configuration |
 | --- | --- | --- | --- | --- |
+| Питание в общем дневнике | Implemented: КБЖУ, граммы/мл, завтрак/обед/ужин/перекусы, цели, фото, состав блюда, ручной ввод, recent/saved meals, повтор/редактирование/удаление, Open Food Facts | Linux-tested: Core nutrition/DST/identity/Codable; Foundation/Observation/URLSession с HTTP fixtures, errors, cancellation и demo isolation; сеть в тестах не используется | Requires Xcode validation: SwiftUI, PhotosPicker/ImageIO, SwiftData/CloudKit payload, Apple XCTest/UI tests и доступность; выполнить XcodeGen после новых файлов | Нет новых capabilities; синхронизация использует существующую CloudKit configuration |
 | Объединение шаблонов при старте | Implemented: множественный выбор с явным запуском; объединение по exercise UUID в порядке выбора, параметры первого вхождения и отдых первого шаблона; исходные шаблоны не меняются | Linux-tested: Core order/dedup/targets, новые row/set/stage IDs, валидация всех входов и ограничение имени; Apple UI только parser/lint | Requires Xcode validation: выбор/снятие/отмена, обновление списка, сохранение/ошибка, VoiceOver, RU/EN и Dynamic Type; новые XCTest/UI tests не запускались | Нет |
 | Центральная кнопка начала тренировки | Implemented: выступающая круглая кнопка в общей Liquid Glass панели, выбор сохранённого шаблона/свободного старта; активная сессия продолжается без дубликата | Core regression suite; Apple-исходники только parser/lint, структура и RU/EN ресурсы; новые XCTest/UI tests на Linux не запускались | Requires Xcode validation: геометрия стекла, tab navigation, sheet transitions, отмена, пустой каталог, ошибка сохранения, активная сессия, доступность | Нет новых capabilities |
 | Сворачивание верхней карточки пульса в тренировке | Implemented: компактная строка пульса со стрелкой; график/детали раскрываются, карточка остаётся на месте; AppStorage сохраняет вид | Linux-tested: parser/lint/структура/локализация; Apple UI не запускался | Requires Xcode validation: свернуть/развернуть, relaunch, прежняя настройка false, свежесть, demo mode, VoiceOver; запись/Live Activity продолжаются | Нет |
