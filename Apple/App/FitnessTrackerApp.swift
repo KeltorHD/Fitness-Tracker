@@ -51,6 +51,13 @@ import WidgetKit
         WidgetCenter.shared.reloadAllTimelines()
         store?.refreshIntegrations()
       }
+      .onChange(of: storedColorTheme, initial: true) {
+        do { try WidgetSnapshot.publishColorTheme(colorTheme.rawValue) } catch {
+          AppErrorReporter.record(error, operation: "shareColorThemePreference")
+        }
+        WidgetCenter.shared.reloadAllTimelines()
+        store?.refreshIntegrations()
+      }
     }
   }
   private var presentationCalendar: Calendar {

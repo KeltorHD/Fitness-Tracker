@@ -4,6 +4,24 @@ import XCTest
 @testable import FitnessTracker
 
 final class WidgetSnapshotTests: XCTestCase {
+  func testColorThemeCanBeSharedWithoutWorkoutOptInAndSurvivesClearingSummary() throws {
+    let suite = "FitnessTracker.ColorThemeTests.\(UUID().uuidString)"
+    let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
+    defer { defaults.removePersistentDomain(forName: suite) }
+    XCTAssertNil(try WidgetSnapshot.colorThemeID(from: defaults))
+    XCTAssertEqual(FitnessColorTheme.resolved(nil), .forest)
+    for theme in FitnessColorTheme.allCases {
+      try WidgetSnapshot.publishColorTheme(theme.rawValue, to: defaults)
+      XCTAssertEqual(
+        FitnessColorTheme.resolved(try WidgetSnapshot.colorThemeID(from: defaults)), theme)
+      XCTAssertNil(try WidgetSnapshot.read(from: defaults))
+    }
+    try WidgetSnapshot.clear(from: defaults)
+    XCTAssertEqual(
+      try WidgetSnapshot.colorThemeID(from: defaults), FitnessColorTheme.allCases.last?.rawValue)
+    XCTAssertEqual(FitnessColorTheme.resolved("unknown-theme"), .forest)
+  }
+
   func testLanguageCanBeSharedWithoutPublishingWorkoutData() throws {
     let suite = "FitnessTracker.LanguageTests.\(UUID().uuidString)"
     let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))

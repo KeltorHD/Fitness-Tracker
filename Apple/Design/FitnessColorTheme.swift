@@ -6,6 +6,21 @@ enum FitnessColorTheme: String, CaseIterable, Sendable {
 
   static let defaultTheme = FitnessColorTheme.forest
 
+  static func resolved(_ identifier: String?) -> Self {
+    identifier.flatMap(Self.init(rawValue:)) ?? .defaultTheme
+  }
+
+  /// Dynamic Island always has a dark surface, even when the phone uses Light appearance.
+  var accentOnDark: Color {
+    switch self {
+    case .indigo: Color("AccentOnDark")
+    case .ocean: Color("OceanAccentOnDark")
+    case .forest: Color("ForestAccentOnDark")
+    case .rose: Color("RoseAccentOnDark")
+    case .amber: Color("AmberAccentOnDark")
+    }
+  }
+
   var title: String {
     switch self {
     case .indigo: "Индиго"

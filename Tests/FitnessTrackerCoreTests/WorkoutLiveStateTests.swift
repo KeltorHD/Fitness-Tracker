@@ -177,3 +177,35 @@ private func liveWorkout() throws -> Workout {
   workout.endedAt = start.addingTimeInterval(10)
   #expect(WorkoutLiveState(workout: workout, at: fresh.date, heartRate: fresh).heartRate == nil)
 }
+
+@Test func liveActivityThemeAndNameSurviveRoundTripAndChanges() throws {
+  var workout = try liveWorkout()
+  for theme in ["forest", "indigo", "ocean", "rose", "amber"] {
+    let state = WorkoutLiveState(workout: workout, at: start, colorThemeID: theme)
+    #expect(state.colorThemeID == theme)
+    #expect(state.workoutName == workout.name)
+    #expect(
+      try JSONDecoder().decode(WorkoutLiveState.self, from: JSONEncoder().encode(state)) == state)
+    #expect(state.completedSets == 0 && state.nextSetNumber == 1)
+  }
+  let original = WorkoutLiveState(workout: workout, at: start, colorThemeID: "ocean")
+  workout.name = "Новое название занятия"
+  let updated = WorkoutLiveState(workout: workout, at: start, colorThemeID: "amber")
+  #expect(original.workoutName != updated.workoutName)
+  #expect(updated.workoutName == workout.name && updated.colorThemeID == "amber")
+  #expect(original.timerStart == updated.timerStart && original.progress == updated.progress)
+}
+
+@Test func legacyLiveActivityWithoutThemeOrMutableNameRemainsDecodable() throws {
+  let workout = try liveWorkout()
+  let state = WorkoutLiveState(workout: workout, at: start, colorThemeID: "forest")
+  var payload = try #require(
+    JSONSerialization.jsonObject(with: JSONEncoder().encode(state)) as? [String: Any])
+  payload.removeValue(forKey: "colorThemeID")
+  payload.removeValue(forKey: "workoutName")
+  let restored = try JSONDecoder().decode(
+    WorkoutLiveState.self, from: JSONSerialization.data(withJSONObject: payload))
+  #expect(restored.colorThemeID == nil && restored.workoutName == nil)
+  #expect(restored.timerStart == state.timerStart && restored.totalSets == state.totalSets)
+  #expect(restored.nextExerciseName == state.nextExerciseName)
+}

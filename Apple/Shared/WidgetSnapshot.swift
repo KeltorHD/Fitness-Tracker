@@ -32,6 +32,14 @@ struct WidgetSnapshot: Codable, Sendable {
     let storage = try defaults ?? sharedDefaults()
     storage.set(language.rawValue, forKey: "appLanguage")
   }
+  static func publishColorTheme(_ identifier: String, to defaults: UserDefaults? = nil) throws {
+    let storage = try defaults ?? sharedDefaults()
+    storage.set(identifier, forKey: "colorTheme")
+  }
+  static func colorThemeID(from defaults: UserDefaults? = nil) throws -> String? {
+    let storage = try defaults ?? sharedDefaults()
+    return storage.string(forKey: "colorTheme")
+  }
   private func validate() throws {
     guard workoutsThisWeek >= 0, (1...7).contains(weeklyGoal),
       updatedAt.timeIntervalSince1970.isFinite

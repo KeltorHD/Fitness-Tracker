@@ -77,3 +77,13 @@ Capabilities выражены настоящими entitlement keys: [HealthKit]
 - [PhotosPicker](https://developer.apple.com/documentation/photosui/photospicker), [loadTransferable](https://developer.apple.com/documentation/photosui/photospickeritem/loadtransferable(type:)), [CGImageSourceCreateThumbnailAtIndex](https://developer.apple.com/documentation/imageio/cgimagesourcecreatethumbnailatindex(_:_:_:)): системный выбор существующего фото, передача Data, resize/re-encode на worker actor. Широкий доступ к медиатеке и camera permission не запрашиваются. Фотографию можно предварительно сделать системной камерой; встроенная съёмка не добавлена.
 
 Nutrition payload version 1 хранится в новых kinds `foodEntry` / `nutritionGoal` существующего StoredRecord (schemaVersion 1), старые kinds/UUID и WorkoutArchive v4 не меняются. JPEG до 600 KB хранится в агрегате для атомарного сохранения вместе с записью; экспорт архива тренировок явно не включает питание. Core и portable проверки работают offline; настоящие OFF ответы, Apple SDK, PhotosPicker, SwiftData/CloudKit и UI требуют отдельной проверки на Mac.
+
+
+## Оформление и системная динамика Live Activity
+
+Проверено по документации Apple 2026-11-03:
+
+- [Live Activities HIG](https://developer.apple.com/design/human-interface-guidelines/live-activities): компактная структура, системные границы, ContainerRelativeShape для согласованных отступов/скруглений и акцент keyline. На Lock Screen нужно проверять высоту; [ActivityKit presentation](https://developer.apple.com/documentation/activitykit/displaying-live-data-with-live-activities) предупреждает об обрезке выше 160 pt.
+- [ActivityConfiguration init](https://developer.apple.com/documentation/widgetkit/activityconfiguration/init(for:content:dynamicisland:)): content — ViewBuilder, dynamicIsland — обычное замыкание, возвращающее DynamicIsland. После локальной переменной темы используется явный return.
+- [ProgressView(timerInterval:countsDown:)](https://developer.apple.com/documentation/swiftui/progressview/init(timerinterval:countsdown:)): системный прогресс по сохранённому диапазону дат; countsDown=true уменьшает заполнение. Он не требует polling и не использует custom progress style.
+- [Animating data updates](https://developer.apple.com/documentation/widgetkit/animating-data-updates-in-widgets-and-live-activities): краткие переходы при обновлении данных; учтены Reduce Motion и isLuminanceReduced. Постоянные анимации/фоновые циклы не добавлены.

@@ -4,14 +4,17 @@ import Foundation
 import UIKit
 
 @MainActor final class LiveActivityService {
-  func startIfNeeded(for workout: Workout, heartRate: HeartRateReading? = nil) throws {
+  func startIfNeeded(
+    for workout: Workout, heartRate: HeartRateReading? = nil,
+    colorTheme: FitnessColorTheme = .defaultTheme
+  ) throws {
     guard workout.endedAt == nil, UIApplication.shared.applicationState == .active,
       ActivityAuthorizationInfo().areActivitiesEnabled,
       !Activity<WorkoutActivityAttributes>.activities.contains(where: {
         $0.attributes.workoutID == workout.id && [.active, .stale].contains($0.activityState)
       })
     else { return }
-    let state = localizedState(for: workout, heartRate: heartRate)
+    let state = localizedState(for: workout, heartRate: heartRate, colorTheme: colorTheme)
     _ = try Activity.request(
       attributes: WorkoutActivityAttributes(workoutID: workout.id, name: workout.name),
       content: ActivityContent(state: state, staleDate: state.heartRateStaleDate),
@@ -19,7 +22,8 @@ import UIKit
   }
 
   func update(
-    for workout: Workout?, allowStart: Bool = true, heartRate: HeartRateReading? = nil
+    for workout: Workout?, allowStart: Bool = true, heartRate: HeartRateReading? = nil,
+    colorTheme: FitnessColorTheme = .defaultTheme
   ) async throws {
     // Keep SDK reference objects out of actor crossings; reconciliation uses value snapshots.
     let activities = Activity<WorkoutActivityAttributes>.activities.map {
@@ -35,7 +39,7 @@ import UIKit
     }
     try Task.checkCancellation()
     guard let workout, workout.endedAt == nil else { return }
-    let state = localizedState(for: workout, heartRate: heartRate)
+    let state = localizedState(for: workout, heartRate: heartRate, colorTheme: colorTheme)
     let matching = activities.filter {
       $0.workoutID == workout.id && $0.canUpdate
     }
@@ -51,11 +55,13 @@ import UIKit
       if updated { return }
     }
     if allowStart {
-      try startIfNeeded(for: workout, heartRate: heartRate)
+      try startIfNeeded(for: workout, heartRate: heartRate, colorTheme: colorTheme)
     }
   }
 
-  private func localizedState(for workout: Workout, heartRate: HeartRateReading?)
+  private func localizedState(
+    for workout: Workout, heartRate: HeartRateReading?, colorTheme: FitnessColorTheme
+  )
     -> WorkoutLiveState
   {
     var display = workout
@@ -63,7 +69,8 @@ import UIKit
       display.exercises[index].exercise.name = L10n.exerciseName(display.exercises[index].exercise)
     }
     return WorkoutLiveState(
-      workout: display, languageCode: L10n.language.rawValue, heartRate: heartRate)
+      workout: display, languageCode: L10n.language.rawValue, heartRate: heartRate,
+      colorThemeID: colorTheme.rawValue)
   }
 
   // @concurrent keeps SDK handles on the generic executor, including with Swift 6.2's
