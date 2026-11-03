@@ -3,22 +3,53 @@ import SwiftUI
 
 struct ActiveWorkoutView: View {
   @Environment(\.locale) private var locale
+  @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(AppStore.self) private var store
   @Environment(\.dismiss) private var dismiss
   @AppStorage("weightUnit") private var unit: WeightUnit = .kilograms
-  // Keep the saved preference: previously hidden cards now open in compact form.
-  @AppStorage("showWorkoutHeartRate") private var heartRateExpanded = true
-  @State private var pickingExercise = false
+  @State private var heartRateExpanded = false
+  @State private var showingHeartRateSettings = false
+  @State private var showingHealthCharts = false
+  @AppStorage("workoutHeartRateVisible") private var showsHeartRate = true
+  @State private var insertion: InsertionRequest?
+  @State private var templateAddition: TemplateAdditionRequest?
+  @State private var pendingRemoval: RemovalRequest?
+  @State private var reorderRevision = 0
   @State private var selectedExercise: WorkoutExercise?
   @State private var confirmCancel = false
   @State private var renaming = false
   @State private var workoutName = ""
+  private struct InsertionRequest: Identifiable {
+    let id = UUID()
+    let workoutID: UUID
+    let position: WorkoutExerciseInsertion
+  }
+
+  private struct TemplateAdditionRequest: Identifiable {
+    let id: UUID
+  }
+
+  private struct RemovalRequest {
+    let workoutID: UUID
+    let row: WorkoutExercise
+  }
+
   var body: some View {
     NavigationStack {
       if let workout = store.active {
         overview(workout)
+          .navigationDestination(isPresented: $showingHeartRateSettings) {
+            TrackerView(model: store.tracker).toolbar(.visible, for: .navigationBar)
+          }
+          .navigationDestination(isPresented: $showingHealthCharts) {
+            HealthChartsView().toolbar(.visible, for: .navigationBar)
+          }
           .navigationTitle("").navigationBarTitleDisplayMode(.inline)
-          .safeAreaInset(edge: .bottom, spacing: 0) { SessionControls(workout: workout) }
+          .safeAreaInset(edge: .bottom, spacing: 0) {
+            SessionControls(workout: workout) {
+              insertion = InsertionRequest(workoutID: workout.id, position: .end)
+            }
+          }
           .toolbar {
             ToolbarItem(placement: .topBarLeading) {
               Button(L10n.text("Свернуть", locale: locale), systemImage: "chevron.down") {
@@ -34,8 +65,19 @@ struct ActiveWorkoutView: View {
                     .accessibilityIdentifier("activeWorkoutTitle")
                 }
                 .font(.headline)
-                Text(workout.startedAt, format: .dateTime.weekday(.wide).hour().minute())
-                  .font(.caption2).foregroundStyle(.secondary).lineLimit(1)
+                TimelineView(.periodic(from: .now, by: 1)) { timeline in
+                  let duration =
+                    workout.durationIsKnown == false
+                    ? "—"
+                    : Duration.seconds(workout.duration(at: timeline.date))
+                      .formatted(.time(pattern: .hourMinuteSecond(padHourToLength: 2)))
+                  Text(duration)
+                    .font(.subheadline.weight(.medium)).monospacedDigit()
+                    .foregroundStyle(.secondary).lineLimit(1)
+                    .accessibilityLabel(L10n.text("Длительность тренировки", locale: locale))
+                    .accessibilityValue(duration)
+                    .accessibilityIdentifier("activeWorkoutDuration")
+                }
               }
               .foregroundStyle(.primary)
               .accessibilityElement(children: .combine)
@@ -49,25 +91,36 @@ struct ActiveWorkoutView: View {
                   renaming = true
                 }
                 Button(L10n.text("Добавить упражнение", locale: locale), systemImage: "plus") {
-                  pickingExercise = true
-                }
+                  insertion = InsertionRequest(workoutID: workout.id, position: .end)
+                }.disabled(workout.status != .active)
+                Button(
+                  L10n.text("Добавить шаблоны", locale: locale),
+                  systemImage: "rectangle.stack.badge.plus"
+                ) {
+                  templateAddition = TemplateAdditionRequest(id: workout.id)
+                }.disabled(workout.status != .active)
                 if !store.isDemoMode {
                   Button(
                     L10n.text(
-                      heartRateExpanded ? "Свернуть карточку пульса" : "Развернуть карточку пульса",
+                      showsHeartRate ? "Скрыть пульс" : "Показать пульс",
                       locale: locale),
-                    systemImage: heartRateExpanded ? "chevron.up" : "chevron.down"
-                  ) { heartRateExpanded.toggle() }
+                    systemImage: showsHeartRate ? "heart.slash" : "heart"
+                  ) {
+                    showsHeartRate.toggle()
+                    heartRateExpanded = false
+                  }
                   .accessibilityIdentifier("toggleWorkoutHeartRate")
                 }
                 Button(
                   L10n.text("Отменить тренировку", locale: locale), systemImage: "trash",
                   role: .destructive
                 ) { confirmCancel = true }
+                Section { SettingsLink() }
               } label: {
                 Image(systemName: "ellipsis").foregroundStyle(.primary)
               }
               .accessibilityLabel(L10n.text("Действия тренировки", locale: locale))
+              .accessibilityIdentifier("activeWorkoutActions")
             }
           }
           .alert(L10n.text("Название тренировки", locale: locale), isPresented: $renaming) {
@@ -77,13 +130,49 @@ struct ActiveWorkoutView: View {
             }
             Button(L10n.text("Отмена", locale: locale), role: .cancel) {}
           }
-          .sheet(isPresented: $pickingExercise) {
+          .sheet(item: $insertion) { request in
             ExercisePicker { exercise in
-              store.mutate { try WorkoutEngine.addExercise(exercise, to: &$0) }
+              store.mutate { current in
+                guard current.id == request.workoutID else { throw TrainingError.invalidState }
+                try WorkoutEngine.addExercise(exercise, to: &current, position: request.position)
+              }
+            }
+          }
+          .sheet(item: $templateAddition) { request in
+            WorkoutStartView(addingToWorkout: true) { selection in
+              guard case .templates(let templates) = selection else { return }
+              let saved = store.mutate { current in
+                guard current.id == request.id else { throw TrainingError.invalidState }
+                try WorkoutEngine.addTemplates(templates, to: &current)
+              }
+              if saved { templateAddition = nil }
             }
           }
           .sheet(item: $selectedExercise) { row in
             WorkoutExerciseSheet(workout: workout, exerciseID: row.id, unit: unit)
+          }
+          .confirmationDialog(
+            L10n.text("Удалить упражнение из тренировки?", locale: locale),
+            isPresented: Binding(
+              get: { pendingRemoval != nil }, set: { if !$0 { pendingRemoval = nil } }),
+            titleVisibility: .visible, presenting: pendingRemoval
+          ) { request in
+            Button(L10n.text("Удалить упражнение", locale: locale), role: .destructive) {
+              pendingRemoval = nil
+              store.mutate { current in
+                guard current.id == request.workoutID else { throw TrainingError.invalidState }
+                try WorkoutEngine.removeExercise(id: request.row.id, from: &current)
+              }
+            }.accessibilityIdentifier("confirmRemoveWorkoutExercise")
+            Button(L10n.text("Отмена", locale: locale), role: .cancel) { pendingRemoval = nil }
+          } message: { request in
+            Text(
+              L10n.exerciseName(request.row.exercise, locale: locale) + "\n"
+                + L10n.text(
+                  request.row.sets.contains { !$0.performedStages.isEmpty }
+                    ? "Записанные подходы этого упражнения тоже будут удалены."
+                    : "Будет удалено только это упражнение из текущей тренировки.",
+                  locale: locale))
           }
           .confirmationDialog(
             L10n.text(
@@ -100,16 +189,26 @@ struct ActiveWorkoutView: View {
       }
     }
     .archiveTransferPresenter(
-      when: selectedExercise == nil && !pickingExercise && !renaming && !confirmCancel
-        && !store.showingBodyWeightEditor
+      when: selectedExercise == nil && insertion == nil && templateAddition == nil && !renaming
+        && !confirmCancel
+        && pendingRemoval == nil && !store.showingBodyWeightEditor
     )
+    .onChange(of: store.tracker.recording?.workoutID) { heartRateExpanded = false }
+    .onChange(of: store.tracker.deviceProfile) { heartRateExpanded = false }
+    .onChange(of: store.active?.id) { _, id in
+      if insertion?.workoutID != id { insertion = nil }
+      if templateAddition?.id != id { templateAddition = nil }
+      if pendingRemoval?.workoutID != id { pendingRemoval = nil }
+    }
     .alert(
       L10n.text("Ошибка", locale: locale),
       isPresented: Binding(
         get: {
-          store.error != nil && selectedExercise == nil && !pickingExercise && !renaming
+          store.error != nil && selectedExercise == nil && insertion == nil
+            && templateAddition == nil && !renaming
             && !confirmCancel
-            && !store.archiveTransfer.isPresented && !store.showingBodyWeightEditor
+            && pendingRemoval == nil && !store.archiveTransfer.isPresented
+            && !store.showingBodyWeightEditor
         },
         set: { if !$0 { store.error = nil } })
     ) {
@@ -119,73 +218,124 @@ struct ActiveWorkoutView: View {
     }
   }
   private func overview(_ workout: Workout) -> some View {
-    ScrollView {
-      VStack(spacing: 0) {
-        VStack(spacing: 0) {
-          WorkoutSessionSummary(workout: workout, unit: unit).padding(.vertical, 16)
-          if !store.isDemoMode {
-            WorkoutLiveHeartRateChart(
-              workoutID: workout.id, isExpanded: heartRateExpanded,
-              onToggle: { heartRateExpanded.toggle() }
-            )
-            .padding(.horizontal, FitTheme.cardPadding)
-            .padding(.vertical, heartRateExpanded ? FitTheme.cardPadding : 4)
-            .background(FitTheme.card, in: .rect(cornerRadius: FitTheme.radius))
-            .padding(.bottom, 16)
-            .accessibilityIdentifier("workoutHeartRateCard")
-          }
-          if let end = workout.restEndsAt, end > .now {
-            HStack {
-              RestPill(end: end)
-              Button(L10n.text("Пропустить отдых", locale: locale)) {
-                store.mutate {
-                  _ = try WorkoutLiveAction.skipRest(expectedEnd: end).apply(
-                    to: &$0, expectedWorkoutID: workout.id)
-                }
+    List {
+      Section {
+        WorkoutSessionSummary(workout: workout, unit: unit, showsDuration: false).padding(
+          .vertical, 16)
+        if showsHeartRate, !store.isDemoMode {
+          WorkoutLiveHeartRateChart(
+            workoutID: workout.id, isExpanded: heartRateExpanded,
+            onToggle: { heartRateExpanded.toggle() },
+            openSettings: { showingHeartRateSettings = true },
+            openCharts: { showingHealthCharts = true }
+          )
+          .padding(.horizontal, FitTheme.cardPadding)
+          .padding(.vertical, 4)
+          .padding(.bottom, heartRateExpanded ? FitTheme.cardPadding - 4 : 0)
+          .background(FitTheme.card, in: .rect(cornerRadius: FitTheme.radius))
+          .padding(.bottom, 16)
+          .accessibilityIdentifier("workoutHeartRateCard")
+        }
+        if let end = workout.restEndsAt, end > .now {
+          HStack {
+            RestPill(end: end)
+            Button(L10n.text("Пропустить отдых", locale: locale)) {
+              store.mutate {
+                _ = try WorkoutLiveAction.skipRest(expectedEnd: end).apply(
+                  to: &$0, expectedWorkoutID: workout.id)
               }
-            }.padding(.bottom, 12)
+            }
+          }.padding(.bottom, 12)
+        }
+        if workout.status == .paused {
+          Label(L10n.text("Тренировка на паузе", locale: locale), systemImage: "pause.circle")
+            .font(.subheadline).foregroundStyle(.secondary).padding(.bottom, 12)
+        }
+        if workout.exercises.isEmpty {
+          ContentUnavailableView(
+            L10n.text("Добавьте первое упражнение", locale: locale), systemImage: "dumbbell",
+            description: Text(
+              L10n.text("Откройте упражнение из списка, чтобы записать подходы.", locale: locale))
+          )
+        }
+      }
+      .listRowSeparator(.hidden)
+      .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
+      .listRowBackground(FitTheme.paper)
+      Section {
+        ForEach(Array(workout.exercises.enumerated()), id: \.element.id) { index, row in
+          Button {
+            selectedExercise = row
+          } label: {
+            WorkoutExerciseListRow(row: row, index: index, unit: unit, completedOnly: false)
           }
-          if workout.status == .paused {
-            Label(L10n.text("Тренировка на паузе", locale: locale), systemImage: "pause.circle")
-              .font(.subheadline).foregroundStyle(.secondary).padding(.bottom, 12)
-          }
-          if workout.exercises.isEmpty {
-            ContentUnavailableView(
-              L10n.text("Добавьте первое упражнение", locale: locale), systemImage: "dumbbell",
-              description: Text(
-                L10n.text("Откройте упражнение из списка, чтобы записать подходы.", locale: locale))
-            )
-          }
-          ForEach(Array(workout.exercises.enumerated()), id: \.element.id) { index, row in
-            Button {
-              selectedExercise = row
-            } label: {
-              WorkoutExerciseListRow(row: row, index: index, unit: unit, completedOnly: false)
-            }.buttonStyle(.plain).accessibilityIdentifier("openWorkoutExercise")
-            Divider().padding(.leading, 34)
-          }
-          Button(L10n.text("Добавить упражнение", locale: locale), systemImage: "plus.circle") {
-            pickingExercise = true
-          }
-          .disabled(workout.status != .active).accessibilityIdentifier("addExercise")
-          .font(.headline).frame(maxWidth: .infinity, alignment: .leading).padding(.vertical, 20)
-          VStack(spacing: 16) {
-            WorkoutBodyWeightRow(workout: workout).fitCard()
-            TextField(
-              L10n.text("Заметка о тренировке", locale: locale),
-              text: Binding(
-                get: { store.active?.notes ?? "" },
-                set: { text in store.mutate { $0.notes = text } }), axis: .vertical
-            )
-            .padding().background(FitTheme.card, in: .rect(cornerRadius: FitTheme.radius))
-            Button(L10n.text("Отменить тренировку", locale: locale), role: .destructive) {
-              confirmCancel = true
+          .buttonStyle(.plain).accessibilityIdentifier("openWorkoutExercise")
+          .moveDisabled(workout.status != .active)
+          .swipeActions(edge: .leading, allowsFullSwipe: false) {
+            if workout.status == .active {
+              Button(L10n.text("Добавить перед", locale: locale), systemImage: "arrow.up.to.line") {
+                insertion = InsertionRequest(workoutID: workout.id, position: .before(row.id))
+              }.tint(colorTheme.accent).accessibilityIdentifier("insertWorkoutExerciseBefore")
+              Button(L10n.text("Добавить после", locale: locale), systemImage: "arrow.down.to.line")
+              {
+                insertion = InsertionRequest(workoutID: workout.id, position: .after(row.id))
+              }.tint(.secondary).accessibilityIdentifier("insertWorkoutExerciseAfter")
             }
           }
-        }.padding(.horizontal, 16).padding(.bottom, 20)
+          .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+            if workout.status == .active {
+              Button(
+                L10n.text("Удалить упражнение", locale: locale), systemImage: "trash"
+              ) {
+                pendingRemoval = RemovalRequest(workoutID: workout.id, row: row)
+              }.tint(.red).accessibilityIdentifier("removeWorkoutExercise")
+            }
+          }
+        }
+        .onMove { source, destination in
+          var reordered = workout.exercises
+          reordered.move(fromOffsets: source, toOffset: destination)
+          let saved = store.mutate { current in
+            guard current.id == workout.id else { throw TrainingError.invalidState }
+            try WorkoutEngine.reorderExercises(reordered.map(\.id), in: &current)
+          }
+          // Rebuild the native list after a failed save to discard its temporary drag order.
+          if !saved { reorderRevision += 1 }
+        }
       }
-    }.background(FitTheme.paper).scrollDismissesKeyboard(.interactively)
-      .accessibilityIdentifier("activeWorkoutScroll")
+      .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
+      .listRowBackground(FitTheme.paper)
+      Section {
+        Button(
+          L10n.text("Добавить шаблоны", locale: locale), systemImage: "rectangle.stack.badge.plus"
+        ) {
+          templateAddition = TemplateAdditionRequest(id: workout.id)
+        }
+        .disabled(workout.status != .active).accessibilityIdentifier("addWorkoutTemplates")
+        .font(.headline).frame(maxWidth: .infinity, alignment: .leading).padding(.vertical, 20)
+        VStack(spacing: 16) {
+          WorkoutBodyWeightRow(workout: workout).fitCard()
+          TextField(
+            L10n.text("Заметка о тренировке", locale: locale),
+            text: Binding(
+              get: { store.active?.notes ?? "" },
+              set: { text in store.mutate { $0.notes = text } }), axis: .vertical
+          )
+          .padding().background(FitTheme.card, in: .rect(cornerRadius: FitTheme.radius))
+          Button(L10n.text("Отменить тренировку", locale: locale), role: .destructive) {
+            confirmCancel = true
+          }
+        }
+      }
+      .listRowSeparator(.hidden)
+      .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
+      .listRowBackground(FitTheme.paper)
+    }
+    .id(reorderRevision)
+    .listStyle(.plain).scrollContentBackground(.hidden)
+    .listSectionSpacing(0)
+    .background(FitTheme.paper).scrollDismissesKeyboard(.interactively)
+    .accessibilityIdentifier("activeWorkoutScroll")
   }
 }
 
@@ -193,6 +343,7 @@ struct ExercisePicker: View {
   @Environment(\.locale) private var locale
   @Environment(\.dismiss) private var dismiss
   @State private var custom = false
+  var selectionHint: String? = nil
   var initialGroups: Set<MuscleGroup> = []
   var initialMuscles: Set<ExerciseMuscle> = []
   let select: (Exercise) -> Void
@@ -202,6 +353,12 @@ struct ExercisePicker: View {
         exercise in
         select(exercise)
         dismiss()
+      }
+      .safeAreaInset(edge: .top, spacing: 0) {
+        if let selectionHint {
+          Text(L10n.text(selectionHint, locale: locale)).font(.footnote).foregroundStyle(.secondary)
+            .frame(maxWidth: .infinity, alignment: .leading).padding(16).background(FitTheme.paper)
+        }
       }
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
@@ -234,6 +391,7 @@ private struct CustomExerciseView: View {
     NavigationStack {
       Form {
         TextField(L10n.text("Название", locale: locale), text: $name)
+          .accessibilityIdentifier("customExerciseName")
         Picker(L10n.text("Группа мышц", locale: locale), selection: $muscle) {
           ForEach(MuscleGroup.allCases, id: \.self) { Text($0.title).tag($0) }
         }
@@ -251,6 +409,7 @@ private struct CustomExerciseView: View {
                 dismiss()
               } catch { message = error.localizedDescription }
             }
+            .accessibilityIdentifier("saveCustomExercise")
           }
         }
     }

@@ -21,7 +21,7 @@ extension WorkoutSet {
     }
     return WorkoutSet(
       repetitions: repetitions, weightKG: weightKG, isWarmup: isWarmup,
-      loadMultiplier: loadMultiplier, dropStages: stages.isEmpty ? nil : stages)
+      loadMultiplier: loadMultiplier, dropStages: stages.isEmpty ? nil : stages, note: note)
   }
 }
 
@@ -38,8 +38,20 @@ extension WorkoutEngine {
       throw TrainingError.missingSet
     }
     var set = workout.exercises[e].sets[s]
-    guard set.completedAt == nil, stages.allSatisfy({ $0.completedAt == nil }) else {
-      throw TrainingError.invalidState
+    if set.completedAt != nil {
+      // A started group may only grow by one pending stage. Recorded work stays immutable.
+      let original = set.dropStages ?? []
+      guard set.isDropSet, !set.isFullyCompleted,
+        repetitions == set.repetitions, weightKG == set.weightKG,
+        stages.count == original.count + 1, stages.last?.completedAt == nil
+      else { throw TrainingError.invalidState }
+      for (old, new) in zip(original, stages) {
+        guard old.id == new.id, old.completedAt == new.completedAt,
+          old.completedAt == nil || old == new
+        else { throw TrainingError.invalidState }
+      }
+    } else {
+      guard stages.allSatisfy({ $0.completedAt == nil }) else { throw TrainingError.invalidState }
     }
     guard !set.isWarmup || stages.isEmpty else { throw TrainingError.invalidDropSet }
     set.repetitions = repetitions
@@ -50,6 +62,74 @@ extension WorkoutEngine {
     candidate.exercises[e].sets[s] = set
     try Validation.workout(candidate)
     workout = candidate
+  }
+
+  public static func removeDropStage(
+    in workout: inout Workout, exerciseID: UUID, setID: UUID, stageID: UUID
+  ) throws {
+    guard workout.status == .active else { throw TrainingError.invalidState }
+    guard let e = workout.exercises.firstIndex(where: { $0.id == exerciseID }) else {
+      throw TrainingError.missingExercise
+    }
+    guard let s = workout.exercises[e].sets.firstIndex(where: { $0.id == setID }),
+      let index = workout.exercises[e].sets[s].dropStages?.firstIndex(where: { $0.id == stageID })
+    else { throw TrainingError.missingSet }
+    let original = workout.exercises[e].sets[s]
+    var updated = original
+    updated.dropStages?.remove(at: index)
+    if updated.dropStages?.isEmpty == true { updated.dropStages = nil }
+    var candidate = workout
+    candidate.exercises[e].sets[s] = updated
+    try Validation.workout(candidate)
+    let oldDeadline = dropRestDeadline(original, seconds: workout.restSeconds)
+    let newDeadline = dropRestDeadline(updated, seconds: workout.restSeconds)
+    if let oldDeadline, candidate.restEndsAt == oldDeadline {
+      let shared = candidate.exercises.flatMap(\.sets).contains {
+        dropRestDeadline($0, seconds: candidate.restSeconds) == oldDeadline
+      }
+      if !shared { candidate.restEndsAt = newDeadline }
+    } else if oldDeadline == nil, candidate.restEndsAt == nil {
+      candidate.restEndsAt = newDeadline
+    }
+    workout = candidate
+  }
+
+  /// Corrects recorded values during an ongoing session without re-completing the target.
+  public static func correctCompletedTarget(
+    in workout: inout Workout, exerciseID: UUID, targetID: UUID,
+    repetitions: Int, weightKG: Double
+  ) throws {
+    guard [.active, .paused].contains(workout.status) else { throw TrainingError.invalidState }
+    guard let e = workout.exercises.firstIndex(where: { $0.id == exerciseID }) else {
+      throw TrainingError.missingExercise
+    }
+    guard
+      let s = workout.exercises[e].sets.firstIndex(where: {
+        $0.stages.contains { $0.id == targetID }
+      })
+    else { throw TrainingError.missingSet }
+    var candidate = workout
+    if candidate.exercises[e].sets[s].id == targetID {
+      guard candidate.exercises[e].sets[s].completedAt != nil else {
+        throw TrainingError.invalidState
+      }
+      candidate.exercises[e].sets[s].repetitions = repetitions
+      candidate.exercises[e].sets[s].weightKG = weightKG
+    } else {
+      guard
+        let d = candidate.exercises[e].sets[s].dropStages?.firstIndex(where: { $0.id == targetID }),
+        candidate.exercises[e].sets[s].dropStages?[d].completedAt != nil
+      else { throw TrainingError.invalidState }
+      candidate.exercises[e].sets[s].dropStages?[d].repetitions = repetitions
+      candidate.exercises[e].sets[s].dropStages?[d].weightKG = weightKG
+    }
+    try Validation.workout(candidate)
+    workout = candidate
+  }
+
+  private static func dropRestDeadline(_ set: WorkoutSet, seconds: Int) -> Date? {
+    guard seconds > 0, set.isFullyCompleted else { return nil }
+    return set.stages.last?.completedAt?.addingTimeInterval(Double(seconds))
   }
 
   public static func completeDropStage(

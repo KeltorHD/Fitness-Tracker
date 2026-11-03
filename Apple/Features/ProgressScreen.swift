@@ -128,6 +128,7 @@ struct ProgressScreen: View {
               store.presentWorkoutStart()
             }.foregroundStyle(.primary).accessibilityIdentifier("startWorkoutFromResults")
           }
+          SettingsToolbar()
         }
         .onChange(of: store.workouts, initial: true) { refresh() }
         .onChange(of: store.bodyWeights) { refresh() }

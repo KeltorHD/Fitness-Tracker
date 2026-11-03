@@ -60,24 +60,13 @@ struct TemplatesView: View {
             Text(L10n.text("Упражнения", locale: locale)).foregroundStyle(.primary)
           }
         }
-        ToolbarItemGroup(placement: .topBarTrailing) {
-          Menu {
-            Button(L10n.text("Создать тренировку", locale: locale), systemImage: "plus") {
-              creating = true
-            }
-            NavigationLink {
-              ExerciseLibraryView()
-            } label: {
-              Label(L10n.text("Упражнения", locale: locale), systemImage: "dumbbell")
-            }
-          } label: {
-            Image(systemName: "ellipsis").foregroundStyle(.primary)
-          }
+        ToolbarItem(placement: .topBarTrailing) {
           Button(L10n.text("Создать тренировку", locale: locale), systemImage: "plus") {
             creating = true
           }.foregroundStyle(
             .primary)
         }
+        SettingsToolbar()
       }
       .sheet(isPresented: $creating, onDismiss: { store.showingTemplateEditor = false }) {
         TemplateEditor(
@@ -152,18 +141,13 @@ struct TemplateOverviewView: View {
             Button(L10n.text("Удалить", locale: locale), systemImage: "trash", role: .destructive) {
               confirmDelete = true
             }
+            Section { SettingsLink() }
           } label: {
             Image(systemName: "ellipsis")
           }
           .accessibilityLabel(L10n.text("Действия шаблона", locale: locale))
           .accessibilityIdentifier("templateActions")
         }
-      }
-      .safeAreaInset(edge: .bottom) {
-        Button(L10n.text("Начать тренировку", locale: locale), systemImage: "play.fill") {
-          store.start(template: current)
-        }
-        .font(.headline).buttonStyle(.glassProminent).controlSize(.large).padding()
       }
       .sheet(isPresented: $editing, onDismiss: { store.showingTemplateEditor = false }) {
         TemplateEditor(template: current).onAppear { store.showingTemplateEditor = true }

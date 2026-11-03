@@ -56,12 +56,6 @@ struct HistoryView: View {
               systemImage: "book.closed")
           } description: {
             Text(L10n.text("Завершённые тренировки появятся здесь по неделям.", locale: locale))
-          } actions: {
-            Button(L10n.text("Начать тренировку", locale: locale), systemImage: "plus") {
-              store.presentWorkoutStart()
-            }
-            .buttonStyle(.glassProminent).controlSize(.large).accessibilityIdentifier(
-              "startEmptyWorkout")
           }.cardListRow()
         }
         ForEach(model.weeks) { week in
@@ -111,6 +105,7 @@ struct HistoryView: View {
           }
           .foregroundStyle(.primary).accessibilityIdentifier("startWorkout")
         }
+        SettingsToolbar()
       }
       .sheet(
         item: $selected,

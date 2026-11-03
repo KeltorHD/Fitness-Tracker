@@ -1123,6 +1123,23 @@
         }
       }
     },
+    "Без выбора шаблона начнётся свободная тренировка.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Без выбора шаблона начнётся свободная тренировка."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starting without a template creates a free workout."
+          }
+        }
+      }
+    },
     "Без выполненных подходов: %@. Сессии сохранятся как отменённые.": {
       "extractionState": "manual",
       "localizations": {
@@ -1327,6 +1344,57 @@
         }
       }
     },
+    "Будет удалено только это упражнение из текущей тренировки.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Будет удалено только это упражнение из текущей тренировки."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Only this exercise will be removed from the current workout."
+          }
+        }
+      }
+    },
+    "Будет удалён весь подход со всеми этапами дропсета.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Будет удалён весь подход со всеми этапами дропсета."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The entire set, including all drop stages, will be deleted."
+          }
+        }
+      }
+    },
+    "Будет удалён только этот этап дропсета.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Будет удалён только этот этап дропсета."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Only this drop stage will be deleted."
+          }
+        }
+      }
+    },
     "В CSV нет тренировок для импорта.": {
       "extractionState": "manual",
       "localizations": {
@@ -1493,6 +1561,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "The file contains duplicate records. Nothing was imported."
+          }
+        }
+      }
+    },
+    "В шаблоне нет упражнений.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "В шаблоне нет упражнений."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This template has no exercises."
           }
         }
       }
@@ -2636,6 +2721,23 @@
         }
       }
     },
+    "Выполнено этапов: %@ из %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выполнено этапов: %@ из %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stages completed: %@ of %@"
+          }
+        }
+      }
+    },
     "Выполните хотя бы один подход перед завершением.": {
       "extractionState": "manual",
       "localizations": {
@@ -2857,6 +2959,23 @@
         }
       }
     },
+    "Далее": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Далее"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next"
+          }
+        }
+      }
+    },
     "Далее: подход %@": {
       "extractionState": "manual",
       "localizations": {
@@ -2921,6 +3040,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Your data has not been deleted. Try opening the app again later."
+          }
+        }
+      }
+    },
+    "Данные этого подхода будут удалены из тренировки.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Данные этого подхода будут удалены из тренировки."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This set and its recorded data will be deleted from the workout."
           }
         }
       }
@@ -3040,6 +3176,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "This action is unavailable in the workout’s current state."
+          }
+        }
+      }
+    },
+    "Действия группы дропсета": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Действия группы дропсета"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drop-set group actions"
           }
         }
       }
@@ -3261,6 +3414,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Decimal separator"
+          }
+        }
+      }
+    },
+    "Длительность тренировки": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Длительность тренировки"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workout duration"
           }
         }
       }
@@ -3537,6 +3707,40 @@
         }
       }
     },
+    "Добавить заметку к подходу": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Добавить заметку к подходу"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add set note"
+          }
+        }
+      }
+    },
+    "Добавить перед": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Добавить перед"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add before"
+          }
+        }
+      }
+    },
     "Добавить подход": {
       "extractionState": "manual",
       "localizations": {
@@ -3550,6 +3754,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Add set"
+          }
+        }
+      }
+    },
+    "Добавить подход после": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Добавить подход после"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add set after"
+          }
+        }
+      }
+    },
+    "Добавить после": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Добавить после"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add after"
           }
         }
       }
@@ -3601,6 +3839,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Add exercise"
+          }
+        }
+      }
+    },
+    "Добавить шаблоны": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Добавить шаблоны"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add templates"
           }
         }
       }
@@ -4302,6 +4557,23 @@
         }
       }
     },
+    "Заменить упражнение": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Заменить упражнение"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Replace exercise"
+          }
+        }
+      }
+    },
     "Заметка": {
       "extractionState": "manual",
       "localizations": {
@@ -4319,6 +4591,40 @@
         }
       }
     },
+    "Заметка к подходу": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Заметка к подходу"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set note"
+          }
+        }
+      }
+    },
+    "Заметка к подходу должна быть не длиннее 2000 символов.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Заметка к подходу должна быть не длиннее 2000 символов."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set notes must be no longer than 2000 characters."
+          }
+        }
+      }
+    },
     "Заметка о тренировке": {
       "extractionState": "manual",
       "localizations": {
@@ -4332,6 +4638,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Workout notes"
+          }
+        }
+      }
+    },
+    "Записанные подходы этого упражнения тоже будут удалены.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Записанные подходы этого упражнения тоже будут удалены."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recorded sets for this exercise will also be deleted."
           }
         }
       }
@@ -4621,6 +4944,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Edit weight"
+          }
+        }
+      }
+    },
+    "Изменить выполненный подход": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Изменить выполненный подход"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit completed set"
           }
         }
       }
@@ -5815,6 +6155,23 @@
         }
       }
     },
+    "Назад": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Назад"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back"
+          }
+        }
+      }
+    },
     "Название": {
       "extractionState": "manual",
       "localizations": {
@@ -6049,6 +6406,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Settings"
+          }
+        }
+      }
+    },
+    "Настройки пульса": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Настройки пульса"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate settings"
           }
         }
       }
@@ -6767,6 +7141,23 @@
         }
       }
     },
+    "Не удалось сохранить заметку. Попробуйте ещё раз.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось сохранить заметку. Попробуйте ещё раз."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not save the note. Please try again."
+          }
+        }
+      }
+    },
     "Не удалось сохранить изменения тренировки. Попробуйте ещё раз.": {
       "extractionState": "manual",
       "localizations": {
@@ -7239,6 +7630,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "No data is available. Check your tracker app’s sync and FitnessTracker permissions in Health."
+          }
+        }
+      }
+    },
+    "Нет заметки": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нет заметки"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No note"
           }
         }
       }
@@ -8008,6 +8416,23 @@
         }
       }
     },
+    "Открыть фото и анимацию упражнения": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Открыть фото и анимацию упражнения"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open exercise photos and animation"
+          }
+        }
+      }
+    },
     "Открыть цифровую панель": {
       "extractionState": "manual",
       "localizations": {
@@ -8140,6 +8565,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Select a whole group or expand it to choose individual muscles."
+          }
+        }
+      }
+    },
+    "Очистить значение": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Очистить значение"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear value"
           }
         }
       }
@@ -8480,6 +8922,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "The exercise library file is corrupted."
+          }
+        }
+      }
+    },
+    "Повт.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Повт."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reps"
           }
         }
       }
@@ -9028,6 +9487,40 @@
         }
       }
     },
+    "Показать пульс": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Показать пульс"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show heart rate"
+          }
+        }
+      }
+    },
+    "Показать упражнения": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Показать упражнения"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show exercises"
+          }
+        }
+      }
+    },
     "Показываем доступные источники: Apple Watch, AirPods, приложения браслетов и iPhone. Частота обновлений зависит от устройства и синхронизации с «Здоровьем».": {
       "extractionState": "manual",
       "localizations": {
@@ -9245,6 +9738,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Core"
+          }
+        }
+      }
+    },
+    "При замене записанные подходы останутся у прежнего упражнения. Новое упражнение начнётся с начальных параметров.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "При замене записанные подходы останутся у прежнего упражнения. Новое упражнение начнётся с начальных параметров."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recorded sets will stay with the original exercise. The replacement exercise will start with default targets."
           }
         }
       }
@@ -10031,6 +10541,23 @@
         }
       }
     },
+    "Раздел пока в разработке.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Раздел пока в разработке."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This section is under development."
+          }
+        }
+      }
+    },
     "Разминка": {
       "extractionState": "manual",
       "localizations": {
@@ -10762,6 +11289,40 @@
         }
       }
     },
+    "Скрыть пульс": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Скрыть пульс"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hide heart rate"
+          }
+        }
+      }
+    },
+    "Скрыть упражнения": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Скрыть упражнения"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hide exercises"
+          }
+        }
+      }
+    },
     "Скрыть цифровую панель": {
       "extractionState": "manual",
       "localizations": {
@@ -11200,6 +11761,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Back"
+          }
+        }
+      }
+    },
+    "Справка": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Справка"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Help"
           }
         }
       }
@@ -11986,6 +12564,40 @@
         }
       }
     },
+    "Удалить группу дропсета": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Удалить группу дропсета"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete drop-set group"
+          }
+        }
+      }
+    },
+    "Удалить группу дропсета?": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Удалить группу дропсета?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete drop-set group?"
+          }
+        }
+      }
+    },
     "Удалить запись веса?": {
       "extractionState": "manual",
       "localizations": {
@@ -12020,6 +12632,40 @@
         }
       }
     },
+    "Удалить подход": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Удалить подход"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete set"
+          }
+        }
+      }
+    },
+    "Удалить подход?": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Удалить подход?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete set?"
+          }
+        }
+      }
+    },
     "Удалить тренировку?": {
       "extractionState": "manual",
       "localizations": {
@@ -12033,6 +12679,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Delete workout?"
+          }
+        }
+      }
+    },
+    "Удалить упражнение": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Удалить упражнение"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete exercise"
+          }
+        }
+      }
+    },
+    "Удалить упражнение из тренировки?": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Удалить упражнение из тренировки?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete this exercise from the workout?"
           }
         }
       }
@@ -12067,6 +12747,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Delete template?"
+          }
+        }
+      }
+    },
+    "Удалить этап дропсета": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Удалить этап дропсета"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete drop stage"
+          }
+        }
+      }
+    },
+    "Удалить этап дропсета?": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Удалить этап дропсета?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete drop stage?"
           }
         }
       }
@@ -12254,6 +12968,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Exercises"
+          }
+        }
+      }
+    },
+    "Упражнения шаблонов добавятся в конец. Записанные подходы и параметры текущей тренировки сохранятся.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Упражнения шаблонов добавятся в конец. Записанные подходы и параметры текущей тренировки сохранятся."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Template exercises will be appended. Recorded sets and current workout settings will be preserved."
           }
         }
       }
@@ -13308,6 +14039,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "level"
+          }
+        }
+      }
+    },
+    "№ %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "№ %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "#%@"
           }
         }
       }

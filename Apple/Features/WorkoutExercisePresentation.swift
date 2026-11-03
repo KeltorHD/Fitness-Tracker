@@ -99,6 +99,15 @@ struct WorkoutSetCompletion {
     selectedSetID = nil
     refresh(workout)
   }
+  func showExercise(_ id: UUID, in workout: Workout) {
+    guard workout.id == workoutID, workout.exercises.contains(where: { $0.id == id }) else {
+      return
+    }
+    exerciseID = id
+    selectedSetID = nil
+    selectedStageID = nil
+    refresh(workout)
+  }
   func select(_ targetID: UUID, in workout: Workout) {
     guard
       let set = exercise(in: workout)?.sets.first(where: {
@@ -173,10 +182,11 @@ struct WorkoutSetCompletion {
     return WorkoutSetCompletion(
       exerciseID: row.id, set: try preparedSet(set), stageID: selectedStageID)
   }
-  func configuredDropSet(in workout: Workout, adding: Bool) throws -> WorkoutSet {
+  func configuredDropSet(in workout: Workout, adding: Bool, setID: UUID? = nil) throws -> WorkoutSet
+  {
     guard workout.id == workoutID, workout.status == .active,
-      let set = exercise(in: workout)?.sets.first(where: { $0.id == selectedSetID }),
-      set.completedAt == nil
+      let set = exercise(in: workout)?.sets.first(where: { $0.id == (setID ?? selectedSetID) }),
+      set.completedAt == nil || (adding && set.isDropSet && !set.isFullyCompleted)
     else { throw TrainingError.invalidState }
     if !adding {
       var plain = set
