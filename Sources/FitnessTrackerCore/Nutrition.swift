@@ -1,7 +1,7 @@
 import Foundation
 
 public enum NutritionError: Error, LocalizedError, Sendable {
-  case invalidValues, invalidPortion, invalidEntry, invalidPhoto, invalidGoal
+  case invalidValues, invalidPortion, invalidEntry, invalidPhoto, invalidGoal, invalidWater
   public var errorDescription: String? {
     switch self {
     case .invalidValues:
@@ -11,6 +11,7 @@ public enum NutritionError: Error, LocalizedError, Sendable {
     case .invalidPhoto: "Не удалось обработать фото. Выберите другое изображение."
     case .invalidGoal:
       "Укажите положительную цель калорий. Необязательные цели БЖУ тоже должны быть больше нуля."
+    case .invalidWater: "Укажите объём воды больше нуля и не больше 10 000 мл."
     }
   }
 }
@@ -167,13 +168,16 @@ public struct NutritionGoal: Codable, Equatable, Sendable {
   public var protein: Double?
   public var fat: Double?
   public var carbohydrates: Double?
+  public var waterMilliliters: Double?
   public init(
-    calories: Double, protein: Double? = nil, fat: Double? = nil, carbohydrates: Double? = nil
+    calories: Double, protein: Double? = nil, fat: Double? = nil, carbohydrates: Double? = nil,
+    waterMilliliters: Double? = nil
   ) {
     self.calories = calories
     self.protein = protein
     self.fat = fat
     self.carbohydrates = carbohydrates
+    self.waterMilliliters = waterMilliliters
   }
   public func validate() throws {
     guard calories.isFinite, calories > 0, calories <= 20_000,
@@ -181,6 +185,73 @@ public struct NutritionGoal: Codable, Equatable, Sendable {
         $0.isFinite && $0 > 0 && $0 <= 2000
       })
     else { throw NutritionError.invalidGoal }
+    if let waterMilliliters {
+      guard waterMilliliters.isFinite, waterMilliliters > 0, waterMilliliters <= 10_000 else {
+        throw NutritionError.invalidWater
+      }
+    }
+  }
+}
+
+public struct WaterEntry: Codable, Equatable, Identifiable, Sendable {
+  public var id: UUID
+  public var date: Date
+  public var milliliters: Double
+  public init(id: UUID = UUID(), date: Date = Date(), milliliters: Double) {
+    self.id = id
+    self.date = date
+    self.milliliters = milliliters
+  }
+  public func validate() throws {
+    guard date.timeIntervalSince1970.isFinite, milliliters.isFinite,
+      milliliters > 0, milliliters <= 10_000
+    else { throw NutritionError.invalidWater }
+  }
+}
+
+public enum NutritionCalendar {
+  public static func date(on day: Date, timeOf source: Date, calendar: Calendar) -> Date {
+    let time = calendar.dateComponents([.hour, .minute, .second], from: source)
+    let resolved =
+      calendar.date(
+        bySettingHour: time.hour ?? 0, minute: time.minute ?? 0, second: time.second ?? 0, of: day)
+      ?? calendar.startOfDay(for: day)
+    let fraction = source.timeIntervalSince1970 - floor(source.timeIntervalSince1970)
+    return resolved.addingTimeInterval(fraction)
+  }
+}
+
+public struct NutritionDaySummary: Identifiable, Equatable, Sendable {
+  public var id: Date { date }
+  public let date: Date
+  public let total: Nutrients
+  public let incompleteCount: Int
+  public let waterMilliliters: Double
+  public let entryCount: Int
+
+  public static func week(
+    ending date: Date, entries: [FoodEntry], water: [WaterEntry], calendar: Calendar
+  ) -> [Self] {
+    (-6...0).compactMap { offset in
+      guard
+        let day = calendar.date(byAdding: .day, value: offset, to: calendar.startOfDay(for: date))
+      else { return nil }
+      let nutrition = NutritionDay(entries: entries, date: day, calendar: calendar)
+      return Self(
+        date: day, total: nutrition.total, incompleteCount: nutrition.incompleteCount,
+        waterMilliliters: water.filter { calendar.isDate($0.date, inSameDayAs: day) }
+          .reduce(0) { $0 + $1.milliliters }, entryCount: nutrition.entries.count)
+    }
+  }
+}
+
+public enum FoodBarcode {
+  public static func normalized(_ value: String) -> String? {
+    let value = value.trimmingCharacters(in: .whitespacesAndNewlines)
+    guard (8...14).contains(value.count), value.allSatisfy({ $0.isASCII && $0.isNumber }) else {
+      return nil
+    }
+    return value
   }
 }
 
@@ -199,24 +270,47 @@ public struct NutritionDay: Equatable, Sendable {
 @MainActor public protocol NutritionRepository {
   func foodEntries() throws -> [FoodEntry]
   func saveFoodEntry(_ entry: FoodEntry) throws
+  func saveFoodEntries(_ entries: [FoodEntry]) throws
   func deleteFoodEntry(id: UUID) throws
   func nutritionGoal() throws -> NutritionGoal?
   func saveNutritionGoal(_ goal: NutritionGoal?) throws
+  func waterEntries() throws -> [WaterEntry]
+  func saveWaterEntry(_ entry: WaterEntry) throws
+  func deleteWaterEntry(id: UUID) throws
+  func favoriteFoodProducts() throws -> [FoodProduct]
+  func setFavoriteFoodProduct(_ product: FoodProduct, isFavorite: Bool) throws
 }
 
 @MainActor public final class MemoryNutritionRepository: NutritionRepository {
   private var entries: [UUID: FoodEntry] = [:]
   private var goal: NutritionGoal?
+  private var water: [UUID: WaterEntry] = [:]
+  private var favorites: [String: FoodProduct] = [:]
   public init() {}
   public func foodEntries() throws -> [FoodEntry] { Array(entries.values) }
   public func saveFoodEntry(_ entry: FoodEntry) throws {
-    try entry.validate()
-    entries[entry.id] = entry
+    try saveFoodEntries([entry])
+  }
+  public func saveFoodEntries(_ values: [FoodEntry]) throws {
+    guard Set(values.map(\.id)).count == values.count else { throw NutritionError.invalidEntry }
+    for entry in values { try entry.validate() }
+    for entry in values { entries[entry.id] = entry }
   }
   public func deleteFoodEntry(id: UUID) throws { entries[id] = nil }
   public func nutritionGoal() throws -> NutritionGoal? { goal }
   public func saveNutritionGoal(_ goal: NutritionGoal?) throws {
     try goal?.validate()
     self.goal = goal
+  }
+  public func waterEntries() throws -> [WaterEntry] { Array(water.values) }
+  public func saveWaterEntry(_ entry: WaterEntry) throws {
+    try entry.validate()
+    water[entry.id] = entry
+  }
+  public func deleteWaterEntry(id: UUID) throws { water[id] = nil }
+  public func favoriteFoodProducts() throws -> [FoodProduct] { Array(favorites.values) }
+  public func setFavoriteFoodProduct(_ product: FoodProduct, isFavorite: Bool) throws {
+    try product.validate()
+    favorites[product.id] = isFavorite ? product : nil
   }
 }

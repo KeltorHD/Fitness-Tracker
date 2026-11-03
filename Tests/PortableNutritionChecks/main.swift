@@ -18,6 +18,24 @@ private enum Failure: Error { case expected }
     if fail { throw Failure.expected }
     try memory.saveFoodEntry(entry)
   }
+  func saveFoodEntries(_ entries: [FoodEntry]) throws {
+    if fail { throw Failure.expected }
+    try memory.saveFoodEntries(entries)
+  }
+  func waterEntries() throws -> [WaterEntry] { try memory.waterEntries() }
+  func saveWaterEntry(_ entry: WaterEntry) throws {
+    if fail { throw Failure.expected }
+    try memory.saveWaterEntry(entry)
+  }
+  func deleteWaterEntry(id: UUID) throws {
+    if fail { throw Failure.expected }
+    try memory.deleteWaterEntry(id: id)
+  }
+  func favoriteFoodProducts() throws -> [FoodProduct] { try memory.favoriteFoodProducts() }
+  func setFavoriteFoodProduct(_ product: FoodProduct, isFavorite: Bool) throws {
+    if fail { throw Failure.expected }
+    try memory.setFavoriteFoodProduct(product, isFavorite: isFavorite)
+  }
   func deleteFoodEntry(id: UUID) throws {
     if fail { throw Failure.expected }
     try memory.deleteFoodEntry(id: id)
@@ -104,6 +122,37 @@ private final class FoodURLProtocol: URLProtocol {
     model.switchWorkspace(isDemo: false)
     precondition(model.entries == [entry] && model.goal == goal)
     precondition(model.recentProducts.count == 1)
+    var calendar = Calendar(identifier: .gregorian)
+    calendar.timeZone = TimeZone(identifier: "UTC") ?? .current
+    model.selectDay(entry.date, calendar: calendar)
+    var favorite = entry.portions[0].product
+    favorite = FoodProduct(id: "12345678", name: favorite.name, per100Units: favorite.per100Units)
+    precondition(model.toggleFavorite(favorite))
+    precondition(model.localProduct(barcode: " 12345678 ") == favorite)
+    precondition(model.addWater(250, on: entry.date, calendar: calendar))
+    precondition(model.waterToday.reduce(0) { $0 + $1.milliliters } == 250)
+    let initialWater = model.water
+    repository.fail = true
+    precondition(!model.addWater(500, on: entry.date, calendar: calendar))
+    precondition(!model.toggleFavorite(favorite) && model.favorites == [favorite])
+    precondition(model.water == initialWater)
+    let target = calendar.date(byAdding: .day, value: 1, to: entry.date) ?? entry.date
+    precondition(!model.copyMeals(from: entry.date, meal: nil, to: target, calendar: calendar))
+    precondition(model.entries == [entry])
+    repository.fail = false
+    precondition(model.copyMeals(from: entry.date, meal: .snack, to: target, calendar: calendar))
+    precondition(model.entries.count == 2)
+    let copy = model.entries.first { $0.id != entry.id }
+    precondition(
+      copy?.portions.first?.id != entry.portions.first?.id && copy?.nutrients == entry.nutrients)
+    precondition(copy.map { calendar.isDate($0.date, inSameDayAs: target) } == true)
+    model.selectDay(target, calendar: calendar)
+    precondition(model.day.entries.count == 1 && model.waterToday.isEmpty)
+    model.switchWorkspace(isDemo: true)
+    precondition(model.water.isEmpty && model.favorites.isEmpty && model.entries.isEmpty)
+    model.switchWorkspace(isDemo: false)
+    precondition(model.water == initialWater && model.favorites == [favorite])
+    precondition(model.deleteWater(initialWater[0]) && model.water.isEmpty)
     let decimal = try NutritionInput.number("12,5")
     precondition(decimal == 12.5)
     for invalid in ["NaN", "Infinity", "1e3", "-1", "1.2.3", ""] {
