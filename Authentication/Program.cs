@@ -20,7 +20,19 @@ public partial class Program
         builder.Logging.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Warning);
         builder.Services.AddProblemDetails();
         builder.Services.AddControllersWithViews(options =>
-            options.Filters.Add(new Microsoft.AspNetCore.Mvc.AutoValidateAntiforgeryTokenAttribute()));
+        {
+            options.Filters.Add(new Microsoft.AspNetCore.Mvc.AutoValidateAntiforgeryTokenAttribute());
+            options.Filters.Add<Controllers.AuthenticationExceptionFilter>();
+        });
+        builder.Services.AddSingleton(Controllers.AuthenticationMapping.Create());
+        builder.Services.AddScoped<MapsterMapper.IMapper, MapsterMapper.Mapper>();
+        builder.Services.AddScoped<BrowserNavigation>();
+        builder.Services.AddScoped<AccountService>();
+        builder.Services.AddScoped<PasswordService>();
+        builder.Services.AddScoped<PasskeyService>();
+        builder.Services.AddScoped<ExternalLoginService>();
+        builder.Services.AddScoped<AuthorizationService>();
+        builder.Services.AddScoped<AppAssociationService>();
         builder.Services.AddOpenApi();
         builder.Services.AddDbContext<AuthDbContext>(options =>
         {

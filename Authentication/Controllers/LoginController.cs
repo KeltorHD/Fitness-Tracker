@@ -1,68 +1,30 @@
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
+using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
-using OpenIddict.Abstractions;
 using OpenIddict.Client.AspNetCore;
 
 namespace FitnessTracker.Authentication.Controllers;
 
-public sealed record LoginPage(string ReturnUrl, string[] Providers);
-
-public sealed class LoginController(IConfiguration config, UserManager<ApplicationUser> users,
-    SignInManager<ApplicationUser> signIn, ExternalAccounts accounts) : Controller
+/// <summary>Маппит browser login HTTP-контракты и делегирует внешние входы сервису.</summary>
+public sealed class LoginController(ExternalLoginService service, IMapper mapper) : Controller
 {
+    /// <summary>Открывает браузерный аккаунт.</summary>
     [HttpGet("/")]
     public IActionResult Index() => Redirect("/account");
 
+    /// <summary>Отображает доступные провайдеры и безопасное продолжение.</summary>
     [HttpGet("/login")]
-    public IActionResult Login(string returnUrl = "/account") => View(new LoginPage(
-        LocalReturn(returnUrl), new[] { "Apple", "Google", "Yandex" }.Where(name =>
-            AuthConfiguration.Enabled(config, name)).ToArray()));
+    public IActionResult Login([FromQuery] NavigationRequest request) =>
+        View(mapper.Map<LoginPage>(service.GetPage(mapper.Map<NavigationInput>(request))));
 
+    /// <summary>Передаёт подготовленные сервисом свойства штатному OpenIddict challenge.</summary>
     [HttpPost("/login/{provider}")]
-    public async Task<IActionResult> Start(string provider, string returnUrl = "/account", bool link = false)
-    {
-        var name = new[] { "Apple", "Google", "Yandex" }.SingleOrDefault(item =>
-            string.Equals(item, provider, StringComparison.OrdinalIgnoreCase));
-        if (name is null || !AuthConfiguration.Enabled(config, name)) return NotFound();
-        var properties = new AuthenticationProperties { RedirectUri = LocalReturn(returnUrl) };
-        properties.Items[OpenIddictClientAspNetCoreConstants.Properties.ProviderName] = name;
-        if (link)
-        {
-            var current = await users.GetUserAsync(User);
-            if (current is null || await users.IsLockedOutAsync(current)) return Unauthorized();
-            properties.Items["link_user"] = current.Id;
-        }
-        return Challenge(properties, OpenIddictClientAspNetCoreDefaults.AuthenticationScheme);
-    }
+    public async Task<IActionResult> StartAsync(string provider, [FromForm] ExternalLoginRequest request,
+        CancellationToken cancellationToken) =>
+        Challenge(await service.StartAsync(provider, mapper.Map<ExternalLoginInput>(request), User, cancellationToken),
+            OpenIddictClientAspNetCoreDefaults.AuthenticationScheme);
 
+    /// <summary>Передаёт проверку callback сервису и выполняет только локальный HTTP-переход.</summary>
     [HttpGet("/callback/login/{provider}"), HttpPost("/callback/login/{provider}"), IgnoreAntiforgeryToken]
-    public async Task<IActionResult> Callback(CancellationToken cancellationToken)
-    {
-        // OpenIddict validates provider state, nonce, signatures, issuer/audience and one-time state redemption.
-        var result = await HttpContext.AuthenticateAsync(OpenIddictClientAspNetCoreDefaults.AuthenticationScheme);
-        var subject = result.Principal?.FindFirstValue(ClaimTypes.NameIdentifier);
-        var provider = result.Principal?.GetClaim(OpenIddictConstants.Claims.Private.ProviderName);
-        if (!result.Succeeded || string.IsNullOrWhiteSpace(subject) || provider is null ||
-            !AuthConfiguration.Enabled(config, provider))
-            return Problem(statusCode: 400, title: "Не удалось подтвердить вход. Начните заново.");
-        ApplicationUser user;
-        if (result.Properties?.Items.TryGetValue("link_user", out var linkUser) == true)
-        {
-            var current = await users.GetUserAsync(User);
-            if (current is null || current.Id != linkUser || await users.IsLockedOutAsync(current)) return Unauthorized();
-            // AddLogin enforces unique (LoginProvider, ProviderKey); never move another user's login.
-            var linked = await users.AddLoginAsync(current, new UserLoginInfo(provider, subject, provider));
-            if (!linked.Succeeded) return Problem(statusCode: 409, title: "Этот способ входа уже связан с аккаунтом.");
-            user = current;
-        }
-        else user = await accounts.SignIn(provider, subject, result.Principal!, cancellationToken);
-        if (!await signIn.CanSignInAsync(user) || await users.IsLockedOutAsync(user))
-            return Problem(statusCode: 403, title: "Вход в этот аккаунт недоступен.");
-        await signIn.SignInAsync(user, isPersistent: false);
-        return LocalRedirect(LocalReturn(result.Properties?.RedirectUri ?? "/account"));
-    }
-
-    private string LocalReturn(string value) => Url.IsLocalUrl(value) ? value : "/account";
+    public async Task<IActionResult> CallbackAsync(CancellationToken cancellationToken) =>
+        LocalRedirect(await service.CompleteAsync(User, cancellationToken));
 }

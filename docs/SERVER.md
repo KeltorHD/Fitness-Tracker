@@ -24,6 +24,16 @@ flowchart LR
   Auth -->|Удаление данных: внутренняя сеть| API
 ```
 
+## Контроллеры и сервисы
+
+Контроллеры Authentication выполняют HTTP binding, Mapster mapping, вызов сервиса и выдачу HTTP-результата. Правило закреплено в AGENTS.md. `AccountService` управляет профилем/удалением, `PasswordService` — парольным входом/регистрацией, `PasskeyService` — WebAuthn/credentials, `ExternalLoginService` — внешними входами/привязками, `AuthorizationService` — решениями OAuth и проверкой SecurityStamp, `AppAssociationService` — конфигурацией AASA. EF/Identity операции и транзакции находятся в сервисах, которые не возвращают MVC `IActionResult`.
+
+`Controllers/AuthenticationMapping.cs` создаёт отдельный DI `TypeAdapterConfig` Mapster 10.0.14, явно регистрирует request/command и service-data/HTTP преобразования, запрещает неявный mapping и компилирует конфигурацию при запуске. Глобальный `GlobalSettings` не меняется; используется [конфигурация экземпляра Mapster](https://github.com/MapsterMapper/Mapster/wiki/Config-instance). Публичный профиль имеет прежние поля `{id,name,createdAt,logins}`; EF entities, парольные хеши, SecurityStamp и ключевой материал не сериализуются. Владелец определяется только из проверенного principal; клиентские поля owner ID отсутствуют в командах.
+
+MVC mapping сохраняет native principal OpenIddict, scheme и protocol errors. WebAuthn JSON передаётся Identity без повторного разбора или преобразования mapper-ом. Ожидаемые отказы сервисов преобразуются через Mapster/exception filter; инфраструктурные исключения и cancellation остаются штатному ASP.NET Core pipeline. Ошибка регистрации создаёт чистый ModelState без паролей, а безопасное сообщение неудачного входа сохраняется в browser TempData на HTTP-границе. Локальность продолжений проверяет штатный MVC URL helper в `BrowserNavigation`.
+
+Маршруты, scope, payloads и алгоритмы отзыва сохраняются. Рефакторинг не меняет EF-модель или миграции. Backend сохраняет minimal API и существующий `BackupStorage`.
+
 ## Вход и сессии
 
 Приложение открывает системную `WebAuthenticationSession` из AuthenticationServices. Auth Server предлагает email/пароль, passkey и настроенные Google/Apple/Яндекс. OpenIddict проверяет внешние OAuth/OIDC-потоки, state, nonce и ответ провайдера. Приложение получает код на `https://auth.example.com/ios/oauth/callback`, проверяет точные HTTPS origin/path, state, issuer и отсутствие повторяющихся параметров, обменивает код с PKCE S256. Client secret в iOS отсутствует. Старые URL schemes сохранены для совместимости, но для OAuth больше не принимаются.
@@ -241,6 +251,8 @@ Backend отклоняет JWT с неверными issuer/audience/type/scope/
 
 ## Проверки
 
+После переноса логики контроллеров в сервисы полный `check-server.sh` прошёл: locked restore с Mapster 10.0.14, сборка без warnings/errors, 154 сценария (70 unit, 78 HTTP/Identity/SQLite, 6 PostgreSQL 16.6), проверка `dotnet format` и shell syntax. Новые проверки подтверждают зависимости тонких контроллеров, запрет неявного Identity entity mapping, сохранение native OAuth principal/stamp/grant/error, защиту от overposting, точный JSON профиля и безопасное PRG/TempData сообщение. Прежние PKCE, refresh/revoke, WebAuthn, race/rollback и межсервисные сценарии повторно прошли. EF-модель и миграции не менялись; рабочие базы не использовались.
+
 После замены адресов развёртывания примерами: 21 OAuth/Identity/forwarded-HTTPS/AASA тест прошёл, Compose и изолированный Nginx syntax/ACL/header smoke проверены. Associated Domains использует локально переопределяемый host; структура проекта и plist проверены, signing/Apple SDK требуют Xcode.
 
 После добавления email/passkey и HTTPS callback полный `check-server.sh` прошёл: locked restore, сборка .NET без warnings, 149 сценариев (67 unit, 76 HTTP/Identity/SQLite, 6 PostgreSQL 16.6), `dotnet format` и shell syntax. Новые проверки используют реальную WebAuthn ES256 подпись через штатный Identity; проверены неверные RP/origin/UV/подпись, CSRF, lockout, replay, добавление/удаление ключа, отзыв grant, last-credential guard и AASA. Отдельный model-diff тест подтверждает единственную новую таблицу/индекс без сужения прежних колонок. Миграция `AddPasskeys` и snapshot созданы штатным EF Core; повторная PostgreSQL-проверка подтвердила обновление прежней схемы с данными, сохранность password/login/длинных полей, JSONB round-trip/update/cascade, а также прежние migration/concurrency/rollback сценарии. Использовался одноразовый PostgreSQL 16.6 с отдельными случайными БД; рабочая база не менялась. После финального просмотра повторно прошли 13 целевых credential/schema тестов: password-попытки не блокируют passkey-only аккаунт, challenge одноразовый и при нулевом счётчике, пустой ID удаления даёт 400; snapshot согласован с миграцией.
@@ -267,6 +279,8 @@ dotnet ef migrations has-pending-model-changes --project Backend
 | `Unit` | `Tests/Server/BackupArchiveValidatorTests.cs` | v1–v4 и legacy format, обязательные поля, неверные JSON-типы/UTF-8, точные границы байтов и количества записей, безопасные ошибки; без БД и HTTP |
 | `Unit` | `Tests/Server/BackupCleanupTests.cs` | DELETE/service key контракт, ошибки статуса и конфигурации, передача отмены в HTTP handler без сети |
 | `Unit` | `Tests/Server/TokenIntrospectionTests.cs` | RFC 7662 POST/body, active boolean, protocol/HTTP/transport errors, ограничение ответа, отмена, отсутствие утечек секретов |
+| `Unit` | `Tests/Server/AuthenticationMappingTests.cs` | Зависимости тонких контроллеров, запрет неявного Identity entity mapping, сохранение principal/stamp/grant и OAuth error при HTTP mapping |
+| `HTTP` | `Tests/Server/AuthenticationMappingHttpTests.cs` | Защита от overposting, точный публичный профиль после настоящего OAuth exchange, безопасное сообщение PRG/TempData без credentials в HTML |
 | `Unit` | `Tests/Server/PasskeySchemaTests.cs` | Согласованность snapshot и модели, AddPasskeys добавляет только таблицу/индекс, прежние колонки не сужаются |
 | `HTTP` | `Tests/Server/CredentialsTests.cs` | Email/password без подтверждения, нормализация/уникальность, CSRF, lockout, отсутствие email merge, реальные WebAuthn attestation/assertion, origin/RP/UV/signature/replay, управление ключами и отзыв |
 | `HTTP` | `Tests/Server/AppAssociationTests.cs` | AASA только с настроенным App ID, безопасный HTTPS fallback без отражения code/state |
