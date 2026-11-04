@@ -9,10 +9,12 @@ using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace FitnessTracker.Authentication.Controllers;
 
+/// <summary>Выдаёт authorization codes и токены с проверкой актуального состояния Identity-пользователя.</summary>
 public sealed class AuthorizationController(UserManager<ApplicationUser> users,
     SignInManager<ApplicationUser> signIn, IOpenIddictApplicationManager applications,
     IOpenIddictAuthorizationManager authorizations) : Controller
 {
+    /// <summary>Продолжает PKCE-вход либо требует аутентификацию разрешённого пользователя.</summary>
     [HttpGet("/connect/authorize")]
     public async Task<IActionResult> Authorize(CancellationToken cancellationToken)
     {
@@ -20,7 +22,8 @@ public sealed class AuthorizationController(UserManager<ApplicationUser> users,
         var cookie = await HttpContext.AuthenticateAsync(IdentityConstants.ApplicationScheme);
         var user = cookie.Principal is null ? null : await users.GetUserAsync(cookie.Principal);
         var chooseAccount = request.HasPromptValue(PromptValues.SelectAccount) || request.HasPromptValue(PromptValues.Login);
-        if (!cookie.Succeeded || user is null || !await signIn.CanSignInAsync(user) || chooseAccount)
+        if (!cookie.Succeeded || user is null || !await signIn.CanSignInAsync(user) ||
+            await users.IsLockedOutAsync(user) || chooseAccount)
         {
             if (request.HasPromptValue(PromptValues.None)) return Deny(Errors.LoginRequired);
             if (chooseAccount) await signIn.SignOutAsync();
@@ -45,6 +48,7 @@ public sealed class AuthorizationController(UserManager<ApplicationUser> users,
         return SignIn(new ClaimsPrincipal(identity), OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
     }
 
+    /// <summary>Обменивает code/refresh только пока пользователь существует и не заблокирован.</summary>
     [HttpPost("/connect/token"), IgnoreAntiforgeryToken]
     public async Task<IActionResult> Token()
     {
@@ -54,7 +58,7 @@ public sealed class AuthorizationController(UserManager<ApplicationUser> users,
         var ticket = await HttpContext.AuthenticateAsync(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
         var subject = ticket.Principal?.GetClaim(Claims.Subject);
         var user = subject is null ? null : await users.FindByIdAsync(subject);
-        if (!ticket.Succeeded || user is null || !await signIn.CanSignInAsync(user))
+        if (!ticket.Succeeded || user is null || !await signIn.CanSignInAsync(user) || await users.IsLockedOutAsync(user))
             return Deny(Errors.InvalidGrant);
         var identity = new ClaimsIdentity(ticket.Principal!.Claims, "Bearer", Claims.Name, Claims.Role);
         identity.SetClaim(Claims.Name, user.DisplayName);

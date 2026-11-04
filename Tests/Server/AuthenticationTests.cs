@@ -6,82 +6,109 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using FitnessTracker.Authentication;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Xunit;
 
 namespace FitnessTracker.Server.Tests;
 
-public sealed class AuthFactory : WebApplicationFactory<Authentication.Program>
-{
-    private readonly SqliteConnection connection = new("Data Source=:memory:");
-    internal int CleanupCalls;
-    internal bool CleanupFails;
-
-    protected override void ConfigureWebHost(IWebHostBuilder builder)
-    {
-        connection.Open();
-        builder.UseEnvironment("Testing");
-        builder.UseSetting("Auth:Issuer", "https://localhost/");
-        builder.UseSetting("Backend:InternalUrl", "https://backend.test/");
-        builder.UseSetting("Backend:ServiceKey", BackendFactory.ServiceKey);
-        builder.ConfigureServices(services =>
-        {
-            services.RemoveAll<DbContextOptions<AuthDbContext>>();
-            services.RemoveAll<IDbContextOptionsConfiguration<AuthDbContext>>();
-            services.AddDbContext<AuthDbContext>(options => options.UseSqlite(connection).UseOpenIddict());
-            services.AddHttpClient<BackupCleanup>().ConfigurePrimaryHttpMessageHandler(() => new CleanupHandler(this));
-        });
-    }
-
-    internal async Task<HttpClient> SignedIn()
-    {
-        var client = CreateClient(new WebApplicationFactoryClientOptions { BaseAddress = new Uri("https://localhost"), AllowAutoRedirect = false });
-        using var scope = Services.CreateScope();
-        await scope.ServiceProvider.GetRequiredService<AuthDbContext>().Database.EnsureCreatedAsync();
-        await AuthConfiguration.RegisterClient(scope.ServiceProvider, new Microsoft.Extensions.Configuration.ConfigurationBuilder().Build());
-        var manager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-        var user = new ApplicationUser { Id = Guid.NewGuid().ToString(), UserName = Guid.NewGuid().ToString("N"), DisplayName = "Test" };
-        Assert.True((await manager.CreateAsync(user)).Succeeded);
-        var principal = await scope.ServiceProvider.GetRequiredService<SignInManager<ApplicationUser>>().CreateUserPrincipalAsync(user);
-        var options = scope.ServiceProvider.GetRequiredService<IOptionsMonitor<CookieAuthenticationOptions>>().Get(IdentityConstants.ApplicationScheme);
-        var ticket = options.TicketDataFormat.Protect(new AuthenticationTicket(principal, new AuthenticationProperties
-        { IssuedUtc = DateTimeOffset.UtcNow, ExpiresUtc = DateTimeOffset.UtcNow.AddHours(1) }, IdentityConstants.ApplicationScheme));
-        client.DefaultRequestHeaders.Add("Cookie", $"{options.Cookie.Name}={ticket}");
-        return client;
-    }
-
-    private sealed class CleanupHandler(AuthFactory owner) : HttpMessageHandler
-    {
-        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken ct)
-        {
-            Assert.Equal(BackendFactory.ServiceKey, request.Headers.GetValues("X-Service-Key").Single());
-            Interlocked.Increment(ref owner.CleanupCalls);
-            return Task.FromResult(new HttpResponseMessage(owner.CleanupFails ? HttpStatusCode.ServiceUnavailable : HttpStatusCode.NoContent));
-        }
-    }
-
-    protected override void Dispose(bool disposing)
-    {
-        base.Dispose(disposing);
-        if (disposing) connection.Dispose();
-    }
-}
-
+/// <summary>Проверяет собственный OAuth/Identity-сервер через HTTP без внешних провайдеров.</summary>
+[Trait("Category", "HTTP")]
 public sealed class AuthenticationTests
 {
-    private static async Task<(string Code, string Verifier)> Code(HttpClient client)
+    /// <summary>Без сессии или при блокировке prompt=none возвращает login_required без кода и браузерного редиректа на провайдера.</summary>
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task SilentAuthorizationRequiresAnAllowedUserAsync(bool blocked)
+    {
+        using var factory = new AuthFactory();
+        using var client = await factory.SignedInAsync();
+        if (blocked)
+        {
+            using var scope = factory.Services.CreateScope();
+            var users = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var user = await scope.ServiceProvider.GetRequiredService<AuthDbContext>().Users.SingleAsync();
+            Assert.True((await users.SetLockoutEnabledAsync(user, true)).Succeeded);
+            Assert.True((await users.SetLockoutEndDateAsync(user, DateTimeOffset.MaxValue)).Succeeded);
+        }
+        else client.DefaultRequestHeaders.Remove("Cookie");
+        var request = QueryHelpers.AddQueryString("/connect/authorize", new Dictionary<string, string?>
+        {
+            ["client_id"] = AuthConfiguration.ClientId,
+            ["redirect_uri"] = AuthConfiguration.Callback,
+            ["response_type"] = "code",
+            ["scope"] = "backups",
+            ["state"] = "expected-state",
+            ["code_challenge"] = Base64UrlEncoder.Encode(SHA256.HashData("fixed-verifier-for-prompt-none-test"u8.ToArray())),
+            ["code_challenge_method"] = "S256",
+            ["prompt"] = "none"
+        });
+
+        using var response = await client.GetAsync(request);
+
+        Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
+        var query = QueryHelpers.ParseQuery(response.Headers.Location!.Query);
+        Assert.Equal("login_required", query["error"].ToString());
+        Assert.Equal("expected-state", query["state"].ToString());
+        Assert.False(query.ContainsKey("code"));
+    }
+
+    /// <summary>Cookie браузера и JWT без backups scope не разрешают API аккаунта и не запускают удаление копий.</summary>
+    [Fact]
+    public async Task AccountApiRequiresBearerTokenAndBackupScopeAsync()
+    {
+        using var factory = new AuthFactory();
+        using var client = await factory.SignedInAsync();
+        using var cookieOnly = await client.GetAsync("/v1/account");
+        Assert.Equal(HttpStatusCode.Unauthorized, cookieOnly.StatusCode);
+        var code = await CodeAsync(client, "profile offline_access");
+        using var issued = await ExchangeAsync(client, code.Code, code.Verifier);
+        Assert.Equal(HttpStatusCode.OK, issued.StatusCode);
+        var tokens = await issued.Content.ReadFromJsonAsync<JsonElement>();
+        client.DefaultRequestHeaders.Authorization = new("Bearer", tokens.GetProperty("access_token").GetString());
+
+        using var profile = await client.GetAsync("/v1/account");
+        using var deletion = await client.DeleteAsync("/v1/account");
+
+        Assert.Equal(HttpStatusCode.Forbidden, profile.StatusCode);
+        Assert.Equal(HttpStatusCode.Forbidden, deletion.StatusCode);
+        Assert.Equal(0, factory.CleanupCalls);
+        using var scope = factory.Services.CreateScope();
+        Assert.Single(await scope.ServiceProvider.GetRequiredService<AuthDbContext>().Users.ToListAsync());
+    }
+    /// <summary>Заблокированному Identity-пользователю нельзя обменивать ранее выданные code/refresh tokens.</summary>
+    [Fact]
+    public async Task BlockedUserCannotExchangeCodeOrRefreshAsync()
+    {
+        using var factory = new AuthFactory();
+        using var client = await factory.SignedInAsync();
+        var initial = await CodeAsync(client);
+        using var issued = await ExchangeAsync(client, initial.Code, initial.Verifier);
+        Assert.Equal(HttpStatusCode.OK, issued.StatusCode);
+        var tokens = await issued.Content.ReadFromJsonAsync<JsonElement>();
+        var pending = await CodeAsync(client);
+        var subject = new JwtSecurityTokenHandler().ReadJwtToken(tokens.GetProperty("access_token").GetString()).Subject;
+        using (var scope = factory.Services.CreateScope())
+        {
+            var users = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var user = Assert.IsType<ApplicationUser>(await users.FindByIdAsync(subject));
+            Assert.True((await users.SetLockoutEnabledAsync(user, true)).Succeeded);
+            Assert.True((await users.SetLockoutEndDateAsync(user, DateTimeOffset.MaxValue)).Succeeded);
+        }
+
+        using var code = await ExchangeAsync(client, pending.Code, pending.Verifier);
+        using var refresh = await RefreshAsync(client, tokens.GetProperty("refresh_token").GetString()!);
+
+        Assert.Equal(HttpStatusCode.BadRequest, code.StatusCode);
+        Assert.Equal("invalid_grant", (await code.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("error").GetString());
+        Assert.Equal(HttpStatusCode.BadRequest, refresh.StatusCode);
+    }
+    /// <summary>Создаёт настоящий authorization code и проверяет state callback.</summary>
+    private static async Task<(string Code, string Verifier)> CodeAsync(HttpClient client, string scope = "openid profile offline_access backups")
     {
         var verifier = Base64UrlEncoder.Encode(RandomNumberGenerator.GetBytes(32));
         var url = QueryHelpers.AddQueryString("/connect/authorize", new Dictionary<string, string?>
@@ -89,7 +116,7 @@ public sealed class AuthenticationTests
             ["client_id"] = AuthConfiguration.ClientId,
             ["redirect_uri"] = AuthConfiguration.Callback,
             ["response_type"] = "code",
-            ["scope"] = "openid profile offline_access backups",
+            ["scope"] = scope,
             ["state"] = "test-state",
             ["code_challenge"] = Base64UrlEncoder.Encode(SHA256.HashData(Encoding.ASCII.GetBytes(verifier))),
             ["code_challenge_method"] = "S256"
@@ -102,7 +129,8 @@ public sealed class AuthenticationTests
         return (query["code"].ToString(), verifier);
     }
 
-    private static Task<HttpResponseMessage> Exchange(HttpClient client, string code, string verifier) =>
+    /// <summary>Обменивает код через form-urlencoded token endpoint.</summary>
+    private static Task<HttpResponseMessage> ExchangeAsync(HttpClient client, string code, string verifier) =>
         client.PostAsync("/connect/token", new FormUrlEncodedContent(new Dictionary<string, string>
         {
             ["grant_type"] = "authorization_code",
@@ -112,20 +140,22 @@ public sealed class AuthenticationTests
             ["code_verifier"] = verifier
         }));
 
-    private static Task<HttpResponseMessage> Refresh(HttpClient client, string refresh) =>
+    /// <summary>Запрашивает ротацию с явно переданным refresh token.</summary>
+    private static Task<HttpResponseMessage> RefreshAsync(HttpClient client, string refresh) =>
         client.PostAsync("/connect/token", new FormUrlEncodedContent(new Dictionary<string, string>
         { ["grant_type"] = "refresh_token", ["client_id"] = AuthConfiguration.ClientId, ["refresh_token"] = refresh }));
 
+    /// <summary>Проверяет PKCE, одноразовость кода, тип/issuer/audience JWT и точный зарегистрированный callback.</summary>
     [Fact]
-    public async Task CodeFlowEnforcesPkceAndExactRedirectUri()
+    public async Task CodeFlowEnforcesPkceAndExactRedirectUriAsync()
     {
         using var factory = new AuthFactory();
-        using var client = await factory.SignedIn();
-        var (code, verifier) = await Code(client);
-        var wrong = await Exchange(client, code, verifier + "wrong");
+        using var client = await factory.SignedInAsync();
+        var (code, verifier) = await CodeAsync(client);
+        var wrong = await ExchangeAsync(client, code, verifier + "wrong");
         Assert.Equal(HttpStatusCode.BadRequest, wrong.StatusCode);
-        var fresh = await Code(client);
-        using var token = await Exchange(client, fresh.Code, fresh.Verifier);
+        var fresh = await CodeAsync(client);
+        using var token = await ExchangeAsync(client, fresh.Code, fresh.Verifier);
         Assert.Equal(HttpStatusCode.OK, token.StatusCode);
         var response = await token.Content.ReadFromJsonAsync<JsonElement>();
         var jwt = new JwtSecurityTokenHandler().ReadJwtToken(response.GetProperty("access_token").GetString());
@@ -133,7 +163,7 @@ public sealed class AuthenticationTests
         Assert.Equal("RS256", jwt.Header.Alg);
         Assert.Equal("https://localhost/", jwt.Issuer);
         Assert.Contains(AuthConfiguration.Audience, jwt.Audiences);
-        Assert.Equal(HttpStatusCode.BadRequest, (await Exchange(client, fresh.Code, fresh.Verifier)).StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, (await ExchangeAsync(client, fresh.Code, fresh.Verifier)).StatusCode);
         var rejected = await client.GetAsync("/connect/authorize?client_id=fitnesstracker-ios&redirect_uri=https://attacker.test/&response_type=code&scope=backups");
         Assert.Equal(HttpStatusCode.BadRequest, rejected.StatusCode);
         var missingPkce = await client.GetAsync("/connect/authorize?client_id=fitnesstracker-ios&redirect_uri=fitnesstracker%3A%2F%2Foauth%2Fcallback&response_type=code&scope=backups");
@@ -142,29 +172,31 @@ public sealed class AuthenticationTests
         Assert.Contains("invalid_request", plainPkce.Headers.Location?.ToString() ?? await plainPkce.Content.ReadAsStringAsync());
     }
 
+    /// <summary>Повтор старого refresh token отзывает всю семью, включая уже выданный следующий refresh.</summary>
     [Fact]
-    public async Task RefreshRotationRejectsReplayAndRevokesTheSessionFamily()
+    public async Task RefreshRotationRejectsReplayAndRevokesTheSessionFamilyAsync()
     {
         using var factory = new AuthFactory();
-        using var client = await factory.SignedIn();
-        var code = await Code(client);
-        var tokens = await (await Exchange(client, code.Code, code.Verifier)).Content.ReadFromJsonAsync<JsonElement>();
+        using var client = await factory.SignedInAsync();
+        var code = await CodeAsync(client);
+        var tokens = await (await ExchangeAsync(client, code.Code, code.Verifier)).Content.ReadFromJsonAsync<JsonElement>();
         var refresh = tokens.GetProperty("refresh_token").GetString()!;
-        using var rotated = await Refresh(client, refresh);
+        using var rotated = await RefreshAsync(client, refresh);
         Assert.Equal(HttpStatusCode.OK, rotated.StatusCode);
         var next = (await rotated.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("refresh_token").GetString()!;
         Assert.NotEqual(refresh, next);
-        Assert.Equal(HttpStatusCode.BadRequest, (await Refresh(client, refresh)).StatusCode);
-        Assert.Equal(HttpStatusCode.BadRequest, (await Refresh(client, next)).StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, (await RefreshAsync(client, refresh)).StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, (await RefreshAsync(client, next)).StatusCode);
     }
 
+    /// <summary>Публичный iOS-клиент отзывает свой refresh token без client secret.</summary>
     [Fact]
-    public async Task PublicClientCanRevokeRefreshTokenWithoutAClientSecret()
+    public async Task PublicClientCanRevokeRefreshTokenWithoutAClientSecretAsync()
     {
         using var factory = new AuthFactory();
-        using var client = await factory.SignedIn();
-        var code = await Code(client);
-        var tokens = await (await Exchange(client, code.Code, code.Verifier)).Content.ReadFromJsonAsync<JsonElement>();
+        using var client = await factory.SignedInAsync();
+        var code = await CodeAsync(client);
+        var tokens = await (await ExchangeAsync(client, code.Code, code.Verifier)).Content.ReadFromJsonAsync<JsonElement>();
         var refresh = tokens.GetProperty("refresh_token").GetString()!;
         using var revoked = await client.PostAsync("/connect/revoke", new FormUrlEncodedContent(new Dictionary<string, string>
         {
@@ -173,16 +205,17 @@ public sealed class AuthenticationTests
             ["token_type_hint"] = "refresh_token"
         }));
         Assert.Equal(HttpStatusCode.OK, revoked.StatusCode);
-        Assert.Equal(HttpStatusCode.BadRequest, (await Refresh(client, refresh)).StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, (await RefreshAsync(client, refresh)).StatusCode);
     }
 
+    /// <summary>Отказ Backend сохраняет аккаунт; повтор удаляет Identity, grants и payloads сессий.</summary>
     [Fact]
-    public async Task AccountDeletionPreservesIdentityOnCleanupFailureAndRevokesTokensOnSuccess()
+    public async Task AccountDeletionPreservesIdentityOnCleanupFailureAndRevokesTokensOnSuccessAsync()
     {
         using var factory = new AuthFactory();
-        using var client = await factory.SignedIn();
-        var code = await Code(client);
-        var tokens = await (await Exchange(client, code.Code, code.Verifier)).Content.ReadFromJsonAsync<JsonElement>();
+        using var client = await factory.SignedInAsync();
+        var code = await CodeAsync(client);
+        var tokens = await (await ExchangeAsync(client, code.Code, code.Verifier)).Content.ReadFromJsonAsync<JsonElement>();
         client.DefaultRequestHeaders.Authorization = new("Bearer", tokens.GetProperty("access_token").GetString());
         Assert.Equal(HttpStatusCode.OK, (await client.GetAsync("/v1/account")).StatusCode);
         factory.CleanupFails = true;
@@ -192,7 +225,7 @@ public sealed class AuthenticationTests
         Assert.Equal(HttpStatusCode.NoContent, (await client.DeleteAsync("/v1/account")).StatusCode);
         Assert.Equal(2, factory.CleanupCalls);
         Assert.Equal(HttpStatusCode.Unauthorized, (await client.GetAsync("/v1/account")).StatusCode);
-        Assert.Equal(HttpStatusCode.BadRequest, (await Refresh(client, tokens.GetProperty("refresh_token").GetString()!)).StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, (await RefreshAsync(client, tokens.GetProperty("refresh_token").GetString()!)).StatusCode);
         using var scope = factory.Services.CreateScope();
         var subject = new JwtSecurityTokenHandler().ReadJwtToken(tokens.GetProperty("access_token").GetString()).Subject;
         await foreach (var token in scope.ServiceProvider.GetRequiredService<OpenIddict.Abstractions.IOpenIddictTokenManager>().FindBySubjectAsync(subject))
@@ -201,11 +234,12 @@ public sealed class AuthenticationTests
             Assert.Fail("Deleted account retains an authorization.");
     }
 
+    /// <summary>Совпадение email не связывает пользователей, а последний login нельзя отключить.</summary>
     [Fact]
-    public async Task SameEmailDoesNotMergeProvidersAndLastLoginCannotBeRemoved()
+    public async Task SameEmailDoesNotMergeProvidersAndLastLoginCannotBeRemovedAsync()
     {
         using var factory = new AuthFactory();
-        using var client = await factory.SignedIn();
+        using var client = await factory.SignedInAsync();
         using var scope = factory.Services.CreateScope();
         var accounts = scope.ServiceProvider.GetRequiredService<ExternalAccounts>();
         var principal = new ClaimsPrincipal(new ClaimsIdentity([new Claim(ClaimTypes.Email, "same@example.test")]));
@@ -218,11 +252,12 @@ public sealed class AuthenticationTests
         Assert.False((await manager.AddLoginAsync(apple, new UserLoginInfo("Google", "google-subject", "Google"))).Succeeded);
     }
 
+    /// <summary>Вход требует antiforgery; внешний returnUrl не попадает в браузерную форму.</summary>
     [Fact]
-    public async Task ProviderSelectionRequiresAntiforgeryAndLocalReturnUrl()
+    public async Task ProviderSelectionRequiresAntiforgeryAndLocalReturnUrlAsync()
     {
         using var factory = new AuthFactory();
-        using var client = await factory.SignedIn();
+        using var client = await factory.SignedInAsync();
         var response = await client.PostAsync("/login/google", new FormUrlEncodedContent(new Dictionary<string, string>()));
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var page = await client.GetStringAsync("/login?returnUrl=https://attacker.test");

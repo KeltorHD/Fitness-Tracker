@@ -32,7 +32,7 @@ iOS использует OAuth access/refresh tokens; профиль получ�
 
 Keychain item изолирован по bundle ID и issuer, не синхронизируется через iCloud, доступен при разблокированном устройстве и не переносится на другое устройство. Сетевой клиент использует HTTPS, тайм-ауты, ephemeral URLSession без cookies/cache и запрещает redirects запросов с credentials. Токены и payloads не логируются. Закрытие экрана отменяет его работу; общая операция ротации принадлежит сессии и сохраняет результат независимо от закрытия одного экрана.
 
-Выход отзывает текущий refresh token. Выданные JWT основного API могут действовать оставшиеся 10 минут: API проверяет их по JWKS без introspection. Для удаления аккаунта действует дополнительная блокировка UUID на стороне Backend, поэтому старый JWT не может создать новую копию удалённого аккаунта.
+Выход отзывает текущий refresh token. Заблокированный Identity-пользователь не может получить новый authorization code, обменять ранее выданный код, обновить сессию или выполнить новый браузерный вход/привязку. Выданные JWT основного API могут действовать оставшиеся 10 минут: API проверяет их по JWKS без introspection. Для удаления аккаунта действует дополнительная блокировка UUID на стороне Backend, поэтому старый JWT не может создать новую копию удалённого аккаунта.
 
 Аккаунты идентифицируются по паре provider/subject, а не email. Совпадение email не объединяет пользователей. Привязка выполняется на защищённой веб-странице из «Способы входа», с новым provider flow и проверкой текущего пользователя. Нельзя отвязать последний способ входа. Cookie — Secure/HttpOnly; изменяющие веб-формы защищены antiforgery. Email используется только как атрибут внешнего профиля и не считается подтверждённым для будущего password-входа.
 
@@ -115,7 +115,7 @@ FITNESS_TRACKER_BACKEND_URL = https:/$()/api.example.com/
 
 ## Проверки
 
-Локально 2026-11-04: check-server прошёл (сборка без warnings, 10 функциональных тестов, format); отдельный PostgreSQL 16.6 test миграций/конкурентной квоты/удаления прошёл. Swift-format 6.2.1 strict lint, структура, RU/EN, ресурсы и Compose config проверены. Core build/tests, Apple SDK/XCTest, production images и реальные provider flows не запускались: полного Swift toolchain/Apple SDK здесь нет, registrations и домены ещё не настроены.
+Локально 2026-11-04: полный `check-server.sh` прошёл, включая locked restore, сборку без warnings, 71 серверный сценарий и проверку `dotnet format`: 44 unit, 25 функциональных HTTP/Identity/SQLite и 2 интеграционных PostgreSQL 16.6. Новые регрессии подтвердили и исправили обмен токенов заблокированного пользователя и отказ допустимым MIME types в другом регистре. Схема БД и файлы миграций не менялись; существующие миграции проверены на отдельных временных базах обоих сервисов. Ранее проверены Swift-format 6.2.1 strict lint, структура, RU/EN, ресурсы и Compose config. Core build/tests, Apple SDK/XCTest, production images и реальные provider flows не запускались.
 
 ```bash
 bash scripts/check-server.sh
@@ -124,7 +124,24 @@ dotnet ef migrations has-pending-model-changes --project Authentication
 dotnet ef migrations has-pending-model-changes --project Backend
 ```
 
-Обычный тестовый прогон использует SQLite и in-memory HTTP host; внешних провайдеров не вызывает. Для миграций и конкурентной квоты предусмотрен отдельный тест на временном PostgreSQL: задайте `FITNESS_TRACKER_TEST_POSTGRES` connection string к **одноразовому тестовому экземпляру** и повторите check-server. Тест создаёт случайную новую БД и удаляет только её. CI запускает его с PostgreSQL 18. Локальная интеграционная проверка проводится отдельно; результаты — в IMPLEMENTATION_STATUS.md.
+Наборы находятся в одном xUnit-проекте; категории позволяют запускать их отдельно:
+
+| Категория | Исходники | Что проверяется |
+| --- | --- | --- |
+| `Unit` | `Tests/Server/BackupArchiveValidatorTests.cs` | v1–v4 и legacy format, обязательные поля, неверные JSON-типы/UTF-8, точные границы байтов и количества записей, безопасные ошибки; без БД и HTTP |
+| `Unit` | `Tests/Server/BackupCleanupTests.cs` | DELETE/service key контракт, ошибки статуса и конфигурации, передача отмены в HTTP handler без сети |
+| `HTTP` | `Tests/Server/BackendTests.cs` | JWT/subject/scope и изоляция пользователей, MIME type, SHA-256/headers/фиксированное время, квота, идемпотентность, откат при отказе/отмене записи |
+| `HTTP` | `Tests/Server/AuthenticationTests.cs` | PKCE, code/refresh/revoke, блокировка аккаунта, scopes, prompt=none, antiforgery, внешние привязки и удаление данных |
+| `PostgreSQL` | `Tests/Server/PostgresTests.cs` | Раздельные БД Auth/Backend, существующие миграции и model snapshots, конкурентная квота, гонка PUT/удаления и сохранность чужих данных |
+
+```bash
+dotnet test FitnessTracker.Server.sln --no-build --no-restore -m:1 --filter 'Category=Unit'
+dotnet test FitnessTracker.Server.sln --no-build --no-restore -m:1 --filter 'Category=HTTP'
+```
+
+Обычный прогон не вызывает внешних OAuth-провайдеров. HTTP fixtures используют настоящий in-memory host и собственную SQLite, очищают пользовательские configuration sources, явно отключают внешние providers и внедряют фиксированное время для метаданных. Отказ/отмена SaveChanges подменяются через EF interceptor, сохраняя настоящую транзакцию и проверки результата. Сценарии и вспомогательные классы имеют XML-описания на русском языке.
+
+Для PostgreSQL задайте `FITNESS_TRACKER_TEST_POSTGRES` connection string к **одноразовому тестовому экземпляру** и запустите `check-server.sh`; он включит обе PostgreSQL-проверки. Только эту категорию запускают с `--filter 'Category=PostgreSQL'`. Без явной конфигурации прямой запуск категории завершается ошибкой, а не молчаливым пропуском. Fixture создаёт случайные отдельные базы с отключённым pooling и удаляет только их с отдельным cleanup deadline, включая сбой основного теста. CI поднимает PostgreSQL 18; локально проверено на 16.6, на динамически выделенном localhost-порту. Файлы миграций для этих тестов не генерируются и не изменяются.
 
 Apple XCTest `AccountBackupTests` проверяют callback validation, одну ротацию для параллельных запросов, ошибки сети/Keychain, истёкшую сессию и проверку целостности; `ArchiveTransferTests` проверяет подтверждение восстановления. Их запуск требует Xcode. Foundation-часть добавлена в Swift 6 type-check скрипта `check-linux.sh`; SwiftUI/Keychain/CryptoKit и реальный вход требуют Apple SDK/устройства. Чек-лист: [XCODE_VALIDATION.md](XCODE_VALIDATION.md).
 

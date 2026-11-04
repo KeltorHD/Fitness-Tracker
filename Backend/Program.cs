@@ -1,4 +1,5 @@
 using System.Net;
+using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.RateLimiting;
@@ -117,7 +118,9 @@ public partial class Program
     private static async Task<IResult> Upload(Guid id, HttpContext context, BackupStorage storage, CancellationToken ct)
     {
         if (id == Guid.Empty) return Results.BadRequest(new { code = "invalid_id" });
-        if (context.Request.ContentType?.Split(';')[0] is not ("application/vnd.fitnesstracker+json" or "application/json"))
+        if (!MediaTypeHeaderValue.TryParse(context.Request.ContentType, out var contentType) ||
+            (!string.Equals(contentType.MediaType, "application/vnd.fitnesstracker+json", StringComparison.OrdinalIgnoreCase) &&
+             !string.Equals(contentType.MediaType, "application/json", StringComparison.OrdinalIgnoreCase)))
             return Results.StatusCode(415);
         if (context.Request.ContentLength > BackupStorage.MaximumBytes) return Results.StatusCode(413);
         using var data = new MemoryStream();

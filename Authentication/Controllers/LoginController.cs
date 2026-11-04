@@ -31,7 +31,7 @@ public sealed class LoginController(IConfiguration config, UserManager<Applicati
         if (link)
         {
             var current = await users.GetUserAsync(User);
-            if (current is null) return Unauthorized();
+            if (current is null || await users.IsLockedOutAsync(current)) return Unauthorized();
             properties.Items["link_user"] = current.Id;
         }
         return Challenge(properties, OpenIddictClientAspNetCoreDefaults.AuthenticationScheme);
@@ -51,13 +51,15 @@ public sealed class LoginController(IConfiguration config, UserManager<Applicati
         if (result.Properties?.Items.TryGetValue("link_user", out var linkUser) == true)
         {
             var current = await users.GetUserAsync(User);
-            if (current is null || current.Id != linkUser) return Unauthorized();
+            if (current is null || current.Id != linkUser || await users.IsLockedOutAsync(current)) return Unauthorized();
             // AddLogin enforces unique (LoginProvider, ProviderKey); never move another user's login.
             var linked = await users.AddLoginAsync(current, new UserLoginInfo(provider, subject, provider));
             if (!linked.Succeeded) return Problem(statusCode: 409, title: "Этот способ входа уже связан с аккаунтом.");
             user = current;
         }
         else user = await accounts.SignIn(provider, subject, result.Principal!, cancellationToken);
+        if (!await signIn.CanSignInAsync(user) || await users.IsLockedOutAsync(user))
+            return Problem(statusCode: 403, title: "Вход в этот аккаунт недоступен.");
         await signIn.SignInAsync(user, isPersistent: false);
         return LocalRedirect(LocalReturn(result.Properties?.RedirectUri ?? "/account"));
     }
