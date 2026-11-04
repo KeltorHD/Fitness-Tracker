@@ -106,6 +106,7 @@ assert entitlements['com.apple.developer.healthkit'] is True
 assert entitlements['com.apple.developer.icloud-services'] == ['CloudKit']
 assert entitlements['com.apple.security.application-groups'] == plists['Widgets.entitlements']['com.apple.security.application-groups']
 assert 'aps-environment' in entitlements
+assert entitlements['com.apple.developer.associated-domains'] == ['webcredentials:auth.example.com']
 personal = plists['PersonalTeam.entitlements']
 assert personal['com.apple.developer.healthkit'] is True
 assert personal['com.apple.security.application-groups'] == entitlements['com.apple.security.application-groups']

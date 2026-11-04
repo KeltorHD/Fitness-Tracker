@@ -6,7 +6,9 @@ import Foundation
 
 struct ServerConfiguration: Equatable, Sendable {
   static let clientID = "fitnesstracker-ios"
-  static let callback = "fitnesstracker://oauth/callback"
+  static let callbackPath = "/ios/oauth/callback"
+  let callbackHost: String
+  var callbackURL: URL { authenticationURL.appendingPathComponent("ios/oauth/callback") }
   let authenticationURL: URL
   let backendURL: URL
 
@@ -16,6 +18,8 @@ struct ServerConfiguration: Equatable, Sendable {
         url.query == nil, url.fragment == nil, url.path.isEmpty || url.path == "/"
       else { throw ServerError.invalidConfiguration }
     }
+    guard let host = authenticationURL.host else { throw ServerError.invalidConfiguration }
+    self.callbackHost = host
     self.authenticationURL = authenticationURL.appendingPathComponent("")
     self.backendURL = backendURL.appendingPathComponent("")
   }
@@ -90,7 +94,7 @@ struct OAuthAttempt: Equatable, Sendable {
     // Identity is fetched from the protected profile endpoint; ID tokens are not used by this client.
     parts.queryItems = [
       URLQueryItem(name: "client_id", value: ServerConfiguration.clientID),
-      URLQueryItem(name: "redirect_uri", value: ServerConfiguration.callback),
+      URLQueryItem(name: "redirect_uri", value: configuration.callbackURL.absoluteString),
       URLQueryItem(name: "response_type", value: "code"),
       URLQueryItem(name: "scope", value: "profile offline_access backups"),
       URLQueryItem(name: "state", value: state),
@@ -106,9 +110,10 @@ struct OAuthAttempt: Equatable, Sendable {
   }
 
   func code(from callback: URL, configuration: ServerConfiguration) throws -> String {
-    guard callback.scheme == "fitnesstracker", callback.host == "oauth",
-      callback.path == "/callback",
-      callback.user == nil, callback.password == nil, callback.port == nil,
+    guard callback.scheme == "https", callback.host == configuration.callbackHost,
+      callback.path == ServerConfiguration.callbackPath,
+      callback.user == nil, callback.password == nil,
+      callback.port == configuration.callbackURL.port,
       callback.fragment == nil,
       let items = URLComponents(url: callback, resolvingAgainstBaseURL: false)?.queryItems,
       Set(items.map(\.name)).count == items.count,

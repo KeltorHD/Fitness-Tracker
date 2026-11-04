@@ -38,7 +38,7 @@ actor AccountSession {
     request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
     request.httpBody = ServerJSON.form([
       ("grant_type", "authorization_code"), ("client_id", ServerConfiguration.clientID),
-      ("redirect_uri", ServerConfiguration.callback), ("code", code),
+      ("redirect_uri", configuration.callbackURL.absoluteString), ("code", code),
       ("code_verifier", attempt.verifier),
     ])
     let response = try ServerJSON.decode(TokenResponse.self, from: await http.send(request))

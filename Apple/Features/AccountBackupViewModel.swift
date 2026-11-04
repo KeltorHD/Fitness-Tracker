@@ -34,6 +34,8 @@ enum AccountBackupAction: Hashable {
     self.preview = preview
   }
 
+  var callbackHost: String { session.configuration.callbackHost }
+
   func load() async {
     await perform(.refresh) { _ in throw CancellationError() }
   }

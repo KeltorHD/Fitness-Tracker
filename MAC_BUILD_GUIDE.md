@@ -237,3 +237,5 @@ xcodebuild -project FitnessTracker.xcodeproj -scheme FitnessTracker \
 ## Обновлённая шторка старта
 
 В этом обновлении изменены только существующие исходники: если Xcode-проект был сгенерирован после предыдущих добавлений файлов, повторять `xcodegen generate` не нужно. Достаточно pull и сборки ⌘B/запуска ⌘R. Кнопки общего старта теперь открывают полноразмерный выбор шаблонов с поиском и фильтрами; «Без шаблона» закреплено компактно сверху. Тема по умолчанию — зелёный «Лес», явно выбранная тема сохраняется. [Сценарии проверки](docs/XCODE_VALIDATION.md#старт-с-приоритетом-шаблонов-поиск-и-фильтры).
+
+Для HTTPS callback используйте полную схему `FitnessTracker` с Associated Domains `webcredentials:auth.example.com`, настоящим App ID Prefix.Bundle ID и соответствующим provisioning. Задайте `IOS_APP_IDENTIFIER` на Auth Server и проверьте AASA по [SERVER.md](docs/SERVER.md#привязка-https-callback-к-ios). Пока Apple ID не зарегистрирован, возврат на iPhone не считается настроенным. Personal Team схема сохраняет прежние entitlements для локального приложения.

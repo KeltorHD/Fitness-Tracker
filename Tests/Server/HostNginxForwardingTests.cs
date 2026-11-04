@@ -44,7 +44,7 @@ public sealed class HostNginxForwardingTests
         {
             Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
             var callback = Assert.IsType<Uri>(response.Headers.Location);
-            Assert.Equal("fitnesstracker", callback.Scheme);
+            Assert.Equal(new Uri(AuthConfiguration.Callback).GetLeftPart(UriPartial.Path), callback.GetLeftPart(UriPartial.Path));
             var query = QueryHelpers.ParseQuery(callback.Query);
             Assert.Equal("nginx-state", query["state"].ToString());
             Assert.False(string.IsNullOrWhiteSpace(query["code"]));

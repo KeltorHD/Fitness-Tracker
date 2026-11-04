@@ -14,7 +14,8 @@ services:
       ASPNETCORE_ENVIRONMENT: Production
       AllowedHosts: ${AUTH_DOMAIN:?Set AUTH_DOMAIN in .env}
       Auth__Issuer: https://${AUTH_DOMAIN}/
-      Auth__RedirectUri: fitnesstracker://oauth/callback
+      Auth__RedirectUri: https://${AUTH_DOMAIN}/ios/oauth/callback
+      Auth__AppleAppIdentifier: ${IOS_APP_IDENTIFIER:-}
       Auth__IntrospectionClientSecret: ${BACKEND_INTROSPECTION_SECRET:?Set BACKEND_INTROSPECTION_SECRET in .env}
       ConnectionStrings__Database: Host=auth-db;Database=fitnesstracker_auth;Username=fitnesstracker_auth;Password=${AUTH_DB_PASSWORD:?Run scripts/setup-server.sh}
       ReverseProxy__Address: ${SERVER_NETWORK_GATEWAY:-172.30.0.1}

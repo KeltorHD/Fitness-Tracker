@@ -131,17 +131,21 @@ private final class AccountURLProtocol: URLProtocol {
     let config = try ServerConfiguration(authenticationURL: url, backendURL: url)
     let attempt = OAuthAttempt(verifier: "verifier", state: "expected", challenge: "challenge")
     for value in [
-      "fitnesstracker://oauth/callback?code=a&state=wrong",
-      "fitnesstracker://workout/callback?code=a&state=expected",
-      "fitnesstracker://oauth/callback?code=a&state=expected&state=expected",
-      "fitnesstracker://oauth/callback?code=a&state=expected&iss=https%3A%2F%2Fattacker.test%2F",
-      "fitnesstracker://oauth/callback?code=a&state=expected#fragment",
+      "fitnesstracker://oauth/callback?code=a&state=expected",
+      "https://auth.example.com/other?code=a&state=expected",
+      "http://auth.example.com/ios/oauth/callback?code=a&state=expected",
+      "https://auth.example.com:444/ios/oauth/callback?code=a&state=expected",
+      "https://auth.example.com/ios/oauth/callback?code=a&state=wrong",
+      "https://attacker.test/ios/oauth/callback?code=a&state=expected",
+      "https://auth.example.com/ios/oauth/callback?code=a&state=expected&state=expected",
+      "https://auth.example.com/ios/oauth/callback?code=a&state=expected&iss=https%3A%2F%2Fattacker.test%2F",
+      "https://auth.example.com/ios/oauth/callback?code=a&state=expected#fragment",
     ] {
       XCTAssertThrowsError(
         try attempt.code(from: XCTUnwrap(URL(string: value)), configuration: config))
     }
     let valid = try XCTUnwrap(
-      URL(string: "fitnesstracker://oauth/callback?code=one-time&state=expected"))
+      URL(string: "https://auth.example.com/ios/oauth/callback?code=one-time&state=expected"))
     XCTAssertEqual(try attempt.code(from: valid, configuration: config), "one-time")
     XCTAssertEqual(
       AppleServerCryptography().sha256(Data("abc".utf8)),

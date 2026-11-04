@@ -92,7 +92,8 @@ struct AccountBackupView: View {
           await model.perform(requested) { url in
             do {
               return try await authentication.authenticate(
-                using: url, callback: .customScheme("fitnesstracker"))
+                using: url,
+                callback: .https(host: model.callbackHost, path: ServerConfiguration.callbackPath))
             } catch let error as ASWebAuthenticationSessionError where error.code == .canceledLogin
             {
               throw CancellationError()

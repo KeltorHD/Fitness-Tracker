@@ -1,5 +1,6 @@
 # Include inside the existing Nginx http context (for example, conf.d/fitnesstracker.conf).
-# Replace domain names and TLS paths with your own. TLS certificates are managed by the operator.
+# Both hosts use the existing example.com / *.example.com certificate.
+# Set both TLS paths to its actual location on your host; the paths below are examples.
 # If AUTH_HTTP_PORT/API_HTTP_PORT change, update the corresponding proxy_pass ports below.
 
 server {
@@ -13,8 +14,8 @@ server {
     listen 443 ssl;
     server_name auth.example.com;
 
-    ssl_certificate /etc/nginx/ssl/auth.example.com/fullchain.pem;
-    ssl_certificate_key /etc/nginx/ssl/auth.example.com/privkey.pem;
+    ssl_certificate /etc/nginx/ssl/example.com/fullchain.pem;
+    ssl_certificate_key /etc/nginx/ssl/example.com/privkey.pem;
 
     # Standard access logs contain callback query strings with OAuth codes.
     access_log off;
@@ -49,8 +50,8 @@ server {
     listen 443 ssl;
     server_name api.example.com;
 
-    ssl_certificate /etc/nginx/ssl/api.example.com/fullchain.pem;
-    ssl_certificate_key /etc/nginx/ssl/api.example.com/privkey.pem;
+    ssl_certificate /etc/nginx/ssl/example.com/fullchain.pem;
+    ssl_certificate_key /etc/nginx/ssl/example.com/privkey.pem;
 
     access_log off;
     client_max_body_size 20m;

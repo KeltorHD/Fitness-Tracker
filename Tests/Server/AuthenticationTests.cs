@@ -167,9 +167,9 @@ public sealed class AuthenticationTests
         Assert.Equal(HttpStatusCode.BadRequest, (await ExchangeAsync(client, fresh.Code, fresh.Verifier)).StatusCode);
         var rejected = await client.GetAsync("/connect/authorize?client_id=fitnesstracker-ios&redirect_uri=https://attacker.test/&response_type=code&scope=backups");
         Assert.Equal(HttpStatusCode.BadRequest, rejected.StatusCode);
-        var missingPkce = await client.GetAsync("/connect/authorize?client_id=fitnesstracker-ios&redirect_uri=fitnesstracker%3A%2F%2Foauth%2Fcallback&response_type=code&scope=backups");
+        var missingPkce = await client.GetAsync("/connect/authorize?client_id=fitnesstracker-ios&redirect_uri=https%3A%2F%2Fauth.example.com%2Fios%2Foauth%2Fcallback&response_type=code&scope=backups");
         Assert.Contains("invalid_request", missingPkce.Headers.Location?.ToString() ?? await missingPkce.Content.ReadAsStringAsync());
-        var plainPkce = await client.GetAsync("/connect/authorize?client_id=fitnesstracker-ios&redirect_uri=fitnesstracker%3A%2F%2Foauth%2Fcallback&response_type=code&scope=backups&code_challenge=abcdefghijklmnopqrstuvwxyz1234567890abcdefghijk&code_challenge_method=plain");
+        var plainPkce = await client.GetAsync("/connect/authorize?client_id=fitnesstracker-ios&redirect_uri=https%3A%2F%2Fauth.example.com%2Fios%2Foauth%2Fcallback&response_type=code&scope=backups&code_challenge=abcdefghijklmnopqrstuvwxyz1234567890abcdefghijk&code_challenge_method=plain");
         Assert.Contains("invalid_request", plainPkce.Headers.Location?.ToString() ?? await plainPkce.Content.ReadAsStringAsync());
     }
 

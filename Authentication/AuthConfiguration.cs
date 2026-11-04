@@ -11,7 +11,7 @@ public static class AuthConfiguration
     public const string ClientId = "fitnesstracker-ios";
     public const string Scope = "backups";
     public const string Audience = "fitnesstracker-api";
-    public const string Callback = "fitnesstracker://oauth/callback";
+    public const string Callback = "https://auth.example.com/ios/oauth/callback";
 
     public static X509Certificate2 Certificate(IConfiguration config, string name) =>
         X509CertificateLoader.LoadPkcs12FromFile(
@@ -57,8 +57,10 @@ public static class AuthConfiguration
     {
         var manager = services.GetRequiredService<IOpenIddictApplicationManager>();
         var redirect = new Uri(config["Auth:RedirectUri"] ?? Callback);
-        if (redirect != new Uri(Callback) && redirect.Scheme != Uri.UriSchemeHttps)
-            throw new InvalidOperationException("Additional callback URLs must use HTTPS.");
+        if (redirect.Scheme != Uri.UriSchemeHttps || !string.IsNullOrEmpty(redirect.UserInfo) ||
+            !string.IsNullOrEmpty(redirect.Query) || !string.IsNullOrEmpty(redirect.Fragment) ||
+            redirect.AbsolutePath != "/ios/oauth/callback")
+            throw new InvalidOperationException("The iOS callback must use HTTPS and /ios/oauth/callback.");
         var descriptor = new OpenIddictApplicationDescriptor
         {
             ClientId = ClientId,
