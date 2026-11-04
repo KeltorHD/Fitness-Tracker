@@ -36,6 +36,25 @@ import WidgetKit
   @ObservationIgnored private let platformServicesEnabled: Bool
   @ObservationIgnored private let defaults: UserDefaults
   @ObservationIgnored private let archiveFiles: any ArchiveFileHandling
+  @ObservationIgnored private let accountSession: AccountSession?
+  @ObservationIgnored lazy var accountBackups: AccountBackupViewModel? = {
+    guard let accountSession else { return nil }
+    return AccountBackupViewModel(
+      session: accountSession,
+      client: RemoteBackupClient(session: accountSession, cryptography: AppleServerCryptography()),
+      snapshot: { [weak self] in
+        guard let self, !self.isDemoMode, !self.switchingDemo else {
+          throw TrainingError.invalidState
+        }
+        return try self.archiveSnapshot()
+      },
+      preview: { [weak self] archive in
+        guard let self, !self.isDemoMode, !self.switchingDemo else {
+          throw TrainingError.invalidState
+        }
+        try self.archiveTransfer.presentBackup(archive)
+      })
+  }()
   @ObservationIgnored lazy var archiveTransfer = ArchiveTransferViewModel(
     files: archiveFiles,
     snapshot: { [weak self] in
@@ -63,7 +82,8 @@ import WidgetKit
     exerciseImages: any ExerciseImageLoading = ExerciseImageLoader(),
     archiveFiles: any ArchiveFileHandling = ArchiveFileService(),
     tracker: TrackerViewModel? = nil,
-    healthCharts: HealthChartsViewModel? = nil
+    healthCharts: HealthChartsViewModel? = nil,
+    accountSession: AccountSession? = nil
   ) {
     self.repository = WorkoutWorkspaceRepository(personal: repository)
     self.nutrition = (repository as? any NutritionRepository).map {
@@ -76,6 +96,7 @@ import WidgetKit
     self.settings = SettingsViewModel(cloud: cloud, notifications: notifications)
     self.exerciseImages = exerciseImages
     self.archiveFiles = archiveFiles
+    self.accountSession = accountSession
     self.tracker =
       tracker
       ?? TrackerViewModel(
@@ -134,7 +155,7 @@ import WidgetKit
       try Task.checkCancellation()
       guard !showSession, !showingWorkoutStart, !showingWorkoutDetail, !showingTemplateEditor,
         !showingBodyWeightEditor, nutrition?.isPresenting != true,
-        !archiveTransfer.isPresented, !archiveTransfer.isSaving
+        !archiveTransfer.isPresented, !archiveTransfer.isSaving, accountBackups?.isBusy != true
       else { throw TrainingError.invalidState }
       try repository.openDemo(archive)
       isDemoMode = true

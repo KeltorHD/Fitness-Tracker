@@ -1,0 +1,19 @@
+@model FitnessTracker.Authentication.Controllers.RegistrationPage
+<h1>Создать аккаунт</h1>
+<p>Выберите пароль или passkey. Письмо с кодом не потребуется.</p>
+<div asp-validation-summary="All" role="alert"></div>
+<form method="post" action="/register" asp-antiforgery="true">
+  <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+  <label for="email">Электронная почта</label>
+  <input id="email" name="email" type="email" value="@Model.Email" autocomplete="username" maxlength="254" required />
+  <label for="password">Пароль</label>
+  <input id="password" name="password" type="password" autocomplete="new-password" minlength="12" maxlength="128" required aria-describedby="password-hint" />
+  <p id="password-hint">От 12 до 128 символов, не менее четырёх разных символов.</p>
+  <label for="confirm-password">Повторите пароль</label>
+  <input id="confirm-password" name="confirmPassword" type="password" autocomplete="new-password" minlength="12" maxlength="128" required />
+  <button type="submit">Создать аккаунт с паролем</button>
+  <button type="button" data-passkey="register" disabled>Создать аккаунт с passkey</button>
+  <p data-passkey-status role="status" aria-live="polite"></p>
+</form>
+<noscript><p>Для passkey включите JavaScript или используйте пароль.</p></noscript>
+<p><a href="@Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString("/login", "returnUrl", Model.ReturnUrl)">Уже есть аккаунт — войти</a></p>

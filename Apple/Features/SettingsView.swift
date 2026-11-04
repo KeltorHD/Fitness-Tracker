@@ -116,6 +116,12 @@ struct SettingsView: View {
         }.disabled(store.isDemoMode)
       }
       Section {
+        NavigationLink {
+          AccountBackupView()
+        } label: {
+          SettingsLabel(
+            title: L10n.text("Аккаунт и копии", locale: locale), symbol: "person.crop.circle")
+        }.disabled(store.isDemoMode).accessibilityIdentifier("openAccountBackups")
         if AppCapabilities.current.supportsCloudSync {
           Toggle(isOn: $cloud) {
             SettingsLabel(

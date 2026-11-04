@@ -86,6 +86,15 @@ struct ArchiveImportPreview {
     selectFile(url)
   }
 
+  func presentBackup(_ archive: WorkoutArchive) throws {
+    guard !isSaving else { throw ArchiveFileError.unreadable }
+    try WorkoutArchiveCodec.validate(archive)
+    let summary = try plan(archive)
+    present()
+    preview = ArchiveImportPreview(
+      archive: archive, fileName: "FitnessTracker-Backup.fitnesstracker", summary: summary)
+  }
+
   func selectFile(_ url: URL) {
     guard !isSaving else { return }
     preview = nil

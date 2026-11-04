@@ -1,0 +1,29 @@
+@model FitnessTracker.Authentication.Controllers.LoginPage
+<h1>Вход в аккаунт</h1>
+<p>Войдите, чтобы сохранять резервные копии тренировок.</p>
+@if (TempData["LoginError"] is string error)
+{
+  <p role="alert">@error</p>
+}
+<form method="post" action="/login/password" asp-antiforgery="true">
+  <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+  <label for="email">Электронная почта</label>
+  <input id="email" name="email" type="email" autocomplete="username" maxlength="254" required />
+  <label for="password">Пароль</label>
+  <input id="password" name="password" type="password" autocomplete="current-password" maxlength="128" required />
+  <button type="submit">Войти по паролю</button>
+</form>
+<form method="post" action="/passkeys/login" asp-antiforgery="true">
+  <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+  <button type="button" data-passkey="login" disabled>Войти с passkey</button>
+  <p data-passkey-status role="status" aria-live="polite"></p>
+</form>
+<p><a href="@Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString("/register", "returnUrl", Model.ReturnUrl)">Создать аккаунт</a></p>
+@foreach (var provider in Model.Providers)
+{
+  <form method="post" action="/login/@provider.ToLowerInvariant()" asp-antiforgery="true">
+    <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+    <button type="submit">Продолжить с @(provider == "Yandex" ? "Яндекс ID" : provider)</button>
+  </form>
+}
+<p>Тренировки на устройстве доступны без входа.</p>

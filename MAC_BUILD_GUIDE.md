@@ -1,5 +1,7 @@
 # FitnessTracker: первая сборка на macOS
 
+Для проверки новой аутентификации и копий выполните `xcodegen generate`, добавьте HTTPS-адреса серверов в существующий `Config/Local.xcconfig` по [SERVER.md](docs/SERVER.md) и запустите `AccountBackupTests`. Реальные provider flows требуют настройки Auth Server и кабинетов Google/Apple/Яндекс; наличие исходников не означает проверки входа на устройстве. Без серверных адресов приложение продолжает работать локально.
+
 После переименования закройте прежний проект, выполните `git pull --ff-only` и `xcodegen generate`, затем откройте **FitnessTracker.xcodeproj**. Выберите **FitnessTracker Personal**. Сохраняйте значения Team, Bundle ID, App Group и CloudKit из существующего `Config/Local.xcconfig`: прежние переменные поддержаны aliases. Не удаляйте приложение/store. [Правила обновления](docs/RENAME.md).
 
 После добавления питания повторите `xcodegen generate`: новые файлы входят только в основной iOS target. Запустите `NutritionTests` и `testDiaryCanLogManualFoodWithoutNetwork`, затем проверьте PhotosPicker и запись с фото в SwiftData/CloudKit по [чек-листу](docs/XCODE_VALIDATION.md). На Linux эти Apple-сценарии не выполнялись. Дополнительные ключи API и разрешения медиатеки для системного выбора фото не требуются.
@@ -235,3 +237,5 @@ xcodebuild -project FitnessTracker.xcodeproj -scheme FitnessTracker \
 ## Обновлённая шторка старта
 
 В этом обновлении изменены только существующие исходники: если Xcode-проект был сгенерирован после предыдущих добавлений файлов, повторять `xcodegen generate` не нужно. Достаточно pull и сборки ⌘B/запуска ⌘R. Кнопки общего старта теперь открывают полноразмерный выбор шаблонов с поиском и фильтрами; «Без шаблона» закреплено компактно сверху. Тема по умолчанию — зелёный «Лес», явно выбранная тема сохраняется. [Сценарии проверки](docs/XCODE_VALIDATION.md#старт-с-приоритетом-шаблонов-поиск-и-фильтры).
+
+Для HTTPS callback используйте полную схему `FitnessTracker` с Associated Domains `webcredentials:$(FITNESS_TRACKER_AUTH_DOMAIN)`, настоящим App ID Prefix.Bundle ID и соответствующим provisioning. Пример host — `auth.example.com`; реальный `FITNESS_TRACKER_AUTH_DOMAIN` и HTTPS URL задайте в игнорируемом `Config/Local.xcconfig`. Задайте `IOS_APP_IDENTIFIER` на Auth Server и проверьте AASA по [SERVER.md](docs/SERVER.md#привязка-https-callback-к-ios). Пока Apple ID не зарегистрирован, возврат на iPhone не считается настроенным. Personal Team схема сохраняет прежние entitlements для локального приложения.

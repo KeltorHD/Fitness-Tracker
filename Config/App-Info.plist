@@ -48,6 +48,10 @@
 	</array>
 	<key>FitnessTrackerAppGroup</key>
 	<string>$(FITNESS_TRACKER_APP_GROUP)</string>
+	<key>FitnessTrackerAuthenticationURL</key>
+	<string>$(FITNESS_TRACKER_AUTH_URL)</string>
+	<key>FitnessTrackerBackendURL</key>
+	<string>$(FITNESS_TRACKER_BACKEND_URL)</string>
 	<key>FitnessTrackerCloudContainer</key>
 	<string>$(FITNESS_TRACKER_CLOUD_CONTAINER)</string>
 	<key>FitnessTrackerCloudSyncAvailable</key>
