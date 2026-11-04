@@ -20,7 +20,9 @@ namespace FitnessTracker.Server.Tests;
 /// <summary>Изолирует Identity/OpenIddict и подменяет только внешний HTTP-сервис удаления копий.</summary>
 /// <param name="peerAddress">Сетевой адрес непосредственного отправителя для проверки reverse proxy.</param>
 /// <param name="trustedProxy">Единственный дополнительно доверенный proxy в тестовой конфигурации.</param>
-public sealed class AuthFactory(IPAddress? peerAddress = null, string? trustedProxy = null) : WebApplicationFactory<Authentication.Program>
+/// <param name="claimsTransformation">Необязательная точка синхронизации после проверки cookie для тестов гонок.</param>
+public sealed class AuthFactory(IPAddress? peerAddress = null, string? trustedProxy = null,
+    IClaimsTransformation? claimsTransformation = null) : WebApplicationFactory<Authentication.Program>
 {
     private readonly SqliteConnection _connection = new("Data Source=:memory:");
     /// <summary>Количество реальных обращений Auth к подменённому Backend.</summary>
@@ -55,6 +57,8 @@ public sealed class AuthFactory(IPAddress? peerAddress = null, string? trustedPr
         {
             if (peerAddress is not null)
                 services.AddSingleton<IStartupFilter>(new PeerAddressStartupFilter(peerAddress));
+            if (claimsTransformation is not null)
+                services.AddSingleton(claimsTransformation);
             services.RemoveAll<DbContextOptions<AuthDbContext>>();
             services.RemoveAll<IDbContextOptionsConfiguration<AuthDbContext>>();
             services.AddDbContext<AuthDbContext>(options => options.UseSqlite(_connection).UseOpenIddict());

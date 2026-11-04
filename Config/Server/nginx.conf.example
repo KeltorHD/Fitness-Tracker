@@ -18,6 +18,9 @@ server {
 
     # Standard access logs contain callback query strings with OAuth codes.
     access_log off;
+    # Upstream error logs also include the full callback URI. Application logs
+    # provide diagnostics without persisting OAuth codes in host Nginx logs.
+    error_log /dev/null;
     client_max_body_size 1m;
 
     location / {

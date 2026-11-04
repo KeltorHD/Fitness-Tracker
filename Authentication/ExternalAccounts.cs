@@ -1,10 +1,12 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using OpenIddict.Abstractions;
 
 namespace FitnessTracker.Authentication;
 
-public sealed class ExternalAccounts(AuthDbContext database, UserManager<ApplicationUser> users)
+public sealed class ExternalAccounts(AuthDbContext database, UserManager<ApplicationUser> users,
+    IOpenIddictAuthorizationManager authorizations, IOpenIddictTokenManager tokens)
 {
     public async Task<ApplicationUser> SignIn(string provider, string subject, ClaimsPrincipal principal,
         CancellationToken cancellationToken)
@@ -28,6 +30,7 @@ public sealed class ExternalAccounts(AuthDbContext database, UserManager<Applica
         return user;
     }
 
+    /// <summary>Атомарно отключает login и отзывает прежние OAuth-сессии, сохраняя последний способ входа.</summary>
     public async Task<bool> Unlink(ApplicationUser user, string provider, CancellationToken cancellationToken)
     {
         await using var transaction = await database.Database.BeginTransactionAsync(
@@ -37,6 +40,9 @@ public sealed class ExternalAccounts(AuthDbContext database, UserManager<Applica
         if (login is null || (logins.Count <= 1 && !await users.HasPasswordAsync(user))) return false;
         Check(await users.RemoveLoginAsync(user, login.LoginProvider, login.ProviderKey));
         Check(await users.UpdateSecurityStampAsync(user));
+        // Смена SecurityStamp защищает cookies, но сама по себе не отзывает OAuth refresh/code.
+        await authorizations.RevokeBySubjectAsync(user.Id, cancellationToken);
+        await tokens.RevokeBySubjectAsync(user.Id, cancellationToken);
         await transaction.CommitAsync(cancellationToken);
         return true;
     }

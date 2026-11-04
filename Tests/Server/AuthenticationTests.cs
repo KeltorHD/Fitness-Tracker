@@ -163,6 +163,7 @@ public sealed class AuthenticationTests
         Assert.Equal("RS256", jwt.Header.Alg);
         Assert.Equal("https://localhost/", jwt.Issuer);
         Assert.Contains(AuthConfiguration.Audience, jwt.Audiences);
+        Assert.DoesNotContain(jwt.Claims, claim => claim.Type == "fitnesstracker:security_stamp");
         Assert.Equal(HttpStatusCode.BadRequest, (await ExchangeAsync(client, fresh.Code, fresh.Verifier)).StatusCode);
         var rejected = await client.GetAsync("/connect/authorize?client_id=fitnesstracker-ios&redirect_uri=https://attacker.test/&response_type=code&scope=backups");
         Assert.Equal(HttpStatusCode.BadRequest, rejected.StatusCode);
@@ -250,6 +251,81 @@ public sealed class AuthenticationTests
         Assert.False(await accounts.Unlink(google, "Google", default));
         var manager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
         Assert.False((await manager.AddLoginAsync(apple, new UserLoginInfo("Google", "google-subject", "Google"))).Succeeded);
+    }
+
+    /// <summary>Успешная отвязка закрывает старые OAuth-сессии; запрет последнего login сохраняет действующие токены.</summary>
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task ProviderRemovalRevokesExistingSessionsAsync(bool canUnlink)
+    {
+        // Arrange: две независимые OAuth-сессии одного пользователя и один либо два способа входа.
+        using var factory = new AuthFactory();
+        using var client = await factory.SignedInAsync();
+        using var scope = factory.Services.CreateScope();
+        var users = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+        var user = await scope.ServiceProvider.GetRequiredService<AuthDbContext>().Users.SingleAsync();
+        Assert.True((await users.AddLoginAsync(user, new UserLoginInfo("Google", "google-subject", "Google"))).Succeeded);
+        if (canUnlink)
+            Assert.True((await users.AddLoginAsync(user, new UserLoginInfo("Apple", "apple-subject", "Apple"))).Succeeded);
+        var code = await CodeAsync(client);
+        using var issued = await ExchangeAsync(client, code.Code, code.Verifier);
+        Assert.Equal(HttpStatusCode.OK, issued.StatusCode);
+        var tokens = await issued.Content.ReadFromJsonAsync<JsonElement>();
+        var pending = await CodeAsync(client);
+        client.DefaultRequestHeaders.Authorization = new("Bearer", tokens.GetProperty("access_token").GetString());
+        using var initialProfile = await client.GetAsync("/v1/account");
+        Assert.Equal(HttpStatusCode.OK, initialProfile.StatusCode);
+
+        // Act: тот же сервис использует браузерный endpoint отвязки провайдера.
+        var unlinked = await scope.ServiceProvider.GetRequiredService<ExternalAccounts>().Unlink(user, "Google", default);
+        using var refresh = await RefreshAsync(client, tokens.GetProperty("refresh_token").GetString()!);
+        using var exchange = await ExchangeAsync(client, pending.Code, pending.Verifier);
+        using var profile = await client.GetAsync("/v1/account");
+
+        // Assert: старые refresh/code/access Auth больше не работают только после фактического удаления login.
+        Assert.Equal(canUnlink, unlinked);
+        Assert.Equal(canUnlink ? HttpStatusCode.BadRequest : HttpStatusCode.OK, refresh.StatusCode);
+        Assert.Equal(canUnlink ? HttpStatusCode.BadRequest : HttpStatusCode.OK, exchange.StatusCode);
+        Assert.Equal(canUnlink ? HttpStatusCode.Unauthorized : HttpStatusCode.OK, profile.StatusCode);
+        var remaining = await users.GetLoginsAsync(user);
+        Assert.Single(remaining);
+        Assert.Equal(canUnlink ? "Apple" : "Google", remaining[0].LoginProvider);
+    }
+
+    /// <summary>Запрос со старой cookie, начатый до отвязки, не создаёт рабочую сессию после отзыва.</summary>
+    [Fact]
+    public async Task ProviderRemovalRejectsSessionIssuedByInFlightCookieAsync()
+    {
+        // Arrange: cookie проверяется до отвязки, а authorization сохраняется уже после неё.
+        using var deadline = new CancellationTokenSource(TimeSpan.FromMinutes(1));
+        var pause = new PausedCookieAuthentication(deadline.Token);
+        using var factory = new AuthFactory(claimsTransformation: pause);
+        using var client = await factory.SignedInAsync();
+        using var scope = factory.Services.CreateScope();
+        var users = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+        var user = await scope.ServiceProvider.GetRequiredService<AuthDbContext>().Users.SingleAsync();
+        Assert.True((await users.AddLoginAsync(user, new UserLoginInfo("Google", "google-subject", "Google"))).Succeeded);
+        Assert.True((await users.AddLoginAsync(user, new UserLoginInfo("Apple", "apple-subject", "Apple"))).Succeeded);
+
+        // Act: управляем порядок через сигнал настоящего authentication middleware, без задержек.
+        var pending = CodeAsync(client);
+        try
+        {
+            await pause.CookieValidated.WaitAsync(deadline.Token);
+            Assert.True(await scope.ServiceProvider.GetRequiredService<ExternalAccounts>().Unlink(user, "Google", deadline.Token));
+        }
+        finally
+        {
+            pause.Resume();
+            await pending.WaitAsync(deadline.Token);
+        }
+        var code = await pending;
+        using var exchange = await ExchangeAsync(client, code.Code, code.Verifier);
+
+        // Assert: даже сохранённый после массового отзыва code не продлевает доступ старой cookie.
+        Assert.Equal(HttpStatusCode.BadRequest, exchange.StatusCode);
+        Assert.Equal("invalid_grant", (await exchange.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("error").GetString());
     }
 
     /// <summary>Вход требует antiforgery; внешний returnUrl не попадает в браузерную форму.</summary>

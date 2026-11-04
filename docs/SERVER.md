@@ -34,7 +34,9 @@ Keychain item изолирован по bundle ID и issuer, не синхрон
 
 Выход отзывает текущий refresh token. Заблокированный Identity-пользователь не может получить новый authorization code, обменять ранее выданный код, обновить сессию или выполнить новый браузерный вход/привязку. Выданные JWT основного API могут действовать оставшиеся 10 минут: API проверяет их по JWKS без introspection. Для удаления аккаунта действует дополнительная блокировка UUID на стороне Backend, поэтому старый JWT не может создать новую копию удалённого аккаунта.
 
-Аккаунты идентифицируются по паре provider/subject, а не email. Совпадение email не объединяет пользователей. Привязка выполняется на защищённой веб-странице из «Способы входа», с новым provider flow и проверкой текущего пользователя. Нельзя отвязать последний способ входа. Cookie — Secure/HttpOnly; изменяющие веб-формы защищены antiforgery. Email используется только как атрибут внешнего профиля и не считается подтверждённым для будущего password-входа.
+Аккаунты идентифицируются по паре provider/subject, а не email. Совпадение email не объединяет пользователей. Привязка выполняется на защищённой веб-странице из «Способы входа», с новым provider flow и проверкой текущего пользователя. Нельзя отвязать последний способ входа. Успешная отвязка в одной транзакции меняет SecurityStamp и отзывает все прежние OAuth authorizations/tokens, включая refresh и ещё не обменянные коды. Приложения на всех устройствах потребуют нового входа; текущая веб-сессия обновляется. Cookie — Secure/HttpOnly; изменяющие веб-формы защищены antiforgery. Email используется только как атрибут внешнего профиля и не считается подтверждённым для будущего password-входа.
+
+Версия SecurityStamp берётся из проверенной cookie и сохраняется только в защищённых code/refresh payloads. Token endpoint сверяет её с текущим пользователем. Это закрывает гонку, когда запрос проверил старую cookie до отвязки, а authorization создал после массового отзыва. Версия не публикуется в access/ID JWT. После обновления реализации старые code/refresh без этой версии отклоняются с `invalid_grant`; пользователю понадобится новый вход. Изменения схемы БД нет. Backend проверяет JWT автономно, поэтому ранее выданный access token там действует до истечения срока с допуском 30 секунд.
 
 ## HTTP-контракт
 
@@ -106,7 +108,7 @@ sudo nginx -t
 sudo systemctl reload nginx
 ```
 
-Образец сохраняет Host и перезаписывает `X-Forwarded-Proto`/`X-Forwarded-For` значениями реального запроса. Так OpenIddict видит исходный HTTPS и корректно строит provider callbacks. Переданные клиентом forwarded headers не должны подменять эти значения. Внешний `/internal` и его подпути блокируются без учёта регистра, как и маршруты ASP.NET Core. Для Backend установлен лимит body 20 MiB, отключена буферизация архивов в временные файлы Nginx. Access log отключён, чтобы стандартный request URI с OAuth-кодом не попадал в журнал; при настройке своих журналов исключайте callback query strings и credentials.
+Образец сохраняет Host и перезаписывает `X-Forwarded-Proto`/`X-Forwarded-For` значениями реального запроса. Так OpenIddict видит исходный HTTPS и корректно строит provider callbacks. Переданные клиентом forwarded headers не должны подменять эти значения. Внешний `/internal` и его подпути блокируются без учёта регистра, как и маршруты ASP.NET Core. Для Backend установлен лимит body 20 MiB, отключена буферизация архивов во временные файлы Nginx. Access log отключён. В Auth server block также установлен `error_log /dev/null`: при отказе upstream стандартный error log включает полный callback URI с OAuth-кодом/state. Для диагностики Auth используйте безопасные application logs и проверку доступности upstream; запросы этого virtual host в Nginx error log не сохраняются. Если нужны собственные журналы, используйте сборщик с редактированием секретных query-параметров; не включайте исходный request URI/credentials.
 
 ### Docker gateway и доверие к proxy
 
@@ -157,11 +159,35 @@ FITNESS_TRACKER_BACKEND_URL = https:/$()/api.example.com/
 
 Перед публикацией актуализируйте App Store privacy labels и политику конфиденциальности для добровольной передачи Fitness/Health и данных аккаунта; manifest отражает связанные данные без tracking по [категориям Apple](https://developer.apple.com/documentation/bundleresources/app-privacy-configuration/nsprivacycollecteddatatypes/nsprivacycollecteddatatype).
 
+## Проверка безопасности 2026-11-04
+
+Проверены серверные исходники, OAuth/Identity и JWT middleware, границы доступа к копиям, транзакции удаления, Compose/Nginx и NuGet-зависимости. Три проблемы воспроизведены до исправления:
+
+| Приоритет | Проблема | Исправление и подтверждение |
+| --- | --- | --- |
+| Высокий | Отвязка провайдера не отзывала OAuth-сессии: ранее выданный refresh продолжал давать доступ после отключения способа входа; начатая до отвязки выдача кода могла обойти массовый отзыв | Отзыв authorizations/tokens в транзакции удаления login и привязка code/refresh к stamp проверенной cookie; HTTP-тесты старых токенов, запрета последней отвязки и детерминированной гонки; PostgreSQL проверяет сохранённые статусы |
+| Средний | OpenIddict завершал анонимные запросы до `UseRateLimiter`, обходя IP-лимит Auth | Лимит перенесён перед authentication middleware; после 120 запросов authorize/token/discovery следующий получает 429 |
+| Средний | При 502 Nginx записывал OAuth code/state в унаследованный error log | В Auth virtual host отключена запись исходных ошибок Nginx; изолированная проверка 502 с синтетическим callback больше не находит code/state в журнале |
+
+Backend отклоняет JWT с неверными issuer/audience/type/scope/subject, чужой подписью, без подписи, с HS256 вместо RS256, без exp, истёкшие и ещё не вступившие в силу. Проверены чтение/запись чужих копий, внутренний service credential, идемпотентность, квота и сохранность данных при отказах; PostgreSQL-сценарии отдельно проверяют конкуренцию. Поддельные forwarded headers от неизвестного peer не подтверждают HTTPS. Веб-формы используют antiforgery, return URL ограничен локальным адресом, одинаковый email не объединяет аккаунты.
+
+`dotnet package list --project FitnessTracker.Server.sln --vulnerable --include-transitive --no-restore --format json` завершился успешно с источником NuGet.org и не сообщил об известных уязвимостях в трёх проектах. [Advisory OpenIddict GHSA-925x-4h4v-2792](https://github.com/openiddict/openiddict-core/security/advisories/GHSA-925x-4h4v-2792) исправлен с 7.7; используемая 7.7.2 находится вне затронутого диапазона.
+
+Остаются границы проверки и эксплуатационные риски:
+
+- JWT Backend после выхода/отвязки может действовать до 10 минут плюс 30 секунд допуска; немедленный отзыв потребовал бы отдельной проверки состояния сессии. Удаление аккаунта дополнительно блокирует новые PUT через tombstone.
+- Частота запросов и квота действуют на пользователя, но общего лимита одновременно обрабатываемых больших архивов нет. Перед открытием публичного сервера нужны лимиты соединений в хостовом Nginx и бюджеты памяти/диска под фактическую нагрузку; устойчивость к распределённому DoS не проверялась.
+- Копии доступны администратору БД; шифрование дисков и резервных копий PostgreSQL настраивается на сервере. Текущий Compose использует bootstrap role также для приложения, а `POSTGRES_USER` создаётся с superuser-правами по [контракту официального образа](https://hub.docker.com/_/postgres). Для production разделите роли миграций и обычного DML-доступа; права существующих рабочих БД в этой проверке не менялись.
+- `fitnesstracker://` не подтверждает принадлежность приложения: стороннее приложение может начать собственный PKCE flow с тем же client ID/URL scheme. Текущий `ConsentType=Implicit` допускает автоматическую выдачу кода при действующей cookie. [RFC 8252, §8.6](https://www.rfc-editor.org/rfc/rfc8252.html#section-8.6) рекомендует дополнительное взаимодействие с пользователем, если identity клиента не подтверждена. Для публикации нужен HTTPS callback с Associated Domains либо отдельное согласованное подтверждение входа; домен и Apple Developer configuration в этой задаче не задавались.
+- Реальные DNS/TLS, вход Google/Apple/Яндекс, конфигурация вашего Nginx, ОС и содержимое production Docker images не проверялись.
+
+Порядок middleware учитывает [интеграцию OpenIddict через IAuthenticationRequestHandler](https://documentation.openiddict.com/integrations/aspnet-core) и [правила ASP.NET Core pipeline](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/middleware/?view=aspnetcore-10.0).
+
 ## Проверки
 
-Локально 2026-11-04 после перехода на хостовый Nginx: `check-server.sh` прошёл — locked restore, сборка без warnings, 73 сценария (44 unit, 29 HTTP/Identity/SQLite) и `dotnet format`. Четыре новых HTTP-сценария подтверждают принятие forwarded HTTPS только от доверенного proxy, включая IPv4-mapped IPv6. Две интеграционные PostgreSQL-проверки ранее прошли на 16.6 с отдельными временными базами; при изменении proxy они повторно не запускались. Схема БД и файлы миграций не менялись.
+Локально 2026-11-04 после проверки безопасности: полный `check-server.sh` прошёл — locked restore, сборка без warnings, 86 сценариев (44 unit, 39 HTTP/Identity/SQLite, 3 PostgreSQL 16.6) и `dotnet format`. Добавлены 11 security-сценариев: лимит до OpenIddict, отвязка/отзыв и гонка выдачи кода, запрет ослабленных JWT и сохранение отзыва в PostgreSQL. Тест гонки использует сигналы после настоящей проверки cookie, без фиксированных задержек. PostgreSQL запускался одноразовым контейнером с динамическим localhost-портом; использовались отдельные временные БД. Схема БД и файлы миграций не менялись.
 
-Compose config проверен с обычными и изменёнными портами/subnet/gateway. Образец Nginx прошёл `nginx -t` на 1.24 и изолированную проверку с временным TLS-сертификатом и синтетическим Docker-upstream: HTTPS redirect, оба домена, перезапись поддельных заголовков, фактический TCP peer равен bridge gateway, `/internal` закрыт и при другом регистре или encoded slash. Системный Nginx не устанавливался и не изменялся. Эта проверка не заменяет проверку ваших доменов, сертификатов и полного provider flow на сервере.
+Ранее Compose config проверен с обычными и изменёнными портами/subnet/gateway; изолированный Nginx 1.24 с Docker-upstream подтвердил HTTPS redirect, оба домена, перезапись поддельных заголовков, точный TCP peer bridge gateway и запрет `/internal` при другом регистре или encoded slash. При текущем аудите исправленный образец повторно прошёл `nginx -t` и проверку 502: синтетические code/state отсутствуют в error log. Использовались временные локальные порты и тестовый TLS-сертификат. Системный Nginx не устанавливался и не изменялся. Эта проверка не заменяет проверку ваших доменов, сертификатов и полного provider flow на сервере.
 
 Ранее проверены Swift-format 6.2.1 strict lint, структура, RU/EN и ресурсы. Core build/tests, Apple SDK/XCTest, production images и реальные provider flows не запускались.
 
@@ -179,9 +205,11 @@ dotnet ef migrations has-pending-model-changes --project Backend
 | `Unit` | `Tests/Server/BackupArchiveValidatorTests.cs` | v1–v4 и legacy format, обязательные поля, неверные JSON-типы/UTF-8, точные границы байтов и количества записей, безопасные ошибки; без БД и HTTP |
 | `Unit` | `Tests/Server/BackupCleanupTests.cs` | DELETE/service key контракт, ошибки статуса и конфигурации, передача отмены в HTTP handler без сети |
 | `HTTP` | `Tests/Server/BackendTests.cs` | JWT/subject/scope и изоляция пользователей, MIME type, SHA-256/headers/фиксированное время, квота, идемпотентность, откат при отказе/отмене записи |
-| `HTTP` | `Tests/Server/AuthenticationTests.cs` | PKCE, code/refresh/revoke, блокировка аккаунта, scopes, prompt=none, antiforgery, внешние привязки и удаление данных |
+| `HTTP` | `Tests/Server/AuthenticationTests.cs` | PKCE, code/refresh/revoke, блокировка аккаунта, scopes, prompt=none, antiforgery, внешние привязки, отзыв сессий/гонка отвязки и удаление данных |
+| `HTTP` | `Tests/Server/AuthenticationSecurityTests.cs` | IP-лимит OAuth errors/discovery применяется до обработки запросов OpenIddict |
+| `HTTP` | `Tests/Server/BackendSecurityTests.cs` | Запрет unsigned/HS256 JWT, обязательный exp и запрет преждевременного использования токена |
 | `HTTP` | `Tests/Server/HostNginxForwardingTests.cs` | Исходный HTTPS за доверенным proxy, отказ поддельному `X-Forwarded-Proto` от чужого peer, IPv4 и IPv4-mapped IPv6 |
-| `PostgreSQL` | `Tests/Server/PostgresTests.cs` | Раздельные БД Auth/Backend, существующие миграции и model snapshots, конкурентная квота, гонка PUT/удаления и сохранность чужих данных |
+| `PostgreSQL` | `Tests/Server/PostgresTests.cs` | Раздельные БД Auth/Backend, существующие миграции и model snapshots, конкурентная квота, гонка PUT/удаления и сохранность чужих данных, отзыв сессий при отвязке провайдера |
 
 ```bash
 dotnet test FitnessTracker.Server.sln --no-build --no-restore -m:1 --filter 'Category=Unit'
@@ -190,7 +218,7 @@ dotnet test FitnessTracker.Server.sln --no-build --no-restore -m:1 --filter 'Cat
 
 Обычный прогон не вызывает внешних OAuth-провайдеров. HTTP fixtures используют настоящий in-memory host и собственную SQLite, очищают пользовательские configuration sources, явно отключают внешние providers и внедряют фиксированное время для метаданных. Отказ/отмена SaveChanges подменяются через EF interceptor, сохраняя настоящую транзакцию и проверки результата. Сценарии и вспомогательные классы имеют XML-описания на русском языке.
 
-Для PostgreSQL задайте `FITNESS_TRACKER_TEST_POSTGRES` connection string к **одноразовому тестовому экземпляру** и запустите `check-server.sh`; он включит обе PostgreSQL-проверки. Только эту категорию запускают с `--filter 'Category=PostgreSQL'`. Без явной конфигурации прямой запуск категории завершается ошибкой, а не молчаливым пропуском. Fixture создаёт случайные отдельные базы с отключённым pooling и удаляет только их с отдельным cleanup deadline, включая сбой основного теста. CI поднимает PostgreSQL 18; локально проверено на 16.6, на динамически выделенном localhost-порту. Файлы миграций для этих тестов не генерируются и не изменяются.
+Для PostgreSQL задайте `FITNESS_TRACKER_TEST_POSTGRES` connection string к **одноразовому тестовому экземпляру** и запустите `check-server.sh`; он включит все три PostgreSQL-проверки. Только эту категорию запускают с `--filter 'Category=PostgreSQL'`. Без явной конфигурации прямой запуск категории завершается ошибкой, а не молчаливым пропуском. Fixture создаёт случайные отдельные базы с отключённым pooling и удаляет только их с отдельным cleanup deadline, включая сбой основного теста. CI поднимает PostgreSQL 18; локально проверено на 16.6, на динамически выделенном localhost-порту. Файлы миграций для этих тестов не генерируются и не изменяются.
 
 Apple XCTest `AccountBackupTests` проверяют callback validation, одну ротацию для параллельных запросов, ошибки сети/Keychain, истёкшую сессию и проверку целостности; `ArchiveTransferTests` проверяет подтверждение восстановления. Их запуск требует Xcode. Foundation-часть добавлена в Swift 6 type-check скрипта `check-linux.sh`; SwiftUI/Keychain/CryptoKit и реальный вход требуют Apple SDK/устройства. Чек-лист: [XCODE_VALIDATION.md](XCODE_VALIDATION.md).
 

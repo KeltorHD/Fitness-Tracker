@@ -14,6 +14,9 @@ public sealed class AuthorizationController(UserManager<ApplicationUser> users,
     SignInManager<ApplicationUser> signIn, IOpenIddictApplicationManager applications,
     IOpenIddictAuthorizationManager authorizations) : Controller
 {
+    /// <summary>Версия учётных данных только в защищённых code/refresh payloads, без публикации в JWT.</summary>
+    private const string SECURITY_STAMP_CLAIM = "fitnesstracker:security_stamp";
+
     /// <summary>Продолжает PKCE-вход либо требует аутентификацию разрешённого пользователя.</summary>
     [HttpGet("/connect/authorize")]
     public async Task<IActionResult> Authorize(CancellationToken cancellationToken)
@@ -37,7 +40,10 @@ public sealed class AuthorizationController(UserManager<ApplicationUser> users,
         }
         var application = await applications.FindByClientIdAsync(request.ClientId!, cancellationToken)
             ?? throw new InvalidOperationException();
-        var identity = CreateIdentity(user);
+        // Берём stamp из проверенной cookie, а не из заново загруженного профиля:
+        // начатый до отвязки запрос не должен получить новую версию учётных данных.
+        var identity = CreateIdentity(user,
+            cookie.Principal?.FindFirstValue(users.Options.ClaimsIdentity.SecurityStampClaimType));
         identity.SetScopes(request.GetScopes());
         identity.SetResources(AuthConfiguration.Audience);
         // One authorization per device sign-in gives refresh tokens a revocable session family.
@@ -60,16 +66,21 @@ public sealed class AuthorizationController(UserManager<ApplicationUser> users,
         var user = subject is null ? null : await users.FindByIdAsync(subject);
         if (!ticket.Succeeded || user is null || !await signIn.CanSignInAsync(user) || await users.IsLockedOutAsync(user))
             return Deny(Errors.InvalidGrant);
+        var stamp = ticket.Principal?.GetClaim(SECURITY_STAMP_CLAIM);
+        if (string.IsNullOrEmpty(stamp) || !string.Equals(stamp, await users.GetSecurityStampAsync(user), StringComparison.Ordinal))
+            return Deny(Errors.InvalidGrant);
         var identity = new ClaimsIdentity(ticket.Principal!.Claims, "Bearer", Claims.Name, Claims.Role);
         identity.SetClaim(Claims.Name, user.DisplayName);
         SetDestinations(identity);
         return SignIn(new ClaimsPrincipal(identity), OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
     }
 
-    private static ClaimsIdentity CreateIdentity(ApplicationUser user)
+    /// <summary>Связывает сессию с версией проверенной cookie, включая гонку с массовым отзывом.</summary>
+    private static ClaimsIdentity CreateIdentity(ApplicationUser user, string? securityStamp)
     {
         var identity = new ClaimsIdentity("Bearer", Claims.Name, Claims.Role);
         identity.SetClaim(Claims.Subject, user.Id).SetClaim(Claims.Name, user.DisplayName);
+        identity.SetClaim(SECURITY_STAMP_CLAIM, securityStamp);
         SetDestinations(identity);
         return identity;
     }

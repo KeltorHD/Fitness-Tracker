@@ -1,5 +1,10 @@
+using FitnessTracker.Authentication;
 using FitnessTracker.Backend;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using OpenIddict.Abstractions;
+using OpenIddict.EntityFrameworkCore.Models;
 using Xunit;
 
 namespace FitnessTracker.Server.Tests;
@@ -8,6 +13,62 @@ namespace FitnessTracker.Server.Tests;
 [Trait("Category", "PostgreSQL")]
 public sealed class PostgresTests
 {
+    /// <summary>Настоящий PostgreSQL сохраняет удаление login и отзыв grants/tokens вместе со сменой SecurityStamp.</summary>
+    [Fact]
+    public async Task ProviderRemovalPersistsSessionRevocationAsync()
+    {
+        // Arrange: одноразовая Auth-БД с Identity и OpenIddict; нет внешних OAuth-провайдеров.
+        using var deadline = new CancellationTokenSource(TimeSpan.FromMinutes(2));
+        var cancellationToken = deadline.Token;
+        await using var fixture = await PostgresDatabase.CreateAsync(cancellationToken);
+        var services = new ServiceCollection();
+        services.AddLogging();
+        services.AddDbContext<AuthDbContext>(options => options.UseNpgsql(fixture.ConnectionString).UseOpenIddict());
+        services.AddIdentityCore<ApplicationUser>().AddEntityFrameworkStores<AuthDbContext>();
+        services.AddOpenIddict().AddCore(options => options.UseEntityFrameworkCore().UseDbContext<AuthDbContext>());
+        services.AddScoped<ExternalAccounts>();
+        await using var provider = services.BuildServiceProvider();
+        await using var scope = provider.CreateAsyncScope();
+        var database = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
+        await database.Database.MigrateAsync(cancellationToken);
+        var users = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+        var user = new ApplicationUser { Id = Guid.NewGuid().ToString(), UserName = Guid.NewGuid().ToString("N") };
+        Assert.True((await users.CreateAsync(user)).Succeeded);
+        Assert.True((await users.AddLoginAsync(user, new UserLoginInfo("Google", "google-subject", "Google"))).Succeeded);
+        Assert.True((await users.AddLoginAsync(user, new UserLoginInfo("Apple", "apple-subject", "Apple"))).Succeeded);
+        var originalStamp = user.SecurityStamp;
+        var authorizations = scope.ServiceProvider.GetRequiredService<IOpenIddictAuthorizationManager>();
+        var authorization = await authorizations.CreateAsync(new OpenIddictAuthorizationDescriptor
+        {
+            Subject = user.Id,
+            Status = OpenIddictConstants.Statuses.Valid,
+            Type = OpenIddictConstants.AuthorizationTypes.Permanent
+        }, cancellationToken);
+        var tokens = scope.ServiceProvider.GetRequiredService<IOpenIddictTokenManager>();
+        await tokens.CreateAsync(new OpenIddictTokenDescriptor
+        {
+            Subject = user.Id,
+            AuthorizationId = await authorizations.GetIdAsync(authorization, cancellationToken),
+            Status = OpenIddictConstants.Statuses.Valid,
+            Type = OpenIddictConstants.TokenTypeIdentifiers.RefreshToken
+        }, cancellationToken);
+
+        // Act: рабочий сервис выполняет все изменения в одной транзакции.
+        Assert.True(await scope.ServiceProvider.GetRequiredService<ExternalAccounts>().Unlink(user, "Google", cancellationToken));
+
+        // Assert: новый DbContext читает сохранённые статусы, минуя tracking и кэш managers.
+        await using var verification = new AuthDbContext(new DbContextOptionsBuilder<AuthDbContext>()
+            .UseNpgsql(fixture.ConnectionString)
+            .UseOpenIddict()
+            .Options);
+        Assert.Equal("Apple", (await verification.UserLogins.SingleAsync(cancellationToken)).LoginProvider);
+        Assert.NotEqual(originalStamp, (await verification.Users.SingleAsync(cancellationToken)).SecurityStamp);
+        Assert.Equal(OpenIddictConstants.Statuses.Revoked,
+            (await verification.Set<OpenIddictEntityFrameworkCoreAuthorization>().SingleAsync(cancellationToken)).Status);
+        Assert.Equal(OpenIddictConstants.Statuses.Revoked,
+            (await verification.Set<OpenIddictEntityFrameworkCoreToken>().SingleAsync(cancellationToken)).Status);
+    }
+
     /// <summary>Раздельные базы применяют миграции без расхождений модели; гонка загрузок соблюдает квоту.</summary>
     [Fact]
     public async Task RealMigrationsAndConcurrentQuotaRemainConsistentAsync()

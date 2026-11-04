@@ -128,9 +128,11 @@ public partial class Program
         });
         app.UseStaticFiles();
         app.UseRouting();
+        // OpenIddict может завершить запрос внутри authentication middleware.
+        // IP-лимит должен применяться до разбора OAuth и проверки токенов.
+        app.UseRateLimiter();
         app.UseAuthentication();
         app.UseAuthorization();
-        app.UseRateLimiter();
         app.MapControllers();
         app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
         if (app.Environment.IsDevelopment()) app.MapOpenApi();
