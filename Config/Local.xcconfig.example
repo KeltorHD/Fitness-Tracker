@@ -6,3 +6,4 @@ FITNESS_TRACKER_BUNDLE_ID = com.yourcompany.fitnesstracker
 // $() preserves the second slash: // alone starts an xcconfig comment.
 // FITNESS_TRACKER_AUTH_URL = https:/$()/auth.example.com/
 // FITNESS_TRACKER_BACKEND_URL = https:/$()/api.example.com/
+// FITNESS_TRACKER_AUTH_DOMAIN = auth.example.com
