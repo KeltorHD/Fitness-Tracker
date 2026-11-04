@@ -2,3 +2,7 @@
 DEVELOPMENT_TEAM = YOURTEAMID
 FITNESS_TRACKER_BUNDLE_ID = com.yourcompany.fitnesstracker
 // Register the derived App Group and CloudKit container in the Developer portal.
+// Optional self-hosted account/backups; leave empty to keep local-only operation.
+// $() preserves the second slash: // alone starts an xcconfig comment.
+// FITNESS_TRACKER_AUTH_URL = https:/$()/auth.example.com/
+// FITNESS_TRACKER_BACKEND_URL = https:/$()/api.example.com/

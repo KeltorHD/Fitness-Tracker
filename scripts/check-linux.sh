@@ -37,7 +37,10 @@ bin_path="$("$swift_bin" build "${flags[@]}" --show-bin-path)"
   Apple/Services/HeartRateBluetooth.swift Apple/Services/LiveHeartRate.swift Apple/Services/ServiceError.swift \
   Apple/Features/TrackerViewModel.swift Apple/Features/WorkoutHeartRateViewModel.swift \
   Apple/Features/HealthChartsViewModel.swift \
-  Apple/Features/TrackerDeviceProfile.swift Apple/Shared/AppCompatibility.swift
+  Apple/Features/TrackerDeviceProfile.swift Apple/Shared/AppCompatibility.swift \
+  Apple/Services/ServerContracts.swift Apple/Services/ServerHTTPClient.swift \
+  Apple/Services/AccountSession.swift Apple/Services/RemoteBackupClient.swift \
+  Apple/Features/AccountBackupViewModel.swift
 echo 'Portable presentation/data subset: Swift 6 type check passed (no Apple SDK).'
 # Exercise chart presentation with real Core data, without SwiftUI/Charts SDK stand-ins.
 "$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \

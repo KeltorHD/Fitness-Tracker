@@ -1055,6 +1055,74 @@
         }
       }
     },
+    "Аккаунт": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Аккаунт"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Account"
+          }
+        }
+      }
+    },
+    "Аккаунт и копии": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Аккаунт и копии"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Account and backups"
+          }
+        }
+      }
+    },
+    "Аккаунт и серверные копии удалены. История на устройстве сохранена.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Аккаунт и серверные копии удалены. История на устройстве сохранена."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your account and server backups have been deleted. The history on this device has been kept."
+          }
+        }
+      }
+    },
+    "Аккаунт, привязанные способы входа и все серверные копии будут удалены. История на устройстве сохранится.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Аккаунт, привязанные способы входа и все серверные копии будут удалены. История на устройстве сохранится."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your account, linked sign-in methods and all server backups will be deleted. The history on this device will be kept."
+          }
+        }
+      }
+    },
     "Активная энергия, ккал": {
       "extractionState": "manual",
       "localizations": {
@@ -2177,6 +2245,57 @@
         }
       }
     },
+    "Войдите в аккаунт, чтобы открыть резервные копии.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Войдите в аккаунт, чтобы открыть резервные копии."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in to access your backups."
+          }
+        }
+      }
+    },
+    "Войдите, чтобы сохранять резервные копии тренировок.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Войдите, чтобы сохранять резервные копии тренировок."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in to back up your workouts."
+          }
+        }
+      }
+    },
+    "Войти в аккаунт": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Войти в аккаунт"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in"
+          }
+        }
+      }
+    },
     "Воскресенье": {
       "extractionState": "manual",
       "localizations": {
@@ -2207,6 +2326,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Play animation"
+          }
+        }
+      }
+    },
+    "Восстановить…": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Восстановить…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restore…"
           }
         }
       }
@@ -2738,6 +2874,23 @@
         }
       }
     },
+    "Выйти из аккаунта": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выйти из аккаунта"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign out"
+          }
+        }
+      }
+    },
     "Выполнено %@ из %@ подходов": {
       "extractionState": "manual",
       "localizations": {
@@ -2819,6 +2972,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Complete drop-set stage"
+          }
+        }
+      }
+    },
+    "Выход и удаление аккаунта сохраняют историю на этом устройстве.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выход и удаление аккаунта сохраняют историю на этом устройстве."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Signing out or deleting your account keeps the history on this device."
           }
         }
       }
@@ -3537,6 +3707,23 @@
         }
       }
     },
+    "Для переноса истории используйте импорт и экспорт файлов.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Для переноса истории используйте импорт и экспорт файлов."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use file import and export to transfer your history."
+          }
+        }
+      }
+    },
     "Для поиска нужен интернет. Недавние продукты и ручной ввод доступны без сети.": {
       "extractionState": "manual",
       "localizations": {
@@ -3703,6 +3890,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Training days"
+          }
+        }
+      }
+    },
+    "До 10 копий по 20 МБ. В копию входят тренировки, планы и записи веса. Питание, фотографии и пульс не передаются. Восстановление добавляет новые записи после проверки.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "До 10 копий по 20 МБ. В копию входят тренировки, планы и записи веса. Питание, фотографии и пульс не передаются. Восстановление добавляет новые записи после проверки."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Up to 10 backups, 20 MB each. Backups include workouts, plans and weight entries. Nutrition, photos and heart rate are not uploaded. Restoring adds new records after validation."
           }
         }
       }
@@ -4587,6 +4791,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Loading photo"
+          }
+        }
+      }
+    },
+    "Загрузка…": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Загрузка…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading…"
           }
         }
       }
@@ -5747,6 +5968,23 @@
         }
       }
     },
+    "Копия с этим идентификатором уже существует. Создайте новую копию.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Копия с этим идентификатором уже существует. Создайте новую копию."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A backup with this identifier already exists. Create a new backup."
+          }
+        }
+      }
+    },
     "Лес": {
       "extractionState": "manual",
       "localizations": {
@@ -6733,6 +6971,23 @@
         }
       }
     },
+    "Не удалось выполнить действие. Повторите попытку.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось выполнить действие. Повторите попытку."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The action could not be completed. Try again."
+          }
+        }
+      }
+    },
     "Не удалось загрузить демо-данные. Ваши тренировки сохранены; попробуйте ещё раз.": {
       "extractionState": "manual",
       "localizations": {
@@ -6971,6 +7226,23 @@
         }
       }
     },
+    "Не удалось открыть защищённую сессию. Разблокируйте устройство и повторите попытку.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось открыть защищённую сессию. Разблокируйте устройство и повторите попытку."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not access your secure session. Unlock the device and try again."
+          }
+        }
+      }
+    },
     "Не удалось открыть историю тренировок.": {
       "extractionState": "manual",
       "localizations": {
@@ -7090,6 +7362,23 @@
         }
       }
     },
+    "Не удалось подтвердить вход. Попробуйте войти ещё раз.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось подтвердить вход. Попробуйте войти ещё раз."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not verify sign-in. Try signing in again."
+          }
+        }
+      }
+    },
     "Не удалось показать тренировку на экране блокировки. Тренировка сохранена в приложении.": {
       "extractionState": "manual",
       "localizations": {
@@ -7137,6 +7426,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Couldn’t check iCloud. Check your connection and try again."
+          }
+        }
+      }
+    },
+    "Не удалось проверить ответ сервера. Повторите попытку.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось проверить ответ сервера. Повторите попытку."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not verify the server response. Try again."
           }
         }
       }
@@ -8042,6 +8348,23 @@
         }
       }
     },
+    "Обновить список": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Обновить список"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Refresh list"
+          }
+        }
+      }
+    },
     "Обновлено строк: %@": {
       "extractionState": "manual",
       "localizations": {
@@ -8701,6 +9024,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Select a whole group or expand it to choose individual muscles."
+          }
+        }
+      }
+    },
+    "Отправить копию на сервер": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Отправить копию на сервер"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Upload backup"
           }
         }
       }
@@ -9415,6 +9755,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pair WATCH GT 6 Pro with HUAWEI Health on your iPhone and enable available data sharing with Apple Health. In Health, open your profile → Apps and Services → HUAWEI Health and allow writing the measurements you want to share."
+          }
+        }
+      }
+    },
+    "Подтвердите действие": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Подтвердите действие"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confirm action"
           }
         }
       }
@@ -10932,6 +11289,91 @@
         }
       }
     },
+    "Резервная копия сохранена.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Резервная копия сохранена."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Backup saved."
+          }
+        }
+      }
+    },
+    "Резервная копия удалена.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Резервная копия удалена."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Backup deleted."
+          }
+        }
+      }
+    },
+    "Резервное копирование на сервер пока недоступно.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Резервное копирование на сервер пока недоступно."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Server backups are currently unavailable."
+          }
+        }
+      }
+    },
+    "Резервные копии": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Резервные копии"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Backups"
+          }
+        }
+      }
+    },
+    "Резервные копии пока недоступны": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Резервные копии пока недоступны"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Backups are currently unavailable"
+          }
+        }
+      }
+    },
     "Результаты": {
       "extractionState": "manual",
       "localizations": {
@@ -11357,6 +11799,57 @@
         }
       }
     },
+    "Сервер не смог выполнить запрос. Повторите попытку.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сервер не смог выполнить запрос. Повторите попытку."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The server could not complete the request. Try again."
+          }
+        }
+      }
+    },
+    "Сервер недоступен. Проверьте подключение и повторите попытку.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сервер недоступен. Проверьте подключение и повторите попытку."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The server is unavailable. Check your connection and try again."
+          }
+        }
+      }
+    },
+    "Серверных копий пока нет.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Серверных копий пока нет."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No server backups yet."
+          }
+        }
+      }
+    },
     "Сзади": {
       "extractionState": "manual",
       "localizations": {
@@ -11612,6 +12105,23 @@
         }
       }
     },
+    "Слишком много запросов. Подождите минуту и повторите попытку.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Слишком много запросов. Подождите минуту и повторите попытку."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Too many requests. Wait a minute and try again."
+          }
+        }
+      }
+    },
     "Сначала выполните предыдущий этап дропсета.": {
       "extractionState": "manual",
       "localizations": {
@@ -11765,6 +12275,23 @@
         }
       }
     },
+    "Создать резервную копию": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Создать резервную копию"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create backup"
+          }
+        }
+      }
+    },
     "Создать тренировку": {
       "extractionState": "manual",
       "localizations": {
@@ -11846,6 +12373,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Saving…"
+          }
+        }
+      }
+    },
+    "Сохранено 10 копий. Удалите ненужную копию и повторите попытку.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сохранено 10 копий. Удалите ненужную копию и повторите попытку."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You have 10 backups. Delete an unneeded backup and try again."
           }
         }
       }
@@ -11982,6 +12526,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Back"
+          }
+        }
+      }
+    },
+    "Способы входа": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Способы входа"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign-in methods"
           }
         }
       }
@@ -12513,6 +13074,23 @@
         }
       }
     },
+    "Тренировки, планы и записи веса будут сохранены в вашем аккаунте на сервере.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Тренировки, планы и записи веса будут сохранены в вашем аккаунте на сервере."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your workouts, plans and weight entries will be saved to your account on the server."
+          }
+        }
+      }
+    },
     "Трицепс": {
       "extractionState": "manual",
       "localizations": {
@@ -12802,6 +13380,23 @@
         }
       }
     },
+    "Удалить аккаунт": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Удалить аккаунт"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete account"
+          }
+        }
+      }
+    },
     "Удалить группу дропсета": {
       "extractionState": "manual",
       "localizations": {
@@ -12866,6 +13461,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Delete this food entry?"
+          }
+        }
+      }
+    },
+    "Удалить копию": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Удалить копию"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete backup"
           }
         }
       }
@@ -13920,6 +14532,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Resistance band"
+          }
+        }
+      }
+    },
+    "Эта серверная копия будет удалена.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Эта серверная копия будет удалена."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This server backup will be deleted."
           }
         }
       }

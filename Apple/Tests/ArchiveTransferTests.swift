@@ -94,6 +94,31 @@ private struct ArchiveFileStub: ArchiveFileHandling {
     XCTAssertEqual(try repository.workouts().count, 1)
   }
 
+  func testServerBackupOpensPreviewWithoutSavingUntilExplicitConfirmation() async throws {
+    let repository = MemoryWorkoutRepository()
+    let archive = makeArchive()
+    let model = ArchiveTransferViewModel(
+      files: ArchiveFileStub(result: .success(archive)), snapshot: { archive },
+      plan: {
+        try ArchiveImportPlan(
+          archive: $0, existingWorkouts: repository.workouts(),
+          existingTemplates: repository.templates()
+        ).summary
+      },
+      commit: { try repository.importArchive($0) })
+    try model.presentBackup(archive)
+    XCTAssertTrue(model.isPresented)
+    XCTAssertNil(model.request)
+    XCTAssertEqual(model.preview?.summary.addedWorkouts, 1)
+    await model.confirmImport()
+    XCTAssertTrue(try repository.workouts().isEmpty)
+    model.requestImport()
+    await model.confirmImport()
+    XCTAssertEqual(try repository.workouts(), archive.workouts)
+    try model.presentBackup(archive)
+    XCTAssertFalse(try XCTUnwrap(model.preview).summary.hasChanges)
+  }
+
   func testImportRechecksRepositoryChangesAfterPreview() async throws {
     let repository = MemoryWorkoutRepository()
     let archive = makeArchive()

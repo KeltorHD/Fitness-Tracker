@@ -1,5 +1,7 @@
 # FitnessTracker: первая сборка на macOS
 
+Для проверки новой аутентификации и копий выполните `xcodegen generate`, добавьте HTTPS-адреса серверов в существующий `Config/Local.xcconfig` по [SERVER.md](docs/SERVER.md) и запустите `AccountBackupTests`. Реальные provider flows требуют настройки Auth Server и кабинетов Google/Apple/Яндекс; наличие исходников не означает проверки входа на устройстве. Без серверных адресов приложение продолжает работать локально.
+
 После переименования закройте прежний проект, выполните `git pull --ff-only` и `xcodegen generate`, затем откройте **FitnessTracker.xcodeproj**. Выберите **FitnessTracker Personal**. Сохраняйте значения Team, Bundle ID, App Group и CloudKit из существующего `Config/Local.xcconfig`: прежние переменные поддержаны aliases. Не удаляйте приложение/store. [Правила обновления](docs/RENAME.md).
 
 После добавления питания повторите `xcodegen generate`: новые файлы входят только в основной iOS target. Запустите `NutritionTests` и `testDiaryCanLogManualFoodWithoutNetwork`, затем проверьте PhotosPicker и запись с фото в SwiftData/CloudKit по [чек-листу](docs/XCODE_VALIDATION.md). На Linux эти Apple-сценарии не выполнялись. Дополнительные ключи API и разрешения медиатеки для системного выбора фото не требуются.

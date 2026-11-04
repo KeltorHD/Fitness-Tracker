@@ -28,9 +28,24 @@ import Foundation
     }
     if testing { defaults.removePersistentDomain(forName: "FitnessTracker.UITests") }
     defaults.register(defaults: ["weeklyGoal": 3, "liveActivities": !testing])
+    let accountSession: AccountSession?
+    do {
+      if !testing, let configuration = try ServerConfiguration.configured() {
+        accountSession = AccountSession(
+          configuration: configuration, http: ServerHTTPClient(),
+          credentials: KeychainAccountTokenStore(
+            service: (Bundle.main.bundleIdentifier ?? "FitnessTracker") + ".authentication",
+            account: configuration.authenticationURL.absoluteString + ServerConfiguration.clientID))
+      } else {
+        accountSession = nil
+      }
+    } catch {
+      AppErrorReporter.record(error, operation: "configureAccountServer")
+      accountSession = nil
+    }
     let store = AppStore(
       repository: repository, health: HealthKitService(), defaults: defaults,
-      platformServicesEnabled: !testing)
+      platformServicesEnabled: !testing, accountSession: accountSession)
     cachedStore = store
     return store
   }
