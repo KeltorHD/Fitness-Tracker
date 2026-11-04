@@ -18,7 +18,7 @@ services:
       Auth__AppleAppIdentifier: ${IOS_APP_IDENTIFIER:-}
       Auth__IntrospectionClientSecret: ${BACKEND_INTROSPECTION_SECRET:?Set BACKEND_INTROSPECTION_SECRET in .env}
       ConnectionStrings__Database: Host=auth-db;Database=fitnesstracker_auth;Username=fitnesstracker_auth;Password=${AUTH_DB_PASSWORD:?Run scripts/setup-server.sh}
-      ReverseProxy__Address: ${SERVER_NETWORK_GATEWAY:-172.30.0.1}
+      ReverseProxy__Address: ${SERVER_NETWORK_GATEWAY:?Run python3 scripts/setup-server-network.py}
       DataProtection__Path: /app/keys
       Certificates__Signing__Path: /run/certificates/signing.pfx
       Certificates__Signing__Password: ${CERTIFICATE_PASSWORD:?Run scripts/setup-server.sh}
@@ -56,14 +56,14 @@ services:
     ports:
       - "127.0.0.1:${API_HTTP_PORT:-5081}:8080"
     extra_hosts:
-      - "${AUTH_DOMAIN}:${SERVER_NETWORK_GATEWAY:-172.30.0.1}"
+      - "${AUTH_DOMAIN}:${SERVER_NETWORK_GATEWAY:?Run python3 scripts/setup-server-network.py}"
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       AllowedHosts: ${API_DOMAIN:?Set API_DOMAIN in .env};backend
       Auth__Issuer: https://${AUTH_DOMAIN}/
       Auth__IntrospectionClientSecret: ${BACKEND_INTROSPECTION_SECRET:?Set BACKEND_INTROSPECTION_SECRET in .env}
       ConnectionStrings__Database: Host=backup-db;Database=fitnesstracker_backups;Username=fitnesstracker_backups;Password=${BACKUP_DB_PASSWORD:?Run scripts/setup-server.sh}
-      ReverseProxy__Address: ${SERVER_NETWORK_GATEWAY:-172.30.0.1}
+      ReverseProxy__Address: ${SERVER_NETWORK_GATEWAY:?Run python3 scripts/setup-server-network.py}
       Backend__ServiceKey: ${BACKEND_SERVICE_KEY}
     depends_on:
       backup-db:
@@ -99,10 +99,8 @@ services:
 
 networks:
   default:
-    ipam:
-      config:
-        - subnet: ${SERVER_NETWORK_SUBNET:-172.30.0.0/24}
-          gateway: ${SERVER_NETWORK_GATEWAY:-172.30.0.1}
+    external: true
+    name: ${SERVER_NETWORK_NAME:-fitness-tracker-server}
 
 volumes:
   auth-db:

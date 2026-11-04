@@ -33,4 +33,4 @@ for purpose in signing encryption; do
   chmod 444 ".local/certificates/$purpose.pfx"
 done
 unset FITNESS_TRACKER_CERTIFICATE_PASSWORD certificate_password
-echo 'Token keys and configuration generated. Set .env and configure host Nginx with your TLS certificates; follow docs/SERVER.md.'
+echo 'Token keys generated. Edit .env, run python3 scripts/setup-server-network.py, then configure host Nginx with your TLS certificates; follow docs/SERVER.md.'
