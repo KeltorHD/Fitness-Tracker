@@ -1,7 +1,9 @@
 namespace FitnessTracker.Authentication;
 
+/// <summary>Удаляет серверные копии через внутренний HTTP-контракт до удаления Identity-профиля.</summary>
 public sealed class BackupCleanup(HttpClient client, IConfiguration config)
 {
+    /// <summary>Передаёт отмену и завершает операцию успешно только после успешного ответа Backend.</summary>
     public async Task Delete(string userId, CancellationToken cancellationToken)
     {
         var address = config["Backend:InternalUrl"] ?? throw new InvalidOperationException("Backend URL is required.");

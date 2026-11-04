@@ -1,22 +1,25 @@
 using System.Data;
 using System.Security.Cryptography;
-using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 
 namespace FitnessTracker.Backend;
 
+/// <summary>Описывает копию без передачи её содержимого в списке метаданных.</summary>
 public sealed record BackupInfo(Guid Id, DateTimeOffset CreatedAt, int ArchiveVersion, int Size, string Sha256);
 
+/// <summary>Атомарно сохраняет неизменяемые архивы, квоту и запрет загрузок удалённого аккаунта.</summary>
 public sealed class BackupStorage(BackupDbContext database, TimeProvider clock)
 {
+    /// <summary>Максимальный размер архива в байтах, согласованный со Swift Core.</summary>
     public const int MaximumBytes = 20 * 1024 * 1024;
+    /// <summary>Максимальное количество одновременно сохранённых копий одного пользователя.</summary>
     public const int MaximumCopies = 10;
 
+    /// <summary>Создаёт копию или подтверждает повтор того же UUID и байтов без изменения времени создания.</summary>
     public async Task<(BackupInfo Info, bool Created)> Put(string owner, Guid id, byte[] payload,
         CancellationToken cancellationToken)
     {
-        if (payload.Length == 0 || payload.Length > MaximumBytes) throw new BackupException(413, "invalid_size");
-        var version = ValidateEnvelope(payload);
+        var version = BackupArchiveValidator.Validate(payload);
         var hash = Convert.ToHexStringLower(SHA256.HashData(payload));
         await using var transaction = await database.Database.BeginTransactionAsync(
             database.Database.IsNpgsql() ? IsolationLevel.ReadCommitted : IsolationLevel.Serializable, cancellationToken);
@@ -48,6 +51,7 @@ public sealed class BackupStorage(BackupDbContext database, TimeProvider clock)
         return (Info(backup), true);
     }
 
+    /// <summary>Удаляет копии и запрещает новые загрузки в одной транзакции с per-user блокировкой.</summary>
     public async Task DeleteAccount(string owner, CancellationToken cancellationToken)
     {
         await using var transaction = await database.Database.BeginTransactionAsync(
@@ -60,6 +64,7 @@ public sealed class BackupStorage(BackupDbContext database, TimeProvider clock)
         await transaction.CommitAsync(cancellationToken);
     }
 
+    /// <summary>Сериализует изменения квоты и удаления одного владельца в PostgreSQL.</summary>
     private async Task LockOwner(string owner, CancellationToken cancellationToken)
     {
         if (database.Database.IsNpgsql())
@@ -67,35 +72,17 @@ public sealed class BackupStorage(BackupDbContext database, TimeProvider clock)
                 $"SELECT pg_advisory_xact_lock(hashtextextended({owner}, 0))", cancellationToken);
     }
 
+    /// <summary>Преобразует запись в безопасный HTTP DTO метаданных.</summary>
     public static BackupInfo Info(BackupRecord value) =>
         new(value.Id, DateTimeOffset.FromUnixTimeMilliseconds(value.CreatedAtMilliseconds), value.ArchiveVersion, value.Size, value.Sha256);
 
-    private static int ValidateEnvelope(byte[] payload)
-    {
-        try
-        {
-            using var document = JsonDocument.Parse(payload, new JsonDocumentOptions { MaxDepth = 64 });
-            var root = document.RootElement;
-            if (root.ValueKind != JsonValueKind.Object || !root.TryGetProperty("format", out var format) ||
-                format.ValueKind != JsonValueKind.String || format.GetString() is not
-                    ("com.fitnesstracker.archive" or "com.fitsession.archive") ||
-                !root.TryGetProperty("version", out var version) || version.ValueKind != JsonValueKind.Number || !version.TryGetInt32(out var number) ||
-                number is < 1 or > 4 || !root.TryGetProperty("exportedAt", out var date) ||
-                date.ValueKind != JsonValueKind.Number || !date.TryGetDouble(out var timestamp) || !double.IsFinite(timestamp) ||
-                !Array(root, "workouts", 10000) || !Array(root, "templates", 1000) ||
-                (number >= 2 && !Array(root, "bodyWeights", 10000)))
-                throw new BackupException(400, "invalid_archive");
-            return number;
-        }
-        catch (JsonException) { throw new BackupException(400, "invalid_archive"); }
-    }
-
-    private static bool Array(JsonElement root, string name, int limit) =>
-        root.TryGetProperty(name, out var array) && array.ValueKind == JsonValueKind.Array && array.GetArrayLength() <= limit;
 }
 
+/// <summary>Возвращает устойчивый HTTP status/code без содержимого архива и внутренних деталей.</summary>
 public sealed class BackupException(int status, string code) : Exception(code)
 {
+    /// <summary>HTTP-статус отказа в операции.</summary>
     public int Status { get; } = status;
+    /// <summary>Машинный код ошибки, используемый клиентом.</summary>
     public string Code { get; } = code;
 }
