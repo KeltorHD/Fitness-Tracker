@@ -1,6 +1,6 @@
 # Аутентификация и серверные резервные копии
 
-Основа — [согласованная переписка](https://chatgpt.com/share/6aea2280-e498-83eb-be07-a822dfac1c8d): два самостоятельных .NET-приложения, ASP.NET Core Identity + OpenIddict, Google/Apple/Яндекс, PostgreSQL, Docker Compose и Authorization Code + PKCE. Email-вход остаётся следующим этапом: Identity уже поддерживает пароли, но публичных email register/login/reset endpoints пока нет.
+Основа — [согласованная переписка](https://chatgpt.com/share/6aea2280-e498-83eb-be07-a822dfac1c8d): два самостоятельных .NET-приложения, ASP.NET Core Identity + OpenIddict, Google/Apple/Яндекс, PostgreSQL, Docker Compose и Authorization Code + PKCE. Добавлены регистрация/вход по email и паролю без подтверждения почты и passkey как альтернатива паролю; восстановление по почте пока не реализовано.
 
 ## Проекты
 
@@ -26,7 +26,9 @@ flowchart LR
 
 ## Вход и сессии
 
-Приложение открывает системную `WebAuthenticationSession` из AuthenticationServices. Auth Server показывает русскую страницу выбора доступных провайдеров. OpenIddict Client выполняет и проверяет внешние OAuth/OIDC-потоки, state, nonce и ответ провайдера. Для каждого провайдера используется отдельный callback. Приложение получает одноразовый код на `fitnesstracker://oauth/callback`, проверяет точный URL и state, обменивает код с PKCE S256; client secret в iOS отсутствует. Схема callback уже зарегистрирована приложением. При необходимости можно согласованно перейти на HTTPS callback и Associated Domains; готового AASA для неизвестного домена здесь нет.
+Приложение открывает системную `WebAuthenticationSession` из AuthenticationServices. Auth Server предлагает email/пароль, passkey и настроенные Google/Apple/Яндекс. OpenIddict проверяет внешние OAuth/OIDC-потоки, state, nonce и ответ провайдера. Приложение получает код на `https://auth.example.com/ios/oauth/callback`, проверяет точные HTTPS origin/path, state, issuer и отсутствие повторяющихся параметров, обменивает код с PKCE S256. Client secret в iOS отсутствует. Старые URL schemes сохранены для совместимости, но для OAuth больше не принимаются.
+
+HTTPS callback использует `.https(host:path:)` и `webcredentials` Associated Domains. Это требует настоящих App ID Prefix и Bundle ID, соответствующей capability/provisioning и файла AASA. Они пока не заданы: код подготовлен, работоспособность возврата на iPhone ещё не подтверждена. [API Apple](https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession/callback/https(host:path:)).
 
 iOS использует OAuth access/refresh tokens; профиль получает из защищённого `/v1/account`. ID token не используется как источник identity. Access token действует 10 минут, refresh — до 30 дней с ротацией. Повтор использованного refresh token отвергается и отзывает authorization family; окно повторного использования равно нулю. Параллельные iOS-запросы используют одну операцию обновления; новые токены сначала сохраняются в Keychain. При `invalid_grant` требуется новый вход. Потеря ответа token endpoint может потребовать повторного входа — автоматического повторного обмена использованного refresh нет.
 
@@ -34,7 +36,7 @@ Keychain item изолирован по bundle ID и issuer, не синхрон
 
 Выход через прежний `/connect/revoke` отзывает текущую authorization family и все её access/refresh tokens в одной транзакции. Другой вход того же пользователя продолжает работать. Backend проверяет актуальный статус на каждом защищённом запросе: после успешного отзыва следующий запрос со старым JWT получает 401 без ожидания `exp`. Уже выполняющийся запрос автоматически не отменяется. Заблокированный Identity-пользователь не может получить новый authorization code, обменять ранее выданный код, обновить сессию или выполнить новый браузерный вход/привязку. Для удаления аккаунта сохраняется дополнительная блокировка UUID на стороне Backend.
 
-Аккаунты идентифицируются по паре provider/subject, а не email. Совпадение email не объединяет пользователей. Привязка выполняется на защищённой веб-странице из «Способы входа», с новым provider flow и проверкой текущего пользователя. Нельзя отвязать последний способ входа. Успешная отвязка в одной транзакции меняет SecurityStamp и отзывает все прежние OAuth authorizations/tokens, включая refresh и ещё не обменянные коды. Приложения на всех устройствах потребуют нового входа; текущая веб-сессия обновляется. Cookie — Secure/HttpOnly; изменяющие веб-формы защищены antiforgery. Email используется только как атрибут внешнего профиля и не считается подтверждённым для будущего password-входа.
+Внешние аккаунты идентифицируются по паре provider/subject, локальные — по нормализованному email. Совпадение email не объединяет пользователей. Привязка выполняется на защищённой веб-странице из «Способы входа», с новым provider flow и проверкой текущего пользователя. Нельзя отвязать последний способ входа. Успешная отвязка в одной транзакции меняет SecurityStamp и отзывает все прежние OAuth authorizations/tokens, включая refresh и ещё не обменянные коды. Приложения на всех устройствах потребуют нового входа; текущая веб-сессия обновляется. Cookie — Secure/HttpOnly; изменяющие веб-формы защищены antiforgery. Email внешнего профиля остаётся неподтверждённым атрибутом и не даёт входа в локальный аккаунт с тем же адресом.
 
 Версия SecurityStamp берётся из проверенной cookie и сохраняется только в защищённых code/refresh payloads. Token endpoint сверяет её с текущим пользователем. Это закрывает гонку, когда запрос проверил старую cookie до отвязки, а authorization создал после массового отзыва. Версия не публикуется в access/ID JWT. После обновления реализации старые code/refresh без этой версии отклоняются с `invalid_grant`; пользователю понадобится новый вход. Изменения схемы БД нет.
 
@@ -57,6 +59,12 @@ Keychain item изолирован по bundle ID и issuer, не синхрон
 | Auth POST | `/connect/introspect` | RFC 7662, только confidential Backend client; внешний доступ закрыт Nginx |
 | Auth GET | `/login` | Выбор включённых провайдеров |
 | Auth POST | `/login/{provider}` | Начало внешнего входа / явной привязки; antiforgery |
+| Auth GET/POST | `/register` | Регистрация email/пароль без подтверждения почты |
+| Auth POST | `/login/password` | Парольный вход с lockout и antiforgery |
+| Auth POST | `/passkeys/register/options`, `/passkeys/register` | Создание аккаунта без пароля |
+| Auth POST | `/passkeys/login/options`, `/passkeys/login` | Вход по discoverable passkey |
+| Auth POST | `/account/passkeys/options`, `/account/passkeys`, `/account/passkeys/remove` | Добавление/удаление своих passkey |
+| Auth GET | `/.well-known/apple-app-site-association` | Webcredentials после настройки App ID |
 | Auth GET/POST | `/callback/login/{provider}` | Проверенный OpenIddict callback Google/Apple/Яндекс |
 | Auth GET | `/account` | Способы входа и возврат в iOS |
 | Auth POST | `/account/unlink/{provider}`, `/account/logout` | Веб-действия с antiforgery |
@@ -117,11 +125,11 @@ docker compose run --rm authentication --configure-clients
 docker compose up -d authentication backend
 ```
 
-`--configure-clients` создаёт/обновляет регистрации public iOS и confidential Backend client в существующих таблицах, не запускает миграции. Schema/model snapshots не менялись. Команду нужно выполнить также при смене service secret. После её успешного выполнения обновите оба сервиса с согласованным секретом. Пока регистрация отсутствует или секреты расходятся, Backend закрывает доступ с 503.
+`--configure-clients` создаёт/обновляет регистрации public iOS и confidential Backend client в существующих таблицах, не запускает миграции. Команда не изменяет EF model/snapshot. Для текущей версии перед обновлением также требуется включённая миграция AddPasskeys. Команду нужно выполнить также при смене service secret. После её успешного выполнения обновите оба сервиса с согласованным секретом. Пока регистрация отсутствует или секреты расходятся, Backend закрывает доступ с 503.
 
 ### Nginx на хосте
 
-Образец — [`Config/Server/nginx.conf.example`](../Config/Server/nginx.conf.example). Он включается внутри существующего `http` context, например через `/etc/nginx/conf.d/fitnesstracker.conf`. Замените `auth.example.com`/`api.example.com`, `ssl_certificate`/`ssl_certificate_key` на собственные значения. Если HTTP→HTTPS redirect уже настроен, объедините его с существующим server block. В образце используются обычные `listen 443 ssl`, поэтому он не требует новой директивы `http2`.
+Образец — [`Config/Server/nginx.conf.example`](../Config/Server/nginx.conf.example). Он включается внутри существующего `http` context, например через `/etc/nginx/conf.d/fitnesstracker.conf`. Домены уже выбраны: `auth.example.com` и `api.example.com`. Оба покрываются существующим сертификатом `*.example.com`; `auth.fitness.example.com` им не покрывается. В обоих virtual hosts укажите одинаковые реальные пути `ssl_certificate`/`ssl_certificate_key` к вашему текущему сертификату. Путь `/etc/nginx/ssl/example.com/` в образце условный. Сертификат не перевыпускается и не передаётся в Docker. Если HTTP→HTTPS redirect уже настроен, объедините его с существующим server block. В образце используются обычные `listen 443 ssl`, поэтому он не требует новой директивы `http2`.
 
 ```bash
 # Скопируйте и отредактируйте конфигурацию на своём сервере.
@@ -160,7 +168,7 @@ docker compose logs --tail=100 authentication backend
 
 ## Провайдеры
 
-Включайте провайдер только после заполнения его параметров. Отключённые провайдеры не отображаются; без настроенных провайдеров страница честно сообщает о недоступности входа.
+Включайте провайдер только после заполнения его параметров. Отключённые провайдеры не отображаются; без настроенных внешних провайдеров остаются email/пароль и passkey.
 
 | Провайдер | Настройки `.env` | Redirect в кабинете провайдера |
 | --- | --- | --- |
@@ -183,6 +191,28 @@ FITNESS_TRACKER_BACKEND_URL = https:/$()/api.example.com/
 
 Перед публикацией актуализируйте App Store privacy labels и политику конфиденциальности для добровольной передачи Fitness/Health и данных аккаунта; manifest отражает связанные данные без tracking по [категориям Apple](https://developer.apple.com/documentation/bundleresources/app-privacy-configuration/nsprivacycollecteddatatypes/nsprivacycollecteddatatype).
 
+## Email, пароль и passkey
+
+Регистрация `/register` создаёт локальный аккаунт с email и паролем от 12 до 128 символов (не менее четырёх разных символов), либо с email и passkey без пароля. Письма и коды не отправляются; `EmailConfirmed` остаётся `false`. Адрес служит логином, но владение им не проверяется. Восстановление доступа по неподтверждённой почте не реализовано. Локальный email нормализуется Identity и получает уникальный username; совпадение email с Google/Apple/Яндекс не объединяет аккаунты. Внешние способы добавляются явным действием из аккаунта.
+
+Пароли хеширует Identity V3 (PBKDF2-HMAC-SHA512, 210 000 итераций), пять неудачных попыток включают блокировку на 15 минут. Credential endpoints дополнительно ограничены 20 запросами в минуту на IP и защищены antiforgery. Ошибка входа не раскрывает наличие email. HTTPS cookies имеют HttpOnly, Secure и ограниченный срок; в HTML пароль не возвращается.
+
+Passkey использует встроенный WebAuthn в ASP.NET Core Identity 10: RP ID равен точному host `Auth:Issuer`, origin должен точно совпадать с HTTPS origin issuer; cross-origin iframe запрещён. User verification и discoverable credential обязательны. Проверку подписи, challenge, RP hash, user handle, UV и счётчика выполняет Identity. Сервер хранит публичный ключ, приватный ключ остаётся у аутентификатора. Attestation `none` подходит для потребительского входа и не подтверждает модель/производителя устройства. [Документация Microsoft](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/passkeys/?view=aspnetcore-10.0).
+
+В аккаунте можно добавить до 10 passkey с названием до 64 символов и удалить свои ключи; последний доступный способ входа удалить нельзя. Удаление ключа отзывает прежние OAuth-сессии и меняет SecurityStamp. Browser JS загружается с собственного origin без inline scripts, показывает ошибки/отмену и не передаёт пароль в passkey-запросах. Требуется браузер с WebAuthn JSON API; при отсутствии поддержки доступен пароль или внешний провайдер.
+
+Challenge живёт не более пяти минут и расходуется атомарно даже при синхронизируемом passkey с нулевым счётчиком. Ограниченный серверный cache содержит только временные challenges; перезапуск аннулирует незавершённые попытки. Текущая Compose-конфигурация запускает один Auth instance. Перед масштабированием понадобится общее атомарное хранилище challenges, а также общие Data Protection keys.
+
+**Миграция `AddPasskeys` включена в проект.** Она добавляет `AspNetUserPasskeys`: `CredentialId` (bytea, PK), `UserId` (FK с cascade), `Data` (jsonb) и индекс `UserId`; прежние таблицы и размеры колонок сохраняются. Агент ведёт миграции по [AGENTS.md](../AGENTS.md#ef-core-и-миграции). При обновлении примените включённые миграции контролируемым `--migrate`, как в инструкции выше, до запуска нового сервера на прежней БД. Обычный запуск схему не меняет. Рабочая БД в этой задаче не изменялась.
+
+## Привязка HTTPS callback к iOS
+
+В `.env` оставьте `IOS_APP_IDENTIFIER` пустым до регистрации приложения. После получения App ID укажите `AppIDPrefix.BundleID`, например формат `ABCDEFGHIJ.ru.yourcompany.fitnesstracker` (пример, не готовый идентификатор). Используйте именно App ID Prefix из Apple, который не всегда равен Team ID. Затем пересоздайте Auth container с новым env и проверьте `https://auth.example.com/.well-known/apple-app-site-association`: JSON `webcredentials.apps` должен содержать ваш настоящий App ID. До настройки endpoint отвечает 404, при неверном формате — 503; редиректа и публикации вымышленных ID нет.
+
+Главный target в полной схеме `FitnessTracker` содержит `webcredentials:auth.example.com`. В Apple Developer включите Associated Domains для App ID и обновите provisioning. Personal Team схема сохраняет прежние entitlements и предназначена для локального приложения; HTTPS-вход проверяйте в схеме с настроенной capability. Bundle ID совместимости не переименовывается автоматически. В `Config/Local.xcconfig` задайте выбранные HTTPS endpoints, как в примере выше. При смене домена согласованно измените entitlement, `Auth:Issuer`, redirect URI и серверные URL. Выполните `--configure-clients`, чтобы заменить прежний redirect URI в существующей Auth-БД; старые уже выданные коды могут потребовать нового входа.
+
+Файл AASA и DNS/TLS должны быть доступны публично для Apple. Запись DNS-01, используемая при выдаче сертификата, сама не создаёт A/AAAA-записи сервисов: направьте оба выбранных имени на сервер. Nginx использует текущий wildcard-сертификат. Возврат в приложение, browser passkey, отмена и повтор входа требуют отдельной проверки на настоящем iPhone после настройки Apple ID.
+
 ## Проверка безопасности 2026-11-04
 
 Проверены серверные исходники, OAuth/Identity и JWT middleware, границы доступа к копиям, транзакции удаления, Compose/Nginx и NuGet-зависимости. Результат аудита и последующей доработки отзыва:
@@ -203,12 +233,16 @@ Backend отклоняет JWT с неверными issuer/audience/type/scope/
 - Проверка отзыва делает защищённые операции зависимыми от доступности Auth. Ошибка даёт 503 с сохранением credentials; уже начатые до отзыва запросы автоматически не отменяются. Удаление аккаунта дополнительно блокирует новые PUT через tombstone.
 - Частота запросов и квота действуют на пользователя, но общего лимита одновременно обрабатываемых больших архивов нет. Перед открытием публичного сервера нужны лимиты соединений в хостовом Nginx и бюджеты памяти/диска под фактическую нагрузку; устойчивость к распределённому DoS не проверялась.
 - Копии доступны администратору БД; шифрование дисков и резервных копий PostgreSQL настраивается на сервере. Текущий Compose использует bootstrap role также для приложения, а `POSTGRES_USER` создаётся с superuser-правами по [контракту официального образа](https://hub.docker.com/_/postgres). Для production разделите роли миграций и обычного DML-доступа; права существующих рабочих БД в этой проверке не менялись.
-- `fitnesstracker://` не подтверждает принадлежность приложения: стороннее приложение может начать собственный PKCE flow с тем же client ID/URL scheme. Текущий `ConsentType=Implicit` допускает автоматическую выдачу кода при действующей cookie. [RFC 8252, §8.6](https://www.rfc-editor.org/rfc/rfc8252.html#section-8.6) рекомендует дополнительное взаимодействие с пользователем, если identity клиента не подтверждена. Для публикации нужен HTTPS callback с Associated Domains либо отдельное согласованное подтверждение входа; домен и Apple Developer configuration в этой задаче не задавались.
+- HTTPS callback реализован с Associated Domains; старый custom scheme отклоняется. До настройки настоящего Apple App ID и проверки provisioning/AASA на устройстве публикация iOS-входа не завершена.
 - Реальные DNS/TLS, вход Google/Apple/Яндекс, конфигурация вашего Nginx, ОС и содержимое production Docker images не проверялись.
 
 Порядок middleware учитывает [интеграцию OpenIddict через IAuthenticationRequestHandler](https://documentation.openiddict.com/integrations/aspnet-core) и [правила ASP.NET Core pipeline](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/middleware/?view=aspnetcore-10.0).
 
 ## Проверки
+
+После добавления email/passkey и HTTPS callback полный `check-server.sh` прошёл: locked restore, сборка .NET без warnings, 149 сценариев (67 unit, 76 HTTP/Identity/SQLite, 6 PostgreSQL 16.6), `dotnet format` и shell syntax. Новые проверки используют реальную WebAuthn ES256 подпись через штатный Identity; проверены неверные RP/origin/UV/подпись, CSRF, lockout, replay, добавление/удаление ключа, отзыв grant, last-credential guard и AASA. Отдельный model-diff тест подтверждает единственную новую таблицу/индекс без сужения прежних колонок. Миграция `AddPasskeys` и snapshot созданы штатным EF Core; повторная PostgreSQL-проверка подтвердила обновление прежней схемы с данными, сохранность password/login/длинных полей, JSONB round-trip/update/cascade, а также прежние migration/concurrency/rollback сценарии. Использовался одноразовый PostgreSQL 16.6 с отдельными случайными БД; рабочая база не менялась. После финального просмотра повторно прошли 13 целевых credential/schema тестов: password-попытки не блокируют passkey-only аккаунт, challenge одноразовый и при нулевом счётчике, пустой ID удаления даёт 400; snapshot согласован с миграцией.
+
+Compose проверен на выбранных доменах/HTTPS callback/пустом App ID и loopback ports. Nginx 1.24 повторно прошёл syntax/ACL/forwarded headers smoke с тестовым TLS, без изменения хостового Nginx или настоящих сертификатов. Swift-format strict lint, структура/plist, JS syntax и diff проверены. Полного Swift SDK нет; доступного места недостаточно для его установки. Новые Apple XCTest, Core build/tests, Apple SDK и устройство в этой сессии не запускались.
 
 Локально 2026-11-04 после внедрения introspection: полный `check-server.sh` прошёл — locked restore, сборка без warnings, 131 сценарий (66 unit, 60 HTTP/Identity/SQLite, 5 PostgreSQL 16.6) и `dotnet format`. Сквозные сценарии используют настоящие Auth/Backend, PKCE, discovery/JWKS и introspection: без кеша статуса, немедленный отказ после logout/unlink/delete/replay, изоляция другого входа, отказ Auth с кешем metadata и при холодном старте, восстановление с прежним JWT. Отдельно проверены ошибки HTTP/JSON/encoding, размер ответа, отмена, startup validation и rate limit до удалённой проверки. PostgreSQL проверяет commit/rollback logout с сохранением второй сессии. Тесты гонок используют сигналы, без фиксированных задержек. PostgreSQL запускался одноразовым контейнером с динамическим localhost-портом и отдельными временными БД. Схема и файлы миграций не менялись.
 
@@ -230,6 +264,9 @@ dotnet ef migrations has-pending-model-changes --project Backend
 | `Unit` | `Tests/Server/BackupArchiveValidatorTests.cs` | v1–v4 и legacy format, обязательные поля, неверные JSON-типы/UTF-8, точные границы байтов и количества записей, безопасные ошибки; без БД и HTTP |
 | `Unit` | `Tests/Server/BackupCleanupTests.cs` | DELETE/service key контракт, ошибки статуса и конфигурации, передача отмены в HTTP handler без сети |
 | `Unit` | `Tests/Server/TokenIntrospectionTests.cs` | RFC 7662 POST/body, active boolean, protocol/HTTP/transport errors, ограничение ответа, отмена, отсутствие утечек секретов |
+| `Unit` | `Tests/Server/PasskeySchemaTests.cs` | Согласованность snapshot и модели, AddPasskeys добавляет только таблицу/индекс, прежние колонки не сужаются |
+| `HTTP` | `Tests/Server/CredentialsTests.cs` | Email/password без подтверждения, нормализация/уникальность, CSRF, lockout, отсутствие email merge, реальные WebAuthn attestation/assertion, origin/RP/UV/signature/replay, управление ключами и отзыв |
+| `HTTP` | `Tests/Server/AppAssociationTests.cs` | AASA только с настроенным App ID, безопасный HTTPS fallback без отражения code/state |
 | `HTTP` | `Tests/Server/BackendTests.cs` | JWT/subject/scope и изоляция пользователей, MIME type, SHA-256/headers/фиксированное время, квота, идемпотентность, откат при отказе/отмене записи |
 | `HTTP` | `Tests/Server/AuthenticationTests.cs` | PKCE, code/refresh/revoke, блокировка аккаунта, scopes, prompt=none, antiforgery, внешние привязки, отзыв сессий/гонка отвязки и удаление данных |
 | `HTTP` | `Tests/Server/AuthenticationSecurityTests.cs` | IP-лимит OAuth errors/discovery применяется до обработки запросов OpenIddict |
@@ -237,7 +274,7 @@ dotnet ef migrations has-pending-model-changes --project Backend
 | `HTTP` | `Tests/Server/HostNginxForwardingTests.cs` | Исходный HTTPS за доверенным proxy, отказ поддельному `X-Forwarded-Proto` от чужого peer, IPv4 и IPv4-mapped IPv6 |
 | `HTTP` | `Tests/Server/BackendIntrospectionTests.cs` | Отсутствие positive cache, 401/503 и сохранность данных, recovery с прежним JWT, rate limit до обращения к Auth, startup validation |
 | `HTTP` | `Tests/Server/SessionRevocationTests.cs` | Настоящие два host, discovery/JWKS и introspection, logout одной сессии/ротации, unlink/delete/replay, revoked grant при valid token entry, Auth outage с кешем и без кеша metadata, server credentials/audience |
-| `PostgreSQL` | `Tests/Server/PostgresTests.cs` | Раздельные БД Auth/Backend, существующие миграции и model snapshots, конкурентная квота, гонка PUT/удаления и сохранность чужих данных, отзыв при отвязке и атомарный logout/rollback с сохранением другой сессии |
+| `PostgreSQL` | `Tests/Server/PostgresTests.cs` | Раздельные БД Auth/Backend, существующие миграции и model snapshots, конкурентная квота, гонка PUT/удаления и сохранность чужих данных, отзыв при отвязке и атомарный logout/rollback с сохранением другой сессии; AddPasskeys поверх прежних данных и JSONB round-trip/update/cascade |
 
 ```bash
 dotnet test FitnessTracker.Server.sln --no-build --no-restore -m:1 --filter 'Category=Unit'
@@ -246,7 +283,7 @@ dotnet test FitnessTracker.Server.sln --no-build --no-restore -m:1 --filter 'Cat
 
 Обычный прогон не вызывает внешних OAuth-провайдеров. HTTP fixtures используют настоящий in-memory host и собственную SQLite, очищают пользовательские configuration sources, явно отключают внешние providers и внедряют фиксированное время для метаданных. Отказ/отмена SaveChanges подменяются через EF interceptor, сохраняя настоящую транзакцию и проверки результата. Сценарии и вспомогательные классы имеют XML-описания на русском языке.
 
-Для PostgreSQL задайте `FITNESS_TRACKER_TEST_POSTGRES` connection string к **одноразовому тестовому экземпляру** и запустите `check-server.sh`; он включит все пять PostgreSQL-проверок. Только эту категорию запускают с `--filter 'Category=PostgreSQL'`. Без явной конфигурации прямой запуск категории завершается ошибкой, а не молчаливым пропуском. Fixture создаёт случайные отдельные базы с отключённым pooling и удаляет только их с отдельным cleanup deadline, включая сбой основного теста. Триггер отказа записи существует только в случайной тестовой БД сценария rollback. CI поднимает PostgreSQL 18; локально проверено на 16.6, на динамически выделенном localhost-порту. Файлы миграций для этих тестов не генерируются и не изменяются.
+Для PostgreSQL задайте `FITNESS_TRACKER_TEST_POSTGRES` connection string к **одноразовому тестовому экземпляру** и запустите `check-server.sh`; он включит все шесть PostgreSQL-проверок. Только эту категорию запускают с `--filter 'Category=PostgreSQL'`. Без явной конфигурации прямой запуск категории завершается ошибкой, а не молчаливым пропуском. Fixture создаёт случайные отдельные базы с отключённым pooling и удаляет только их с отдельным cleanup deadline, включая сбой основного теста. Триггер отказа записи существует только в случайной тестовой БД сценария rollback. CI поднимает PostgreSQL 18; локально проверено на 16.6, на динамически выделенном localhost-порту. Файлы миграций для этих тестов не генерируются и не изменяются.
 
 Apple XCTest `AccountBackupTests` проверяют callback validation, одну ротацию для параллельных запросов, ошибки сети/Keychain, истёкшую сессию и проверку целостности; `ArchiveTransferTests` проверяет подтверждение восстановления. Их запуск требует Xcode. Foundation-часть добавлена в Swift 6 type-check скрипта `check-linux.sh`; SwiftUI/Keychain/CryptoKit и реальный вход требуют Apple SDK/устройства. Чек-лист: [XCODE_VALIDATION.md](XCODE_VALIDATION.md).
 

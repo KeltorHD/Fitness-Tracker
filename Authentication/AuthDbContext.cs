@@ -17,5 +17,18 @@ public sealed class AuthDbContext(DbContextOptions<AuthDbContext> options)
     {
         base.OnModelCreating(builder);
         builder.Entity<ApplicationUser>().Property(user => user.DisplayName).HasMaxLength(200);
+        // Добавляем штатное хранилище passkey, сохраняя прежние размеры Identity-колонок.
+        builder.Entity<IdentityUserPasskey<string>>(passkey =>
+        {
+            passkey.ToTable("AspNetUserPasskeys");
+            passkey.HasKey(key => key.CredentialId);
+            passkey.Property(key => key.CredentialId).HasMaxLength(1024);
+            passkey.OwnsOne(key => key.Data).ToJson();
+        });
+        builder.Entity<ApplicationUser>()
+            .HasMany<IdentityUserPasskey<string>>()
+            .WithOne()
+            .HasForeignKey(key => key.UserId)
+            .IsRequired();
     }
 }

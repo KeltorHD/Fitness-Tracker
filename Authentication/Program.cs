@@ -32,7 +32,44 @@ public partial class Program
         {
             options.User.RequireUniqueEmail = false;
             options.Lockout.MaxFailedAccessAttempts = 5;
+            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+            options.SignIn.RequireConfirmedEmail = false;
+            options.SignIn.RequireConfirmedAccount = false;
+            options.Password.RequiredLength = 12;
+            options.Password.RequiredUniqueChars = 4;
+            options.Password.RequireDigit = false;
+            options.Password.RequireLowercase = false;
+            options.Password.RequireUppercase = false;
+            options.Password.RequireNonAlphanumeric = false;
         }).AddEntityFrameworkStores<AuthDbContext>().AddDefaultTokenProviders();
+        builder.Services.Configure<PasswordHasherOptions>(options => options.IterationCount = 210_000);
+        builder.Services.AddScoped<EmailAccounts>();
+        builder.Services.AddSingleton<UnknownPasswordCheck>();
+        builder.Services.AddSingleton<PasskeyChallenges>();
+        builder.Services.Configure<IdentityPasskeyOptions>(options =>
+        {
+            var issuer = new Uri(config["Auth:Issuer"] ?? "https://localhost:5001/");
+            if (issuer.Scheme != Uri.UriSchemeHttps)
+                throw new InvalidOperationException("Passkeys require an HTTPS issuer.");
+            options.ServerDomain = issuer.Host;
+            options.UserVerificationRequirement = "required";
+            options.ResidentKeyRequirement = "required";
+            options.AttestationConveyancePreference = "none";
+            options.AuthenticatorTimeout = TimeSpan.FromMinutes(3);
+            options.ValidateOrigin = context => ValueTask.FromResult(
+                !context.CrossOrigin && context.Origin == issuer.GetLeftPart(UriPartial.Authority));
+        });
+        builder.Services.Configure<Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationOptions>(
+            IdentityConstants.TwoFactorUserIdScheme, options =>
+            {
+                options.Cookie.Name = "__Host-FitnessTrackerPasskey";
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SameSite = SameSiteMode.Strict;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+                options.SlidingExpiration = false;
+            });
+        builder.Services.AddAntiforgery(options => options.Cookie.SecurePolicy = CookieSecurePolicy.Always);
         builder.Services.ConfigureApplicationCookie(options =>
         {
             options.Cookie.Name = "__Host-FitnessTrackerAuth";
@@ -116,6 +153,9 @@ public partial class Program
         builder.Services.AddRateLimiter(options =>
         {
             options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+            options.AddPolicy("credentials", context => RateLimitPartition.GetFixedWindowLimiter(
+                context.Connection.RemoteIpAddress?.ToString() ?? "unknown", _ =>
+                    new FixedWindowRateLimiterOptions { PermitLimit = 20, Window = TimeSpan.FromMinutes(1) }));
             options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
                 // Introspection закрыта Nginx для внешних клиентов и использует confidential client.
                 // Её отдельный общий бюджет не расходует IP-лимит обычных пользовательских входов.
@@ -134,7 +174,7 @@ public partial class Program
             context.Response.Headers.CacheControl = "no-store";
             context.Response.Headers["Referrer-Policy"] = "no-referrer";
             context.Response.Headers["X-Content-Type-Options"] = "nosniff";
-            context.Response.Headers.ContentSecurityPolicy = "default-src 'none'; style-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'";
+            context.Response.Headers.ContentSecurityPolicy = "default-src 'none'; style-src 'self'; script-src 'self'; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'";
             await next();
         });
         app.UseStaticFiles();

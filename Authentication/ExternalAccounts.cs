@@ -37,7 +37,8 @@ public sealed class ExternalAccounts(AuthDbContext database, UserManager<Applica
             System.Data.IsolationLevel.Serializable, cancellationToken);
         var logins = await users.GetLoginsAsync(user);
         var login = logins.SingleOrDefault(item => item.LoginProvider == provider);
-        if (login is null || (logins.Count <= 1 && !await users.HasPasswordAsync(user))) return false;
+        if (login is null || (logins.Count <= 1 && !await users.HasPasswordAsync(user) &&
+            (await users.GetPasskeysAsync(user)).Count == 0)) return false;
         Check(await users.RemoveLoginAsync(user, login.LoginProvider, login.ProviderKey));
         Check(await users.UpdateSecurityStampAsync(user));
         // Смена SecurityStamp защищает cookies, но сама по себе не отзывает OAuth refresh/code.

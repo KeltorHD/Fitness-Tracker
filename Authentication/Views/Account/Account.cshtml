@@ -2,11 +2,34 @@
 <h1>Ваш аккаунт</h1>
 <p>@Model.Name</p>
 <h2>Способы входа</h2>
+@if (Model.HasPassword)
+{
+  <p>Пароль подключён.</p>
+}
+@foreach (var passkey in Model.Passkeys)
+{
+  <form method="post" action="/account/passkeys/remove" asp-antiforgery="true">
+    <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+    <input type="hidden" name="credentialId" value="@passkey.CredentialId" />
+    <p>@passkey.Name</p>
+    <button type="submit" disabled="@(!Model.HasPassword && Model.Logins.Length == 0 && Model.Passkeys.Length <= 1)">Удалить passkey</button>
+  </form>
+}
+@if (Model.Passkeys.Length < 10)
+{
+  <form method="post" action="/account/passkeys" asp-antiforgery="true">
+    <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+    <label for="passkey-name">Название passkey</label>
+    <input id="passkey-name" name="name" maxlength="64" placeholder="Например, мой iPhone" />
+    <button type="button" data-passkey="enroll" disabled>Добавить passkey</button>
+    <p data-passkey-status role="status" aria-live="polite"></p>
+  </form>
+}
 @foreach (var provider in Model.Logins)
 {
   <form method="post" action="/account/unlink/@provider" asp-antiforgery="true">
     <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
-    <p>@provider</p><button type="submit" disabled="@(Model.Logins.Length <= 1)">Отключить @provider</button>
+    <p>@provider</p><button type="submit" disabled="@(Model.Logins.Length <= 1 && !Model.HasPassword && Model.Passkeys.Length == 0)">Отключить @provider</button>
   </form>
 }
 @foreach (var provider in Model.Providers)

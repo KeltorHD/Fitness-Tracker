@@ -636,3 +636,11 @@ Requires Xcode validation. Новых файлов и изменений project
 - [ ] «Способы входа»: привязать второй provider и вернуться в приложение, отвязать один, защитить последний. Совпадающие email не объединяют аккаунты.
 - [ ] Выход и удаление аккаунта сохраняют журнал на устройстве. Удаление требует подтверждения; отказ Backend сохраняет Identity для повтора; после успеха серверные копии удалены и старый access token не создаёт новые.
 - [ ] Проверить privacy report и App Store privacy labels: добровольные серверные Health/Fitness/профиль связаны с пользователем, tracking отсутствует. Реальный provider flow, TLS, provisioning и Apple SDK требуют отдельной проверки; Linux-тесты .NET их не подтверждают.
+
+## HTTPS callback, email и passkey
+
+- [ ] Настроить настоящий App ID и Associated Domains; проверить `webcredentials.apps` в AASA и provisioning полной схемы FitnessTracker.
+- [ ] На iPhone iOS 26 проверить `.https(host:path:)`, точный callback origin/path, state/issuer, отмену и повтор; старый custom scheme не завершает OAuth.
+- [ ] В системном браузере зарегистрироваться с паролем без подтверждения почты и отдельно с passkey без пароля; войти после relaunch.
+- [ ] Добавить passkey к существующему аккаунту, отменить Face ID/PIN, повторить операцию, удалить ключ и проверить отзыв на другом устройстве; последний способ входа защищён.
+- [ ] Проверить автозаполнение пароля, менеджер passkey, клавиатуру, VoiceOver, Dynamic Type, dark mode и ошибки сети/429.

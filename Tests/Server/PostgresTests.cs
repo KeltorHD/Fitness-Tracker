@@ -2,6 +2,8 @@ using FitnessTracker.Authentication;
 using FitnessTracker.Backend;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection;
 using OpenIddict.Abstractions;
 using OpenIddict.EntityFrameworkCore.Models;
@@ -15,6 +17,69 @@ namespace FitnessTracker.Server.Tests;
 [Trait("Category", "PostgreSQL")]
 public sealed class PostgresTests
 {
+    /// <summary>Миграция passkey сохраняет прежние аккаунты/длинные поля; штатное JSONB-хранилище Identity работает после обновления.</summary>
+    [Fact]
+    public async Task PasskeyMigrationPreservesExistingAccountsAndRoundTripsIdentityDataAsync()
+    {
+        // Arrange: первоначальная схема и существующий парольный аккаунт с внешним login.
+        using var deadline = new CancellationTokenSource(TimeSpan.FromMinutes(2));
+        var cancellationToken = deadline.Token;
+        await using var fixture = await PostgresDatabase.CreateAsync(cancellationToken);
+        await using var provider = CreateAuthProvider(fixture.ConnectionString);
+        string owner;
+        string passwordHash;
+        byte[] credentialId = System.Security.Cryptography.RandomNumberGenerator.GetBytes(32);
+        byte[] publicKey = [1, 2, 3, 4];
+        await using (var scope = provider.CreateAsyncScope())
+        {
+            var database = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
+            await database.GetService<IMigrator>().MigrateAsync("20261103183016_InitialAuth", cancellationToken);
+            var users = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var user = new ApplicationUser
+            { UserName = Guid.NewGuid().ToString("N"), PhoneNumber = new string('1', 300), Email = "legacy@fitness.test" };
+            Assert.True((await users.CreateAsync(user, "Legacy-password-123!")).Succeeded);
+            Assert.True((await users.AddLoginAsync(user, new UserLoginInfo("Google", new string('s', 180), "Google"))).Succeeded);
+            owner = user.Id;
+            passwordHash = user.PasswordHash!;
+
+            // Act: применение новой additive migration к базе с данными, затем сохранение passkey через настоящий UserManager.
+            await database.Database.MigrateAsync(cancellationToken);
+            Assert.False(database.Database.HasPendingModelChanges());
+            var passkey = new UserPasskeyInfo(credentialId, publicKey, DateTimeOffset.UtcNow, 0,
+                ["internal"], true, true, true, [5, 6], [7, 8])
+            { Name = "Мой iPhone" };
+            Assert.True((await users.AddOrUpdatePasskeyAsync(user, passkey)).Succeeded);
+        }
+
+        // Assert: новый scope читает JSONB с байтами и флагами; legacy password/login не изменились.
+        await using (var scope = provider.CreateAsyncScope())
+        {
+            var users = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var user = Assert.IsType<ApplicationUser>(await users.FindByIdAsync(owner));
+            Assert.Equal(passwordHash, user.PasswordHash);
+            Assert.Equal(300, user.PhoneNumber?.Length);
+            Assert.Equal(180, Assert.Single(await users.GetLoginsAsync(user)).ProviderKey.Length);
+            Assert.True(await users.CheckPasswordAsync(user, "Legacy-password-123!"));
+            var passkey = Assert.Single(await users.GetPasskeysAsync(user));
+            Assert.Equal(credentialId, passkey.CredentialId);
+            Assert.Equal(publicKey, passkey.PublicKey);
+            Assert.Equal("Мой iPhone", passkey.Name);
+            Assert.True(passkey.IsBackedUp);
+            Assert.True(passkey.IsBackupEligible);
+            Assert.Equal(owner, (await users.FindByPasskeyIdAsync(credentialId))?.Id);
+            passkey.SignCount = 2;
+            Assert.True((await users.AddOrUpdatePasskeyAsync(user, passkey)).Succeeded);
+        }
+        await using (var scope = provider.CreateAsyncScope())
+        {
+            var users = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var user = Assert.IsType<ApplicationUser>(await users.FindByIdAsync(owner));
+            Assert.Equal(2u, Assert.Single(await users.GetPasskeysAsync(user)).SignCount);
+            Assert.True((await users.DeleteAsync(user)).Succeeded);
+            Assert.Null(await users.FindByPasskeyIdAsync(credentialId));
+        }
+    }
+
     /// <summary>Logout атомарно отзывает только выбранную сессию; отказ записи токенов откатывает также grant.</summary>
     [Theory]
     [InlineData(false)]

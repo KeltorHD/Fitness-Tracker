@@ -5,7 +5,12 @@ using OpenIddict.Abstractions;
 
 namespace FitnessTracker.Authentication.Controllers;
 
-public sealed record AccountPage(string Name, string ReturnUrl, string[] Logins, string[] Providers);
+/// <summary>Безопасные сведения о passkey для страницы управления аккаунтом.</summary>
+public sealed record PasskeySummary(string CredentialId, string Name);
+
+/// <summary>Способы входа и продолжение OAuth без секретов и ключевого материала.</summary>
+public sealed record AccountPage(string Name, string ReturnUrl, string[] Logins, string[] Providers,
+    bool HasPassword, PasskeySummary[] Passkeys);
 
 public sealed class AccountController(UserManager<ApplicationUser> users, SignInManager<ApplicationUser> signIn,
     ExternalAccounts accounts, IConfiguration config, BackupCleanup cleanup,
@@ -17,9 +22,12 @@ public sealed class AccountController(UserManager<ApplicationUser> users, SignIn
         var user = await users.GetUserAsync(User);
         if (user is null) return Unauthorized();
         var logins = (await users.GetLoginsAsync(user)).Select(login => login.LoginProvider).ToArray();
+        var passkeys = (await users.GetPasskeysAsync(user)).Select(key => new PasskeySummary(
+            Microsoft.AspNetCore.WebUtilities.WebEncoders.Base64UrlEncode(key.CredentialId), key.Name ?? "Passkey")).ToArray();
         return View(new AccountPage(user.DisplayName, Url.IsLocalUrl(returnUrl) ? returnUrl : "/account",
             logins, new[] { "Apple", "Google", "Yandex" }.Where(name =>
-                AuthConfiguration.Enabled(config, name) && !logins.Contains(name)).ToArray()));
+                AuthConfiguration.Enabled(config, name) && !logins.Contains(name)).ToArray(),
+            await users.HasPasswordAsync(user), passkeys));
     }
 
     [Authorize, HttpPost("/account/unlink/{provider}")]
@@ -46,12 +54,15 @@ public sealed class AccountController(UserManager<ApplicationUser> users, SignIn
         var subject = User.GetClaim(OpenIddictConstants.Claims.Subject);
         var user = subject is null ? null : await users.FindByIdAsync(subject);
         if (user is null) return Unauthorized();
+        var methods = (await users.GetLoginsAsync(user)).Select(login => login.LoginProvider).ToList();
+        if (await users.HasPasswordAsync(user)) methods.Add("Email");
+        if ((await users.GetPasskeysAsync(user)).Count > 0) methods.Add("Passkey");
         return Ok(new
         {
             id = user.Id,
             name = user.DisplayName,
             createdAt = user.CreatedAt,
-            logins = (await users.GetLoginsAsync(user)).Select(login => login.LoginProvider)
+            logins = methods
         });
     }
 
