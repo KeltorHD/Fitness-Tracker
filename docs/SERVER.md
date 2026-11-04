@@ -115,52 +115,57 @@ Compose публикует только эти loopback-порты; PostgreSQL �
 ```bash
 bash scripts/setup-server.sh
 # Отредактируйте .env: AUTH_DOMAIN, API_DOMAIN, HTTP-порты и credentials провайдеров.
+python3 scripts/setup-server-network.py
 docker compose config --quiet
-docker compose build
-docker compose run --rm authentication --migrate
-docker compose run --rm backend --migrate
-docker compose up -d
+docker compose up -d --build
 ```
 
 Скрипт создаёт пароли БД, разные ключи удаления копий и introspection, а также два PFX для подписи/шифрования токенов OpenIddict и Data Protection. `BACKEND_INTROSPECTION_SECRET` из `.env` передаётся только Auth и Backend как `Auth:IntrospectionClientSecret`; минимум 32 символа, генератор использует 32 случайных байта в hex. Он не совпадает с `BACKEND_SERVICE_KEY` и не передаётся iOS. Эти PFX не являются HTTPS-сертификатами Nginx; TLS-ключи в контейнеры передавать не требуется. Существующие `.env`/ключи скрипт не перезаписывает. `.env`, `.local/`, private keys и сертификаты исключены из git. `.local` доступна только владельцу, её дочерняя mount-директория позволяет непривилегированному container UID читать PFX. Production использует постоянные ключи, Development certificates — только в Development, ephemeral credentials — только в тестах.
 
 ### Обновление существующего сервера для introspection
 
-Добавьте в существующую `.env` новый `BACKEND_INTROSPECTION_SECRET`, сгенерированный `openssl rand -hex 32`. Сохраните прежние пароли, PFX и Data Protection keys. Обновите свой Nginx по образцу ниже: доступ к `/connect/introspect` разрешён только localhost и Compose subnet; при нестандартной подсети согласуйте `allow` с `SERVER_NETWORK_SUBNET`.
+Если прежняя версия ещё не использовала introspection, добавьте в существующую `.env` `BACKEND_INTROSPECTION_SECRET`, сгенерированный `openssl rand -hex 32`. Сохраните прежние пароли, PFX и Data Protection keys. Подготовьте автоматическую сеть, затем обновите свой Nginx по сгенерированному образцу ниже: доступ к `/connect/introspect` разрешён только localhost и найденной Compose subnet.
 
 ```bash
+python3 scripts/setup-server-network.py
 docker compose config --quiet
-docker compose build
-docker compose run --rm authentication --configure-clients
-docker compose up -d authentication backend
+docker compose up -d --build
 ```
 
-`--configure-clients` создаёт/обновляет регистрации public iOS и confidential Backend client в существующих таблицах, не запускает миграции. Команда не изменяет EF model/snapshot. Для текущей версии перед обновлением также требуется включённая миграция AddPasskeys. Команду нужно выполнить также при смене service secret. После её успешного выполнения обновите оба сервиса с согласованным секретом. Пока регистрация отсутствует или секреты расходятся, Backend закрывает доступ с 503.
+Обычный запуск Auth теперь применяет включённые миграции, в том числе AddPasskeys, и создаёт/обновляет обе регистрации clients. При смене introspection secret обновите согласованно Auth и Backend. Пока секреты расходятся, Backend закрывает доступ с 503. `--configure-clients` сохранён как необязательный служебный режим: он обновляет регистрации в существующих таблицах и завершает процесс без миграций и HTTP.
 
 ### Nginx на хосте
 
-Образец — [`Config/Server/nginx.conf.example`](../Config/Server/nginx.conf.example). Он включается внутри существующего `http` context, например через `/etc/nginx/conf.d/fitnesstracker.conf`. В примере используются `auth.example.com` и `api.example.com`; замените их своими доменами в локальной конфигурации. Если оба имени покрыты имеющимся wildcard-сертификатом, его можно использовать для обоих сервисов. Например, `*.example.com` покрывает `auth.example.com`, но не `auth.fitness.example.com`. В обоих virtual hosts укажите одинаковые реальные пути `ssl_certificate`/`ssl_certificate_key` к вашему текущему сертификату. Путь `/etc/nginx/ssl/example.com/` в образце условный. Сертификат настраивается оператором и не передаётся в Docker. Если HTTP→HTTPS redirect уже настроен, объедините его с существующим server block. В образце используются обычные `listen 443 ssl`, поэтому он не требует новой директивы `http2`.
+Шаблон — [`Config/Server/nginx.conf.example`](../Config/Server/nginx.conf.example). Команда `python3 scripts/setup-server-network.py` подставляет в него домены, HTTP-порты и настоящую подсеть Docker, записывая результат в игнорируемый `.local/nginx.generated.conf`. Устанавливайте сгенерированный файл: исходный шаблон содержит незаполненный `@SERVER_NETWORK_SUBNET@` и не подходит для прямого копирования. Конфигурация включается внутри существующего `http` context, например через `/etc/nginx/conf.d/fitnesstracker.conf`. Если оба домена покрыты имеющимся wildcard-сертификатом, его можно использовать для обоих сервисов. Например, `*.example.com` покрывает `auth.example.com`, но не `auth.fitness.example.com`. В обоих virtual hosts укажите реальные пути `ssl_certificate`/`ssl_certificate_key` к вашему текущему сертификату. Путь `/etc/nginx/ssl/example.com/` в образце условный. Сертификат настраивается оператором и не передаётся в Docker. Если HTTP→HTTPS redirect уже настроен, объедините его с существующим server block. В образце используются обычные `listen 443 ssl`, поэтому он не требует новой директивы `http2`.
 
 ```bash
-# Скопируйте и отредактируйте конфигурацию на своём сервере.
-sudo cp Config/Server/nginx.conf.example /etc/nginx/conf.d/fitnesstracker.conf
+# При первом подключении этих virtual hosts скопируйте сгенерированную конфигурацию.
+# При обновлении перенесите изменения в существующую, сохраняя ваши TLS-пути.
+sudo cp .local/nginx.generated.conf /etc/nginx/conf.d/fitnesstracker.conf
+sudoedit /etc/nginx/conf.d/fitnesstracker.conf
 sudo nginx -t
 sudo systemctl reload nginx
 ```
 
 Образец сохраняет Host и перезаписывает `X-Forwarded-Proto`/`X-Forwarded-For` значениями реального запроса. Так OpenIddict видит исходный HTTPS и корректно строит provider callbacks. Переданные клиентом forwarded headers не должны подменять эти значения. Внешний `/internal` и его подпути блокируются без учёта регистра, как и маршруты ASP.NET Core. Для Backend установлен лимит body 20 MiB, отключена буферизация архивов во временные файлы Nginx. Access log отключён. В Auth server block также установлен `error_log /dev/null`: при отказе upstream стандартный error log включает полный callback URI с OAuth-кодом/state. Для диагностики Auth используйте безопасные application logs и проверку доступности upstream; запросы этого virtual host в Nginx error log не сохраняются. Если нужны собственные журналы, используйте сборщик с редактированием секретных query-параметров; не включайте исходный request URI/credentials.
 
-В обоих virtual hosts отключён `proxy_cache`. Для `/connect/introspect` задан ACL по фактическому TCP peer: localhost и `SERVER_NETWORK_SUBNET` (по умолчанию `172.30.0.0/24`); регистр и encoded slash не обходят запрет. Клиентский `X-Forwarded-For` не даёт доступ к этому endpoint. В Auth для introspection действует отдельный общий бюджет 1200 запросов/минуту; обычный IP-лимит входа остаётся 120/минуту. Backend применяет свои 30 запросов/минуту на пользователя до удалённой проверки, поэтому отклонённые запросы не расходуют бюджет Auth.
+В обоих virtual hosts отключён `proxy_cache`. Для `/connect/introspect` задан ACL по фактическому TCP peer: localhost и автоматически найденная `SERVER_NETWORK_SUBNET`; регистр и encoded slash не обходят запрет. Клиентский `X-Forwarded-For` не даёт доступ к этому endpoint. В Auth для introspection действует отдельный общий бюджет 1200 запросов/минуту; обычный IP-лимит входа остаётся 120/минуту. Backend применяет свои 30 запросов/минуту на пользователя до удалённой проверки, поэтому отклонённые запросы не расходуют бюджет Auth.
 
-### Docker gateway и доверие к proxy
+### Автоматическая сеть Docker и доверие к proxy
 
-По умолчанию используются `SERVER_NETWORK_SUBNET=172.30.0.0/24` и `SERVER_NETWORK_GATEWAY=172.30.0.1`. Последний — адрес хоста внутри Docker bridge и ожидаемый TCP peer у запросов от хостового Nginx через опубликованные порты. Этот единственный дополнительный адрес передаётся обоим приложениям как `ReverseProxy:Address`; проверка доверенного proxy не отключается. Если подсеть занята, измените subnet и gateway согласованно в `.env`. Для rootless Docker или другого сетевого режима проверьте фактический peer и настройте точный доверенный адрес, сохраняя loopback-привязку портов.
+`python3 scripts/setup-server-network.py` создаёт bridge-сеть без заданного IPAM-диапазона: Docker сам выбирает свободную подсеть и gateway. Скрипт считывает их через `docker network inspect`, обновляет только `SERVER_NETWORK_NAME`, `SERVER_NETWORK_SUBNET`, `SERVER_NETWORK_GATEWAY` в существующей `.env` и готовит `.local/nginx.generated.conf`. Пароли, `COMPOSE_FILE`, настройки bind mounts, PFX и volumes сохраняются. Чтение Compose учитывает `.env`, в том числе `COMPOSE_FILE=compose.yml:.local/compose.storage.yml` на Linux. Скрипт не выводит секреты, не читает `.env` как shell-код и не меняет системный Nginx.
+
+По умолчанию сеть называется `fitness-tracker-server`; для отдельного экземпляра задайте другое `SERVER_NETWORK_NAME`. Повторная подготовка использует ту же сеть, а не выбирает новый диапазон. Чужая сеть с таким именем отклоняется. В Compose она объявлена `external`, поэтому обычный `docker compose down` её сохраняет. После переноса на другой сервер, удаления этой сети или изменения доменов/портов повторите подготовку и перенесите обновления в Nginx. При переходе со старой фиксированной сети обновляйте все четыре сервиса через `docker compose up -d --build`; рабочие volumes и bind mounts остаются прежними. Если свободные address pools Docker исчерпаны, скрипт завершится ошибкой, сохранив прежнюю конфигурацию; это требует настройки пула самого Docker, а не удаления БД.
+
+Найденный gateway — адрес хоста внутри bridge и ожидаемый TCP peer у запросов от хостового Nginx через опубликованные порты. Только этот дополнительный адрес передаётся обоим приложениям как `ReverseProxy:Address`; проверка доверенного proxy сохраняется. Экспортированные устаревшие `SERVER_NETWORK_*` перекрывают `.env`, поэтому скрипт попросит выполнить соответствующий `unset`. Этот способ рассчитан на обычный Docker Engine bridge в Linux; для rootless Docker или другого сетевого режима необходимо проверить фактический peer, сохраняя loopback-привязку портов.
 
 Backend сопоставляет `AUTH_DOMAIN` с gateway через `extra_hosts`, чтобы обращаться за discovery/JWKS и introspection к Nginx на хосте с правильными HTTPS hostname/SNI, без зависимости от hairpin-маршрутизации публичного IP. Поэтому HTTPS listener Nginx должен принимать подключения и на bridge-адресе хоста; обычный `listen 443 ssl` из образца подходит. Firewall и Nginx ACL должны разрешать этот внутренний HTTPS-доступ. Сертификат Auth должен быть доверен контейнеру: для частного CA установите доверенную цепочку в контейнер, не отключая проверку TLS. Для публичного CA используйте fullchain.
 
 Межсервисное удаление копий остаётся в закрытой Compose-сети: Authentication вызывает `http://backend:8080/internal/...` с service key. Оно не проходит через публичный Nginx. При разнесении сервисов на разные хосты внутренний канал требует HTTPS/mTLS.
 
-Миграции включены в проекты. `--migrate` применяет существующие миграции, а Auth также создаёт/обновляет регистрации обоих clients. Обычный запуск не меняет схему; генерацию/изменение миграций выполняют по правилам AGENTS.md. Сохраняйте обе БД, volume `auth-keys`, `.env` и token certificates при обновлениях. Срок созданных token certificates — 730 дней; ротацию выполняйте с перекрытием сроков и доступностью старого публичного ключа до истечения выданных токенов. TLS-сертификаты Nginx имеют собственный независимый lifecycle.
+Миграции включены в проекты и применяются автоматически при обычном запуске обоих сервисов, до открытия HTTP listener. Auth после миграций создаёт/обновляет public iOS и confidential Backend clients в транзакции. Вся инициализация каждого сервиса сериализована PostgreSQL advisory lock в его собственной БД: блокировка удерживается отдельным непулируемым соединением и освобождается при его закрытии, включая ошибку или завершение процесса. Повторный запуск применяет только отсутствующие миграции и сохраняет пользовательские данные. При ошибке БД/миграции/регистрации процесс завершается с ошибкой, а Compose с `restart: unless-stopped` повторяет запуск. Неготовая схема не обслуживает HTTP. SQLite-fixtures в среде `Testing` продолжают создавать изолированную схему сами.
+
+`docker compose run --rm authentication --migrate` и аналогичная команда Backend остаются необязательными: применяют миграции и завершают процесс без HTTP. Генерацию/изменение миграций агент выполняет по правилам AGENTS.md; обычный startup использует только уже включённые в сборку миграции. Сохраняйте обе БД, volume `auth-keys`, `.env` и token certificates при обновлениях. Срок созданных token certificates — 730 дней; ротацию выполняйте с перекрытием сроков и доступностью старого публичного ключа до истечения выданных токенов. TLS-сертификаты Nginx имеют собственный независимый lifecycle.
 
 Проверка после настройки Nginx:
 
@@ -174,11 +179,11 @@ docker compose logs --tail=100 authentication backend
 
 Откройте `https://auth.example.com/login` и проверьте вход настроенным провайдером. `/health` подтверждает только работу процесса. Для обновления прежней Compose-конфигурации с контейнерным proxy остановите старый proxy/orphan перед передачей 80/443 хостовому Nginx; рабочие БД и volumes сохраняются.
 
-Официальные источники: [Nginx reverse proxy](https://nginx.org/en/docs/http/ngx_http_proxy_module.html), [ASP.NET Core forwarded headers](https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/proxy-load-balancer?view=aspnetcore-10.0), [Docker port publishing](https://docs.docker.com/engine/network/port-publishing/).
+Официальные источники: [Nginx reverse proxy](https://nginx.org/en/docs/http/ngx_http_proxy_module.html), [ASP.NET Core forwarded headers](https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/proxy-load-balancer?view=aspnetcore-10.0), [Docker port publishing](https://docs.docker.com/engine/network/port-publishing/), [автоматический IPAM Docker](https://docs.docker.com/reference/cli/docker/network/create/#specify-advanced-options), [external-сети Compose](https://docs.docker.com/reference/compose-file/networks/#external), [применение EF-миграций](https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/applying), [PostgreSQL advisory locks](https://www.postgresql.org/docs/current/functions-admin.html#FUNCTIONS-ADVISORY-LOCKS).
 
 ## Провайдеры
 
-Включайте провайдер только после заполнения его параметров. Отключённые провайдеры не отображаются; без настроенных внешних провайдеров остаются email/пароль и passkey.
+Apple, Google и Яндекс всегда видны на странице входа и среди доступных привязок аккаунта. Выключенные или не полностью настроенные провайдеры показываются серыми с подсказкой «В разработке» при наведении/фокусе; на touch-устройствах пояснение видно сразу. У них нет формы отправки; прямой запрос входа также отклоняется сервером. Активной кнопка становится только при `Enabled=true` и заполненных обязательных credentials; для Apple также нужен существующий файл private key. Невалидный формат уже заданного Apple-ключа остаётся ошибкой конфигурации. Email/пароль и passkey доступны независимо от внешних провайдеров.
 
 | Провайдер | Настройки `.env` | Redirect в кабинете провайдера |
 | --- | --- | --- |
@@ -214,7 +219,7 @@ Passkey использует встроенный WebAuthn в ASP.NET Core Ident
 
 Challenge живёт не более пяти минут и расходуется атомарно даже при синхронизируемом passkey с нулевым счётчиком. Ограниченный серверный cache содержит только временные challenges; перезапуск аннулирует незавершённые попытки. Текущая Compose-конфигурация запускает один Auth instance. Перед масштабированием понадобится общее атомарное хранилище challenges, а также общие Data Protection keys.
 
-**Миграция `AddPasskeys` включена в проект.** Она добавляет `AspNetUserPasskeys`: `CredentialId` (bytea, PK), `UserId` (FK с cascade), `Data` (jsonb) и индекс `UserId`; прежние таблицы и размеры колонок сохраняются. Агент ведёт миграции по [AGENTS.md](../AGENTS.md#ef-core-и-миграции). При обновлении примените включённые миграции контролируемым `--migrate`, как в инструкции выше, до запуска нового сервера на прежней БД. Обычный запуск схему не меняет. Рабочая БД в этой задаче не изменялась.
+**Миграция `AddPasskeys` включена в проект.** Она добавляет `AspNetUserPasskeys`: `CredentialId` (bytea, PK), `UserId` (FK с cascade), `Data` (jsonb) и индекс `UserId`; прежние таблицы и размеры колонок сохраняются. Агент ведёт миграции по [AGENTS.md](../AGENTS.md#ef-core-и-миграции). Обычный запуск Auth автоматически применяет отсутствующие миграции до приёма HTTP. Отдельный `--migrate` доступен при необходимости предварительного обновления схемы. Рабочая БД в этой задаче не изменялась.
 
 ## Привязка HTTPS callback к iOS
 
@@ -280,6 +285,7 @@ dotnet ef migrations has-pending-model-changes --project Backend
 | `Unit` | `Tests/Server/BackupCleanupTests.cs` | DELETE/service key контракт, ошибки статуса и конфигурации, передача отмены в HTTP handler без сети |
 | `Unit` | `Tests/Server/TokenIntrospectionTests.cs` | RFC 7662 POST/body, active boolean, protocol/HTTP/transport errors, ограничение ответа, отмена, отсутствие утечек секретов |
 | `Unit` | `Tests/Server/AuthenticationMappingTests.cs` | Зависимости тонких контроллеров, запрет неявного Identity entity mapping, сохранение principal/stamp/grant и OAuth error при HTTP mapping |
+| `Unit` / `HTTP` | `Tests/Server/ProviderSelectionTests.cs` | Полнота credentials, серые кнопки и доступные tooltip для ненастроенных способов, запрет прямого POST, сохранение активного входа и привязки настроенного провайдера |
 | `HTTP` | `Tests/Server/AuthenticationMappingHttpTests.cs` | Защита от overposting, точный публичный профиль после настоящего OAuth exchange, безопасное сообщение PRG/TempData без credentials в HTML |
 | `Unit` | `Tests/Server/PasskeySchemaTests.cs` | Согласованность snapshot и модели, AddPasskeys добавляет только таблицу/индекс, прежние колонки не сужаются |
 | `HTTP` | `Tests/Server/CredentialsTests.cs` | Email/password без подтверждения, нормализация/уникальность, CSRF, lockout, отсутствие email merge, реальные WebAuthn attestation/assertion, origin/RP/UV/signature/replay, управление ключами и отзыв |
@@ -292,6 +298,8 @@ dotnet ef migrations has-pending-model-changes --project Backend
 | `HTTP` | `Tests/Server/BackendIntrospectionTests.cs` | Отсутствие positive cache, 401/503 и сохранность данных, recovery с прежним JWT, rate limit до обращения к Auth, startup validation |
 | `HTTP` | `Tests/Server/SessionRevocationTests.cs` | Настоящие два host, discovery/JWKS и introspection, logout одной сессии/ротации, unlink/delete/replay, revoked grant при valid token entry, Auth outage с кешем и без кеша metadata, server credentials/audience |
 | `PostgreSQL` | `Tests/Server/PostgresTests.cs` | Раздельные БД Auth/Backend, существующие миграции и model snapshots, конкурентная квота, гонка PUT/удаления и сохранность чужих данных, отзыв при отвязке и атомарный logout/rollback с сохранением другой сессии; AddPasskeys поверх прежних данных и JSONB round-trip/update/cascade |
+| `PostgreSQL` | `Tests/Server/StartupMigrationTests.cs` | Настоящий Production startup без --migrate на пустой и прежней схеме, сохранность аккаунтов/архивов/clients при повторе, обновление secret, отказ запуска при ошибке миграции, два конкурирующих Auth с наблюдаемой блокировкой PostgreSQL |
+| Python / fake Docker | `Tests/Scripts/test_server_network.py` | Автоматический IPAM без фиксированного CIDR, повторная подготовка, сохранность credentials/COMPOSE_FILE, чужая сеть, исчерпание пула, устаревший export и безопасная генерация Nginx |
 
 ```bash
 dotnet test FitnessTracker.Server.sln --no-build --no-restore -m:1 --filter 'Category=Unit'
@@ -300,7 +308,9 @@ dotnet test FitnessTracker.Server.sln --no-build --no-restore -m:1 --filter 'Cat
 
 Обычный прогон не вызывает внешних OAuth-провайдеров. HTTP fixtures используют настоящий in-memory host и собственную SQLite, очищают пользовательские configuration sources, явно отключают внешние providers и внедряют фиксированное время для метаданных. Отказ/отмена SaveChanges подменяются через EF interceptor, сохраняя настоящую транзакцию и проверки результата. Сценарии и вспомогательные классы имеют XML-описания на русском языке.
 
-Для PostgreSQL задайте `FITNESS_TRACKER_TEST_POSTGRES` connection string к **одноразовому тестовому экземпляру** и запустите `check-server.sh`; он включит все шесть PostgreSQL-проверок. Только эту категорию запускают с `--filter 'Category=PostgreSQL'`. Без явной конфигурации прямой запуск категории завершается ошибкой, а не молчаливым пропуском. Fixture создаёт случайные отдельные базы с отключённым pooling и удаляет только их с отдельным cleanup deadline, включая сбой основного теста. Триггер отказа записи существует только в случайной тестовой БД сценария rollback. CI поднимает PostgreSQL 18; локально проверено на 16.6, на динамически выделенном localhost-порту. Файлы миграций для этих тестов не генерируются и не изменяются.
+Для PostgreSQL задайте `FITNESS_TRACKER_TEST_POSTGRES` connection string к **одноразовому тестовому экземпляру** и запустите `check-server.sh`; он включит все 12 PostgreSQL-проверок. Только эту категорию запускают с `--filter 'Category=PostgreSQL'`. Без явной конфигурации прямой запуск категории завершается ошибкой, а не молчаливым пропуском. Fixture создаёт случайные отдельные базы с отключённым pooling и удаляет только их с отдельным cleanup deadline, включая сбой основного теста. Триггер отказа записи существует только в случайной тестовой БД сценария rollback. CI поднимает PostgreSQL 18; локально проверено на 16.6, на динамически выделенном localhost-порту. Файлы миграций для этих тестов не генерируются и не изменяются.
+
+После автоматизации развёртывания локально прошёл полный `check-server.sh`: locked restore, сборка без warnings/errors, 166 xUnit-сценариев (73 unit, 81 HTTP/Identity/SQLite, 12 PostgreSQL 16.6), `dotnet format` и пять Python-тестов скрипта сети. Отдельная проверка с настоящим Docker подтвердила автоматическое выделение свободной подсети, повторную подготовку без смены network ID, сохранение storage override и сети после `compose down`, согласованные proxy/extra_hosts и фактический HTTP peer gateway. Временный Nginx прошёл syntax/ACL/header и проверку отсутствия OAuth query в error log при 502. Production startup проверен с тестовыми PFX и БД через настоящий Main; рабочий сервер и его сертификаты не менялись. Визуальная проверка подсказок в браузере на реальных устройствах не выполнялась.
 
 Apple XCTest `AccountBackupTests` проверяют callback validation, одну ротацию для параллельных запросов, ошибки сети/Keychain, истёкшую сессию и проверку целостности; `ArchiveTransferTests` проверяет подтверждение восстановления. Их запуск требует Xcode. Foundation-часть добавлена в Swift 6 type-check скрипта `check-linux.sh`; SwiftUI/Keychain/CryptoKit и реальный вход требуют Apple SDK/устройства. Чек-лист: [XCODE_VALIDATION.md](XCODE_VALIDATION.md).
 

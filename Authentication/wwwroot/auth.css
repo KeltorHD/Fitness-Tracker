@@ -6,6 +6,10 @@ h1 { font-size: 2rem; } h2 { font-size: 1.25rem; margin-top: 2rem; }
 p { line-height: 1.6; }
 button, .button { display: block; width: 100%; box-sizing: border-box; padding: 1rem; margin: 1rem 0; border-radius: .8rem; border: 1px solid currentColor; font: inherit; font-weight: 600; text-align: center; text-decoration: none; color: inherit; background: light-dark(#fff, #28282c); cursor: pointer; }
 button:disabled { opacity: .55; cursor: default; }
+.unavailable-provider { position: relative; color: light-dark(#62626a, #b6b6bf); background: light-dark(#e7e7ec, #303036); border-color: light-dark(#c6c6cf, #62626a); cursor: not-allowed; }
+.provider-tooltip { position: absolute; bottom: calc(100% + .4rem); left: 50%; transform: translateX(-50%); z-index: 1; padding: .45rem .7rem; border-radius: .4rem; white-space: nowrap; font-size: .875rem; color: light-dark(#fff, #18181b); background: light-dark(#34343a, #eeeef4); visibility: hidden; }
+.unavailable-provider:is(:hover, :focus) .provider-tooltip { visibility: visible; }
+@media (hover: none) { .provider-tooltip { position: static; display: block; transform: none; margin-top: .35rem; visibility: visible; } }
 :focus-visible { outline: 3px solid light-dark(#b44300, #ffac70); outline-offset: 4px; }
 label { display: block; margin-top: 1rem; }
 input:not([type="hidden"]) { box-sizing: border-box; width: 100%; padding: .8rem; margin-top: .4rem; border: 1px solid currentColor; border-radius: .5rem; font: inherit; background: light-dark(#fff, #28282c); color: inherit; }

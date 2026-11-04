@@ -32,13 +32,23 @@
     <p>@provider</p><button type="submit" disabled="@(Model.Logins.Length <= 1 && !Model.HasPassword && Model.Passkeys.Length == 0)">Отключить @provider</button>
   </form>
 }
-@foreach (var provider in Model.Providers)
+@foreach (var provider in new[] { "Apple", "Google", "Yandex" }.Where(provider => !Model.Logins.Contains(provider)))
 {
-  <form method="post" action="/login/@provider.ToLowerInvariant()" asp-antiforgery="true">
-    <input type="hidden" name="returnUrl" value="@Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString("/account", "returnUrl", Model.ReturnUrl)" />
-    <input type="hidden" name="link" value="true" />
-    <button type="submit">Подключить @(provider == "Yandex" ? "Яндекс ID" : provider)</button>
-  </form>
+  @if (Model.Providers.Contains(provider))
+  {
+    <form method="post" action="/login/@provider.ToLowerInvariant()" asp-antiforgery="true">
+      <input type="hidden" name="returnUrl" value="@Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString("/account", "returnUrl", Model.ReturnUrl)" />
+      <input type="hidden" name="link" value="true" />
+      <button type="submit">Подключить @(provider == "Yandex" ? "Яндекс ID" : provider)</button>
+    </form>
+  }
+  else
+  {
+    <span class="button unavailable-provider" role="button" aria-disabled="true" tabindex="0" aria-describedby="unavailable-@provider">
+      Подключить @(provider == "Yandex" ? "Яндекс ID" : provider)
+      <span id="unavailable-@provider" class="provider-tooltip" role="tooltip">В разработке</span>
+    </span>
+  }
 }
 <p>Последний способ входа отключить нельзя.</p>
 <p>После отключения способа входа потребуется снова войти в приложение на всех устройствах.</p>
