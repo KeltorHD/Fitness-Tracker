@@ -13,11 +13,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.IdentityModel.Protocols;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace FitnessTracker.Server.Tests;
 
 /// <summary>Запускает настоящий API с собственной SQLite, ключом JWT и изолированной конфигурацией.</summary>
-public sealed class BackendFactory : WebApplicationFactory<Backend.Program>
+/// <param name="authHandler">Реальный in-memory Auth для сквозных тестов; иначе подменяется только introspection.</param>
+public sealed class BackendFactory(HttpMessageHandler? authHandler = null) : WebApplicationFactory<Backend.Program>
 {
     private readonly SqliteConnection _connection = new("Data Source=:memory:");
     private readonly BackupSaveInterceptor _saves = new();
@@ -31,6 +34,9 @@ public sealed class BackendFactory : WebApplicationFactory<Backend.Program>
     /// <summary>Позволяет проверить откат HTTP-операции при отказе записи.</summary>
     internal BackupSaveInterceptor Saves => _saves;
 
+    /// <summary>Управляемый ответ только для обычных HTTP-тестов Backend; сквозные тесты его не используют.</summary>
+    internal IntrospectionStub Introspection { get; } = new();
+
     /// <summary>Отделяет тест от appsettings, пользовательских env keys, реальной БД и discovery-запросов.</summary>
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -42,6 +48,8 @@ public sealed class BackendFactory : WebApplicationFactory<Backend.Program>
             config.AddInMemoryCollection(new Dictionary<string, string?>
             {
                 ["Backend:ServiceKey"] = ServiceKey,
+                ["Auth:Issuer"] = authHandler is null ? "https://auth.test/" : "https://localhost/",
+                ["Auth:IntrospectionClientSecret"] = AuthFactory.IntrospectionSecret,
                 ["AllowedHosts"] = "localhost",
                 ["Logging:LogLevel:Default"] = "None"
             });
@@ -53,8 +61,17 @@ public sealed class BackendFactory : WebApplicationFactory<Backend.Program>
             services.AddDbContext<BackupDbContext>(options => options.UseSqlite(_connection).AddInterceptors(_saves));
             services.RemoveAll<TimeProvider>();
             services.AddSingleton<TimeProvider>(new FrozenTimeProvider(BackupTime));
+            services.AddHttpClient<TokenIntrospection>().ConfigurePrimaryHttpMessageHandler(() => authHandler ?? Introspection);
             services.PostConfigure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme, options =>
             {
+                if (authHandler is not null)
+                {
+                    // Настоящие discovery/JWKS и подпись OpenIddict; заменяется только сетевой транспорт.
+                    options.ConfigurationManager = new ConfigurationManager<OpenIdConnectConfiguration>(
+                        "https://localhost/.well-known/openid-configuration", new OpenIdConnectConfigurationRetriever(),
+                        new HttpDocumentRetriever(new HttpClient(authHandler, disposeHandler: false)) { RequireHttps = true });
+                    return;
+                }
                 options.Authority = null;
                 options.ConfigurationManager = null;
                 options.Configuration = null;

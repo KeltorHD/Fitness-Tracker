@@ -48,6 +48,7 @@ public sealed class BackendSecurityTests
         // Assert: нет ни доступа к данным, ни побочных записей при ошибке подписи/времени.
         Assert.Equal(HttpStatusCode.Unauthorized, read.StatusCode);
         Assert.Equal(HttpStatusCode.Unauthorized, write.StatusCode);
+        Assert.Equal(0, factory.Introspection.Calls);
         using var scope = factory.Services.CreateScope();
         Assert.Empty(await scope.ServiceProvider.GetRequiredService<BackupDbContext>().Backups.ToListAsync());
     }

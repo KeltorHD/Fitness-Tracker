@@ -71,7 +71,13 @@ public partial class Program
             {
                 options.SetIssuer(new Uri(config["Auth:Issuer"] ?? "https://localhost:5001/"));
                 options.SetAuthorizationEndpointUris("connect/authorize")
-                    .SetTokenEndpointUris("connect/token").SetRevocationEndpointUris("connect/revoke");
+                    .SetTokenEndpointUris("connect/token")
+                    .SetRevocationEndpointUris("connect/revoke")
+                    .SetIntrospectionEndpointUris("connect/introspect");
+                options.RemoveEventHandler(OpenIddict.Server.OpenIddictServerHandlers.Revocation.RevokeToken.Descriptor);
+                options.AddEventHandler<OpenIddict.Server.OpenIddictServerEvents.HandleRevocationRequestContext>(handler => handler
+                    .UseScopedHandler<RevokeSessionHandler>()
+                    .SetOrder(OpenIddict.Server.OpenIddictServerHandlers.Revocation.RevokeToken.Descriptor.Order));
                 options.AllowAuthorizationCodeFlow().AllowRefreshTokenFlow();
                 options.RequireProofKeyForCodeExchange();
                 options.Configure(server => server.CodeChallengeMethods.Remove(OpenIddictConstants.CodeChallengeMethods.Plain));
@@ -111,8 +117,13 @@ public partial class Program
         {
             options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
             options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
-                RateLimitPartition.GetFixedWindowLimiter(context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
-                    _ => new FixedWindowRateLimiterOptions { PermitLimit = 120, Window = TimeSpan.FromMinutes(1) }));
+                // Introspection закрыта Nginx для внешних клиентов и использует confidential client.
+                // Её отдельный общий бюджет не расходует IP-лимит обычных пользовательских входов.
+                context.Request.Path.Value?.TrimEnd('/').Equals("/connect/introspect", StringComparison.OrdinalIgnoreCase) == true
+                    ? RateLimitPartition.GetFixedWindowLimiter("service:introspection", _ =>
+                        new FixedWindowRateLimiterOptions { PermitLimit = 1200, Window = TimeSpan.FromMinutes(1) })
+                    : RateLimitPartition.GetFixedWindowLimiter("ip:" + (context.Connection.RemoteIpAddress?.ToString() ?? "unknown"),
+                        _ => new FixedWindowRateLimiterOptions { PermitLimit = 120, Window = TimeSpan.FromMinutes(1) }));
         });
         var app = builder.Build();
         app.UseForwardedHeaders();
@@ -142,6 +153,11 @@ public partial class Program
             if (args.Contains("--migrate"))
             {
                 await scope.ServiceProvider.GetRequiredService<AuthDbContext>().Database.MigrateAsync();
+                await AuthConfiguration.RegisterClient(scope.ServiceProvider, config);
+                return;
+            }
+            if (args.Contains("--configure-clients"))
+            {
                 await AuthConfiguration.RegisterClient(scope.ServiceProvider, config);
                 return;
             }

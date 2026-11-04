@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using OpenIddict.Abstractions;
 using OpenIddict.EntityFrameworkCore.Models;
+using OpenIddict.Server;
+using System.Security.Claims;
 using Xunit;
 
 namespace FitnessTracker.Server.Tests;
@@ -13,6 +15,89 @@ namespace FitnessTracker.Server.Tests;
 [Trait("Category", "PostgreSQL")]
 public sealed class PostgresTests
 {
+    /// <summary>Logout атомарно отзывает только выбранную сессию; отказ записи токенов откатывает также grant.</summary>
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task SessionRevocationIsAtomicAndIsolatedAsync(bool rejectTokenUpdate)
+    {
+        // Arrange: реальные строки двух сессий одного пользователя в отдельной PostgreSQL-БД.
+        using var deadline = new CancellationTokenSource(TimeSpan.FromMinutes(2));
+        var cancellationToken = deadline.Token;
+        await using var fixture = await PostgresDatabase.CreateAsync(cancellationToken);
+        await using var provider = CreateAuthProvider(fixture.ConnectionString);
+        await using var scope = provider.CreateAsyncScope();
+        var database = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
+        await database.Database.MigrateAsync(cancellationToken);
+        var authorizations = scope.ServiceProvider.GetRequiredService<IOpenIddictAuthorizationManager>();
+        var tokens = scope.ServiceProvider.GetRequiredService<IOpenIddictTokenManager>();
+        var owner = Guid.NewGuid().ToString();
+        var grants = new List<string>();
+        var tokenIds = new List<string>();
+        for (var index = 0; index < 2; index++)
+        {
+            var grant = await authorizations.CreateAsync(new OpenIddictAuthorizationDescriptor
+            {
+                Subject = owner,
+                Status = OpenIddictConstants.Statuses.Valid,
+                Type = OpenIddictConstants.AuthorizationTypes.Permanent
+            }, cancellationToken);
+            var grantId = Assert.IsType<string>(await authorizations.GetIdAsync(grant, cancellationToken));
+            grants.Add(grantId);
+            var token = await tokens.CreateAsync(new OpenIddictTokenDescriptor
+            {
+                Subject = owner,
+                AuthorizationId = grantId,
+                Status = OpenIddictConstants.Statuses.Valid,
+                Type = OpenIddictConstants.TokenTypeIdentifiers.RefreshToken
+            }, cancellationToken);
+            tokenIds.Add(Assert.IsType<string>(await tokens.GetIdAsync(token, cancellationToken)));
+        }
+        if (rejectTokenUpdate)
+        {
+            // Trigger существует только в случайной тестовой БД и имитирует отказ второй части транзакции.
+            await database.Database.ExecuteSqlRawAsync("""
+                CREATE FUNCTION reject_test_revocation() RETURNS trigger LANGUAGE plpgsql AS $$
+                BEGIN RAISE EXCEPTION 'Synthetic token revocation failure.'; END; $$;
+                CREATE TRIGGER reject_test_revocation BEFORE UPDATE ON "OpenIddictTokens"
+                FOR EACH ROW EXECUTE FUNCTION reject_test_revocation();
+                """, cancellationToken);
+        }
+        var context = new OpenIddictServerEvents.HandleRevocationRequestContext(new OpenIddictServerTransaction())
+        {
+            GenericTokenPrincipal = new ClaimsPrincipal(new ClaimsIdentity()).SetTokenId(tokenIds[0])
+        };
+        var handler = new RevokeSessionHandler(database, tokens, authorizations);
+
+        // Act: вызывается тот же обработчик после штатной protocol/client проверки OpenIddict.
+        if (rejectTokenUpdate)
+        {
+            var error = await Assert.ThrowsAnyAsync<Exception>(() => handler.HandleAsync(context).AsTask());
+            Assert.Equal("P0001", Assert.IsType<Npgsql.PostgresException>(error.GetBaseException()).SqlState);
+        }
+        else
+        {
+            await handler.HandleAsync(context);
+            Assert.False(context.IsRejected);
+        }
+
+        // Assert: свежий DbContext проверяет commit/rollback и сохранность второй сессии.
+        await using var verification = new AuthDbContext(new DbContextOptionsBuilder<AuthDbContext>()
+            .UseNpgsql(fixture.ConnectionString)
+            .UseOpenIddict()
+            .Options);
+        for (var index = 0; index < 2; index++)
+        {
+            var expected = index == 0 && !rejectTokenUpdate ? OpenIddictConstants.Statuses.Revoked : OpenIddictConstants.Statuses.Valid;
+            var grant = await verification.Set<OpenIddictEntityFrameworkCoreAuthorization>()
+                .SingleAsync(value => value.Id == grants[index], cancellationToken);
+            var token = await verification.Set<OpenIddictEntityFrameworkCoreToken>()
+                .SingleAsync(value => value.Id == tokenIds[index], cancellationToken);
+            Assert.Equal(expected, grant.Status);
+            Assert.Equal(expected, token.Status);
+        }
+    }
+
     /// <summary>Настоящий PostgreSQL сохраняет удаление login и отзыв grants/tokens вместе со сменой SecurityStamp.</summary>
     [Fact]
     public async Task ProviderRemovalPersistsSessionRevocationAsync()
@@ -21,13 +106,7 @@ public sealed class PostgresTests
         using var deadline = new CancellationTokenSource(TimeSpan.FromMinutes(2));
         var cancellationToken = deadline.Token;
         await using var fixture = await PostgresDatabase.CreateAsync(cancellationToken);
-        var services = new ServiceCollection();
-        services.AddLogging();
-        services.AddDbContext<AuthDbContext>(options => options.UseNpgsql(fixture.ConnectionString).UseOpenIddict());
-        services.AddIdentityCore<ApplicationUser>().AddEntityFrameworkStores<AuthDbContext>();
-        services.AddOpenIddict().AddCore(options => options.UseEntityFrameworkCore().UseDbContext<AuthDbContext>());
-        services.AddScoped<ExternalAccounts>();
-        await using var provider = services.BuildServiceProvider();
+        await using var provider = CreateAuthProvider(fixture.ConnectionString);
         await using var scope = provider.CreateAsyncScope();
         var database = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
         await database.Database.MigrateAsync(cancellationToken);
@@ -159,5 +238,17 @@ public sealed class PostgresTests
     {
         await using var database = new BackupDbContext(options);
         await new BackupStorage(database, TimeProvider.System).DeleteAccount(owner, cancellationToken);
+    }
+
+    /// <summary>Создаёт изолированные Identity/OpenIddict services без рабочих конфигов и внешних провайдеров.</summary>
+    private static ServiceProvider CreateAuthProvider(string connectionString)
+    {
+        var services = new ServiceCollection();
+        services.AddLogging();
+        services.AddDbContext<AuthDbContext>(options => options.UseNpgsql(connectionString).UseOpenIddict());
+        services.AddIdentityCore<ApplicationUser>().AddEntityFrameworkStores<AuthDbContext>();
+        services.AddOpenIddict().AddCore(options => options.UseEntityFrameworkCore().UseDbContext<AuthDbContext>());
+        services.AddScoped<ExternalAccounts>();
+        return services.BuildServiceProvider();
     }
 }

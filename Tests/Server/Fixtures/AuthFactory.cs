@@ -24,6 +24,8 @@ namespace FitnessTracker.Server.Tests;
 public sealed class AuthFactory(IPAddress? peerAddress = null, string? trustedProxy = null,
     IClaimsTransformation? claimsTransformation = null) : WebApplicationFactory<Authentication.Program>
 {
+    /// <summary>Синтетический секрет отдельного confidential client в изолированной Auth-БД.</summary>
+    internal const string IntrospectionSecret = "test-introspection-secret-with-at-least-32-characters";
     private readonly SqliteConnection _connection = new("Data Source=:memory:");
     /// <summary>Количество реальных обращений Auth к подменённому Backend.</summary>
     internal int CleanupCalls;
@@ -46,6 +48,7 @@ public sealed class AuthFactory(IPAddress? peerAddress = null, string? trustedPr
             config.AddInMemoryCollection(new Dictionary<string, string?>
             {
                 ["Auth:Issuer"] = "https://localhost/",
+                ["Auth:IntrospectionClientSecret"] = IntrospectionSecret,
                 ["Backend:InternalUrl"] = "https://backend.test/",
                 ["Backend:ServiceKey"] = BackendFactory.ServiceKey,
                 ["ReverseProxy:Address"] = trustedProxy,
@@ -89,7 +92,7 @@ public sealed class AuthFactory(IPAddress? peerAddress = null, string? trustedPr
         {
             using var scope = Services.CreateScope();
             await scope.ServiceProvider.GetRequiredService<AuthDbContext>().Database.EnsureCreatedAsync(cancellationToken);
-            await AuthConfiguration.RegisterClient(scope.ServiceProvider, new ConfigurationBuilder().Build());
+            await AuthConfiguration.RegisterClient(scope.ServiceProvider, scope.ServiceProvider.GetRequiredService<IConfiguration>());
             var manager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             var user = new ApplicationUser { Id = Guid.NewGuid().ToString(), UserName = Guid.NewGuid().ToString("N"), DisplayName = "Test" };
             var created = await manager.CreateAsync(user);

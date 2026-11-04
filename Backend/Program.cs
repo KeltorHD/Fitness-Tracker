@@ -25,8 +25,29 @@ public partial class Program
             config.GetConnectionString("Database") ?? "Host=localhost;Database=fitnesstracker_backups;Username=fitnesstracker_backups"));
         builder.Services.AddSingleton(TimeProvider.System);
         builder.Services.AddScoped<BackupStorage>();
+        builder.Services.AddOptions<IntrospectionOptions>()
+            .BindConfiguration("Auth")
+            .Validate(options => Uri.TryCreate(options.Issuer, UriKind.Absolute, out var uri) &&
+                uri.Scheme == Uri.UriSchemeHttps && uri.AbsolutePath == "/" &&
+                uri.UserInfo.Length == 0 && uri.Query.Length == 0 && uri.Fragment.Length == 0,
+                "Auth:Issuer must be a root HTTPS URL without credentials, query or fragment.")
+            .Validate(options => !string.IsNullOrWhiteSpace(options.IntrospectionClientSecret) &&
+                options.IntrospectionClientSecret.Length >= 32, "Auth:IntrospectionClientSecret must have at least 32 characters.")
+            .ValidateOnStart();
+        builder.Services.AddHttpClient<TokenIntrospection>(client => client.Timeout = TimeSpan.FromSeconds(5))
+            .ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler
+            {
+                AllowAutoRedirect = false,
+                UseCookies = false,
+                PooledConnectionLifetime = TimeSpan.FromMinutes(5)
+            })
+            .RemoveAllLoggers();
+        builder.Services.AddScoped<DependencyAwareJwtBearerEvents>();
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
         {
+            options.EventsType = typeof(DependencyAwareJwtBearerEvents);
+            options.IncludeErrorDetails = false;
+            options.BackchannelTimeout = TimeSpan.FromSeconds(5);
             options.Authority = config["Auth:Issuer"] ?? "https://localhost:5001/";
             options.Audience = "fitnesstracker-api";
             options.RequireHttpsMetadata = true;
@@ -72,7 +93,10 @@ public partial class Program
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseRateLimiter();
-        var backups = app.MapGroup("/v1/backups").RequireAuthorization("backups").RequireRateLimiting("backups");
+        var backups = app.MapGroup("/v1/backups")
+            .RequireAuthorization("backups")
+            .RequireRateLimiting("backups")
+            .AddEndpointFilter<ActiveSessionFilter>();
         backups.MapGet("/", async (HttpContext context, BackupDbContext database, CancellationToken ct) =>
             Results.Ok(await database.Backups.AsNoTracking().Where(item => item.OwnerId == Owner(context))
                 .OrderByDescending(item => item.CreatedAtMilliseconds).Select(item => new BackupInfo(

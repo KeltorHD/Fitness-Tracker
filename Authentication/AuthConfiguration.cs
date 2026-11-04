@@ -78,5 +78,26 @@ public static class AuthConfiguration
         var existing = await manager.FindByClientIdAsync(ClientId);
         if (existing is null) await manager.CreateAsync(descriptor);
         else await manager.UpdateAsync(existing, descriptor);
+        await RegisterIntrospectionClientAsync(manager, config);
+    }
+
+    /// <summary>Регистрирует серверный confidential client с единственным разрешением introspection.</summary>
+    private static async Task RegisterIntrospectionClientAsync(IOpenIddictApplicationManager manager, IConfiguration config,
+        CancellationToken cancellationToken = default)
+    {
+        var secret = config["Auth:IntrospectionClientSecret"];
+        if (string.IsNullOrWhiteSpace(secret) || secret.Length < 32)
+            throw new InvalidOperationException("Auth:IntrospectionClientSecret must have at least 32 characters.");
+        var descriptor = new OpenIddictApplicationDescriptor
+        {
+            ClientId = Audience,
+            ClientSecret = secret,
+            ClientType = ClientTypes.Confidential,
+            DisplayName = "FitnessTracker Backend",
+            Permissions = { Permissions.Endpoints.Introspection }
+        };
+        var existing = await manager.FindByClientIdAsync(Audience, cancellationToken);
+        if (existing is null) await manager.CreateAsync(descriptor, cancellationToken);
+        else await manager.UpdateAsync(existing, descriptor, cancellationToken);
     }
 }

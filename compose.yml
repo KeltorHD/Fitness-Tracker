@@ -15,6 +15,7 @@ services:
       AllowedHosts: ${AUTH_DOMAIN:?Set AUTH_DOMAIN in .env}
       Auth__Issuer: https://${AUTH_DOMAIN}/
       Auth__RedirectUri: fitnesstracker://oauth/callback
+      Auth__IntrospectionClientSecret: ${BACKEND_INTROSPECTION_SECRET:?Set BACKEND_INTROSPECTION_SECRET in .env}
       ConnectionStrings__Database: Host=auth-db;Database=fitnesstracker_auth;Username=fitnesstracker_auth;Password=${AUTH_DB_PASSWORD:?Run scripts/setup-server.sh}
       ReverseProxy__Address: ${SERVER_NETWORK_GATEWAY:-172.30.0.1}
       DataProtection__Path: /app/keys
@@ -59,6 +60,7 @@ services:
       ASPNETCORE_ENVIRONMENT: Production
       AllowedHosts: ${API_DOMAIN:?Set API_DOMAIN in .env};backend
       Auth__Issuer: https://${AUTH_DOMAIN}/
+      Auth__IntrospectionClientSecret: ${BACKEND_INTROSPECTION_SECRET:?Set BACKEND_INTROSPECTION_SECRET in .env}
       ConnectionStrings__Database: Host=backup-db;Database=fitnesstracker_backups;Username=fitnesstracker_backups;Password=${BACKUP_DB_PASSWORD:?Run scripts/setup-server.sh}
       ReverseProxy__Address: ${SERVER_NETWORK_GATEWAY:-172.30.0.1}
       Backend__ServiceKey: ${BACKEND_SERVICE_KEY}
