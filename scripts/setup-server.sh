@@ -23,6 +23,7 @@ PY
 certificate_password="$(python3 -c 'from pathlib import Path; print(next(line.split("=",1)[1] for line in Path(".env").read_text().splitlines() if line.startswith("CERTIFICATE_PASSWORD=")))')"
 export FITNESS_TRACKER_CERTIFICATE_PASSWORD="$certificate_password"
 for purpose in signing encryption; do
+  # These protect OpenIddict tokens/Data Protection; Nginx manages HTTPS separately.
   openssl req -x509 -newkey rsa:3072 -sha256 -nodes -days 730 \
     -subj "/CN=FitnessTracker $purpose" \
     -keyout ".local/certificates/$purpose.key" -out ".local/certificates/$purpose.crt" 2>/dev/null
@@ -32,4 +33,4 @@ for purpose in signing encryption; do
   chmod 444 ".local/certificates/$purpose.pfx"
 done
 unset FITNESS_TRACKER_CERTIFICATE_PASSWORD certificate_password
-echo 'Configuration generated. Set domains and provider credentials in .env; follow docs/SERVER.md.'
+echo 'Token keys and configuration generated. Set .env and configure host Nginx with your TLS certificates; follow docs/SERVER.md.'

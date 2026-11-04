@@ -8,13 +8,15 @@ services:
     tmpfs: [/tmp]
     security_opt: [no-new-privileges:true]
     cap_drop: [ALL]
+    ports:
+      - "127.0.0.1:${AUTH_HTTP_PORT:-5080}:8080"
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       AllowedHosts: ${AUTH_DOMAIN:?Set AUTH_DOMAIN in .env}
       Auth__Issuer: https://${AUTH_DOMAIN}/
       Auth__RedirectUri: fitnesstracker://oauth/callback
       ConnectionStrings__Database: Host=auth-db;Database=fitnesstracker_auth;Username=fitnesstracker_auth;Password=${AUTH_DB_PASSWORD:?Run scripts/setup-server.sh}
-      ReverseProxy__Address: 172.30.0.10
+      ReverseProxy__Address: ${SERVER_NETWORK_GATEWAY:-172.30.0.1}
       DataProtection__Path: /app/keys
       Certificates__Signing__Path: /run/certificates/signing.pfx
       Certificates__Signing__Password: ${CERTIFICATE_PASSWORD:?Run scripts/setup-server.sh}
@@ -49,12 +51,16 @@ services:
     tmpfs: [/tmp]
     security_opt: [no-new-privileges:true]
     cap_drop: [ALL]
+    ports:
+      - "127.0.0.1:${API_HTTP_PORT:-5081}:8080"
+    extra_hosts:
+      - "${AUTH_DOMAIN}:${SERVER_NETWORK_GATEWAY:-172.30.0.1}"
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       AllowedHosts: ${API_DOMAIN:?Set API_DOMAIN in .env};backend
       Auth__Issuer: https://${AUTH_DOMAIN}/
       ConnectionStrings__Database: Host=backup-db;Database=fitnesstracker_backups;Username=fitnesstracker_backups;Password=${BACKUP_DB_PASSWORD:?Run scripts/setup-server.sh}
-      ReverseProxy__Address: 172.30.0.10
+      ReverseProxy__Address: ${SERVER_NETWORK_GATEWAY:-172.30.0.1}
       Backend__ServiceKey: ${BACKEND_SERVICE_KEY}
     depends_on:
       backup-db:
@@ -88,32 +94,14 @@ services:
       timeout: 5s
       retries: 12
 
-  proxy:
-    image: caddy:2-alpine
-    restart: unless-stopped
-    ports: ["80:80", "443:443", "443:443/udp"]
-    environment:
-      AUTH_DOMAIN: ${AUTH_DOMAIN}
-      API_DOMAIN: ${API_DOMAIN}
-      ACME_EMAIL: ${ACME_EMAIL:?Set ACME_EMAIL in .env}
-    volumes:
-      - ./Config/Server/Caddyfile:/etc/caddy/Caddyfile:ro
-      - caddy-data:/data
-      - caddy-config:/config
-    depends_on: [authentication, backend]
-    networks:
-      default:
-        ipv4_address: 172.30.0.10
-        aliases: ["${AUTH_DOMAIN}", "${API_DOMAIN}"]
-
 networks:
   default:
     ipam:
-      config: [{subnet: 172.30.0.0/24}]
+      config:
+        - subnet: ${SERVER_NETWORK_SUBNET:-172.30.0.0/24}
+          gateway: ${SERVER_NETWORK_GATEWAY:-172.30.0.1}
 
 volumes:
   auth-db:
   backup-db:
   auth-keys:
-  caddy-data:
-  caddy-config:

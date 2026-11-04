@@ -55,7 +55,7 @@ Keychain item изолирован по bundle ID и issuer, не синхрон
 | Backend PUT | `/v1/backups/{uuid}` | UTF-8 архив в body; `application/vnd.fitnesstracker+json` |
 | Backend GET | `/v1/backups/{uuid}` | Исходные байты архива, ETag SHA-256 |
 | Backend DELETE | `/v1/backups/{uuid}` | Удаление одной собственной копии |
-| Backend DELETE | `/internal/users/{uuid}/backups` | Только внутренний service credential; публичный proxy возвращает 404 |
+| Backend DELETE | `/internal/users/{uuid}/backups` | Только внутренний service credential; хостовый Nginx возвращает 404 |
 | Оба GET | `/health` | Liveness процесса; не проверка подключения к БД |
 | Оба GET, Development | `/openapi/v1.json` | OpenAPI-документ |
 
@@ -71,22 +71,66 @@ Backend проверяет размер и envelope формата v1–v4, со
 
 ## Подготовка и развёртывание
 
-Нужны Docker Engine + Compose, DNS двух доменов, открытые 80/443 и исходящий HTTPS к провайдерам. Compose использует подсеть `172.30.0.0/24`; если она занята, измените её и доверенный адрес proxy одновременно. Приложения/БД не публикуют порты на хосте.
+Нужны Docker Engine + Compose на Linux, существующий Nginx на этом же хосте, DNS двух доменов и исходящий HTTPS к провайдерам. Публичные сертификаты и их обновление настраивает администратор Nginx. В Compose запускаются только Authentication, Backend и две PostgreSQL-базы.
+
+```text
+Internet → Nginx на хосте (HTTPS, ваши сертификаты)
+  auth.example.com → 127.0.0.1:5080 → authentication:8080
+  api.example.com  → 127.0.0.1:5081 → backend:8080
+```
+
+Compose публикует только эти loopback-порты; PostgreSQL наружу не публикуется. Значения `AUTH_HTTP_PORT`/`API_HTTP_PORT` в `.env` можно изменить вместе с соответствующими `proxy_pass` в Nginx. Домены `AUTH_DOMAIN`/`API_DOMAIN` указываются без схемы, пути и порта. Public issuer остаётся `https://AUTH_DOMAIN/`, хотя Nginx передаёт запросы внутрь по HTTP.
+
+При первой установке:
 
 ```bash
 bash scripts/setup-server.sh
-# Отредактируйте .env: AUTH_DOMAIN, API_DOMAIN, ACME_EMAIL и credentials провайдеров.
+# Отредактируйте .env: AUTH_DOMAIN, API_DOMAIN, HTTP-порты и credentials провайдеров.
+docker compose config --quiet
 docker compose build
 docker compose run --rm authentication --migrate
 docker compose run --rm backend --migrate
 docker compose up -d
 ```
 
-Скрипт генерирует случайные разные пароли БД, внутренний ключ сервиса, пароль PFX и два RSA-сертификата. Существующие `.env`/ключи он не перезаписывает. `.env`, `.local/`, private keys и сертификаты исключены из git; не добавляйте их принудительно. `.local` доступна только владельцу; PFX в дочерней mount-директории доступны непривилегированному container UID. Исходные `.key` также защищены родительской директорией. Production не использует development/ephemeral keys. Development certificates допустимы только при `ASPNETCORE_ENVIRONMENT=Development`; ephemeral credentials — только в тестовой среде.
+Скрипт создаёт пароли БД, внутренний ключ сервиса и два PFX для подписи/шифрования токенов OpenIddict и Data Protection. Эти PFX не являются HTTPS-сертификатами Nginx; TLS-ключи в контейнеры передавать не требуется. Существующие `.env`/ключи скрипт не перезаписывает. `.env`, `.local/`, private keys и сертификаты исключены из git. `.local` доступна только владельцу, её дочерняя mount-директория позволяет непривилегированному container UID читать PFX. Production использует постоянные ключи, Development certificates — только в Development, ephemeral credentials — только в тестах.
 
-Миграции EF Core включены в оба проекта. Изменение схемы делайте новой миграцией; не используйте EnsureDeleted/EnsureCreated для production и не удаляйте volumes при обновлении. `--migrate` Auth также создаёт/обновляет регистрацию iOS client; обычный запуск не меняет схему. Сохраняйте БД Auth, БД Backend, Data Protection volume и сертификаты. Их утрата прервёт существующие сессии. До истечения сертификатов настройте плановую ротацию с перекрытием сроков и публикацией старого публичного ключа на период жизни выданных токенов; автоматическая ротация здесь не реализована. Срок созданных сертификатов — 730 дней.
+### Nginx на хосте
 
-Caddy выдаёт публичный TLS-сертификат по DNS-доменам; сертификаты PFX выше используются для подписи/шифрования токенов, а не HTTPS. Caddy не ведёт access log с OAuth-кодами. Auth доверяет forwarded headers только указанному proxy. Приватный service key используется исключительно на закрытом HTTP-маршруте Compose-сети; при разнесении сервисов на разные хосты переведите внутренний канал на HTTPS/mTLS.
+Образец — [`Config/Server/nginx.conf.example`](../Config/Server/nginx.conf.example). Он включается внутри существующего `http` context, например через `/etc/nginx/conf.d/fitnesstracker.conf`. Замените `auth.example.com`/`api.example.com`, `ssl_certificate`/`ssl_certificate_key` на собственные значения. Если HTTP→HTTPS redirect уже настроен, объедините его с существующим server block. В образце используются обычные `listen 443 ssl`, поэтому он не требует новой директивы `http2`.
+
+```bash
+# Скопируйте и отредактируйте конфигурацию на своём сервере.
+sudo cp Config/Server/nginx.conf.example /etc/nginx/conf.d/fitnesstracker.conf
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+Образец сохраняет Host и перезаписывает `X-Forwarded-Proto`/`X-Forwarded-For` значениями реального запроса. Так OpenIddict видит исходный HTTPS и корректно строит provider callbacks. Переданные клиентом forwarded headers не должны подменять эти значения. Внешний `/internal` и его подпути блокируются без учёта регистра, как и маршруты ASP.NET Core. Для Backend установлен лимит body 20 MiB, отключена буферизация архивов в временные файлы Nginx. Access log отключён, чтобы стандартный request URI с OAuth-кодом не попадал в журнал; при настройке своих журналов исключайте callback query strings и credentials.
+
+### Docker gateway и доверие к proxy
+
+По умолчанию используются `SERVER_NETWORK_SUBNET=172.30.0.0/24` и `SERVER_NETWORK_GATEWAY=172.30.0.1`. Последний — адрес хоста внутри Docker bridge и ожидаемый TCP peer у запросов от хостового Nginx через опубликованные порты. Этот единственный дополнительный адрес передаётся обоим приложениям как `ReverseProxy:Address`; проверка доверенного proxy не отключается. Если подсеть занята, измените subnet и gateway согласованно в `.env`. Для rootless Docker или другого сетевого режима проверьте фактический peer и настройте точный доверенный адрес, сохраняя loopback-привязку портов.
+
+Backend сопоставляет `AUTH_DOMAIN` с gateway через `extra_hosts`, чтобы обращаться за discovery/JWKS к Nginx на хосте с правильными HTTPS hostname/SNI, без зависимости от hairpin-маршрутизации публичного IP. Поэтому HTTPS listener Nginx должен принимать подключения и на bridge-адресе хоста; обычный `listen 443 ssl` из образца подходит. Firewall должен разрешать этот внутренний HTTPS-доступ. Сертификат Auth должен быть доверен контейнеру: для частного CA установите доверенную цепочку в контейнер, не отключая проверку TLS. Для публичного CA используйте fullchain.
+
+Межсервисное удаление копий остаётся в закрытой Compose-сети: Authentication вызывает `http://backend:8080/internal/...` с service key. Оно не проходит через публичный Nginx. При разнесении сервисов на разные хосты внутренний канал требует HTTPS/mTLS.
+
+Миграции включены в проекты. `--migrate` применяет существующие миграции, а Auth также создаёт/обновляет регистрацию iOS client. Обычный запуск не меняет схему; генерацию/изменение миграций выполняют по правилам AGENTS.md. Сохраняйте обе БД, volume `auth-keys`, `.env` и token certificates при обновлениях. Срок созданных token certificates — 730 дней; ротацию выполняйте с перекрытием сроков и доступностью старого публичного ключа до истечения выданных токенов. TLS-сертификаты Nginx имеют собственный независимый lifecycle.
+
+Проверка после настройки Nginx:
+
+```bash
+docker compose ps
+curl -fsS https://auth.example.com/health
+curl -fsS https://auth.example.com/.well-known/openid-configuration
+curl -fsS https://api.example.com/health
+docker compose logs --tail=100 authentication backend
+```
+
+Откройте `https://auth.example.com/login` и проверьте вход настроенным провайдером. `/health` подтверждает только работу процесса. Для обновления прежней Compose-конфигурации с контейнерным proxy остановите старый proxy/orphan перед передачей 80/443 хостовому Nginx; рабочие БД и volumes сохраняются.
+
+Официальные источники: [Nginx reverse proxy](https://nginx.org/en/docs/http/ngx_http_proxy_module.html), [ASP.NET Core forwarded headers](https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/proxy-load-balancer?view=aspnetcore-10.0), [Docker port publishing](https://docs.docker.com/engine/network/port-publishing/).
 
 ## Провайдеры
 
@@ -115,7 +159,11 @@ FITNESS_TRACKER_BACKEND_URL = https:/$()/api.example.com/
 
 ## Проверки
 
-Локально 2026-11-04: полный `check-server.sh` прошёл, включая locked restore, сборку без warnings, 71 серверный сценарий и проверку `dotnet format`: 44 unit, 25 функциональных HTTP/Identity/SQLite и 2 интеграционных PostgreSQL 16.6. Новые регрессии подтвердили и исправили обмен токенов заблокированного пользователя и отказ допустимым MIME types в другом регистре. Схема БД и файлы миграций не менялись; существующие миграции проверены на отдельных временных базах обоих сервисов. Ранее проверены Swift-format 6.2.1 strict lint, структура, RU/EN, ресурсы и Compose config. Core build/tests, Apple SDK/XCTest, production images и реальные provider flows не запускались.
+Локально 2026-11-04 после перехода на хостовый Nginx: `check-server.sh` прошёл — locked restore, сборка без warnings, 73 сценария (44 unit, 29 HTTP/Identity/SQLite) и `dotnet format`. Четыре новых HTTP-сценария подтверждают принятие forwarded HTTPS только от доверенного proxy, включая IPv4-mapped IPv6. Две интеграционные PostgreSQL-проверки ранее прошли на 16.6 с отдельными временными базами; при изменении proxy они повторно не запускались. Схема БД и файлы миграций не менялись.
+
+Compose config проверен с обычными и изменёнными портами/subnet/gateway. Образец Nginx прошёл `nginx -t` на 1.24 и изолированную проверку с временным TLS-сертификатом и синтетическим Docker-upstream: HTTPS redirect, оба домена, перезапись поддельных заголовков, фактический TCP peer равен bridge gateway, `/internal` закрыт и при другом регистре или encoded slash. Системный Nginx не устанавливался и не изменялся. Эта проверка не заменяет проверку ваших доменов, сертификатов и полного provider flow на сервере.
+
+Ранее проверены Swift-format 6.2.1 strict lint, структура, RU/EN и ресурсы. Core build/tests, Apple SDK/XCTest, production images и реальные provider flows не запускались.
 
 ```bash
 bash scripts/check-server.sh
@@ -132,6 +180,7 @@ dotnet ef migrations has-pending-model-changes --project Backend
 | `Unit` | `Tests/Server/BackupCleanupTests.cs` | DELETE/service key контракт, ошибки статуса и конфигурации, передача отмены в HTTP handler без сети |
 | `HTTP` | `Tests/Server/BackendTests.cs` | JWT/subject/scope и изоляция пользователей, MIME type, SHA-256/headers/фиксированное время, квота, идемпотентность, откат при отказе/отмене записи |
 | `HTTP` | `Tests/Server/AuthenticationTests.cs` | PKCE, code/refresh/revoke, блокировка аккаунта, scopes, prompt=none, antiforgery, внешние привязки и удаление данных |
+| `HTTP` | `Tests/Server/HostNginxForwardingTests.cs` | Исходный HTTPS за доверенным proxy, отказ поддельному `X-Forwarded-Proto` от чужого peer, IPv4 и IPv4-mapped IPv6 |
 | `PostgreSQL` | `Tests/Server/PostgresTests.cs` | Раздельные БД Auth/Backend, существующие миграции и model snapshots, конкурентная квота, гонка PUT/удаления и сохранность чужих данных |
 
 ```bash

@@ -1,7 +1,9 @@
 using System.Net;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
@@ -16,7 +18,9 @@ using FitnessTracker.Authentication;
 namespace FitnessTracker.Server.Tests;
 
 /// <summary>Изолирует Identity/OpenIddict и подменяет только внешний HTTP-сервис удаления копий.</summary>
-public sealed class AuthFactory : WebApplicationFactory<Authentication.Program>
+/// <param name="peerAddress">Сетевой адрес непосредственного отправителя для проверки reverse proxy.</param>
+/// <param name="trustedProxy">Единственный дополнительно доверенный proxy в тестовой конфигурации.</param>
+public sealed class AuthFactory(IPAddress? peerAddress = null, string? trustedProxy = null) : WebApplicationFactory<Authentication.Program>
 {
     private readonly SqliteConnection _connection = new("Data Source=:memory:");
     /// <summary>Количество реальных обращений Auth к подменённому Backend.</summary>
@@ -42,17 +46,35 @@ public sealed class AuthFactory : WebApplicationFactory<Authentication.Program>
                 ["Auth:Issuer"] = "https://localhost/",
                 ["Backend:InternalUrl"] = "https://backend.test/",
                 ["Backend:ServiceKey"] = BackendFactory.ServiceKey,
+                ["ReverseProxy:Address"] = trustedProxy,
                 ["AllowedHosts"] = "localhost",
                 ["Logging:LogLevel:Default"] = "None"
             });
         });
         builder.ConfigureServices(services =>
         {
+            if (peerAddress is not null)
+                services.AddSingleton<IStartupFilter>(new PeerAddressStartupFilter(peerAddress));
             services.RemoveAll<DbContextOptions<AuthDbContext>>();
             services.RemoveAll<IDbContextOptionsConfiguration<AuthDbContext>>();
             services.AddDbContext<AuthDbContext>(options => options.UseSqlite(_connection).UseOpenIddict());
             services.AddHttpClient<BackupCleanup>().ConfigurePrimaryHttpMessageHandler(() => new CleanupHandler(this));
         });
+    }
+
+    /// <summary>Подставляет реальный TCP peer до production middleware обработки forwarded headers.</summary>
+    private sealed class PeerAddressStartupFilter(IPAddress address) : IStartupFilter
+    {
+        /// <summary>Сохраняет остальной pipeline приложения, меняя только сетевое окружение запроса.</summary>
+        public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> next) => app =>
+        {
+            app.Use(nextMiddleware => context =>
+            {
+                context.Connection.RemoteIpAddress = address;
+                return nextMiddleware(context);
+            });
+            next(app);
+        };
     }
 
     /// <summary>Создаёт отдельного пользователя и защищённый Identity cookie без обращения к OAuth-провайдеру.</summary>
