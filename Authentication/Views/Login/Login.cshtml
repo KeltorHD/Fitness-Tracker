@@ -1,0 +1,15 @@
+@model FitnessTracker.Authentication.Controllers.LoginPage
+<h1>Вход в аккаунт</h1>
+<p>Войдите, чтобы сохранять резервные копии тренировок.</p>
+@foreach (var provider in Model.Providers)
+{
+  <form method="post" action="/login/@provider.ToLowerInvariant()" asp-antiforgery="true">
+    <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+    <button type="submit">Продолжить с @(provider == "Yandex" ? "Яндекс ID" : provider)</button>
+  </form>
+}
+@if (Model.Providers.Length == 0)
+{
+  <p role="status">Вход временно недоступен. Попробуйте позже.</p>
+}
+<p>Тренировки на устройстве доступны без входа.</p>

@@ -1,0 +1,12 @@
+**
+!global.json
+!Directory.Build.props
+!Authentication/
+!Authentication/**
+!Backend/
+!Backend/**
+**/bin
+**/obj
+**/*.pfx
+**/*.p8
+**/appsettings.*.json
