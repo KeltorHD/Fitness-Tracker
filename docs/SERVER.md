@@ -8,7 +8,7 @@
 | --- | --- |
 | Существующий `project.yml`, `Apple/`, `Sources/` | Нативное iOS/watchOS-приложение и независимый Swift Core; пути сохранены |
 | `Authentication/FitnessTracker.Authentication.csproj` | Пользователи Identity, внешние входы, OAuth/OIDC, сессии, привязки, удаление аккаунта |
-| `Backend/FitnessTracker.Backend.csproj` | Только резервные копии; JWT через discovery/JWKS и проверка отзыва через introspection Auth Server |
+| `Backend/FitnessTracker.Backend.csproj` | Backend приложения; текущая функция — резервные копии. Собственные правила доступа, JWT через discovery/JWKS и проверка отзыва через introspection Auth Server |
 | `FitnessTracker.Server.sln` | Оба серверных проекта и отдельный тестовый проект `Tests/Server` |
 
 Требуется .NET 10 SDK. Версии пакетов и lock-файлы закреплены. Внутренних ссылок между серверными проектами нет: обмен идёт по HTTP и общему документированному контракту. В production сервисы используют раздельные PostgreSQL-базы и учётные данные. SwiftData остаётся основным локальным хранилищем приложения; сервер не синхронизирует записи и не заменяет CloudKit.
@@ -18,8 +18,8 @@ flowchart LR
   iOS[iOS / SwiftUI] -->|PKCE S256| Auth[Authentication / Identity + OpenIddict]
   Auth --> Providers[Apple / Google / Яндекс]
   Auth --> AuthDB[(PostgreSQL: пользователи и токены)]
-  iOS -->|JWT / backups scope| API[Backend: резервные копии]
-  API --> BackupDB[(PostgreSQL: архивы)]
+  iOS -->|JWT / личность пользователя| API[Backend: собственные правила доступа]
+  API --> BackendDB[(PostgreSQL: данные Backend)]
   API -. JWKS + introspection .-> Auth
   Auth -->|Удаление данных: внутренняя сеть| API
 ```
@@ -32,7 +32,7 @@ flowchart LR
 
 MVC mapping сохраняет native principal OpenIddict, scheme и protocol errors. WebAuthn JSON передаётся Identity без повторного разбора или преобразования mapper-ом. Ожидаемые отказы сервисов преобразуются через Mapster/exception filter; инфраструктурные исключения и cancellation остаются штатному ASP.NET Core pipeline. Ошибка регистрации создаёт чистый ModelState без паролей, а безопасное сообщение неудачного входа сохраняется в browser TempData на HTTP-границе. Локальность продолжений проверяет штатный MVC URL helper в `BrowserNavigation`.
 
-Маршруты, scope, payloads и алгоритмы отзыва сохраняются. Рефакторинг не меняет EF-модель или миграции. Backend сохраняет minimal API и существующий `BackupStorage`.
+Маршруты, payloads и алгоритмы отзыва сохраняются. Backend использует собственные правила доступа вместо прикладных OAuth scopes. EF-модель и миграции не меняются; Backend сохраняет minimal API и существующий `BackupStorage`.
 
 ## Вход и сессии
 
@@ -41,6 +41,8 @@ MVC mapping сохраняет native principal OpenIddict, scheme и protocol e
 HTTPS callback использует `.https(host:path:)` и `webcredentials` Associated Domains. Это требует настоящих App ID Prefix и Bundle ID, соответствующей capability/provisioning и файла AASA. Они пока не заданы: код подготовлен, работоспособность возврата на iPhone ещё не подтверждена. [API Apple](https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession/callback/https(host:path:)).
 
 iOS использует OAuth access/refresh tokens; профиль получает из защищённого `/v1/account`. ID token не используется как источник identity. Access token действует 10 минут, refresh — до 30 дней с ротацией. Повтор использованного refresh token отвергается и отзывает authorization family; окно повторного использования равно нулю. Параллельные iOS-запросы используют одну операцию обновления; новые токены сначала сохраняются в Keychain. При `invalid_grant` требуется новый вход. Потеря ответа token endpoint может потребовать повторного входа — автоматического повторного обмена использованного refresh нет.
+
+Auth подтверждает личность, состояние аккаунта и сессии. iOS запрашивает только стандартные `profile offline_access`; `openid` поддерживается сервером для OIDC-клиентов. Прикладной scope `backups` больше не регистрируется и не запрашивается. Backend локально проверяет допустимый UUID в `sub`, ограничивает операции владельцем копии, применяет квоту и rate limit. Все действующие пользователи могут работать со своими копиями; дополнительных ролей или прав, выдаваемых Auth, сейчас нет. Scopes в старом токене не добавляют прав. API аккаунта требует действующий bearer token и UUID пользователя, без scope функций Backend.
 
 Keychain item изолирован по bundle ID и issuer, не синхронизируется через iCloud, доступен при разблокированном устройстве и не переносится на другое устройство. Сетевой клиент использует HTTPS, тайм-ауты, ephemeral URLSession без cookies/cache и запрещает redirects запросов с credentials. Токены и payloads не логируются. Закрытие экрана отменяет его работу; общая операция ротации принадлежит сессии и сохраняет результат независимо от закрытия одного экрана.
 
@@ -78,7 +80,7 @@ Keychain item изолирован по bundle ID и issuer, не синхрон
 | Auth GET/POST | `/callback/login/{provider}` | Проверенный OpenIddict callback Google/Apple/Яндекс |
 | Auth GET | `/account` | Способы входа и возврат в iOS |
 | Auth POST | `/account/unlink/{provider}`, `/account/logout` | Веб-действия с antiforgery |
-| Auth GET | `/v1/account` | `{id,name,createdAt,logins}`; bearer token, scope `backups` |
+| Auth GET | `/v1/account` | `{id,name,createdAt,logins}`; bearer token с UUID пользователя |
 | Auth DELETE | `/v1/account` | Очистка копий, отзыв токенов и удаление Identity-пользователя |
 | Backend GET | `/v1/backups` | Массив `{id,createdAt,archiveVersion,size,sha256}` без содержимого копий |
 | Backend PUT | `/v1/backups/{uuid}` | UTF-8 архив в body; `application/vnd.fitnesstracker+json` |
@@ -88,7 +90,7 @@ Keychain item изолирован по bundle ID и issuer, не синхрон
 | Оба GET | `/health` | Liveness процесса; не проверка подключения к БД |
 | Оба GET, Development | `/openapi/v1.json` | OpenAPI-документ |
 
-Для защищённых API нужен `Authorization: Bearer <access_token>`. Основной API проверяет RS256, тип `at+jwt`, issuer, audience `fitnesstracker-api`, срок, `sub`, scope `backups` и актуальный статус сессии через Auth. Пользователь не передаёт owner ID в публичном API; все выборки ограничены subject токена. Чужая или отсутствующая копия возвращает одинаковый 404. При невозможности проверить статус возвращается 503, доступ к копиям закрыт.
+Для защищённых API нужен `Authorization: Bearer <access_token>`. Backend проверяет RS256, тип `at+jwt`, issuer, audience `fitnesstracker-api`, срок, допустимый `sub` и актуальный статус сессии через Auth. Разрешения на операции определяет сам Backend, без проверки прикладных OAuth scopes. Пользователь не передаёт owner ID в публичном API; все выборки ограничены subject токена. Чужая или отсутствующая копия возвращает одинаковый 404. При невозможности проверить статус возвращается 503, доступ к копиям закрыт. При обновлении развёртывайте изменённый iOS-клиент вместе с Auth: прежний запрос входа со scope `backups` новая регистрация клиента не принимает. Уже выданные access tokens могут использоваться до истечения срока/отзыва; scope не расширяет их права.
 
 PUT создаёт неизменяемую копию: 201 при создании, 200 при повторе тех же байтов и UUID, 409 при попытке заменить содержимое или превышении квоты. iOS сохраняет UUID и байты неудачной загрузки до повтора, чтобы потеря ответа не создавала дубликаты. По умолчанию 10 копий по 20 MiB на аккаунт; старые копии не удаляются автоматически. Некорректный envelope — 400, неподдерживаемый Content-Type — 415, слишком большой body — 413, ограничение частоты — 429. PostgreSQL advisory transaction lock сериализует проверку квоты и удаление аккаунта для одного UUID.
 
@@ -100,7 +102,7 @@ Backend проверяет размер и envelope формата v1–v4, со
 
 ## Подготовка и развёртывание
 
-Нужны Docker Engine + Compose на Linux, существующий Nginx на этом же хосте, DNS двух доменов и исходящий HTTPS к провайдерам. Публичные сертификаты и их обновление настраивает администратор Nginx. В Compose запускаются только Authentication, Backend и две PostgreSQL-базы.
+Нужны Docker Engine + Compose на Linux, существующий Nginx на этом же хосте, DNS двух доменов и исходящий HTTPS к провайдерам. Публичные сертификаты и их обновление настраивает администратор Nginx. В Compose постоянно работают Authentication, Backend и две PostgreSQL-базы; одноразовый `auth-storage-init` подготавливает права каталога ключей перед запуском Auth.
 
 ```text
 Internet → Nginx на хосте (HTTPS, ваши сертификаты)
@@ -120,7 +122,44 @@ docker compose config --quiet
 docker compose up -d --build
 ```
 
-Скрипт создаёт пароли БД, разные ключи удаления копий и introspection, а также два PFX для подписи/шифрования токенов OpenIddict и Data Protection. `BACKEND_INTROSPECTION_SECRET` из `.env` передаётся только Auth и Backend как `Auth:IntrospectionClientSecret`; минимум 32 символа, генератор использует 32 случайных байта в hex. Он не совпадает с `BACKEND_SERVICE_KEY` и не передаётся iOS. Эти PFX не являются HTTPS-сертификатами Nginx; TLS-ключи в контейнеры передавать не требуется. Существующие `.env`/ключи скрипт не перезаписывает. `.env`, `.local/`, private keys и сертификаты исключены из git. `.local` доступна только владельцу, её дочерняя mount-директория позволяет непривилегированному container UID читать PFX. Production использует постоянные ключи, Development certificates — только в Development, ephemeral credentials — только в тестах.
+Скрипт создаёт пароли БД (`AUTH_DB_PASSWORD`, `BACKEND_DB_PASSWORD`), разные ключи удаления копий и introspection, а также два PFX для подписи/шифрования токенов OpenIddict и Data Protection. `BACKEND_INTROSPECTION_SECRET` из `.env` передаётся только Auth и Backend как `Auth:IntrospectionClientSecret`; минимум 32 символа, генератор использует 32 случайных байта в hex. Он не совпадает с `BACKEND_SERVICE_KEY` и не передаётся iOS. Эти PFX не являются HTTPS-сертификатами Nginx; TLS-ключи в контейнеры передавать не требуется. Существующие `.env`/ключи скрипт не перезаписывает. `.env`, `.local/`, private keys и сертификаты исключены из git. `.local` доступна только владельцу, её дочерняя mount-директория позволяет непривилегированному container UID читать PFX. Production использует постоянные ключи, Development certificates — только в Development, ephemeral credentials — только в тестах.
+
+### Постоянные папки и другой диск
+
+По умолчанию постоянные данные лежат рядом с `compose.yml`, в игнорируемой `.local/`. Именованные Docker volumes для новых установок не используются. Пути задаются в `.env`, без дополнительного Compose override:
+
+| Переменная | Путь по умолчанию | Содержимое |
+| --- | --- | --- |
+| `AUTH_DB_DATA_PATH` | `./.local/auth-db` | PostgreSQL Authentication |
+| `BACKEND_DB_DATA_PATH` | `./.local/backend-db` | PostgreSQL Backend, включая архивы |
+| `AUTH_KEYS_PATH` | `./.local/auth-keys` | Постоянные Data Protection keys |
+| `AUTH_CERTIFICATES_PATH` | `./.local/certificates` | PFX подписи/шифрования и необязательный Apple P8; mount только для чтения |
+
+Например, для данных PostgreSQL на другом диске:
+
+```dotenv
+AUTH_DB_DATA_PATH=/srv/fitnesstracker/auth-db
+BACKEND_DB_DATA_PATH=/srv/fitnesstracker/backend-db
+```
+
+Относительные пути считаются от каталога `compose.yml`; абсолютные могут указывать на другой диск. Пути с пробелами в `.env` заключайте в кавычки. Docker создаёт отсутствующие каталоги БД и Data Protection keys. Для PostgreSQL 18 монтируется родитель `/var/lib/postgresql`; фактический `PGDATA` — `18/docker` внутри выбранной папки. Базы создаются стандартным entrypoint PostgreSQL при первом запуске пустого хранилища: `fitnesstracker_auth` и `fitnesstracker_backend`, с отдельными пользователями того же имени. Backend подключается к `backend-db`; при необходимости логические имя БД и пользователь переопределяются через `BACKEND_DB_NAME` и `BACKEND_DB_USER`. Эти параметры не переименовывают уже существующую БД.
+
+`auth-storage-init` запускается без сети, с read-only root filesystem и только capabilities `CHOWN`/`FOWNER`. Он назначает корневому каталогу keys UID/GID runtime-образа .NET (`APP_UID`) и mode `0700`, затем завершается. Содержимое ключей не меняется. Auth ожидает успешного завершения этого шага и работает под прежним непривилегированным UID. Существующий каталог сертификатов требуется заранее: `setup-server.sh` создаёт его в стандартном месте; при смене `AUTH_CERTIFICATES_PATH` сначала скопируйте туда прежние PFX/P8, сохраняя права. Отсутствующий путь сертификатов вызывает ошибку запуска.
+
+### Переход с прежних volumes и имён Backend
+
+Для существующей установки сначала остановите приложения и PostgreSQL, сохраните дампы обеих БД, `.env`, Data Protection keys и token certificates. Менять путь на пустую папку без переноса данных нельзя: PostgreSQL создаст новый кластер, а не перенесёт прежний. Само обновление Compose не копирует данные и не переименовывает логическую БД.
+
+Если использовались bind mounts, задайте в новых `AUTH_DB_DATA_PATH`/`BACKEND_DB_DATA_PATH` именно прежние пути. Если использовались именованные volumes, скопируйте их содержимое в выбранные папки при остановленных БД, сохранив UID/GID, права и всю структуру, включая `18/docker`. Каталог Data Protection keys также переносится целиком с прежними файлами и владельцем. Физический перенос допустим только между одинаковыми major-версиями PostgreSQL; между версиями используйте dump/restore. Старые volumes сохраняйте до проверки перенесённых данных.
+
+В существующей `.env` переименуйте `BACKUP_DB_PASSWORD` в `BACKEND_DB_PASSWORD`, сохранив пароль. Если прежняя логическая БД/пользователь назывались `fitnesstracker_backups`, укажите их как параметры совместимости:
+
+```dotenv
+BACKEND_DB_NAME=fitnesstracker_backups
+BACKEND_DB_USER=fitnesstracker_backups
+```
+
+Новые установки по умолчанию используют `fitnesstracker_backend`. Для существующей БД эти параметры сохраняют доступ к прежним архивам без изменения их содержимого. Из старого storage override перенесите пути в `.env`; если `COMPOSE_FILE` подключал только этот override, удалите его настройку. Если override нужен и для других изменений, переименуйте в нём сервис `backup-db` в `backend-db` и согласуйте mounts с `.env`. После переноса выполните `python3 scripts/setup-server-network.py`, `docker compose config --quiet` и `docker compose up -d --build`; проверьте аккаунт и список прежних копий. Рабочие данные агент в этой задаче не переносит и не удаляет.
 
 ### Обновление существующего сервера для introspection
 
@@ -155,7 +194,7 @@ sudo systemctl reload nginx
 
 `python3 scripts/setup-server-network.py` создаёт bridge-сеть без заданного IPAM-диапазона: Docker сам выбирает свободную подсеть и gateway. Скрипт считывает их через `docker network inspect`, обновляет только `SERVER_NETWORK_NAME`, `SERVER_NETWORK_SUBNET`, `SERVER_NETWORK_GATEWAY` в существующей `.env` и готовит `.local/nginx.generated.conf`. Пароли, `COMPOSE_FILE`, настройки bind mounts, PFX и volumes сохраняются. Чтение Compose учитывает `.env`, в том числе `COMPOSE_FILE=compose.yml:.local/compose.storage.yml` на Linux. Скрипт не выводит секреты, не читает `.env` как shell-код и не меняет системный Nginx.
 
-По умолчанию сеть называется `fitness-tracker-server`; для отдельного экземпляра задайте другое `SERVER_NETWORK_NAME`. Повторная подготовка использует ту же сеть, а не выбирает новый диапазон. Чужая сеть с таким именем отклоняется. В Compose она объявлена `external`, поэтому обычный `docker compose down` её сохраняет. После переноса на другой сервер, удаления этой сети или изменения доменов/портов повторите подготовку и перенесите обновления в Nginx. При переходе со старой фиксированной сети обновляйте все четыре сервиса через `docker compose up -d --build`; рабочие volumes и bind mounts остаются прежними. Если свободные address pools Docker исчерпаны, скрипт завершится ошибкой, сохранив прежнюю конфигурацию; это требует настройки пула самого Docker, а не удаления БД.
+По умолчанию сеть называется `fitness-tracker-server`; для отдельного экземпляра задайте другое `SERVER_NETWORK_NAME`. Повторная подготовка использует ту же сеть, а не выбирает новый диапазон. Чужая сеть с таким именем отклоняется. В Compose она объявлена `external`, поэтому обычный `docker compose down` её сохраняет. После переноса на другой сервер, удаления этой сети или изменения доменов/портов повторите подготовку и перенесите обновления в Nginx. При переходе со старой фиксированной сети обновляйте все сервисы через `docker compose up -d --build`, предварительно подготовив постоянные папки по разделу выше. Если свободные address pools Docker исчерпаны, скрипт завершится ошибкой, сохранив прежнюю конфигурацию; это требует настройки пула самого Docker, а не удаления БД.
 
 Найденный gateway — адрес хоста внутри bridge и ожидаемый TCP peer у запросов от хостового Nginx через опубликованные порты. Только этот дополнительный адрес передаётся обоим приложениям как `ReverseProxy:Address`; проверка доверенного proxy сохраняется. Экспортированные устаревшие `SERVER_NETWORK_*` перекрывают `.env`, поэтому скрипт попросит выполнить соответствующий `unset`. Этот способ рассчитан на обычный Docker Engine bridge в Linux; для rootless Docker или другого сетевого режима необходимо проверить фактический peer, сохраняя loopback-привязку портов.
 
@@ -165,7 +204,7 @@ Backend сопоставляет `AUTH_DOMAIN` с gateway через `extra_host
 
 Миграции включены в проекты и применяются автоматически при обычном запуске обоих сервисов, до открытия HTTP listener. Auth после миграций создаёт/обновляет public iOS и confidential Backend clients в транзакции. Вся инициализация каждого сервиса сериализована PostgreSQL advisory lock в его собственной БД: блокировка удерживается отдельным непулируемым соединением и освобождается при его закрытии, включая ошибку или завершение процесса. Повторный запуск применяет только отсутствующие миграции и сохраняет пользовательские данные. При ошибке БД/миграции/регистрации процесс завершается с ошибкой, а Compose с `restart: unless-stopped` повторяет запуск. Неготовая схема не обслуживает HTTP. SQLite-fixtures в среде `Testing` продолжают создавать изолированную схему сами.
 
-`docker compose run --rm authentication --migrate` и аналогичная команда Backend остаются необязательными: применяют миграции и завершают процесс без HTTP. Генерацию/изменение миграций агент выполняет по правилам AGENTS.md; обычный startup использует только уже включённые в сборку миграции. Сохраняйте обе БД, volume `auth-keys`, `.env` и token certificates при обновлениях. Срок созданных token certificates — 730 дней; ротацию выполняйте с перекрытием сроков и доступностью старого публичного ключа до истечения выданных токенов. TLS-сертификаты Nginx имеют собственный независимый lifecycle.
+`docker compose run --rm authentication --migrate` и аналогичная команда Backend остаются необязательными: применяют миграции и завершают процесс без HTTP. Генерацию/изменение миграций агент выполняет по правилам AGENTS.md; обычный startup использует только уже включённые в сборку миграции. Сохраняйте обе БД, каталог `AUTH_KEYS_PATH`, `.env` и token certificates при обновлениях. Срок созданных token certificates — 730 дней; ротацию выполняйте с перекрытием сроков и доступностью старого публичного ключа до истечения выданных токенов. TLS-сертификаты Nginx имеют собственный независимый lifecycle.
 
 Проверка после настройки Nginx:
 
@@ -240,7 +279,7 @@ Challenge живёт не более пяти минут и расходуетс
 | Средний | OpenIddict завершал анонимные запросы до `UseRateLimiter`, обходя IP-лимит Auth | Лимит перенесён перед authentication middleware; после 120 запросов authorize/token/discovery следующий получает 429 |
 | Средний | При 502 Nginx записывал OAuth code/state в унаследованный error log | В Auth virtual host отключена запись исходных ошибок Nginx; изолированная проверка 502 с синтетическим callback больше не находит code/state в журнале |
 
-Backend отклоняет JWT с неверными issuer/audience/type/scope/subject, чужой подписью, без подписи, с HS256 вместо RS256, без exp, истёкшие и ещё не вступившие в силу. Проверены чтение/запись чужих копий, внутренний service credential, идемпотентность, квота и сохранность данных при отказах; PostgreSQL-сценарии отдельно проверяют конкуренцию. Поддельные forwarded headers от неизвестного peer не подтверждают HTTPS. Веб-формы используют antiforgery, return URL ограничен локальным адресом, одинаковый email не объединяет аккаунты.
+Backend отклоняет JWT с неверными issuer/audience/type/subject, чужой подписью, без подписи, с HS256 вместо RS256, без exp, истёкшие и ещё не вступившие в силу. Проверены чтение/запись чужих копий, внутренний service credential, идемпотентность, квота и сохранность данных при отказах; PostgreSQL-сценарии отдельно проверяют конкуренцию. Права локальны для Backend: JWT без scopes разрешает работу только со своими данными, а произвольные scopes не открывают чужие. Поддельные forwarded headers от неизвестного peer не подтверждают HTTPS. Веб-формы используют antiforgery, return URL ограничен локальным адресом, одинаковый email не объединяет аккаунты.
 
 `dotnet package list --project FitnessTracker.Server.sln --vulnerable --include-transitive --no-restore --format json` завершился успешно с источником NuGet.org и не сообщил об известных уязвимостях в трёх проектах. [Advisory OpenIddict GHSA-925x-4h4v-2792](https://github.com/openiddict/openiddict-core/security/advisories/GHSA-925x-4h4v-2792) исправлен с 7.7; используемая 7.7.2 находится вне затронутого диапазона.
 
@@ -290,7 +329,7 @@ dotnet ef migrations has-pending-model-changes --project Backend
 | `Unit` | `Tests/Server/PasskeySchemaTests.cs` | Согласованность snapshot и модели, AddPasskeys добавляет только таблицу/индекс, прежние колонки не сужаются |
 | `HTTP` | `Tests/Server/CredentialsTests.cs` | Email/password без подтверждения, нормализация/уникальность, CSRF, lockout, отсутствие email merge, реальные WebAuthn attestation/assertion, origin/RP/UV/signature/replay, управление ключами и отзыв |
 | `HTTP` | `Tests/Server/AppAssociationTests.cs` | AASA только с настроенным App ID, безопасный HTTPS fallback без отражения code/state |
-| `HTTP` | `Tests/Server/BackendTests.cs` | JWT/subject/scope и изоляция пользователей, MIME type, SHA-256/headers/фиксированное время, квота, идемпотентность, откат при отказе/отмене записи |
+| `HTTP` | `Tests/Server/BackendTests.cs` | JWT/subject и изоляция пользователей без scopes, отсутствие дополнительных прав от scopes в токене, MIME type, SHA-256/headers/фиксированное время, квота, идемпотентность, откат при отказе/отмене записи |
 | `HTTP` | `Tests/Server/AuthenticationTests.cs` | PKCE, code/refresh/revoke, блокировка аккаунта, scopes, prompt=none, antiforgery, внешние привязки, отзыв сессий/гонка отвязки и удаление данных |
 | `HTTP` | `Tests/Server/AuthenticationSecurityTests.cs` | IP-лимит OAuth errors/discovery применяется до обработки запросов OpenIddict |
 | `HTTP` | `Tests/Server/BackendSecurityTests.cs` | Запрет unsigned/HS256 JWT, обязательный exp и запрет преждевременного использования токена |
@@ -311,6 +350,8 @@ dotnet test FitnessTracker.Server.sln --no-build --no-restore -m:1 --filter 'Cat
 Для PostgreSQL задайте `FITNESS_TRACKER_TEST_POSTGRES` connection string к **одноразовому тестовому экземпляру** и запустите `check-server.sh`; он включит все 12 PostgreSQL-проверок. Только эту категорию запускают с `--filter 'Category=PostgreSQL'`. Без явной конфигурации прямой запуск категории завершается ошибкой, а не молчаливым пропуском. Fixture создаёт случайные отдельные базы с отключённым pooling и удаляет только их с отдельным cleanup deadline, включая сбой основного теста. Триггер отказа записи существует только в случайной тестовой БД сценария rollback. CI поднимает PostgreSQL 18; локально проверено на 16.6, на динамически выделенном localhost-порту. Файлы миграций для этих тестов не генерируются и не изменяются.
 
 После автоматизации развёртывания локально прошёл полный `check-server.sh`: locked restore, сборка без warnings/errors, 166 xUnit-сценариев (73 unit, 81 HTTP/Identity/SQLite, 12 PostgreSQL 16.6), `dotnet format` и пять Python-тестов скрипта сети. Отдельная проверка с настоящим Docker подтвердила автоматическое выделение свободной подсети, повторную подготовку без смены network ID, сохранение storage override и сети после `compose down`, согласованные proxy/extra_hosts и фактический HTTP peer gateway. Временный Nginx прошёл syntax/ACL/header и проверку отсутствия OAuth query в error log при 502. Production startup проверен с тестовыми PFX и БД через настоящий Main; рабочий сервер и его сертификаты не менялись. Визуальная проверка подсказок в браузере на реальных устройствах не выполнялась.
+
+2026-11-05 после переноса хранения и правил доступа полный `check-server.sh` прошёл: 168 xUnit-сценариев (73 unit, 83 HTTP/Identity/SQLite, 12 PostgreSQL 16.6), locked restore, сборка без warnings/errors, форматирование и пять Python-тестов сети. HTTP-проверки используют токены без scope функций Backend; отдельно проверено, что scopes в токене не открывают чужие копии. Сквозные проверки PKCE, introspection и немедленного отзыва сохранены. Временные Docker Compose проекты проверили пути по умолчанию и абсолютные пути с пробелами, согласованность имён БД/пользователя с connection string, запись keys под UID 1654 без capabilities, повторный init и сохранность БД/ключей после пересоздания контейнеров. Storage smoke использовал локальные PostgreSQL 16.6 с явным `PGDATA` и runtime .NET 10.0.0; сборка production images и запуск PostgreSQL 18 в этой проверке не выполнялись. Изолированный setup подтвердил пять разных 256-bit секретов, mode 0600 `.env` и сохранение ключей при повторе. Swift-format изменённых файлов прошёл; новый XCTest OAuth query требует Xcode. Рабочие базы, папки и конфигурация сервера не менялись.
 
 Apple XCTest `AccountBackupTests` проверяют callback validation, одну ротацию для параллельных запросов, ошибки сети/Keychain, истёкшую сессию и проверку целостности; `ArchiveTransferTests` проверяет подтверждение восстановления. Их запуск требует Xcode. Foundation-часть добавлена в Swift 6 type-check скрипта `check-linux.sh`; SwiftUI/Keychain/CryptoKit и реальный вход требуют Apple SDK/устройства. Чек-лист: [XCODE_VALIDATION.md](XCODE_VALIDATION.md).
 

@@ -131,7 +131,7 @@ public partial class Program
                 options.AllowAuthorizationCodeFlow().AllowRefreshTokenFlow();
                 options.RequireProofKeyForCodeExchange();
                 options.Configure(server => server.CodeChallengeMethods.Remove(OpenIddictConstants.CodeChallengeMethods.Plain));
-                options.RegisterScopes("openid", "profile", AuthConfiguration.Scope);
+                options.RegisterScopes("openid", "profile");
                 options.SetAccessTokenLifetime(TimeSpan.FromMinutes(10));
                 options.SetRefreshTokenLifetime(TimeSpan.FromDays(30));
                 options.SetRefreshTokenReuseLeeway(TimeSpan.Zero);
@@ -154,7 +154,8 @@ public partial class Program
             });
         builder.Services.AddAuthorization(options => options.AddPolicy("account", policy =>
             policy.AddAuthenticationSchemes(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)
-                .RequireAuthenticatedUser().RequireAssertion(context => context.User.HasScope(AuthConfiguration.Scope))));
+                .RequireAuthenticatedUser().RequireAssertion(context =>
+                    Guid.TryParse(context.User.FindFirst("sub")?.Value, out _))));
         builder.Services.AddScoped<ExternalAccounts>();
         builder.Services.AddHttpClient<BackupCleanup>(client => client.Timeout = TimeSpan.FromSeconds(30));
         builder.Services.Configure<ForwardedHeadersOptions>(options =>

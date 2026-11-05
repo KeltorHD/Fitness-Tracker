@@ -9,7 +9,6 @@ namespace FitnessTracker.Authentication;
 public static class AuthConfiguration
 {
     public const string ClientId = "fitnesstracker-ios";
-    public const string Scope = "backups";
     public const string Audience = "fitnesstracker-api";
     public const string Callback = "https://auth.example.com/ios/oauth/callback";
 
@@ -85,8 +84,7 @@ public static class AuthConfiguration
             {
                 Permissions.Endpoints.Authorization, Permissions.Endpoints.Token, Permissions.Endpoints.Revocation,
                 Permissions.GrantTypes.AuthorizationCode, Permissions.GrantTypes.RefreshToken,
-                Permissions.ResponseTypes.Code, Permissions.Scopes.Profile,
-                Permissions.Prefixes.Scope + Scope
+                Permissions.ResponseTypes.Code, Permissions.Scopes.Profile
             },
             Requirements = { Requirements.Features.ProofKeyForCodeExchange }
         };

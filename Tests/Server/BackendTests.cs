@@ -42,18 +42,17 @@ public sealed class BackendTests
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
     }
 
-    /// <summary>Неподходящие issuer, тип, subject и scope не дают читать и изменять копии.</summary>
+    /// <summary>Неподходящие issuer, тип и subject не дают читать и изменять копии.</summary>
     [Theory]
     [InlineData("issuer", HttpStatusCode.Unauthorized)]
     [InlineData("type", HttpStatusCode.Unauthorized)]
     [InlineData("subject", HttpStatusCode.Forbidden)]
-    [InlineData("scope", HttpStatusCode.Forbidden)]
     public async Task RejectsInvalidTokenContractsAsync(string invalid, HttpStatusCode expected)
     {
         using var factory = new BackendFactory();
         using var client = factory.Client(invalid == "subject" ? "not-a-user-uuid" : Guid.NewGuid().ToString(),
             issuer: invalid == "issuer" ? "https://other-issuer.test/" : "https://auth.test/",
-            tokenType: invalid == "type" ? "JWT" : "at+jwt", scope: invalid == "scope" ? "other-backups" : "backups");
+            tokenType: invalid == "type" ? "JWT" : "at+jwt");
 
         using var read = await client.GetAsync("/v1/backups");
         using var write = await client.PutAsync($"/v1/backups/{Guid.NewGuid()}", Content());
@@ -194,16 +193,35 @@ public sealed class BackendTests
         Assert.Empty((await owner.GetFromJsonAsync<BackupInfo[]>("/v1/backups"))!);
     }
 
-    /// <summary>Отвергает отсутствие bearer, неверные scopes/audience/подпись и истёкший JWT.</summary>
+    /// <summary>Backend разрешает работу со своей копией без scopes; их наличие не даёт доступ к чужой.</summary>
+    [Theory]
+    [InlineData(null)]
+    [InlineData("profile")]
+    [InlineData("backups admin")]
+    public async Task BackendAccessUsesLocalOwnershipInsteadOfScopesAsync(string? scope)
+    {
+        using var factory = new BackendFactory();
+        using var owner = factory.Client(Guid.NewGuid().ToString(), scope: scope);
+        using var other = factory.Client(Guid.NewGuid().ToString(), scope: "admin backups");
+        var id = Guid.NewGuid();
+        using var created = await owner.PutAsync($"/v1/backups/{id}", Content());
+        Assert.Equal(HttpStatusCode.Created, created.StatusCode);
+        Assert.Equal(_archive, await owner.GetByteArrayAsync($"/v1/backups/{id}"));
+        using var deniedRead = await other.GetAsync($"/v1/backups/{id}");
+        using var deniedDelete = await other.DeleteAsync($"/v1/backups/{id}");
+        Assert.Equal(HttpStatusCode.NotFound, deniedRead.StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound, deniedDelete.StatusCode);
+        Assert.Equal(_archive, await owner.GetByteArrayAsync($"/v1/backups/{id}"));
+    }
+
+    /// <summary>Отвергает отсутствие bearer, неверные audience/подпись и истёкший JWT.</summary>
     [Fact]
-    public async Task RejectsUnauthenticatedWrongScopeAudienceSignatureAndExpiredTokensAsync()
+    public async Task RejectsUnauthenticatedWrongAudienceSignatureAndExpiredTokensAsync()
     {
         using var factory = new BackendFactory();
         var id = Guid.NewGuid().ToString();
         using var anonymous = factory.Client();
         Assert.Equal(HttpStatusCode.Unauthorized, (await anonymous.GetAsync("/v1/backups")).StatusCode);
-        using var wrongScope = factory.Client(id, scope: "profile");
-        Assert.Equal(HttpStatusCode.Forbidden, (await wrongScope.GetAsync("/v1/backups")).StatusCode);
         using var wrongAudience = factory.Client(id, audience: "another-api");
         Assert.Equal(HttpStatusCode.Unauthorized, (await wrongAudience.GetAsync("/v1/backups")).StatusCode);
         using var expired = factory.Client(id, expires: DateTime.UtcNow.AddMinutes(-10));

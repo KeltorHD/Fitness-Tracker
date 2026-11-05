@@ -96,7 +96,7 @@ struct OAuthAttempt: Equatable, Sendable {
       URLQueryItem(name: "client_id", value: ServerConfiguration.clientID),
       URLQueryItem(name: "redirect_uri", value: configuration.callbackURL.absoluteString),
       URLQueryItem(name: "response_type", value: "code"),
-      URLQueryItem(name: "scope", value: "profile offline_access backups"),
+      URLQueryItem(name: "scope", value: "profile offline_access"),
       URLQueryItem(name: "state", value: state),
       URLQueryItem(name: "code_challenge", value: challenge),
       URLQueryItem(name: "code_challenge_method", value: "S256"),
