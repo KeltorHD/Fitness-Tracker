@@ -627,6 +627,7 @@ Requires Xcode validation. Новых файлов и изменений project
 - [ ] Подтверждение осталось только у удаления всей группы дропсета. Последний основной подход защищён Core; ошибка записи оставляет данные на месте и показывает сообщение. **Requires Xcode validation**.
 ## Аккаунт и серверные резервные копии
 
+- [ ] Собрать `AccountBackupView` без `unable to type-check this expression in reasonable time`: форма, секции, строки копий, диалог и обработчик действий теперь проверяются как отдельные выражения. Проверить экран до/после входа, пустой/заполненный список, загрузку, ошибку/retry, отмену входа и подтверждения upload/delete/delete account. На Linux выполнены swift-format strict lint и проверки структуры/локализации; Apple SDK type checking и UI требуют Xcode.
 - [ ] Проверить `AccountBackupTests.testAuthorizationRequestsProtocolScopesWithoutBackendPermissions`: вход и управление аккаунтом запрашивают только `profile offline_access`. На обновлённом сервере загрузить/скачать/удалить свою копию без scope `backups`; чужая копия недоступна, выход немедленно отзывает доступ. Права на операции определяет Backend. Новый XCTest на Linux не запускался.
 
 - [ ] После `xcodegen generate` собрать iOS 26 app и выполнить `AccountBackupTests`; проверить strict concurrency, новые AuthenticationServices signatures, CryptoKit/Security и отсутствие серверных файлов в Watch/widget targets.
