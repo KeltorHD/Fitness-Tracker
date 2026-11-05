@@ -1,4 +1,4 @@
-name: Authentication and Backup API
+name: Authentication and Backend
 on: [push, pull_request]
 jobs:
   server:
