@@ -1,11 +1,15 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.IdentityModel.Tokens;
 using Npgsql;
 
@@ -81,6 +85,15 @@ public partial class Program
                 context.User.FindFirst("sub")?.Value ?? context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
                 _ => new FixedWindowRateLimiterOptions { PermitLimit = 30, Window = TimeSpan.FromMinutes(1) }));
         });
+        var protection = builder.Services.AddDataProtection().SetApplicationName("FitnessTracker.Backend");
+        if (config["DataProtection:Path"] is { Length: > 0 } keyPath)
+            protection.PersistKeysToFileSystem(new DirectoryInfo(keyPath));
+        else if (builder.Environment.IsProduction())
+            throw new InvalidOperationException("Missing DataProtection:Path.");
+        if (builder.Environment.IsProduction())
+            protection.ProtectKeysWithCertificate(X509CertificateLoader.LoadPkcs12FromFile(
+                config["Certificates:Encryption:Path"] ?? throw new InvalidOperationException("Missing Backend encryption certificate."),
+                config["Certificates:Encryption:Password"]));
         var app = builder.Build();
         app.UseForwardedHeaders();
         app.UseExceptionHandler();
@@ -144,6 +157,7 @@ public partial class Program
             await startupConnection.OpenAsync(cancellationToken);
             await using var startupLock = new NpgsqlCommand("SELECT pg_advisory_lock(447295635001)", startupConnection);
             await startupLock.ExecuteNonQueryAsync(cancellationToken);
+            await database.GetService<IHistoryRepository>().CreateIfNotExistsAsync(cancellationToken);
             await database.Database.MigrateAsync(cancellationToken);
             if (args.Contains("--migrate")) return;
         }

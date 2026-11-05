@@ -12,3 +12,4 @@ dotnet test FitnessTracker.Server.sln --no-build --no-restore -m:1 "${test_flags
 dotnet format FitnessTracker.Server.sln --verify-no-changes --no-restore
 bash -n scripts/setup-server.sh scripts/check-server.sh
 python3 -m unittest discover -s Tests/Scripts -p 'test_server_network.py'
+python3 -m py_compile scripts/setup-backend-keys.py

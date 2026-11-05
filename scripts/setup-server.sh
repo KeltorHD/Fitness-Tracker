@@ -3,7 +3,9 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 command -v openssl >/dev/null
 command -v python3 >/dev/null
-if [[ -e .env || -e .local/certificates/signing.pfx || -e .local/certificates/encryption.pfx ]]; then
+command -v docker >/dev/null
+docker compose version >/dev/null
+if [[ -e .env || -e .local/certificates/signing.pfx || -e .local/certificates/encryption.pfx || -e .local/backend-certificates/encryption.pfx ]]; then
   echo 'Existing server configuration found. Keep its keys and edit .env manually.' >&2
   exit 1
 fi
@@ -33,4 +35,5 @@ for purpose in signing encryption; do
   chmod 444 ".local/certificates/$purpose.pfx"
 done
 unset FITNESS_TRACKER_CERTIFICATE_PASSWORD certificate_password
+python3 scripts/setup-backend-keys.py
 echo 'Token keys generated. Edit .env, run python3 scripts/setup-server-network.py, then configure host Nginx with your TLS certificates; follow docs/SERVER.md.'

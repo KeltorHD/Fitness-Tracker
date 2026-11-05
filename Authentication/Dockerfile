@@ -8,7 +8,10 @@ RUN dotnet publish Authentication/FitnessTracker.Authentication.csproj -c Releas
 FROM mcr.microsoft.com/dotnet/aspnet:10.0
 WORKDIR /app
 COPY --from=build /out .
-RUN mkdir /app/keys && chown $APP_UID /app/keys
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends libgssapi-krb5-2 \
+    && rm -rf /var/lib/apt/lists/* \
+    && mkdir /app/keys && chown $APP_UID /app/keys
 USER $APP_UID
 ENV ASPNETCORE_HTTP_PORTS=8080
 EXPOSE 8080

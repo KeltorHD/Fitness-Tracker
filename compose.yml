@@ -92,11 +92,34 @@ services:
       Auth__Issuer: https://${AUTH_DOMAIN}/
       Auth__IntrospectionClientSecret: ${BACKEND_INTROSPECTION_SECRET:?Set BACKEND_INTROSPECTION_SECRET in .env}
       ConnectionStrings__Database: Host=backend-db;Database=${BACKEND_DB_NAME:-fitnesstracker_backend};Username=${BACKEND_DB_USER:-fitnesstracker_backend};Password=${BACKEND_DB_PASSWORD:?Set BACKEND_DB_PASSWORD in .env (keep the existing database password)}
+      DataProtection__Path: /app/keys
+      Certificates__Encryption__Path: /run/certificates/encryption.pfx
+      Certificates__Encryption__Password: ${CERTIFICATE_PASSWORD}
       ReverseProxy__Address: ${SERVER_NETWORK_GATEWAY:?Run python3 scripts/setup-server-network.py}
       Backend__ServiceKey: ${BACKEND_SERVICE_KEY}
+    volumes:
+      - type: bind
+        source: ${BACKEND_KEYS_PATH:-./.local/backend-keys}
+        target: /app/keys
+      - type: bind
+        source: ${BACKEND_CERTIFICATES_PATH:-./.local/backend-certificates}
+        target: /run/certificates
+        read_only: true
+        bind:
+          create_host_path: false
     depends_on:
       backend-db:
         condition: service_healthy
+      backend-storage-init:
+        condition: service_completed_successfully
+
+  backend-storage-init:
+    extends:
+      service: auth-storage-init
+    volumes:
+      - type: bind
+        source: ${BACKEND_KEYS_PATH:-./.local/backend-keys}
+        target: /keys
 
   auth-db:
     image: postgres:18-alpine

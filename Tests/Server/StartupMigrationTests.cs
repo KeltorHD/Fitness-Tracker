@@ -1,11 +1,16 @@
+using System.Collections.Concurrent;
+using System.Data.Common;
 using System.Net;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
+using System.Xml.Linq;
 using FitnessTracker.Authentication;
 using FitnessTracker.Backend;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
@@ -41,11 +46,13 @@ public sealed class StartupMigrationTests
         }
 
         // Act: обычный Production Main без CLI-флагов применяет миграции и регистрирует clients.
-        using (var factory = new StartupFactory<Authentication.Program>(fixture.ConnectionString))
+        var errors = new StartupCommandErrors();
+        using (var factory = new StartupFactory<Authentication.Program>(fixture.ConnectionString, commandErrors: errors))
         using (var client = factory.CreateClient())
         {
             using var health = await client.GetAsync("/health", cancellationToken);
             Assert.Equal(HttpStatusCode.OK, health.StatusCode);
+            Assert.Empty(errors.Errors);
         }
         await using (var database = new AuthDbContext(options))
         {
@@ -90,11 +97,26 @@ public sealed class StartupMigrationTests
         var options = new DbContextOptionsBuilder<BackupDbContext>().UseNpgsql(fixture.ConnectionString).Options;
         var id = Guid.NewGuid();
         var owner = Guid.NewGuid().ToString();
-        using (var factory = new StartupFactory<Backend.Program>(fixture.ConnectionString))
+        using var protectionFiles = new ProtectionFiles();
+        string protectedValue;
+        var errors = new StartupCommandErrors();
+        using (var factory = new StartupFactory<Backend.Program>(fixture.ConnectionString,
+            commandErrors: errors, protectionFiles: protectionFiles))
         using (var client = factory.CreateClient())
         {
             using var health = await client.GetAsync("/health", cancellationToken);
             Assert.Equal(HttpStatusCode.OK, health.StatusCode);
+            Assert.Empty(errors.Errors);
+            var protector = factory.Services.GetRequiredService<IDataProtectionProvider>().CreateProtector("startup-persistence");
+            protectedValue = protector.Protect("survives-restart");
+            var keys = Directory.GetFiles(Path.Combine(protectionFiles.Directory, "keys"), "key-*.xml");
+            Assert.NotEmpty(keys);
+            foreach (var key in keys)
+            {
+                var document = XDocument.Load(key);
+                Assert.Contains(document.Descendants(), element => element.Name.LocalName == "encryptedSecret");
+                Assert.DoesNotContain(document.Descendants(), element => element.Name.LocalName == "masterKey");
+            }
             await using var database = new BackupDbContext(options);
             database.Backups.Add(new BackupRecord { Id = id, OwnerId = owner, Payload = [1, 2, 3], Size = 3, Sha256 = "preserved" });
             database.DeletedAccounts.Add(new DeletedAccount { Id = Guid.NewGuid().ToString() });
@@ -102,10 +124,12 @@ public sealed class StartupMigrationTests
         }
 
         // Assert: повторный startup идемпотентен и не сбрасывает данные.
-        using var restarted = new StartupFactory<Backend.Program>(fixture.ConnectionString);
+        using var restarted = new StartupFactory<Backend.Program>(fixture.ConnectionString, protectionFiles: protectionFiles);
         using var restartedClient = restarted.CreateClient();
         using var restartedHealth = await restartedClient.GetAsync("/health", cancellationToken);
         Assert.Equal(HttpStatusCode.OK, restartedHealth.StatusCode);
+        var restartedProtector = restarted.Services.GetRequiredService<IDataProtectionProvider>().CreateProtector("startup-persistence");
+        Assert.Equal("survives-restart", restartedProtector.Unprotect(protectedValue));
         await using var verification = new BackupDbContext(options);
         var backup = await verification.Backups.SingleAsync(cancellationToken);
         Assert.Equal(id, backup.Id);
@@ -194,21 +218,58 @@ public sealed class StartupMigrationTests
             .Set<OpenIddict.EntityFrameworkCore.Models.OpenIddictEntityFrameworkCoreApplication>().CountAsync(cancellationToken));
     }
 
+    /// <summary>Фиксирует настоящие ошибки SQL при bootstrap, в том числе перехваченные самим провайдером EF.</summary>
+    private sealed class StartupCommandErrors : DbCommandInterceptor
+    {
+        /// <summary>SQL-сбои, которые не должны возникать при нормальной инициализации.</summary>
+        public ConcurrentQueue<Exception> Errors { get; } = new();
+
+        /// <summary>Сохраняет исключение до того, как Npgsql обработает отсутствие history как пустую схему.</summary>
+        public override Task CommandFailedAsync(DbCommand command, CommandErrorEventData eventData,
+            CancellationToken cancellationToken = default)
+        {
+            Errors.Enqueue(eventData.Exception);
+            return Task.CompletedTask;
+        }
+    }
+
+    /// <summary>Владеет отдельными временными PFX/DP-файлами для проверки перезапуска host.</summary>
+    private sealed class ProtectionFiles : IDisposable
+    {
+        /// <summary>Каталог принадлежит только текущему тесту.</summary>
+        public string Directory { get; } = Path.Combine(Path.GetTempPath(), "fitness-startup-" + Guid.NewGuid().ToString("N"));
+
+        /// <summary>Удаляет временные ключи после завершения всех использовавших их host.</summary>
+        public void Dispose()
+        {
+            if (System.IO.Directory.Exists(Directory)) System.IO.Directory.Delete(Directory, recursive: true);
+        }
+    }
+
     /// <summary>Запускает настоящий Production Main с тестовой БД, отдельными PFX/DP keys и без внешних провайдеров.</summary>
     private sealed class StartupFactory<TProgram> : WebApplicationFactory<TProgram> where TProgram : class
     {
-        private readonly string _directory = Path.Combine(Path.GetTempPath(), "fitness-startup-" + Guid.NewGuid().ToString("N"));
+        private readonly ProtectionFiles _protectionFiles;
+        private readonly bool _ownsProtectionFiles;
         private readonly Dictionary<string, string?> _settings;
+        private readonly StartupCommandErrors? _commandErrors;
 
         /// <summary>Создаёт исключительно временные ключи; рабочая конфигурация не используется.</summary>
-        public StartupFactory(string connectionString, string introspectionSecret = AuthFactory.IntrospectionSecret)
+        public StartupFactory(string connectionString, string introspectionSecret = AuthFactory.IntrospectionSecret,
+            StartupCommandErrors? commandErrors = null, ProtectionFiles? protectionFiles = null)
         {
-            Directory.CreateDirectory(_directory);
-            using var rsa = RSA.Create(2048);
-            var request = new CertificateRequest("CN=FitnessTracker isolated startup", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
-            using var certificate = request.CreateSelfSigned(DateTimeOffset.UtcNow.AddMinutes(-5), DateTimeOffset.UtcNow.AddDays(1));
-            var pfx = Path.Combine(_directory, "test.pfx");
-            File.WriteAllBytes(pfx, certificate.Export(X509ContentType.Pfx, "test-only-password"));
+            _ownsProtectionFiles = protectionFiles is null;
+            _protectionFiles = protectionFiles ?? new ProtectionFiles();
+            _commandErrors = commandErrors;
+            Directory.CreateDirectory(_protectionFiles.Directory);
+            var pfx = Path.Combine(_protectionFiles.Directory, "test.pfx");
+            if (!File.Exists(pfx))
+            {
+                using var rsa = RSA.Create(2048);
+                var request = new CertificateRequest("CN=FitnessTracker isolated startup", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+                using var certificate = request.CreateSelfSigned(DateTimeOffset.UtcNow.AddMinutes(-5), DateTimeOffset.UtcNow.AddDays(1));
+                File.WriteAllBytes(pfx, certificate.Export(X509ContentType.Pfx, "test-only-password"));
+            }
             _settings = new()
             {
                 ["ConnectionStrings:Database"] = connectionString,
@@ -219,7 +280,7 @@ public sealed class StartupMigrationTests
                 ["Certificates:Signing:Password"] = "test-only-password",
                 ["Certificates:Encryption:Path"] = pfx,
                 ["Certificates:Encryption:Password"] = "test-only-password",
-                ["DataProtection:Path"] = Path.Combine(_directory, "keys"),
+                ["DataProtection:Path"] = Path.Combine(_protectionFiles.Directory, "keys"),
                 ["Providers:Google:Enabled"] = "false",
                 ["Providers:Apple:Enabled"] = "false",
                 ["Providers:Yandex:Enabled"] = "false",
@@ -238,13 +299,21 @@ public sealed class StartupMigrationTests
                 configuration.Sources.Clear();
                 configuration.AddInMemoryCollection(_settings);
             });
+            if (_commandErrors is not null)
+                builder.ConfigureServices(services =>
+                {
+                    if (typeof(TProgram) == typeof(Authentication.Program))
+                        services.ConfigureDbContext<AuthDbContext>(options => options.AddInterceptors(_commandErrors));
+                    else
+                        services.ConfigureDbContext<BackupDbContext>(options => options.AddInterceptors(_commandErrors));
+                });
         }
 
         /// <summary>Завершает host и удаляет только собственные временные ключи.</summary>
         protected override void Dispose(bool disposing)
         {
             try { base.Dispose(disposing); }
-            finally { if (disposing && Directory.Exists(_directory)) Directory.Delete(_directory, recursive: true); }
+            finally { if (disposing && _ownsProtectionFiles) _protectionFiles.Dispose(); }
         }
     }
 }
