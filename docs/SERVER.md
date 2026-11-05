@@ -102,7 +102,7 @@ Backend проверяет размер и envelope формата v1–v4, со
 
 ## Подготовка и развёртывание
 
-Нужны Docker Engine + Compose на Linux, существующий Nginx на этом же хосте, DNS двух доменов и исходящий HTTPS к провайдерам. Публичные сертификаты и их обновление настраивает администратор Nginx. В Compose постоянно работают Authentication, Backend и две PostgreSQL-базы; одноразовый `auth-storage-init` подготавливает права каталога ключей перед запуском Auth.
+Нужны Docker Engine + Compose на Linux, OpenSSL и Python 3 для подготовки ключей, существующий Nginx на этом же хосте, DNS двух доменов и исходящий HTTPS к провайдерам. Публичные сертификаты и их обновление настраивает администратор Nginx. В Compose постоянно работают Authentication, Backend и две PostgreSQL-базы; одноразовые `auth-storage-init` и `backend-storage-init` подготавливают права каталогов ключей перед запуском приложений.
 
 ```text
 Internet → Nginx на хосте (HTTPS, ваши сертификаты)
@@ -122,7 +122,7 @@ docker compose config --quiet
 docker compose up -d --build
 ```
 
-Скрипт создаёт пароли БД (`AUTH_DB_PASSWORD`, `BACKEND_DB_PASSWORD`), разные ключи удаления копий и introspection, а также два PFX для подписи/шифрования токенов OpenIddict и Data Protection. `BACKEND_INTROSPECTION_SECRET` из `.env` передаётся только Auth и Backend как `Auth:IntrospectionClientSecret`; минимум 32 символа, генератор использует 32 случайных байта в hex. Он не совпадает с `BACKEND_SERVICE_KEY` и не передаётся iOS. Эти PFX не являются HTTPS-сертификатами Nginx; TLS-ключи в контейнеры передавать не требуется. Существующие `.env`/ключи скрипт не перезаписывает. `.env`, `.local/`, private keys и сертификаты исключены из git. `.local` доступна только владельцу, её дочерняя mount-директория позволяет непривилегированному container UID читать PFX. Production использует постоянные ключи, Development certificates — только в Development, ephemeral credentials — только в тестах.
+Скрипт создаёт пароли БД (`AUTH_DB_PASSWORD`, `BACKEND_DB_PASSWORD`), разные ключи удаления копий и introspection, два PFX для подписи/шифрования Auth и отдельный PFX для шифрования Data Protection keys Backend. Приватные ключи Auth и Backend различаются и монтируются только в соответствующий сервис. `BACKEND_INTROSPECTION_SECRET` из `.env` передаётся только Auth и Backend как `Auth:IntrospectionClientSecret`; минимум 32 символа, генератор использует 32 случайных байта в hex. Он не совпадает с `BACKEND_SERVICE_KEY` и не передаётся iOS. Эти PFX не являются HTTPS-сертификатами Nginx; TLS-ключи в контейнеры передавать не требуется. Существующие `.env`/ключи скрипт не перезаписывает. `.env`, `.local/`, private keys и сертификаты исключены из git. `.local` доступна только владельцу, её дочерние mount-директории позволяют непривилегированному container UID читать PFX. Production использует постоянные сертификаты и зашифрованные Data Protection keys обоих сервисов; ephemeral credentials допустимы только в тестах, development certificates — в Development.
 
 ### Постоянные папки и другой диск
 
@@ -134,6 +134,8 @@ docker compose up -d --build
 | `BACKEND_DB_DATA_PATH` | `./.local/backend-db` | PostgreSQL Backend, включая архивы |
 | `AUTH_KEYS_PATH` | `./.local/auth-keys` | Постоянные Data Protection keys |
 | `AUTH_CERTIFICATES_PATH` | `./.local/certificates` | PFX подписи/шифрования и необязательный Apple P8; mount только для чтения |
+| `BACKEND_KEYS_PATH` | `./.local/backend-keys` | Постоянные Data Protection keys Backend, зашифрованные его сертификатом |
+| `BACKEND_CERTIFICATES_PATH` | `./.local/backend-certificates` | Отдельный PFX шифрования Backend; mount только для чтения |
 
 Например, для данных PostgreSQL на другом диске:
 
@@ -144,7 +146,27 @@ BACKEND_DB_DATA_PATH=/srv/fitnesstracker/backend-db
 
 Относительные пути считаются от каталога `compose.yml`; абсолютные могут указывать на другой диск. Пути с пробелами в `.env` заключайте в кавычки. Docker создаёт отсутствующие каталоги БД и Data Protection keys. Для PostgreSQL 18 монтируется родитель `/var/lib/postgresql`; фактический `PGDATA` — `18/docker` внутри выбранной папки. Базы создаются стандартным entrypoint PostgreSQL при первом запуске пустого хранилища: `fitnesstracker_auth` и `fitnesstracker_backend`, с отдельными пользователями того же имени. Backend подключается к `backend-db`; при необходимости логические имя БД и пользователь переопределяются через `BACKEND_DB_NAME` и `BACKEND_DB_USER`. Эти параметры не переименовывают уже существующую БД.
 
-`auth-storage-init` запускается без сети, с read-only root filesystem и только capabilities `CHOWN`/`FOWNER`. Он назначает корневому каталогу keys UID/GID runtime-образа .NET (`APP_UID`) и mode `0700`, затем завершается. Содержимое ключей не меняется. Auth ожидает успешного завершения этого шага и работает под прежним непривилегированным UID. Существующий каталог сертификатов требуется заранее: `setup-server.sh` создаёт его в стандартном месте; при смене `AUTH_CERTIFICATES_PATH` сначала скопируйте туда прежние PFX/P8, сохраняя права. Отсутствующий путь сертификатов вызывает ошибку запуска.
+Каждый storage-init запускается без сети, с read-only root filesystem и только capabilities `CHOWN`/`FOWNER`. Он назначает своему каталогу keys UID/GID runtime-образа .NET (`APP_UID`) и mode `0700`, затем завершается. Содержимое ключей не меняется. Приложение ожидает успешного завершения своего init и работает под непривилегированным UID. Существующие каталоги сертификатов требуются заранее: `setup-server.sh` создаёт их в стандартных местах; при смене путей сначала перенесите прежние PFX/P8, сохраняя права. Отсутствующий путь сертификатов вызывает ошибку запуска. Backend в Production требует постоянный key path и сертификат шифрования; перехода на временное хранилище нет.
+
+### Обновление защиты ключей Backend
+
+Для сервера, подготовленного до появления отдельного Backend PFX, после обновления ветки выполните:
+
+```bash
+python3 scripts/setup-backend-keys.py
+docker compose config --quiet
+docker compose up -d --build
+```
+
+Команда читает существующие настройки через Compose, создаёт только недостающий Backend `encryption.pfx` по `BACKEND_CERTIFICATES_PATH` и использует прежний `CERTIFICATE_PASSWORD`. Она не меняет `.env`, PFX Auth и существующие key rings. Повторный запуск проверяет прежний PFX с заданным паролем без перезаписи; неверный пароль приводит к отказу. Сохраняется только зашифрованный PFX, временный незашифрованный PEM удаляется. Сертификат Backend также действует 730 дней и требует сохранения прежних ключей при ротации. Это шифрование служебных Data Protection keys; формат архивов и политика их хранения в PostgreSQL не меняются.
+
+### Сообщения первого запуска
+
+Npgsql 10 по умолчанию пробует GSSAPI/Kerberos перед обычным подключением. В минимальном Linux-образе отсутствие `libgssapi_krb5.so.2` даёт сообщение даже при входе в PostgreSQL по паролю; Npgsql обрабатывает ошибку и продолжает подключение. В обоих Dockerfile теперь устанавливается `libgssapi-krb5-2`: поддержка GSSAPI сохраняется, режим шифрования не отключается. Сама библиотека не включает Kerberos или TLS на PostgreSQL; текущий Compose использует парольное подключение внутри Docker-сети. Для внешней БД шифрование транспорта настраивается отдельно на PostgreSQL и клиенте. [Документация Npgsql](https://www.npgsql.org/doc/security.html#gss-session-encryption-gss-api).
+
+На пустой БД Npgsql обнаруживает отсутствие `__EFMigrationsHistory` через перехватываемый SQL exception; это могло выводиться как `Failed executing DbCommand`, хотя миграции продолжались. Теперь под общей startup-блокировкой сначала вызывается штатный EF `CreateIfNotExistsAsync` для history, затем `MigrateAsync`; прочие SQL-ошибки не скрываются. Инициализация/остановка PostgreSQL во время `initdb` ожидаема. Сообщения о временном незашифрованном key ring Backend устраняются постоянным каталогом и отдельным PFX. Успех запуска проверяется `/health` и состоянием контейнеров; отдельные строки первого старта не доказывают сбой миграций.
+
+Проверка исправления на Linux: полный `check-server.sh` прошёл, все 168 серверных тестов и пять Python-тестов сети успешны. PostgreSQL-сценарии дополнены проверкой отсутствия SQL CommandError при новом startup, отсутствия открытого master key в XML и успешной расшифровки защищённого значения после рестарта Backend с теми же PFX/key ring. Дополнительно собран runtime-образ с тем же native install, что в Dockerfile, на локальной базе .NET 10.0.0. Настоящие Auth и Backend запущены в Production с готовыми Debug-сборками, PostgreSQL 16.6 и временными сертификатами/папками: оба health 200, GSSAPI доступна, перечисленные ошибки в логах отсутствуют, key rings зашифрованы и переживают перезапуск. Это проверка runtime; полный production Compose build здесь не выполнялся. Изолированный setup/upgrade проверил PFX с custom path, права при umask 077, повторный запуск без перезаписи, отказ с неверным паролем и сохранность Auth/.env без вывода секретов. Рабочий сервер не менялся.
 
 ### Переход с прежних volumes и имён Backend
 

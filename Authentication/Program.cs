@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql;
 using OpenIddict.Abstractions;
 using OpenIddict.Validation.AspNetCore;
@@ -219,7 +221,12 @@ public partial class Program
             await startupLock.ExecuteNonQueryAsync(cancellationToken);
             // Обычный запуск обновляет схему до открытия HTTP listener.
             if (!args.Contains("--configure-clients") || args.Contains("--migrate"))
+            {
+                // Npgsql обнаруживает отсутствие history через SQL exception.
+                // Штатное создание таблицы заранее исключает ложный CommandError при первом запуске.
+                await database.GetService<IHistoryRepository>().CreateIfNotExistsAsync(cancellationToken);
                 await database.Database.MigrateAsync(cancellationToken);
+            }
             await using var transaction = await database.Database.BeginTransactionAsync(cancellationToken);
             await AuthConfiguration.RegisterClient(scope.ServiceProvider, config, cancellationToken);
             await transaction.CommitAsync(cancellationToken);
