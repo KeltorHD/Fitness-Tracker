@@ -83,7 +83,7 @@ public sealed class BackendFactory(HttpMessageHandler? authHandler = null) : Web
     }
 
     /// <summary>Создаёт HTTP-клиент с явно заданными свойствами JWT либо без аутентификации.</summary>
-    internal HttpClient Client(string? owner = null, string scope = "backups", string audience = "fitnesstracker-api",
+    internal HttpClient Client(string? owner = null, string? scope = null, string audience = "fitnesstracker-api",
         DateTime? expires = null, SecurityKey? key = null, string issuer = "https://auth.test/", string tokenType = "at+jwt")
     {
         var client = CreateClient(new WebApplicationFactoryClientOptions
@@ -95,8 +95,10 @@ public sealed class BackendFactory(HttpMessageHandler? authHandler = null) : Web
         serviceScope.ServiceProvider.GetRequiredService<BackupDbContext>().Database.EnsureCreated();
         if (owner is not null)
         {
+            var claims = new List<Claim> { new("sub", owner) };
+            if (scope is not null) claims.Add(new Claim("scope", scope));
             var token = new JwtSecurityToken(issuer, audience,
-                [new Claim("sub", owner), new Claim("scope", scope)],
+                claims,
                 expires: expires ?? DateTime.UtcNow.AddMinutes(5),
                 signingCredentials: new SigningCredentials(key ?? Key, SecurityAlgorithms.RsaSha256));
             token.Header["typ"] = tokenType;

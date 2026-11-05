@@ -53,7 +53,7 @@ public sealed class AuthenticationMappingTests
             .SetClaim(OpenIddictConstants.Claims.Subject, Guid.NewGuid().ToString())
             .SetClaim("fitnesstracker:security_stamp", "protected-cookie-version")
             .SetAuthorizationId("authorization-family")
-            .SetScopes("backups", "offline_access");
+            .SetScopes("profile", "offline_access");
 
         var approved = Assert.IsType<SignInResult>(mapper.Map<OAuthDecision, IActionResult>(new OAuthSignIn(principal)));
         var denied = Assert.IsType<ForbidResult>(mapper.Map<OAuthDecision, IActionResult>(

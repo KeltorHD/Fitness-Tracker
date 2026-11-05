@@ -67,7 +67,7 @@ public sealed class AuthenticationMappingHttpTests
             ["client_id"] = AuthConfiguration.ClientId,
             ["redirect_uri"] = AuthConfiguration.Callback,
             ["response_type"] = "code",
-            ["scope"] = "profile offline_access backups",
+            ["scope"] = "profile offline_access",
             ["state"] = "mapping-state",
             ["code_challenge"] = WebEncoders.Base64UrlEncode(SHA256.HashData(Encoding.ASCII.GetBytes(verifier))),
             ["code_challenge_method"] = "S256"

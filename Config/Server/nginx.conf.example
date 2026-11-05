@@ -2,6 +2,7 @@
 # Example hosts may share a certificate covering both names (for example, *.example.com).
 # Set both TLS paths to its actual location on your host; the paths below are examples.
 # If AUTH_HTTP_PORT/API_HTTP_PORT change, update the corresponding proxy_pass ports below.
+# Generate .local/nginx.generated.conf with scripts/setup-server-network.py first.
 
 server {
     listen 80;
@@ -33,10 +34,10 @@ server {
     proxy_set_header Connection "";
     proxy_read_timeout 60s;
 
-    # Match SERVER_NETWORK_SUBNET in .env. Public clients cannot call introspection.
+    # Replaced with the actual Docker subnet by scripts/setup-server-network.py.
     location ~* ^/connect/introspect(?:/|$) {
         allow 127.0.0.1;
-        allow 172.30.0.0/24;
+        allow @SERVER_NETWORK_SUBNET@;
         deny all;
         proxy_pass http://127.0.0.1:5080;
     }

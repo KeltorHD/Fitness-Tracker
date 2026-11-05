@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using OpenIddict.Abstractions;
 using OpenIddict.Validation.AspNetCore;
 
@@ -130,7 +131,7 @@ public partial class Program
                 options.AllowAuthorizationCodeFlow().AllowRefreshTokenFlow();
                 options.RequireProofKeyForCodeExchange();
                 options.Configure(server => server.CodeChallengeMethods.Remove(OpenIddictConstants.CodeChallengeMethods.Plain));
-                options.RegisterScopes("openid", "profile", AuthConfiguration.Scope);
+                options.RegisterScopes("openid", "profile");
                 options.SetAccessTokenLifetime(TimeSpan.FromMinutes(10));
                 options.SetRefreshTokenLifetime(TimeSpan.FromDays(30));
                 options.SetRefreshTokenReuseLeeway(TimeSpan.Zero);
@@ -153,7 +154,8 @@ public partial class Program
             });
         builder.Services.AddAuthorization(options => options.AddPolicy("account", policy =>
             policy.AddAuthenticationSchemes(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)
-                .RequireAuthenticatedUser().RequireAssertion(context => context.User.HasScope(AuthConfiguration.Scope))));
+                .RequireAuthenticatedUser().RequireAssertion(context =>
+                    Guid.TryParse(context.User.FindFirst("sub")?.Value, out _))));
         builder.Services.AddScoped<ExternalAccounts>();
         builder.Services.AddHttpClient<BackupCleanup>(client => client.Timeout = TimeSpan.FromSeconds(30));
         builder.Services.Configure<ForwardedHeadersOptions>(options =>
@@ -202,17 +204,26 @@ public partial class Program
         if (!app.Environment.IsEnvironment("Testing"))
         {
             await using var scope = app.Services.CreateAsyncScope();
-            if (args.Contains("--migrate"))
+            var database = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
+            var cancellationToken = app.Lifetime.ApplicationStopping;
+            // Блокировка живёт на отдельном непулируемом соединении: EF может менять
+            // свои транзакции/соединения, а весь startup остаётся последовательным.
+            var startupSettings = new NpgsqlConnectionStringBuilder(database.Database.GetConnectionString())
             {
-                await scope.ServiceProvider.GetRequiredService<AuthDbContext>().Database.MigrateAsync();
-                await AuthConfiguration.RegisterClient(scope.ServiceProvider, config);
-                return;
-            }
-            if (args.Contains("--configure-clients"))
-            {
-                await AuthConfiguration.RegisterClient(scope.ServiceProvider, config);
-                return;
-            }
+                Pooling = false,
+                ApplicationName = "FitnessTracker startup"
+            };
+            await using var startupConnection = new NpgsqlConnection(startupSettings.ConnectionString);
+            await startupConnection.OpenAsync(cancellationToken);
+            await using var startupLock = new NpgsqlCommand("SELECT pg_advisory_lock(447295635001)", startupConnection);
+            await startupLock.ExecuteNonQueryAsync(cancellationToken);
+            // Обычный запуск обновляет схему до открытия HTTP listener.
+            if (!args.Contains("--configure-clients") || args.Contains("--migrate"))
+                await database.Database.MigrateAsync(cancellationToken);
+            await using var transaction = await database.Database.BeginTransactionAsync(cancellationToken);
+            await AuthConfiguration.RegisterClient(scope.ServiceProvider, config, cancellationToken);
+            await transaction.CommitAsync(cancellationToken);
+            if (args.Contains("--migrate") || args.Contains("--configure-clients")) return;
         }
         await app.RunAsync();
     }

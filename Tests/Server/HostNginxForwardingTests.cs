@@ -30,7 +30,7 @@ public sealed class HostNginxForwardingTests
             ["client_id"] = AuthConfiguration.ClientId,
             ["redirect_uri"] = AuthConfiguration.Callback,
             ["response_type"] = "code",
-            ["scope"] = "backups",
+            ["scope"] = "profile",
             ["state"] = "nginx-state",
             ["code_challenge"] = Base64UrlEncoder.Encode(SHA256.HashData("nginx-test-verifier"u8.ToArray())),
             ["code_challenge_method"] = "S256"

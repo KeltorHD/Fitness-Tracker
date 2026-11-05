@@ -627,6 +627,8 @@ Requires Xcode validation. Новых файлов и изменений project
 - [ ] Подтверждение осталось только у удаления всей группы дропсета. Последний основной подход защищён Core; ошибка записи оставляет данные на месте и показывает сообщение. **Requires Xcode validation**.
 ## Аккаунт и серверные резервные копии
 
+- [ ] Проверить `AccountBackupTests.testAuthorizationRequestsProtocolScopesWithoutBackendPermissions`: вход и управление аккаунтом запрашивают только `profile offline_access`. На обновлённом сервере загрузить/скачать/удалить свою копию без scope `backups`; чужая копия недоступна, выход немедленно отзывает доступ. Права на операции определяет Backend. Новый XCTest на Linux не запускался.
+
 - [ ] После `xcodegen generate` собрать iOS 26 app и выполнить `AccountBackupTests`; проверить strict concurrency, новые AuthenticationServices signatures, CryptoKit/Security и отсутствие серверных файлов в Watch/widget targets.
 - [ ] Без настроенных HTTPS-адресов локальное приложение открывается и работает. В демо-профиле серверный экран недоступен. Неверная конфигурация не блокирует SwiftData и локальный журнал.
 - [ ] Войти через каждый настроенный Google/Apple/Яндекс на реальном Auth Server, отменить браузер, повторить вход, сменить аккаунт; проверить state/redirect, отсутствие tokens в URL/UserDefaults/logs и корректность Keychain после relaunch/блокировки устройства.

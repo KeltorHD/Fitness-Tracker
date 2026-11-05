@@ -7,5 +7,5 @@ public sealed class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<Bac
 {
     public BackupDbContext CreateDbContext(string[] args) => new(new DbContextOptionsBuilder<BackupDbContext>()
         .UseNpgsql(Environment.GetEnvironmentVariable("ConnectionStrings__Database") ??
-            "Host=localhost;Database=fitnesstracker_backups;Username=fitnesstracker_backups").Options);
+            "Host=localhost;Database=fitnesstracker_backend;Username=fitnesstracker_backend").Options);
 }

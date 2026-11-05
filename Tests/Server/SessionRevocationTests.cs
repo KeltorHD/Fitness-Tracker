@@ -254,7 +254,7 @@ public sealed class SessionRevocationTests
             ["client_id"] = AuthConfiguration.ClientId,
             ["redirect_uri"] = AuthConfiguration.Callback,
             ["response_type"] = "code",
-            ["scope"] = "openid profile offline_access backups",
+            ["scope"] = "openid profile offline_access",
             ["state"] = "introspection-state",
             ["code_challenge"] = Base64UrlEncoder.Encode(SHA256.HashData(System.Text.Encoding.ASCII.GetBytes(verifier))),
             ["code_challenge_method"] = "S256"

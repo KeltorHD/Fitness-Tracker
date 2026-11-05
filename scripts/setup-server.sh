@@ -16,7 +16,7 @@ python3 - <<'PY'
 from pathlib import Path
 import secrets
 text = Path('.env.example').read_text()
-for key in ['AUTH_DB_PASSWORD', 'BACKUP_DB_PASSWORD', 'BACKEND_SERVICE_KEY', 'BACKEND_INTROSPECTION_SECRET', 'CERTIFICATE_PASSWORD']:
+for key in ['AUTH_DB_PASSWORD', 'BACKEND_DB_PASSWORD', 'BACKEND_SERVICE_KEY', 'BACKEND_INTROSPECTION_SECRET', 'CERTIFICATE_PASSWORD']:
     text = text.replace(f'{key}=\n', f'{key}={secrets.token_hex(32)}\n')
 Path('.env').write_text(text)
 PY
@@ -33,4 +33,4 @@ for purpose in signing encryption; do
   chmod 444 ".local/certificates/$purpose.pfx"
 done
 unset FITNESS_TRACKER_CERTIFICATE_PASSWORD certificate_password
-echo 'Token keys and configuration generated. Set .env and configure host Nginx with your TLS certificates; follow docs/SERVER.md.'
+echo 'Token keys generated. Edit .env, run python3 scripts/setup-server-network.py, then configure host Nginx with your TLS certificates; follow docs/SERVER.md.'

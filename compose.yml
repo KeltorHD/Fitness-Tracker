@@ -18,7 +18,7 @@ services:
       Auth__AppleAppIdentifier: ${IOS_APP_IDENTIFIER:-}
       Auth__IntrospectionClientSecret: ${BACKEND_INTROSPECTION_SECRET:?Set BACKEND_INTROSPECTION_SECRET in .env}
       ConnectionStrings__Database: Host=auth-db;Database=fitnesstracker_auth;Username=fitnesstracker_auth;Password=${AUTH_DB_PASSWORD:?Run scripts/setup-server.sh}
-      ReverseProxy__Address: ${SERVER_NETWORK_GATEWAY:-172.30.0.1}
+      ReverseProxy__Address: ${SERVER_NETWORK_GATEWAY:?Run python3 scripts/setup-server-network.py}
       DataProtection__Path: /app/keys
       Certificates__Signing__Path: /run/certificates/signing.pfx
       Certificates__Signing__Password: ${CERTIFICATE_PASSWORD:?Run scripts/setup-server.sh}
@@ -38,11 +38,40 @@ services:
       Providers__Apple__KeyId: ${APPLE_KEY_ID:-}
       Providers__Apple__PrivateKeyPath: /run/certificates/apple.p8
     volumes:
-      - ./.local/certificates:/run/certificates:ro
-      - auth-keys:/app/keys
+      - type: bind
+        source: ${AUTH_CERTIFICATES_PATH:-./.local/certificates}
+        target: /run/certificates
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ${AUTH_KEYS_PATH:-./.local/auth-keys}
+        target: /app/keys
     depends_on:
       auth-db:
         condition: service_healthy
+      auth-storage-init:
+        condition: service_completed_successfully
+
+  # Prepare only the mounted key directory; Authentication keeps its non-root UID.
+  auth-storage-init:
+    image: mcr.microsoft.com/dotnet/aspnet:10.0
+    user: "0:0"
+    restart: "no"
+    network_mode: none
+    read_only: true
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+    cap_add: [CHOWN, FOWNER]
+    entrypoint: [/bin/sh, -ec]
+    command:
+      - |
+        chown "$${APP_UID}:$${APP_UID}" /keys
+        chmod 0700 /keys
+    volumes:
+      - type: bind
+        source: ${AUTH_KEYS_PATH:-./.local/auth-keys}
+        target: /keys
 
   backend:
     build:
@@ -56,17 +85,17 @@ services:
     ports:
       - "127.0.0.1:${API_HTTP_PORT:-5081}:8080"
     extra_hosts:
-      - "${AUTH_DOMAIN}:${SERVER_NETWORK_GATEWAY:-172.30.0.1}"
+      - "${AUTH_DOMAIN}:${SERVER_NETWORK_GATEWAY:?Run python3 scripts/setup-server-network.py}"
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       AllowedHosts: ${API_DOMAIN:?Set API_DOMAIN in .env};backend
       Auth__Issuer: https://${AUTH_DOMAIN}/
       Auth__IntrospectionClientSecret: ${BACKEND_INTROSPECTION_SECRET:?Set BACKEND_INTROSPECTION_SECRET in .env}
-      ConnectionStrings__Database: Host=backup-db;Database=fitnesstracker_backups;Username=fitnesstracker_backups;Password=${BACKUP_DB_PASSWORD:?Run scripts/setup-server.sh}
-      ReverseProxy__Address: ${SERVER_NETWORK_GATEWAY:-172.30.0.1}
+      ConnectionStrings__Database: Host=backend-db;Database=${BACKEND_DB_NAME:-fitnesstracker_backend};Username=${BACKEND_DB_USER:-fitnesstracker_backend};Password=${BACKEND_DB_PASSWORD:?Set BACKEND_DB_PASSWORD in .env (keep the existing database password)}
+      ReverseProxy__Address: ${SERVER_NETWORK_GATEWAY:?Run python3 scripts/setup-server-network.py}
       Backend__ServiceKey: ${BACKEND_SERVICE_KEY}
     depends_on:
-      backup-db:
+      backend-db:
         condition: service_healthy
 
   auth-db:
@@ -76,35 +105,34 @@ services:
       POSTGRES_DB: fitnesstracker_auth
       POSTGRES_USER: fitnesstracker_auth
       POSTGRES_PASSWORD: ${AUTH_DB_PASSWORD}
-    volumes: [auth-db:/var/lib/postgresql]
+    volumes:
+      - type: bind
+        source: ${AUTH_DB_DATA_PATH:-./.local/auth-db}
+        target: /var/lib/postgresql
     healthcheck:
       test: [CMD-SHELL, pg_isready -U fitnesstracker_auth -d fitnesstracker_auth]
       interval: 5s
       timeout: 5s
       retries: 12
 
-  backup-db:
+  backend-db:
     image: postgres:18-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_DB: fitnesstracker_backups
-      POSTGRES_USER: fitnesstracker_backups
-      POSTGRES_PASSWORD: ${BACKUP_DB_PASSWORD}
-    volumes: [backup-db:/var/lib/postgresql]
+      POSTGRES_DB: ${BACKEND_DB_NAME:-fitnesstracker_backend}
+      POSTGRES_USER: ${BACKEND_DB_USER:-fitnesstracker_backend}
+      POSTGRES_PASSWORD: ${BACKEND_DB_PASSWORD}
+    volumes:
+      - type: bind
+        source: ${BACKEND_DB_DATA_PATH:-./.local/backend-db}
+        target: /var/lib/postgresql
     healthcheck:
-      test: [CMD-SHELL, pg_isready -U fitnesstracker_backups -d fitnesstracker_backups]
+      test: [CMD-SHELL, 'pg_isready -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}"']
       interval: 5s
       timeout: 5s
       retries: 12
 
 networks:
   default:
-    ipam:
-      config:
-        - subnet: ${SERVER_NETWORK_SUBNET:-172.30.0.0/24}
-          gateway: ${SERVER_NETWORK_GATEWAY:-172.30.0.1}
-
-volumes:
-  auth-db:
-  backup-db:
-  auth-keys:
+    external: true
+    name: ${SERVER_NETWORK_NAME:-fitness-tracker-server}

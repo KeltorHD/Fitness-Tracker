@@ -63,6 +63,19 @@ private final class AccountURLProtocol: URLProtocol {
 }
 
 @MainActor final class AccountBackupTests: XCTestCase {
+  func testAuthorizationRequestsProtocolScopesWithoutBackendPermissions() throws {
+    let authURL = try XCTUnwrap(URL(string: "https://auth.example.com/"))
+    let backendURL = try XCTUnwrap(URL(string: "https://api.example.com/"))
+    let configuration = try ServerConfiguration(authenticationURL: authURL, backendURL: backendURL)
+    let attempt = OAuthAttempt(verifier: "verifier", state: "expected", challenge: "challenge")
+    for manageAccount in [false, true] {
+      let url = try attempt.authorizationURL(
+        configuration: configuration, manageAccount: manageAccount)
+      let query = try XCTUnwrap(URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems)
+      XCTAssertEqual(query.first(where: { $0.name == "scope" })?.value, "profile offline_access")
+    }
+  }
+
   private func setup(prefix: String = "ok", failsToSave: Bool = false) throws -> (
     AccountSession, AccountCredentialFixture, URLRequest
   ) {

@@ -41,7 +41,7 @@ public sealed class AuthenticationTests
             ["client_id"] = AuthConfiguration.ClientId,
             ["redirect_uri"] = AuthConfiguration.Callback,
             ["response_type"] = "code",
-            ["scope"] = "backups",
+            ["scope"] = "profile",
             ["state"] = "expected-state",
             ["code_challenge"] = Base64UrlEncoder.Encode(SHA256.HashData("fixed-verifier-for-prompt-none-test"u8.ToArray())),
             ["code_challenge_method"] = "S256",
@@ -57,9 +57,9 @@ public sealed class AuthenticationTests
         Assert.False(query.ContainsKey("code"));
     }
 
-    /// <summary>Cookie браузера и JWT без backups scope не разрешают API аккаунта и не запускают удаление копий.</summary>
+    /// <summary>API аккаунта требует bearer вместо cookie и не зависит от разрешений функций Backend.</summary>
     [Fact]
-    public async Task AccountApiRequiresBearerTokenAndBackupScopeAsync()
+    public async Task AccountApiRequiresBearerTokenWithoutBackendScopesAsync()
     {
         using var factory = new AuthFactory();
         using var client = await factory.SignedInAsync();
@@ -71,14 +71,17 @@ public sealed class AuthenticationTests
         var tokens = await issued.Content.ReadFromJsonAsync<JsonElement>();
         client.DefaultRequestHeaders.Authorization = new("Bearer", tokens.GetProperty("access_token").GetString());
 
+        var access = new JwtSecurityTokenHandler().ReadJwtToken(tokens.GetProperty("access_token").GetString());
+        Assert.DoesNotContain(access.Claims, claim => claim.Type == "scope" && claim.Value.Split(' ').Contains("backups"));
+
         using var profile = await client.GetAsync("/v1/account");
         using var deletion = await client.DeleteAsync("/v1/account");
 
-        Assert.Equal(HttpStatusCode.Forbidden, profile.StatusCode);
-        Assert.Equal(HttpStatusCode.Forbidden, deletion.StatusCode);
-        Assert.Equal(0, factory.CleanupCalls);
+        Assert.Equal(HttpStatusCode.OK, profile.StatusCode);
+        Assert.Equal(HttpStatusCode.NoContent, deletion.StatusCode);
+        Assert.Equal(1, factory.CleanupCalls);
         using var scope = factory.Services.CreateScope();
-        Assert.Single(await scope.ServiceProvider.GetRequiredService<AuthDbContext>().Users.ToListAsync());
+        Assert.Empty(await scope.ServiceProvider.GetRequiredService<AuthDbContext>().Users.ToListAsync());
     }
     /// <summary>Заблокированному Identity-пользователю нельзя обменивать ранее выданные code/refresh tokens.</summary>
     [Fact]
@@ -108,7 +111,7 @@ public sealed class AuthenticationTests
         Assert.Equal(HttpStatusCode.BadRequest, refresh.StatusCode);
     }
     /// <summary>Создаёт настоящий authorization code и проверяет state callback.</summary>
-    private static async Task<(string Code, string Verifier)> CodeAsync(HttpClient client, string scope = "openid profile offline_access backups")
+    private static async Task<(string Code, string Verifier)> CodeAsync(HttpClient client, string scope = "openid profile offline_access")
     {
         var verifier = Base64UrlEncoder.Encode(RandomNumberGenerator.GetBytes(32));
         var url = QueryHelpers.AddQueryString("/connect/authorize", new Dictionary<string, string?>
@@ -165,11 +168,11 @@ public sealed class AuthenticationTests
         Assert.Contains(AuthConfiguration.Audience, jwt.Audiences);
         Assert.DoesNotContain(jwt.Claims, claim => claim.Type == "fitnesstracker:security_stamp");
         Assert.Equal(HttpStatusCode.BadRequest, (await ExchangeAsync(client, fresh.Code, fresh.Verifier)).StatusCode);
-        var rejected = await client.GetAsync("/connect/authorize?client_id=fitnesstracker-ios&redirect_uri=https://attacker.test/&response_type=code&scope=backups");
+        var rejected = await client.GetAsync("/connect/authorize?client_id=fitnesstracker-ios&redirect_uri=https://attacker.test/&response_type=code&scope=profile");
         Assert.Equal(HttpStatusCode.BadRequest, rejected.StatusCode);
-        var missingPkce = await client.GetAsync("/connect/authorize?client_id=fitnesstracker-ios&redirect_uri=https%3A%2F%2Fauth.example.com%2Fios%2Foauth%2Fcallback&response_type=code&scope=backups");
+        var missingPkce = await client.GetAsync("/connect/authorize?client_id=fitnesstracker-ios&redirect_uri=https%3A%2F%2Fauth.example.com%2Fios%2Foauth%2Fcallback&response_type=code&scope=profile");
         Assert.Contains("invalid_request", missingPkce.Headers.Location?.ToString() ?? await missingPkce.Content.ReadAsStringAsync());
-        var plainPkce = await client.GetAsync("/connect/authorize?client_id=fitnesstracker-ios&redirect_uri=https%3A%2F%2Fauth.example.com%2Fios%2Foauth%2Fcallback&response_type=code&scope=backups&code_challenge=abcdefghijklmnopqrstuvwxyz1234567890abcdefghijk&code_challenge_method=plain");
+        var plainPkce = await client.GetAsync("/connect/authorize?client_id=fitnesstracker-ios&redirect_uri=https%3A%2F%2Fauth.example.com%2Fios%2Foauth%2Fcallback&response_type=code&scope=profile&code_challenge=abcdefghijklmnopqrstuvwxyz1234567890abcdefghijk&code_challenge_method=plain");
         Assert.Contains("invalid_request", plainPkce.Headers.Location?.ToString() ?? await plainPkce.Content.ReadAsStringAsync());
     }
 

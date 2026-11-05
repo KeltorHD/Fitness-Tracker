@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Npgsql;
 
 namespace FitnessTracker.Backend;
 
@@ -22,7 +23,7 @@ public partial class Program
         builder.Services.AddProblemDetails();
         builder.Services.AddOpenApi();
         builder.Services.AddDbContext<BackupDbContext>(options => options.UseNpgsql(
-            config.GetConnectionString("Database") ?? "Host=localhost;Database=fitnesstracker_backups;Username=fitnesstracker_backups"));
+            config.GetConnectionString("Database") ?? "Host=localhost;Database=fitnesstracker_backend;Username=fitnesstracker_backend"));
         builder.Services.AddSingleton(TimeProvider.System);
         builder.Services.AddScoped<BackupStorage>();
         builder.Services.AddOptions<IntrospectionOptions>()
@@ -63,10 +64,10 @@ public partial class Program
                 ValidAlgorithms = [SecurityAlgorithms.RsaSha256]
             };
         });
-        builder.Services.AddAuthorization(options => options.AddPolicy("backups", policy =>
+        // Права Backend задаются здесь; OAuth scopes не определяют доступ к функциям сервиса.
+        builder.Services.AddAuthorization(options => options.AddPolicy("backend", policy =>
             policy.RequireAuthenticatedUser().RequireAssertion(context =>
-                Guid.TryParse(context.User.FindFirst("sub")?.Value, out _) &&
-                context.User.FindAll("scope").Any(claim => claim.Value.Split(' ').Contains("backups")))));
+                Guid.TryParse(context.User.FindFirst("sub")?.Value, out _))));
         builder.Services.Configure<ForwardedHeadersOptions>(options =>
         {
             options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
@@ -94,7 +95,7 @@ public partial class Program
         app.UseAuthorization();
         app.UseRateLimiter();
         var backups = app.MapGroup("/v1/backups")
-            .RequireAuthorization("backups")
+            .RequireAuthorization("backend")
             .RequireRateLimiting("backups")
             .AddEndpointFilter<ActiveSessionFilter>();
         backups.MapGet("/", async (HttpContext context, BackupDbContext database, CancellationToken ct) =>
@@ -128,11 +129,23 @@ public partial class Program
         });
         app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
         if (app.Environment.IsDevelopment()) app.MapOpenApi();
-        if (args.Contains("--migrate") && !app.Environment.IsEnvironment("Testing"))
+        if (!app.Environment.IsEnvironment("Testing"))
         {
             await using var scope = app.Services.CreateAsyncScope();
-            await scope.ServiceProvider.GetRequiredService<BackupDbContext>().Database.MigrateAsync();
-            return;
+            var database = scope.ServiceProvider.GetRequiredService<BackupDbContext>();
+            var cancellationToken = app.Lifetime.ApplicationStopping;
+            // Отдельное непулируемое соединение удерживает блокировку до конца startup.
+            var startupSettings = new NpgsqlConnectionStringBuilder(database.Database.GetConnectionString())
+            {
+                Pooling = false,
+                ApplicationName = "FitnessTracker startup"
+            };
+            await using var startupConnection = new NpgsqlConnection(startupSettings.ConnectionString);
+            await startupConnection.OpenAsync(cancellationToken);
+            await using var startupLock = new NpgsqlCommand("SELECT pg_advisory_lock(447295635001)", startupConnection);
+            await startupLock.ExecuteNonQueryAsync(cancellationToken);
+            await database.Database.MigrateAsync(cancellationToken);
+            if (args.Contains("--migrate")) return;
         }
         await app.RunAsync();
     }

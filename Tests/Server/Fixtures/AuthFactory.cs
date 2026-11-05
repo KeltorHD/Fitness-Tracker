@@ -22,8 +22,10 @@ namespace FitnessTracker.Server.Tests;
 /// <param name="trustedProxy">Единственный дополнительно доверенный proxy в тестовой конфигурации.</param>
 /// <param name="claimsTransformation">Необязательная точка синхронизации после проверки cookie для тестов гонок.</param>
 /// <param name="appleAppIdentifier">Синтетическая привязка приложения для тестирования AASA без настоящего Apple аккаунта.</param>
+/// <param name="providerSettings">Синтетические настройки провайдеров для проверки доступности кнопок без внешних запросов.</param>
 public sealed class AuthFactory(IPAddress? peerAddress = null, string? trustedProxy = null,
-    IClaimsTransformation? claimsTransformation = null, string? appleAppIdentifier = null) : WebApplicationFactory<Authentication.Program>
+    IClaimsTransformation? claimsTransformation = null, string? appleAppIdentifier = null,
+    IReadOnlyDictionary<string, string?>? providerSettings = null) : WebApplicationFactory<Authentication.Program>
 {
     /// <summary>Синтетический секрет отдельного confidential client в изолированной Auth-БД.</summary>
     internal const string IntrospectionSecret = "test-introspection-secret-with-at-least-32-characters";
@@ -43,6 +45,8 @@ public sealed class AuthFactory(IPAddress? peerAddress = null, string? trustedPr
         builder.UseSetting("Providers:Google:Enabled", "false");
         builder.UseSetting("Providers:Apple:Enabled", "false");
         builder.UseSetting("Providers:Yandex:Enabled", "false");
+        if (providerSettings is not null)
+            foreach (var setting in providerSettings) builder.UseSetting(setting.Key, setting.Value);
         builder.ConfigureAppConfiguration((_, config) =>
         {
             config.Sources.Clear();
@@ -57,6 +61,7 @@ public sealed class AuthFactory(IPAddress? peerAddress = null, string? trustedPr
                 ["AllowedHosts"] = "localhost",
                 ["Logging:LogLevel:Default"] = "None"
             });
+            if (providerSettings is not null) config.AddInMemoryCollection(providerSettings);
         });
         builder.ConfigureServices(services =>
         {

@@ -9,7 +9,6 @@ namespace FitnessTracker.Authentication;
 public static class AuthConfiguration
 {
     public const string ClientId = "fitnesstracker-ios";
-    public const string Scope = "backups";
     public const string Audience = "fitnesstracker-api";
     public const string Callback = "https://auth.example.com/ios/oauth/callback";
 
@@ -46,14 +45,27 @@ public static class AuthConfiguration
         }
     }
 
-    public static bool Enabled(IConfiguration config, string provider) =>
-        config.GetValue<bool>($"Providers:{provider}:Enabled");
+    /// <summary>Разрешает внешний вход только при включённом провайдере и полном наборе его настроек.</summary>
+    public static bool Enabled(IConfiguration config, string provider)
+    {
+        string[] required = provider switch
+        {
+            "Google" or "Yandex" => ["ClientId", "ClientSecret"],
+            "Apple" => ["ClientId", "TeamId", "KeyId", "PrivateKeyPath"],
+            _ => []
+        };
+        return required.Length > 0 && config.GetValue<bool>($"Providers:{provider}:Enabled") &&
+            required.All(key => !string.IsNullOrWhiteSpace(config[$"Providers:{provider}:{key}"])) &&
+            (provider != "Apple" || File.Exists(config["Providers:Apple:PrivateKeyPath"]));
+    }
 
     private static string Required(IConfiguration config, string provider, string key) =>
         config[$"Providers:{provider}:{key}"] is { Length: > 0 } value ? value :
             throw new InvalidOperationException($"Missing configuration for {provider}: {key}.");
 
-    public static async Task RegisterClient(IServiceProvider services, IConfiguration config)
+    /// <summary>Создаёт или обновляет public iOS и confidential Backend clients с поддержкой отмены.</summary>
+    public static async Task RegisterClient(IServiceProvider services, IConfiguration config,
+        CancellationToken cancellationToken = default)
     {
         var manager = services.GetRequiredService<IOpenIddictApplicationManager>();
         var redirect = new Uri(config["Auth:RedirectUri"] ?? Callback);
@@ -72,15 +84,14 @@ public static class AuthConfiguration
             {
                 Permissions.Endpoints.Authorization, Permissions.Endpoints.Token, Permissions.Endpoints.Revocation,
                 Permissions.GrantTypes.AuthorizationCode, Permissions.GrantTypes.RefreshToken,
-                Permissions.ResponseTypes.Code, Permissions.Scopes.Profile,
-                Permissions.Prefixes.Scope + Scope
+                Permissions.ResponseTypes.Code, Permissions.Scopes.Profile
             },
             Requirements = { Requirements.Features.ProofKeyForCodeExchange }
         };
-        var existing = await manager.FindByClientIdAsync(ClientId);
-        if (existing is null) await manager.CreateAsync(descriptor);
-        else await manager.UpdateAsync(existing, descriptor);
-        await RegisterIntrospectionClientAsync(manager, config);
+        var existing = await manager.FindByClientIdAsync(ClientId, cancellationToken);
+        if (existing is null) await manager.CreateAsync(descriptor, cancellationToken);
+        else await manager.UpdateAsync(existing, descriptor, cancellationToken);
+        await RegisterIntrospectionClientAsync(manager, config, cancellationToken);
     }
 
     /// <summary>Регистрирует серверный confidential client с единственным разрешением introspection.</summary>
