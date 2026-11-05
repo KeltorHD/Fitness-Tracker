@@ -15,6 +15,7 @@ enum AccountBackupAction: Hashable {
   private(set) var loaded = false
   private(set) var errorMessage: String?
   private(set) var notice: String?
+  private(set) var noticeIsSuccess = true
   private(set) var retryAction: AccountBackupAction?
   @ObservationIgnored private let session: AccountSession
   @ObservationIgnored private let client: RemoteBackupClient
@@ -35,6 +36,7 @@ enum AccountBackupAction: Hashable {
   }
 
   var callbackHost: String { session.configuration.callbackHost }
+  var callback: ServerCallback { session.configuration.callback }
 
   func load() async {
     await perform(.refresh) { _ in throw CancellationError() }
@@ -48,6 +50,7 @@ enum AccountBackupAction: Hashable {
     isBusy = true
     errorMessage = nil
     notice = nil
+    noticeIsSuccess = true
     retryAction = nil
     defer {
       isBusy = false
@@ -100,6 +103,11 @@ enum AccountBackupAction: Hashable {
     } catch {
       if error as? ServerError == .signInRequired { clearAccount() }
       guard !Task.isCancelled, !(error is CancellationError) else { return }
+      if error as? ServerError == .authenticationCancelled {
+        noticeIsSuccess = false
+        notice = ServerError.authenticationCancelled.errorDescription
+        return
+      }
       retryAction = error as? ServerError == .signInRequired ? .signIn : (retryAction ?? action)
       errorMessage =
         (error as? ServerError)?.errorDescription

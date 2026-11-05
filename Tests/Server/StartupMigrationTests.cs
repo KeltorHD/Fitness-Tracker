@@ -86,6 +86,40 @@ public sealed class StartupMigrationTests
         Assert.False(await applications.ValidateClientSecretAsync(backend, AuthFactory.IntrospectionSecret, cancellationToken));
     }
 
+    /// <summary>Production startup сохраняет отдельный Personal client, обновляет его callback и удаляет при отключении.</summary>
+    [Fact]
+    public async Task AuthStartupConfiguresPersonalClientWithoutChangingHttpsClientAsync()
+    {
+        // Arrange/Act: обычный startup с явно разрешённой private-use URI scheme.
+        using var deadline = new CancellationTokenSource(TimeSpan.FromMinutes(2));
+        var cancellationToken = deadline.Token;
+        await using var fixture = await PostgresDatabase.CreateAsync(cancellationToken);
+        foreach (var scheme in new string?[] { "com.example.first", "com.example.second", null })
+        {
+            using var factory = new StartupFactory<Authentication.Program>(fixture.ConnectionString, personalCallbackScheme: scheme);
+            using var client = factory.CreateClient();
+            using var health = await client.GetAsync("/health", cancellationToken);
+            Assert.Equal(HttpStatusCode.OK, health.StatusCode);
+            await using var scope = factory.Services.CreateAsyncScope();
+            var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictApplicationManager>();
+            var full = await manager.FindByClientIdAsync(AuthConfiguration.ClientId, cancellationToken);
+            Assert.NotNull(full);
+            Assert.Equal(AuthConfiguration.Callback, Assert.Single(await manager.GetRedirectUrisAsync(full, cancellationToken)));
+            var personal = await manager.FindByClientIdAsync(AuthConfiguration.PersonalClientId, cancellationToken);
+            if (scheme is null) Assert.Null(personal);
+            else
+            {
+                Assert.NotNull(personal);
+                Assert.Equal(scheme + ":/ios/oauth/callback", Assert.Single(await manager.GetRedirectUrisAsync(personal, cancellationToken)));
+            }
+            // Assert: перезапуск не создаёт дубликаты или миграции ради регистрации клиента.
+            var database = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
+            Assert.Equal(scheme is null ? 2 : 3,
+                await database.Set<OpenIddict.EntityFrameworkCore.Models.OpenIddictEntityFrameworkCoreApplication>().CountAsync(cancellationToken));
+            Assert.Empty(await database.Database.GetPendingMigrationsAsync(cancellationToken));
+        }
+    }
+
     /// <summary>Backend создаёт схему перед HTTP и при повторном запуске сохраняет архив и запрет удалённого аккаунта.</summary>
     [Fact]
     public async Task BackendStartupMigratesAndPreservesBackupsOnRestartAsync()
@@ -256,7 +290,7 @@ public sealed class StartupMigrationTests
 
         /// <summary>Создаёт исключительно временные ключи; рабочая конфигурация не используется.</summary>
         public StartupFactory(string connectionString, string introspectionSecret = AuthFactory.IntrospectionSecret,
-            StartupCommandErrors? commandErrors = null, ProtectionFiles? protectionFiles = null)
+            StartupCommandErrors? commandErrors = null, ProtectionFiles? protectionFiles = null, string? personalCallbackScheme = null)
         {
             _ownsProtectionFiles = protectionFiles is null;
             _protectionFiles = protectionFiles ?? new ProtectionFiles();
@@ -275,6 +309,7 @@ public sealed class StartupMigrationTests
                 ["ConnectionStrings:Database"] = connectionString,
                 ["Auth:Issuer"] = "https://localhost/",
                 ["Auth:RedirectUri"] = AuthConfiguration.Callback,
+                ["Auth:PersonalCallbackScheme"] = personalCallbackScheme,
                 ["Auth:IntrospectionClientSecret"] = introspectionSecret,
                 ["Certificates:Signing:Path"] = pfx,
                 ["Certificates:Signing:Password"] = "test-only-password",

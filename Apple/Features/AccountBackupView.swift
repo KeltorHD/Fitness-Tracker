@@ -128,7 +128,11 @@ struct AccountBackupView: View {
       }
     }
     if let notice = model.notice {
-      Section { Label(L10n.text(notice, locale: locale), systemImage: "checkmark.circle") }
+      Section {
+        Label(
+          L10n.text(notice, locale: locale),
+          systemImage: model.noticeIsSuccess ? "checkmark.circle" : "info.circle")
+      }
     }
   }
 
@@ -162,12 +166,19 @@ struct AccountBackupView: View {
     guard let requested = action else { return }
     await model.perform(requested) { url in
       do {
+        let callback: ASWebAuthenticationSession.Callback
+        switch model.callback {
+        case .https:
+          callback = .https(host: model.callbackHost, path: ServerConfiguration.callbackPath)
+        case .customScheme(let scheme):
+          callback = .customScheme(scheme)
+        }
         return try await authentication.authenticate(
           using: url,
-          callback: .https(host: model.callbackHost, path: ServerConfiguration.callbackPath),
+          callback: callback,
           additionalHeaderFields: [:])
       } catch let error as ASWebAuthenticationSessionError where error.code == .canceledLogin {
-        throw CancellationError()
+        throw ServerError.authenticationCancelled
       }
     }
     if action == requested { action = nil }

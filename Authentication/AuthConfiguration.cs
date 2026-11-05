@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
+using System.Text.RegularExpressions;
 using Microsoft.IdentityModel.Tokens;
 using OpenIddict.Abstractions;
 using static OpenIddict.Abstractions.OpenIddictConstants;
@@ -9,6 +10,8 @@ namespace FitnessTracker.Authentication;
 public static class AuthConfiguration
 {
     public const string ClientId = "fitnesstracker-ios";
+    /// <summary>Отдельный public client для Personal Team без Associated Domains.</summary>
+    public const string PersonalClientId = "fitnesstracker-ios-personal";
     public const string Audience = "fitnesstracker-api";
     public const string Callback = "https://auth.example.com/ios/oauth/callback";
 
@@ -73,12 +76,39 @@ public static class AuthConfiguration
             !string.IsNullOrEmpty(redirect.Query) || !string.IsNullOrEmpty(redirect.Fragment) ||
             redirect.AbsolutePath != "/ios/oauth/callback")
             throw new InvalidOperationException("The iOS callback must use HTTPS and /ios/oauth/callback.");
+        await RegisterPublicClientAsync(manager, ClientId, redirect, "FitnessTracker для iOS", cancellationToken);
+        await RegisterPersonalClientAsync(manager, config, cancellationToken);
+        await RegisterIntrospectionClientAsync(manager, config, cancellationToken);
+    }
+
+    /// <summary>Регистрирует только явно настроенную reverse-DNS URL-схему; отключение удаляет её client и grants.</summary>
+    private static async Task RegisterPersonalClientAsync(IOpenIddictApplicationManager manager, IConfiguration config,
+        CancellationToken cancellationToken)
+    {
+        var scheme = config["Auth:PersonalCallbackScheme"];
+        if (string.IsNullOrEmpty(scheme))
+        {
+            var existing = await manager.FindByClientIdAsync(PersonalClientId, cancellationToken);
+            if (existing is not null) await manager.DeleteAsync(existing, cancellationToken);
+            return;
+        }
+        if (scheme.Length > 253 || !scheme.Contains('.') || !Uri.CheckSchemeName(scheme) ||
+            scheme.Split('.').Any(label => !Regex.IsMatch(label, @"\A[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\z")))
+            throw new InvalidOperationException("Auth:PersonalCallbackScheme must be a lowercase reverse-DNS URI scheme.");
+        await RegisterPublicClientAsync(manager, PersonalClientId, new Uri(scheme + ":/ios/oauth/callback"),
+            "FitnessTracker Personal для iOS", cancellationToken);
+    }
+
+    /// <summary>Создаёт либо обновляет public client с единственным callback и обязательным PKCE.</summary>
+    private static async Task RegisterPublicClientAsync(IOpenIddictApplicationManager manager, string clientId, Uri redirect,
+        string displayName, CancellationToken cancellationToken)
+    {
         var descriptor = new OpenIddictApplicationDescriptor
         {
-            ClientId = ClientId,
+            ClientId = clientId,
             ClientType = ClientTypes.Public,
             ConsentType = ConsentTypes.Implicit,
-            DisplayName = "FitnessTracker для iOS",
+            DisplayName = displayName,
             RedirectUris = { redirect },
             Permissions =
             {
@@ -88,10 +118,9 @@ public static class AuthConfiguration
             },
             Requirements = { Requirements.Features.ProofKeyForCodeExchange }
         };
-        var existing = await manager.FindByClientIdAsync(ClientId, cancellationToken);
+        var existing = await manager.FindByClientIdAsync(clientId, cancellationToken);
         if (existing is null) await manager.CreateAsync(descriptor, cancellationToken);
         else await manager.UpdateAsync(existing, descriptor, cancellationToken);
-        await RegisterIntrospectionClientAsync(manager, config, cancellationToken);
     }
 
     /// <summary>Регистрирует серверный confidential client с единственным разрешением introspection.</summary>

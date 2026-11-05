@@ -4,15 +4,23 @@ import Foundation
   import FoundationNetworking
 #endif
 
+enum ServerCallback: Equatable, Sendable {
+  case https
+  case customScheme(String)
+}
+
 struct ServerConfiguration: Equatable, Sendable {
   static let clientID = "fitnesstracker-ios"
+  static let personalClientID = "fitnesstracker-ios-personal"
   static let callbackPath = "/ios/oauth/callback"
   let callbackHost: String
-  var callbackURL: URL { authenticationURL.appendingPathComponent("ios/oauth/callback") }
+  let callback: ServerCallback
+  let callbackURL: URL
+  var oauthClientID: String { callback == .https ? Self.clientID : Self.personalClientID }
   let authenticationURL: URL
   let backendURL: URL
 
-  init(authenticationURL: URL, backendURL: URL) throws {
+  init(authenticationURL: URL, backendURL: URL, callback: ServerCallback = .https) throws {
     for url in [authenticationURL, backendURL] {
       guard url.scheme == "https", url.host != nil, url.user == nil, url.password == nil,
         url.query == nil, url.fragment == nil, url.path.isEmpty || url.path == "/"
@@ -20,24 +28,51 @@ struct ServerConfiguration: Equatable, Sendable {
     }
     guard let host = authenticationURL.host else { throw ServerError.invalidConfiguration }
     self.callbackHost = host
+    self.callback = callback
+    switch callback {
+    case .https:
+      callbackURL = authenticationURL.appendingPathComponent("ios/oauth/callback")
+    case .customScheme(let scheme):
+      let labels = scheme.split(separator: ".", omittingEmptySubsequences: false)
+      guard scheme.count <= 253, labels.count >= 2,
+        scheme.first.map({ ("a"..."z").contains(String($0)) }) == true,
+        labels.allSatisfy({
+          $0.range(of: "\\A[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\\z", options: .regularExpression)
+            != nil
+        }),
+        let url = URL(string: scheme + ":" + Self.callbackPath)
+      else { throw ServerError.invalidConfiguration }
+      callbackURL = url
+    }
     self.authenticationURL = authenticationURL.appendingPathComponent("")
     self.backendURL = backendURL.appendingPathComponent("")
   }
 
   static func configured(in bundle: Bundle = .main) throws -> Self? {
-    let auth =
-      bundle.object(forInfoDictionaryKey: "FitnessTrackerAuthenticationURL") as? String ?? ""
-    let api = bundle.object(forInfoDictionaryKey: "FitnessTrackerBackendURL") as? String ?? ""
+    try configured(info: bundle.infoDictionary ?? [:])
+  }
+
+  static func configured(info: [String: Any]) throws -> Self? {
+    let auth = info["FitnessTrackerAuthenticationURL"] as? String ?? ""
+    let api = info["FitnessTrackerBackendURL"] as? String ?? ""
     guard !auth.isEmpty || !api.isEmpty else { return nil }
     guard let authURL = URL(string: auth), let apiURL = URL(string: api) else {
       throw ServerError.invalidConfiguration
     }
-    return try Self(authenticationURL: authURL, backendURL: apiURL)
+    let callback: ServerCallback
+    switch info["FitnessTrackerAuthenticationCallbackMode"] as? String ?? "https" {
+    case "https": callback = .https
+    case "customScheme":
+      callback = .customScheme(info["FitnessTrackerAuthenticationCallbackScheme"] as? String ?? "")
+    default: throw ServerError.invalidConfiguration
+    }
+    return try Self(authenticationURL: authURL, backendURL: apiURL, callback: callback)
   }
 }
 
 enum ServerError: Error, Equatable, LocalizedError, Sendable {
-  case invalidConfiguration, invalidResponse, invalidCallback, signInRequired
+  case invalidConfiguration, invalidResponse, invalidCallback, signInRequired,
+    authenticationCancelled
   case backupLimit, backupConflict, rateLimited, unavailable, credentialStorage
   case rejected(Int)
 
@@ -47,6 +82,7 @@ enum ServerError: Error, Equatable, LocalizedError, Sendable {
     case .invalidResponse: "Не удалось проверить ответ сервера. Повторите попытку."
     case .invalidCallback: "Не удалось подтвердить вход. Попробуйте войти ещё раз."
     case .signInRequired: "Войдите в аккаунт, чтобы открыть резервные копии."
+    case .authenticationCancelled: "Вход в аккаунт не завершён."
     case .backupLimit: "Сохранено 10 копий. Удалите ненужную копию и повторите попытку."
     case .backupConflict: "Копия с этим идентификатором уже существует. Создайте новую копию."
     case .rateLimited: "Слишком много запросов. Подождите минуту и повторите попытку."
@@ -93,7 +129,7 @@ struct OAuthAttempt: Equatable, Sendable {
     else { throw ServerError.invalidConfiguration }
     // Identity is fetched from the protected profile endpoint; ID tokens are not used by this client.
     parts.queryItems = [
-      URLQueryItem(name: "client_id", value: ServerConfiguration.clientID),
+      URLQueryItem(name: "client_id", value: configuration.oauthClientID),
       URLQueryItem(name: "redirect_uri", value: configuration.callbackURL.absoluteString),
       URLQueryItem(name: "response_type", value: "code"),
       URLQueryItem(name: "scope", value: "profile offline_access"),
@@ -110,8 +146,10 @@ struct OAuthAttempt: Equatable, Sendable {
   }
 
   func code(from callback: URL, configuration: ServerConfiguration) throws -> String {
-    guard callback.scheme == "https", callback.host == configuration.callbackHost,
-      callback.path == ServerConfiguration.callbackPath,
+    guard callback.scheme == configuration.callbackURL.scheme,
+      callback.host == configuration.callbackURL.host,
+      URLComponents(url: callback, resolvingAgainstBaseURL: false)?.percentEncodedPath
+        == ServerConfiguration.callbackPath,
       callback.user == nil, callback.password == nil,
       callback.port == configuration.callbackURL.port,
       callback.fragment == nil,

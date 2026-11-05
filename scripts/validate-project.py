@@ -32,8 +32,10 @@ assert spec['configs']['PersonalRelease'] == 'release'
 assert spec['schemes']['FitnessTracker Personal']['run']['config'] == 'PersonalDebug'
 assert spec['schemes']['FitnessTracker Personal']['archive']['config'] == 'PersonalRelease'
 assert spec['settings']['base']['FITNESS_TRACKER_CLOUD_SYNC_AVAILABLE'] == 'YES'
+assert spec['settings']['base']['FITNESS_TRACKER_AUTH_CALLBACK_MODE'] == 'https'
 for config in ['PersonalDebug', 'PersonalRelease']:
     assert spec['settings']['configs'][config]['FITNESS_TRACKER_CLOUD_SYNC_AVAILABLE'] == 'NO'
+    assert spec['settings']['configs'][config]['FITNESS_TRACKER_AUTH_CALLBACK_MODE'] == 'customScheme'
     assert spec['targets']['FitnessTracker']['settings']['configs'][config]['CODE_SIGN_ENTITLEMENTS'] == 'Config/PersonalTeam.entitlements'
 for path in spec['configFiles'].values(): assert (root / path).is_file()
 covered = set()
@@ -80,6 +82,9 @@ assert app['NSHealthUpdateUsageDescription']
 assert app['NSBluetoothAlwaysUsageDescription']
 assert 'bluetooth-central' in app['UIBackgroundModes']
 assert app['FitnessTrackerCloudSyncAvailable'] == '$(FITNESS_TRACKER_CLOUD_SYNC_AVAILABLE)'
+assert app['FitnessTrackerAuthenticationCallbackMode'] == '$(FITNESS_TRACKER_AUTH_CALLBACK_MODE)'
+assert app['FitnessTrackerAuthenticationCallbackScheme'] == '$(FITNESS_TRACKER_AUTH_CALLBACK_SCHEME)'
+assert any(item['CFBundleURLSchemes'] == ['$(FITNESS_TRACKER_AUTH_CALLBACK_SCHEME)'] for item in app['CFBundleURLTypes'])
 archive_type = next(item for item in app['UTExportedTypeDeclarations']
                     if item['UTTypeIdentifier'] == 'com.fitnesstracker.archive')
 assert archive_type['UTTypeConformsTo'] == ['public.json']
@@ -109,6 +114,7 @@ assert 'aps-environment' in entitlements
 assert entitlements['com.apple.developer.associated-domains'] == ['webcredentials:$(FITNESS_TRACKER_AUTH_DOMAIN)']
 personal = plists['PersonalTeam.entitlements']
 assert personal['com.apple.developer.healthkit'] is True
+assert 'com.apple.developer.associated-domains' not in personal
 assert personal['com.apple.security.application-groups'] == entitlements['com.apple.security.application-groups']
 assert not any(key.startswith('com.apple.developer.icloud') or key == 'aps-environment' for key in personal)
 ui = '\n'.join(p.read_text() for p in (root / 'Apple').rglob('*.swift'))

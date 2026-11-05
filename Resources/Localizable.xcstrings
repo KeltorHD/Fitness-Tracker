@@ -2636,6 +2636,23 @@
         }
       }
     },
+    "Вход в аккаунт не завершён.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вход в аккаунт не завершён."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign-in was not completed."
+          }
+        }
+      }
+    },
     "Выберите другой период или завершите тренировку с рабочими подходами этого упражнения.": {
       "extractionState": "manual",
       "localizations": {

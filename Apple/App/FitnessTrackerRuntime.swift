@@ -35,7 +35,7 @@ import Foundation
           configuration: configuration, http: ServerHTTPClient(),
           credentials: KeychainAccountTokenStore(
             service: (Bundle.main.bundleIdentifier ?? "FitnessTracker") + ".authentication",
-            account: configuration.authenticationURL.absoluteString + ServerConfiguration.clientID))
+            account: configuration.authenticationURL.absoluteString + configuration.oauthClientID))
       } else {
         accountSession = nil
       }

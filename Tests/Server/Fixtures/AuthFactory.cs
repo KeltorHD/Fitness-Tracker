@@ -23,9 +23,10 @@ namespace FitnessTracker.Server.Tests;
 /// <param name="claimsTransformation">Необязательная точка синхронизации после проверки cookie для тестов гонок.</param>
 /// <param name="appleAppIdentifier">Синтетическая привязка приложения для тестирования AASA без настоящего Apple аккаунта.</param>
 /// <param name="providerSettings">Синтетические настройки провайдеров для проверки доступности кнопок без внешних запросов.</param>
+/// <param name="personalCallbackScheme">Необязательная URL-схема отдельного Personal Team client.</param>
 public sealed class AuthFactory(IPAddress? peerAddress = null, string? trustedProxy = null,
     IClaimsTransformation? claimsTransformation = null, string? appleAppIdentifier = null,
-    IReadOnlyDictionary<string, string?>? providerSettings = null) : WebApplicationFactory<Authentication.Program>
+    IReadOnlyDictionary<string, string?>? providerSettings = null, string? personalCallbackScheme = null) : WebApplicationFactory<Authentication.Program>
 {
     /// <summary>Синтетический секрет отдельного confidential client в изолированной Auth-БД.</summary>
     internal const string IntrospectionSecret = "test-introspection-secret-with-at-least-32-characters";
@@ -55,6 +56,7 @@ public sealed class AuthFactory(IPAddress? peerAddress = null, string? trustedPr
                 ["Auth:Issuer"] = "https://localhost/",
                 ["Auth:IntrospectionClientSecret"] = IntrospectionSecret,
                 ["Auth:AppleAppIdentifier"] = appleAppIdentifier,
+                ["Auth:PersonalCallbackScheme"] = personalCallbackScheme,
                 ["Backend:InternalUrl"] = "https://backend.test/",
                 ["Backend:ServiceKey"] = BackendFactory.ServiceKey,
                 ["ReverseProxy:Address"] = trustedProxy,

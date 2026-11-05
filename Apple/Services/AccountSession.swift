@@ -37,7 +37,7 @@ actor AccountSession {
     request.httpMethod = "POST"
     request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
     request.httpBody = ServerJSON.form([
-      ("grant_type", "authorization_code"), ("client_id", ServerConfiguration.clientID),
+      ("grant_type", "authorization_code"), ("client_id", configuration.oauthClientID),
       ("redirect_uri", configuration.callbackURL.absoluteString), ("code", code),
       ("code_verifier", attempt.verifier),
     ])
@@ -91,7 +91,7 @@ actor AccountSession {
       request.httpMethod = "POST"
       request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
       request.httpBody = ServerJSON.form([
-        ("client_id", ServerConfiguration.clientID), ("token", value.refreshToken),
+        ("client_id", configuration.oauthClientID), ("token", value.refreshToken),
         ("token_type_hint", "refresh_token"),
       ])
       _ = try await http.send(request)
@@ -139,6 +139,7 @@ actor AccountSession {
     } else {
       let http = http
       let credentials = credentials
+      let clientID = configuration.oauthClientID
       let url = configuration.authenticationURL.appendingPathComponent("connect/token")
       // The session owns this shared rotation. Cancelling one screen must not lose a rotated token.
       let task = Task<AccountTokens, any Error> {
@@ -146,7 +147,7 @@ actor AccountSession {
         request.httpMethod = "POST"
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.httpBody = ServerJSON.form([
-          ("grant_type", "refresh_token"), ("client_id", ServerConfiguration.clientID),
+          ("grant_type", "refresh_token"), ("client_id", clientID),
           ("refresh_token", value.refreshToken),
         ])
         let response: TokenResponse
