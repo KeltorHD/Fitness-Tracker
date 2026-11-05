@@ -12,9 +12,10 @@ struct WorkoutSetDraft {
   init(set: WorkoutSet, unit: WeightUnit, locale: Locale) {
     weight = unit.display(set.weightKG).formatted(
       .number.locale(locale).grouping(.never).precision(.fractionLength(0...2)))
-    repetitions = String(set.repetitions)
+    repetitions = set.repetitions == 0 ? "" : String(set.repetitions)
     originalWeightKG = set.weightKG
     originalText = weight
+    if set.completedAt == nil, set.repetitions == 0, set.weightKG == 0 { weight = "" }
     decimalSeparator = locale.decimalSeparator ?? "."
   }
 
@@ -72,6 +73,8 @@ struct WorkoutSetCompletion {
   var selectedTargetID: UUID? { selectedStageID ?? selectedSetID }
   private(set) var selectedSetID: UUID?
   private(set) var drafts: [UUID: WorkoutSetDraft] = [:]
+  private(set) var previousValues: PreviousWorkoutValues?
+  @ObservationIgnored private var history: [Workout] = []
   let unit: WeightUnit
   private let locale: Locale
   private let workoutID: UUID
@@ -119,6 +122,11 @@ struct WorkoutSetCompletion {
   }
   func editWeight(_ text: String, setID: UUID) { drafts[setID]?.weight = text }
   func editRepetitions(_ text: String, setID: UUID) { drafts[setID]?.repetitions = text }
+  func updateHistory(_ history: [Workout], for workout: Workout) {
+    guard workout.id == workoutID else { return }
+    self.history = history
+    refresh(workout)
+  }
   func refresh(_ workout: Workout) {
     guard workout.id == workoutID else { return }
     if !workout.exercises.contains(where: { $0.id == exerciseID }),
@@ -127,6 +135,7 @@ struct WorkoutSetCompletion {
       exerciseID = first.id
       selectedSetID = nil
     }
+    previousValues = PreviousWorkoutValues(exerciseRowID: exerciseID, in: workout, history: history)
     let pending = workout.exercises.flatMap(\.sets).flatMap(\.stages).filter {
       $0.completedAt == nil
     }
@@ -216,9 +225,13 @@ enum WorkoutExerciseSummary {
   ) -> String {
     let sets = completedOnly ? row.sets.filter { $0.completedAt != nil } : row.sets
     guard !sets.isEmpty else { return L10n.text("Нет выполненных подходов", locale: locale) }
+    if sets.allSatisfy({ $0.completedAt == nil && $0.repetitions == 0 && $0.weightKG == 0 }) {
+      return L10n.countText(sets.count, kind: "set", locale: locale)
+    }
     return sets.map { set in
       let stages = completedOnly ? set.performedStages : set.stages
       var text = stages.map { stage in
+        if stage.completedAt == nil, stage.repetitions == 0, stage.weightKG == 0 { return "—" }
         let weight = unit.display(stage.weightKG).formatted(
           .number.locale(numberLocale).precision(.fractionLength(0...1)))
         return "\(weight) \(L10n.text(unit.rawValue, locale: locale)) × \(stage.repetitions)"

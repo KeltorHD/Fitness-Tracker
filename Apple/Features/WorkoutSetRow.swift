@@ -51,6 +51,8 @@ struct WorkoutSetRow<ContextActions: View>: View {
   var showsDropMetadata = true
   var canCorrectCompleted = false
   let selected: Bool
+  var previous: DropSetStage? = nil
+  var showsPrevious = false
   let weight: String
   let repetitions: String
   let numberPad: WorkoutNumberPadModel
@@ -108,6 +110,13 @@ struct WorkoutSetRow<ContextActions: View>: View {
         }.frame(maxWidth: .infinity)
         if typeSize.isAccessibilitySize { noteField.frame(width: noteColumnWidth) }
       }
+      if showsPrevious {
+        Text(previousText)
+          .font(.caption).foregroundStyle(.secondary)
+          .fixedSize(horizontal: false, vertical: true)
+          .padding(.leading, WorkoutSetTableLayout.indexWidth + WorkoutSetTableLayout.spacing)
+          .accessibilityIdentifier("previousSetValues_\(set.id)")
+      }
       if set.isWarmup || (showsDropMetadata && set.isDropSet) || (set.loadMultiplier ?? 1) > 1 {
         ViewThatFits(in: .horizontal) {
           HStack(spacing: 8) { metadata }
@@ -124,6 +133,15 @@ struct WorkoutSetRow<ContextActions: View>: View {
       selected && set.completedAt == nil ? colorTheme.accent.opacity(0.09) : Color.clear,
       in: .rect(cornerRadius: 16)
     )
+  }
+
+  private var previousText: String {
+    guard let previous else { return L10n.text("Ранее: —", locale: locale) }
+    let weight = unit.display(previous.weightKG).formatted(
+      .number.locale(L10n.numberLocale).precision(.fractionLength(0...2)))
+    return L10n.format(
+      "Ранее: %@ %@ × %@", weight, L10n.text(unit.rawValue, locale: locale),
+      String(previous.repetitions), locale: locale)
   }
 
   private var noteField: some View {
@@ -217,7 +235,8 @@ struct WorkoutSetRow<ContextActions: View>: View {
   }
 
   private var formattedWeight: String {
-    unit.display(set.weightKG).formatted(
+    if set.completedAt == nil, set.repetitions == 0, set.weightKG == 0 { return "—" }
+    return unit.display(set.weightKG).formatted(
       .number.locale(L10n.numberLocale).precision(.fractionLength(0...2)))
   }
 
@@ -237,9 +256,12 @@ struct WorkoutSetRow<ContextActions: View>: View {
         .accessibilityValue(String(set.repetitions))
         .accessibilityIdentifier("correctSetRepetitions_\(set.id)")
       } else {
-        Text(String(set.repetitions)).frame(maxWidth: .infinity, minHeight: 44)
+        Text(set.repetitions == 0 ? "—" : String(set.repetitions))
+          .frame(maxWidth: .infinity, minHeight: 44)
           .accessibilityLabel(
-            L10n.format("Повторения: %@", String(set.repetitions), locale: locale))
+            L10n.format(
+              "Повторения: %@", set.repetitions == 0 ? "—" : String(set.repetitions), locale: locale
+            ))
       }
     }
     .font(.title3.weight(selected ? .bold : set.completedAt != nil ? .semibold : .regular))
@@ -284,6 +306,7 @@ private struct WorkoutNumericField: UIViewRepresentable {
     view.inputAssistantItem.leadingBarButtonGroups = []
     view.inputAssistantItem.trailingBarButtonGroups = []
     view.textAlignment = .center
+    view.placeholder = "—"
     view.autocorrectionType = .no
     view.spellCheckingType = .no
     view.smartInsertDeleteType = .no

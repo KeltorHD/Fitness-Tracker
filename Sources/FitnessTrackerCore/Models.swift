@@ -155,19 +155,29 @@ public struct WorkoutTemplate: Identifiable, Codable, Equatable, Sendable {
     }
   }
 
-  public func start(at date: Date = Date()) throws -> Workout {
+  /// Interactive logging can start without numeric targets while legacy plans remain readable.
+  public func start(at date: Date = Date(), prefillTargets: Bool = true) throws -> Workout {
     try Validation.template(self)
     return Workout(
       name: name, startedAt: date,
       exercises: exercises.map { item in
         WorkoutExercise(
           exercise: item.exercise,
-          sets: item.plannedSets.map { $0.map { $0.freshCopy() } }
-            ?? (0..<item.setCount).map { _ in
-              WorkoutSet(
-                repetitions: item.repetitions, weightKG: item.weightKG,
-                loadMultiplier: item.loadMultiplier)
-            })
+          sets: !prefillTargets
+            ? (0..<item.setCount).map { index in
+              if let plan = item.plannedSets?[index] {
+                return WorkoutSet(
+                  repetitions: 0, isWarmup: plan.isWarmup,
+                  loadMultiplier: plan.loadMultiplier, note: plan.note)
+              }
+              return WorkoutSet(repetitions: 0, loadMultiplier: item.loadMultiplier)
+            }
+            : item.plannedSets.map { $0.map { $0.freshCopy() } }
+              ?? (0..<item.setCount).map { _ in
+                WorkoutSet(
+                  repetitions: item.repetitions, weightKG: item.weightKG,
+                  loadMultiplier: item.loadMultiplier)
+              })
       }, restSeconds: restSeconds)
   }
 }

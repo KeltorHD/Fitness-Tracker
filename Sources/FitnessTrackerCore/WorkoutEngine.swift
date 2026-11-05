@@ -149,14 +149,17 @@ public enum WorkoutEngine {
       }
       index = position == .before(id) ? anchor : anchor + 1
     }
-    workout.exercises.insert(WorkoutExercise(exercise: exercise), at: index)
+    workout.exercises.insert(
+      WorkoutExercise(exercise: exercise, sets: [WorkoutSet(repetitions: 0)]), at: index)
   }
 
   /// Adds fresh template rows without replacing recorded work or session-wide settings.
-  public static func addTemplates(_ templates: [WorkoutTemplate], to workout: inout Workout) throws
-  {
+  public static func addTemplates(
+    _ templates: [WorkoutTemplate], to workout: inout Workout, prefillTargets: Bool = true
+  ) throws {
     guard workout.status == .active else { throw TrainingError.invalidState }
-    let additions = try WorkoutTemplate.start(combining: templates, at: workout.startedAt)
+    let additions = try WorkoutTemplate.start(
+      combining: templates, at: workout.startedAt, prefillTargets: prefillTargets)
     var candidate = workout
     candidate.exercises.append(contentsOf: additions.exercises)
     try Validation.workout(candidate)
@@ -179,7 +182,8 @@ public enum WorkoutEngine {
     var candidate = workout
     let hasRecordedWork = original.sets.contains { !$0.performedStages.isEmpty }
     let replacement = WorkoutExercise(
-      id: hasRecordedWork ? UUID() : original.id, exercise: exercise)
+      id: hasRecordedWork ? UUID() : original.id, exercise: exercise,
+      sets: [WorkoutSet(repetitions: 0)])
     if hasRecordedWork {
       candidate.exercises.insert(replacement, at: index + 1)
     } else {
@@ -241,11 +245,9 @@ public enum WorkoutEngine {
     } else {
       index = workout.exercises[i].sets.endIndex
     }
-    let source = index > 0 ? workout.exercises[i].sets[index - 1] : WorkoutSet()
-    var copy = source.freshCopy()
-    copy.isWarmup = false
-    copy.note = nil
-    workout.exercises[i].sets.insert(copy, at: index)
+    let multiplier = index > 0 ? workout.exercises[i].sets[index - 1].loadMultiplier : nil
+    workout.exercises[i].sets.insert(
+      WorkoutSet(repetitions: 0, loadMultiplier: multiplier), at: index)
   }
 
   public static func removeSet(exerciseID: UUID, setID: UUID, from workout: inout Workout) throws {

@@ -6,7 +6,6 @@ struct TemplateExerciseCard: View {
   @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
   @Environment(\.dynamicTypeSize) private var typeSize
-  @AppStorage("weightUnit") private var unit: WeightUnit = .kilograms
   let item: TemplateExercise
   let index: Int
   let onTechnique: () -> Void
@@ -21,16 +20,7 @@ struct TemplateExerciseCard: View {
   private var name: String { entry?.name ?? item.exercise.name }
 
   private var summary: String {
-    let sets = L10n.countText(item.setCount, kind: "set", locale: locale)
-    if item.plannedSets != nil {
-      return sets + " · " + L10n.text("Индивидуальные параметры", locale: locale)
-    }
-    let repetitions = L10n.countText(item.repetitions, kind: "rep", locale: locale)
-    guard item.weightKG > 0 else { return sets + " · " + repetitions }
-    let weight = unit.display(item.weightKG).formatted(
-      .number.locale(L10n.numberLocale).precision(.fractionLength(0...2)))
-    return sets + " · " + repetitions + " · " + weight + " "
-      + L10n.text(unit.rawValue, locale: locale)
+    L10n.countText(item.setCount, kind: "set", locale: locale)
   }
 
   var body: some View {

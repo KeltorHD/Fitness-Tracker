@@ -72,6 +72,8 @@ struct WorkoutSetGroupView: View {
       editable: workout.status == .active && value.completedAt == nil,
       showsDropMetadata: false, canCorrectCompleted: [.active, .paused].contains(workout.status),
       selected: value.id == model.selectedTargetID && workout.status == .active,
+      previous: model.previousValues?.stages[value.id],
+      showsPrevious: [.active, .paused].contains(workout.status) && model.previousValues != nil,
       weight: model.drafts[value.id]?.weight ?? "",
       repetitions: model.drafts[value.id]?.repetitions ?? "",
       numberPad: numberPad, edit: { numberPad.begin($0, in: workout) },

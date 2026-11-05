@@ -8161,6 +8161,23 @@
         }
       }
     },
+    "Нет предыдущих значений": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нет предыдущих значений"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No previous values"
+          }
+        }
+      }
+    },
     "Нет свежего измерения": {
       "extractionState": "manual",
       "localizations": {
@@ -10201,6 +10218,23 @@
         }
       }
     },
+    "Предыдущая тренировка: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Предыдущая тренировка: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Previous workout: %@"
+          }
+        }
+      }
+    },
     "Предыдущее упражнение": {
       "extractionState": "manual",
       "localizations": {
@@ -11217,6 +11251,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gaps in the chart indicate missing measurements. Average heart rate is calculated from saved samples."
+          }
+        }
+      }
+    },
+    "Ранее: %@ %@ × %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ранее: %@ %@ × %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Previously: %@ %@ × %@"
+          }
+        }
+      }
+    },
+    "Ранее: —": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ранее: —"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Previously: —"
           }
         }
       }

@@ -216,8 +216,13 @@ private func expect(_ condition: Bool, _ message: String) throws {
     pad.begin(.weight(zero.id), in: workout)
     pad.advance(in: workout)
     try expect(
-      pad.field == .repetitions(zero.id),
-      "A legacy zero-rep draft does not trap navigation in its valid weight field")
+      pad.field == .weight(zero.id) && pad.text.isEmpty && pad.error != nil,
+      "An unfilled target requires an explicit weight, including zero for bodyweight")
+    pad.digit(0)
+    pad.advance(in: workout)
+    try expect(
+      pad.field == .repetitions(zero.id) && pad.text.isEmpty,
+      "An explicit zero weight advances to empty repetitions")
     pad.advance(in: workout)
     try expect(pad.field != nil && pad.error != nil, "Zero repetitions still require correction")
     pad.digit(8)

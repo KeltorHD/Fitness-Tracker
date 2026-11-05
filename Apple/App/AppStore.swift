@@ -321,9 +321,9 @@ import WidgetKit
       case 0:
         workout = Workout(name: L10n.text(isDemoMode ? "Демо-тренировка" : "Свободная тренировка"))
       case 1:
-        workout = try templates[0].start()
+        workout = try templates[0].start(prefillTargets: false)
       default:
-        workout = try WorkoutTemplate.start(combining: templates)
+        workout = try WorkoutTemplate.start(combining: templates, prefillTargets: false)
       }
       try activate(workout)
     } catch {

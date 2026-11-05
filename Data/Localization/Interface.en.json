@@ -876,5 +876,9 @@
   "Тренировки, планы и записи веса будут сохранены в вашем аккаунте на сервере.": "Your workouts, plans and weight entries will be saved to your account on the server.",
   "Удалить аккаунт": "Delete account",
   "Удалить копию": "Delete backup",
-  "Эта серверная копия будет удалена.": "This server backup will be deleted."
+  "Эта серверная копия будет удалена.": "This server backup will be deleted.",
+  "Предыдущая тренировка: %@": "Previous workout: %@",
+  "Нет предыдущих значений": "No previous values",
+  "Ранее: —": "Previously: —",
+  "Ранее: %@ %@ × %@": "Previously: %@ %@ × %@"
 }

@@ -49,6 +49,25 @@ import XCTest
 }
 
 @MainActor final class AppStoreTests: XCTestCase {
+  func testOrdinaryTemplateStartPersistsEmptyTargetsAndRetainsTheSavedTemplate() throws {
+    let repository = MemoryWorkoutRepository()
+    let template = WorkoutTemplate(
+      name: "План",
+      exercises: [
+        TemplateExercise(exercise: ExerciseCatalog.all[0], repetitions: 12, weightKG: 60)
+      ], restSeconds: 120)
+    try repository.saveTemplate(template)
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    store.start(template: template)
+    let workout = try XCTUnwrap(store.active)
+    XCTAssertEqual(workout.exercises[0].sets.count, 3)
+    XCTAssertTrue(workout.exercises[0].sets.allSatisfy { $0.repetitions == 0 && $0.weightKG == 0 })
+    XCTAssertEqual(workout.restSeconds, 120)
+    XCTAssertEqual(try repository.workouts(), [workout])
+    XCTAssertEqual(try repository.templates(), [template])
+  }
+
   func testFailedExerciseInsertionAndRemovalKeepPersistedSessionIntact() throws {
     let repository = FailingWorkoutRepository()
     let store = AppStore(

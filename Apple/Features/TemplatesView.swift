@@ -332,30 +332,20 @@ private struct TemplateExerciseParameters: View {
   @Binding var exercise: TemplateExercise
 
   var body: some View {
-    Group {
-      if let plans = exercise.plannedSets {
-        Text(
-          WorkoutExerciseSummary.text(
-            WorkoutExercise(exercise: exercise.exercise, sets: plans), completedOnly: false,
-            unit: .kilograms, locale: locale, numberLocale: L10n.numberLocale))
-        Text(
-          L10n.text("Вес и этапы можно изменить после запуска тренировки.", locale: locale)
-        ).font(.caption).foregroundStyle(.secondary)
-      } else {
-        Stepper(
-          L10n.format("Подходы: %@", String(exercise.setCount), locale: locale),
-          value: $exercise.setCount, in: 1...30)
-        Stepper(
-          L10n.format(
-            "Повторения: %@", String(exercise.repetitions), locale: locale),
-          value: $exercise.repetitions, in: 1...1000)
-        TextField(
-          L10n.text("Добавленный вес, кг", locale: locale), value: $exercise.weightKG,
-          format: .number
-        )
-        .keyboardType(.decimalPad)
-      }
-    }
+    Stepper(
+      L10n.format("Подходы: %@", String(exercise.setCount), locale: locale),
+      value: Binding(
+        get: { exercise.setCount },
+        set: { count in
+          exercise.setCount = count
+          if let plans = exercise.plannedSets {
+            exercise.plannedSets =
+              Array(plans.prefix(count))
+              + (plans.count..<max(plans.count, count)).map { _ in WorkoutSet() }
+          }
+        }), in: 1...30
+    )
+    .accessibilityIdentifier("templateSetCount_\(exercise.id)")
   }
 }
 

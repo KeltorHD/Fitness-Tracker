@@ -120,8 +120,83 @@ private func rejects(_ action: () throws -> Void) throws {
     try checkContextTarget(at: date)
     try checkStartedGroupAppend(at: date)
     try checkReplacementFocus(at: date)
+    try checkPreviousValuesAndBlankDrafts(at: date)
     print(
       "Portable workout exercise presentation: localized/strict input, pounds precision, draft retention, repeated exercise identity, paging/reordering/removal, completion, pause/history guards and summaries passed (no Apple SDK)."
+    )
+  }
+
+  @MainActor private static func checkPreviousValuesAndBlankDrafts(at date: Date) throws {
+    let exercise = Exercise(name: "Previous values", muscle: .back)
+    let otherExercise = Exercise(name: "Bodyweight", muscle: .arms)
+    let recordedDate = date.addingTimeInterval(-3600)
+    var history = Workout(
+      name: "Earlier", startedAt: recordedDate,
+      exercises: [
+        WorkoutExercise(
+          exercise: exercise,
+          sets: [
+            WorkoutSet(repetitions: 10, weightKG: 30, completedAt: recordedDate),
+            WorkoutSet(repetitions: 6, weightKG: 40, completedAt: recordedDate),
+          ]),
+        WorkoutExercise(
+          exercise: otherExercise,
+          sets: [WorkoutSet(repetitions: 15, weightKG: 0, completedAt: recordedDate)]),
+      ])
+    try WorkoutEngine.finish(&history, at: recordedDate.addingTimeInterval(60))
+    let first = WorkoutExercise(
+      exercise: exercise, sets: [WorkoutSet(repetitions: 0), WorkoutSet(repetitions: 0)])
+    let second = WorkoutExercise(exercise: otherExercise, sets: [WorkoutSet(repetitions: 0)])
+    var workout = Workout(name: "Now", startedAt: date, exercises: [first, second])
+    let model = WorkoutExercisePresentation(
+      workout: workout, exerciseID: first.id, unit: .kilograms, locale: Locale(identifier: "en_US"))
+    let snapshot = workout
+    model.updateHistory([history], for: workout)
+    try expect(
+      model.previousValues?.stages[first.sets[0].id]?.weightKG == 30
+        && model.previousValues?.stages[first.sets[1].id]?.repetitions == 6,
+      "History values map to current target IDs")
+    try expect(
+      model.drafts.values.allSatisfy { $0.weight.isEmpty && $0.repetitions.isEmpty }
+        && workout == snapshot,
+      "Displaying history leaves all pending numeric fields blank and never changes the workout")
+    try rejects { _ = try model.completion(in: workout) }
+    model.editRepetitions("8", setID: first.sets[0].id)
+    try rejects { _ = try model.completion(in: workout) }
+    model.editWeight("0", setID: first.sets[0].id)
+    let explicitBodyweight = try model.completion(in: workout)
+    try expect(
+      explicitBodyweight.set.weightKG == 0 && explicitBodyweight.set.repetitions == 8
+        && workout == snapshot,
+      "Explicit zero added load and positive repetitions prepare a valid completion")
+    model.move(1, in: workout)
+    try expect(
+      model.previousValues?.stages[second.sets[0].id]?.repetitions == 15
+        && model.previousValues?.stages[first.sets[0].id] == nil,
+      "Paging replaces suggestions with the selected exercise's own history")
+    model.move(-1, in: workout)
+    workout.exercises[0].sets.swapAt(0, 1)
+    model.refresh(workout)
+    try expect(
+      model.previousValues?.stages[first.sets[1].id]?.weightKG == 30
+        && model.previousValues?.stages[first.sets[0].id]?.weightKG == 40
+        && model.drafts[first.sets[0].id]?.weight == "0",
+      "Refreshing reordered targets remaps historical positions while retaining typed drafts")
+    model.updateHistory([], for: workout)
+    try expect(
+      model.previousValues == nil && model.drafts[first.sets[0].id]?.repetitions == "8",
+      "Deleting history removes previous values without losing entered data")
+    model.updateHistory([history], for: workout)
+    let replacementID = try WorkoutEngine.replaceExercise(
+      id: first.id, with: Exercise(name: "No history", muscle: .legs), in: &workout)
+    model.showExercise(replacementID, in: workout)
+    try expect(
+      model.previousValues == nil && model.drafts[first.sets[0].id] == nil
+        && model.drafts[workout.exercises[0].sets[0].id]?.weight == ""
+        && model.drafts[workout.exercises[0].sets[0].id]?.repetitions == "",
+      "Replacement clears unrelated history and starts new empty fields")
+    print(
+      "Portable previous workout values: display without prefill, explicit zero load, paging, refresh, history deletion and replacement passed (no Apple SDK)."
     )
   }
 

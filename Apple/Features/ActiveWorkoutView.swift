@@ -143,7 +143,7 @@ struct ActiveWorkoutView: View {
               guard case .templates(let templates) = selection else { return }
               let saved = store.mutate { current in
                 guard current.id == request.id else { throw TrainingError.invalidState }
-                try WorkoutEngine.addTemplates(templates, to: &current)
+                try WorkoutEngine.addTemplates(templates, to: &current, prefillTargets: false)
               }
               if saved { templateAddition = nil }
             }
