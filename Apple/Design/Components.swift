@@ -38,19 +38,62 @@ struct SessionControls: View {
   @Environment(\.accessibilityReduceMotion) private var reduceMotion
   @Namespace private var controls
   let workout: Workout
+  let cancel: () -> Void
+  let addTemplates: () -> Void
   let addExercise: () -> Void
   var body: some View {
     GlassEffectContainer(spacing: 8) {
-      HStack(spacing: 8) {
-        pauseButton
-        finishButton
-        addExerciseButton
+      ViewThatFits(in: .horizontal) {
+        HStack(spacing: 8) {
+          leadingActions
+          finishButton(fixedLabel: true)
+          trailingActions
+        }
+        VStack(spacing: 8) {
+          HStack(spacing: 8) {
+            leadingActions
+            Spacer(minLength: 8)
+            trailingActions
+          }
+          finishButton(fixedLabel: false)
+        }
       }
       .font(.subheadline.weight(.semibold))
       .controlSize(.regular)
     }
     .padding(.horizontal, 16).padding(.vertical, 6)
     .background(FitTheme.paper)
+    .accessibilityElement(children: .contain)
+    .accessibilityIdentifier("sessionControls")
+  }
+
+  private var leadingActions: some View {
+    HStack(spacing: 8) {
+      Button(role: .destructive, action: cancel) {
+        Image(systemName: "xmark").frame(minWidth: 44, minHeight: 44)
+      }
+      .buttonStyle(.glass).buttonBorderShape(.circle)
+      .glassEffectID("cancel", in: controls)
+      .accessibilityLabel(L10n.text("Отменить тренировку", locale: locale))
+      .accessibilityIdentifier("cancelWorkout")
+      pauseButton
+    }
+    .font(.system(size: 20, weight: .semibold))
+  }
+
+  private var trailingActions: some View {
+    HStack(spacing: 8) {
+      Button(action: addTemplates) {
+        Image(systemName: "rectangle.stack.badge.plus").frame(minWidth: 44, minHeight: 44)
+      }
+      .buttonStyle(.glass).buttonBorderShape(.circle)
+      .glassEffectID("addTemplates", in: controls)
+      .disabled(workout.status != .active)
+      .accessibilityLabel(L10n.text("Добавить шаблоны", locale: locale))
+      .accessibilityIdentifier("addWorkoutTemplates")
+      addExerciseButton
+    }
+    .font(.system(size: 20, weight: .semibold))
   }
 
   private var pauseButton: some View {
@@ -89,11 +132,12 @@ struct SessionControls: View {
     .accessibilityIdentifier("addExercise")
   }
 
-  private var finishButton: some View {
+  private func finishButton(fixedLabel: Bool) -> some View {
     Button {
       store.finish()
     } label: {
       Label(L10n.text("Завершить", locale: locale), systemImage: "checkmark")
+        .fixedSize(horizontal: fixedLabel, vertical: true)
         .frame(maxWidth: .infinity, minHeight: 44)
     }
     .buttonStyle(.glassProminent)

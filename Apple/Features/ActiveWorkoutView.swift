@@ -46,9 +46,12 @@ struct ActiveWorkoutView: View {
           }
           .navigationTitle("").navigationBarTitleDisplayMode(.inline)
           .safeAreaInset(edge: .bottom, spacing: 0) {
-            SessionControls(workout: workout) {
-              insertion = InsertionRequest(workoutID: workout.id, position: .end)
-            }
+            SessionControls(
+              workout: workout, cancel: { confirmCancel = true },
+              addTemplates: { templateAddition = TemplateAdditionRequest(id: workout.id) },
+              addExercise: {
+                insertion = InsertionRequest(workoutID: workout.id, position: .end)
+              })
           }
           .toolbar {
             ToolbarItem(placement: .topBarLeading) {
@@ -58,13 +61,9 @@ struct ActiveWorkoutView: View {
             }
             ToolbarItem(placement: .principal) {
               VStack(spacing: 1) {
-                HStack(spacing: 6) {
-                  Image(systemName: "dumbbell.fill").accessibilityHidden(true)
-                  Text(workout.name)
-                    .lineLimit(1).truncationMode(.tail).layoutPriority(1)
-                    .accessibilityIdentifier("activeWorkoutTitle")
-                }
-                .font(.headline)
+                Text(workout.name)
+                  .font(.headline).lineLimit(1).truncationMode(.tail)
+                  .accessibilityIdentifier("activeWorkoutTitle")
                 TimelineView(.periodic(from: .now, by: 1)) { timeline in
                   let duration =
                     workout.durationIsKnown == false
@@ -93,12 +92,6 @@ struct ActiveWorkoutView: View {
                 Button(L10n.text("Добавить упражнение", locale: locale), systemImage: "plus") {
                   insertion = InsertionRequest(workoutID: workout.id, position: .end)
                 }.disabled(workout.status != .active)
-                Button(
-                  L10n.text("Добавить шаблоны", locale: locale),
-                  systemImage: "rectangle.stack.badge.plus"
-                ) {
-                  templateAddition = TemplateAdditionRequest(id: workout.id)
-                }.disabled(workout.status != .active)
                 if !store.isDemoMode {
                   Button(
                     L10n.text(
@@ -115,6 +108,7 @@ struct ActiveWorkoutView: View {
                   L10n.text("Отменить тренировку", locale: locale), systemImage: "trash",
                   role: .destructive
                 ) { confirmCancel = true }
+                .accessibilityIdentifier("cancelWorkoutMenu")
                 Section { SettingsLink() }
               } label: {
                 Image(systemName: "ellipsis").foregroundStyle(.primary)
@@ -181,7 +175,10 @@ struct ActiveWorkoutView: View {
           ) {
             Button(L10n.text("Отменить тренировку", locale: locale), role: .destructive) {
               store.cancel()
-            }
+            }.accessibilityIdentifier("confirmCancelWorkout")
+            Button(L10n.text("Отмена", locale: locale), role: .cancel) {
+              confirmCancel = false
+            }.accessibilityIdentifier("dismissCancelWorkout")
           }
       } else {
         ContentUnavailableView(
@@ -307,13 +304,6 @@ struct ActiveWorkoutView: View {
       .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
       .listRowBackground(FitTheme.paper)
       Section {
-        Button(
-          L10n.text("Добавить шаблоны", locale: locale), systemImage: "rectangle.stack.badge.plus"
-        ) {
-          templateAddition = TemplateAdditionRequest(id: workout.id)
-        }
-        .disabled(workout.status != .active).accessibilityIdentifier("addWorkoutTemplates")
-        .font(.headline).frame(maxWidth: .infinity, alignment: .leading).padding(.vertical, 20)
         VStack(spacing: 16) {
           WorkoutBodyWeightRow(workout: workout).fitCard()
           TextField(
@@ -323,9 +313,6 @@ struct ActiveWorkoutView: View {
               set: { text in store.mutate { $0.notes = text } }), axis: .vertical
           )
           .padding().background(FitTheme.card, in: .rect(cornerRadius: FitTheme.radius))
-          Button(L10n.text("Отменить тренировку", locale: locale), role: .destructive) {
-            confirmCancel = true
-          }
         }
       }
       .listRowSeparator(.hidden)

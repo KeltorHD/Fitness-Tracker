@@ -1055,7 +1055,12 @@ final class FitnessTrackerUITests: XCTestCase {
     app.buttons["workoutStartAction"].tap()
     chooseFreeWorkout(in: app)
     let add = app.buttons["addWorkoutTemplates"]
-    reveal(add, in: app)
+    XCTAssertTrue(add.waitForExistence(timeout: 5))
+    XCTAssertTrue(add.isHittable)
+    let controls = app.descendants(matching: .any).matching(identifier: "sessionControls")
+      .firstMatch
+    XCTAssertTrue(controls.buttons["addWorkoutTemplates"].exists)
+    XCTAssertEqual(app.buttons.matching(identifier: "addWorkoutTemplates").count, 1)
     add.tap()
     let submit = app.buttons["addSelectedTemplates"]
     XCTAssertTrue(submit.waitForExistence(timeout: 5))
@@ -1069,6 +1074,59 @@ final class FitnessTrackerUITests: XCTestCase {
     app.buttons["Свернуть"].tap()
     app.buttons["workoutStartAction"].tap()
     XCTAssertTrue(app.buttons["openWorkoutExercise"].firstMatch.waitForExistence(timeout: 5))
+  }
+
+  @MainActor func testWorkoutControlCancellationPreservesPausedSessionUntilConfirmation() {
+    let app = launch()
+    let start = app.buttons["workoutStartAction"]
+    XCTAssertTrue(start.waitForExistence(timeout: 10))
+    start.tap()
+    chooseFreeWorkout(in: app)
+    app.buttons["addExercise"].tap()
+    addCustomExercise("Проверка отмены", in: app)
+    let title = app.staticTexts["activeWorkoutTitle"].label
+    let controls = app.descendants(matching: .any).matching(identifier: "sessionControls")
+      .firstMatch
+    XCTAssertTrue(controls.waitForExistence(timeout: 5))
+    let cancel = controls.buttons["cancelWorkout"]
+    let pause = controls.buttons["pauseWorkout"]
+    let addExercise = controls.buttons["addExercise"]
+    let addTemplates = controls.buttons["addWorkoutTemplates"]
+    XCTAssertTrue(cancel.isHittable)
+    XCTAssertTrue(addTemplates.isHittable)
+    XCTAssertEqual(app.buttons.matching(identifier: "cancelWorkout").count, 1)
+    XCTAssertEqual(app.buttons.matching(identifier: "addWorkoutTemplates").count, 1)
+    XCTAssertEqual(
+      app.buttons.matching(NSPredicate(format: "label == %@", "Отменить тренировку")).count, 1)
+    XCTAssertEqual(
+      app.buttons.matching(NSPredicate(format: "label == %@", "Добавить шаблоны")).count, 1)
+    pause.tap()
+    XCTAssertEqual(pause.label, "Продолжить")
+    XCTAssertFalse(addExercise.isEnabled)
+    XCTAssertFalse(addTemplates.isEnabled)
+    XCTAssertTrue(cancel.isEnabled)
+    cancel.tap()
+    let confirm = app.buttons["confirmCancelWorkout"]
+    XCTAssertTrue(confirm.waitForExistence(timeout: 5))
+    app.buttons["dismissCancelWorkout"].tap()
+    XCTAssertTrue(confirm.waitForNonExistence(timeout: 5))
+    XCTAssertEqual(app.staticTexts["activeWorkoutTitle"].label, title)
+    XCTAssertTrue(app.buttons["openWorkoutExercise"].firstMatch.label.contains("Проверка отмены"))
+    XCTAssertEqual(pause.label, "Продолжить")
+    pause.tap()
+    XCTAssertTrue(addExercise.isEnabled)
+    XCTAssertTrue(addTemplates.isEnabled)
+    app.buttons["activeWorkoutActions"].tap()
+    let menuCancel = app.buttons["cancelWorkoutMenu"]
+    XCTAssertTrue(menuCancel.waitForExistence(timeout: 5))
+    menuCancel.tap()
+    XCTAssertTrue(confirm.waitForExistence(timeout: 5))
+    confirm.tap()
+    XCTAssertTrue(controls.waitForNonExistence(timeout: 5))
+    XCTAssertTrue(start.waitForExistence(timeout: 5))
+    start.tap()
+    XCTAssertTrue(app.buttons["startSelectedTemplates"].waitForExistence(timeout: 5))
+    XCTAssertFalse(app.buttons["openWorkoutExercise"].exists)
   }
 
   @MainActor private func chooseFreeWorkout(in app: XCUIApplication) {
@@ -1357,9 +1415,28 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertFalse(app.staticTexts["finishWorkoutHint"].exists)
     let add = app.buttons["addExercise"]
     let pause = app.buttons["pauseWorkout"]
+    let cancel = app.buttons["cancelWorkout"]
+    let templates = app.buttons["addWorkoutTemplates"]
+    let controls = app.descendants(matching: .any).matching(identifier: "sessionControls")
+      .firstMatch
+    XCTAssertTrue(controls.exists)
     XCTAssertTrue(add.isHittable)
-    XCTAssertGreaterThan(add.frame.minX, finish.frame.maxX)
-    XCTAssertEqual(finish.frame.midX, (pause.frame.midX + add.frame.midX) / 2, accuracy: 2)
+    XCTAssertTrue(cancel.isHittable)
+    XCTAssertTrue(templates.isHittable)
+    XCTAssertLessThan(cancel.frame.midX, pause.frame.midX)
+    XCTAssertLessThan(pause.frame.midX, finish.frame.midX)
+    XCTAssertGreaterThan(templates.frame.midX, finish.frame.midX)
+    XCTAssertGreaterThan(add.frame.midX, templates.frame.midX)
+    XCTAssertEqual(finish.frame.midX, controls.frame.midX, accuracy: 2)
+    for button in [cancel, add, templates] {
+      XCTAssertEqual(button.frame.midY, pause.frame.midY, accuracy: 2)
+    }
+    if abs(pause.frame.midY - finish.frame.midY) < 4 {
+      XCTAssertLessThan(pause.frame.maxX, finish.frame.minX)
+      XCTAssertGreaterThan(templates.frame.minX, finish.frame.maxX)
+    } else {
+      XCTAssertLessThan(pause.frame.maxY, finish.frame.minY)
+    }
     let header = app.descendants(matching: .any).matching(identifier: "activeWorkoutHeader")
       .firstMatch
     XCTAssertTrue(header.exists)
