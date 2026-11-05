@@ -84,7 +84,7 @@ App Group и CloudKit ID автоматически выводятся из Bund
 
 ## 3. Генерация, Simulator и первая сборка
 
-После изменения структуры исходников или `project.yml`:
+После изменения структуры исходников, `project.yml` или переключения на ветку с другим составом файлов закройте проект в Xcode и выполните в корне репозитория:
 
 ```bash
 xcodegen generate
@@ -109,6 +109,7 @@ xcodebuild -project FitnessTracker.xcodeproj -scheme FitnessTracker \
 
 Разбор частых ошибок:
 
+- **`Build input files cannot be found` после переключения ветки и `Cannot find type ... in scope`:** проверьте, что открыт проект из нужного checkout, закройте его и выполните `xcodegen generate`, затем `open FitnessTracker.xcodeproj`. Каталог `*.xcodeproj` исключён из Git, поэтому переключение ветки не обновляет его список исходников. Например, старый проект может ссылаться на отсутствующие в выбранной ветке `NutritionToolsView.swift` / `FoodBarcodeScanner.swift` и одновременно не включать существующие `AccountSession.swift`, `AccountBackupViewModel.swift`, `RemoteBackupClient.swift`, `AppleServerCryptography.swift`. Генерация из актуального `project.yml` согласует состав файлов. Если Xcode продолжает показывать прежние ошибки, выполните Product → Clean Build Folder и соберите заново. Не создавайте заглушки отсутствующих файлов и не добавляйте исходники вручную в старый проект; сохраните существующий `Config/Local.xcconfig` и пользовательское хранилище.
 - **`unable to type-check this expression in reasonable time` в ExerciseProgressTests:** обновите исходники через `git pull --ff-only` и повторите `swift test`. Извлечение optional, расчёт ожидаемого 1ПМ и проверка разницы теперь разделены на типизированные `Double`-выражения; допуск теста не изменён. В ExerciseLibraryTests вложенный `#require` также вынесен перед JSON encoding. Если ошибка возникла в `setup-macos.sh`, после успешных тестов повторите скрипт: при сбое `swift test` он останавливается до генерации проекта.
 - **Нет GlassEffectContainer / glass styles:** проверьте выбранный Xcode, SDK и deployment target 26.0. Не заменяйте эффект blur-реализацией.
 - **Swift 6 isolation / Sendable:** проверьте границы `@MainActor` и `nonisolated` в делегатах. Передавайте `Data`, строки и Core value types через `Task`, а не `ModelContext`.
