@@ -164,7 +164,8 @@ struct AccountBackupView: View {
       do {
         return try await authentication.authenticate(
           using: url,
-          callback: .https(host: model.callbackHost, path: ServerConfiguration.callbackPath))
+          callback: .https(host: model.callbackHost, path: ServerConfiguration.callbackPath),
+          additionalHeaderFields: [:])
       } catch let error as ASWebAuthenticationSessionError where error.code == .canceledLogin {
         throw CancellationError()
       }
