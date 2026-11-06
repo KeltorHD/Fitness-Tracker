@@ -90,7 +90,6 @@ struct SessionControls: View {
       addExerciseButton(height: height)
     }
     .foregroundStyle(.primary)
-    .accessibilityIdentifier("sessionActionBlock")
   }
 
   private func pauseButton(height: CGFloat) -> some View {

@@ -1510,14 +1510,15 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(app.staticTexts["200 ккал"].firstMatch.exists)
   }
 
-  @MainActor private func launch() -> XCUIApplication {
+  @MainActor private func launch(additionalArguments: [String] = []) -> XCUIApplication {
     let app = XCUIApplication()
-    app.launchArguments = ["--ui-testing", "-AppleLanguages", "(ru)", "-AppleLocale", "ru_RU"]
+    app.launchArguments =
+      ["--ui-testing", "-AppleLanguages", "(ru)", "-AppleLocale", "ru_RU"] + additionalArguments
     app.launch()
     return app
   }
   @MainActor func testLogSetAndFindWorkoutInHistory() {
-    let app = launch()
+    let app = launch(additionalArguments: ["-appearance", "dark", "-colorTheme", "forest"])
     let start = app.buttons["startWorkout"]
     XCTAssertTrue(start.waitForExistence(timeout: 10))
     start.tap()
@@ -1565,19 +1566,17 @@ final class FitnessTrackerUITests: XCTestCase {
         of: "[0-9]{2}:[0-9]{2}:[0-9]{2}", options: .regularExpression))
     add.tap()
     app.searchFields.firstMatch.tap()
-    app.searchFields.firstMatch.typeText("Приседания")
-    let squat = app.buttons.containing(.staticText, identifier: "Приседания").firstMatch
+    app.searchFields.firstMatch.typeText("Goblet")
+    let squat = app.buttons.containing(.staticText, identifier: "Гоблет-приседания").firstMatch
     XCTAssertTrue(squat.waitForExistence(timeout: 5))
     squat.tap()
+    XCTAssertTrue(app.navigationBars["Гоблет-приседания"].waitForExistence(timeout: 5))
     let select = app.buttons["selectLibraryExercise"]
     XCTAssertTrue(select.waitForExistence(timeout: 5))
     select.tap()
     let exercise = app.buttons["openWorkoutExercise"].firstMatch
     XCTAssertTrue(exercise.waitForExistence(timeout: 5))
-    let sessionPanel = app.descendants(matching: .any).matching(identifier: "sessionActionBlock")
-      .firstMatch
-    XCTAssertTrue(sessionPanel.waitForExistence(timeout: 5))
-    let sessionPanelHeight = sessionPanel.frame.height
+    let sessionPanelHeight = controls.frame.height
     let finishCircleWidth = finish.frame.width
     let sessionScreenshot = XCTAttachment(screenshot: app.screenshot())
     sessionScreenshot.name = "Active workout controls"

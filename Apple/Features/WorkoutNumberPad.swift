@@ -107,6 +107,7 @@ struct WorkoutNumberPad: View {
     }
     .frame(maxWidth: .infinity).background(FitTheme.grouped.ignoresSafeArea(edges: .bottom))
     .overlay(alignment: .top) { Divider() }
+    .accessibilityElement(children: .contain)
     .accessibilityIdentifier("workoutNumberPad")
   }
   private func digit(_ number: Int) -> some View {

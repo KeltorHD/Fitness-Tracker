@@ -86,7 +86,9 @@ struct WorkoutExerciseView: View {
         WorkoutNumberPad(model: numberPad, workout: workout)
       }
     }
-    .tint(colorTheme.accent).accessibilityIdentifier("workoutExerciseScreen")
+    .tint(colorTheme.accent)
+    .accessibilityElement(children: .contain)
+    .accessibilityIdentifier("workoutExerciseScreen")
     .onChange(of: workout) { _, value in
       if let value { model.refresh(value) }
       numberPad.reconcile(value)
@@ -403,13 +405,13 @@ struct WorkoutExerciseView: View {
                     .top, 12)
               }
             }
-            .accessibilityIdentifier("workoutSetTable")
           }
           .listRowInsets(EdgeInsets(top: 6, leading: 0, bottom: 6, trailing: 0))
           .listRowBackground(Color.clear)
         }
         .listStyle(.plain).scrollContentBackground(.hidden)
         .environment(\.defaultMinListRowHeight, 0)
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("workoutExerciseScroll")
         .onChange(of: numberPad.field) { _, field in
           if let field {
@@ -428,6 +430,7 @@ struct WorkoutExerciseView: View {
       RoundedRectangle(cornerRadius: FitTheme.radius).stroke(FitTheme.separator, lineWidth: 0.5)
     }
     .animation(reduceMotion ? nil : .snappy(duration: 0.28), value: notesExpanded)
+    .accessibilityElement(children: .contain)
     .accessibilityIdentifier("workoutSetTableCard")
   }
 

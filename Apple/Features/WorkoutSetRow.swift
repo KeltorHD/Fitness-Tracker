@@ -133,6 +133,7 @@ struct WorkoutSetRow<ContextActions: View>: View {
       selected && set.completedAt == nil ? colorTheme.accent.opacity(0.09) : Color.clear,
       in: .rect(cornerRadius: 16)
     )
+    .accessibilityElement(children: .contain)
   }
 
   private var previousText: String {
