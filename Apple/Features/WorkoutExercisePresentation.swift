@@ -61,10 +61,14 @@ struct WorkoutSetDraft {
 }
 
 struct WorkoutSetCompletion {
+  let requestID = UUID()
+  let workoutID: UUID
   let exerciseID: UUID
   let set: WorkoutSet
   var stageID: UUID? = nil
 }
+
+enum WorkoutExerciseAdvance { case stay, moved, finished }
 
 /// Owns selection and unsaved field drafts. Persistence and training rules stay in AppStore/Core.
 @MainActor @Observable final class WorkoutExercisePresentation {
@@ -75,6 +79,7 @@ struct WorkoutSetCompletion {
   private(set) var drafts: [UUID: WorkoutSetDraft] = [:]
   private(set) var previousValues: PreviousWorkoutValues?
   @ObservationIgnored private var history: [Workout] = []
+  @ObservationIgnored private var pendingCompletionID: UUID?
   let unit: WeightUnit
   private let locale: Locale
   private let workoutID: UUID
@@ -99,6 +104,7 @@ struct WorkoutSetCompletion {
       return
     }
     exerciseID = workout.exercises[index + offset].id
+    pendingCompletionID = nil
     selectedSetID = nil
     refresh(workout)
   }
@@ -107,6 +113,7 @@ struct WorkoutSetCompletion {
       return
     }
     exerciseID = id
+    pendingCompletionID = nil
     selectedSetID = nil
     selectedStageID = nil
     refresh(workout)
@@ -117,6 +124,7 @@ struct WorkoutSetCompletion {
         $0.stages.contains { $0.id == targetID && $0.completedAt == nil }
       })
     else { return }
+    pendingCompletionID = nil
     selectedSetID = set.id
     selectedStageID = targetID == set.id ? nil : targetID
   }
@@ -129,6 +137,7 @@ struct WorkoutSetCompletion {
   }
   func refresh(_ workout: Workout) {
     guard workout.id == workoutID else { return }
+    if workout.status != .active { pendingCompletionID = nil }
     if !workout.exercises.contains(where: { $0.id == exerciseID }),
       let first = workout.exercises.first
     {
@@ -188,8 +197,51 @@ struct WorkoutSetCompletion {
     guard set.stages.first(where: { $0.completedAt == nil })?.id == selectedTargetID else {
       throw TrainingError.invalidDropStageOrder
     }
-    return WorkoutSetCompletion(
-      exerciseID: row.id, set: try preparedSet(set), stageID: selectedStageID)
+    let completion = WorkoutSetCompletion(
+      workoutID: workoutID, exerciseID: row.id, set: try preparedSet(set), stageID: selectedStageID)
+    pendingCompletionID = completion.requestID
+    return completion
+  }
+
+  /// The caller invokes this only after saving the exact requested completion successfully.
+  /// It advances presentation; finishing the workout remains a separate explicit action.
+  func advance(afterSaving completion: WorkoutSetCompletion, in workout: Workout)
+    -> WorkoutExerciseAdvance
+  {
+    guard workout.id == workoutID, completion.workoutID == workoutID,
+      workout.status == .active, completion.requestID == pendingCompletionID,
+      exerciseID == completion.exerciseID,
+      let index = workout.exercises.firstIndex(where: { $0.id == completion.exerciseID }),
+      let saved = workout.exercises[index].sets.first(where: { $0.id == completion.set.id })
+    else { return .stay }
+    var beforeCompletion = saved
+    if let stageID = completion.stageID {
+      guard let stageIndex = beforeCompletion.dropStages?.firstIndex(where: { $0.id == stageID }),
+        beforeCompletion.dropStages?[stageIndex].completedAt != nil,
+        completion.set.dropStages?.first(where: { $0.id == stageID })?.completedAt == nil
+      else { return .stay }
+      beforeCompletion.dropStages?[stageIndex].completedAt = nil
+    } else {
+      guard saved.completedAt != nil, completion.set.completedAt == nil else { return .stay }
+      beforeCompletion.completedAt = nil
+    }
+    guard beforeCompletion == completion.set else { return .stay }
+    pendingCompletionID = nil
+    refresh(workout)
+    guard WorkoutCompletionProgress(exercise: workout.exercises[index]).isComplete else {
+      return .stay
+    }
+    let candidates =
+      Array(workout.exercises.indices.dropFirst(index + 1))
+      + Array(workout.exercises.indices.prefix(index))
+    if let next = candidates.first(where: {
+      let progress = WorkoutCompletionProgress(exercise: workout.exercises[$0])
+      return progress.completed < progress.total
+    }) {
+      showExercise(workout.exercises[next].id, in: workout)
+      return .moved
+    }
+    return .finished
   }
   func configuredDropSet(in workout: Workout, adding: Bool, setID: UUID? = nil) throws -> WorkoutSet
   {

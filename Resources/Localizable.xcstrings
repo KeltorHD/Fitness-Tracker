@@ -2415,6 +2415,23 @@
         }
       }
     },
+    "Все упражнения выполнены": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Все упражнения выполнены"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All exercises completed"
+          }
+        }
+      }
+    },
     "Все функции FitnessTracker доступны бесплатно.": {
       "extractionState": "manual",
       "localizations": {
@@ -4706,6 +4723,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Finish"
+          }
+        }
+      }
+    },
+    "Завершить и сохранить тренировку": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Завершить и сохранить тренировку"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finish and save workout"
           }
         }
       }

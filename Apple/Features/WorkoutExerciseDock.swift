@@ -109,16 +109,7 @@ struct WorkoutExerciseDock: View {
       .themeGlow(in: Circle(), emphasized: true)
       .overlay {
         if isOngoing {
-          ZStack {
-            Circle().stroke(FitTheme.accentForeground.opacity(0.18), lineWidth: 1)
-            Circle().trim(from: 0, to: stageProgress.fraction)
-              .stroke(
-                FitTheme.accentForeground.opacity(0.85),
-                style: StrokeStyle(lineWidth: 2, lineCap: .round)
-              )
-              .rotationEffect(.degrees(-90))
-          }.padding(5).allowsHitTesting(false).accessibilityHidden(true)
-            .animation(reduceMotion ? nil : .smooth(duration: 0.28), value: stageProgress.fraction)
+          WorkoutCompletionRing(progress: stageProgress).padding(5)
         }
       }
       .contentShape(.circle)
@@ -133,12 +124,11 @@ struct WorkoutExerciseDock: View {
     .accessibilityIdentifier("completeSet")
   }
 
-  private var stageProgress: (completed: Int, total: Int, fraction: Double) {
-    guard workout.exercises.indices.contains(exerciseIndex) else { return (0, 0, 0) }
-    let sets = workout.exercises[exerciseIndex].sets
-    let total = sets.reduce(0) { $0 + $1.stages.count }
-    let completed = sets.reduce(0) { $0 + $1.performedStages.count }
-    return (completed, total, total > 0 ? Double(completed) / Double(total) : 0)
+  private var stageProgress: WorkoutCompletionProgress {
+    guard workout.exercises.indices.contains(exerciseIndex) else {
+      return WorkoutCompletionProgress()
+    }
+    return WorkoutCompletionProgress(exercise: workout.exercises[exerciseIndex])
   }
 
   private var actionTitle: String {

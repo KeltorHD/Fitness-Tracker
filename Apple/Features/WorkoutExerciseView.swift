@@ -553,7 +553,19 @@ struct WorkoutExerciseView: View {
             repetitions: request.set.repetitions, weightKG: request.set.weightKG)
         }
       }
-      if saved { lastCompletion = ContinuousClock().now }
+      if saved {
+        lastCompletion = ContinuousClock().now
+        guard let updated = store.active, updated.id == workout.id else { return }
+        let previousIndex = model.index(in: updated) ?? 0
+        let advance = withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.24)) {
+          let result = model.advance(afterSaving: request, in: updated)
+          if case .moved = result {
+            movingForward = (model.index(in: updated) ?? previousIndex) > previousIndex
+          }
+          return result
+        }
+        if case .finished = advance { dismiss() }
+      }
     } catch { self.error = error.localizedDescription }
   }
   private func configureDrop(_ workout: Workout, setID: UUID, adding: Bool) {

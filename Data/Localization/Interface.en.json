@@ -880,5 +880,7 @@
   "Предыдущая тренировка: %@": "Previous workout: %@",
   "Нет предыдущих значений": "No previous values",
   "Ранее: —": "Previously: —",
-  "Ранее: %@ %@ × %@": "Previously: %@ %@ × %@"
+  "Ранее: %@ %@ × %@": "Previously: %@ %@ × %@",
+  "Завершить и сохранить тренировку": "Finish and save workout",
+  "Все упражнения выполнены": "All exercises completed"
 }

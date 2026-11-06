@@ -49,6 +49,72 @@ import XCTest
 }
 
 @MainActor final class AppStoreTests: XCTestCase {
+  func testAllStagesRequireExplicitFinishAndFailedFinishCanBeRetried() throws {
+    let date = Date(timeIntervalSince1970: 1_700_000_000)
+    let warmup = WorkoutSet(repetitions: 12, weightKG: 10, isWarmup: true)
+    let drop = WorkoutSet(
+      repetitions: 8, weightKG: 40, dropStages: [DropSetStage(repetitions: 6, weightKG: 30)])
+    let last = WorkoutSet(repetitions: 10, weightKG: 0)
+    let firstRow = WorkoutExercise(exercise: ExerciseCatalog.all[0], sets: [warmup, drop])
+    let lastRow = WorkoutExercise(exercise: ExerciseCatalog.all[1], sets: [last])
+    let workout = Workout(name: "План", startedAt: date, exercises: [firstRow, lastRow])
+    let repository = FailingWorkoutRepository()
+    try repository.save(workout)
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    store.presentWorkoutStart()
+    XCTAssertTrue(store.showSession)
+    XCTAssertTrue(
+      store.mutate {
+        try WorkoutEngine.completeSet(
+          in: &$0, exerciseID: firstRow.id, setID: warmup.id,
+          repetitions: 12, weightKG: 10, at: date)
+        try WorkoutEngine.completeSet(
+          in: &$0, exerciseID: firstRow.id, setID: drop.id,
+          repetitions: 8, weightKG: 40, at: date.addingTimeInterval(1))
+        try WorkoutEngine.completeSet(
+          in: &$0, exerciseID: lastRow.id, setID: last.id,
+          repetitions: 10, weightKG: 0, at: date.addingTimeInterval(2))
+      })
+    let pending = try XCTUnwrap(store.active)
+    XCTAssertFalse(WorkoutCompletionProgress(workout: pending).isComplete)
+    let stage = try XCTUnwrap(drop.dropStages?.first)
+    XCTAssertTrue(
+      store.mutate {
+        try WorkoutEngine.completeDropStage(
+          in: &$0, exerciseID: firstRow.id, setID: drop.id, stageID: stage.id,
+          repetitions: 6, weightKG: 30, at: date.addingTimeInterval(3))
+      })
+    let ready = try XCTUnwrap(store.active)
+    XCTAssertTrue(WorkoutCompletionProgress(workout: ready).isComplete)
+    XCTAssertEqual(ready.status, .active)
+    XCTAssertNil(ready.endedAt)
+    XCTAssertTrue(store.completed.isEmpty)
+    XCTAssertTrue(store.showSession)
+    XCTAssertEqual(try repository.workouts(), [ready])
+    repository.failSaves = true
+    store.finish()
+    XCTAssertEqual(store.active, ready)
+    XCTAssertTrue(store.completed.isEmpty)
+    XCTAssertTrue(store.showSession)
+    XCTAssertNil(store.notice)
+    XCTAssertNotNil(store.error)
+    XCTAssertEqual(try repository.workouts(), [ready])
+    repository.failSaves = false
+    store.error = nil
+    store.finish()
+    XCTAssertNil(store.active)
+    XCTAssertFalse(store.showSession)
+    XCTAssertEqual(store.completed.count, 1)
+    let saved = try XCTUnwrap(store.completed.first)
+    XCTAssertEqual(saved.id, ready.id)
+    XCTAssertEqual(saved.exercises, ready.exercises)
+    XCTAssertEqual(saved.status, .completed)
+    XCTAssertNotNil(saved.endedAt)
+    XCTAssertNotNil(store.notice)
+    XCTAssertEqual(try repository.workouts(), [saved])
+  }
+
   func testOrdinaryTemplateStartPersistsEmptyTargetsAndRetainsTheSavedTemplate() throws {
     let repository = MemoryWorkoutRepository()
     let template = WorkoutTemplate(

@@ -34,66 +34,79 @@ struct MetricView: View {
 
 struct SessionControls: View {
   @Environment(\.locale) private var locale
+  @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(AppStore.self) private var store
   @Environment(\.accessibilityReduceMotion) private var reduceMotion
+  @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
+  @Environment(\.colorSchemeContrast) private var contrast
+  @State private var readyFeedback = 0
   @Namespace private var controls
   let workout: Workout
   let cancel: () -> Void
   let addTemplates: () -> Void
   let addExercise: () -> Void
   var body: some View {
-    GlassEffectContainer(spacing: 8) {
-      ViewThatFits(in: .horizontal) {
-        HStack(spacing: 8) {
-          leadingActions
-          finishButton(fixedLabel: true)
-          trailingActions
-        }
-        VStack(spacing: 8) {
-          HStack(spacing: 8) {
-            leadingActions
-            Spacer(minLength: 8)
-            trailingActions
-          }
-          finishButton(fixedLabel: false)
+    let progress = WorkoutCompletionProgress(workout: workout)
+    let shape = WorkoutNavigationShape(rise: 12, shoulderWidth: 44)
+    GlassEffectContainer(spacing: 4) {
+      HStack(spacing: 4) {
+        leadingActions.frame(maxWidth: .infinity)
+        finishButton(progress: progress)
+        trailingActions.frame(maxWidth: .infinity)
+      }
+      .controlSize(.regular)
+      .padding(.horizontal, 4).padding(.top, 4).padding(.bottom, 8)
+      .background {
+        if reduceTransparency { shape.fill(FitTheme.paper) }
+      }
+      .glassEffect(.regular, in: shape)
+      .themeGlow(in: shape)
+      .overlay {
+        if contrast == .increased {
+          shape.stroke(FitTheme.muted, lineWidth: 1).allowsHitTesting(false)
         }
       }
-      .font(.subheadline.weight(.semibold))
-      .controlSize(.regular)
     }
-    .padding(.horizontal, 16).padding(.vertical, 6)
-    .background(FitTheme.paper)
+    .padding(.horizontal, 4).padding(.vertical, 6)
     .accessibilityElement(children: .contain)
     .accessibilityIdentifier("sessionControls")
+    .onChange(of: workout) { old, new in
+      // Reopening or replacing a restored session never announces a new success.
+      guard old.id == new.id, !WorkoutCompletionProgress(workout: old).isComplete,
+        WorkoutCompletionProgress(workout: new).isComplete
+      else { return }
+      readyFeedback += 1
+    }
+    .sensoryFeedback(.success, trigger: readyFeedback)
   }
 
   private var leadingActions: some View {
-    HStack(spacing: 8) {
+    HStack(spacing: 4) {
       Button(role: .destructive, action: cancel) {
-        Image(systemName: "xmark").frame(minWidth: 44, minHeight: 44)
+        controlImage("xmark")
       }
       .buttonStyle(.glass).buttonBorderShape(.circle)
+      .frame(width: 44, height: 52).contentShape(.rect)
       .glassEffectID("cancel", in: controls)
       .accessibilityLabel(L10n.text("Отменить тренировку", locale: locale))
       .accessibilityIdentifier("cancelWorkout")
       pauseButton
     }
-    .font(.system(size: 20, weight: .semibold))
   }
 
   private var trailingActions: some View {
-    HStack(spacing: 8) {
+    HStack(spacing: 4) {
       Button(action: addTemplates) {
-        Image(systemName: "rectangle.stack.badge.plus").frame(minWidth: 44, minHeight: 44)
+        controlImage("rectangle.stack.badge.plus")
       }
       .buttonStyle(.glass).buttonBorderShape(.circle)
+      .frame(width: 44, height: 52).contentShape(.rect)
       .glassEffectID("addTemplates", in: controls)
       .disabled(workout.status != .active)
       .accessibilityLabel(L10n.text("Добавить шаблоны", locale: locale))
       .accessibilityIdentifier("addWorkoutTemplates")
       addExerciseButton
     }
-    .font(.system(size: 20, weight: .semibold))
   }
 
   private var pauseButton: some View {
@@ -108,49 +121,99 @@ struct SessionControls: View {
         }
       }
     } label: {
-      Label(
-        workout.status == .paused
-          ? L10n.text("Продолжить", locale: locale) : L10n.text("Пауза", locale: locale),
-        systemImage: workout.status == .paused ? "play.fill" : "pause.fill"
-      )
-      .labelStyle(.iconOnly)
-      .frame(minWidth: 44, minHeight: 44)
+      controlImage(workout.status == .paused ? "play.fill" : "pause.fill")
     }
     .buttonStyle(.glass)
     .buttonBorderShape(.circle)
+    .frame(width: 44, height: 52).contentShape(.rect)
     .glassEffectID("pause", in: controls)
+    .accessibilityLabel(
+      L10n.text(workout.status == .paused ? "Продолжить" : "Пауза", locale: locale)
+    )
     .accessibilityIdentifier("pauseWorkout")
   }
   private var addExerciseButton: some View {
     Button(action: addExercise) {
-      Image(systemName: "plus").frame(minWidth: 44, minHeight: 44)
+      controlImage("plus")
     }
     .buttonStyle(.glass).buttonBorderShape(.circle)
+    .frame(width: 44, height: 52).contentShape(.rect)
     .glassEffectID("addExercise", in: controls)
     .disabled(workout.status != .active)
     .accessibilityLabel(L10n.text("Добавить упражнение", locale: locale))
     .accessibilityIdentifier("addExercise")
   }
 
-  private func finishButton(fixedLabel: Bool) -> some View {
+  private func controlImage(_ symbol: String) -> some View {
+    Image(systemName: symbol).font(.system(size: 20, weight: .semibold))
+      .frame(width: 20, height: 20).accessibilityHidden(true)
+  }
+
+  private func finishButton(progress: WorkoutCompletionProgress) -> some View {
     Button {
       store.finish()
     } label: {
-      Label(L10n.text("Завершить", locale: locale), systemImage: "checkmark")
-        .fixedSize(horizontal: fixedLabel, vertical: true)
-        .frame(maxWidth: .infinity, minHeight: 44)
+      Group {
+        if reduceMotion {
+          Image(systemName: progress.isComplete ? "checkmark.seal.fill" : "checkmark")
+        } else {
+          Image(systemName: progress.isComplete ? "checkmark.seal.fill" : "checkmark")
+            .symbolEffect(.bounce, value: readyFeedback)
+        }
+      }
+      .font(.system(size: 28, weight: .bold))
+      .foregroundStyle(FitTheme.accentForeground)
+      .frame(width: 48, height: 48).accessibilityHidden(true)
     }
     .buttonStyle(.glassProminent)
+    .buttonBorderShape(.circle).tint(colorTheme.accent)
+    .frame(width: 72, height: 72).contentShape(.circle)
     .glassEffectID("finish", in: controls)
     .glassEffectTransition(.matchedGeometry)
-    .themeGlow(in: Capsule(), emphasized: true)
+    .themeGlow(in: Circle(), emphasized: true)
+    .overlay { WorkoutCompletionRing(progress: progress).padding(5) }
     .disabled(workout.completedSets == 0)
-    .accessibilityLabel(L10n.text("Завершить тренировку", locale: locale))
+    .accessibilityLabel(
+      L10n.text(
+        progress.isComplete ? "Завершить и сохранить тренировку" : "Завершить тренировку",
+        locale: locale)
+    )
+    .accessibilityValue(
+      progress.isComplete
+        ? L10n.text("Все упражнения выполнены", locale: locale)
+        : L10n.format(
+          "Выполнено этапов: %@ из %@", String(progress.completed), String(progress.total),
+          locale: locale)
+    )
     .accessibilityHint(
       workout.completedSets == 0
         ? L10n.text("Для завершения отметьте хотя бы один выполненный подход.", locale: locale) : ""
     )
     .accessibilityIdentifier("finishWorkout")
+    .animation(reduceMotion ? nil : .smooth(duration: 0.28), value: progress.isComplete)
+  }
+}
+
+/// Shared stage progress for the workout and exercise completion circles.
+struct WorkoutCompletionRing: View {
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
+  @Environment(\.colorSchemeContrast) private var contrast
+  let progress: WorkoutCompletionProgress
+
+  var body: some View {
+    ZStack {
+      Circle().stroke(
+        FitTheme.accentForeground.opacity(contrast == .increased ? 0.55 : 0.18),
+        lineWidth: contrast == .increased ? 2 : 1)
+      Circle().trim(from: 0, to: progress.fraction)
+        .stroke(
+          FitTheme.accentForeground.opacity(contrast == .increased ? 1 : 0.85),
+          style: StrokeStyle(lineWidth: contrast == .increased ? 3 : 2, lineCap: .round)
+        )
+        .rotationEffect(.degrees(-90))
+    }
+    .animation(reduceMotion ? nil : .smooth(duration: 0.28), value: progress.fraction)
+    .allowsHitTesting(false).accessibilityHidden(true)
   }
 }
 

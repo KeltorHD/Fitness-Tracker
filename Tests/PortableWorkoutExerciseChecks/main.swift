@@ -121,9 +121,146 @@ private func rejects(_ action: () throws -> Void) throws {
     try checkStartedGroupAppend(at: date)
     try checkReplacementFocus(at: date)
     try checkPreviousValuesAndBlankDrafts(at: date)
+    try checkAutomaticExerciseAdvance(at: date)
+    try checkAdvanceGuards(at: date)
+    try checkAdvanceWrapsToEarlierPendingExercise(at: date)
     print(
       "Portable workout exercise presentation: localized/strict input, pounds precision, draft retention, repeated exercise identity, paging/reordering/removal, completion, pause/history guards and summaries passed (no Apple SDK)."
     )
+  }
+
+  @MainActor private static func checkAutomaticExerciseAdvance(at date: Date) throws {
+    let first = WorkoutExercise(
+      exercise: Exercise(name: "First", muscle: .back),
+      sets: [WorkoutSet(weightKG: 40), WorkoutSet(weightKG: 20, isWarmup: true)])
+    let alreadyComplete = WorkoutExercise(
+      exercise: first.exercise, sets: [WorkoutSet(weightKG: 30, completedAt: date)])
+    let next = WorkoutExercise(
+      exercise: Exercise(name: "Next", muscle: .legs), sets: [WorkoutSet(repetitions: 0)])
+    var workout = Workout(
+      name: "Advance", startedAt: date, exercises: [first, alreadyComplete, next])
+    let model = WorkoutExercisePresentation(
+      workout: workout, exerciseID: first.id, unit: .kilograms, locale: Locale(identifier: "en_US"))
+    model.editWeight("17.5", setID: next.sets[0].id)
+    model.editRepetitions("11", setID: next.sets[0].id)
+    let initial = try model.completion(in: workout)
+    try expect(
+      model.advance(afterSaving: initial, in: workout) == .stay
+        && model.exerciseID == first.id && model.selectedSetID == first.sets[0].id,
+      "Preparing a completion or failing to save cannot move the exercise page")
+    try persist(initial, in: &workout, at: date.addingTimeInterval(1))
+    // SwiftUI may already refresh its snapshot before the save handler advances the page.
+    model.refresh(workout)
+    try expect(
+      model.advance(afterSaving: initial, in: workout) == .stay
+        && model.exerciseID == first.id && model.selectedSetID == first.sets[1].id,
+      "Completing a set stays in the exercise until its warmup and all other sets are performed")
+    let final = try model.completion(in: workout)
+    try persist(final, in: &workout, at: date.addingTimeInterval(2))
+    try expect(
+      model.advance(afterSaving: final, in: workout) == .moved && model.exerciseID == next.id,
+      "Saving the last set skips fully completed exercise rows and selects the next pending row")
+    try expect(
+      model.selectedSetID == next.sets[0].id && model.selectedStageID == nil
+        && model.drafts[next.sets[0].id]?.weight == "17.5"
+        && model.drafts[next.sets[0].id]?.repetitions == "11",
+      "Automatic paging keeps unsaved drafts and focuses the next actual target")
+    try expect(
+      model.advance(afterSaving: final, in: workout) == .stay && model.exerciseID == next.id,
+      "Delivering the same save again cannot advance a second exercise")
+    let last = try model.completion(in: workout)
+    try persist(last, in: &workout, at: date.addingTimeInterval(3))
+    try expect(
+      model.advance(afterSaving: last, in: workout) == .finished
+        && model.selectedSetID == nil && workout.status == .active && workout.endedAt == nil,
+      "All stages performed return to the overview while workout finishing remains explicit")
+    try expect(
+      model.advance(afterSaving: last, in: workout) == .stay,
+      "A consumed final request cannot signal another automatic return")
+  }
+
+  @MainActor private static func checkAdvanceGuards(at date: Date) throws {
+    let first = WorkoutExercise(exercise: Exercise(name: "First", muscle: .back))
+    let second = WorkoutExercise(exercise: Exercise(name: "Second", muscle: .arms))
+    let initial = Workout(name: "Guards", startedAt: date, exercises: [first, second])
+    let model = WorkoutExercisePresentation(
+      workout: initial, exerciseID: first.id, unit: .kilograms, locale: Locale(identifier: "en_US"))
+    let stale = try model.completion(in: initial)
+    let request = try model.completion(in: initial)
+    var saved = initial
+    try persist(request, in: &saved, at: date.addingTimeInterval(1))
+    try expect(
+      model.advance(afterSaving: stale, in: saved) == .stay,
+      "Only the latest prepared completion can drive automatic paging")
+    var foreign = saved
+    foreign.id = UUID()
+    var wrongRow = saved
+    wrongRow.exercises[0].id = UUID()
+    var wrongSet = saved
+    wrongSet.exercises[0].sets[0].id = UUID()
+    var changedValues = saved
+    changedValues.exercises[0].sets[0].repetitions += 1
+    var paused = saved
+    try WorkoutEngine.pause(&paused, at: date.addingTimeInterval(2))
+    var finished = saved
+    try WorkoutEngine.finish(&finished, at: date.addingTimeInterval(2))
+    for invalid in [foreign, wrongRow, wrongSet, changedValues, paused, finished] {
+      try expect(
+        model.advance(afterSaving: request, in: invalid) == .stay
+          && model.exerciseID == first.id && model.selectedSetID == first.sets[0].id
+          && model.drafts[first.sets[0].id] != nil,
+        "Foreign, missing, changed, paused and finished snapshots cannot consume selection or drafts"
+      )
+    }
+    model.move(1, in: saved)
+    try expect(
+      model.advance(afterSaving: request, in: saved) == .stay && model.exerciseID == second.id,
+      "A late save cannot replace a manually chosen page")
+    model.move(-1, in: saved)
+    try expect(
+      model.advance(afterSaving: request, in: saved) == .stay && model.exerciseID == first.id,
+      "Returning to the page does not revive a stale completion")
+  }
+
+  @MainActor private static func checkAdvanceWrapsToEarlierPendingExercise(at date: Date) throws {
+    let first = WorkoutExercise(exercise: Exercise(name: "Earlier", muscle: .arms))
+    let last = WorkoutExercise(exercise: Exercise(name: "Last", muscle: .legs))
+    var workout = Workout(name: "Wrap", startedAt: date, exercises: [first, last])
+    let model = WorkoutExercisePresentation(
+      workout: workout, exerciseID: last.id, unit: .kilograms, locale: Locale(identifier: "en_US"))
+    model.editWeight("10", setID: first.sets[0].id)
+    model.editRepetitions("13", setID: first.sets[0].id)
+    let request = try model.completion(in: workout)
+    try persist(request, in: &workout, at: date.addingTimeInterval(1))
+    try expect(
+      model.advance(afterSaving: request, in: workout) == .moved && model.exerciseID == first.id
+        && model.drafts[first.sets[0].id]?.repetitions == "13",
+      "The last exercise wraps to earlier pending work while preserving its drafts")
+    let final = try model.completion(in: workout)
+    try persist(final, in: &workout, at: date.addingTimeInterval(2))
+    try expect(
+      model.advance(afterSaving: final, in: workout) == .finished
+        && WorkoutCompletionProgress(workout: workout).isComplete
+        && workout.status == .active && workout.endedAt == nil,
+      "Completing the wrapped target leaves a ready ongoing workout for explicit finishing")
+  }
+
+  private static func persist(
+    _ request: WorkoutSetCompletion, in workout: inout Workout, at date: Date
+  ) throws {
+    if let stageID = request.stageID {
+      guard let stage = request.set.dropStages?.first(where: { $0.id == stageID }) else {
+        throw Failure(message: "Missing requested drop stage")
+      }
+      try WorkoutEngine.completeDropStage(
+        in: &workout, exerciseID: request.exerciseID, setID: request.set.id, stageID: stageID,
+        repetitions: stage.repetitions, weightKG: stage.weightKG,
+        dropStages: request.set.dropStages, at: date)
+    } else {
+      try WorkoutEngine.completeSet(
+        in: &workout, exerciseID: request.exerciseID, setID: request.set.id,
+        repetitions: request.set.repetitions, weightKG: request.set.weightKG, at: date)
+    }
   }
 
   @MainActor private static func checkPreviousValuesAndBlankDrafts(at date: Date) throws {
@@ -306,7 +443,8 @@ private func rejects(_ action: () throws -> Void) throws {
     try WorkoutEngine.completeSet(
       in: &workout, exerciseID: row.id, setID: base.set.id, repetitions: base.set.repetitions,
       weightKG: base.set.weightKG, at: date.addingTimeInterval(1))
-    model.refresh(workout)
+    try expect(
+      model.advance(afterSaving: base, in: workout) == .stay, "Base stage cannot page away")
     try expect(
       model.selectedSetID == base.set.id && model.selectedStageID == stages[0].id
         && workout.restEndsAt == nil,
@@ -324,7 +462,9 @@ private func rejects(_ action: () throws -> Void) throws {
       in: &workout, exerciseID: row.id, setID: first.set.id, stageID: value.id,
       repetitions: value.repetitions, weightKG: value.weightKG, dropStages: first.set.dropStages,
       at: date.addingTimeInterval(2))
-    model.refresh(workout)
+    try expect(
+      model.advance(afterSaving: first, in: workout) == .stay,
+      "An intermediate drop cannot advance the exercise")
     try expect(
       model.selectedStageID == stages[1].id && model.drafts[stages[0].id] == nil
         && workout.restEndsAt == nil,
@@ -337,7 +477,9 @@ private func rejects(_ action: () throws -> Void) throws {
       in: &workout, exerciseID: row.id, setID: last.set.id, stageID: final.id,
       repetitions: final.repetitions, weightKG: final.weightKG, dropStages: last.set.dropStages,
       at: date.addingTimeInterval(3))
-    model.refresh(workout)
+    try expect(
+      model.advance(afterSaving: last, in: workout) == .finished && workout.status == .active,
+      "The final drop returns to the overview and leaves the workout unfinished")
     try expect(
       model.selectedSetID == nil && workout.fullyCompletedSets == 1 && workout.totalSets == 1
         && workout.restEndsAt != nil, "One complete group starts exactly one rest interval")
