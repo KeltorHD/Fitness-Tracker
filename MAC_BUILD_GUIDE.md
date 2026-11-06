@@ -151,6 +151,19 @@ xcodebuild -project FitnessTracker.xcodeproj -scheme FitnessTracker \
 
 После обновления исходников снова выполните `xcodegen generate`: String Catalogs должны быть в Resources приложения, виджетов и Watch. Xcode компилирует `.xcstrings` в языковые bundles; Linux-проверка проверяет только входные каталоги.
 
+Если Xcode сообщает `Localizable.xcstrings:1:1 — The data couldn’t be read because it isn’t in the correct format`, сначала выполните `git status --short`. Статус `UU Resources/Localizable.xcstrings` означает неразрешённый конфликт слияния. Закройте Xcode и восстановите сгенерированный каталог из словарей переводов. Перед этим проверьте, что в `Data/Localization/Interface.en.json` и `Interface.ru.json` нет собственных неразрешённых конфликтов; переводы обеих веток должны сохраниться в этих источниках.
+
+Выполняйте команды отдельно из корня репозитория:
+
+```bash
+cp -n Resources/Localizable.xcstrings /tmp/FitnessTracker-catalog-conflict
+python3 scripts/generate-localizations.py
+git add Resources/Localizable.xcstrings
+git status --short
+```
+
+Первая команда сохраняет копию конфликтного файла, генератор также воспроизводит штатный `InfoPlist.xcstrings`, а `git add` отмечает решённым только конфликт `Localizable.xcstrings`. Если резервная копия уже существует, `cp -n` её не перезаписывает. Другие конфликты разбирайте отдельно; слияние или восстановление stash этими командами не завершается. Откройте проект и повторите сборку `⌘B`. Если статус `UU` уже снят, а компилятор продолжает отклонять каталог, нужна отдельная проверка фактического файла через `xcstringstool`, а не только JSON-парсер на Linux.
+
 В приложении откройте **Настройки → Основные → Язык приложения**. Проверьте переключение без перезапуска и после повторного запуска; «Как на устройстве» учитывает приоритет языков iOS. Запустите L10nTests, WidgetSnapshotTests и UI-тест переключения языка. Проверьте обе локали в каталоге, истории, файловых диалогах, уведомлениях, виджете и Dynamic Island; Watch использует свой системный язык. Разрешения HealthKit и системные подписи App Intents следуют системному/назначенному в iOS языку приложения. Полные сценарии: [LOCALIZATION.md](docs/LOCALIZATION.md), [XCODE_VALIDATION.md](docs/XCODE_VALIDATION.md).
 
 ## Импорт и экспорт файлов
