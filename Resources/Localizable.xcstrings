@@ -2007,6 +2007,23 @@
         }
       }
     },
+    "Вес сохранится в настройках и истории веса. Вес прошедших тренировок не изменится.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вес сохранится в настройках и истории веса. Вес прошедших тренировок не изменится."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your weight will be saved in settings and weight history. Past workout weights will not change."
+          }
+        }
+      }
+    },
     "Вес тела": {
       "extractionState": "manual",
       "localizations": {

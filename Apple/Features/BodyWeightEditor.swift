@@ -9,13 +9,22 @@ struct BodyWeightEditor: View {
   @State private var model: BodyWeightEditorModel
   private let workoutID: UUID?
   private let canClear: Bool
+  private let isCompletedWorkout: Bool
+  private let updatesCurrentWeight: Bool
+  private let measurementWorkoutID: UUID?
 
-  init(entry: BodyWeightEntry? = nil, workout: Workout? = nil, unit: WeightUnit) {
+  init(
+    entry: BodyWeightEntry? = nil, workout: Workout? = nil, initialWeightKG: Double? = nil,
+    updatesCurrentWeight: Bool = false, unit: WeightUnit
+  ) {
     workoutID = workout?.id
-    canClear = workout?.bodyWeightKG != nil
+    isCompletedWorkout = workout?.status == .completed
+    canClear = workout?.status == .completed && workout?.bodyWeightKG != nil
+    self.updatesCurrentWeight = updatesCurrentWeight
+    measurementWorkoutID = entry?.workoutID
     _model = State(
       initialValue: BodyWeightEditorModel(
-        weightKG: workout?.bodyWeightKG ?? entry?.weightKG,
+        weightKG: workout?.bodyWeightKG ?? entry?.weightKG ?? initialWeightKG,
         date: workout?.startedAt ?? entry?.measuredAt ?? Date(),
         id: entry?.id ?? UUID(), unit: unit, locale: L10n.numberLocale))
   }
@@ -29,11 +38,11 @@ struct BodyWeightEditor: View {
               .keyboardType(.decimalPad).accessibilityIdentifier("bodyWeightInput")
             Text(L10n.text(model.unit.rawValue, locale: locale)).foregroundStyle(.secondary)
           }
-          if workoutID == nil {
+          if workoutID == nil && !updatesCurrentWeight {
             DatePicker(
               L10n.text("Дата взвешивания", locale: locale), selection: $model.date,
               in: ...Date(), displayedComponents: [.date, .hourAndMinute])
-          } else {
+          } else if workoutID != nil {
             LabeledContent(L10n.text("Тренировка", locale: locale)) {
               Text(model.date, format: .dateTime.day().month().year())
             }
@@ -41,9 +50,7 @@ struct BodyWeightEditor: View {
         } footer: {
           Text(
             L10n.text(
-              workoutID == nil
-                ? "Запись хранится в истории веса. Вес прошедших тренировок не изменится."
-                : "Вес относится к этой тренировке. После завершения он появится в общей истории веса.",
+              footer,
               locale: locale))
         }
         if canClear {
@@ -76,13 +83,26 @@ struct BodyWeightEditor: View {
     .onDisappear { store.showingBodyWeightEditor = false }
   }
 
+  private var footer: String {
+    if isCompletedWorkout {
+      return "Вес относится к этой тренировке. После завершения он появится в общей истории веса."
+    }
+    if workoutID == nil && !updatesCurrentWeight {
+      return "Запись хранится в истории веса. Вес прошедших тренировок не изменится."
+    }
+    return "Вес сохранится в настройках и истории веса. Вес прошедших тренировок не изменится."
+  }
+
   private func save() {
     do {
       let value = try model.valueInKG()
-      if let workoutID {
+      if updatesCurrentWeight {
+        finish(store.setCurrentBodyWeight(value))
+      } else if let workoutID {
         finish(store.setBodyWeight(value, for: workoutID))
       } else {
-        let entry = BodyWeightEntry(id: model.id, measuredAt: model.date, weightKG: value)
+        let entry = BodyWeightEntry(
+          id: model.id, measuredAt: model.date, weightKG: value, workoutID: measurementWorkoutID)
         finish(store.saveBodyWeight(entry))
       }
     } catch {

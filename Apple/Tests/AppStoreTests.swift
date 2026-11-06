@@ -15,6 +15,7 @@ import XCTest
   var failSaves = false
   var failTemplateReads = false
   var failBodyWeightReads = false
+  var failBodyWeightReadsAfterWrite = false
   private var failure: NSError {
     NSError(domain: "Test", code: 1, userInfo: [NSLocalizedDescriptionKey: "private diagnostic"])
   }
@@ -38,9 +39,19 @@ import XCTest
     if failSaves { throw failure }
     try memory.saveBodyWeight(entry)
   }
+  func saveBodyWeight(_ entry: BodyWeightEntry, updating workout: Workout?) throws {
+    if failSaves { throw failure }
+    try memory.saveBodyWeight(entry, updating: workout)
+    if failBodyWeightReadsAfterWrite { failBodyWeightReads = true }
+  }
   func deleteBodyWeight(id: UUID) throws {
     if failSaves { throw failure }
     try memory.deleteBodyWeight(id: id)
+  }
+  func deleteBodyWeight(id: UUID, updating workout: Workout?) throws {
+    if failSaves { throw failure }
+    try memory.deleteBodyWeight(id: id, updating: workout)
+    if failBodyWeightReadsAfterWrite { failBodyWeightReads = true }
   }
   func importArchive(_ archive: WorkoutArchive) throws -> ArchiveImportSummary {
     if failSaves { throw failure }
@@ -412,6 +423,285 @@ import XCTest
     XCTAssertEqual(store.active?.bodyWeightKG, 72.5)
     XCTAssertEqual(try repository.workouts().first?.bodyWeightKG, 72.5)
     XCTAssertNotNil(store.error)
+  }
+  func testCurrentWeightStartsFreeTemplateAndRepeatedWorkoutsWithoutChangingHistory() throws {
+    let repository = MemoryWorkoutRepository()
+    var instant = Date(timeIntervalSince1970: 1_700_000_000)
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false,
+      now: { instant })
+    XCTAssertNil(store.currentBodyWeightKG)
+    XCTAssertTrue(store.setCurrentBodyWeight(72.5))
+    store.start()
+    XCTAssertEqual(store.active?.bodyWeightKG, 72.5)
+    store.cancel()
+    instant = instant.addingTimeInterval(1)
+    XCTAssertTrue(store.setCurrentBodyWeight(73))
+    store.start(template: ExerciseCatalog.starterTemplates[0])
+    let active = try XCTUnwrap(store.active)
+    XCTAssertEqual(active.bodyWeightKG, 73)
+    XCTAssertTrue(
+      store.mutate {
+        try WorkoutEngine.completeSet(
+          in: &$0, exerciseID: active.exercises[0].id, setID: active.exercises[0].sets[0].id,
+          repetitions: 8, weightKG: 20)
+      })
+    store.finish()
+    let completed = try XCTUnwrap(store.completed.first)
+    instant = instant.addingTimeInterval(1)
+    XCTAssertTrue(store.setCurrentBodyWeight(74))
+    store.repeatWorkout(completed)
+    XCTAssertEqual(store.active?.bodyWeightKG, 74)
+    XCTAssertEqual(store.completed.first?.bodyWeightKG, 73)
+    XCTAssertEqual(
+      try repository.workouts().first(where: { $0.id == completed.id })?.bodyWeightKG, 73)
+    let restored = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false,
+      now: { instant })
+    XCTAssertEqual(restored.currentBodyWeightKG, 74)
+    XCTAssertEqual(restored.active?.bodyWeightKG, 74)
+  }
+  func testActiveWeightEditsUpdateGlobalStateOnceAndSurviveCancellation() throws {
+    let repository = MemoryWorkoutRepository()
+    var instant = Date(timeIntervalSince1970: 1_700_000_000)
+    let workout = Workout(name: "Current weight", startedAt: instant)
+    try repository.save(workout)
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false,
+      now: { instant })
+    XCTAssertTrue(store.setBodyWeight(72.5, for: workout.id))
+    let first = try XCTUnwrap(store.bodyWeights.first)
+    XCTAssertEqual(first.workoutID, workout.id)
+    XCTAssertEqual(store.currentBodyWeightKG, 72.5)
+    XCTAssertEqual(store.active?.bodyWeightKG, 72.5)
+    instant = instant.addingTimeInterval(1)
+    XCTAssertTrue(store.setBodyWeight(73, for: workout.id))
+    XCTAssertEqual(store.bodyWeights.count, 1)
+    XCTAssertEqual(store.bodyWeights.first?.id, first.id)
+    XCTAssertEqual(store.bodyWeights.first?.weightKG, 73)
+    XCTAssertEqual(store.currentBodyWeightKG, 73)
+    XCTAssertTrue(store.mutate { try WorkoutEngine.pause(&$0) })
+    instant = instant.addingTimeInterval(1)
+    XCTAssertTrue(store.setCurrentBodyWeight(74))
+    XCTAssertEqual(store.active?.bodyWeightKG, 74)
+    store.cancel()
+    XCTAssertNil(store.active)
+    XCTAssertEqual(store.currentBodyWeightKG, 74)
+    XCTAssertEqual(store.bodyWeights.count, 1)
+    XCTAssertEqual(
+      BodyWeightSummary(entries: store.bodyWeights, workouts: store.workouts, now: instant).points
+        .count, 1)
+  }
+  func testNewReadingUpdatesActiveWeightButDatedRecordEditsDoNot() throws {
+    let repository = MemoryWorkoutRepository()
+    let date = Date(timeIntervalSince1970: 1_700_000_000)
+    let historical = BodyWeightEntry(measuredAt: date.addingTimeInterval(-3600), weightKG: 72)
+    try repository.saveBodyWeight(historical)
+    let workout = Workout(name: "Current weight", startedAt: date, bodyWeightKG: 72)
+    try repository.save(workout)
+    let now = date.addingTimeInterval(3600)
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false,
+      now: { now })
+    var correction = historical
+    correction.weightKG = 71
+    XCTAssertTrue(store.saveBodyWeight(correction))
+    XCTAssertEqual(store.active?.bodyWeightKG, 72)
+    let reading = BodyWeightEntry(measuredAt: now, weightKG: 73)
+    XCTAssertTrue(store.saveBodyWeight(reading))
+    XCTAssertEqual(store.active?.bodyWeightKG, 73)
+    XCTAssertEqual(store.currentBodyWeightKG, 73)
+    XCTAssertEqual(store.bodyWeights.first(where: { $0.id == reading.id })?.workoutID, workout.id)
+    correction.weightKG = 70
+    XCTAssertTrue(store.saveBodyWeight(correction))
+    XCTAssertEqual(store.active?.bodyWeightKG, 73)
+    XCTAssertEqual(store.currentBodyWeightKG, 73)
+  }
+  func testCurrentWeightAtomicFailurePreservesReadingAndWorkoutAndReadFailureCannotUndoCommit()
+    throws
+  {
+    let repository = FailingWorkoutRepository()
+    let date = Date(timeIntervalSince1970: 1_700_000_000)
+    let workout = Workout(name: "Current weight", startedAt: date)
+    try repository.save(workout)
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false,
+      now: { date })
+    XCTAssertTrue(store.setCurrentBodyWeight(72.5))
+    let savedWeights = try repository.bodyWeights()
+    let savedWorkout = try XCTUnwrap(repository.workouts().first)
+    repository.failSaves = true
+    XCTAssertFalse(store.setCurrentBodyWeight(73))
+    XCTAssertEqual(store.currentBodyWeightKG, 72.5)
+    XCTAssertEqual(store.active, savedWorkout)
+    XCTAssertEqual(try repository.bodyWeights(), savedWeights)
+    XCTAssertEqual(try repository.workouts(), [savedWorkout])
+    repository.failSaves = false
+    repository.failBodyWeightReads = true
+    XCTAssertFalse(store.setCurrentBodyWeight(73))
+    XCTAssertEqual(store.currentBodyWeightKG, 72.5)
+    XCTAssertEqual(try repository.memory.bodyWeights(), savedWeights)
+    XCTAssertEqual(try repository.memory.workouts(), [savedWorkout])
+    repository.failBodyWeightReads = false
+    repository.failBodyWeightReadsAfterWrite = true
+    XCTAssertTrue(store.setCurrentBodyWeight(74))
+    XCTAssertEqual(store.currentBodyWeightKG, 74)
+    XCTAssertEqual(store.active?.bodyWeightKG, 74)
+    XCTAssertEqual(try repository.memory.bodyWeights().first?.weightKG, 74)
+    XCTAssertEqual(try repository.memory.workouts().first?.bodyWeightKG, 74)
+  }
+  func testCurrentWeightEditsValidateAndDoNotChangeCompletedWorkoutSnapshots() throws {
+    let repository = MemoryWorkoutRepository()
+    let date = Date(timeIntervalSince1970: 1_700_000_000)
+    var workout = try ExerciseCatalog.starterTemplates[0].start(at: date)
+    try WorkoutEngine.setBodyWeight(72, in: &workout)
+    try WorkoutEngine.completeSet(
+      in: &workout, exerciseID: workout.exercises[0].id, setID: workout.exercises[0].sets[0].id,
+      repetitions: 8, weightKG: 20, at: date)
+    try WorkoutEngine.finish(&workout, at: date.addingTimeInterval(60))
+    try repository.save(workout)
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false,
+      now: { date.addingTimeInterval(3600) })
+    for invalid in [0.0, -1, .nan, .infinity, 1001] {
+      XCTAssertFalse(store.setCurrentBodyWeight(invalid))
+    }
+    XCTAssertTrue(try repository.bodyWeights().isEmpty)
+    XCTAssertTrue(store.setCurrentBodyWeight(73))
+    XCTAssertEqual(store.currentBodyWeightKG, 73)
+    XCTAssertEqual(try repository.workouts(), [workout])
+    XCTAssertTrue(store.setBodyWeight(71, for: workout.id))
+    XCTAssertEqual(store.currentBodyWeightKG, 73)
+    XCTAssertEqual(try repository.workouts().first?.bodyWeightKG, 71)
+  }
+  private func sharedWeightFixture(status: WorkoutStatus, at date: Date) throws
+    -> (Workout, BodyWeightEntry)
+  {
+    let row = WorkoutExercise(
+      exercise: ExerciseCatalog.all[0], sets: [WorkoutSet(weightKG: 20, completedAt: date)])
+    var workout = Workout(
+      name: "Shared weight", startedAt: date, exercises: [row], bodyWeightKG: 72)
+    switch status {
+    case .completed: try WorkoutEngine.finish(&workout, at: date.addingTimeInterval(60))
+    case .cancelled: try WorkoutEngine.cancel(&workout, at: date.addingTimeInterval(60))
+    case .paused: try WorkoutEngine.pause(&workout, at: date.addingTimeInterval(60))
+    case .active: break
+    }
+    let entry = BodyWeightEntry(
+      measuredAt: date.addingTimeInterval(30), weightKG: 72, workoutID: workout.id)
+    return (workout, entry)
+  }
+  func testDeletingSharedCompletedWeightDoesNotRestoreTheWorkoutSnapshot() throws {
+    let date = Date(timeIntervalSince1970: 1_700_000_000)
+    let (workout, entry) = try sharedWeightFixture(status: .completed, at: date)
+    let repository = MemoryWorkoutRepository()
+    try repository.saveBodyWeight(entry, updating: workout)
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false,
+      now: { date.addingTimeInterval(3600) })
+    let summary = BodyWeightSummary(entries: store.bodyWeights, workouts: store.workouts)
+    XCTAssertEqual(summary.points.count, 1)
+    let point = try XCTUnwrap(summary.latest)
+    XCTAssertTrue(store.deleteBodyWeight(point))
+    XCTAssertTrue(store.bodyWeights.isEmpty)
+    XCTAssertNil(store.currentBodyWeightKG)
+    XCTAssertTrue(
+      BodyWeightSummary(entries: store.bodyWeights, workouts: store.workouts).points.isEmpty)
+    var expected = workout
+    expected.bodyWeightKG = nil
+    XCTAssertEqual(try repository.workouts(), [expected])
+    store.reload()
+    XCTAssertNil(store.currentBodyWeightKG)
+    XCTAssertTrue(
+      BodyWeightSummary(entries: store.bodyWeights, workouts: store.workouts).points.isEmpty)
+  }
+  func testSharedWeightDeleteFailurePreservesBothRecordsUntilRetry() throws {
+    let date = Date(timeIntervalSince1970: 1_700_000_000)
+    let (workout, entry) = try sharedWeightFixture(status: .completed, at: date)
+    let repository = FailingWorkoutRepository()
+    try repository.saveBodyWeight(entry, updating: workout)
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false,
+      now: { date.addingTimeInterval(3600) })
+    let point = try XCTUnwrap(
+      BodyWeightSummary(entries: store.bodyWeights, workouts: store.workouts).latest)
+    repository.failSaves = true
+    XCTAssertFalse(store.deleteBodyWeight(point))
+    XCTAssertEqual(store.bodyWeights, [entry])
+    XCTAssertEqual(store.completed, [workout])
+    XCTAssertEqual(try repository.workouts(), [workout])
+    XCTAssertEqual(try repository.bodyWeights(), [entry])
+    repository.failSaves = false
+    repository.failBodyWeightReadsAfterWrite = true
+    XCTAssertTrue(store.deleteBodyWeight(point))
+    XCTAssertTrue(store.bodyWeights.isEmpty)
+    XCTAssertNil(store.completed.first?.bodyWeightKG)
+    XCTAssertNil(store.currentBodyWeightKG)
+    XCTAssertTrue(try repository.memory.bodyWeights().isEmpty)
+    XCTAssertNil(try repository.memory.workouts().first?.bodyWeightKG)
+  }
+  func testDeletingSharedCancelledWeightRemovesItsGlobalReading() throws {
+    let date = Date(timeIntervalSince1970: 1_700_000_000)
+    let (workout, entry) = try sharedWeightFixture(status: .cancelled, at: date)
+    let repository = MemoryWorkoutRepository()
+    try repository.saveBodyWeight(entry, updating: workout)
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false,
+      now: { date.addingTimeInterval(3600) })
+    let point = try XCTUnwrap(
+      BodyWeightSummary(entries: store.bodyWeights, workouts: store.workouts).latest)
+    XCTAssertTrue(store.deleteBodyWeight(point))
+    XCTAssertNil(store.currentBodyWeightKG)
+    XCTAssertTrue(store.bodyWeights.isEmpty)
+    XCTAssertNil(try repository.workouts().first?.bodyWeightKG)
+    XCTAssertEqual(try repository.workouts().first?.status, .cancelled)
+  }
+  func testDeletingSharedActiveWeightRevealsPreviousReadingAndClearsOnlyItsSnapshot() throws {
+    let date = Date(timeIntervalSince1970: 1_700_000_000)
+    let (workout, entry) = try sharedWeightFixture(status: .active, at: date)
+    let previous = BodyWeightEntry(measuredAt: date.addingTimeInterval(-3600), weightKG: 70)
+    let repository = MemoryWorkoutRepository()
+    try repository.saveBodyWeight(previous)
+    try repository.saveBodyWeight(entry, updating: workout)
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false,
+      now: { date.addingTimeInterval(3600) })
+    let point = try XCTUnwrap(
+      BodyWeightSummary(entries: store.bodyWeights, workouts: store.workouts).latest)
+    XCTAssertTrue(store.deleteBodyWeight(point))
+    XCTAssertNil(store.active?.bodyWeightKG)
+    XCTAssertEqual(store.currentBodyWeightKG, 70)
+    XCTAssertEqual(store.bodyWeights, [previous])
+    XCTAssertEqual(store.active?.exercises, workout.exercises)
+    XCTAssertEqual(store.active?.status, .active)
+  }
+  func testDeletingUnlinkedOrDifferentSharedWeightPreservesTheCompletedSnapshot() throws {
+    let date = Date(timeIntervalSince1970: 1_700_000_000)
+    let (workout, originalEntry) = try sharedWeightFixture(status: .completed, at: date)
+    var different = originalEntry
+    different.weightKG = 71
+    let repository = MemoryWorkoutRepository()
+    try repository.saveBodyWeight(different, updating: workout)
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false,
+      now: { date.addingTimeInterval(3600) })
+    let point = try XCTUnwrap(
+      BodyWeightSummary(entries: store.bodyWeights, workouts: store.workouts).points.first {
+        $0.source == .measurement(different.id)
+      })
+    XCTAssertTrue(store.deleteBodyWeight(point))
+    XCTAssertEqual(try repository.workouts(), [workout])
+    let unrelated = BodyWeightEntry(measuredAt: date.addingTimeInterval(120), weightKG: 72)
+    XCTAssertTrue(store.saveBodyWeight(unrelated))
+    let unrelatedPoint = try XCTUnwrap(
+      BodyWeightSummary(entries: store.bodyWeights, workouts: store.workouts).points.first {
+        $0.source == .measurement(unrelated.id)
+      })
+    XCTAssertTrue(store.deleteBodyWeight(unrelatedPoint))
+    XCTAssertEqual(try repository.workouts(), [workout])
+    XCTAssertEqual(store.currentBodyWeightKG, 72)
+    XCTAssertEqual(
+      BodyWeightSummary(entries: store.bodyWeights, workouts: store.workouts).points.count, 1)
   }
   func testDemoWeightsNeverChangePersonalWeightHistory() async throws {
     let repository = MemoryWorkoutRepository()

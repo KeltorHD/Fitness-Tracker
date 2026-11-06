@@ -191,6 +191,7 @@ struct ExerciseMediaViewer: View {
             .labelStyle(.iconOnly).accessibilityIdentifier("closeExerciseMedia")
         }
       }
+      .accessibilityElement(children: .contain)
       .accessibilityIdentifier("exerciseMediaViewer")
     }
   }

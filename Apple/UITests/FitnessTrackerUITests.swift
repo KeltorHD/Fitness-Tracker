@@ -128,12 +128,26 @@ final class FitnessTrackerUITests: XCTestCase {
     reveal(rows.element(boundBy: 2), in: app)
     rows.element(boundBy: 2).swipeLeft()
     app.buttons["removeWorkoutExercise"].tap()
-    XCTAssertTrue(app.buttons["confirmRemoveWorkoutExercise"].waitForExistence(timeout: 5))
-    app.buttons["Отмена"].tap()
+    let confirmRemoval = app.buttons.matching(identifier: "confirmRemoveWorkoutExercise").firstMatch
+    XCTAssertTrue(confirmRemoval.waitForExistence(timeout: 5))
+    let cancel = app.buttons["Отмена"]
+    if cancel.exists && cancel.isHittable {
+      cancel.tap()
+    } else {
+      // A confirmation popover can dismiss on an outside tap without a Cancel button.
+      app.descendants(matching: .any).matching(identifier: "activeWorkoutHeader").firstMatch
+        .coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+    }
+    XCTAssertTrue(confirmRemoval.waitForNonExistence(timeout: 5))
     XCTAssertEqual(rows.count, 5)
     rows.element(boundBy: 2).swipeLeft()
     app.buttons["removeWorkoutExercise"].tap()
-    app.buttons["confirmRemoveWorkoutExercise"].tap()
+    XCTAssertTrue(confirmRemoval.waitForExistence(timeout: 5))
+    confirmRemoval.tap()
+    XCTAssertTrue(confirmRemoval.waitForNonExistence(timeout: 5))
+    let removal = XCTNSPredicateExpectation(
+      predicate: NSPredicate(format: "count == 4"), object: rows)
+    XCTAssertEqual(XCTWaiter.wait(for: [removal], timeout: 5), .completed)
     XCTAssertEqual(rows.count, 4)
     XCTAssertTrue(rows.element(boundBy: 2).label.contains("Жим лёжа"))
     XCTAssertEqual(app.alerts.count, 0)
@@ -956,7 +970,37 @@ final class FitnessTrackerUITests: XCTestCase {
     app.buttons["saveBodyWeight"].tap()
     let weight = app.descendants(matching: .any).matching(identifier: "latestBodyWeight").firstMatch
     XCTAssertTrue(weight.waitForExistence(timeout: 5))
-    XCTAssertTrue(weight.label.contains("72"))
+    XCTAssertTrue(weight.label.contains("72,5"))
+    app.buttons["openSettings"].tap()
+    let setting = app.buttons["settingsBodyWeight"]
+    XCTAssertTrue(app.navigationBars["Настройки"].waitForExistence(timeout: 5))
+    reveal(setting, in: app)
+    XCTAssertEqual(setting.value as? String, "72,5 кг")
+    setting.tap()
+    XCTAssertTrue(input.waitForExistence(timeout: 5))
+    XCTAssertEqual(input.value as? String, "72,5")
+    input.tap()
+    input.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: 4) + "74,1")
+    app.buttons["saveBodyWeight"].tap()
+    XCTAssertTrue(input.waitForNonExistence(timeout: 5))
+    XCTAssertEqual(setting.value as? String, "74,1 кг")
+    app.navigationBars["Настройки"].buttons.element(boundBy: 0).tap()
+    reveal(weight, in: app)
+    XCTAssertTrue(weight.label.contains("74,1"))
+    app.buttons["workoutStartAction"].tap()
+    chooseFreeWorkout(in: app)
+    let workoutWeight = app.buttons["editWorkoutBodyWeight"]
+    XCTAssertTrue(workoutWeight.waitForExistence(timeout: 5))
+    XCTAssertTrue(workoutWeight.isHittable)
+    XCTAssertEqual(workoutWeight.value as? String, "74,1 кг")
+    workoutWeight.tap()
+    XCTAssertTrue(input.waitForExistence(timeout: 5))
+    XCTAssertEqual(input.value as? String, "74,1")
+    app.navigationBars["Записать вес"].buttons["Отмена"].tap()
+    XCTAssertTrue(input.waitForNonExistence(timeout: 5))
+    app.buttons["Свернуть"].tap()
+    XCTAssertTrue(app.buttons["navigationTab_2"].waitForExistence(timeout: 5))
+    app.buttons["navigationTab_2"].tap()
     let history = app.buttons["openBodyWeightHistory"]
     for _ in 0..<4 where !history.isHittable { app.swipeDown() }
     XCTAssertTrue(history.isHittable)
@@ -966,21 +1010,93 @@ final class FitnessTrackerUITests: XCTestCase {
 
   @MainActor func testBodyWeightIsSavedOnAnActiveWorkout() {
     let app = launch()
-    XCTAssertTrue(app.buttons["startWorkout"].waitForExistence(timeout: 10))
-    app.buttons["startWorkout"].tap()
+    XCTAssertTrue(app.buttons["workoutStartAction"].waitForExistence(timeout: 10))
+    app.buttons["workoutStartAction"].tap()
     chooseFreeWorkout(in: app)
     let edit = app.buttons["editWorkoutBodyWeight"]
-    reveal(edit, in: app)
+    XCTAssertTrue(edit.waitForExistence(timeout: 5))
+    XCTAssertTrue(edit.isHittable)
     edit.tap()
     let input = app.textFields["bodyWeightInput"]
     XCTAssertTrue(input.waitForExistence(timeout: 5))
     input.tap()
     input.typeText("73,2")
     app.buttons["saveBodyWeight"].tap()
+    XCTAssertTrue(input.waitForNonExistence(timeout: 5))
     XCTAssertTrue(edit.waitForExistence(timeout: 5))
+    XCTAssertEqual(edit.value as? String, "73,2 кг")
+    let summaryScreenshot = XCTAttachment(screenshot: app.screenshot())
+    summaryScreenshot.name = "Active workout body weight summary"
+    summaryScreenshot.lifetime = .keepAlways
+    add(summaryScreenshot)
     edit.tap()
     XCTAssertTrue(input.waitForExistence(timeout: 5))
-    XCTAssertTrue((input.value as? String)?.contains("73") == true)
+    XCTAssertEqual(input.value as? String, "73,2")
+    app.navigationBars["Записать вес"].buttons["Отмена"].tap()
+    XCTAssertTrue(input.waitForNonExistence(timeout: 5))
+    app.buttons["Свернуть"].tap()
+    let start = app.buttons["workoutStartAction"]
+    XCTAssertTrue(start.waitForExistence(timeout: 5))
+    let settings = app.buttons["openSettings"]
+    XCTAssertTrue(settings.waitForExistence(timeout: 5))
+    XCTAssertTrue(settings.isHittable)
+    settings.tap()
+    let setting = app.buttons["settingsBodyWeight"]
+    XCTAssertTrue(app.navigationBars["Настройки"].waitForExistence(timeout: 5))
+    reveal(setting, in: app)
+    XCTAssertEqual(setting.value as? String, "73,2 кг")
+    app.navigationBars["Настройки"].buttons.element(boundBy: 0).tap()
+    app.buttons["navigationTab_2"].tap()
+    let weight = app.descendants(matching: .any).matching(identifier: "latestBodyWeight").firstMatch
+    reveal(weight, in: app)
+    XCTAssertTrue(weight.label.contains("73,2"))
+    start.tap()
+    XCTAssertTrue(edit.waitForExistence(timeout: 5))
+    XCTAssertEqual(edit.value as? String, "73,2 кг")
+  }
+
+  @MainActor func testWorkoutExerciseThumbnailOpensMediaWithoutOpeningTheSetEditor() {
+    let app = launch(additionalArguments: ["-appearance", "dark", "-colorTheme", "forest"])
+    XCTAssertTrue(app.buttons["workoutStartAction"].waitForExistence(timeout: 10))
+    app.buttons["workoutStartAction"].tap()
+    chooseFreeWorkout(in: app)
+    app.buttons["addExercise"].tap()
+    app.searchFields.firstMatch.tap()
+    app.searchFields.firstMatch.typeText("Goblet")
+    let goblet = app.buttons.containing(.staticText, identifier: "Гоблет-приседания").firstMatch
+    XCTAssertTrue(goblet.waitForExistence(timeout: 5))
+    goblet.tap()
+    XCTAssertTrue(app.navigationBars["Гоблет-приседания"].waitForExistence(timeout: 5))
+    app.buttons["selectLibraryExercise"].tap()
+    let row = app.buttons["openWorkoutExercise"].firstMatch
+    XCTAssertTrue(row.waitForExistence(timeout: 5))
+    let weight = app.buttons["editWorkoutBodyWeight"]
+    XCTAssertTrue(weight.exists)
+    XCTAssertTrue(weight.isHittable)
+    XCTAssertLessThan(weight.frame.maxY, row.frame.minY)
+    let media = app.buttons["openWorkoutExerciseMedia"].firstMatch
+    XCTAssertTrue(media.waitForExistence(timeout: 5))
+    XCTAssertGreaterThanOrEqual(media.frame.width, 44)
+    XCTAssertGreaterThanOrEqual(media.frame.height, 44)
+    media.tap()
+    let viewer = app.descendants(matching: .any).matching(identifier: "exerciseMediaViewer")
+      .firstMatch
+    XCTAssertTrue(viewer.waitForExistence(timeout: 5))
+    let setEditor = app.descendants(matching: .any).matching(identifier: "workoutExerciseScreen")
+      .firstMatch
+    XCTAssertFalse(setEditor.exists)
+    let mediaScreenshot = XCTAttachment(screenshot: app.screenshot())
+    mediaScreenshot.name = "Workout exercise thumbnail media"
+    mediaScreenshot.lifetime = .keepAlways
+    add(mediaScreenshot)
+    app.buttons["closeExerciseMedia"].tap()
+    XCTAssertTrue(viewer.waitForNonExistence(timeout: 5))
+    XCTAssertTrue(media.waitForExistence(timeout: 5))
+    XCTAssertFalse(setEditor.exists)
+    XCTAssertTrue(row.isHittable)
+    row.tap()
+    XCTAssertTrue(setEditor.waitForExistence(timeout: 5))
+    XCTAssertFalse(viewer.exists)
   }
 
   @MainActor func testHistoryMonthMenuPreservesCalendarNavigation() {

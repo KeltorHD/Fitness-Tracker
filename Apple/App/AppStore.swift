@@ -9,6 +9,7 @@ import WidgetKit
   private(set) var completed: [Workout] = []
   private(set) var templates: [WorkoutTemplate] = []
   private(set) var bodyWeights: [BodyWeightEntry] = []
+  private(set) var currentBodyWeightKG: Double?
   private(set) var active: Workout?
   var error: String?
   var notice: String?
@@ -37,6 +38,7 @@ import WidgetKit
   @ObservationIgnored private let defaults: UserDefaults
   @ObservationIgnored private let archiveFiles: any ArchiveFileHandling
   @ObservationIgnored private let accountSession: AccountSession?
+  @ObservationIgnored private let now: () -> Date
   @ObservationIgnored lazy var accountBackups: AccountBackupViewModel? = {
     guard let accountSession else { return nil }
     return AccountBackupViewModel(
@@ -83,7 +85,7 @@ import WidgetKit
     archiveFiles: any ArchiveFileHandling = ArchiveFileService(),
     tracker: TrackerViewModel? = nil,
     healthCharts: HealthChartsViewModel? = nil,
-    accountSession: AccountSession? = nil
+    accountSession: AccountSession? = nil, now: @escaping () -> Date = Date.init
   ) {
     self.repository = WorkoutWorkspaceRepository(personal: repository)
     self.nutrition = (repository as? any NutritionRepository).map {
@@ -97,6 +99,7 @@ import WidgetKit
     self.exerciseImages = exerciseImages
     self.archiveFiles = archiveFiles
     self.accountSession = accountSession
+    self.now = now
     self.tracker =
       tracker
       ?? TrackerViewModel(
@@ -223,6 +226,9 @@ import WidgetKit
     bodyWeights = measurements
     let unfinished = loaded.filter { [.active, .paused].contains($0.status) }
     active = unfinished.first { $0.id == active?.id } ?? unfinished.first
+    currentBodyWeightKG =
+      BodyWeightSummary(entries: measurements, workouts: loaded, now: now()).latest?.weightKG
+      ?? active?.bodyWeightKG
     if !isDemoMode {
       tracker.attach(active)
       healthCharts.attach(active)
@@ -237,8 +243,7 @@ import WidgetKit
 
   @discardableResult func saveBodyWeight(_ entry: BodyWeightEntry) -> Bool {
     do {
-      try repository.saveBodyWeight(entry)
-      try loadRepository()
+      try commitBodyWeight(entry, snapshot: archiveSnapshot(), isCurrentUpdate: false)
       return true
     } catch {
       report(
@@ -247,8 +252,65 @@ import WidgetKit
       return false
     }
   }
+  @discardableResult func setCurrentBodyWeight(_ weightKG: Double) -> Bool {
+    do {
+      try Validation.bodyWeight(weightKG)
+      let snapshot = try archiveSnapshot()
+      let previous = active.flatMap { workout in
+        snapshot.bodyWeights.first { $0.workoutID == workout.id }
+      }
+      let entry = BodyWeightEntry(
+        id: previous?.id ?? UUID(), measuredAt: now(), weightKG: weightKG,
+        workoutID: active?.id)
+      try commitBodyWeight(entry, snapshot: snapshot, isCurrentUpdate: true)
+      return true
+    } catch {
+      report(
+        error, operation: "saveBodyWeight", message: "Не удалось сохранить вес. Попробуйте ещё раз."
+      )
+      return false
+    }
+  }
+  private func commitBodyWeight(
+    _ value: BodyWeightEntry, snapshot: WorkoutArchive, isCurrentUpdate: Bool
+  ) throws {
+    try Validation.bodyWeightEntry(value)
+    var entry = value
+    var measurements = snapshot.bodyWeights.filter { $0.id != entry.id } + [entry]
+    var workouts = snapshot.workouts
+    var updated: Workout?
+    if let active {
+      guard let index = workouts.firstIndex(where: { $0.id == active.id }),
+        [.active, .paused].contains(workouts[index].status)
+      else { throw TrainingError.invalidState }
+      let previousEntry = snapshot.bodyWeights.first { $0.id == entry.id }
+      let latest = BodyWeightSummary(
+        entries: measurements, workouts: workouts, now: now()
+      ).latest
+      let isRecentReading =
+        entry.measuredAt >= active.startedAt
+        && (previousEntry == nil || previousEntry.map { $0.measuredAt >= active.startedAt } == true)
+        && (entry.workoutID == nil || entry.workoutID == active.id)
+        && latest?.source == .measurement(entry.id)
+      if isCurrentUpdate || isRecentReading {
+        try WorkoutEngine.setBodyWeight(entry.weightKG, in: &workouts[index])
+        entry.workoutID = active.id
+        measurements = measurements.map { $0.id == entry.id ? entry : $0 }
+        updated = workouts[index]
+      }
+    }
+    // All reads and transformations finish before the single transactional write.
+    try repository.saveBodyWeight(entry, updating: updated)
+    measurements.sort {
+      $0.measuredAt == $1.measuredAt
+        ? $0.id.uuidString < $1.id.uuidString : $0.measuredAt > $1.measuredAt
+    }
+    applySnapshot(workouts: workouts, templates: snapshot.templates, bodyWeights: measurements)
+    if updated != nil { refreshIntegrations() }
+  }
   @discardableResult func setBodyWeight(_ weightKG: Double?, for workoutID: UUID) -> Bool {
     if active?.id == workoutID {
+      if let weightKG { return setCurrentBodyWeight(weightKG) }
       return mutate { try WorkoutEngine.setBodyWeight(weightKG, in: &$0) }
     }
     guard var workout = workouts.first(where: { $0.id == workoutID }), workout.status == .completed
@@ -264,8 +326,27 @@ import WidgetKit
     case .workout(let id): return setBodyWeight(nil, for: id)
     case .measurement(let id):
       do {
-        try repository.deleteBodyWeight(id: id)
-        try loadRepository()
+        let snapshot = try archiveSnapshot()
+        let entry = snapshot.bodyWeights.first { $0.id == id }
+        var workouts = snapshot.workouts
+        var updated: Workout?
+        if let entry, let workoutID = entry.workoutID,
+          let index = workouts.firstIndex(where: { $0.id == workoutID }),
+          workouts[index].bodyWeightKG == entry.weightKG
+        {
+          if [.active, .paused].contains(workouts[index].status) {
+            try WorkoutEngine.setBodyWeight(nil, in: &workouts[index])
+          } else {
+            workouts[index].bodyWeightKG = nil
+            try Validation.workout(workouts[index])
+          }
+          updated = workouts[index]
+        }
+        try repository.deleteBodyWeight(id: id, updating: updated)
+        applySnapshot(
+          workouts: workouts, templates: snapshot.templates,
+          bodyWeights: snapshot.bodyWeights.filter { $0.id != id })
+        if updated != nil { refreshIntegrations() }
         return true
       } catch {
         report(
@@ -333,6 +414,8 @@ import WidgetKit
     }
   }
   private func activate(_ workout: Workout) throws {
+    var workout = workout
+    try WorkoutEngine.setBodyWeight(currentBodyWeightKG, in: &workout)
     try repository.save(workout)
     try loadRepository()
     showSession = true

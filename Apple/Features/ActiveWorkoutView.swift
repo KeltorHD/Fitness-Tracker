@@ -16,6 +16,8 @@ struct ActiveWorkoutView: View {
   @State private var pendingRemoval: RemovalRequest?
   @State private var reorderRevision = 0
   @State private var selectedExercise: WorkoutExercise?
+  @State private var mediaExercise: Exercise?
+  @State private var editingBodyWeight = false
   @State private var confirmCancel = false
   @State private var renaming = false
   @State private var workoutName = ""
@@ -147,6 +149,11 @@ struct ActiveWorkoutView: View {
           .sheet(item: $selectedExercise) { row in
             WorkoutExerciseSheet(workout: workout, exerciseID: row.id, unit: unit)
           }
+          .sheet(isPresented: $editingBodyWeight) {
+            BodyWeightEditor(
+              workout: workout, initialWeightKG: store.currentBodyWeightKG, unit: unit)
+          }
+          .fullScreenCover(item: $mediaExercise) { ExerciseMediaViewer(exercise: $0) }
           .confirmationDialog(
             L10n.text("Удалить упражнение из тренировки?", locale: locale),
             isPresented: Binding(
@@ -188,7 +195,8 @@ struct ActiveWorkoutView: View {
       }
     }
     .archiveTransferPresenter(
-      when: selectedExercise == nil && insertion == nil && templateAddition == nil && !renaming
+      when: selectedExercise == nil && mediaExercise == nil && !editingBodyWeight
+        && insertion == nil && templateAddition == nil && !renaming
         && !confirmCancel
         && pendingRemoval == nil && !store.showingBodyWeightEditor
     )
@@ -203,7 +211,8 @@ struct ActiveWorkoutView: View {
       L10n.text("Ошибка", locale: locale),
       isPresented: Binding(
         get: {
-          store.error != nil && selectedExercise == nil && insertion == nil
+          store.error != nil && selectedExercise == nil && mediaExercise == nil
+            && !editingBodyWeight && insertion == nil
             && templateAddition == nil && !renaming
             && !confirmCancel
             && pendingRemoval == nil && !store.archiveTransfer.isPresented
@@ -219,8 +228,11 @@ struct ActiveWorkoutView: View {
   private func overview(_ workout: Workout) -> some View {
     List {
       Section {
-        WorkoutSessionSummary(workout: workout, unit: unit, showsDuration: false).padding(
-          .vertical, 16)
+        WorkoutSessionSummary(
+          workout: workout, unit: unit, showsDuration: false,
+          bodyWeightKG: workout.bodyWeightKG ?? store.currentBodyWeightKG,
+          editBodyWeight: { editingBodyWeight = true }
+        ).padding(.vertical, 16)
         if showsHeartRate, !store.isDemoMode {
           WorkoutLiveHeartRateChart(
             workoutID: workout.id, isExpanded: heartRateExpanded,
@@ -264,12 +276,29 @@ struct ActiveWorkoutView: View {
       .listRowBackground(FitTheme.paper)
       Section {
         ForEach(Array(workout.exercises.enumerated()), id: \.element.id) { index, row in
-          Button {
-            selectedExercise = row
-          } label: {
-            WorkoutExerciseListRow(row: row, index: index, unit: unit, completedOnly: false)
+          HStack(alignment: .top, spacing: 14) {
+            Button {
+              selectedExercise = row
+            } label: {
+              WorkoutExerciseListRow(
+                row: row, index: index, unit: unit, completedOnly: false, showsThumbnail: false)
+            }
+            .buttonStyle(.plain).accessibilityIdentifier("openWorkoutExercise")
+            if let entry = ExerciseLibrary.entry(for: row.exercise.id),
+              entry.generatedMedia != nil || !entry.images.isEmpty
+            {
+              Button {
+                mediaExercise = row.exercise
+              } label: {
+                WorkoutExerciseThumbnail(exercise: row.exercise)
+                  .frame(minWidth: 44, minHeight: 44).contentShape(.rect)
+              }
+              .buttonStyle(.plain).padding(.vertical, 16)
+              .accessibilityLabel(L10n.text("Открыть фото и анимацию упражнения", locale: locale))
+              .accessibilityValue(L10n.exerciseName(row.exercise, locale: locale))
+              .accessibilityIdentifier("openWorkoutExerciseMedia")
+            }
           }
-          .buttonStyle(.plain).accessibilityIdentifier("openWorkoutExercise")
           .moveDisabled(workout.status != .active)
           .swipeActions(edge: .leading, allowsFullSwipe: false) {
             if workout.status == .active {
@@ -307,7 +336,6 @@ struct ActiveWorkoutView: View {
       .listRowBackground(FitTheme.paper)
       Section {
         VStack(spacing: 16) {
-          WorkoutBodyWeightRow(workout: workout).fitCard()
           TextField(
             L10n.text("Заметка о тренировке", locale: locale),
             text: Binding(
