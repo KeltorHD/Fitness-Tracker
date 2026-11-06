@@ -53,8 +53,7 @@ struct SessionControls: View {
         actionRow(progress: progress, spacing: 8).padding(.horizontal, 8)
         actionRow(progress: progress, spacing: 0)
       }
-      // The main surface starts below the central rise; center the controls in that surface.
-      .padding(.top, shape.rise + 4).padding(.bottom, 4)
+      .padding(.top, 4).padding(.bottom, 8)
       .background {
         if reduceTransparency { shape.fill(FitTheme.paper) }
       }
