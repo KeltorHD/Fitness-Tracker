@@ -81,12 +81,10 @@ extension WorkoutEngine {
     var candidate = workout
     candidate.exercises[e].sets[s] = updated
     try Validation.workout(candidate)
-    let oldDeadline = dropRestDeadline(original, seconds: workout.restSeconds)
-    let newDeadline = dropRestDeadline(updated, seconds: workout.restSeconds)
+    let oldDeadline = restDeadline(in: workout, exerciseID: exerciseID, setIndex: s)
+    let newDeadline = restDeadline(in: candidate, exerciseID: exerciseID, setIndex: s)
     if let oldDeadline, candidate.restEndsAt == oldDeadline {
-      let shared = candidate.exercises.flatMap(\.sets).contains {
-        dropRestDeadline($0, seconds: candidate.restSeconds) == oldDeadline
-      }
+      let shared = hasRestDeadline(oldDeadline, in: candidate)
       if !shared { candidate.restEndsAt = newDeadline }
     } else if oldDeadline == nil, candidate.restEndsAt == nil {
       candidate.restEndsAt = newDeadline
@@ -127,11 +125,6 @@ extension WorkoutEngine {
     workout = candidate
   }
 
-  private static func dropRestDeadline(_ set: WorkoutSet, seconds: Int) -> Date? {
-    guard seconds > 0, set.isFullyCompleted else { return nil }
-    return set.stages.last?.completedAt?.addingTimeInterval(Double(seconds))
-  }
-
   public static func completeDropStage(
     in workout: inout Workout, exerciseID: UUID, setID: UUID, stageID: UUID,
     repetitions: Int, weightKG: Double, dropStages: [DropSetStage]? = nil, at date: Date = Date()
@@ -164,8 +157,6 @@ extension WorkoutEngine {
     set.dropStages?[index].completedAt = date
     try Validation.set(set)
     workout.exercises[e].sets[s] = set
-    workout.restEndsAt =
-      set.isFullyCompleted && workout.restSeconds > 0
-      ? date.addingTimeInterval(Double(workout.restSeconds)) : nil
+    workout.restEndsAt = restDeadline(in: workout, exerciseID: exerciseID, setIndex: s)
   }
 }

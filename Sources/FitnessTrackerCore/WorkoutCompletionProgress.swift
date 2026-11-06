@@ -19,6 +19,10 @@ public struct WorkoutCompletionProgress: Equatable, Sendable {
     self.init(exercises: [exercise])
   }
 
+  public init(group: WorkoutExerciseGroup) {
+    self.init(exercises: group.exercises)
+  }
+
   private init(exercises: [WorkoutExercise]) {
     var completed = 0
     var total = 0

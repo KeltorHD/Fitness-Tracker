@@ -6,6 +6,7 @@ public enum TrainingError: Error, Equatable, LocalizedError, Sendable {
   case invalidBodyWeight, invalidMeasurementDate
   case invalidLoadMultiplier
   case invalidDropSet, invalidDropStageOrder, invalidSetNote
+  case invalidSuperset, missingTemplateVariation
   public var errorDescription: String? {
     switch self {
     case .invalidName: "Введите название (1–80 символов)."
@@ -26,6 +27,8 @@ public enum TrainingError: Error, Equatable, LocalizedError, Sendable {
     case .invalidDropSet:
       "Дропсет должен содержать от 1 до 5 снижений веса. Каждый следующий вес должен быть меньше предыдущего. Разминка оформляется отдельно."
     case .invalidDropStageOrder: "Сначала выполните предыдущий этап дропсета."
+    case .invalidSuperset: "Суперсет должен объединять минимум два соседних упражнения."
+    case .missingTemplateVariation: "Вариант шаблона не найден."
     }
   }
 }
@@ -83,10 +86,25 @@ public enum Validation {
   }
   public static func template(_ value: WorkoutTemplate) throws {
     try name(value.name)
-    guard !value.exercises.isEmpty else { throw TrainingError.emptyWorkout }
     guard (0...3600).contains(value.restSeconds) else { throw TrainingError.invalidRest }
-    try unique(value.exercises.map(\.id))
-    for exercise in value.exercises {
+    try unique([value.id] + value.variations.map(\.id))
+    try templateExercises(value.exercises)
+    for variation in value.variations {
+      try name(variation.name)
+      try templateExercises(variation.exercises)
+    }
+    let allRows = value.exercises + value.variations.flatMap(\.exercises)
+    try unique(allRows.map(\.id))
+    try unique(allRows.flatMap { ($0.plannedSets ?? []).flatMap(\.stages).map(\.id) })
+  }
+
+  private static func templateExercises(_ exercises: [TemplateExercise]) throws {
+    guard !exercises.isEmpty else { throw TrainingError.emptyWorkout }
+    try unique(exercises.map(\.id))
+    guard SupersetStructure.invalidIDs(in: exercises.map(\.supersetID)).isEmpty else {
+      throw TrainingError.invalidSuperset
+    }
+    for exercise in exercises {
       try name(exercise.exercise.name)
       guard (1...30).contains(exercise.setCount) else { throw TrainingError.invalidSetCount }
       try set(
@@ -103,7 +121,7 @@ public enum Validation {
         }
       }
     }
-    try unique(value.exercises.flatMap { ($0.plannedSets ?? []).flatMap(\.stages).map(\.id) })
+    try unique(exercises.flatMap { ($0.plannedSets ?? []).flatMap(\.stages).map(\.id) })
   }
   public static func workout(_ value: Workout) throws {
     try name(value.name)
@@ -137,6 +155,9 @@ public enum Validation {
     if let pause = value.pausedAt, pause < previousEnd { throw TrainingError.invalidDate }
     try unique(value.exercises.map(\.id))
     try unique(value.exercises.flatMap(\.sets).flatMap(\.stages).map(\.id))
+    guard SupersetStructure.invalidIDs(in: value.exercises.map(\.supersetID)).isEmpty else {
+      throw TrainingError.invalidSuperset
+    }
     for exercise in value.exercises {
       try name(exercise.exercise.name)
       guard (1...30).contains(exercise.sets.count) else { throw TrainingError.invalidSetCount }

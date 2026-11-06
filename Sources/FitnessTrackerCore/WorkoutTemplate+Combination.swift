@@ -22,6 +22,8 @@ extension WorkoutTemplate {
     }
     let names = templates.map { $0.name.trimmingCharacters(in: .whitespacesAndNewlines) }
     let name = String(names.joined(separator: " + ").prefix(80))
+    // Duplicate removal can leave only one member of a source superset.
+    WorkoutEngine.normalizeSupersets(in: &exercises)
     return Workout(
       name: name, startedAt: date, exercises: exercises, restSeconds: first.restSeconds)
   }

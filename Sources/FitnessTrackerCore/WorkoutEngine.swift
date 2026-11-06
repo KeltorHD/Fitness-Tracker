@@ -52,9 +52,7 @@ public enum WorkoutEngine {
     try Validation.set(item)
     item.completedAt = date
     workout.exercises[e].sets[s] = item
-    workout.restEndsAt =
-      item.isFullyCompleted && workout.restSeconds > 0
-      ? date.addingTimeInterval(Double(workout.restSeconds)) : nil
+    workout.restEndsAt = restDeadline(in: workout, exerciseID: exerciseID, setIndex: s)
   }
   public static func pause(_ workout: inout Workout, at date: Date = Date()) throws {
     guard workout.status == .active else { throw TrainingError.invalidState }
@@ -106,13 +104,21 @@ public enum WorkoutEngine {
   public static func repeatWorkout(_ original: Workout, at date: Date = Date()) throws -> Workout {
     try Validation.workout(original)
     guard original.status == .completed else { throw TrainingError.invalidState }
-    let exercises = original.exercises.compactMap { item -> WorkoutExercise? in
+    var groupIDs: [UUID: UUID] = [:]
+    var exercises = original.exercises.compactMap { item -> WorkoutExercise? in
       let completed = item.sets.filter { $0.completedAt != nil }
       guard !completed.isEmpty else { return nil }
       return WorkoutExercise(
         exercise: item.exercise,
-        sets: completed.map { $0.freshCopy(performedOnly: true) })
+        sets: completed.map { $0.freshCopy(performedOnly: true) },
+        supersetID: item.supersetID.map { id in
+          if let existing = groupIDs[id] { return existing }
+          let new = UUID()
+          groupIDs[id] = new
+          return new
+        })
     }
+    normalizeSupersets(in: &exercises)
     return Workout(
       name: original.name, startedAt: date, exercises: exercises, restSeconds: original.restSeconds)
   }
@@ -120,17 +126,25 @@ public enum WorkoutEngine {
   public static func makeTemplate(from workout: Workout) throws -> WorkoutTemplate {
     try Validation.workout(workout)
     guard workout.status == .completed else { throw TrainingError.invalidState }
+    var groupIDs: [UUID: UUID] = [:]
     let exercises = workout.exercises.compactMap { item -> TemplateExercise? in
       let completed = item.sets.filter { $0.completedAt != nil }
       guard let first = completed.first else { return nil }
       return TemplateExercise(
         exercise: item.exercise, setCount: completed.count, repetitions: first.repetitions,
         weightKG: first.weightKG, loadMultiplier: first.loadMultiplier,
-        plannedSets: completed.contains(where: { $0.isDropSet || $0.note != nil })
-          ? completed.map { $0.freshCopy(performedOnly: true) } : nil)
+        plannedSets: completed.contains(where: { $0.isWarmup || $0.isDropSet || $0.note != nil })
+          ? completed.map { $0.freshCopy(performedOnly: true) } : nil,
+        supersetID: item.supersetID.map { id in
+          if let existing = groupIDs[id] { return existing }
+          let new = UUID()
+          groupIDs[id] = new
+          return new
+        })
     }
     let template = WorkoutTemplate(
-      name: workout.name, exercises: exercises, restSeconds: workout.restSeconds)
+      name: workout.name, exercises: TemplateExercise.normalizingSupersets(exercises),
+      restSeconds: workout.restSeconds)
     try Validation.template(template)
     return template
   }
@@ -147,7 +161,15 @@ public enum WorkoutEngine {
       guard let anchor = workout.exercises.firstIndex(where: { $0.id == id }) else {
         throw TrainingError.missingExercise
       }
-      index = position == .before(id) ? anchor : anchor + 1
+      if let group = workout.groupContaining(exerciseID: id), group.isSuperset,
+        let first = workout.exercises.firstIndex(where: { $0.id == group.id }),
+        let last = group.exercises.last,
+        let end = workout.exercises.firstIndex(where: { $0.id == last.id })
+      {
+        index = position == .before(id) ? first : end + 1
+      } else {
+        index = position == .before(id) ? anchor : anchor + 1
+      }
     }
     workout.exercises.insert(
       WorkoutExercise(exercise: exercise, sets: [WorkoutSet(repetitions: 0)]), at: index)
@@ -183,12 +205,13 @@ public enum WorkoutEngine {
     let hasRecordedWork = original.sets.contains { !$0.performedStages.isEmpty }
     let replacement = WorkoutExercise(
       id: hasRecordedWork ? UUID() : original.id, exercise: exercise,
-      sets: [WorkoutSet(repetitions: 0)])
+      sets: [WorkoutSet(repetitions: 0)], supersetID: original.supersetID)
     if hasRecordedWork {
       candidate.exercises.insert(replacement, at: index + 1)
     } else {
       candidate.exercises[index] = replacement
     }
+    reconcileRest(in: &candidate)
     try Validation.workout(candidate)
     workout = candidate
     return replacement.id
@@ -204,7 +227,10 @@ public enum WorkoutEngine {
     else { throw TrainingError.missingExercise }
     let rows = Dictionary(
       workout.exercises.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
-    workout.exercises = rowIDs.compactMap { rows[$0] }
+    var candidate = workout
+    candidate.exercises = rowIDs.compactMap { rows[$0] }
+    try Validation.workout(candidate)
+    workout = candidate
   }
 
   public static func removeExercise(id: UUID, from workout: inout Workout) throws {
@@ -214,6 +240,8 @@ public enum WorkoutEngine {
     }
     let removedDeadline = restDeadline(for: workout.exercises[index], seconds: workout.restSeconds)
     workout.exercises.remove(at: index)
+    normalizeSupersets(in: &workout.exercises)
+    reconcileRest(in: &workout)
     if let removedDeadline, workout.restEndsAt == removedDeadline,
       !workout.exercises.contains(where: {
         restDeadline(for: $0, seconds: workout.restSeconds) == removedDeadline
@@ -248,6 +276,7 @@ public enum WorkoutEngine {
     let multiplier = index > 0 ? workout.exercises[i].sets[index - 1].loadMultiplier : nil
     workout.exercises[i].sets.insert(
       WorkoutSet(repetitions: 0, loadMultiplier: multiplier), at: index)
+    if workout.exercises[i].supersetID != nil { reconcileRest(in: &workout) }
   }
 
   public static func removeSet(exerciseID: UUID, setID: UUID, from workout: inout Workout) throws {
@@ -259,15 +288,12 @@ public enum WorkoutEngine {
       throw TrainingError.missingSet
     }
     guard workout.exercises[row].sets.count > 1 else { throw TrainingError.invalidSetCount }
-    let set = workout.exercises[row].sets[index]
-    let deadline =
-      set.isFullyCompleted
-      ? set.stages.last?.completedAt?.addingTimeInterval(Double(workout.restSeconds)) : nil
+    let deadline = restDeadline(in: workout, exerciseID: exerciseID, setIndex: index)
+    let wasGrouped = workout.exercises[row].supersetID != nil
     workout.exercises[row].sets.remove(at: index)
+    if wasGrouped { reconcileRest(in: &workout) }
     if let deadline, workout.restEndsAt == deadline,
-      !workout.exercises.contains(where: {
-        restDeadline(for: $0, seconds: workout.restSeconds) == deadline
-      })
+      !hasRestDeadline(deadline, in: workout)
     {
       workout.restEndsAt = nil
     }

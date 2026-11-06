@@ -77,10 +77,16 @@ public struct WorkoutExercise: Identifiable, Codable, Equatable, Sendable {
   public var id: UUID
   public var exercise: Exercise
   public var sets: [WorkoutSet]
-  public init(id: UUID = UUID(), exercise: Exercise, sets: [WorkoutSet] = [WorkoutSet()]) {
+  /// Adjacent rows sharing this identifier alternate their sets as one superset.
+  public var supersetID: UUID?
+  public init(
+    id: UUID = UUID(), exercise: Exercise, sets: [WorkoutSet] = [WorkoutSet()],
+    supersetID: UUID? = nil
+  ) {
     self.id = id
     self.exercise = exercise
     self.sets = sets
+    self.supersetID = supersetID
   }
 }
 
@@ -93,10 +99,11 @@ public struct TemplateExercise: Identifiable, Codable, Equatable, Sendable {
   public var loadMultiplier: Int?
   /// Lossless individual targets; nil retains legacy uniform targets.
   public var plannedSets: [WorkoutSet]?
+  public var supersetID: UUID?
   public init(
     id: UUID = UUID(), exercise: Exercise, setCount: Int = 3,
     repetitions: Int = 8, weightKG: Double = 0, loadMultiplier: Int? = nil,
-    plannedSets: [WorkoutSet]? = nil
+    plannedSets: [WorkoutSet]? = nil, supersetID: UUID? = nil
   ) {
     self.id = id
     self.exercise = exercise
@@ -105,6 +112,7 @@ public struct TemplateExercise: Identifiable, Codable, Equatable, Sendable {
     self.weightKG = weightKG
     self.loadMultiplier = loadMultiplier
     self.plannedSets = plannedSets
+    self.supersetID = supersetID
   }
 }
 
@@ -116,10 +124,12 @@ public struct WorkoutTemplate: Identifiable, Codable, Equatable, Sendable {
   public var muscleGroups: Set<MuscleGroup>
   public var muscles: Set<ExerciseMuscle>
   public var preferredWeekdays: Set<WorkoutWeekday>
+  /// The existing exercises remain the first variation, preserving installed templates.
+  public var variations: [WorkoutTemplateVariation]
   public init(
     id: UUID = UUID(), name: String, exercises: [TemplateExercise], restSeconds: Int = 0,
     muscleGroups: Set<MuscleGroup> = [], muscles: Set<ExerciseMuscle> = [],
-    preferredWeekdays: Set<WorkoutWeekday> = []
+    preferredWeekdays: Set<WorkoutWeekday> = [], variations: [WorkoutTemplateVariation] = []
   ) {
     self.id = id
     self.name = name
@@ -128,10 +138,11 @@ public struct WorkoutTemplate: Identifiable, Codable, Equatable, Sendable {
     self.muscleGroups = muscleGroups
     self.muscles = muscles
     self.preferredWeekdays = preferredWeekdays
+    self.variations = variations
   }
 
   private enum CodingKeys: String, CodingKey {
-    case id, name, exercises, restSeconds, muscleGroups, muscles, preferredWeekdays
+    case id, name, exercises, restSeconds, muscleGroups, muscles, preferredWeekdays, variations
   }
 
   public init(from decoder: Decoder) throws {
@@ -145,6 +156,8 @@ public struct WorkoutTemplate: Identifiable, Codable, Equatable, Sendable {
     muscles = try container.decodeIfPresent(Set<ExerciseMuscle>.self, forKey: .muscles) ?? []
     preferredWeekdays =
       try container.decodeIfPresent(Set<WorkoutWeekday>.self, forKey: .preferredWeekdays) ?? []
+    variations =
+      try container.decodeIfPresent([WorkoutTemplateVariation].self, forKey: .variations) ?? []
   }
 
   public var muscleSelection: ExerciseMuscleSelection {
@@ -158,6 +171,7 @@ public struct WorkoutTemplate: Identifiable, Codable, Equatable, Sendable {
   /// Interactive logging can start without numeric targets while legacy plans remain readable.
   public func start(at date: Date = Date(), prefillTargets: Bool = true) throws -> Workout {
     try Validation.template(self)
+    var groupIDs: [UUID: UUID] = [:]
     return Workout(
       name: name, startedAt: date,
       exercises: exercises.map { item in
@@ -177,7 +191,13 @@ public struct WorkoutTemplate: Identifiable, Codable, Equatable, Sendable {
                 WorkoutSet(
                   repetitions: item.repetitions, weightKG: item.weightKG,
                   loadMultiplier: item.loadMultiplier)
-              })
+              },
+          supersetID: item.supersetID.map { id in
+            if let mapped = groupIDs[id] { return mapped }
+            let mapped = UUID()
+            groupIDs[id] = mapped
+            return mapped
+          })
       }, restSeconds: restSeconds)
   }
 }
