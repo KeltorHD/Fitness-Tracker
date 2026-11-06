@@ -1543,10 +1543,11 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertGreaterThan(add.frame.midX, templates.frame.midX)
     XCTAssertEqual(finish.frame.midX, controls.frame.midX, accuracy: 2)
     for button in [cancel, pause, templates, add] {
-      XCTAssertEqual(button.frame.midY, finish.frame.midY, accuracy: 2)
+      XCTAssertEqual(button.frame.maxY, finish.frame.maxY, accuracy: 2)
+      XCTAssertGreaterThan(button.frame.midY, finish.frame.midY)
       XCTAssertGreaterThanOrEqual(button.frame.width, 44)
       XCTAssertGreaterThanOrEqual(button.frame.height, 44)
-      XCTAssertGreaterThan(finish.frame.width, button.frame.width)
+      XCTAssertEqual(button.frame.width, cancel.frame.width, accuracy: 2)
       XCTAssertGreaterThan(finish.frame.height, button.frame.height)
     }
     XCTAssertGreaterThanOrEqual(cancel.frame.minX, controls.frame.minX)
@@ -1573,11 +1574,29 @@ final class FitnessTrackerUITests: XCTestCase {
     select.tap()
     let exercise = app.buttons["openWorkoutExercise"].firstMatch
     XCTAssertTrue(exercise.waitForExistence(timeout: 5))
+    let sessionPanel = app.descendants(matching: .any).matching(identifier: "sessionActionBlock")
+      .firstMatch
+    XCTAssertTrue(sessionPanel.waitForExistence(timeout: 5))
+    let sessionPanelHeight = sessionPanel.frame.height
+    let finishCircleWidth = finish.frame.width
+    let sessionScreenshot = XCTAttachment(screenshot: app.screenshot())
+    sessionScreenshot.name = "Active workout controls"
+    sessionScreenshot.lifetime = .keepAlways
+    self.add(sessionScreenshot)
     exercise.tap()
     XCTAssertTrue(app.buttons["addWorkoutSet"].waitForExistence(timeout: 5))
     app.buttons["addWorkoutSet"].tap()
     let complete = app.buttons["completeSet"].firstMatch
     XCTAssertTrue(complete.waitForExistence(timeout: 5))
+    let exercisePanel = app.descendants(matching: .any).matching(identifier: "exerciseActionBlock")
+      .firstMatch
+    XCTAssertTrue(exercisePanel.waitForExistence(timeout: 5))
+    XCTAssertEqual(exercisePanel.frame.height, sessionPanelHeight, accuracy: 2)
+    XCTAssertEqual(complete.frame.width, finishCircleWidth, accuracy: 2)
+    let exerciseScreenshot = XCTAttachment(screenshot: app.screenshot())
+    exerciseScreenshot.name = "Exercise controls"
+    exerciseScreenshot.lifetime = .keepAlways
+    self.add(exerciseScreenshot)
     fillWorkoutSet(in: app)
     complete.tap()
     app.buttons["closeWorkoutExercise"].tap()

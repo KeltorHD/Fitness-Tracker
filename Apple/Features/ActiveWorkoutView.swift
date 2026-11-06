@@ -51,7 +51,9 @@ struct ActiveWorkoutView: View {
               addTemplates: { templateAddition = TemplateAdditionRequest(id: workout.id) },
               addExercise: {
                 insertion = InsertionRequest(workoutID: workout.id, position: .end)
-              })
+              }
+            )
+            .padding(.bottom, 8)
           }
           .toolbar {
             ToolbarItem(placement: .topBarLeading) {

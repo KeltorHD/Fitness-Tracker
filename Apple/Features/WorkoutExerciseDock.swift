@@ -24,8 +24,10 @@ struct WorkoutExerciseDock: View {
     GlassEffectContainer(spacing: 4) {
       ViewThatFits(in: .horizontal) {
         controls(height: actionRowHeight, navigationWidth: 64, plusWidth: 60)
-          .frame(minWidth: isOngoing ? 288 + actionRowHeight : 240)
-        controls(height: 52, navigationWidth: 52, plusWidth: 56)
+          .frame(
+            minWidth: isOngoing
+              ? WorkoutControlSizing.regularMinimumWidth(for: actionRowHeight) : 240)
+        controls(height: WorkoutControlSizing.compactRowHeight, navigationWidth: 52, plusWidth: 56)
       }
     }
     .padding(.vertical, 8)
@@ -51,7 +53,7 @@ struct WorkoutExerciseDock: View {
   }
 
   private func actionBlock(height: CGFloat, plusWidth: CGFloat) -> some View {
-    HStack(alignment: .bottom, spacing: 0) {
+    WorkoutActionSurface {
       if isOngoing {
         Button(action: pause) {
           Image(systemName: workout.status == .paused ? "play.fill" : "pause.fill")
@@ -65,7 +67,7 @@ struct WorkoutExerciseDock: View {
       } else {
         Spacer(minLength: 0)
       }
-      primaryAction(height: height + (height >= 56 ? 16 : 12)).zIndex(1)
+      primaryAction(height: WorkoutControlSizing.primaryDiameter(for: height)).zIndex(1)
       if isOngoing {
         Button(action: add) {
           Image(systemName: "plus").font(.system(size: 22, weight: .semibold))
@@ -83,11 +85,7 @@ struct WorkoutExerciseDock: View {
         Spacer(minLength: 0)
       }
     }
-    .font(.system(size: 18, weight: .semibold)).buttonStyle(WorkoutControlPressStyle())
-    .padding(.horizontal, 8).padding(.top, 4).padding(.bottom, 8)
-    .glassEffect(.regular, in: WorkoutNavigationShape(rise: 16, shoulderWidth: 48))
-    .themeGlow(in: WorkoutNavigationShape(rise: 16, shoulderWidth: 48))
-    .accessibilityElement(children: .contain)
+    .font(.system(size: 18, weight: .semibold))
     .accessibilityIdentifier("exerciseActionBlock")
   }
 
