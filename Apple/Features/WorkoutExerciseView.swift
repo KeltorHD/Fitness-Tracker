@@ -338,19 +338,6 @@ struct WorkoutExerciseView: View {
       $0.note?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false
     }
     return VStack(spacing: 0) {
-      if [.active, .paused].contains(workout.status) {
-        Text(
-          model.previousValues.map {
-            L10n.format(
-              "Предыдущая тренировка: %@",
-              $0.date.formatted(.dateTime.day().month(.abbreviated).year().locale(locale)),
-              locale: locale)
-          } ?? L10n.text("Нет предыдущих значений", locale: locale)
-        )
-        .font(.caption).foregroundStyle(.secondary)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.vertical, 8).accessibilityIdentifier("previousWorkoutValuesHeader")
-      }
       WorkoutSetTableHeader(unit: model.unit, notesExpanded: notesExpanded).padding(.top, 12)
         .padding(
           .bottom, 8)

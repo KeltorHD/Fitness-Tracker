@@ -782,7 +782,8 @@ final class FitnessTrackerUITests: XCTestCase {
       )
       .firstMatch.exists)
     XCTAssertGreaterThanOrEqual(weight.frame.width, 44)
-    XCTAssertLessThanOrEqual(weight.frame.width, 88)
+    XCTAssertLessThanOrEqual(weight.frame.width, 76)
+    XCTAssertFalse(app.staticTexts["previousWorkoutValuesHeader"].exists)
     let compactTable = XCTAttachment(screenshot: app.screenshot())
     compactTable.name = "Compact workout table with previous values"
     compactTable.lifetime = .keepAlways

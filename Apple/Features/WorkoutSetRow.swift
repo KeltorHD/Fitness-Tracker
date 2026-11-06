@@ -41,7 +41,7 @@ struct WorkoutSetRow<ContextActions: View>: View {
   @Environment(\.locale) private var locale
   @Environment(\.dynamicTypeSize) private var typeSize
   @ScaledMetric(relativeTo: .caption) private var expandedNoteWidth: CGFloat = 84
-  @ScaledMetric(relativeTo: .body) private var inputWidth: CGFloat = 88
+  @ScaledMetric(relativeTo: .body) private var inputWidth: CGFloat = 76
   private var noteColumnWidth: CGFloat { notesExpanded ? min(expandedNoteWidth, 112) : 44 }
   let set: WorkoutSet
   let index: Int
@@ -270,11 +270,11 @@ struct WorkoutSetRow<ContextActions: View>: View {
         begin: { edit(field) }, advance: advance
       )
       .frame(
-        maxWidth: typeSize.isAccessibilitySize ? .infinity : min(inputWidth, 112), minHeight: 44
+        maxWidth: typeSize.isAccessibilitySize ? .infinity : min(inputWidth, 100), minHeight: 44
       )
       .layoutPriority(1)
       .background {
-        RoundedRectangle(cornerRadius: 9)
+        RoundedRectangle(cornerRadius: 8)
           .fill(active ? colorTheme.accent.opacity(0.12) : FitTheme.paper.opacity(0.65))
           .padding(.vertical, 6)
       }
