@@ -3,26 +3,56 @@ import Foundation
 import Observation
 
 struct WorkoutSetDraft {
-  var weight: String
-  var repetitions: String
-  private let originalWeightKG: Double
-  private let originalText: String
+  var weight: String {
+    get { weightText }
+    set {
+      weightText = newValue
+      weightWasEdited = true
+    }
+  }
+  var repetitions: String {
+    get { repetitionText }
+    set {
+      repetitionText = newValue
+      repetitionsWereEdited = true
+    }
+  }
+  private var weightText = ""
+  private var repetitionText = ""
+  private var weightWasEdited = false
+  private var repetitionsWereEdited = false
+  private var uneditedWeightKG: Double?
   private let decimalSeparator: String
 
-  init(set: WorkoutSet, unit: WeightUnit, locale: Locale) {
-    weight = unit.display(set.weightKG).formatted(
-      .number.locale(locale).grouping(.never).precision(.fractionLength(0...2)))
-    repetitions = set.repetitions == 0 ? "" : String(set.repetitions)
-    originalWeightKG = set.weightKG
-    originalText = weight
-    if set.completedAt == nil, set.repetitions == 0, set.weightKG == 0 { weight = "" }
+  init(set: WorkoutSet, unit: WeightUnit, locale: Locale, previous: DropSetStage? = nil) {
     decimalSeparator = locale.decimalSeparator ?? "."
+    refresh(set: set, previous: previous, unit: unit, locale: locale)
+  }
+
+  /// History is a temporary fallback. Even an explicit clear is a user edit and wins on refresh.
+  mutating func refresh(
+    set: WorkoutSet, previous: DropSetStage?, unit: WeightUnit, locale: Locale
+  ) {
+    if !weightWasEdited {
+      let isEmpty = set.completedAt == nil && set.repetitions == 0 && set.weightKG == 0
+      let kilograms = isEmpty ? previous?.weightKG : set.weightKG
+      uneditedWeightKG = kilograms
+      weightText =
+        kilograms.map {
+          unit.display($0).formatted(
+            .number.locale(locale).grouping(.never).precision(.fractionLength(0...2)))
+        } ?? ""
+    }
+    if !repetitionsWereEdited {
+      let count = set.repetitions > 0 ? set.repetitions : previous?.repetitions
+      repetitionText = count.map(String.init) ?? ""
+    }
   }
 
   func weightInKG(unit: WeightUnit) throws -> Double {
-    if weight == originalText {
-      try Validation.set(WorkoutSet(repetitions: 1, weightKG: originalWeightKG))
-      return originalWeightKG
+    if !weightWasEdited, let uneditedWeightKG {
+      try Validation.set(WorkoutSet(repetitions: 1, weightKG: uneditedWeightKG))
+      return uneditedWeightKG
     }
     let input = weight.trimmingCharacters(in: .whitespacesAndNewlines)
     guard !input.isEmpty, input.count <= 20 else { throw TrainingError.invalidWeight }
@@ -84,10 +114,13 @@ enum WorkoutExerciseAdvance { case stay, moved, finished }
   private let locale: Locale
   private let workoutID: UUID
 
-  init(workout: Workout, exerciseID: UUID, unit: WeightUnit, locale: Locale) {
+  init(
+    workout: Workout, exerciseID: UUID, unit: WeightUnit, locale: Locale, history: [Workout] = []
+  ) {
     self.exerciseID = exerciseID
     self.unit = unit
     self.locale = locale
+    self.history = history
     workoutID = workout.id
     refresh(workout)
   }
@@ -150,10 +183,15 @@ enum WorkoutExerciseAdvance { case stay, moved, finished }
     }
     let ids = Set(pending.map(\.id))
     drafts = drafts.filter { ids.contains($0.key) }
-    for stage in pending where drafts[stage.id] == nil {
-      drafts[stage.id] = WorkoutSetDraft(
-        set: WorkoutSet(id: stage.id, repetitions: stage.repetitions, weightKG: stage.weightKG),
-        unit: unit, locale: locale)
+    for stage in pending {
+      let set = WorkoutSet(id: stage.id, repetitions: stage.repetitions, weightKG: stage.weightKG)
+      let previous = previousValues?.stages[stage.id]
+      if drafts[stage.id] == nil {
+        drafts[stage.id] = WorkoutSetDraft(
+          set: set, unit: unit, locale: locale, previous: previous)
+      } else {
+        drafts[stage.id]?.refresh(set: set, previous: previous, unit: unit, locale: locale)
+      }
     }
     let sets = exercise(in: workout)?.sets ?? []
     if !sets.contains(where: { $0.id == selectedSetID && !$0.isFullyCompleted }) {

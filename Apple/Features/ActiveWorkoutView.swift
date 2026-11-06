@@ -344,6 +344,7 @@ struct ActiveWorkoutView: View {
           )
           .padding().background(FitTheme.card, in: .rect(cornerRadius: FitTheme.radius))
         }
+        .padding(.top, 12)
       }
       .listRowSeparator(.hidden)
       .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))

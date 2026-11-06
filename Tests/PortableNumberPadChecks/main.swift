@@ -147,10 +147,144 @@ private func expect(_ condition: Bool, _ message: String) throws {
     try expect(pad.field == nil, "Another workout cannot reuse the editor")
     try checkLegacyAndPounds(date: date)
     try checkCursor(date: date)
+    try checkFirstInsertionReplacement(date: date)
+    try checkNativeSelectionCallbacks(date: date)
     print(
-      "Portable number pad: native caret, range replacement, C/backspace, decimal/bounds, field traversal, copy isolation, draft-only changes, immutable completions, pause/removal, legacy zero reps and pounds precision passed (no Apple SDK)."
+      "Portable number pad: first insertion replacement, native caret, range replacement, C/backspace, decimal/bounds, field traversal, copy isolation, draft-only changes, immutable completions, pause/removal, legacy zero reps and pounds precision passed (no Apple SDK)."
     )
   }
+
+  @MainActor private static func checkNativeSelectionCallbacks(date: Date) throws {
+    let set = WorkoutSet(repetitions: 8, weightKG: 45)
+    let row = WorkoutExercise(exercise: Exercise(name: "Native focus", muscle: .back), sets: [set])
+    let workout = Workout(name: "Native focus", startedAt: date, exercises: [row])
+    let editor = WorkoutExercisePresentation(
+      workout: workout, exerciseID: row.id, unit: .kilograms, locale: Locale(identifier: "ru_RU"))
+    let pad = WorkoutNumberPadModel(editor: editor, locale: Locale(identifier: "ru_RU"))
+    pad.begin(.weight(set.id), in: workout)
+    pad.selectText(NSRange(location: 0, length: 0), userInitiated: false)
+    try expect(
+      pad.selection == NSRange(location: 2, length: 0),
+      "Automatic caret placement preserves the initial model caret")
+    pad.digit(3)
+    try expect(pad.text == "3", "Automatic UIKit caret placement does not cancel replacement")
+    pad.dismiss()
+    editor.editWeight("45", setID: set.id)
+    pad.begin(.weight(set.id), in: workout)
+    pad.selectText(NSRange(location: 0, length: 0), userInitiated: false)
+    pad.digit(6)
+    try expect(pad.text == "6", "Refocus replacement survives a delayed native selection callback")
+    pad.dismiss()
+    editor.editWeight("45", setID: set.id)
+    pad.begin(.weight(set.id), in: workout)
+    pad.selectText(NSRange(location: 0, length: 0), userInitiated: false)
+    pad.delete()
+    try expect(pad.text == "4", "Initial backspace uses the preserved caret after native focus")
+    pad.dismiss()
+    editor.editWeight("45", setID: set.id)
+    pad.begin(.weight(set.id), in: workout)
+    pad.beginSelectionInteraction()
+    pad.selectText(NSRange(location: 2, length: 0), userInitiated: false)
+    pad.digit(3)
+    try expect(pad.text == "453", "An explicit tap at the existing caret permits appending")
+    pad.dismiss()
+    editor.editWeight("45", setID: set.id)
+    pad.begin(.weight(set.id), in: workout)
+    pad.beginSelectionInteraction()
+    pad.selectText(NSRange(location: 0, length: 0), userInitiated: false)
+    pad.digit(3)
+    try expect(pad.text == "345", "A deliberate caret move permits insertion at the start")
+    pad.dismiss()
+    pad.selectText(NSRange(location: 0, length: 0), userInitiated: false)
+    try expect(pad.field == nil, "A late selection callback cannot reopen the hidden panel")
+  }
+
+  @MainActor private static func checkFirstInsertionReplacement(date: Date) throws {
+    let set = WorkoutSet(repetitions: 12, weightKG: 123.5)
+    let row = WorkoutExercise(exercise: Exercise(name: "Replace", muscle: .back), sets: [set])
+    let workout = Workout(name: "Replace", startedAt: date, exercises: [row])
+    let editor = WorkoutExercisePresentation(
+      workout: workout, exerciseID: row.id, unit: .kilograms, locale: Locale(identifier: "ru_RU"))
+    let pad = WorkoutNumberPadModel(editor: editor, locale: Locale(identifier: "ru_RU"))
+    pad.begin(.weight(set.id), in: workout)
+    try expect(
+      pad.text == "123,5" && pad.selection == NSRange(location: 5, length: 0),
+      "Focusing preserves the visible value with an insertion caret")
+    pad.dismiss()
+    try expect(
+      pad.field == nil && editor.drafts[set.id]?.weight == "123,5",
+      "Closing without typing preserves the initial value")
+    pad.begin(.weight(set.id), in: workout)
+    pad.reconcile(workout)
+    pad.digit(8)
+    pad.digit(0)
+    try expect(pad.text == "80", "The first digit replaces the whole value; later digits append")
+    pad.dismiss()
+    try expect(editor.drafts[set.id]?.weight == "80", "Hiding keeps the entered draft")
+    pad.begin(.weight(set.id), in: workout)
+    try expect(pad.text == "80", "Refocusing does not change the existing draft")
+    pad.digit(4)
+    pad.digit(2)
+    try expect(pad.text == "42", "Refocusing re-arms replacement for the next insertion")
+    pad.begin(.repetitions(set.id), in: workout)
+    try expect(pad.text == "12", "Changing fields preserves its displayed value until typing")
+    pad.replaceCharacters(in: pad.selection, with: "٩")
+    pad.digit(1)
+    try expect(pad.text == "91", "A first pasted digit replaces and normalizes repetitions")
+
+    editor.editWeight("123,5", setID: set.id)
+    pad.begin(.weight(set.id), in: workout)
+    pad.decimal()
+    pad.digit(5)
+    try expect(pad.text == "0,5", "A first decimal replaces an existing decimal value")
+    pad.dismiss()
+    pad.begin(.weight(set.id), in: workout)
+    pad.replaceCharacters(in: pad.selection, with: "42.75")
+    pad.digit(0)
+    try expect(pad.text == "42,750", "The first paste replaces; subsequent digits edit normally")
+    pad.dismiss()
+    pad.begin(.weight(set.id), in: workout)
+    let beforeInvalidPaste = pad.text
+    pad.replaceCharacters(in: pad.selection, with: "invalid")
+    try expect(
+      pad.text == beforeInvalidPaste && pad.error != nil,
+      "Rejected first input preserves the displayed value")
+    pad.digit(7)
+    try expect(pad.text == "7" && pad.error == nil, "Rejected input does not consume replacement")
+
+    pad.dismiss()
+    editor.editWeight("123,5", setID: set.id)
+    pad.begin(.weight(set.id), in: workout)
+    pad.selectText(NSRange(location: 1, length: 2))
+    pad.replaceCharacters(in: pad.selection, with: "88")
+    try expect(pad.text == "188,5", "An explicit selected range overrides first-input replacement")
+    pad.dismiss()
+    pad.begin(.weight(set.id), in: workout)
+    pad.delete()
+    pad.digit(9)
+    try expect(pad.text == "188,9", "Initial backspace edits one character and ends replacement")
+    pad.dismiss()
+    pad.begin(.weight(set.id), in: workout)
+    pad.clear()
+    try expect(pad.text.isEmpty, "C explicitly clears the existing value")
+    pad.digit(0)
+    try expect(pad.text == "0", "Zero is an explicit entered value")
+    pad.digit(5)
+    try expect(pad.text == "5", "Typing after zero does not retain an unwanted leading zero")
+    pad.dismiss()
+    pad.begin(.weight(set.id), in: workout)
+    pad.digit(0)
+    pad.dismiss()
+    pad.begin(.weight(set.id), in: workout)
+    try expect(pad.text == "0", "Refocusing preserves explicit bodyweight zero")
+    pad.digit(6)
+    try expect(pad.text == "6", "A first digit replaces a previously entered zero")
+    pad.dismiss()
+    try expect(
+      workout.exercises == [row] && workout.completedSets == 0,
+      "Replacement, hiding and refocusing never complete or persist a set")
+  }
+
   @MainActor private static func checkCursor(date: Date) throws {
     let row = WorkoutExercise(
       exercise: Exercise(name: "Caret", muscle: .legs),

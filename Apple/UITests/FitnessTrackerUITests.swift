@@ -653,16 +653,10 @@ final class FitnessTrackerUITests: XCTestCase {
   }
   @MainActor func testNumberPadClearsValuesAndCopiesFollowingRepetitions() {
     let app = launch()
-    XCTAssertTrue(app.buttons["startWorkout"].waitForExistence(timeout: 10))
-    app.buttons["startWorkout"].tap()
+    XCTAssertTrue(app.buttons["workoutStartAction"].waitForExistence(timeout: 10))
+    app.buttons["workoutStartAction"].tap()
     chooseFreeWorkout(in: app)
-    app.buttons["addExercise"].tap()
-    app.searchFields.firstMatch.tap()
-    app.searchFields.firstMatch.typeText("Приседания")
-    app.buttons.containing(.staticText, identifier: "Приседания").firstMatch.tap()
-    let select = app.buttons["selectLibraryExercise"]
-    XCTAssertTrue(select.waitForExistence(timeout: 5))
-    select.tap()
+    addGobletExercise(in: app)
     app.buttons["openWorkoutExercise"].firstMatch.tap()
     let weights = app.textFields.matching(
       NSPredicate(format: "identifier BEGINSWITH %@", "setWeight_"))
@@ -742,27 +736,29 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(app.buttons["finishWorkout"].isEnabled)
   }
 
-  @MainActor func testActiveWorkoutShowsRecordedPreviousValuesWithoutFillingNewTargets() {
-    let app = launch()
+  @MainActor func testPreviousWorkoutValuesPrefillTargetsAndFirstDigitReplacesFocusedValue() {
+    let app = launch(additionalArguments: ["-appearance", "dark", "-colorTheme", "forest"])
     let start = app.buttons["workoutStartAction"]
     XCTAssertTrue(start.waitForExistence(timeout: 10))
     start.tap()
-    let template = app.buttons["startWorkoutTemplate_20000000-0000-0000-0000-000000000001"]
-    reveal(template, in: app)
-    template.tap()
-    app.buttons["startSelectedTemplates"].tap()
+    chooseFreeWorkout(in: app)
+    addGobletExercise(in: app)
     let exercise = app.buttons["openWorkoutExercise"].firstMatch
     XCTAssertTrue(exercise.waitForExistence(timeout: 5))
+    let overview = XCTAttachment(screenshot: app.screenshot())
+    overview.name = "Workout notes spacing"
+    overview.lifetime = .keepAlways
+    add(overview)
     exercise.tap()
-    let previousHeader = app.staticTexts["previousWorkoutValuesHeader"]
-    XCTAssertTrue(previousHeader.waitForExistence(timeout: 5))
-    XCTAssertEqual(previousHeader.label, "Нет предыдущих значений")
+    let weights = app.textFields.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "setWeight_"))
+    let repetitions = app.textFields.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "setRepetitions_"))
+    XCTAssertTrue(weights.firstMatch.waitForExistence(timeout: 5))
+    assertEmptyWorkoutField(weights.firstMatch)
+    assertEmptyWorkoutField(repetitions.firstMatch)
     fillWorkoutSet(in: app, weight: 42, repetitions: 7)
     app.buttons["completeSet"].tap()
-    XCTAssertTrue(
-      app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "correctSetWeight_"))
-        .firstMatch.waitForExistence(timeout: 5))
-    app.buttons["closeWorkoutExercise"].tap()
     let finish = app.buttons["finishWorkout"]
     XCTAssertTrue(finish.waitForExistence(timeout: 5))
     XCTAssertTrue(finish.isEnabled)
@@ -772,40 +768,52 @@ final class FitnessTrackerUITests: XCTestCase {
     notice.buttons["Хорошо"].tap()
     XCTAssertTrue(start.waitForExistence(timeout: 5))
     start.tap()
-    reveal(template, in: app)
-    template.tap()
-    app.buttons["startSelectedTemplates"].tap()
+    chooseFreeWorkout(in: app)
+    addGobletExercise(in: app)
+    exercise.tap()
+    let weight = weights.firstMatch
+    let prefilled = XCTNSPredicateExpectation(
+      predicate: NSPredicate(format: "exists == true AND value == %@", "42"), object: weight)
+    XCTAssertEqual(XCTWaiter.wait(for: [prefilled], timeout: 5), .completed)
+    XCTAssertEqual(repetitions.firstMatch.value as? String, "7")
+    XCTAssertFalse(
+      app.staticTexts.matching(
+        NSPredicate(format: "identifier BEGINSWITH %@", "previousSetValues_")
+      )
+      .firstMatch.exists)
+    XCTAssertGreaterThanOrEqual(weight.frame.width, 44)
+    XCTAssertLessThanOrEqual(weight.frame.width, 88)
+    let compactTable = XCTAttachment(screenshot: app.screenshot())
+    compactTable.name = "Compact workout table with previous values"
+    compactTable.lifetime = .keepAlways
+    add(compactTable)
+
+    let setID = String(weight.identifier.dropFirst("setWeight_".count))
+    weight.tap()
+    XCTAssertTrue(app.buttons["numberPadDigit_4"].waitForExistence(timeout: 5))
+    XCTAssertEqual(weight.value as? String, "42")
+    app.buttons["numberPadDigit_4"].tap()
+    XCTAssertEqual(weight.value as? String, "4")
+    app.buttons["numberPadDigit_5"].tap()
+    XCTAssertEqual(weight.value as? String, "45")
+    XCTAssertEqual(repetitions.firstMatch.value as? String, "7")
+    app.buttons["numberPadHide"].tap()
+    XCTAssertEqual(weight.value as? String, "45")
+    weight.tap()
+    XCTAssertTrue(app.buttons["numberPadDigit_3"].waitForExistence(timeout: 5))
+    XCTAssertEqual(weight.value as? String, "45")
+    app.buttons["numberPadDigit_3"].tap()
+    XCTAssertEqual(weight.value as? String, "3")
+    XCTAssertEqual(repetitions.firstMatch.value as? String, "7")
+    app.buttons["numberPadHide"].tap()
+    app.buttons["completeSet"].tap()
+    XCTAssertTrue(finish.waitForExistence(timeout: 5))
     XCTAssertTrue(exercise.waitForExistence(timeout: 5))
     exercise.tap()
-    XCTAssertTrue(previousHeader.waitForExistence(timeout: 5))
-    XCTAssertTrue(previousHeader.label.hasPrefix("Предыдущая тренировка: "))
-    let weights = app.textFields.matching(
-      NSPredicate(format: "identifier BEGINSWITH %@", "setWeight_"))
-    let repetitions = app.textFields.matching(
-      NSPredicate(format: "identifier BEGINSWITH %@", "setRepetitions_"))
-    XCTAssertTrue(weights.firstMatch.waitForExistence(timeout: 5))
-    assertEmptyWorkoutField(weights.firstMatch)
-    assertEmptyWorkoutField(repetitions.firstMatch)
-    let firstSetID = String(weights.firstMatch.identifier.dropFirst("setWeight_".count))
-    let previous = app.staticTexts["previousSetValues_\(firstSetID)"]
-    XCTAssertTrue(previous.waitForExistence(timeout: 5))
-    XCTAssertTrue(previous.label.hasPrefix("Ранее: 42 "))
-    XCTAssertTrue(previous.label.hasSuffix(" × 7"))
-    let recordedValues = previous.label
-    let secondWeight = weights.element(boundBy: 1)
-    reveal(secondWeight, in: app)
-    let secondSetID = String(secondWeight.identifier.dropFirst("setWeight_".count))
-    let missingPrevious = app.staticTexts["previousSetValues_\(secondSetID)"]
-    reveal(missingPrevious, in: app)
-    XCTAssertEqual(missingPrevious.label, "Ранее: —")
-    app.buttons["pauseExerciseWorkout"].tap()
-    XCTAssertTrue(previousHeader.exists)
-    for _ in 0..<6 where !previous.isHittable { app.swipeDown() }
-    XCTAssertTrue(previous.waitForExistence(timeout: 5))
-    XCTAssertEqual(previous.label, recordedValues)
-    reveal(missingPrevious, in: app)
-    XCTAssertEqual(missingPrevious.label, "Ранее: —")
-    XCTAssertFalse(app.buttons["completeSet"].isEnabled)
+    let savedWeight = app.buttons["correctSetWeight_\(setID)"]
+    XCTAssertTrue(savedWeight.waitForExistence(timeout: 5))
+    XCTAssertEqual(savedWeight.value as? String, "3")
+    XCTAssertEqual(app.buttons["correctSetRepetitions_\(setID)"].value as? String, "7")
   }
 
   @MainActor func testWorkoutTableKeepsEditingAndCompletedRowsReadOnly() {
@@ -1366,6 +1374,23 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(app.buttons["addExercise"].waitForExistence(timeout: 5))
   }
 
+  @MainActor private func addGobletExercise(in app: XCUIApplication) {
+    let add = app.buttons["addExercise"]
+    XCTAssertTrue(add.waitForExistence(timeout: 5))
+    add.tap()
+    let search = app.searchFields.firstMatch
+    XCTAssertTrue(search.waitForExistence(timeout: 5))
+    search.tap()
+    search.typeText("Goblet")
+    let goblet = app.buttons.containing(.staticText, identifier: "Гоблет-приседания").firstMatch
+    XCTAssertTrue(goblet.waitForExistence(timeout: 5))
+    goblet.tap()
+    let select = app.buttons["selectLibraryExercise"]
+    XCTAssertTrue(select.waitForExistence(timeout: 5))
+    select.tap()
+    XCTAssertTrue(app.buttons["openWorkoutExercise"].firstMatch.waitForExistence(timeout: 5))
+  }
+
   @MainActor private func assertEmptyWorkoutField(
     _ field: XCUIElement, file: StaticString = #filePath, line: UInt = #line
   ) {
@@ -1819,56 +1844,79 @@ final class FitnessTrackerUITests: XCTestCase {
   }
   @MainActor func testSetNoteAndContextInsertion() {
     let app = launch()
-    XCTAssertTrue(app.buttons["startWorkout"].waitForExistence(timeout: 10))
-    app.buttons["startWorkout"].tap()
+    XCTAssertTrue(app.buttons["workoutStartAction"].waitForExistence(timeout: 10))
+    app.buttons["workoutStartAction"].tap()
     chooseFreeWorkout(in: app)
-    app.buttons["addExercise"].tap()
-    app.searchFields.firstMatch.tap()
-    app.searchFields.firstMatch.typeText("Приседания")
-    app.buttons.containing(.staticText, identifier: "Приседания").firstMatch.tap()
-    XCTAssertTrue(app.buttons["selectLibraryExercise"].waitForExistence(timeout: 5))
-    app.buttons["selectLibraryExercise"].tap()
+    addGobletExercise(in: app)
     app.buttons["openWorkoutExercise"].firstMatch.tap()
-    let weight = app.textFields.matching(
-      NSPredicate(format: "identifier BEGINSWITH %@", "setWeight_")
-    )
-    .firstMatch
+    let weights = app.textFields.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "setWeight_"))
+    let weight = weights.firstMatch
     XCTAssertTrue(weight.waitForExistence(timeout: 5))
+    let weightID = weight.identifier
+    let setID = String(weightID.dropFirst("setWeight_".count))
+    let note = app.buttons["setNote_\(setID)"]
+    XCTAssertFalse(note.exists)
+    XCTAssertFalse(app.buttons["Добавить заметку к подходу"].exists)
     let initialWeightWidth = weight.frame.width
-    app.descendants(matching: .any).matching(
-      NSPredicate(format: "identifier BEGINSWITH %@", "setIndex_")
-    ).firstMatch.press(forDuration: 1)
-    app.buttons["Заметка к подходу"].tap()
+    let row = app.cells.containing(.textField, identifier: weightID).firstMatch
+    XCTAssertTrue(row.waitForExistence(timeout: 5))
+    weight.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+      .press(
+        forDuration: 0.05,
+        thenDragTo: row.coordinate(withNormalizedOffset: CGVector(dx: 0.95, dy: 0.5)))
+    XCTAssertFalse(app.buttons["numberPadHide"].exists)
+    let addNote = app.buttons["noteSwipe_\(setID)"]
+    XCTAssertTrue(addNote.waitForExistence(timeout: 5))
+    addNote.tap()
     let editor = app.textViews["setNoteEditor"]
     XCTAssertTrue(editor.waitForExistence(timeout: 5))
     editor.tap()
     editor.typeText("Keep elbows close")
     app.buttons["saveSetNote"].tap()
-    let note = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "setNote_"))
-      .firstMatch
+    XCTAssertTrue(editor.waitForNonExistence(timeout: 5))
     XCTAssertTrue(note.waitForExistence(timeout: 5))
-    XCTAssertLessThan(weight.frame.width, initialWeightWidth)
+    XCTAssertLessThanOrEqual(weight.frame.width, initialWeightWidth)
+    XCTAssertGreaterThanOrEqual(weight.frame.width, 44)
     XCTAssertEqual(note.value as? String, "Keep elbows close")
     XCTAssertLessThanOrEqual(note.frame.width, 112)
     note.tap()
     XCTAssertTrue(editor.waitForExistence(timeout: 5))
     XCTAssertEqual(editor.value as? String, "Keep elbows close")
     app.buttons["Закрыть"].tap()
-    let count = app.textFields.matching(
-      NSPredicate(format: "identifier BEGINSWITH %@", "setWeight_")
-    )
-    .count
-    app.descendants(matching: .any).matching(
-      NSPredicate(format: "identifier BEGINSWITH %@", "setIndex_")
-    ).firstMatch.press(forDuration: 1)
-    app.buttons["Добавить подход после"].tap()
-    XCTAssertEqual(
-      app.textFields.matching(NSPredicate(format: "identifier BEGINSWITH %@", "setWeight_")).count,
-      count + 1)
-    app.cells.containing(.textField, identifier: weight.identifier).firstMatch.swipeLeft()
-    app.buttons["Удалить подход"].firstMatch.tap()
-    XCTAssertFalse(app.buttons["Удалить подход"].exists)
-    XCTAssertFalse(note.exists)
+    XCTAssertTrue(editor.waitForNonExistence(timeout: 5))
+    let index = app.descendants(matching: .any).matching(identifier: "setIndex_\(setID)").firstMatch
+    index.press(forDuration: 1)
+    let contextNote = app.buttons.matching(
+      NSPredicate(format: "label == %@", "Заметка к подходу")
+    ).firstMatch
+    XCTAssertTrue(contextNote.waitForExistence(timeout: 5))
+    contextNote.tap()
+    XCTAssertTrue(editor.waitForExistence(timeout: 5))
+    XCTAssertEqual(editor.value as? String, "Keep elbows close")
+    app.buttons["Закрыть"].tap()
+    XCTAssertTrue(editor.waitForNonExistence(timeout: 5))
+    let count = weights.count
+    index.press(forDuration: 1)
+    let addAfter = app.buttons.matching(
+      NSPredicate(format: "label == %@", "Добавить подход после")
+    ).firstMatch
+    XCTAssertTrue(addAfter.waitForExistence(timeout: 5))
+    addAfter.tap()
+    let insertion = XCTNSPredicateExpectation(
+      predicate: NSPredicate(format: "count == %d", count + 1), object: weights)
+    XCTAssertEqual(XCTWaiter.wait(for: [insertion], timeout: 5), .completed)
+    XCTAssertEqual(weights.count, count + 1)
+    row.swipeLeft()
+    let remove = app.buttons["removeSetTarget_\(setID)"]
+    XCTAssertTrue(remove.waitForExistence(timeout: 5))
+    remove.tap()
+    XCTAssertTrue(app.textFields[weightID].waitForNonExistence(timeout: 5))
+    XCTAssertTrue(note.waitForNonExistence(timeout: 5))
+    let removal = XCTNSPredicateExpectation(
+      predicate: NSPredicate(format: "count == %d", count), object: weights)
+    XCTAssertEqual(XCTWaiter.wait(for: [removal], timeout: 5), .completed)
+    XCTAssertEqual(weights.count, count)
   }
 
 }

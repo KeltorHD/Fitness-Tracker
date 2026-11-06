@@ -67,13 +67,12 @@ struct WorkoutSetGroupView: View {
 
   private func row(_ value: WorkoutSet, index: Int, marker: String? = nil) -> some View {
     let child = marker != nil
+    let hasNote = value.note?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false
     return WorkoutSetRow(
       set: value, index: index, marker: marker, unit: model.unit, notesExpanded: notesExpanded,
       editable: workout.status == .active && value.completedAt == nil,
       showsDropMetadata: false, canCorrectCompleted: [.active, .paused].contains(workout.status),
       selected: value.id == model.selectedTargetID && workout.status == .active,
-      previous: model.previousValues?.stages[value.id],
-      showsPrevious: [.active, .paused].contains(workout.status) && model.previousValues != nil,
       weight: model.drafts[value.id]?.weight ?? "",
       repetitions: model.drafts[value.id]?.repetitions ?? "",
       numberPad: numberPad, edit: { numberPad.begin($0, in: workout) },
@@ -82,17 +81,24 @@ struct WorkoutSetGroupView: View {
         model.select(value.id, in: workout)
       },
       advance: { numberPad.advance(in: workout) }, editCompleted: { editCompleted(value) },
-      openNote: child ? nil : openNote,
+      openNote: child || !hasNote ? nil : openNote,
       contextActions: { contextActions(for: value, isChild: child) }
     )
     .listRowBackground(set.isDropSet ? FitTheme.paper : Color.clear)
     .listRowSeparator(set.isDropSet ? .hidden : .automatic)
     .id("number-\(value.id.uuidString)")
     .swipeActions(edge: .leading, allowsFullSwipe: false) {
-      if workout.status == .active, numberPad.field == nil {
-        Button(action: addAfter) {
-          Label(L10n.text("Добавить подход после", locale: locale), systemImage: "plus")
-        }.disabled((model.exercise(in: workout)?.sets.count ?? 30) >= 30)
+      if numberPad.field == nil {
+        if workout.status == .active {
+          Button(action: addAfter) {
+            Label(L10n.text("Добавить подход после", locale: locale), systemImage: "plus")
+          }.disabled((model.exercise(in: workout)?.sets.count ?? 30) >= 30)
+        }
+        if !child, [.active, .paused].contains(workout.status) {
+          Button(action: openNote) {
+            Label(L10n.text("Заметка к подходу", locale: locale), systemImage: "note.text")
+          }.tint(.secondary).accessibilityIdentifier("noteSwipe_\(set.id)")
+        }
       }
     }
     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
