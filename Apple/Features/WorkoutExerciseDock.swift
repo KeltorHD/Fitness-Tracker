@@ -151,17 +151,3 @@ struct WorkoutExerciseDock: View {
       L10n.text(forward ? "Следующее упражнение" : "Предыдущее упражнение", locale: locale))
   }
 }
-
-private struct WorkoutControlPressStyle: ButtonStyle {
-  @Environment(\.accessibilityReduceMotion) private var reduceMotion
-  @Environment(\.isEnabled) private var isEnabled
-
-  func makeBody(configuration: Configuration) -> some View {
-    configuration.label
-      .scaleEffect(reduceMotion ? 1 : configuration.isPressed ? 0.94 : 1)
-      .opacity(isEnabled ? (configuration.isPressed ? 0.86 : 1) : 0.4)
-      .animation(
-        reduceMotion ? nil : .spring(response: 0.22, dampingFraction: 0.76),
-        value: configuration.isPressed)
-  }
-}
