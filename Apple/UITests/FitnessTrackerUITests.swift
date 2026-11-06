@@ -1551,8 +1551,9 @@ final class FitnessTrackerUITests: XCTestCase {
     }
     XCTAssertGreaterThanOrEqual(cancel.frame.minX, controls.frame.minX)
     XCTAssertLessThanOrEqual(add.frame.maxX, controls.frame.maxX)
-    XCTAssertLessThan(pause.frame.maxX, finish.frame.minX)
-    XCTAssertGreaterThan(templates.frame.minX, finish.frame.maxX)
+    // The narrow layout removes gaps without shrinking the controls or overlapping their frames.
+    XCTAssertLessThanOrEqual(pause.frame.maxX, finish.frame.minX)
+    XCTAssertGreaterThanOrEqual(templates.frame.minX, finish.frame.maxX)
     XCTAssertEqual(finish.label, "Завершить тренировку")
     XCTAssertEqual(finish.value as? String, "Выполнено этапов: 0 из 0")
     let header = app.descendants(matching: .any).matching(identifier: "activeWorkoutHeader")

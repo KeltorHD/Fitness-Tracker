@@ -49,13 +49,12 @@ struct SessionControls: View {
     let progress = WorkoutCompletionProgress(workout: workout)
     let shape = WorkoutNavigationShape(rise: 12, shoulderWidth: 44)
     GlassEffectContainer(spacing: 4) {
-      HStack(spacing: 4) {
-        leadingActions.frame(maxWidth: .infinity)
-        finishButton(progress: progress)
-        trailingActions.frame(maxWidth: .infinity)
+      ViewThatFits(in: .horizontal) {
+        actionRow(progress: progress, spacing: 8).padding(.horizontal, 8)
+        actionRow(progress: progress, spacing: 0)
       }
       .controlSize(.regular)
-      .padding(.horizontal, 4).padding(.top, 4).padding(.bottom, 8)
+      .padding(.top, 4).padding(.bottom, 8)
       .background {
         if reduceTransparency { shape.fill(FitTheme.paper) }
       }
@@ -80,13 +79,20 @@ struct SessionControls: View {
     .sensoryFeedback(.success, trigger: readyFeedback)
   }
 
-  private var leadingActions: some View {
-    HStack(spacing: 4) {
+  private func actionRow(progress: WorkoutCompletionProgress, spacing: CGFloat) -> some View {
+    HStack(spacing: spacing) {
+      leadingActions(spacing: spacing).fixedSize().frame(maxWidth: .infinity)
+      finishButton(progress: progress).fixedSize()
+      trailingActions(spacing: spacing).fixedSize().frame(maxWidth: .infinity)
+    }
+  }
+
+  private func leadingActions(spacing: CGFloat) -> some View {
+    HStack(spacing: spacing) {
       Button(role: .destructive, action: cancel) {
         controlImage("xmark")
       }
       .buttonStyle(.glass).buttonBorderShape(.circle)
-      .frame(width: 44, height: 52).contentShape(.rect)
       .glassEffectID("cancel", in: controls)
       .accessibilityLabel(L10n.text("Отменить тренировку", locale: locale))
       .accessibilityIdentifier("cancelWorkout")
@@ -94,13 +100,12 @@ struct SessionControls: View {
     }
   }
 
-  private var trailingActions: some View {
-    HStack(spacing: 4) {
+  private func trailingActions(spacing: CGFloat) -> some View {
+    HStack(spacing: spacing) {
       Button(action: addTemplates) {
         controlImage("rectangle.stack.badge.plus")
       }
       .buttonStyle(.glass).buttonBorderShape(.circle)
-      .frame(width: 44, height: 52).contentShape(.rect)
       .glassEffectID("addTemplates", in: controls)
       .disabled(workout.status != .active)
       .accessibilityLabel(L10n.text("Добавить шаблоны", locale: locale))
@@ -125,7 +130,6 @@ struct SessionControls: View {
     }
     .buttonStyle(.glass)
     .buttonBorderShape(.circle)
-    .frame(width: 44, height: 52).contentShape(.rect)
     .glassEffectID("pause", in: controls)
     .accessibilityLabel(
       L10n.text(workout.status == .paused ? "Продолжить" : "Пауза", locale: locale)
@@ -137,7 +141,6 @@ struct SessionControls: View {
       controlImage("plus")
     }
     .buttonStyle(.glass).buttonBorderShape(.circle)
-    .frame(width: 44, height: 52).contentShape(.rect)
     .glassEffectID("addExercise", in: controls)
     .disabled(workout.status != .active)
     .accessibilityLabel(L10n.text("Добавить упражнение", locale: locale))
@@ -146,7 +149,7 @@ struct SessionControls: View {
 
   private func controlImage(_ symbol: String) -> some View {
     Image(systemName: symbol).font(.system(size: 20, weight: .semibold))
-      .frame(width: 20, height: 20).accessibilityHidden(true)
+      .frame(minWidth: 44, minHeight: 44).accessibilityHidden(true)
   }
 
   private func finishButton(progress: WorkoutCompletionProgress) -> some View {
@@ -163,11 +166,11 @@ struct SessionControls: View {
       }
       .font(.system(size: 28, weight: .bold))
       .foregroundStyle(FitTheme.accentForeground)
-      .frame(width: 48, height: 48).accessibilityHidden(true)
+      .frame(width: 56, height: 56).accessibilityHidden(true)
     }
     .buttonStyle(.glassProminent)
     .buttonBorderShape(.circle).tint(colorTheme.accent)
-    .frame(width: 72, height: 72).contentShape(.circle)
+    .frame(minWidth: 72, minHeight: 72).contentShape(.circle)
     .glassEffectID("finish", in: controls)
     .glassEffectTransition(.matchedGeometry)
     .themeGlow(in: Circle(), emphasized: true)
