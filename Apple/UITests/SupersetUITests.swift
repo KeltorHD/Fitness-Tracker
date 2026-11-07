@@ -41,7 +41,7 @@ final class SupersetUITests: XCTestCase {
     attach("Superset with an added full round", app: app)
   }
 
-  @MainActor func testGroupingAlternatesMembersAndRestsAfterTheWholeRound() {
+  @MainActor func testGroupingAlternatesMembersAndRestsAfterTheWholeRound() async throws {
     let app = launchFixture()
     startTemplate(in: app)
     app.buttons["activeWorkoutActions"].tap()
@@ -120,7 +120,39 @@ final class SupersetUITests: XCTestCase {
     attach("Saved superset in workout history", app: app)
     savedMembers.firstMatch.tap()
     XCTAssertTrue(app.staticTexts["activeSupersetHeading"].waitForExistence(timeout: 5))
+    try await assertSavedColumnsAlign(in: app)
     attach("Saved superset rounds remain grouped", app: app)
+  }
+
+  @MainActor private func assertSavedColumnsAlign(in app: XCUIApplication) async throws {
+    let screen = app.descendants(matching: .any)
+      .matching(identifier: "workoutExerciseScreen").firstMatch
+    let weights = screen.staticTexts.matching(NSPredicate(format: "label BEGINSWITH %@", "Вес:"))
+    let repetitions = screen.staticTexts.matching(
+      NSPredicate(format: "label BEGINSWITH %@", "Повторения:"))
+    XCTAssertTrue(weights.element(boundBy: 1).waitForExistence(timeout: 5))
+    XCTAssertTrue(repetitions.element(boundBy: 1).waitForExistence(timeout: 5))
+    let clock = ContinuousClock()
+    let deadline = clock.now.advanced(by: .seconds(5))
+    var frames: [CGRect] = []
+    repeat {
+      frames = [
+        weights.element(boundBy: 0).frame, weights.element(boundBy: 1).frame,
+        repetitions.element(boundBy: 0).frame, repetitions.element(boundBy: 1).frame,
+      ]
+      if frames.allSatisfy({ $0.width > 0 && $0.height > 0 }),
+        abs(frames[0].midX - frames[1].midX) <= 2,
+        abs(frames[2].midX - frames[3].midX) <= 2
+      {
+        break
+      }
+      try await Task.sleep(for: .milliseconds(100))
+    } while clock.now < deadline
+    XCTAssertTrue(frames.allSatisfy { $0.width > 0 && $0.height > 0 })
+    XCTAssertEqual(frames[0].midX, frames[1].midX, accuracy: 2)
+    XCTAssertEqual(frames[2].midX, frames[3].midX, accuracy: 2)
+    XCTAssertLessThan(frames[0].midX, frames[2].midX)
+    XCTAssertLessThan(frames[1].midX, frames[3].midX)
   }
 
   @MainActor private func launchFixture() -> XCUIApplication {
