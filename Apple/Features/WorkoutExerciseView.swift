@@ -43,7 +43,7 @@ struct WorkoutExerciseView: View {
           sessionHeader(workout)
           ZStack {
             exerciseCard(exercise, workout: workout)
-              .id(exercise.id)
+              .id(workout.groupContaining(exerciseID: exercise.id)?.id ?? exercise.id)
               .transition(
                 reduceMotion
                   ? .identity
@@ -57,6 +57,8 @@ struct WorkoutExerciseView: View {
           if numberPad.field == nil {
             WorkoutExerciseDock(
               workout: workout, exerciseIndex: model.index(in: workout) ?? 0,
+              navigationIndex: navigationIndex(in: workout),
+              navigationCount: workout.exerciseGroups.count,
               canComplete: workout.status == .active && model.selectedSetID != nil,
               completingDrop: exercise.sets.first { $0.id == model.selectedSetID }?.isDropSet
                 == true, completionTrigger: lastCompletion,
@@ -206,7 +208,7 @@ struct WorkoutExerciseView: View {
         Image(systemName: "chevron.down").frame(width: 44, height: 44).contentShape(.rect)
       }.accessibilityLabel(L10n.text("К списку упражнений", locale: locale))
         .accessibilityIdentifier("closeWorkoutExercise")
-      Text("\((model.index(in: workout) ?? 0) + 1)/\(workout.exercises.count)")
+      Text("\(navigationIndex(in: workout) + 1)/\(workout.exerciseGroups.count)")
         .font(.subheadline).foregroundStyle(.secondary).lineLimit(1).minimumScaleFactor(0.6)
         .frame(maxWidth: .infinity, alignment: .leading)
         .accessibilityIdentifier("activeExercisePosition")
@@ -278,6 +280,19 @@ struct WorkoutExerciseView: View {
 
   private func exerciseHeading(_ row: WorkoutExercise, workout: Workout) -> some View {
     VStack(spacing: 8) {
+      if let group = workout.groupContaining(exerciseID: row.id), group.isSuperset {
+        HStack(spacing: 8) {
+          Label(L10n.text("Суперсет", locale: locale), systemImage: "link")
+          Spacer(minLength: 0)
+          Text(
+            L10n.format(
+              "Круг %@ из %@",
+              String(min(group.completedRounds + 1, group.roundCount)),
+              String(group.roundCount), locale: locale))
+        }
+        .font(.subheadline.weight(.semibold)).foregroundStyle(colorTheme.accent)
+        .accessibilityIdentifier("activeSupersetHeading")
+      }
       HStack(alignment: .top, spacing: 8) {
         VStack(alignment: .leading, spacing: 4) {
           Text(L10n.exerciseName(row.exercise, locale: locale)).font(.title2.bold())
@@ -334,7 +349,7 @@ struct WorkoutExerciseView: View {
       FitTheme.paper, in: .rect(cornerRadius: FitTheme.exerciseCardRadius))
   }
   private func setTable(_ row: WorkoutExercise, workout: Workout) -> some View {
-    let notesExpanded = row.sets.contains {
+    let notesExpanded = workout.supersetRows(for: row.id).flatMap(\.sets).contains {
       $0.note?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false
     }
     return VStack(spacing: 0) {
@@ -346,45 +361,13 @@ struct WorkoutExerciseView: View {
         List {
           Group {
             Group {
-              ForEach(Array(row.sets.enumerated()), id: \.element.id) { index, set in
-                WorkoutSetGroupView(
-                  set: set, index: index, workout: workout, model: model, numberPad: numberPad,
-                  notesExpanded: notesExpanded,
-                  toggleWarmup: { toggleWarmup(set, row: row, workout: workout) },
-                  configureDrop: { configureDrop(workout, setID: set.id, adding: $0) },
-                  addAfter: {
-                    numberPad.dismiss()
-                    mutate(workout) {
-                      try WorkoutEngine.addSet(exerciseID: row.id, to: &$0, after: set.id)
-                    }
-                  },
-                  remove: {
-                    numberPad.dismiss()
-                    if set.isDropSet {
-                      removal = DropGroupRemovalRequest(exerciseID: row.id, setID: set.id)
-                    } else {
-                      mutate(workout) {
-                        try WorkoutEngine.removeSet(exerciseID: row.id, setID: set.id, from: &$0)
-                      }
-                    }
-                  },
-                  removeStage: { stageID in
-                    numberPad.dismiss()
-                    mutate(workout) {
-                      try WorkoutEngine.removeDropStage(
-                        in: &$0, exerciseID: row.id, setID: set.id, stageID: stageID)
-                    }
-                  },
-                  editCompleted: { target in
-                    numberPad.dismiss()
-                    correction = CompletedSetRequest(id: target.id, exerciseID: row.id, set: target)
-                  },
-                  openNote: {
-                    numberPad.dismiss()
-                    noteRequest = SetNoteRequest(
-                      id: set.id, exerciseID: row.id, text: set.note ?? "",
-                      editable: [.active, .paused].contains(workout.status))
-                  })
+              if let group = workout.groupContaining(exerciseID: row.id), group.isSuperset {
+                supersetRows(group, workout: workout, notesExpanded: notesExpanded)
+              } else {
+                ForEach(Array(row.sets.enumerated()), id: \.element.id) { index, set in
+                  setGroup(
+                    set, index: index, row: row, workout: workout, notesExpanded: notesExpanded)
+                }
               }
               if let error = error ?? store.error {
                 Text(L10n.text(error, locale: locale)).font(.footnote).foregroundStyle(.red)
@@ -407,6 +390,25 @@ struct WorkoutExerciseView: View {
             }
           }
         }
+        .onChange(of: model.selectedSetID) { previousID, setID in
+          if let setID, numberPad.field == nil,
+            let group = workout.groupContaining(exerciseID: row.id), group.isSuperset
+          {
+            let rounds = group.exercises.flatMap { member in
+              member.sets.enumerated().map { (id: $0.element.id, index: $0.offset) }
+            }
+            let round = rounds.first { $0.id == setID }?.index
+            let previousRound = rounds.first { $0.id == previousID }?.index
+            let changesRound = round != previousRound
+            withAnimation(reduceMotion ? nil : .smooth) {
+              if changesRound, let round {
+                proxy.scrollTo("superset-round-\(round)", anchor: .top)
+              } else {
+                proxy.scrollTo("number-\(setID.uuidString)", anchor: .center)
+              }
+            }
+          }
+        }
       }
     }
     .padding(.horizontal, 6).padding(.bottom, 6)
@@ -419,6 +421,101 @@ struct WorkoutExerciseView: View {
     .animation(reduceMotion ? nil : .snappy(duration: 0.28), value: notesExpanded)
     .accessibilityElement(children: .contain)
     .accessibilityIdentifier("workoutSetTableCard")
+  }
+
+  private func setGroup(
+    _ set: WorkoutSet, index: Int, row: WorkoutExercise, workout: Workout, notesExpanded: Bool
+  ) -> some View {
+    WorkoutSetGroupView(
+      set: set, index: index, workout: workout, exerciseID: row.id, model: model,
+      numberPad: numberPad,
+      notesExpanded: notesExpanded,
+      toggleWarmup: { toggleWarmup(set, row: row, workout: workout) },
+      configureDrop: { configureDrop(workout, setID: set.id, adding: $0, exerciseID: row.id) },
+      addAfter: {
+        numberPad.dismiss()
+        mutate(workout) {
+          try WorkoutEngine.addSet(exerciseID: row.id, to: &$0, after: set.id)
+        }
+      },
+      remove: {
+        numberPad.dismiss()
+        if set.isDropSet {
+          removal = DropGroupRemovalRequest(exerciseID: row.id, setID: set.id)
+        } else {
+          mutate(workout) {
+            try WorkoutEngine.removeSet(exerciseID: row.id, setID: set.id, from: &$0)
+          }
+        }
+      },
+      removeStage: { stageID in
+        numberPad.dismiss()
+        mutate(workout) {
+          try WorkoutEngine.removeDropStage(
+            in: &$0, exerciseID: row.id, setID: set.id, stageID: stageID)
+        }
+      },
+      editCompleted: { target in
+        numberPad.dismiss()
+        correction = CompletedSetRequest(id: target.id, exerciseID: row.id, set: target)
+      },
+      openNote: {
+        numberPad.dismiss()
+        noteRequest = SetNoteRequest(
+          id: set.id, exerciseID: row.id, text: set.note ?? "",
+          editable: [.active, .paused].contains(workout.status))
+      })
+  }
+
+  @ViewBuilder private func supersetRows(
+    _ group: WorkoutExerciseGroup, workout: Workout, notesExpanded: Bool
+  ) -> some View {
+    ForEach(0..<group.roundCount, id: \.self) { round in
+      HStack {
+        Text(L10n.format("Круг %@", String(round + 1), locale: locale))
+        Spacer(minLength: 0)
+        if group.exercises.allSatisfy({
+          !$0.sets.indices.contains(round) || $0.sets[round].isFullyCompleted
+        }) {
+          Image(systemName: "checkmark.circle.fill").foregroundStyle(colorTheme.accent)
+            .accessibilityLabel(L10n.text("Круг выполнен", locale: locale))
+        }
+      }
+      .font(.subheadline.weight(.semibold)).padding(.horizontal, 10).padding(.top, 14)
+      .listRowSeparator(.hidden)
+      .id("superset-round-\(round)")
+      .accessibilityIdentifier("supersetRound_\(round)")
+      ForEach(Array(group.exercises.enumerated()), id: \.element.id) { member, row in
+        if row.sets.indices.contains(round) {
+          let set = row.sets[round]
+          Button {
+            numberPad.dismiss()
+            if let target = set.stages.first(where: { $0.completedAt == nil }) {
+              model.select(target.id, in: workout)
+            }
+          } label: {
+            HStack(alignment: .firstTextBaseline, spacing: 8) {
+              Text(String(member + 1)).monospacedDigit()
+              Text(L10n.exerciseName(row.exercise, locale: locale))
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .fixedSize(horizontal: false, vertical: true)
+              if model.selectedSetID == set.id {
+                Image(systemName: "arrow.right.circle.fill")
+              }
+            }
+            .font(.caption.weight(.medium))
+            .foregroundStyle(model.selectedSetID == set.id ? colorTheme.accent : FitTheme.muted)
+            .padding(.horizontal, 10).frame(minHeight: 44).contentShape(.rect)
+          }
+          .buttonStyle(.plain)
+          .disabled(workout.status != .active || set.isFullyCompleted)
+          .listRowSeparator(.hidden)
+          .accessibilityIdentifier("supersetMember_\(row.id)_\(round)")
+          setGroup(
+            set, index: round, row: row, workout: workout, notesExpanded: notesExpanded)
+        }
+      }
+    }
   }
 
   private func cardFooter(_ row: WorkoutExercise, workout: Workout) -> some View {
@@ -482,12 +579,18 @@ struct WorkoutExerciseView: View {
   private func move(_ offset: Int, in workout: Workout) {
     numberPad.dismiss()
     error = nil
-    guard let index = model.index(in: workout), workout.exercises.indices.contains(index + offset)
+    let index = navigationIndex(in: workout)
+    guard workout.exerciseGroups.indices.contains(index + offset)
     else { return }
     movingForward = offset > 0
     withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.24)) {
       model.move(offset, in: workout)
     }
+  }
+  private func navigationIndex(in workout: Workout) -> Int {
+    workout.exerciseGroups.firstIndex {
+      $0.exercises.contains { $0.id == model.exerciseID }
+    } ?? 0
   }
   @discardableResult
   private func mutate(_ workout: Workout, action: (inout Workout) throws -> Void) -> Bool {
@@ -497,7 +600,15 @@ struct WorkoutExerciseView: View {
     }
   }
   private func addSet(in workout: Workout) {
-    mutate(workout) { try WorkoutEngine.addSet(exerciseID: model.exerciseID, to: &$0) }
+    mutate(workout) { current in
+      if let group = current.groupContaining(exerciseID: model.exerciseID), group.isSuperset,
+        let supersetID = group.supersetID
+      {
+        try WorkoutEngine.addSupersetRound(supersetID: supersetID, to: &current)
+      } else {
+        try WorkoutEngine.addSet(exerciseID: model.exerciseID, to: &current)
+      }
+    }
   }
   private func toggleWarmup(_ set: WorkoutSet, row: WorkoutExercise, workout: Workout) {
     numberPad.dismiss()
@@ -558,9 +669,12 @@ struct WorkoutExerciseView: View {
       }
     } catch { self.error = error.localizedDescription }
   }
-  private func configureDrop(_ workout: Workout, setID: UUID, adding: Bool) {
+  private func configureDrop(
+    _ workout: Workout, setID: UUID, adding: Bool, exerciseID: UUID? = nil
+  ) {
     numberPad.dismiss()
     do {
+      if let exerciseID { model.showExercise(exerciseID, in: workout) }
       let set = try model.configuredDropSet(in: workout, adding: adding, setID: setID)
       error = nil
       mutate(workout) {

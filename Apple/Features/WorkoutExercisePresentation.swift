@@ -123,6 +123,7 @@ enum WorkoutExerciseAdvance { case stay, moved, finished }
     self.history = history
     workoutID = workout.id
     refresh(workout)
+    focusPendingSuperset(in: workout)
   }
   func exercise(in workout: Workout) -> WorkoutExercise? {
     guard workout.id == workoutID else { return nil }
@@ -133,33 +134,42 @@ enum WorkoutExerciseAdvance { case stay, moved, finished }
     return workout.exercises.firstIndex { $0.id == exerciseID }
   }
   func move(_ offset: Int, in workout: Workout) {
-    guard let index = index(in: workout), workout.exercises.indices.contains(index + offset) else {
+    guard workout.id == workoutID else { return }
+    let groups = workout.exerciseGroups
+    guard let index = groups.firstIndex(where: { $0.exercises.contains { $0.id == exerciseID } }),
+      groups.indices.contains(index + offset), let row = groups[index + offset].exercises.first
+    else {
       return
     }
-    exerciseID = workout.exercises[index + offset].id
-    pendingCompletionID = nil
-    selectedSetID = nil
-    refresh(workout)
+    showExercise(row.id, in: workout)
+    focusPendingSuperset(in: workout)
   }
   func showExercise(_ id: UUID, in workout: Workout) {
-    guard workout.id == workoutID, workout.exercises.contains(where: { $0.id == id }) else {
+    guard workout.id == workoutID, let row = workout.exercises.first(where: { $0.id == id }) else {
       return
     }
     exerciseID = id
     pendingCompletionID = nil
-    selectedSetID = nil
+    selectedSetID = row.sets.first { !$0.isFullyCompleted }?.id
     selectedStageID = nil
     refresh(workout)
   }
   func select(_ targetID: UUID, in workout: Workout) {
     guard
-      let set = exercise(in: workout)?.sets.first(where: {
+      workout.id == workoutID,
+      let row = workout.supersetRows(for: exerciseID).first(where: { row in
+        row.sets.contains { $0.stages.contains { $0.id == targetID && $0.completedAt == nil } }
+      }),
+      let set = row.sets.first(where: {
         $0.stages.contains { $0.id == targetID && $0.completedAt == nil }
       })
     else { return }
+    let changesExercise = exerciseID != row.id
+    exerciseID = row.id
     pendingCompletionID = nil
     selectedSetID = set.id
     selectedStageID = targetID == set.id ? nil : targetID
+    if changesExercise { refresh(workout) }
   }
   func editWeight(_ text: String, setID: UUID) { drafts[setID]?.weight = text }
   func editRepetitions(_ text: String, setID: UUID) { drafts[setID]?.repetitions = text }
@@ -167,6 +177,18 @@ enum WorkoutExerciseAdvance { case stay, moved, finished }
     guard workout.id == workoutID else { return }
     self.history = history
     refresh(workout)
+  }
+  private func focusPendingSuperset(in workout: Workout) {
+    guard workout.id == workoutID,
+      workout.groupContaining(exerciseID: exerciseID)?.isSuperset == true,
+      let next = workout.nextPendingSet(inGroupContaining: exerciseID)
+    else { return }
+    showExercise(next.exerciseID, in: workout)
+    if let set = exercise(in: workout)?.sets.first(where: { $0.id == next.setID }),
+      let stage = set.stages.first(where: { $0.completedAt == nil })
+    {
+      select(stage.id, in: workout)
+    }
   }
   func refresh(_ workout: Workout) {
     guard workout.id == workoutID else { return }
@@ -177,20 +199,33 @@ enum WorkoutExerciseAdvance { case stay, moved, finished }
       exerciseID = first.id
       selectedSetID = nil
     }
+    if exercise(in: workout)?.sets.contains(where: {
+      $0.id == selectedSetID && !$0.isFullyCompleted
+    }) != true,
+      let group = workout.groupContaining(exerciseID: exerciseID), group.isSuperset,
+      let next = group.nextPendingSet
+    {
+      exerciseID = next.exerciseID
+      selectedSetID = next.setID
+      selectedStageID = nil
+    }
     previousValues = PreviousWorkoutValues(exerciseRowID: exerciseID, in: workout, history: history)
     let pending = workout.exercises.flatMap(\.sets).flatMap(\.stages).filter {
       $0.completedAt == nil
     }
     let ids = Set(pending.map(\.id))
     drafts = drafts.filter { ids.contains($0.key) }
-    for stage in pending {
-      let set = WorkoutSet(id: stage.id, repetitions: stage.repetitions, weightKG: stage.weightKG)
-      let previous = previousValues?.stages[stage.id]
-      if drafts[stage.id] == nil {
-        drafts[stage.id] = WorkoutSetDraft(
-          set: set, unit: unit, locale: locale, previous: previous)
-      } else {
-        drafts[stage.id]?.refresh(set: set, previous: previous, unit: unit, locale: locale)
+    for row in workout.exercises {
+      let previous = PreviousWorkoutValues(exerciseRowID: row.id, in: workout, history: history)
+      for stage in row.sets.flatMap(\.stages) where stage.completedAt == nil {
+        let set = WorkoutSet(id: stage.id, repetitions: stage.repetitions, weightKG: stage.weightKG)
+        if drafts[stage.id] == nil {
+          drafts[stage.id] = WorkoutSetDraft(
+            set: set, unit: unit, locale: locale, previous: previous?.stages[stage.id])
+        } else {
+          drafts[stage.id]?.refresh(
+            set: set, previous: previous?.stages[stage.id], unit: unit, locale: locale)
+        }
       }
     }
     let sets = exercise(in: workout)?.sets ?? []
@@ -265,6 +300,19 @@ enum WorkoutExerciseAdvance { case stay, moved, finished }
     }
     guard beforeCompletion == completion.set else { return .stay }
     pendingCompletionID = nil
+    if saved.isFullyCompleted,
+      workout.groupContaining(exerciseID: completion.exerciseID)?.isSuperset == true,
+      let next = workout.nextPendingSet(inGroupContaining: completion.exerciseID)
+    {
+      let moved = exerciseID != next.exerciseID
+      showExercise(next.exerciseID, in: workout)
+      if let nextSet = exercise(in: workout)?.sets.first(where: { $0.id == next.setID }),
+        let target = nextSet.stages.first(where: { $0.completedAt == nil })
+      {
+        select(target.id, in: workout)
+      }
+      return moved ? .moved : .stay
+    }
     refresh(workout)
     guard WorkoutCompletionProgress(exercise: workout.exercises[index]).isComplete else {
       return .stay
@@ -277,6 +325,7 @@ enum WorkoutExerciseAdvance { case stay, moved, finished }
       return progress.completed < progress.total
     }) {
       showExercise(workout.exercises[next].id, in: workout)
+      focusPendingSuperset(in: workout)
       return .moved
     }
     return .finished

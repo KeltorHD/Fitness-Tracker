@@ -8,6 +8,8 @@ struct WorkoutExerciseDock: View {
   @ScaledMetric(relativeTo: .headline) private var actionRowHeight = 56
   let workout: Workout
   let exerciseIndex: Int
+  var navigationIndex: Int? = nil
+  var navigationCount: Int? = nil
   let canComplete: Bool
   var completingDrop = false
   var completionTrigger: ContinuousClock.Instant? = nil
@@ -41,13 +43,16 @@ struct WorkoutExerciseDock: View {
         forward: false, height: height + (height >= 56 ? 12 : 8), width: navigationWidth,
         action: previous
       )
-      .disabled(exerciseIndex == 0).accessibilityIdentifier("previousWorkoutExercise")
+      .disabled((navigationIndex ?? exerciseIndex) == 0)
+      .accessibilityIdentifier("previousWorkoutExercise")
       actionBlock(height: height, plusWidth: plusWidth)
       navigationButton(
         forward: true, height: height + (height >= 56 ? 12 : 8), width: navigationWidth,
         action: next
       )
-      .disabled(exerciseIndex >= workout.exercises.count - 1)
+      .disabled(
+        (navigationIndex ?? exerciseIndex) >= (navigationCount ?? workout.exercises.count) - 1
+      )
       .accessibilityIdentifier("nextWorkoutExercise")
     }
   }
@@ -76,10 +81,12 @@ struct WorkoutExerciseDock: View {
         }
         .disabled(
           workout.status != .active
-            || (workout.exercises.indices.contains(exerciseIndex)
-              && workout.exercises[exerciseIndex].sets.count >= 30)
+            || (currentGroup?.roundCount ?? 30) >= 30
         )
-        .accessibilityLabel(L10n.text("Добавить подход", locale: locale))
+        .accessibilityLabel(
+          L10n.text(
+            currentGroup?.isSuperset == true ? "Добавить круг" : "Добавить подход", locale: locale)
+        )
         .accessibilityIdentifier("addWorkoutSet")
       } else {
         Spacer(minLength: 0)
@@ -126,7 +133,16 @@ struct WorkoutExerciseDock: View {
     guard workout.exercises.indices.contains(exerciseIndex) else {
       return WorkoutCompletionProgress()
     }
-    return WorkoutCompletionProgress(exercise: workout.exercises[exerciseIndex])
+    let row = workout.exercises[exerciseIndex]
+    if let group = workout.groupContaining(exerciseID: row.id), group.isSuperset {
+      return WorkoutCompletionProgress(group: group)
+    }
+    return WorkoutCompletionProgress(exercise: row)
+  }
+
+  private var currentGroup: WorkoutExerciseGroup? {
+    guard workout.exercises.indices.contains(exerciseIndex) else { return nil }
+    return workout.groupContaining(exerciseID: workout.exercises[exerciseIndex].id)
   }
 
   private var actionTitle: String {

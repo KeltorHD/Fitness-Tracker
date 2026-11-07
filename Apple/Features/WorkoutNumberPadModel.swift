@@ -36,6 +36,9 @@ enum WorkoutSetField: Hashable, Sendable {
   func begin(_ field: WorkoutSetField, in workout: Workout) {
     guard fields(in: workout).contains(field) else { return }
     guard self.field != field else { return }
+    if workout.groupContaining(exerciseID: editor.exerciseID)?.isSuperset == true {
+      editor.select(field.setID, in: workout)
+    }
     self.field = field
     selection = NSRange(location: (text as NSString).length, length: 0)
     replacesOnFirstInsertion = true
@@ -170,8 +173,13 @@ enum WorkoutSetField: Hashable, Sendable {
     } catch { self.error = error.localizedDescription }
   }
   private func fields(in workout: Workout) -> [WorkoutSetField] {
-    guard workout.status == .active, let row = editor.exercise(in: workout) else { return [] }
-    return row.sets.flatMap(\.stages).filter { $0.completedAt == nil }.flatMap {
+    guard workout.status == .active, editor.exercise(in: workout) != nil else { return [] }
+    let rows = workout.supersetRows(for: editor.exerciseID)
+    let rounds = rows.map { $0.sets.count }.max() ?? 0
+    let sets = (0..<rounds).flatMap { index in
+      rows.compactMap { $0.sets.indices.contains(index) ? $0.sets[index] : nil }
+    }
+    return sets.flatMap(\.stages).filter { $0.completedAt == nil }.flatMap {
       [WorkoutSetField.weight($0.id), .repetitions($0.id)]
     }
   }
@@ -180,10 +188,16 @@ enum WorkoutSetField: Hashable, Sendable {
     let ordered = fields(in: workout)
     guard let index = ordered.firstIndex(of: field) else { return [] }
     // Equal weights cannot be propagated into a decreasing-load chain.
-    let normalSets = Set(
-      (editor.exercise(in: workout)?.sets ?? []).filter { !$0.isDropSet }.map(\.id))
+    guard
+      let owner = workout.exercises.first(where: {
+        $0.sets.contains { $0.stages.contains { $0.id == field.setID } }
+      })
+    else { return [] }
+    let ownerTargets = Set(owner.sets.flatMap(\.stages).map(\.id))
+    let normalSets = Set(owner.sets.filter { !$0.isDropSet }.map(\.id))
     return ordered.dropFirst(index + 1).filter {
-      $0.isWeight == field.isWeight && (!field.isWeight || normalSets.contains($0.setID))
+      ownerTargets.contains($0.setID) && $0.isWeight == field.isWeight
+        && (!field.isWeight || normalSets.contains($0.setID))
     }
   }
   private func validateField() throws {

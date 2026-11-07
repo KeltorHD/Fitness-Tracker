@@ -6,6 +6,7 @@ struct WorkoutSetGroupView: View {
   let set: WorkoutSet
   let index: Int
   let workout: Workout
+  let exerciseID: UUID
   let model: WorkoutExercisePresentation
   let numberPad: WorkoutNumberPadModel
   let notesExpanded: Bool
@@ -92,7 +93,7 @@ struct WorkoutSetGroupView: View {
         if workout.status == .active {
           Button(action: addAfter) {
             Label(L10n.text("Добавить подход после", locale: locale), systemImage: "plus")
-          }.disabled((model.exercise(in: workout)?.sets.count ?? 30) >= 30)
+          }.disabled((exercise?.sets.count ?? 30) >= 30)
         }
         if !child, [.active, .paused].contains(workout.status) {
           Button(action: openNote) {
@@ -112,7 +113,7 @@ struct WorkoutSetGroupView: View {
                 ? "Удалить этап дропсета"
                 : set.isDropSet ? "Удалить группу дропсета" : "Удалить подход", locale: locale),
             systemImage: "trash")
-        }.tint(.red).disabled(!child && (model.exercise(in: workout)?.sets.count ?? 0) <= 1)
+        }.tint(.red).disabled(!child && (exercise?.sets.count ?? 0) <= 1)
           .accessibilityIdentifier("removeSetTarget_\(value.id)")
       }
     }
@@ -129,7 +130,7 @@ struct WorkoutSetGroupView: View {
       Button(action: addAfter) {
         Label(L10n.text("Добавить подход после", locale: locale), systemImage: "plus")
       }
-      .disabled((model.exercise(in: workout)?.sets.count ?? 30) >= 30)
+      .disabled((exercise?.sets.count ?? 30) >= 30)
       if set.completedAt == nil {
         if !set.isDropSet {
           Button(
@@ -157,7 +158,11 @@ struct WorkoutSetGroupView: View {
         L10n.text(set.isDropSet ? "Удалить группу дропсета" : "Удалить подход", locale: locale),
         role: .destructive, action: remove
       )
-      .disabled((model.exercise(in: workout)?.sets.count ?? 0) <= 1)
+      .disabled((exercise?.sets.count ?? 0) <= 1)
     }
+  }
+
+  private var exercise: WorkoutExercise? {
+    workout.exercises.first { $0.id == exerciseID }
   }
 }
