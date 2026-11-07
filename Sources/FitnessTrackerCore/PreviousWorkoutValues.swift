@@ -1,0 +1,61 @@
+import Foundation
+
+/// Recorded values from one earlier session, addressed by the current session's target IDs.
+public struct PreviousWorkoutValues: Equatable, Sendable {
+  public let workoutID: UUID
+  public let date: Date
+  public let stages: [UUID: DropSetStage]
+
+  /// Repeated exercises match by occurrence; warmup and working sets have separate ordinals.
+  /// Unperformed historical targets retain their positions and never become suggestions.
+  public init?(exerciseRowID: UUID, in workout: Workout, history: [Workout]) {
+    guard let rowIndex = workout.exercises.firstIndex(where: { $0.id == exerciseRowID }) else {
+      return nil
+    }
+    let row = workout.exercises[rowIndex]
+    let occurrence = workout.exercises[..<rowIndex].filter {
+      $0.exercise.id == row.exercise.id
+    }.count
+    var previous: (workout: Workout, row: WorkoutExercise)?
+    for candidate in history {
+      guard candidate.id != workout.id, candidate.status == .completed,
+        candidate.startedAt < workout.startedAt,
+        let endedAt = candidate.endedAt, endedAt <= workout.startedAt
+      else { continue }
+      if let previous {
+        guard
+          candidate.startedAt > previous.workout.startedAt
+            || (candidate.startedAt == previous.workout.startedAt
+              && candidate.id.uuidString < previous.workout.id.uuidString)
+        else { continue }
+      }
+      let rows = candidate.exercises.filter { $0.exercise.id == row.exercise.id }
+      guard rows.indices.contains(occurrence),
+        rows[occurrence].sets.contains(where: { !$0.performedStages.isEmpty })
+      else { continue }
+      previous = (candidate, rows[occurrence])
+    }
+    guard let previous else { return nil }
+    let warmups = previous.row.sets.filter(\.isWarmup)
+    let working = previous.row.sets.filter { !$0.isWarmup }
+    var warmupIndex = 0
+    var workingIndex = 0
+    var values: [UUID: DropSetStage] = [:]
+    for set in row.sets {
+      let index = set.isWarmup ? warmupIndex : workingIndex
+      if set.isWarmup { warmupIndex += 1 } else { workingIndex += 1 }
+      let recorded = set.isWarmup ? warmups : working
+      guard recorded.indices.contains(index) else { continue }
+      let recordedStages = recorded[index].stages
+      for (stageIndex, target) in set.stages.enumerated() {
+        guard recordedStages.indices.contains(stageIndex),
+          recordedStages[stageIndex].completedAt != nil
+        else { continue }
+        values[target.id] = recordedStages[stageIndex]
+      }
+    }
+    workoutID = previous.workout.id
+    date = previous.workout.startedAt
+    stages = values
+  }
+}

@@ -3,25 +3,56 @@ import Foundation
 import Observation
 
 struct WorkoutSetDraft {
-  var weight: String
-  var repetitions: String
-  private let originalWeightKG: Double
-  private let originalText: String
+  var weight: String {
+    get { weightText }
+    set {
+      weightText = newValue
+      weightWasEdited = true
+    }
+  }
+  var repetitions: String {
+    get { repetitionText }
+    set {
+      repetitionText = newValue
+      repetitionsWereEdited = true
+    }
+  }
+  private var weightText = ""
+  private var repetitionText = ""
+  private var weightWasEdited = false
+  private var repetitionsWereEdited = false
+  private var uneditedWeightKG: Double?
   private let decimalSeparator: String
 
-  init(set: WorkoutSet, unit: WeightUnit, locale: Locale) {
-    weight = unit.display(set.weightKG).formatted(
-      .number.locale(locale).grouping(.never).precision(.fractionLength(0...2)))
-    repetitions = String(set.repetitions)
-    originalWeightKG = set.weightKG
-    originalText = weight
+  init(set: WorkoutSet, unit: WeightUnit, locale: Locale, previous: DropSetStage? = nil) {
     decimalSeparator = locale.decimalSeparator ?? "."
+    refresh(set: set, previous: previous, unit: unit, locale: locale)
+  }
+
+  /// History is a temporary fallback. Even an explicit clear is a user edit and wins on refresh.
+  mutating func refresh(
+    set: WorkoutSet, previous: DropSetStage?, unit: WeightUnit, locale: Locale
+  ) {
+    if !weightWasEdited {
+      let isEmpty = set.completedAt == nil && set.repetitions == 0 && set.weightKG == 0
+      let kilograms = isEmpty ? previous?.weightKG : set.weightKG
+      uneditedWeightKG = kilograms
+      weightText =
+        kilograms.map {
+          unit.display($0).formatted(
+            .number.locale(locale).grouping(.never).precision(.fractionLength(0...2)))
+        } ?? ""
+    }
+    if !repetitionsWereEdited {
+      let count = set.repetitions > 0 ? set.repetitions : previous?.repetitions
+      repetitionText = count.map(String.init) ?? ""
+    }
   }
 
   func weightInKG(unit: WeightUnit) throws -> Double {
-    if weight == originalText {
-      try Validation.set(WorkoutSet(repetitions: 1, weightKG: originalWeightKG))
-      return originalWeightKG
+    if !weightWasEdited, let uneditedWeightKG {
+      try Validation.set(WorkoutSet(repetitions: 1, weightKG: uneditedWeightKG))
+      return uneditedWeightKG
     }
     let input = weight.trimmingCharacters(in: .whitespacesAndNewlines)
     guard !input.isEmpty, input.count <= 20 else { throw TrainingError.invalidWeight }
@@ -60,10 +91,14 @@ struct WorkoutSetDraft {
 }
 
 struct WorkoutSetCompletion {
+  let requestID = UUID()
+  let workoutID: UUID
   let exerciseID: UUID
   let set: WorkoutSet
   var stageID: UUID? = nil
 }
+
+enum WorkoutExerciseAdvance { case stay, moved, finished }
 
 /// Owns selection and unsaved field drafts. Persistence and training rules stay in AppStore/Core.
 @MainActor @Observable final class WorkoutExercisePresentation {
@@ -72,16 +107,23 @@ struct WorkoutSetCompletion {
   var selectedTargetID: UUID? { selectedStageID ?? selectedSetID }
   private(set) var selectedSetID: UUID?
   private(set) var drafts: [UUID: WorkoutSetDraft] = [:]
+  private(set) var previousValues: PreviousWorkoutValues?
+  @ObservationIgnored private var history: [Workout] = []
+  @ObservationIgnored private var pendingCompletionID: UUID?
   let unit: WeightUnit
   private let locale: Locale
   private let workoutID: UUID
 
-  init(workout: Workout, exerciseID: UUID, unit: WeightUnit, locale: Locale) {
+  init(
+    workout: Workout, exerciseID: UUID, unit: WeightUnit, locale: Locale, history: [Workout] = []
+  ) {
     self.exerciseID = exerciseID
     self.unit = unit
     self.locale = locale
+    self.history = history
     workoutID = workout.id
     refresh(workout)
+    focusPendingSuperset(in: workout)
   }
   func exercise(in workout: Workout) -> WorkoutExercise? {
     guard workout.id == workoutID else { return nil }
@@ -92,50 +134,99 @@ struct WorkoutSetCompletion {
     return workout.exercises.firstIndex { $0.id == exerciseID }
   }
   func move(_ offset: Int, in workout: Workout) {
-    guard let index = index(in: workout), workout.exercises.indices.contains(index + offset) else {
+    guard workout.id == workoutID else { return }
+    let groups = workout.exerciseGroups
+    guard let index = groups.firstIndex(where: { $0.exercises.contains { $0.id == exerciseID } }),
+      groups.indices.contains(index + offset), let row = groups[index + offset].exercises.first
+    else {
       return
     }
-    exerciseID = workout.exercises[index + offset].id
-    selectedSetID = nil
-    refresh(workout)
+    showExercise(row.id, in: workout)
+    focusPendingSuperset(in: workout)
   }
   func showExercise(_ id: UUID, in workout: Workout) {
-    guard workout.id == workoutID, workout.exercises.contains(where: { $0.id == id }) else {
+    guard workout.id == workoutID, let row = workout.exercises.first(where: { $0.id == id }) else {
       return
     }
     exerciseID = id
-    selectedSetID = nil
+    pendingCompletionID = nil
+    selectedSetID = row.sets.first { !$0.isFullyCompleted }?.id
     selectedStageID = nil
     refresh(workout)
   }
   func select(_ targetID: UUID, in workout: Workout) {
     guard
-      let set = exercise(in: workout)?.sets.first(where: {
+      workout.id == workoutID,
+      let row = workout.supersetRows(for: exerciseID).first(where: { row in
+        row.sets.contains { $0.stages.contains { $0.id == targetID && $0.completedAt == nil } }
+      }),
+      let set = row.sets.first(where: {
         $0.stages.contains { $0.id == targetID && $0.completedAt == nil }
       })
     else { return }
+    let changesExercise = exerciseID != row.id
+    exerciseID = row.id
+    pendingCompletionID = nil
     selectedSetID = set.id
     selectedStageID = targetID == set.id ? nil : targetID
+    if changesExercise { refresh(workout) }
   }
   func editWeight(_ text: String, setID: UUID) { drafts[setID]?.weight = text }
   func editRepetitions(_ text: String, setID: UUID) { drafts[setID]?.repetitions = text }
+  func updateHistory(_ history: [Workout], for workout: Workout) {
+    guard workout.id == workoutID else { return }
+    self.history = history
+    refresh(workout)
+  }
+  private func focusPendingSuperset(in workout: Workout) {
+    guard workout.id == workoutID,
+      workout.groupContaining(exerciseID: exerciseID)?.isSuperset == true,
+      let next = workout.nextPendingSet(inGroupContaining: exerciseID)
+    else { return }
+    showExercise(next.exerciseID, in: workout)
+    if let set = exercise(in: workout)?.sets.first(where: { $0.id == next.setID }),
+      let stage = set.stages.first(where: { $0.completedAt == nil })
+    {
+      select(stage.id, in: workout)
+    }
+  }
   func refresh(_ workout: Workout) {
     guard workout.id == workoutID else { return }
+    if workout.status != .active { pendingCompletionID = nil }
     if !workout.exercises.contains(where: { $0.id == exerciseID }),
       let first = workout.exercises.first
     {
       exerciseID = first.id
       selectedSetID = nil
     }
+    if exercise(in: workout)?.sets.contains(where: {
+      $0.id == selectedSetID && !$0.isFullyCompleted
+    }) != true,
+      let group = workout.groupContaining(exerciseID: exerciseID), group.isSuperset,
+      let next = group.nextPendingSet
+    {
+      exerciseID = next.exerciseID
+      selectedSetID = next.setID
+      selectedStageID = nil
+    }
+    previousValues = PreviousWorkoutValues(exerciseRowID: exerciseID, in: workout, history: history)
     let pending = workout.exercises.flatMap(\.sets).flatMap(\.stages).filter {
       $0.completedAt == nil
     }
     let ids = Set(pending.map(\.id))
     drafts = drafts.filter { ids.contains($0.key) }
-    for stage in pending where drafts[stage.id] == nil {
-      drafts[stage.id] = WorkoutSetDraft(
-        set: WorkoutSet(id: stage.id, repetitions: stage.repetitions, weightKG: stage.weightKG),
-        unit: unit, locale: locale)
+    for row in workout.exercises {
+      let previous = PreviousWorkoutValues(exerciseRowID: row.id, in: workout, history: history)
+      for stage in row.sets.flatMap(\.stages) where stage.completedAt == nil {
+        let set = WorkoutSet(id: stage.id, repetitions: stage.repetitions, weightKG: stage.weightKG)
+        if drafts[stage.id] == nil {
+          drafts[stage.id] = WorkoutSetDraft(
+            set: set, unit: unit, locale: locale, previous: previous?.stages[stage.id])
+        } else {
+          drafts[stage.id]?.refresh(
+            set: set, previous: previous?.stages[stage.id], unit: unit, locale: locale)
+        }
+      }
     }
     let sets = exercise(in: workout)?.sets ?? []
     if !sets.contains(where: { $0.id == selectedSetID && !$0.isFullyCompleted }) {
@@ -179,8 +270,65 @@ struct WorkoutSetCompletion {
     guard set.stages.first(where: { $0.completedAt == nil })?.id == selectedTargetID else {
       throw TrainingError.invalidDropStageOrder
     }
-    return WorkoutSetCompletion(
-      exerciseID: row.id, set: try preparedSet(set), stageID: selectedStageID)
+    let completion = WorkoutSetCompletion(
+      workoutID: workoutID, exerciseID: row.id, set: try preparedSet(set), stageID: selectedStageID)
+    pendingCompletionID = completion.requestID
+    return completion
+  }
+
+  /// The caller invokes this only after saving the exact requested completion successfully.
+  /// It advances presentation; finishing the workout remains a separate explicit action.
+  func advance(afterSaving completion: WorkoutSetCompletion, in workout: Workout)
+    -> WorkoutExerciseAdvance
+  {
+    guard workout.id == workoutID, completion.workoutID == workoutID,
+      workout.status == .active, completion.requestID == pendingCompletionID,
+      exerciseID == completion.exerciseID,
+      let index = workout.exercises.firstIndex(where: { $0.id == completion.exerciseID }),
+      let saved = workout.exercises[index].sets.first(where: { $0.id == completion.set.id })
+    else { return .stay }
+    var beforeCompletion = saved
+    if let stageID = completion.stageID {
+      guard let stageIndex = beforeCompletion.dropStages?.firstIndex(where: { $0.id == stageID }),
+        beforeCompletion.dropStages?[stageIndex].completedAt != nil,
+        completion.set.dropStages?.first(where: { $0.id == stageID })?.completedAt == nil
+      else { return .stay }
+      beforeCompletion.dropStages?[stageIndex].completedAt = nil
+    } else {
+      guard saved.completedAt != nil, completion.set.completedAt == nil else { return .stay }
+      beforeCompletion.completedAt = nil
+    }
+    guard beforeCompletion == completion.set else { return .stay }
+    pendingCompletionID = nil
+    if saved.isFullyCompleted,
+      workout.groupContaining(exerciseID: completion.exerciseID)?.isSuperset == true,
+      let next = workout.nextPendingSet(inGroupContaining: completion.exerciseID)
+    {
+      let moved = exerciseID != next.exerciseID
+      showExercise(next.exerciseID, in: workout)
+      if let nextSet = exercise(in: workout)?.sets.first(where: { $0.id == next.setID }),
+        let target = nextSet.stages.first(where: { $0.completedAt == nil })
+      {
+        select(target.id, in: workout)
+      }
+      return moved ? .moved : .stay
+    }
+    refresh(workout)
+    guard WorkoutCompletionProgress(exercise: workout.exercises[index]).isComplete else {
+      return .stay
+    }
+    let candidates =
+      Array(workout.exercises.indices.dropFirst(index + 1))
+      + Array(workout.exercises.indices.prefix(index))
+    if let next = candidates.first(where: {
+      let progress = WorkoutCompletionProgress(exercise: workout.exercises[$0])
+      return progress.completed < progress.total
+    }) {
+      showExercise(workout.exercises[next].id, in: workout)
+      focusPendingSuperset(in: workout)
+      return .moved
+    }
+    return .finished
   }
   func configuredDropSet(in workout: Workout, adding: Bool, setID: UUID? = nil) throws -> WorkoutSet
   {
@@ -216,9 +364,13 @@ enum WorkoutExerciseSummary {
   ) -> String {
     let sets = completedOnly ? row.sets.filter { $0.completedAt != nil } : row.sets
     guard !sets.isEmpty else { return L10n.text("Нет выполненных подходов", locale: locale) }
+    if sets.allSatisfy({ $0.completedAt == nil && $0.repetitions == 0 && $0.weightKG == 0 }) {
+      return L10n.countText(sets.count, kind: "set", locale: locale)
+    }
     return sets.map { set in
       let stages = completedOnly ? set.performedStages : set.stages
       var text = stages.map { stage in
+        if stage.completedAt == nil, stage.repetitions == 0, stage.weightKG == 0 { return "—" }
         let weight = unit.display(stage.weightKG).formatted(
           .number.locale(numberLocale).precision(.fractionLength(0...1)))
         return "\(weight) \(L10n.text(unit.rawValue, locale: locale)) × \(stage.repetitions)"

@@ -84,7 +84,7 @@ App Group и CloudKit ID автоматически выводятся из Bund
 
 ## 3. Генерация, Simulator и первая сборка
 
-После изменения структуры исходников или `project.yml`:
+После изменения структуры исходников, `project.yml` или переключения на ветку с другим составом файлов закройте проект в Xcode и выполните в корне репозитория:
 
 ```bash
 xcodegen generate
@@ -109,6 +109,7 @@ xcodebuild -project FitnessTracker.xcodeproj -scheme FitnessTracker \
 
 Разбор частых ошибок:
 
+- **`Build input files cannot be found` после переключения ветки и `Cannot find type ... in scope`:** проверьте, что открыт проект из нужного checkout, закройте его и выполните `xcodegen generate`, затем `open FitnessTracker.xcodeproj`. Каталог `*.xcodeproj` исключён из Git, поэтому переключение ветки не обновляет его список исходников. Например, старый проект может ссылаться на отсутствующие в выбранной ветке `NutritionToolsView.swift` / `FoodBarcodeScanner.swift` и одновременно не включать существующие `AccountSession.swift`, `AccountBackupViewModel.swift`, `RemoteBackupClient.swift`, `AppleServerCryptography.swift`. Генерация из актуального `project.yml` согласует состав файлов. Если Xcode продолжает показывать прежние ошибки, выполните Product → Clean Build Folder и соберите заново. Не создавайте заглушки отсутствующих файлов и не добавляйте исходники вручную в старый проект; сохраните существующий `Config/Local.xcconfig` и пользовательское хранилище.
 - **`unable to type-check this expression in reasonable time` в ExerciseProgressTests:** обновите исходники через `git pull --ff-only` и повторите `swift test`. Извлечение optional, расчёт ожидаемого 1ПМ и проверка разницы теперь разделены на типизированные `Double`-выражения; допуск теста не изменён. В ExerciseLibraryTests вложенный `#require` также вынесен перед JSON encoding. Если ошибка возникла в `setup-macos.sh`, после успешных тестов повторите скрипт: при сбое `swift test` он останавливается до генерации проекта.
 - **Нет GlassEffectContainer / glass styles:** проверьте выбранный Xcode, SDK и deployment target 26.0. Не заменяйте эффект blur-реализацией.
 - **Swift 6 isolation / Sendable:** проверьте границы `@MainActor` и `nonisolated` в делегатах. Передавайте `Data`, строки и Core value types через `Task`, а не `ModelContext`.
@@ -149,6 +150,19 @@ xcodebuild -project FitnessTracker.xcodeproj -scheme FitnessTracker \
 ## Локализация RU/EN
 
 После обновления исходников снова выполните `xcodegen generate`: String Catalogs должны быть в Resources приложения, виджетов и Watch. Xcode компилирует `.xcstrings` в языковые bundles; Linux-проверка проверяет только входные каталоги.
+
+Если Xcode сообщает `Localizable.xcstrings:1:1 — The data couldn’t be read because it isn’t in the correct format`, сначала выполните `git status --short`. Статус `UU Resources/Localizable.xcstrings` означает неразрешённый конфликт слияния. Закройте Xcode и восстановите сгенерированный каталог из словарей переводов. Перед этим проверьте, что в `Data/Localization/Interface.en.json` и `Interface.ru.json` нет собственных неразрешённых конфликтов; переводы обеих веток должны сохраниться в этих источниках.
+
+Выполняйте команды отдельно из корня репозитория:
+
+```bash
+cp -n Resources/Localizable.xcstrings /tmp/FitnessTracker-catalog-conflict
+python3 scripts/generate-localizations.py
+git add Resources/Localizable.xcstrings
+git status --short
+```
+
+Первая команда сохраняет копию конфликтного файла, генератор также воспроизводит штатный `InfoPlist.xcstrings`, а `git add` отмечает решённым только конфликт `Localizable.xcstrings`. Если резервная копия уже существует, `cp -n` её не перезаписывает. Другие конфликты разбирайте отдельно; слияние или восстановление stash этими командами не завершается. Откройте проект и повторите сборку `⌘B`. Если статус `UU` уже снят, а компилятор продолжает отклонять каталог, нужна отдельная проверка фактического файла через `xcstringstool`, а не только JSON-парсер на Linux.
 
 В приложении откройте **Настройки → Основные → Язык приложения**. Проверьте переключение без перезапуска и после повторного запуска; «Как на устройстве» учитывает приоритет языков iOS. Запустите L10nTests, WidgetSnapshotTests и UI-тест переключения языка. Проверьте обе локали в каталоге, истории, файловых диалогах, уведомлениях, виджете и Dynamic Island; Watch использует свой системный язык. Разрешения HealthKit и системные подписи App Intents следуют системному/назначенному в iOS языку приложения. Полные сценарии: [LOCALIZATION.md](docs/LOCALIZATION.md), [XCODE_VALIDATION.md](docs/XCODE_VALIDATION.md).
 

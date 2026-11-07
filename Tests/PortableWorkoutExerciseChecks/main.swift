@@ -120,9 +120,368 @@ private func rejects(_ action: () throws -> Void) throws {
     try checkContextTarget(at: date)
     try checkStartedGroupAppend(at: date)
     try checkReplacementFocus(at: date)
+    try checkPreviousValuesAndBlankDrafts(at: date)
+    try checkPreviousDraftRefreshAndPrecision(at: date)
+    try checkPreviousDropDrafts(at: date)
+    try checkAutomaticExerciseAdvance(at: date)
+    try checkAdvanceGuards(at: date)
+    try checkAdvanceWrapsToEarlierPendingExercise(at: date)
     print(
       "Portable workout exercise presentation: localized/strict input, pounds precision, draft retention, repeated exercise identity, paging/reordering/removal, completion, pause/history guards and summaries passed (no Apple SDK)."
     )
+  }
+
+  @MainActor private static func checkAutomaticExerciseAdvance(at date: Date) throws {
+    let first = WorkoutExercise(
+      exercise: Exercise(name: "First", muscle: .back),
+      sets: [WorkoutSet(weightKG: 40), WorkoutSet(weightKG: 20, isWarmup: true)])
+    let alreadyComplete = WorkoutExercise(
+      exercise: first.exercise, sets: [WorkoutSet(weightKG: 30, completedAt: date)])
+    let next = WorkoutExercise(
+      exercise: Exercise(name: "Next", muscle: .legs), sets: [WorkoutSet(repetitions: 0)])
+    var workout = Workout(
+      name: "Advance", startedAt: date, exercises: [first, alreadyComplete, next])
+    let model = WorkoutExercisePresentation(
+      workout: workout, exerciseID: first.id, unit: .kilograms, locale: Locale(identifier: "en_US"))
+    model.editWeight("17.5", setID: next.sets[0].id)
+    model.editRepetitions("11", setID: next.sets[0].id)
+    let initial = try model.completion(in: workout)
+    try expect(
+      model.advance(afterSaving: initial, in: workout) == .stay
+        && model.exerciseID == first.id && model.selectedSetID == first.sets[0].id,
+      "Preparing a completion or failing to save cannot move the exercise page")
+    try persist(initial, in: &workout, at: date.addingTimeInterval(1))
+    // SwiftUI may already refresh its snapshot before the save handler advances the page.
+    model.refresh(workout)
+    try expect(
+      model.advance(afterSaving: initial, in: workout) == .stay
+        && model.exerciseID == first.id && model.selectedSetID == first.sets[1].id,
+      "Completing a set stays in the exercise until its warmup and all other sets are performed")
+    let final = try model.completion(in: workout)
+    try persist(final, in: &workout, at: date.addingTimeInterval(2))
+    try expect(
+      model.advance(afterSaving: final, in: workout) == .moved && model.exerciseID == next.id,
+      "Saving the last set skips fully completed exercise rows and selects the next pending row")
+    try expect(
+      model.selectedSetID == next.sets[0].id && model.selectedStageID == nil
+        && model.drafts[next.sets[0].id]?.weight == "17.5"
+        && model.drafts[next.sets[0].id]?.repetitions == "11",
+      "Automatic paging keeps unsaved drafts and focuses the next actual target")
+    try expect(
+      model.advance(afterSaving: final, in: workout) == .stay && model.exerciseID == next.id,
+      "Delivering the same save again cannot advance a second exercise")
+    let last = try model.completion(in: workout)
+    try persist(last, in: &workout, at: date.addingTimeInterval(3))
+    try expect(
+      model.advance(afterSaving: last, in: workout) == .finished
+        && model.selectedSetID == nil && workout.status == .active && workout.endedAt == nil,
+      "All stages performed return to the overview while workout finishing remains explicit")
+    try expect(
+      model.advance(afterSaving: last, in: workout) == .stay,
+      "A consumed final request cannot signal another automatic return")
+  }
+
+  @MainActor private static func checkAdvanceGuards(at date: Date) throws {
+    let first = WorkoutExercise(exercise: Exercise(name: "First", muscle: .back))
+    let second = WorkoutExercise(exercise: Exercise(name: "Second", muscle: .arms))
+    let initial = Workout(name: "Guards", startedAt: date, exercises: [first, second])
+    let model = WorkoutExercisePresentation(
+      workout: initial, exerciseID: first.id, unit: .kilograms, locale: Locale(identifier: "en_US"))
+    let stale = try model.completion(in: initial)
+    let request = try model.completion(in: initial)
+    var saved = initial
+    try persist(request, in: &saved, at: date.addingTimeInterval(1))
+    try expect(
+      model.advance(afterSaving: stale, in: saved) == .stay,
+      "Only the latest prepared completion can drive automatic paging")
+    var foreign = saved
+    foreign.id = UUID()
+    var wrongRow = saved
+    wrongRow.exercises[0].id = UUID()
+    var wrongSet = saved
+    wrongSet.exercises[0].sets[0].id = UUID()
+    var changedValues = saved
+    changedValues.exercises[0].sets[0].repetitions += 1
+    var paused = saved
+    try WorkoutEngine.pause(&paused, at: date.addingTimeInterval(2))
+    var finished = saved
+    try WorkoutEngine.finish(&finished, at: date.addingTimeInterval(2))
+    for invalid in [foreign, wrongRow, wrongSet, changedValues, paused, finished] {
+      try expect(
+        model.advance(afterSaving: request, in: invalid) == .stay
+          && model.exerciseID == first.id && model.selectedSetID == first.sets[0].id
+          && model.drafts[first.sets[0].id] != nil,
+        "Foreign, missing, changed, paused and finished snapshots cannot consume selection or drafts"
+      )
+    }
+    model.move(1, in: saved)
+    try expect(
+      model.advance(afterSaving: request, in: saved) == .stay && model.exerciseID == second.id,
+      "A late save cannot replace a manually chosen page")
+    model.move(-1, in: saved)
+    try expect(
+      model.advance(afterSaving: request, in: saved) == .stay && model.exerciseID == first.id,
+      "Returning to the page does not revive a stale completion")
+  }
+
+  @MainActor private static func checkAdvanceWrapsToEarlierPendingExercise(at date: Date) throws {
+    let first = WorkoutExercise(exercise: Exercise(name: "Earlier", muscle: .arms))
+    let last = WorkoutExercise(exercise: Exercise(name: "Last", muscle: .legs))
+    var workout = Workout(name: "Wrap", startedAt: date, exercises: [first, last])
+    let model = WorkoutExercisePresentation(
+      workout: workout, exerciseID: last.id, unit: .kilograms, locale: Locale(identifier: "en_US"))
+    model.editWeight("10", setID: first.sets[0].id)
+    model.editRepetitions("13", setID: first.sets[0].id)
+    let request = try model.completion(in: workout)
+    try persist(request, in: &workout, at: date.addingTimeInterval(1))
+    try expect(
+      model.advance(afterSaving: request, in: workout) == .moved && model.exerciseID == first.id
+        && model.drafts[first.sets[0].id]?.repetitions == "13",
+      "The last exercise wraps to earlier pending work while preserving its drafts")
+    let final = try model.completion(in: workout)
+    try persist(final, in: &workout, at: date.addingTimeInterval(2))
+    try expect(
+      model.advance(afterSaving: final, in: workout) == .finished
+        && WorkoutCompletionProgress(workout: workout).isComplete
+        && workout.status == .active && workout.endedAt == nil,
+      "Completing the wrapped target leaves a ready ongoing workout for explicit finishing")
+  }
+
+  private static func persist(
+    _ request: WorkoutSetCompletion, in workout: inout Workout, at date: Date
+  ) throws {
+    if let stageID = request.stageID {
+      guard let stage = request.set.dropStages?.first(where: { $0.id == stageID }) else {
+        throw Failure(message: "Missing requested drop stage")
+      }
+      try WorkoutEngine.completeDropStage(
+        in: &workout, exerciseID: request.exerciseID, setID: request.set.id, stageID: stageID,
+        repetitions: stage.repetitions, weightKG: stage.weightKG,
+        dropStages: request.set.dropStages, at: date)
+    } else {
+      try WorkoutEngine.completeSet(
+        in: &workout, exerciseID: request.exerciseID, setID: request.set.id,
+        repetitions: request.set.repetitions, weightKG: request.set.weightKG, at: date)
+    }
+  }
+
+  @MainActor private static func checkPreviousValuesAndBlankDrafts(at date: Date) throws {
+    let exercise = Exercise(name: "Previous values", muscle: .back)
+    let otherExercise = Exercise(name: "Bodyweight", muscle: .arms)
+    let recordedDate = date.addingTimeInterval(-3600)
+    var history = Workout(
+      name: "Earlier", startedAt: recordedDate,
+      exercises: [
+        WorkoutExercise(
+          exercise: exercise,
+          sets: [
+            WorkoutSet(repetitions: 10, weightKG: 30, completedAt: recordedDate),
+            WorkoutSet(repetitions: 6, weightKG: 40, completedAt: recordedDate),
+          ]),
+        WorkoutExercise(
+          exercise: otherExercise,
+          sets: [WorkoutSet(repetitions: 15, weightKG: 0, completedAt: recordedDate)]),
+      ])
+    try WorkoutEngine.finish(&history, at: recordedDate.addingTimeInterval(60))
+    let first = WorkoutExercise(
+      exercise: exercise, sets: [WorkoutSet(repetitions: 0), WorkoutSet(repetitions: 0)])
+    let second = WorkoutExercise(exercise: otherExercise, sets: [WorkoutSet(repetitions: 0)])
+    var workout = Workout(name: "Now", startedAt: date, exercises: [first, second])
+    let model = WorkoutExercisePresentation(
+      workout: workout, exerciseID: first.id, unit: .kilograms, locale: Locale(identifier: "en_US"))
+    let snapshot = workout
+    model.updateHistory([history], for: workout)
+    try expect(
+      model.previousValues?.stages[first.sets[0].id]?.weightKG == 30
+        && model.previousValues?.stages[first.sets[1].id]?.repetitions == 6,
+      "History values map to current target IDs")
+    try expect(
+      model.drafts[first.sets[0].id]?.weight == "30"
+        && model.drafts[first.sets[0].id]?.repetitions == "10"
+        && model.drafts[first.sets[1].id]?.weight == "40"
+        && workout == snapshot,
+      "Previous values appear in input drafts while the saved workout remains unchanged")
+    let unchanged = try model.completion(in: workout)
+    try expect(
+      unchanged.set.weightKG == 30 && unchanged.set.repetitions == 10 && workout == snapshot,
+      "Completing unchanged input uses the displayed historical values")
+    model.editRepetitions("8", setID: first.sets[0].id)
+    try expect(
+      try model.completion(in: workout).set.weightKG == 30,
+      "Editing repetitions independently keeps the previous weight available")
+    model.editWeight("0", setID: first.sets[0].id)
+    let explicitBodyweight = try model.completion(in: workout)
+    try expect(
+      explicitBodyweight.set.weightKG == 0 && explicitBodyweight.set.repetitions == 8
+        && workout == snapshot,
+      "Explicit zero added load and positive repetitions prepare a valid completion")
+    model.move(1, in: workout)
+    try expect(
+      model.previousValues?.stages[second.sets[0].id]?.repetitions == 15
+        && model.previousValues?.stages[first.sets[0].id] == nil
+        && model.drafts[second.sets[0].id]?.weight == "0"
+        && model.drafts[second.sets[0].id]?.repetitions == "15",
+      "Paging replaces suggestions with the selected exercise's own history")
+    model.move(-1, in: workout)
+    workout.exercises[0].sets.swapAt(0, 1)
+    model.refresh(workout)
+    try expect(
+      model.previousValues?.stages[first.sets[1].id]?.weightKG == 30
+        && model.previousValues?.stages[first.sets[0].id]?.weightKG == 40
+        && model.drafts[first.sets[0].id]?.weight == "0"
+        && model.drafts[first.sets[1].id]?.weight == "30",
+      "Refreshing reordered targets remaps historical positions while retaining typed drafts")
+    model.updateHistory([], for: workout)
+    try expect(
+      model.previousValues == nil && model.drafts[first.sets[0].id]?.repetitions == "8"
+        && model.drafts[first.sets[1].id]?.weight == "",
+      "Deleting history removes untouched fallbacks without losing entered data")
+    model.updateHistory([history], for: workout)
+    let replacementID = try WorkoutEngine.replaceExercise(
+      id: first.id, with: Exercise(name: "No history", muscle: .legs), in: &workout)
+    model.showExercise(replacementID, in: workout)
+    try expect(
+      model.previousValues == nil && model.drafts[first.sets[0].id] == nil
+        && model.drafts[workout.exercises[0].sets[0].id]?.weight == ""
+        && model.drafts[workout.exercises[0].sets[0].id]?.repetitions == "",
+      "Replacement clears unrelated history and starts new empty fields")
+    print(
+      "Portable previous workout values: editable draft fallback, unchanged completion, explicit zero load, paging, refresh, history deletion and replacement passed (no Apple SDK)."
+    )
+  }
+
+  @MainActor private static func checkPreviousDraftRefreshAndPrecision(at date: Date) throws {
+    let exercise = Exercise(name: "History draft", muscle: .back)
+    let earlier = date.addingTimeInterval(-3600)
+    var history = Workout(
+      name: "Earlier", startedAt: earlier,
+      exercises: [
+        WorkoutExercise(
+          exercise: exercise,
+          sets: [
+            WorkoutSet(repetitions: 12, weightKG: 20, isWarmup: true, completedAt: earlier),
+            WorkoutSet(repetitions: 8, weightKG: 50.123456, completedAt: earlier),
+          ]),
+        WorkoutExercise(
+          exercise: exercise, sets: [WorkoutSet(repetitions: 15, weightKG: 0, completedAt: earlier)]
+        ),
+      ])
+    try WorkoutEngine.finish(&history, at: earlier.addingTimeInterval(60))
+    let first = WorkoutExercise(
+      exercise: exercise,
+      sets: [WorkoutSet(repetitions: 0, isWarmup: true), WorkoutSet(repetitions: 0)])
+    let repeated = WorkoutExercise(exercise: exercise, sets: [WorkoutSet(repetitions: 0)])
+    var workout = Workout(name: "Now", startedAt: date, exercises: [first, repeated])
+    let model = WorkoutExercisePresentation(
+      workout: workout, exerciseID: first.id, unit: .pounds, locale: Locale(identifier: "en_US"),
+      history: [history])
+    let warmup = try model.completion(in: workout)
+    try expect(
+      warmup.set.isWarmup && warmup.set.weightKG == 20 && warmup.set.repetitions == 12,
+      "Warmup fallback uses its own ordinal and preserves exact kilograms behind pounds display")
+    model.select(first.sets[1].id, in: workout)
+    try expect(
+      try model.completion(in: workout).set.weightKG == 50.123456,
+      "Unchanged historical pounds retain the original precise stored kilograms")
+    model.editRepetitions("9", setID: first.sets[1].id)
+    history.exercises[0].sets[1].weightKG = 55.777777
+    history.exercises[0].sets[1].repetitions = 6
+    model.updateHistory([history], for: workout)
+    let refreshed = try model.completion(in: workout)
+    try expect(
+      refreshed.set.weightKG == 55.777777 && refreshed.set.repetitions == 9,
+      "History refresh updates only the untouched field, preserving independent repetition edits")
+    model.editWeight("0", setID: first.sets[1].id)
+    history.exercises[0].sets[1].weightKG = 60
+    model.updateHistory([history], for: workout)
+    try expect(
+      try model.completion(in: workout).set.weightKG == 0,
+      "Explicit zero added load overrides a positive historical weight after refresh")
+    model.editWeight("", setID: first.sets[1].id)
+    model.updateHistory([history], for: workout)
+    try rejects { _ = try model.completion(in: workout) }
+    try expect(
+      model.drafts[first.sets[1].id]?.weight == "",
+      "An intentionally cleared field cannot silently regain its historical fallback")
+    model.editWeight("1", setID: first.sets[1].id)
+    model.move(1, in: workout)
+    let second = try model.completion(in: workout)
+    try expect(
+      second.set.weightKG == 0 && second.set.repetitions == 15,
+      "Repeated exercise rows use their own occurrence, including zero-load history")
+    model.move(-1, in: workout)
+    try expect(
+      model.drafts[first.sets[1].id]?.weight == "1"
+        && model.drafts[first.sets[1].id]?.repetitions == "9",
+      "Paging does not replace entered current values with another history occurrence")
+    try WorkoutEngine.completeSet(
+      in: &workout, exerciseID: first.id, setID: warmup.set.id, repetitions: warmup.set.repetitions,
+      weightKG: warmup.set.weightKG, at: date.addingTimeInterval(1))
+    model.refresh(workout)
+    history.exercises[0].sets[0].weightKG = 30
+    model.updateHistory([history], for: workout)
+    try expect(
+      model.drafts[warmup.set.id] == nil && workout.exercises[0].sets[0].weightKG == 20,
+      "Completed fields remain frozen even when their history source changes")
+    let existing = WorkoutExercise(
+      exercise: exercise, sets: [WorkoutSet(repetitions: 6, weightKG: 0)])
+    let existingWorkout = Workout(name: "Already entered", startedAt: date, exercises: [existing])
+    let existingModel = WorkoutExercisePresentation(
+      workout: existingWorkout, exerciseID: existing.id, unit: .kilograms,
+      locale: Locale(identifier: "en_US"), history: [history])
+    let existingCompletion = try existingModel.completion(in: existingWorkout)
+    try expect(
+      existingCompletion.set.weightKG == 0 && existingCompletion.set.repetitions == 6,
+      "An existing current zero-load target is recorded data and is never replaced by positive history"
+    )
+  }
+
+  @MainActor private static func checkPreviousDropDrafts(at date: Date) throws {
+    let exercise = Exercise(name: "Drop history", muscle: .back)
+    let earlier = date.addingTimeInterval(-3600)
+    let recorded = WorkoutSet(
+      repetitions: 10, weightKG: 50, completedAt: earlier,
+      dropStages: [
+        DropSetStage(repetitions: 8, weightKG: 40, completedAt: earlier.addingTimeInterval(1))
+      ])
+    var history = Workout(
+      name: "Earlier", startedAt: earlier,
+      exercises: [WorkoutExercise(exercise: exercise, sets: [recorded])])
+    try WorkoutEngine.finish(&history, at: earlier.addingTimeInterval(60))
+    let row = WorkoutExercise(exercise: exercise, sets: [WorkoutSet(repetitions: 0)])
+    var workout = Workout(name: "Drop fallback", startedAt: date, exercises: [row])
+    let model = WorkoutExercisePresentation(
+      workout: workout, exerciseID: row.id, unit: .kilograms, locale: Locale(identifier: "en_US"),
+      history: [history])
+    let configured = try model.configuredDropSet(in: workout, adding: true)
+    try WorkoutEngine.configureDropSet(
+      in: &workout, exerciseID: row.id, setID: configured.id, repetitions: configured.repetitions,
+      weightKG: configured.weightKG, stages: configured.dropStages ?? [])
+    model.refresh(workout)
+    let stage = try requireStage(configured)
+    try expect(
+      model.previousValues?.stages[stage.id]?.repetitions == 8
+        && model.drafts[stage.id]?.repetitions == "10",
+      "Historical drops map to their own stage while explicit current drop configuration wins")
+    model.editRepetitions("7", setID: stage.id)
+    let base = try model.completion(in: workout)
+    try expect(
+      base.set.weightKG == 50 && base.set.dropStages?.first?.repetitions == 7,
+      "Base completion combines unchanged historical base values and entered current drop values")
+    try WorkoutEngine.configureDropSet(
+      in: &workout, exerciseID: row.id, setID: base.set.id, repetitions: base.set.repetitions,
+      weightKG: base.set.weightKG, stages: base.set.dropStages ?? [])
+    try WorkoutEngine.completeSet(
+      in: &workout, exerciseID: row.id, setID: base.set.id, repetitions: base.set.repetitions,
+      weightKG: base.set.weightKG, at: date.addingTimeInterval(1))
+    model.refresh(workout)
+    history.exercises[0].sets[0].dropStages?[0].repetitions = 12
+    model.updateHistory([history], for: workout)
+    let child = try model.completion(in: workout)
+    try expect(
+      child.stageID == stage.id && child.set.completedAt != nil
+        && child.set.dropStages?.first?.repetitions == 7 && model.drafts[base.set.id] == nil,
+      "Completed drop base is frozen and edited pending stage survives a history refresh")
   }
 
   @MainActor private static func checkReplacementFocus(at date: Date) throws {
@@ -231,7 +590,8 @@ private func rejects(_ action: () throws -> Void) throws {
     try WorkoutEngine.completeSet(
       in: &workout, exerciseID: row.id, setID: base.set.id, repetitions: base.set.repetitions,
       weightKG: base.set.weightKG, at: date.addingTimeInterval(1))
-    model.refresh(workout)
+    try expect(
+      model.advance(afterSaving: base, in: workout) == .stay, "Base stage cannot page away")
     try expect(
       model.selectedSetID == base.set.id && model.selectedStageID == stages[0].id
         && workout.restEndsAt == nil,
@@ -249,7 +609,9 @@ private func rejects(_ action: () throws -> Void) throws {
       in: &workout, exerciseID: row.id, setID: first.set.id, stageID: value.id,
       repetitions: value.repetitions, weightKG: value.weightKG, dropStages: first.set.dropStages,
       at: date.addingTimeInterval(2))
-    model.refresh(workout)
+    try expect(
+      model.advance(afterSaving: first, in: workout) == .stay,
+      "An intermediate drop cannot advance the exercise")
     try expect(
       model.selectedStageID == stages[1].id && model.drafts[stages[0].id] == nil
         && workout.restEndsAt == nil,
@@ -262,7 +624,9 @@ private func rejects(_ action: () throws -> Void) throws {
       in: &workout, exerciseID: row.id, setID: last.set.id, stageID: final.id,
       repetitions: final.repetitions, weightKG: final.weightKG, dropStages: last.set.dropStages,
       at: date.addingTimeInterval(3))
-    model.refresh(workout)
+    try expect(
+      model.advance(afterSaving: last, in: workout) == .finished && workout.status == .active,
+      "The final drop returns to the overview and leaves the workout unfinished")
     try expect(
       model.selectedSetID == nil && workout.fullyCompletedSets == 1 && workout.totalSets == 1
         && workout.restEndsAt != nil, "One complete group starts exactly one rest interval")

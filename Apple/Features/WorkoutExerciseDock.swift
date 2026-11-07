@@ -8,6 +8,8 @@ struct WorkoutExerciseDock: View {
   @ScaledMetric(relativeTo: .headline) private var actionRowHeight = 56
   let workout: Workout
   let exerciseIndex: Int
+  var navigationIndex: Int? = nil
+  var navigationCount: Int? = nil
   let canComplete: Bool
   var completingDrop = false
   var completionTrigger: ContinuousClock.Instant? = nil
@@ -24,8 +26,10 @@ struct WorkoutExerciseDock: View {
     GlassEffectContainer(spacing: 4) {
       ViewThatFits(in: .horizontal) {
         controls(height: actionRowHeight, navigationWidth: 64, plusWidth: 60)
-          .frame(minWidth: isOngoing ? 288 + actionRowHeight : 240)
-        controls(height: 52, navigationWidth: 52, plusWidth: 56)
+          .frame(
+            minWidth: isOngoing
+              ? WorkoutControlSizing.regularMinimumWidth(for: actionRowHeight) : 240)
+        controls(height: WorkoutControlSizing.compactRowHeight, navigationWidth: 52, plusWidth: 56)
       }
     }
     .padding(.vertical, 8)
@@ -39,19 +43,22 @@ struct WorkoutExerciseDock: View {
         forward: false, height: height + (height >= 56 ? 12 : 8), width: navigationWidth,
         action: previous
       )
-      .disabled(exerciseIndex == 0).accessibilityIdentifier("previousWorkoutExercise")
+      .disabled((navigationIndex ?? exerciseIndex) == 0)
+      .accessibilityIdentifier("previousWorkoutExercise")
       actionBlock(height: height, plusWidth: plusWidth)
       navigationButton(
         forward: true, height: height + (height >= 56 ? 12 : 8), width: navigationWidth,
         action: next
       )
-      .disabled(exerciseIndex >= workout.exercises.count - 1)
+      .disabled(
+        (navigationIndex ?? exerciseIndex) >= (navigationCount ?? workout.exercises.count) - 1
+      )
       .accessibilityIdentifier("nextWorkoutExercise")
     }
   }
 
   private func actionBlock(height: CGFloat, plusWidth: CGFloat) -> some View {
-    HStack(alignment: .bottom, spacing: 0) {
+    WorkoutActionSurface {
       if isOngoing {
         Button(action: pause) {
           Image(systemName: workout.status == .paused ? "play.fill" : "pause.fill")
@@ -65,7 +72,7 @@ struct WorkoutExerciseDock: View {
       } else {
         Spacer(minLength: 0)
       }
-      primaryAction(height: height + (height >= 56 ? 16 : 12)).zIndex(1)
+      primaryAction(height: WorkoutControlSizing.primaryDiameter(for: height)).zIndex(1)
       if isOngoing {
         Button(action: add) {
           Image(systemName: "plus").font(.system(size: 22, weight: .semibold))
@@ -74,20 +81,18 @@ struct WorkoutExerciseDock: View {
         }
         .disabled(
           workout.status != .active
-            || (workout.exercises.indices.contains(exerciseIndex)
-              && workout.exercises[exerciseIndex].sets.count >= 30)
+            || (currentGroup?.roundCount ?? 30) >= 30
         )
-        .accessibilityLabel(L10n.text("Добавить подход", locale: locale))
+        .accessibilityLabel(
+          L10n.text(
+            currentGroup?.isSuperset == true ? "Добавить круг" : "Добавить подход", locale: locale)
+        )
         .accessibilityIdentifier("addWorkoutSet")
       } else {
         Spacer(minLength: 0)
       }
     }
-    .font(.system(size: 18, weight: .semibold)).buttonStyle(WorkoutControlPressStyle())
-    .padding(.horizontal, 8).padding(.top, 4).padding(.bottom, 8)
-    .glassEffect(.regular, in: WorkoutNavigationShape(rise: 16, shoulderWidth: 48))
-    .themeGlow(in: WorkoutNavigationShape(rise: 16, shoulderWidth: 48))
-    .accessibilityElement(children: .contain)
+    .font(.system(size: 18, weight: .semibold))
     .accessibilityIdentifier("exerciseActionBlock")
   }
 
@@ -109,16 +114,7 @@ struct WorkoutExerciseDock: View {
       .themeGlow(in: Circle(), emphasized: true)
       .overlay {
         if isOngoing {
-          ZStack {
-            Circle().stroke(FitTheme.accentForeground.opacity(0.18), lineWidth: 1)
-            Circle().trim(from: 0, to: stageProgress.fraction)
-              .stroke(
-                FitTheme.accentForeground.opacity(0.85),
-                style: StrokeStyle(lineWidth: 2, lineCap: .round)
-              )
-              .rotationEffect(.degrees(-90))
-          }.padding(5).allowsHitTesting(false).accessibilityHidden(true)
-            .animation(reduceMotion ? nil : .smooth(duration: 0.28), value: stageProgress.fraction)
+          WorkoutCompletionRing(progress: stageProgress).padding(5)
         }
       }
       .contentShape(.circle)
@@ -133,12 +129,20 @@ struct WorkoutExerciseDock: View {
     .accessibilityIdentifier("completeSet")
   }
 
-  private var stageProgress: (completed: Int, total: Int, fraction: Double) {
-    guard workout.exercises.indices.contains(exerciseIndex) else { return (0, 0, 0) }
-    let sets = workout.exercises[exerciseIndex].sets
-    let total = sets.reduce(0) { $0 + $1.stages.count }
-    let completed = sets.reduce(0) { $0 + $1.performedStages.count }
-    return (completed, total, total > 0 ? Double(completed) / Double(total) : 0)
+  private var stageProgress: WorkoutCompletionProgress {
+    guard workout.exercises.indices.contains(exerciseIndex) else {
+      return WorkoutCompletionProgress()
+    }
+    let row = workout.exercises[exerciseIndex]
+    if let group = workout.groupContaining(exerciseID: row.id), group.isSuperset {
+      return WorkoutCompletionProgress(group: group)
+    }
+    return WorkoutCompletionProgress(exercise: row)
+  }
+
+  private var currentGroup: WorkoutExerciseGroup? {
+    guard workout.exercises.indices.contains(exerciseIndex) else { return nil }
+    return workout.groupContaining(exerciseID: workout.exercises[exerciseIndex].id)
   }
 
   private var actionTitle: String {
@@ -159,19 +163,5 @@ struct WorkoutExerciseDock: View {
     .buttonStyle(WorkoutControlPressStyle()).glassEffect(.regular.interactive(), in: .capsule)
     .accessibilityLabel(
       L10n.text(forward ? "Следующее упражнение" : "Предыдущее упражнение", locale: locale))
-  }
-}
-
-private struct WorkoutControlPressStyle: ButtonStyle {
-  @Environment(\.accessibilityReduceMotion) private var reduceMotion
-  @Environment(\.isEnabled) private var isEnabled
-
-  func makeBody(configuration: Configuration) -> some View {
-    configuration.label
-      .scaleEffect(reduceMotion ? 1 : configuration.isPressed ? 0.94 : 1)
-      .opacity(isEnabled ? (configuration.isPressed ? 0.86 : 1) : 0.4)
-      .animation(
-        reduceMotion ? nil : .spring(response: 0.22, dampingFraction: 0.76),
-        value: configuration.isPressed)
   }
 }

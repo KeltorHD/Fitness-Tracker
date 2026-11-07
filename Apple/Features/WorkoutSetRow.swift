@@ -41,6 +41,7 @@ struct WorkoutSetRow<ContextActions: View>: View {
   @Environment(\.locale) private var locale
   @Environment(\.dynamicTypeSize) private var typeSize
   @ScaledMetric(relativeTo: .caption) private var expandedNoteWidth: CGFloat = 84
+  @ScaledMetric(relativeTo: .body) private var inputWidth: CGFloat = 76
   private var noteColumnWidth: CGFloat { notesExpanded ? min(expandedNoteWidth, 112) : 44 }
   let set: WorkoutSet
   let index: Int
@@ -124,6 +125,7 @@ struct WorkoutSetRow<ContextActions: View>: View {
       selected && set.completedAt == nil ? colorTheme.accent.opacity(0.09) : Color.clear,
       in: .rect(cornerRadius: 16)
     )
+    .accessibilityElement(children: .contain)
   }
 
   private var noteField: some View {
@@ -211,13 +213,14 @@ struct WorkoutSetRow<ContextActions: View>: View {
               locale: locale))
       }
     }
-    .font(.title3.weight(selected ? .bold : set.completedAt != nil ? .semibold : .regular))
+    .font(.body.weight(selected ? .semibold : .regular))
     .monospacedDigit().lineLimit(1).minimumScaleFactor(0.65)
     .foregroundStyle(selected ? colorTheme.accent : set.completedAt != nil ? .primary : .secondary)
   }
 
   private var formattedWeight: String {
-    unit.display(set.weightKG).formatted(
+    if set.completedAt == nil { return weight.isEmpty ? "—" : weight }
+    return unit.display(set.weightKG).formatted(
       .number.locale(L10n.numberLocale).precision(.fractionLength(0...2)))
   }
 
@@ -237,29 +240,42 @@ struct WorkoutSetRow<ContextActions: View>: View {
         .accessibilityValue(String(set.repetitions))
         .accessibilityIdentifier("correctSetRepetitions_\(set.id)")
       } else {
-        Text(String(set.repetitions)).frame(maxWidth: .infinity, minHeight: 44)
+        Text(formattedRepetitions)
+          .frame(maxWidth: .infinity, minHeight: 44)
           .accessibilityLabel(
-            L10n.format("Повторения: %@", String(set.repetitions), locale: locale))
+            L10n.format(
+              "Повторения: %@", formattedRepetitions, locale: locale
+            ))
       }
     }
-    .font(.title3.weight(selected ? .bold : set.completedAt != nil ? .semibold : .regular))
+    .font(.body.weight(selected ? .semibold : .regular))
     .monospacedDigit().lineLimit(1).minimumScaleFactor(0.65)
     .foregroundStyle(selected ? colorTheme.accent : set.completedAt != nil ? .primary : .secondary)
   }
 
+  private var formattedRepetitions: String {
+    if set.completedAt == nil { return repetitions.isEmpty ? "—" : repetitions }
+    return String(set.repetitions)
+  }
+
   private func valueButton(_ value: String, field: WorkoutSetField) -> some View {
     let active = numberPad.field == field
-    return WorkoutNumericField(
-      value: value, field: field, numberPad: numberPad,
-      tint: UIColor(colorTheme.accent),
-      foreground: selected ? UIColor(colorTheme.accent) : active ? .label : .secondaryLabel,
-      fontWeight: selected ? .bold : active ? .medium : .regular,
-      begin: { edit(field) }, advance: advance
-    )
-    .frame(maxWidth: .infinity, minHeight: 44)
-    .overlay(alignment: .bottom) {
-      if active { Capsule().fill(colorTheme.accent).frame(height: 3) }
+    return HStack(spacing: 0) {
+      Spacer(minLength: 0)
+      WorkoutNumericField(
+        value: value, field: field, numberPad: numberPad,
+        tint: UIColor(colorTheme.accent),
+        foreground: selected ? UIColor(colorTheme.accent) : active ? .label : .secondaryLabel,
+        fontWeight: selected ? .semibold : active ? .medium : .regular,
+        begin: { edit(field) }, advance: advance
+      )
+      .frame(
+        maxWidth: typeSize.isAccessibilitySize ? .infinity : min(inputWidth, 100), minHeight: 44
+      )
+      .layoutPriority(1)
+      Spacer(minLength: 0)
     }
+    .frame(maxWidth: .infinity, minHeight: 44)
     .accessibilityHint(L10n.text("Открыть цифровую панель", locale: locale))
   }
 }
@@ -278,12 +294,25 @@ private struct WorkoutNumericField: UIViewRepresentable {
 
   func makeCoordinator() -> Coordinator { Coordinator(self) }
   func makeUIView(context: Context) -> UITextField {
-    let view = UITextField()
+    let view = WorkoutNumberTextField()
     view.delegate = context.coordinator
+    view.onActivate = { [weak coordinator = context.coordinator] in coordinator?.activate() }
+    view.onSelectionInteraction = { [weak coordinator = context.coordinator] in
+      coordinator?.beginSelectionInteraction()
+    }
+    // A completed tap activates the field; a swipe starting over it remains a list gesture.
+    let touchObserver = UITapGestureRecognizer(
+      target: context.coordinator, action: #selector(Coordinator.activateFromTap(_:)))
+    touchObserver.cancelsTouchesInView = false
+    touchObserver.delaysTouchesBegan = false
+    touchObserver.delaysTouchesEnded = false
+    touchObserver.delegate = context.coordinator
+    view.addGestureRecognizer(touchObserver)
     view.inputView = UIView(frame: .zero)
     view.inputAssistantItem.leadingBarButtonGroups = []
     view.inputAssistantItem.trailingBarButtonGroups = []
     view.textAlignment = .center
+    view.placeholder = "—"
     view.autocorrectionType = .no
     view.spellCheckingType = .no
     view.smartInsertDeleteType = .no
@@ -296,12 +325,12 @@ private struct WorkoutNumericField: UIViewRepresentable {
   func updateUIView(_ view: UITextField, context: Context) {
     context.coordinator.parent = self
     context.coordinator.synchronize(view)
-    view.font = UIFontMetrics(forTextStyle: .title3).scaledFont(
-      for: .systemFont(ofSize: 20, weight: fontWeight), compatibleWith: view.traitCollection)
+    view.font = UIFontMetrics(forTextStyle: .body).scaledFont(
+      for: .systemFont(ofSize: 18, weight: fontWeight), compatibleWith: view.traitCollection)
     view.tintColor = tint
     view.textColor = foreground
     if numberPad.field == field {
-      if view.window != nil && !view.isFirstResponder { view.becomeFirstResponder() }
+      context.coordinator.focus(view)
     } else if view.isFirstResponder {
       view.resignFirstResponder()
     }
@@ -311,13 +340,14 @@ private struct WorkoutNumericField: UIViewRepresentable {
     CGSize(width: proposal.width ?? 60, height: max(44, uiView.font?.lineHeight ?? 24))
   }
 
-  @MainActor final class Coordinator: NSObject, UITextFieldDelegate {
+  @MainActor final class Coordinator: NSObject, UITextFieldDelegate, UIGestureRecognizerDelegate {
     var parent: WorkoutNumericField
     private var synchronizing = false
     init(_ parent: WorkoutNumericField) { self.parent = parent }
     func synchronize(_ view: UITextField) {
+      let wasSynchronizing = synchronizing
       synchronizing = true
-      defer { synchronizing = false }
+      defer { synchronizing = wasSynchronizing }
       let active = parent.numberPad.field == parent.field
       let text = active ? parent.numberPad.text : parent.value
       if view.text != text { view.text = text }
@@ -330,9 +360,45 @@ private struct WorkoutNumericField: UIViewRepresentable {
         view.selectedTextRange = view.textRange(from: start, to: end)
       }
     }
+    func focus(_ view: UITextField) {
+      guard view.window != nil, !view.isFirstResponder else { return }
+      let wasSynchronizing = synchronizing
+      synchronizing = true
+      defer { synchronizing = wasSynchronizing }
+      // First-responder activation can update UIKit's selection. Restore the model's
+      // caret before accepting user selection changes that cancel first-input replacement.
+      view.becomeFirstResponder()
+      synchronize(view)
+    }
+    func activate() { parent.begin() }
+    @objc func activateFromTap(_ recognizer: UITapGestureRecognizer) {
+      guard recognizer.state == .ended else { return }
+      activate()
+    }
+    func beginSelectionInteraction() {
+      guard parent.numberPad.field == parent.field else { return }
+      parent.numberPad.beginSelectionInteraction()
+    }
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch)
+      -> Bool
+    {
+      if gestureRecognizer.view?.isFirstResponder == true,
+        parent.numberPad.field == parent.field
+      {
+        beginSelectionInteraction()
+      }
+      return true
+    }
+    func gestureRecognizer(
+      _ gestureRecognizer: UIGestureRecognizer,
+      shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
+    ) -> Bool {
+      true
+    }
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-      parent.begin()
-      return parent.numberPad.field == parent.field
+      // Only explicit user activation or the number pad can choose a field. A delayed
+      // UIKit focus request must never reopen a dismissed field or switch to another one.
+      parent.numberPad.field == parent.field
     }
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
       guard parent.numberPad.field == parent.field else { return false }
@@ -340,13 +406,16 @@ private struct WorkoutNumericField: UIViewRepresentable {
       return false
     }
     func textFieldDidEndEditing(_ textField: UITextField) {
-      if parent.numberPad.field == parent.field { parent.numberPad.dismiss() }
+      if !textField.isFirstResponder, parent.numberPad.field == parent.field {
+        parent.numberPad.dismiss()
+      }
     }
     func textFieldDidChangeSelection(_ textField: UITextField) {
       guard !synchronizing, parent.numberPad.field == parent.field,
         let range = selectedRange(in: textField)
       else { return }
-      parent.numberPad.selectText(range)
+      parent.numberPad.selectText(range, userInitiated: false)
+      synchronize(textField)
     }
     func textField(
       _ textField: UITextField, shouldChangeCharactersIn range: NSRange,
@@ -363,5 +432,40 @@ private struct WorkoutNumericField: UIViewRepresentable {
         location: view.offset(from: view.beginningOfDocument, to: range.start),
         length: view.offset(from: range.start, to: range.end))
     }
+  }
+}
+
+/// Native selection stays available after focus without treating UIKit's automatic caret
+/// placement as a user's request to append to the displayed value.
+private final class WorkoutNumberTextField: UITextField {
+  var onActivate: (() -> Void)?
+  var onSelectionInteraction: (() -> Void)?
+
+  override func accessibilityActivate() -> Bool {
+    onActivate?()
+    return super.accessibilityActivate()
+  }
+
+  override func select(_ sender: Any?) {
+    onSelectionInteraction?()
+    super.select(sender)
+  }
+
+  override func selectAll(_ sender: Any?) {
+    onSelectionInteraction?()
+    super.selectAll(sender)
+  }
+
+  override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+    if presses.contains(where: { press in
+      guard let key = press.key else { return false }
+      return [
+        UIKeyboardHIDUsage.keyboardLeftArrow, .keyboardRightArrow, .keyboardUpArrow,
+        .keyboardDownArrow,
+      ].contains(key.keyCode)
+    }) {
+      onSelectionInteraction?()
+    }
+    super.pressesBegan(presses, with: event)
   }
 }

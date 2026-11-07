@@ -4,6 +4,51 @@ import XCTest
 @testable import FitnessTracker
 
 @MainActor final class PersistenceTests: XCTestCase {
+  func testTemplateVariationsAndSupersetMembershipSurvivePersistenceAndArchiveImport() throws {
+    let repository = try SwiftDataWorkoutRepository(inMemory: true)
+    let date = Date(timeIntervalSince1970: 1_700_000_000)
+    let groupID = UUID()
+    let template = WorkoutTemplate(
+      name: "Вариации",
+      exercises: [TemplateExercise(exercise: ExerciseCatalog.all[0])],
+      variations: [
+        WorkoutTemplateVariation(
+          name: "Суперсет",
+          exercises: [
+            TemplateExercise(exercise: ExerciseCatalog.all[1], setCount: 2, supersetID: groupID),
+            TemplateExercise(exercise: ExerciseCatalog.all[2], setCount: 2, supersetID: groupID),
+          ])
+      ], baseVariationName: "Основной жим", muscleRegions: [.chestUpper, .deltoidAnterior])
+    let variation = try XCTUnwrap(template.variations.first)
+    var workout = try template.resolvedVariation(id: variation.id).start(at: date)
+    let first = try XCTUnwrap(workout.exercises.first)
+    try WorkoutEngine.completeSet(
+      in: &workout, exerciseID: first.id, setID: first.sets[0].id,
+      repetitions: 8, weightKG: 40, at: date)
+    try repository.saveTemplate(template)
+    try repository.save(workout)
+    XCTAssertEqual(try repository.templates(), [template])
+    XCTAssertEqual(try repository.workouts(), [workout])
+    XCTAssertEqual(workout.nextPendingSet?.exerciseID, workout.exercises[1].id)
+    var completionIndex = 1
+    for row in workout.exercises {
+      for set in row.sets where !set.isFullyCompleted {
+        completionIndex += 1
+        try WorkoutEngine.completeSet(
+          in: &workout, exerciseID: row.id, setID: set.id, repetitions: 8, weightKG: 40,
+          at: date.addingTimeInterval(Double(completionIndex)))
+      }
+    }
+    try WorkoutEngine.finish(&workout, at: date.addingTimeInterval(600))
+    let archive = try WorkoutArchiveCodec.decode(
+      WorkoutArchiveCodec.encode(WorkoutArchive(workouts: [workout], templates: [template])))
+    let restored = try SwiftDataWorkoutRepository(inMemory: true)
+    _ = try restored.importArchive(archive)
+    XCTAssertEqual(try restored.templates(), [template])
+    XCTAssertEqual(try restored.workouts(), [workout])
+    XCTAssertEqual(archive.workouts, [workout])
+  }
+
   func testDropStagesAndMixedTemplateTargetsRoundTrip() throws {
     let repository = try SwiftDataWorkoutRepository(inMemory: true)
     let date = Date(timeIntervalSince1970: 1_700_000_000)
@@ -47,6 +92,45 @@ import XCTest
     XCTAssertEqual(try repository.bodyWeights(), [entry])
     XCTAssertEqual(try repository.workouts().first?.bodyWeightKG, 72)
     XCTAssertFalse(try repository.importArchive(archive).hasChanges)
+  }
+  func testSharedBodyWeightAndWorkoutWritesAndDeletionAreAtomic() throws {
+    let repository = try SwiftDataWorkoutRepository(inMemory: true)
+    var workout = Workout(name: "Atomic weight", startedAt: Date(timeIntervalSince1970: 100))
+    try repository.save(workout)
+    let entry = BodyWeightEntry(
+      measuredAt: Date(timeIntervalSince1970: 200), weightKG: 72.5, workoutID: workout.id)
+    try WorkoutEngine.setBodyWeight(entry.weightKG, in: &workout)
+    try repository.saveBodyWeight(entry, updating: workout)
+    XCTAssertEqual(try repository.bodyWeights(), [entry])
+    XCTAssertEqual(try repository.workouts(), [workout])
+    var changed = entry
+    changed.weightKG = 73
+    var invalidWorkout = workout
+    invalidWorkout.name = ""
+    XCTAssertThrowsError(try repository.saveBodyWeight(changed, updating: invalidWorkout))
+    var invalidEntry = entry
+    invalidEntry.weightKG = 0
+    var changedWorkout = workout
+    try WorkoutEngine.setBodyWeight(74, in: &changedWorkout)
+    XCTAssertThrowsError(try repository.saveBodyWeight(invalidEntry, updating: changedWorkout))
+    XCTAssertEqual(try repository.bodyWeights(), [entry])
+    XCTAssertEqual(try repository.workouts(), [workout])
+    let archive = WorkoutArchive(
+      workouts: [workout], templates: [], bodyWeights: [entry],
+      exportedAt: Date(timeIntervalSince1970: 300))
+    XCTAssertEqual(try WorkoutArchiveCodec.decode(WorkoutArchiveCodec.encode(archive)), archive)
+    try WorkoutEngine.cancel(&workout, at: Date(timeIntervalSince1970: 300))
+    try repository.save(workout)
+    XCTAssertEqual(try repository.bodyWeights(), [entry])
+    var invalidDeletion = workout
+    invalidDeletion.name = ""
+    XCTAssertThrowsError(try repository.deleteBodyWeight(id: entry.id, updating: invalidDeletion))
+    XCTAssertEqual(try repository.bodyWeights(), [entry])
+    XCTAssertEqual(try repository.workouts(), [workout])
+    workout.bodyWeightKG = nil
+    try repository.deleteBodyWeight(id: entry.id, updating: workout)
+    XCTAssertTrue(try repository.bodyWeights().isEmpty)
+    XCTAssertEqual(try repository.workouts(), [workout])
   }
   func testSwiftDataUpsertRoundTripAndDelete() throws {
     let repository = try SwiftDataWorkoutRepository(inMemory: true)

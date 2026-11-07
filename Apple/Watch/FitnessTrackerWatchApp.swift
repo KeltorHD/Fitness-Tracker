@@ -34,13 +34,18 @@ struct WatchWorkoutView: View {
             if workout.status == .paused {
               Text(L10n.text("На паузе", locale: locale)).foregroundStyle(.secondary)
             }
-            if let exercise = workout.exercises.first(where: {
-              $0.sets.contains { !$0.isFullyCompleted }
-            }),
-              let set = exercise.sets.first(where: { !$0.isFullyCompleted }),
+            if let next = workout.nextPendingSet,
+              let exercise = workout.exercises.first(where: { $0.id == next.exerciseID }),
+              let set = exercise.sets.first(where: { $0.id == next.setID }),
               let target = set.stages.first(where: { $0.completedAt == nil })
             {
               Text(L10n.exerciseName(exercise.exercise, locale: locale)).font(.headline)
+              if exercise.supersetID != nil {
+                Text(
+                  L10n.text("Суперсет", locale: locale) + " · "
+                    + L10n.format("Круг %@", String(next.roundIndex + 1), locale: locale)
+                ).font(.caption).foregroundStyle(.secondary)
+              }
               if set.isDropSet {
                 Text(
                   L10n.format(

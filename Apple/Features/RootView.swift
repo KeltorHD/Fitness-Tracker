@@ -13,49 +13,50 @@ struct RootView: View {
   @AppStorage("keepScreenAwake") private var keepScreenAwake = false
   var body: some View {
     @Bindable var store = store
-    TabView(selection: $tab) {
-      Tab(value: 0) {
-        DashboardView().tint(colorTheme.accent)
-          .toolbar(.hidden, for: .tabBar)
-      } label: {
-        Label(L10n.text("Дневник", locale: locale), systemImage: "book")
-          .environment(\.symbolVariants, SymbolVariants.none)
-      }
-      Tab(value: 1) {
-        TemplatesView().tint(colorTheme.accent)
-          .toolbar(.hidden, for: .tabBar)
-      } label: {
-        Label(L10n.text("Шаблоны", locale: locale), systemImage: "dumbbell")
-          .environment(\.symbolVariants, SymbolVariants.none)
-      }
-      Tab(value: 2) {
-        ProgressScreen().tint(.primary)
-          .toolbar(.hidden, for: .tabBar)
-      } label: {
-        Label(L10n.text("Результаты", locale: locale), systemImage: "chart.bar.xaxis")
-          .environment(\.symbolVariants, SymbolVariants.none)
-      }
-      Tab(value: 3) {
-        NavigationStack {
-          ContentUnavailableView(
-            L10n.text("Справка", locale: locale), systemImage: "questionmark",
-            description: Text(L10n.text("Раздел пока в разработке.", locale: locale))
-          )
-          .navigationTitle(L10n.text("Справка", locale: locale))
-          .toolbar { SettingsToolbar() }
+    VStack(spacing: 0) {
+      TabView(selection: $tab) {
+        Tab(value: 0) {
+          DashboardView().tint(colorTheme.accent)
+            .toolbar(.hidden, for: .tabBar)
+        } label: {
+          Label(L10n.text("Дневник", locale: locale), systemImage: "book")
+            .environment(\.symbolVariants, SymbolVariants.none)
         }
-        .tint(colorTheme.accent)
-        .toolbar(.hidden, for: .tabBar)
-      } label: {
-        Label(L10n.text("Справка", locale: locale), systemImage: "questionmark")
-          .environment(\.symbolVariants, SymbolVariants.none)
+        Tab(value: 1) {
+          TemplatesView().tint(colorTheme.accent)
+            .toolbar(.hidden, for: .tabBar)
+        } label: {
+          Label(L10n.text("Шаблоны", locale: locale), systemImage: "dumbbell")
+            .environment(\.symbolVariants, SymbolVariants.none)
+        }
+        Tab(value: 2) {
+          ProgressScreen().tint(.primary)
+            .toolbar(.hidden, for: .tabBar)
+        } label: {
+          Label(L10n.text("Результаты", locale: locale), systemImage: "chart.bar.xaxis")
+            .environment(\.symbolVariants, SymbolVariants.none)
+        }
+        Tab(value: 3) {
+          NavigationStack {
+            ContentUnavailableView(
+              L10n.text("Справка", locale: locale), systemImage: "questionmark",
+              description: Text(L10n.text("Раздел пока в разработке.", locale: locale))
+            )
+            .navigationTitle(L10n.text("Справка", locale: locale))
+            .toolbar { SettingsToolbar() }
+          }
+          .tint(colorTheme.accent)
+          .toolbar(.hidden, for: .tabBar)
+        } label: {
+          Label(L10n.text("Справка", locale: locale), systemImage: "questionmark")
+            .environment(\.symbolVariants, SymbolVariants.none)
+        }
       }
-    }
-    .safeAreaInset(edge: .bottom, spacing: 0) {
       WorkoutNavigationBar(selection: $tab, hasActiveWorkout: store.active != nil) {
         store.presentWorkoutStart()
       }
     }
+    .background(FitTheme.paper)
     .id(store.workspaceID)
     .safeAreaInset(edge: .top) { if store.isDemoMode { DemoModeBanner() } }
     .tint(.primary)

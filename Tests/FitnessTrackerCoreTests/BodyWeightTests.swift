@@ -96,6 +96,106 @@ func bodyWeightRejectsInvalidValuesWithoutChangingAWorkout(_ value: Double) thro
   }
 }
 
+@Test func linkedBodyWeightDeduplicatesOnlyItsEqualCompletedSnapshotAndSurvivesCancellation()
+  throws
+{
+  let workout = try weightedWorkout()
+  let linked = BodyWeightEntry(
+    measuredAt: weightDate.addingTimeInterval(30), weightKG: 72.5, workoutID: workout.id)
+  let unrelated = BodyWeightEntry(measuredAt: linked.measuredAt, weightKG: linked.weightKG)
+  let now = weightDate.addingTimeInterval(120)
+  let summary = BodyWeightSummary(entries: [linked, unrelated], workouts: [workout], now: now)
+  #expect(summary.points.count == 2)
+  #expect(summary.points.allSatisfy { $0.source != .workout(workout.id) })
+  #expect(Set(summary.points.map(\.id)).count == 2)
+  var corrected = workout
+  corrected.bodyWeightKG = 71
+  #expect(BodyWeightSummary(entries: [linked], workouts: [corrected], now: now).points.count == 2)
+  var unrelatedLink = linked
+  unrelatedLink.workoutID = UUID()
+  #expect(
+    BodyWeightSummary(entries: [unrelatedLink], workouts: [workout], now: now).points.count == 2)
+  var future = linked
+  future.measuredAt = weightDate.addingTimeInterval(86400)
+  #expect(
+    BodyWeightSummary(entries: [future], workouts: [workout], now: now).latest?.source
+      == .workout(workout.id))
+  var cancelled = workout
+  cancelled.status = .cancelled
+  let afterCancellation = BodyWeightSummary(entries: [linked], workouts: [cancelled], now: now)
+  #expect(afterCancellation.points.count == 1 && afterCancellation.latest?.weightKG == 72.5)
+  #expect(BodyWeightSummary(entries: [linked], workouts: [], now: now) == afterCancellation)
+}
+
+@Test func linkedBodyWeightFieldIsAnAdditiveArchiveChangeAndPreservesLegacyMeasurements() throws {
+  let entry = BodyWeightEntry(
+    measuredAt: weightDate, weightKG: 72.345, workoutID: UUID())
+  let data = try JSONEncoder().encode(entry)
+  #expect(try JSONDecoder().decode(BodyWeightEntry.self, from: data) == entry)
+  var object = try #require(JSONSerialization.jsonObject(with: data) as? [String: Any])
+  object.removeValue(forKey: "workoutID")
+  let legacy = try JSONDecoder().decode(
+    BodyWeightEntry.self, from: JSONSerialization.data(withJSONObject: object))
+  #expect(legacy.workoutID == nil && legacy.id == entry.id && legacy.weightKG == entry.weightKG)
+  let archive = WorkoutArchive(workouts: [], templates: [], bodyWeights: [entry, legacy])
+  // A linked entry retains its normal identity; a link never makes duplicate record IDs legal.
+  #expect(throws: WorkoutArchiveError.duplicateID) { try WorkoutArchiveCodec.encode(archive) }
+  let linkedArchive = WorkoutArchive(
+    workouts: [], templates: [], bodyWeights: [entry], exportedAt: weightDate)
+  #expect(
+    try WorkoutArchiveCodec.decode(WorkoutArchiveCodec.encode(linkedArchive)) == linkedArchive)
+}
+
+@Test @MainActor func combinedBodyWeightWriteValidatesEverythingBeforeEitherRecordChanges() throws {
+  let repository = MemoryWorkoutRepository()
+  let original = Workout(name: "Atomic weight", startedAt: weightDate)
+  try repository.save(original)
+  var workout = original
+  try WorkoutEngine.setBodyWeight(72.5, in: &workout)
+  let entry = BodyWeightEntry(measuredAt: weightDate, weightKG: 72.5, workoutID: workout.id)
+  var invalidWorkout = workout
+  invalidWorkout.name = ""
+  #expect(throws: TrainingError.invalidName) {
+    try repository.saveBodyWeight(entry, updating: invalidWorkout)
+  }
+  #expect(try repository.workouts() == [original] && repository.bodyWeights().isEmpty)
+  var invalidEntry = entry
+  invalidEntry.weightKG = 0
+  #expect(throws: TrainingError.invalidBodyWeight) {
+    try repository.saveBodyWeight(invalidEntry, updating: workout)
+  }
+  #expect(try repository.workouts() == [original] && repository.bodyWeights().isEmpty)
+  try repository.saveBodyWeight(entry, updating: workout)
+  #expect(try repository.workouts() == [workout] && repository.bodyWeights() == [entry])
+  #expect(throws: TrainingError.invalidName) {
+    try repository.deleteBodyWeight(id: entry.id, updating: invalidWorkout)
+  }
+  #expect(try repository.workouts() == [workout] && repository.bodyWeights() == [entry])
+  try WorkoutEngine.setBodyWeight(nil, in: &workout)
+  try repository.deleteBodyWeight(id: entry.id, updating: workout)
+  #expect(try repository.workouts() == [workout] && repository.bodyWeights().isEmpty)
+}
+
+@Test @MainActor func combinedBodyWeightWriteStaysInsideTheDemoWorkspace() throws {
+  let personal = MemoryWorkoutRepository()
+  let own = BodyWeightEntry(measuredAt: weightDate, weightKG: 70)
+  try personal.saveBodyWeight(own)
+  let workspace = WorkoutWorkspaceRepository(personal: personal)
+  try workspace.openDemo(WorkoutArchive(workouts: [], templates: []))
+  let demo = Workout(name: "Demo weight", startedAt: weightDate, bodyWeightKG: 90)
+  let reading = BodyWeightEntry(measuredAt: weightDate, weightKG: 90, workoutID: demo.id)
+  try workspace.saveBodyWeight(reading, updating: demo)
+  #expect(try workspace.bodyWeights() == [reading] && workspace.workouts() == [demo])
+  #expect(try personal.bodyWeights() == [own] && personal.workouts().isEmpty)
+  var cleared = demo
+  try WorkoutEngine.setBodyWeight(nil, in: &cleared)
+  try workspace.deleteBodyWeight(id: reading.id, updating: cleared)
+  #expect(try workspace.bodyWeights().isEmpty && workspace.workouts() == [cleared])
+  #expect(try personal.bodyWeights() == [own] && personal.workouts().isEmpty)
+  _ = try workspace.closeDemo()
+  #expect(try workspace.bodyWeights() == [own] && workspace.workouts().isEmpty)
+}
+
 @Test func bodyWeightMigrationReadsVersionOneAndOriginalWorkoutPayloads() throws {
   let archive = WorkoutArchive(
     workouts: [try weightedWorkout()], templates: [], exportedAt: weightDate)

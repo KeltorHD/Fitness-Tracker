@@ -1,4 +1,5 @@
 import FitnessTrackerCore
+import Observation
 import SwiftUI
 
 /// One exercise is one card. The header, technique and removal are separate accessible actions.
@@ -6,11 +7,14 @@ struct TemplateExerciseCard: View {
   @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
   @Environment(\.dynamicTypeSize) private var typeSize
-  @AppStorage("weightUnit") private var unit: WeightUnit = .kilograms
   let item: TemplateExercise
   let index: Int
+  var order: TemplateExerciseOrder? = nil
   let onTechnique: () -> Void
+  var previousResult: WorkoutExercise? = nil
+  var unit: WeightUnit = .kilograms
   var onRemove: (() -> Void)? = nil
+  var onReplace: (() -> Void)? = nil
 
   private var entry: ExerciseLibraryEntry? {
     ExerciseLibrary.entry(
@@ -21,24 +25,28 @@ struct TemplateExerciseCard: View {
   private var name: String { entry?.name ?? item.exercise.name }
 
   private var summary: String {
-    let sets = L10n.countText(item.setCount, kind: "set", locale: locale)
-    if item.plannedSets != nil {
-      return sets + " · " + L10n.text("Индивидуальные параметры", locale: locale)
+    guard let previousResult else {
+      return L10n.text("Пока нет выполненных подходов", locale: locale)
     }
-    let repetitions = L10n.countText(item.repetitions, kind: "rep", locale: locale)
-    guard item.weightKG > 0 else { return sets + " · " + repetitions }
-    let weight = unit.display(item.weightKG).formatted(
-      .number.locale(L10n.numberLocale).precision(.fractionLength(0...2)))
-    return sets + " · " + repetitions + " · " + weight + " "
-      + L10n.text(unit.rawValue, locale: locale)
+    return WorkoutExerciseSummary.text(
+      previousResult, completedOnly: true, unit: unit, locale: locale,
+      numberLocale: L10n.numberLocale)
   }
 
   var body: some View {
     VStack(alignment: .leading, spacing: 0) {
       HStack(alignment: .top, spacing: 12) {
         VStack(alignment: .leading, spacing: 6) {
-          Text(L10n.format("Упражнение %@", String(index + 1), locale: locale))
-            .font(.caption).foregroundStyle(.secondary)
+          Text(
+            L10n.format(
+              "Упражнение %@", String((order?.index(for: item.id) ?? index) + 1), locale: locale)
+          )
+          .font(.caption).foregroundStyle(.secondary)
+          .accessibilityIdentifier("templateExercisePosition_\(item.id)")
+          if item.supersetID != nil {
+            Label(L10n.text("Суперсет", locale: locale), systemImage: "link")
+              .font(.caption.weight(.semibold)).foregroundStyle(colorTheme.accent)
+          }
           Text(name).font(.title3.weight(.semibold)).foregroundStyle(.primary)
             .fixedSize(horizontal: false, vertical: true)
             .accessibilityAddTraits(.isHeader)
@@ -56,6 +64,15 @@ struct TemplateExerciseCard: View {
           .accessibilityLabel(L10n.format("Убрать упражнение: %@", name, locale: locale))
           .accessibilityIdentifier("removeTemplateExercise_\(item.id)")
         }
+        if let onReplace {
+          Button(action: onReplace) {
+            Image(systemName: "arrow.triangle.2.circlepath")
+              .frame(width: 44, height: 44).contentShape(.rect)
+          }
+          .buttonStyle(.borderless)
+          .accessibilityLabel(L10n.text("Заменить упражнение", locale: locale))
+          .accessibilityIdentifier("replaceTemplateExercise_\(item.id)")
+        }
       }.padding(FitTheme.cardPadding)
       Divider().padding(.horizontal, FitTheme.cardPadding)
       VStack(alignment: .leading, spacing: 8) {
@@ -67,7 +84,12 @@ struct TemplateExerciseCard: View {
         } else {
           Text(item.exercise.muscle.title).font(.subheadline).foregroundStyle(.secondary)
         }
+        if previousResult != nil {
+          Text(L10n.text("Последние результаты", locale: locale)).font(.caption).foregroundStyle(
+            .secondary)
+        }
         Text(summary).font(.subheadline).foregroundStyle(.primary)
+          .accessibilityIdentifier("templateExerciseResult_\(item.id)")
         Button(action: onTechnique) {
           HStack(spacing: 8) {
             Label(L10n.text("Техника выполнения", locale: locale), systemImage: "info.circle")
@@ -84,6 +106,20 @@ struct TemplateExerciseCard: View {
     }
     .background(FitTheme.card, in: .rect(cornerRadius: FitTheme.exerciseCardRadius))
     .themeGlow(in: RoundedRectangle(cornerRadius: FitTheme.exerciseCardRadius))
+    .accessibilityElement(children: .contain)
     .accessibilityIdentifier("templateExerciseCard_\(item.id)")
+  }
+}
+
+/// Keeps ordinals live when UIKit retains a row's content during a native move.
+@MainActor @Observable final class TemplateExerciseOrder {
+  private var positions: [UUID: Int] = [:]
+
+  func index(for rowID: UUID) -> Int? { positions[rowID] }
+
+  func update(_ rows: [TemplateExercise]) {
+    positions = Dictionary(
+      rows.enumerated().map { ($0.element.id, $0.offset) },
+      uniquingKeysWith: { first, _ in first })
   }
 }

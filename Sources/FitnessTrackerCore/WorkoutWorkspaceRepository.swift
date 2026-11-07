@@ -29,7 +29,13 @@ import Foundation
   public func templates() throws -> [WorkoutTemplate] { try current.templates() }
   public func bodyWeights() throws -> [BodyWeightEntry] { try current.bodyWeights() }
   public func saveBodyWeight(_ entry: BodyWeightEntry) throws { try current.saveBodyWeight(entry) }
+  public func saveBodyWeight(_ entry: BodyWeightEntry, updating workout: Workout?) throws {
+    try current.saveBodyWeight(entry, updating: workout)
+  }
   public func deleteBodyWeight(id: UUID) throws { try current.deleteBodyWeight(id: id) }
+  public func deleteBodyWeight(id: UUID, updating workout: Workout?) throws {
+    try current.deleteBodyWeight(id: id, updating: workout)
+  }
   public func save(_ workout: Workout) throws { try current.save(workout) }
   public func saveTemplate(_ template: WorkoutTemplate) throws {
     try current.saveTemplate(template)

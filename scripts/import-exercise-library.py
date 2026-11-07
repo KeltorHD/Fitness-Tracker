@@ -85,6 +85,12 @@ def download():
 
 def generate():
     source = {item['id']: item for item in json.loads((VENDOR / 'exercises.selected.json').read_text())}
+    regions = {}
+    for line in (ROOT / 'Data/ExerciseLibrary/muscle-regions.tsv').read_text().splitlines()[1:]:
+        source_id, values = line.split('\t')
+        assert source_id in source and source_id not in regions, source_id
+        regions[source_id] = values.split(';')
+        assert len(regions[source_id]) == len(set(regions[source_id])), source_id
     generated_path = ROOT / 'Data/ExerciseLibrary/generated-media.json'
     generated = json.loads(generated_path.read_text()) if generated_path.exists() else {}
     translation_path = ROOT / 'Data/ExerciseLibrary/translation-provenance.json'
@@ -109,6 +115,7 @@ def generate():
                         'group': GROUPS[item['primaryMuscles'][0]], 'equipment': item['equipment'] or 'unspecified',
                         'level': item['level'], 'primaryMuscles': [MUSCLES[m] for m in item['primaryMuscles']],
                         'secondaryMuscles': [MUSCLES[m] for m in item['secondaryMuscles']],
+                        'trainingRegions': regions.get(source_id, []),
                         'steps': steps, 'images': item['images'],
                         'techniqueUnavailable': not bool(item['instructions']),
                         'imagesUnavailable': not bool(item['images']),
