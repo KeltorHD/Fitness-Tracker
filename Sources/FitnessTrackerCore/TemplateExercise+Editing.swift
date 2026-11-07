@@ -7,20 +7,35 @@ extension TemplateExercise {
   }
 
   /// Native drag requests move each superset as a whole and retain its internal order.
-  public static func reorderedKeepingSupersets(_ rows: [Self], orderedIDs: [UUID]) throws -> [Self]
-  {
-    guard orderedIDs.count == rows.count, Set(orderedIDs).count == rows.count,
-      Set(orderedIDs) == Set(rows.map(\.id))
-    else { throw TrainingError.missingExercise }
-    let byID = Dictionary(uniqueKeysWithValues: rows.map { ($0.id, $0) })
-    let groups = Dictionary(grouping: rows.filter { $0.supersetID != nil }, by: \.supersetID)
-    var visited: Set<UUID> = []
-    return orderedIDs.flatMap { id -> [Self] in
-      guard visited.insert(id).inserted, let row = byID[id] else { return [] }
-      guard let groupID = row.supersetID, let members = groups[groupID] else { return [row] }
-      visited.formUnion(members.map(\.id))
-      return members
+  public static func moving(_ rowID: UUID, to destination: Int, in rows: [Self]) throws -> [Self] {
+    guard let source = rows.firstIndex(where: { $0.id == rowID }) else {
+      throw TrainingError.missingExercise
     }
+    guard (0...rows.count).contains(destination) else { throw TrainingError.invalidState }
+    guard Set(rows.map(\.id)).count == rows.count else { throw TrainingError.duplicateID }
+    guard SupersetStructure.invalidIDs(in: rows.map(\.supersetID)).isEmpty else {
+      throw TrainingError.invalidSuperset
+    }
+    let indices =
+      rows[source].supersetID.map { group in
+        rows.indices.filter { rows[$0].supersetID == group }
+      } ?? [source]
+    guard let first = indices.first, let last = indices.last else {
+      throw TrainingError.missingExercise
+    }
+    if (first...(last + 1)).contains(destination) { return rows }
+    var target = destination
+    if rows.indices.contains(target), let group = rows[target].supersetID {
+      let members = rows.indices.filter { rows[$0].supersetID == group }
+      if let start = members.first, let end = members.last, target > start {
+        target = source < destination ? end + 1 : start
+      }
+    }
+    let movingIDs = Set(indices.map { rows[$0].id })
+    let remaining = rows.filter { !movingIDs.contains($0.id) }
+    let insertion = target - indices.filter { $0 < target }.count
+    return Array(remaining.prefix(insertion)) + indices.map { rows[$0] }
+      + Array(remaining.dropFirst(insertion))
   }
 
   /// Latest recorded rows, matched by exercise identity and occurrence, for display only.

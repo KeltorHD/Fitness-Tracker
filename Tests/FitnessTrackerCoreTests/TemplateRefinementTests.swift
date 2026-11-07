@@ -43,17 +43,18 @@ private let refinementDate = Date(timeIntervalSince1970: 1_700_000_000)
   let second = TemplateExercise(exercise: Exercise(name: "B", muscle: .back), supersetID: groupID)
   let third = TemplateExercise(exercise: Exercise(name: "C", muscle: .legs))
   let rows = [first, second, third]
-  let dragged = try TemplateExercise.reorderedKeepingSupersets(
-    rows, orderedIDs: [third.id, second.id, first.id])
+  let dragged = try TemplateExercise.moving(first.id, to: 3, in: rows)
   #expect(dragged == [third, first, second])
+  #expect(try TemplateExercise.moving(second.id, to: 3, in: rows) == dragged)
+  #expect(try TemplateExercise.moving(third.id, to: 1, in: rows) == dragged)
+  #expect(try TemplateExercise.moving(first.id, to: 1, in: rows) == rows)
   let replacement = first.replacing(with: third.exercise)
   #expect(replacement.id != first.id && replacement.exercise == third.exercise)
   #expect(replacement.supersetID == groupID && replacement.setCount == first.setCount)
   #expect(replacement.plannedSets == nil && replacement.weightKG == 0)
   #expect(first.plannedSets?[0].weightKG == 80)
-  #expect(throws: TrainingError.missingExercise) {
-    try TemplateExercise.reorderedKeepingSupersets(
-      rows, orderedIDs: [third.id, second.id, second.id])
+  #expect(throws: TrainingError.invalidState) {
+    try TemplateExercise.moving(first.id, to: rows.count + 1, in: rows)
   }
 }
 
