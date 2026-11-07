@@ -1,35 +1,36 @@
 @model FitnessTracker.Authentication.Controllers.AccountPage
-<h1>Ваш аккаунт</h1>
-<p>@Model.Name</p>
-<h2>Способы входа</h2>
+@{ ViewData["PageClass"] = "page-account"; }
+<h1 id="page-title" data-localize>Ваш аккаунт</h1>
+<p class="account-identity">@Model.Name</p>
+<h2 data-localize>Способы входа</h2>
 @if (Model.HasPassword)
 {
-  <p>Пароль подключён.</p>
+  <p data-localize>Пароль подключён.</p>
 }
 @foreach (var passkey in Model.Passkeys)
 {
-  <form method="post" action="/account/passkeys/remove" asp-antiforgery="true">
+  <form class="account-method" method="post" action="/account/passkeys/remove" asp-antiforgery="true">
     <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
     <input type="hidden" name="credentialId" value="@passkey.CredentialId" />
     <p>@passkey.Name</p>
-    <button type="submit" disabled="@(!Model.HasPassword && Model.Logins.Length == 0 && Model.Passkeys.Length <= 1)">Удалить passkey</button>
+    <button type="submit" disabled="@(!Model.HasPassword && Model.Logins.Length == 0 && Model.Passkeys.Length <= 1)" data-localize>Удалить passkey</button>
   </form>
 }
 @if (Model.Passkeys.Length < 10)
 {
   <form method="post" action="/account/passkeys" asp-antiforgery="true">
     <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
-    <label for="passkey-name">Название passkey</label>
-    <input id="passkey-name" name="name" maxlength="64" placeholder="Например, мой iPhone" />
-    <button type="button" data-passkey="enroll" disabled>Добавить passkey</button>
-    <p data-passkey-status role="status" aria-live="polite"></p>
+    <label for="passkey-name" data-localize>Название passkey</label>
+    <input id="passkey-name" name="name" maxlength="64" placeholder="Например, мой iPhone" data-localize-placeholder />
+    <button type="button" data-passkey="enroll" disabled><partial name="_Icon" model='@("passkey")' /><span data-localize>Добавить passkey</span></button>
+    <p class="status-message" data-passkey-status role="status" aria-live="polite"></p>
   </form>
 }
 @foreach (var provider in Model.Logins)
 {
-  <form method="post" action="/account/unlink/@provider" asp-antiforgery="true">
+  <form class="account-method" method="post" action="/account/unlink/@provider" asp-antiforgery="true">
     <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
-    <p>@provider</p><button type="submit" disabled="@(Model.Logins.Length <= 1 && !Model.HasPassword && Model.Passkeys.Length == 0)">Отключить @provider</button>
+    <p>@provider</p><button type="submit" disabled="@(Model.Logins.Length <= 1 && !Model.HasPassword && Model.Passkeys.Length == 0)" data-localize>Отключить @provider</button>
   </form>
 }
 @foreach (var provider in new[] { "Apple", "Google", "Yandex" }.Where(provider => !Model.Logins.Contains(provider)))
@@ -39,24 +40,24 @@
     <form method="post" action="/login/@provider.ToLowerInvariant()" asp-antiforgery="true">
       <input type="hidden" name="returnUrl" value="@Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString("/account", "returnUrl", Model.ReturnUrl)" />
       <input type="hidden" name="link" value="true" />
-      <button type="submit">Подключить @(provider == "Yandex" ? "Яндекс ID" : provider)</button>
+      <button type="submit"><partial name="_Icon" model="provider" /><span data-localize>Подключить @(provider == "Yandex" ? "Яндекс ID" : provider)</span></button>
     </form>
   }
   else
   {
-    <span class="button unavailable-provider" role="button" aria-disabled="true" tabindex="0" aria-describedby="unavailable-@provider">
-      Подключить @(provider == "Yandex" ? "Яндекс ID" : provider)
+    <span class="button provider-button unavailable-provider" role="button" aria-disabled="true" tabindex="0" aria-describedby="unavailable-@provider">
+      <partial name="_Icon" model="provider" /><span data-localize>Подключить @(provider == "Yandex" ? "Яндекс ID" : provider)</span>
       <span id="unavailable-@provider" class="provider-tooltip" role="tooltip">В разработке</span>
     </span>
   }
 }
-<p>Последний способ входа отключить нельзя.</p>
-<p>После отключения способа входа потребуется снова войти в приложение на всех устройствах.</p>
+<p data-localize>Последний способ входа отключить нельзя.</p>
+<p data-localize>После отключения способа входа потребуется снова войти в приложение на всех устройствах.</p>
 @if (Model.ReturnUrl != "/account")
 {
-  <a class="button" href="@Model.ReturnUrl">Вернуться в приложение</a>
+  <a class="button" href="@Model.ReturnUrl" data-localize>Вернуться в приложение</a>
 }
 <form method="post" action="/account/logout" asp-antiforgery="true">
-  <button type="submit">Выйти в браузере</button>
+  <button type="submit" data-localize>Выйти в браузере</button>
 </form>
-<p>Удалить аккаунт и все серверные копии можно в настройках приложения.</p>
+<p data-localize>Удалить аккаунт и все серверные копии можно в настройках приложения.</p>

@@ -5,10 +5,10 @@ namespace FitnessTracker.Authentication;
 
 /// <summary>Выполняет регистрацию и парольный вход, сохраняя lockout и разделение локальных/внешних аккаунтов.</summary>
 public sealed class PasswordService(UserManager<ApplicationUser> users, SignInManager<ApplicationUser> signIn,
-    EmailAccounts accounts, UnknownPasswordCheck unknownPassword, BrowserNavigation navigation)
+    EmailAccounts accounts, UnknownPasswordCheck unknownPassword, BrowserNavigation navigation, IConfiguration config)
 {
     /// <summary>Готовит безопасные поля страницы регистрации без credentials.</summary>
-    public RegistrationPageData GetPage(NavigationInput input) => new(navigation.LocalReturn(input.ReturnUrl), "");
+    public RegistrationPageData GetPage(NavigationInput input) => new(navigation.LocalReturn(input.ReturnUrl), "", GetProviders());
 
     /// <summary>Создаёт локальный аккаунт без писем; возвращает только безопасные данные формы.</summary>
     public async Task<PasswordRegistrationOutcome> RegisterAsync(PasswordRegistrationInput input,
@@ -18,7 +18,7 @@ public sealed class PasswordService(UserManager<ApplicationUser> users, SignInMa
         var address = EmailAccounts.ValidateEmail(input.Email);
         var returnUrl = navigation.LocalReturn(input.ReturnUrl);
         if (address is null || input.Password is not { Length: >= 12 and <= 128 } || input.Password != input.ConfirmPassword)
-            return new(returnUrl, address ?? "", "Укажите email и одинаковые пароли длиной от 12 до 128 символов.");
+            return new(returnUrl, address ?? "", "Укажите email и одинаковые пароли длиной от 12 до 128 символов.", GetProviders());
         var user = accounts.NewUser(address);
         IdentityResult result;
         try { result = await users.CreateAsync(user, input.Password); }
@@ -28,7 +28,7 @@ public sealed class PasswordService(UserManager<ApplicationUser> users, SignInMa
         }
         if (!result.Succeeded) return RegistrationFailure(returnUrl, address);
         await signIn.SignInAsync(user, isPersistent: false);
-        return new(returnUrl, address, null);
+        return new(returnUrl, address, null, GetProviders());
     }
 
     /// <summary>Проверяет пароль с lockout, не блокируя passkey-only аккаунт через парольные попытки.</summary>
@@ -53,6 +53,11 @@ public sealed class PasswordService(UserManager<ApplicationUser> users, SignInMa
     }
 
     /// <summary>Не раскрывает причину конфликта регистрации и не возвращает пароль.</summary>
-    private static PasswordRegistrationOutcome RegistrationFailure(string returnUrl, string address) =>
-        new(returnUrl, address, "Не удалось зарегистрироваться. Проверьте данные или попробуйте войти.");
+    private PasswordRegistrationOutcome RegistrationFailure(string returnUrl, string address) =>
+        new(returnUrl, address, "Не удалось зарегистрироваться. Проверьте данные или попробуйте войти.", GetProviders());
+
+    /// <summary>Сохраняет доступность внешних способов входа при открытии и повторном показе регистрации.</summary>
+    private string[] GetProviders() => new[] { "Apple", "Google", "Yandex" }
+        .Where(name => AuthConfiguration.Enabled(config, name))
+        .ToArray();
 }

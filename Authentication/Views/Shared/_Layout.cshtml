@@ -3,9 +3,33 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
   <title>Аккаунт FitnessTracker</title>
-  <link rel="stylesheet" href="/auth.css" />
-  <script src="/passkeys.js" defer></script>
+  <link rel="stylesheet" href="/auth.css" asp-append-version="true" />
+  <script type="module" src="/passkeys.js" asp-append-version="true"></script>
 </head>
-<body><main><p class="brand">FitnessTracker</p>@RenderBody()</main></body>
+<body class="@ViewData["PageClass"]">
+  <a class="skip-link" href="#main-content" data-localize>Перейти к содержимому</a>
+  <header class="site-header">
+    <span class="brand" aria-label="FitnessTracker">
+      <span class="brand-symbol" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+      <span>FitnessTracker</span>
+    </span>
+    <div class="appearance-controls" data-appearance-controls hidden>
+      <div class="theme-switch" role="group" aria-label="Тема оформления" data-localize-label>
+        <button type="button" class="theme-choice" data-theme-choice="light" aria-pressed="false" aria-label="Светлая тема" data-localize-label><partial name="_Icon" model='@("sun")' /></button>
+        <button type="button" class="theme-choice" data-theme-choice="dark" aria-pressed="false" aria-label="Тёмная тема" data-localize-label><partial name="_Icon" model='@("moon")' /></button>
+      </div>
+      <label class="language-picker">
+        <span class="visually-hidden" data-localize>Язык интерфейса</span>
+        <select data-language aria-label="Язык интерфейса" data-localize-label><option value="ru">Русский</option><option value="en">English</option></select>
+      </label>
+    </div>
+  </header>
+  <main id="main-content" class="auth-shell">
+    <partial name="_AuthIntro" />
+    <section class="auth-card" aria-labelledby="page-title">@RenderBody()</section>
+  </main>
+  <footer class="site-footer"><span data-localize>Твой ритм. Твой прогресс.</span></footer>
+</body>
 </html>

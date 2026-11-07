@@ -45,7 +45,7 @@ public sealed record AccountPage(string Name, string ReturnUrl, string[] Logins,
 public sealed record LoginPage(string ReturnUrl, string[] Providers);
 
 /// <summary>Модель Razor регистрации без паролей.</summary>
-public sealed record RegistrationPage(string ReturnUrl, string Email = "");
+public sealed record RegistrationPage(string ReturnUrl, string Email, string[] Providers);
 
 /// <summary>Стабильный JSON-контракт профиля для iOS.</summary>
 public sealed record AccountProfileResponse(string Id, string Name, DateTimeOffset CreatedAt, string[] Logins);

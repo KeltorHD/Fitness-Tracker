@@ -1,39 +1,30 @@
 @model FitnessTracker.Authentication.Controllers.LoginPage
-<h1>Вход в аккаунт</h1>
-<p>Войдите, чтобы сохранять резервные копии тренировок.</p>
+@{ ViewData["PageClass"] = "page-login"; }
+<div class="card-heading">
+  <h1 id="page-title" data-localize>Вход в аккаунт</h1>
+  <p data-localize>Войди, чтобы сохранять резервные копии тренировок и продолжать в своём ритме.</p>
+</div>
 @if (TempData["LoginError"] is string error)
 {
-  <p role="alert">@error</p>
+  <p class="form-alert" role="alert" data-localize>@error</p>
 }
-<form method="post" action="/login/password" asp-antiforgery="true">
+<form class="credential-form" method="post" action="/login/password" asp-antiforgery="true">
   <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
-  <label for="email">Электронная почта</label>
-  <input id="email" name="email" type="email" autocomplete="username" maxlength="254" required />
-  <label for="password">Пароль</label>
-  <input id="password" name="password" type="password" autocomplete="current-password" maxlength="128" required />
-  <button type="submit">Войти по паролю</button>
+  <label for="email" data-localize>Электронная почта</label>
+  <div class="input-field"><partial name="_Icon" model='@("mail")' /><input id="email" name="email" type="email" autocomplete="username" inputmode="email" autocapitalize="none" spellcheck="false" placeholder="you@example.com" maxlength="254" required /></div>
+  <label for="password" data-localize>Пароль</label>
+  <div class="input-field">
+    <partial name="_Icon" model='@("lock")' />
+    <input id="password" name="password" type="password" autocomplete="current-password" maxlength="128" required />
+    <button class="password-toggle" type="button" data-password-toggle="password" aria-controls="password" aria-pressed="false" aria-label="Показать пароль" data-localize-label hidden><partial name="_Icon" model='@("eye")' /></button>
+  </div>
+  <button class="button button-primary" type="submit" data-localize>Войти по паролю</button>
 </form>
-<form method="post" action="/passkeys/login" asp-antiforgery="true">
+<form class="passkey-form" method="post" action="/passkeys/login" asp-antiforgery="true">
   <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
-  <button type="button" data-passkey="login" disabled>Войти с passkey</button>
-  <p data-passkey-status role="status" aria-live="polite"></p>
+  <button class="button button-passkey" type="button" data-passkey="login" disabled><partial name="_Icon" model='@("passkey")' /><span data-localize>Войти с passkey</span></button>
+  <p class="status-message" data-passkey-status role="status" aria-live="polite"></p>
 </form>
-<p><a href="@Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString("/register", "returnUrl", Model.ReturnUrl)">Создать аккаунт</a></p>
-@foreach (var provider in new[] { "Apple", "Google", "Yandex" })
-{
-  @if (Model.Providers.Contains(provider))
-  {
-    <form method="post" action="/login/@provider.ToLowerInvariant()" asp-antiforgery="true">
-      <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
-      <button type="submit">Продолжить с @(provider == "Yandex" ? "Яндекс ID" : provider)</button>
-    </form>
-  }
-  else
-  {
-    <span class="button unavailable-provider" role="button" aria-disabled="true" tabindex="0" aria-describedby="unavailable-@provider">
-      Продолжить с @(provider == "Yandex" ? "Яндекс ID" : provider)
-      <span id="unavailable-@provider" class="provider-tooltip" role="tooltip">В разработке</span>
-    </span>
-  }
-}
-<p>Тренировки на устройстве доступны без входа.</p>
+<partial name="_Providers" model="Model" />
+<p class="card-navigation"><a href="@Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString("/register", "returnUrl", Model.ReturnUrl)" data-localize>Создать аккаунт</a></p>
+<p class="privacy-note" data-localize>Тренировки на устройстве доступны без входа.</p>

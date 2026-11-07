@@ -1,19 +1,38 @@
 @model FitnessTracker.Authentication.Controllers.RegistrationPage
-<h1>Создать аккаунт</h1>
-<p>Выберите пароль или passkey. Письмо с кодом не потребуется.</p>
-<div asp-validation-summary="All" role="alert"></div>
-<form method="post" action="/register" asp-antiforgery="true">
+@{ ViewData["PageClass"] = "page-register"; }
+<div class="card-heading">
+  <h1 id="page-title" data-localize>Создать аккаунт</h1>
+  <p data-localize>Начни планировать тренировки, следить за питанием и сохранять свой прогресс.</p>
+</div>
+@if (!ViewData.ModelState.IsValid)
+{
+  <div class="form-alert" asp-validation-summary="All" role="alert" data-localize-errors></div>
+}
+<form class="credential-form" method="post" action="/register" asp-antiforgery="true" data-registration>
   <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
-  <label for="email">Электронная почта</label>
-  <input id="email" name="email" type="email" value="@Model.Email" autocomplete="username" maxlength="254" required />
-  <label for="password">Пароль</label>
-  <input id="password" name="password" type="password" autocomplete="new-password" minlength="12" maxlength="128" required aria-describedby="password-hint" />
-  <p id="password-hint">От 12 до 128 символов, не менее четырёх разных символов.</p>
-  <label for="confirm-password">Повторите пароль</label>
-  <input id="confirm-password" name="confirmPassword" type="password" autocomplete="new-password" minlength="12" maxlength="128" required />
-  <button type="submit">Создать аккаунт с паролем</button>
-  <button type="button" data-passkey="register" disabled>Создать аккаунт с passkey</button>
-  <p data-passkey-status role="status" aria-live="polite"></p>
+  <label for="email" data-localize>Электронная почта</label>
+  <div class="input-field"><partial name="_Icon" model='@("mail")' /><input id="email" name="email" type="email" value="@Model.Email" autocomplete="username" inputmode="email" autocapitalize="none" spellcheck="false" placeholder="you@example.com" maxlength="254" required /></div>
+  <label for="password" data-localize>Пароль</label>
+  <div class="input-field">
+    <partial name="_Icon" model='@("lock")' />
+    <input id="password" name="password" type="password" autocomplete="new-password" minlength="12" maxlength="128" required aria-describedby="password-hint" />
+    <button class="password-toggle" type="button" data-password-toggle="password" aria-controls="password" aria-pressed="false" aria-label="Показать пароль" data-localize-label hidden><partial name="_Icon" model='@("eye")' /></button>
+  </div>
+  <ul id="password-hint" class="password-rules">
+    <li data-password-rule="length"><partial name="_Icon" model='@("check")' /><span data-localize>От 12 до 128 символов</span></li>
+    <li data-password-rule="unique"><partial name="_Icon" model='@("check")' /><span data-localize>Минимум 4 разных символа</span></li>
+  </ul>
+  <label for="confirm-password" data-localize>Подтвердите пароль</label>
+  <div class="input-field">
+    <partial name="_Icon" model='@("lock")' />
+    <input id="confirm-password" name="confirmPassword" type="password" autocomplete="new-password" minlength="12" maxlength="128" required />
+    <button class="password-toggle" type="button" data-password-toggle="confirm-password" aria-controls="confirm-password" aria-pressed="false" aria-label="Показать пароль" data-localize-label hidden><partial name="_Icon" model='@("eye")' /></button>
+  </div>
+  <button class="button button-primary" type="submit" data-localize>Создать аккаунт</button>
+  <button class="button button-passkey" type="button" data-passkey="register" disabled><partial name="_Icon" model='@("passkey")' /><span data-localize>Создать аккаунт с passkey</span></button>
+  <p class="status-message" data-passkey-status role="status" aria-live="polite"></p>
 </form>
-<noscript><p>Для passkey включите JavaScript или используйте пароль.</p></noscript>
-<p><a href="@Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString("/login", "returnUrl", Model.ReturnUrl)">Уже есть аккаунт — войти</a></p>
+<noscript><p class="privacy-note">Для passkey включите JavaScript или используйте пароль.</p></noscript>
+<partial name="_Providers" model="@(new FitnessTracker.Authentication.Controllers.LoginPage(Model.ReturnUrl, Model.Providers))" />
+<p class="card-navigation"><span data-localize>Уже есть аккаунт?</span> <a href="@Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString("/login", "returnUrl", Model.ReturnUrl)" data-localize>Войти</a></p>
+<p class="privacy-note" data-localize>Без писем и кодов подтверждения.</p>

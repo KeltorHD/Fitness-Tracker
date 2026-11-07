@@ -1,0 +1,21 @@
+@model FitnessTracker.Authentication.Controllers.LoginPage
+<div class="divider"><span data-localize>или</span></div>
+<div class="provider-list">
+  @foreach (var provider in new[] { "Apple", "Google", "Yandex" })
+  {
+    @if (Model.Providers.Contains(provider))
+    {
+      <form method="post" action="/login/@provider.ToLowerInvariant()" asp-antiforgery="true">
+        <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+        <button class="button provider-button" type="submit"><partial name="_Icon" model="provider" /><span data-localize>Продолжить с @(provider == "Yandex" ? "Яндекс ID" : provider)</span></button>
+      </form>
+    }
+    else
+    {
+      <span class="button provider-button unavailable-provider" role="button" aria-disabled="true" tabindex="0" aria-describedby="unavailable-@provider">
+        <partial name="_Icon" model="provider" /><span data-localize>Продолжить с @(provider == "Yandex" ? "Яндекс ID" : provider)</span>
+        <span id="unavailable-@provider" class="provider-tooltip" role="tooltip">В разработке</span>
+      </span>
+    }
+  }
+</div>

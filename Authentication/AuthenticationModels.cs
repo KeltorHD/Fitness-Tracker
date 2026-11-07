@@ -49,10 +49,10 @@ public sealed record AccountProfileData(string Id, string Name, DateTimeOffset C
 public sealed record LoginPageData(string ReturnUrl, string[] Providers);
 
 /// <summary>Страница регистрации без пароля.</summary>
-public sealed record RegistrationPageData(string ReturnUrl, string Email);
+public sealed record RegistrationPageData(string ReturnUrl, string Email, string[] Providers);
 
 /// <summary>Результат регистрации: безопасные поля формы и ошибка либо разрешённое продолжение.</summary>
-public sealed record PasswordRegistrationOutcome(string ReturnUrl, string Email, string? Error);
+public sealed record PasswordRegistrationOutcome(string ReturnUrl, string Email, string? Error, string[] Providers);
 
 /// <summary>Продолжение парольного входа и безопасное сообщение для браузера.</summary>
 public sealed record PasswordLoginOutcome(string ReturnUrl, string? Error);

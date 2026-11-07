@@ -1,4 +1,5 @@
 "use strict";
+import { setMessage } from "./auth-ui.js";
 
 const passkeyButtons = [...document.querySelectorAll("button[data-passkey]")];
 const supported = window.isSecureContext && typeof PublicKeyCredential !== "undefined"
@@ -10,7 +11,7 @@ for (const button of passkeyButtons) {
   const form = button.closest("form");
   const status = form.querySelector("[data-passkey-status]");
   if (!supported) {
-    status.textContent = "Passkey недоступен в этом браузере. Используйте другой способ входа.";
+    setMessage(status, "Passkey недоступен в этом браузере. Используйте другой способ входа.");
     continue;
   }
   button.disabled = false;
@@ -30,7 +31,7 @@ for (const button of passkeyButtons) {
     window.addEventListener("pagehide", abort, { once: true });
     const timeout = setTimeout(abort, 180000);
     passkeyButtons.forEach(item => { item.disabled = true; });
-    status.textContent = "Подтвердите действие на устройстве…";
+    setMessage(status, "Подтвердите действие на устройстве…");
     try {
       const options = await post(`${endpoint}/options`, fields, controller.signal);
       const credential = mode === "login"
@@ -47,9 +48,9 @@ for (const button of passkeyButtons) {
       if (target.origin !== window.location.origin) throw new Error("Не удалось продолжить вход.");
       window.location.assign(target.href);
     } catch (error) {
-      status.textContent = error.name === "NotAllowedError" || error.name === "AbortError"
+      setMessage(status, error.name === "NotAllowedError" || error.name === "AbortError"
         ? "Действие отменено или время ожидания истекло. Можно повторить попытку."
-        : error.message || "Не удалось использовать passkey. Повторите попытку.";
+        : error.message || "Не удалось использовать passkey. Повторите попытку.");
     } finally {
       clearTimeout(timeout);
       window.removeEventListener("pagehide", abort);

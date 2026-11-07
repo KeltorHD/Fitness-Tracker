@@ -88,6 +88,56 @@ public sealed class ProviderSelectionTests
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
+    /// <summary>Регистрация сохраняет доступность провайдеров, CSRF и безопасное продолжение после ошибки пароля.</summary>
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task RegistrationPreservesProviderAvailabilityAfterValidationFailureAsync(bool googleEnabled)
+    {
+        // Arrange: только полностью настроенный и включённый Google доступен для входа.
+        using var factory = new AuthFactory(providerSettings: new Dictionary<string, string?>
+        {
+            ["Providers:Google:Enabled"] = googleEnabled.ToString(),
+            ["Providers:Google:ClientId"] = "test-client",
+            ["Providers:Google:ClientSecret"] = "test-secret"
+        });
+        using var client = factory.CreateClient(new WebApplicationFactoryClientOptions
+        {
+            BaseAddress = new Uri("https://localhost"),
+            AllowAutoRedirect = false
+        });
+        var initial = WebUtility.HtmlDecode(await client.GetStringAsync("/register?returnUrl=%2Faccount%3Fscreen%3Dkeys"));
+        var token = Regex.Match(initial, "name=\"__RequestVerificationToken\"[^>]*value=\"([^\"]+)\"").Groups[1].Value;
+        Assert.NotEmpty(token);
+
+        // Act: пароль не проходит проверку; сервер возвращает ту же форму без credentials.
+        using var response = await client.PostAsync("/register", new FormUrlEncodedContent(new Dictionary<string, string>
+        {
+            ["__RequestVerificationToken"] = token,
+            ["email"] = "design@example.com",
+            ["password"] = "short-private-password",
+            ["confirmPassword"] = "different-private-password",
+            ["returnUrl"] = "/account?screen=keys"
+        }));
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var repeated = WebUtility.HtmlDecode(await response.Content.ReadAsStringAsync());
+
+        // Assert: в обеих версиях формы действуют прежние правила провайдеров и навигации.
+        foreach (var html in new[] { initial, repeated })
+        {
+            Assert.Equal(googleEnabled, html.Contains("action=\"/login/google\"", StringComparison.Ordinal));
+            Assert.Equal(!googleEnabled, html.Contains("unavailable-Google", StringComparison.Ordinal));
+            Assert.Contains("unavailable-Apple", html);
+            Assert.Contains("unavailable-Yandex", html);
+            Assert.Contains("name=\"returnUrl\" value=\"/account?screen=keys\"", html);
+            Assert.DoesNotContain("short-private-password", html);
+            Assert.DoesNotContain("different-private-password", html);
+            // Пустой ValidationSummary не должен добавлять inline style, запрещённый CSP.
+            Assert.DoesNotContain("style=\"", html);
+        }
+        Assert.Contains("value=\"design@example.com\"", repeated);
+    }
+
     /// <summary>Настроенный Google получает обычную форму; остальные способы серые также в управлении аккаунтом.</summary>
     [Fact]
     public async Task ConfiguredProviderRemainsUsableOnLoginAndAccountAsync()
