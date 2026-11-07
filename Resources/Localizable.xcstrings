@@ -1412,6 +1412,40 @@
         }
       }
     },
+    "Бицепс · длинная головка": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Бицепс · длинная головка"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Biceps · long head"
+          }
+        }
+      }
+    },
+    "Бицепс · короткая головка": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Бицепс · короткая головка"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Biceps · short head"
+          }
+        }
+      }
+    },
     "Блочный тренажёр": {
       "extractionState": "manual",
       "localizations": {
@@ -1425,6 +1459,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cable machine"
+          }
+        }
+      }
+    },
+    "Большая ягодичная мышца": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Большая ягодичная мышца"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gluteus maximus"
           }
         }
       }
@@ -1990,6 +2041,23 @@
         }
       }
     },
+    "Верх груди · ключичная часть": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Верх груди · ключичная часть"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Upper chest · clavicular portion"
+          }
+        }
+      }
+    },
     "Верх тела": {
       "extractionState": "manual",
       "localizations": {
@@ -2003,6 +2071,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Upper body"
+          }
+        }
+      }
+    },
+    "Верхняя часть трапеции": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Верхняя часть трапеции"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Upper trapezius"
           }
         }
       }
@@ -2479,6 +2564,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Restore…"
+          }
+        }
+      }
+    },
+    "Вращательная манжета плеча": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вращательная манжета плеча"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rotator cuff"
           }
         }
       }
@@ -3533,6 +3635,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "CSV dates were read in the %@ time zone."
+          }
+        }
+      }
+    },
+    "Двуглавая мышца бедра": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Двуглавая мышца бедра"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Biceps femoris"
           }
         }
       }
@@ -5067,6 +5186,23 @@
         }
       }
     },
+    "Задняя дельта": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Задняя дельта"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Posterior deltoid"
+          }
+        }
+      }
+    },
     "Задняя поверхность бедра": {
       "extractionState": "manual",
       "localizations": {
@@ -5590,6 +5726,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Heart rate readings for the day: %@. Days with step data: %@ of 7."
+          }
+        }
+      }
+    },
+    "Икроножная мышца · обе головки": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Икроножная мышца · обе головки"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gastrocnemius · both heads"
           }
         }
       }
@@ -6155,6 +6308,23 @@
         }
       }
     },
+    "Камбаловидная мышца": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Камбаловидная мышца"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Soleus"
+          }
+        }
+      }
+    },
     "Каталог": {
       "extractionState": "manual",
       "localizations": {
@@ -6257,6 +6427,23 @@
         }
       }
     },
+    "Косые мышцы живота · наружные и внутренние": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Косые мышцы живота · наружные и внутренние"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "External and internal obliques"
+          }
+        }
+      }
+    },
     "Круг %@": {
       "extractionState": "manual",
       "localizations": {
@@ -6304,6 +6491,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Round complete"
+          }
+        }
+      }
+    },
+    "Латеральная широкая мышца бедра": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Латеральная широкая мышца бедра"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vastus lateralis"
           }
         }
       }
@@ -6427,6 +6631,23 @@
         }
       }
     },
+    "Малая ягодичная мышца": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Малая ягодичная мышца"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gluteus minimus"
+          }
+        }
+      }
+    },
     "Масса, г": {
       "extractionState": "manual",
       "localizations": {
@@ -6457,6 +6678,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Foam roller"
+          }
+        }
+      }
+    },
+    "Медиальная широкая мышца бедра": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Медиальная широкая мышца бедра"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vastus medialis"
           }
         }
       }
@@ -6563,6 +6801,23 @@
         }
       }
     },
+    "Мышцы голени": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Мышцы голени"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calf muscles"
+          }
+        }
+      }
+    },
     "Мышцы живота": {
       "extractionState": "manual",
       "localizations": {
@@ -6576,6 +6831,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Abdominals"
+          }
+        }
+      }
+    },
+    "Мышцы и области": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Мышцы и области"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Muscles and regions"
+          }
+        }
+      }
+    },
+    "Мышцы плеча": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Мышцы плеча"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shoulder muscles"
           }
         }
       }
@@ -8569,6 +8858,40 @@
         }
       }
     },
+    "Нижняя часть трапеции": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нижняя часть трапеции"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lower trapezius"
+          }
+        }
+      }
+    },
+    "Низ груди · нижняя область": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Низ груди · нижняя область"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lower chest · inferior region"
+          }
+        }
+      }
+    },
     "Новая тренировка": {
       "extractionState": "manual",
       "localizations": {
@@ -8684,6 +9007,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Lunch"
+          }
+        }
+      }
+    },
+    "Области груди и пресса — части одной мышцы, а не отдельные мышцы. Фильтр показывает упражнения с отмеченной областью; полная изоляция не подразумевается.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Области груди и пресса — части одной мышцы, а не отдельные мышцы. Фильтр показывает упражнения с отмеченной областью; полная изоляция не подразумевается."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chest and abdominal regions are parts of one muscle, not separate muscles. The filter shows exercises tagged for that region; complete isolation is not implied."
           }
         }
       }
@@ -9657,6 +9997,23 @@
         }
       }
     },
+    "Передняя дельта": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Передняя дельта"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anterior deltoid"
+          }
+        }
+      }
+    },
     "Перезагрузить демо-данные": {
       "extractionState": "manual",
       "localizations": {
@@ -10405,6 +10762,23 @@
         }
       }
     },
+    "Пока нет выполненных подходов": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пока нет выполненных подходов"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No recorded sets yet"
+          }
+        }
+      }
+    },
     "Пока нет записей веса": {
       "extractionState": "manual",
       "localizations": {
@@ -10541,6 +10915,40 @@
         }
       }
     },
+    "Полуперепончатая мышца": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Полуперепончатая мышца"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Semimembranosus"
+          }
+        }
+      }
+    },
+    "Полусухожильная мышца": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Полусухожильная мышца"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Semitendinosus"
+          }
+        }
+      }
+    },
     "Получено показателей: %@ из 4.": {
       "extractionState": "manual",
       "localizations": {
@@ -10592,6 +11000,23 @@
         }
       }
     },
+    "Поперечная мышца живота": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Поперечная мышца живота"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transversus abdominis"
+          }
+        }
+      }
+    },
     "Порция": {
       "extractionState": "manual",
       "localizations": {
@@ -10639,6 +11064,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Last measurement"
+          }
+        }
+      }
+    },
+    "Последние результаты": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Последние результаты"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Latest results"
           }
         }
       }
@@ -11187,6 +11629,23 @@
         }
       }
     },
+    "Промежуточная широкая мышца бедра": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Промежуточная широкая мышца бедра"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vastus intermedius"
+          }
+        }
+      }
+    },
     "Пропустить отдых": {
       "extractionState": "manual",
       "localizations": {
@@ -11234,6 +11693,57 @@
           "stringUnit": {
             "state": "translated",
             "value": "Read measurements"
+          }
+        }
+      }
+    },
+    "Прямая мышца бедра": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Прямая мышца бедра"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rectus femoris"
+          }
+        }
+      }
+    },
+    "Прямая мышца живота · верхняя область": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Прямая мышца живота · верхняя область"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rectus abdominis · upper region"
+          }
+        }
+      }
+    },
+    "Прямая мышца живота · нижняя область": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Прямая мышца живота · нижняя область"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rectus abdominis · lower region"
           }
         }
       }
@@ -12394,6 +12904,23 @@
         }
       }
     },
+    "Середина груди · грудино-рёберная область": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Середина груди · грудино-рёберная область"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Middle chest · sternocostal region"
+          }
+        }
+      }
+    },
     "Сзади": {
       "extractionState": "manual",
       "localizations": {
@@ -13193,6 +13720,23 @@
         }
       }
     },
+    "Средняя дельта": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Средняя дельта"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lateral deltoid"
+          }
+        }
+      }
+    },
     "Средняя часть спины": {
       "extractionState": "manual",
       "localizations": {
@@ -13206,6 +13750,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Middle back"
+          }
+        }
+      }
+    },
+    "Средняя часть трапеции": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Средняя часть трапеции"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Middle trapezius"
+          }
+        }
+      }
+    },
+    "Средняя ягодичная мышца": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Средняя ягодичная мышца"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gluteus medius"
           }
         }
       }
@@ -13801,6 +14379,57 @@
           "stringUnit": {
             "state": "translated",
             "value": "Triceps"
+          }
+        }
+      }
+    },
+    "Трицепс · длинная головка": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Трицепс · длинная головка"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Triceps · long head"
+          }
+        }
+      }
+    },
+    "Трицепс · латеральная головка": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Трицепс · латеральная головка"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Triceps · lateral head"
+          }
+        }
+      }
+    },
+    "Трицепс · медиальная головка": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Трицепс · медиальная головка"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Triceps · medial head"
           }
         }
       }
@@ -14719,6 +15348,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "File saved."
+          }
+        }
+      }
+    },
+    "Фильтр учитывает основные мышцы и отмеченные области.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Фильтр учитывает основные мышцы и отмеченные области."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The filter uses primary muscles and tagged regions."
           }
         }
       }

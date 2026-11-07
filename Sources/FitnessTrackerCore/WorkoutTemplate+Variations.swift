@@ -24,6 +24,7 @@ extension WorkoutTemplate {
     if let id, id != self.id {
       guard let selected = variation(id: id) else { throw TrainingError.missingTemplateVariation }
       result.exercises = selected.exercises
+      result.baseVariationName = selected.name
     }
     result.variations = []
     try Validation.template(result)

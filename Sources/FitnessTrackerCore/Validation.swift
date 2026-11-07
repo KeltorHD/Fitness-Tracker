@@ -86,6 +86,7 @@ public enum Validation {
   }
   public static func template(_ value: WorkoutTemplate) throws {
     try name(value.name)
+    if let name = value.baseVariationName { try self.name(name) }
     guard (0...3600).contains(value.restSeconds) else { throw TrainingError.invalidRest }
     try unique([value.id] + value.variations.map(\.id))
     try templateExercises(value.exercises)

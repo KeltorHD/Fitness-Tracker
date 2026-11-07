@@ -25,6 +25,7 @@ assert english['source'] == document['source']
 for ru, en in zip(document['entries'], english['entries']):
     original = source[en['sourceID']]
     assert ru['id'] == en['id'] and ru['images'] == en['images']
+    assert ru['trainingRegions'] == en['trainingRegions']
     assert en['name'] == original['name'] and en['steps'] == [s for s in original['instructions'] if s.strip()]
 assert len(manifest['images']) == 1746
 assert len([entry for entry in document['entries'] if entry['imagesUnavailable']]) == 3

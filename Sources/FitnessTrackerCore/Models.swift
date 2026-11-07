@@ -123,13 +123,16 @@ public struct WorkoutTemplate: Identifiable, Codable, Equatable, Sendable {
   public var restSeconds: Int
   public var muscleGroups: Set<MuscleGroup>
   public var muscles: Set<ExerciseMuscle>
+  public var muscleRegions: Set<ExerciseMuscleRegion>
   public var preferredWeekdays: Set<WorkoutWeekday>
   /// The existing exercises remain the first variation, preserving installed templates.
   public var variations: [WorkoutTemplateVariation]
+  public var baseVariationName: String?
   public init(
     id: UUID = UUID(), name: String, exercises: [TemplateExercise], restSeconds: Int = 0,
     muscleGroups: Set<MuscleGroup> = [], muscles: Set<ExerciseMuscle> = [],
-    preferredWeekdays: Set<WorkoutWeekday> = [], variations: [WorkoutTemplateVariation] = []
+    preferredWeekdays: Set<WorkoutWeekday> = [], variations: [WorkoutTemplateVariation] = [],
+    baseVariationName: String? = nil, muscleRegions: Set<ExerciseMuscleRegion> = []
   ) {
     self.id = id
     self.name = name
@@ -137,12 +140,15 @@ public struct WorkoutTemplate: Identifiable, Codable, Equatable, Sendable {
     self.restSeconds = restSeconds
     self.muscleGroups = muscleGroups
     self.muscles = muscles
+    self.muscleRegions = muscleRegions
     self.preferredWeekdays = preferredWeekdays
     self.variations = variations
+    self.baseVariationName = baseVariationName
   }
 
   private enum CodingKeys: String, CodingKey {
     case id, name, exercises, restSeconds, muscleGroups, muscles, preferredWeekdays, variations
+    case baseVariationName, muscleRegions
   }
 
   public init(from decoder: Decoder) throws {
@@ -154,17 +160,21 @@ public struct WorkoutTemplate: Identifiable, Codable, Equatable, Sendable {
     // Additive migration: existing templates have no preferred filters or training days.
     muscleGroups = try container.decodeIfPresent(Set<MuscleGroup>.self, forKey: .muscleGroups) ?? []
     muscles = try container.decodeIfPresent(Set<ExerciseMuscle>.self, forKey: .muscles) ?? []
+    muscleRegions =
+      try container.decodeIfPresent(Set<ExerciseMuscleRegion>.self, forKey: .muscleRegions) ?? []
     preferredWeekdays =
       try container.decodeIfPresent(Set<WorkoutWeekday>.self, forKey: .preferredWeekdays) ?? []
     variations =
       try container.decodeIfPresent([WorkoutTemplateVariation].self, forKey: .variations) ?? []
+    baseVariationName = try container.decodeIfPresent(String.self, forKey: .baseVariationName)
   }
 
   public var muscleSelection: ExerciseMuscleSelection {
-    get { ExerciseMuscleSelection(groups: muscleGroups, muscles: muscles) }
+    get { ExerciseMuscleSelection(groups: muscleGroups, muscles: muscles, regions: muscleRegions) }
     set {
       muscleGroups = newValue.groups
       muscles = newValue.muscles
+      muscleRegions = newValue.regions
     }
   }
 
