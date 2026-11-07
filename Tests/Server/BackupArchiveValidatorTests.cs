@@ -85,15 +85,15 @@ public sealed class BackupArchiveValidatorTests
         Assert.DoesNotContain("private-health-record", exception.Message);
     }
 
-    /// <summary>Принимает ровно 20 MiB и отклоняет превышение без разбора большого JSON.</summary>
+    /// <summary>Принимает ровно 30 MiB и отклоняет превышение без разбора большого JSON.</summary>
     [Fact]
     public void EnforcesExactByteBoundary()
     {
-        var payload = new byte[BackupStorage.MaximumBytes];
+        var payload = new byte[30 * 1024 * 1024];
         payload.AsSpan().Fill((byte)' ');
         Encoding.UTF8.GetBytes(VALID_ARCHIVE).CopyTo(payload, 0);
         Assert.Equal(4, BackupArchiveValidator.Validate(payload));
-        foreach (var invalid in new[] { Array.Empty<byte>(), new byte[BackupStorage.MaximumBytes + 1] })
+        foreach (var invalid in new[] { Array.Empty<byte>(), new byte[payload.Length + 1] })
         {
             var error = Assert.Throws<BackupException>(() => BackupArchiveValidator.Validate(invalid));
             Assert.Equal(413, error.Status);

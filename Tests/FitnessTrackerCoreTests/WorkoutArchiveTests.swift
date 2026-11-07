@@ -104,9 +104,16 @@ func invalidArchiveInputIsRejected(_ input: String) {
   }
 }
 
-@Test func archiveRejectsOversizedDataBeforeDecoding() {
+@Test func archiveAcceptsExactlyThirtyMiBAndRejectsOneMoreByte() throws {
+  let archive = WorkoutArchive(workouts: [], templates: [], exportedAt: archiveDate)
+  let encoded = try WorkoutArchiveCodec.encode(archive)
+  var data = Data(repeating: 0x20, count: 30 * 1024 * 1024)
+  data.replaceSubrange(0..<encoded.count, with: encoded)
+  #expect(try WorkoutArchiveCodec.decode(data) == archive)
+
+  data.append(0x20)
   #expect(throws: WorkoutArchiveError.tooLarge) {
-    try WorkoutArchiveCodec.decode(Data(repeating: 0, count: WorkoutArchiveCodec.maximumBytes + 1))
+    try WorkoutArchiveCodec.decode(data)
   }
 }
 

@@ -3911,19 +3911,19 @@
         }
       }
     },
-    "До 10 копий по 20 МБ. В копию входят тренировки, планы и записи веса. Питание, фотографии и пульс не передаются. Восстановление добавляет новые записи после проверки.": {
+    "До 10 копий по 30 МБ. В копию входят тренировки, планы и записи веса. Питание, фотографии и пульс не передаются. Восстановление добавляет новые записи после проверки.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "До 10 копий по 20 МБ. В копию входят тренировки, планы и записи веса. Питание, фотографии и пульс не передаются. Восстановление добавляет новые записи после проверки."
+            "value": "До 10 копий по 30 МБ. В копию входят тренировки, планы и записи веса. Питание, фотографии и пульс не передаются. Восстановление добавляет новые записи после проверки."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Up to 10 backups, 20 MB each. Backups include workouts, plans and weight entries. Nutrition, photos and heart rate are not uploaded. Restoring adds new records after validation."
+            "value": "Up to 10 backups, 30 MB each. Backups include workouts, plans and weight entries. Nutrition, photos and heart rate are not uploaded. Restoring adds new records after validation."
           }
         }
       }
@@ -13958,19 +13958,19 @@
         }
       }
     },
-    "Файл превышает допустимый размер 20 МБ.": {
+    "Файл превышает допустимый размер 30 МБ.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Файл превышает допустимый размер 20 МБ."
+            "value": "Файл превышает допустимый размер 30 МБ."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The file exceeds the 20 MB size limit."
+            "value": "The file exceeds the 30 MB size limit."
           }
         }
       }

@@ -11,7 +11,7 @@ public sealed record BackupInfo(Guid Id, DateTimeOffset CreatedAt, int ArchiveVe
 public sealed class BackupStorage(BackupDbContext database, TimeProvider clock)
 {
     /// <summary>Максимальный размер архива в байтах, согласованный со Swift Core.</summary>
-    public const int MaximumBytes = 20 * 1024 * 1024;
+    public const int MaximumBytes = 30 * 1024 * 1024;
     /// <summary>Максимальное количество одновременно сохранённых копий одного пользователя.</summary>
     public const int MaximumCopies = 10;
 

@@ -231,6 +231,31 @@ public sealed class BackendTests
         Assert.Equal(HttpStatusCode.Unauthorized, (await wrongSignature.GetAsync("/v1/backups")).StatusCode);
     }
 
+    /// <summary>Архив ровно в 30 MiB сохраняется и скачивается без изменения байтов.</summary>
+    [Fact]
+    public async Task AcceptsAndDownloadsArchiveAtThirtyMiBLimitAsync()
+    {
+        // Arrange: валидный JSON с допустимыми пробелами до точной границы размера.
+        using var factory = new BackendFactory();
+        using var client = factory.Client(Guid.NewGuid().ToString());
+        var id = Guid.NewGuid();
+        var payload = new byte[30 * 1024 * 1024];
+        payload.AsSpan().Fill((byte)' ');
+        _archive.CopyTo(payload, 0);
+
+        // Act: сохраняем копию и читаем её через те же публичные маршруты.
+        using var upload = await client.PutAsync($"/v1/backups/{id}", Content(payload));
+        using var download = await client.GetAsync($"/v1/backups/{id}");
+
+        // Assert: метаданные и скачанное содержимое совпадают с исходным архивом.
+        Assert.Equal(HttpStatusCode.Created, upload.StatusCode);
+        var info = Assert.IsType<BackupInfo>(await upload.Content.ReadFromJsonAsync<BackupInfo>());
+        Assert.Equal(payload.Length, info.Size);
+        Assert.Equal(Convert.ToHexStringLower(SHA256.HashData(payload)), info.Sha256);
+        Assert.Equal(HttpStatusCode.OK, download.StatusCode);
+        Assert.Equal(payload, await download.Content.ReadAsByteArrayAsync());
+    }
+
     /// <summary>Ошибки архива и превышение квоты не изменяют ранее сохранённые копии.</summary>
     [Fact]
     public async Task RejectsMalformedOversizedUnsupportedArchivesAndQuotaWithoutEvictingBackupsAsync()
@@ -241,11 +266,11 @@ public sealed class BackendTests
         Assert.Equal(HttpStatusCode.BadRequest, (await client.PutAsync($"/v1/backups/{Guid.NewGuid()}", Content(
             Encoding.UTF8.GetBytes(Encoding.UTF8.GetString(_archive).Replace("\"version\":4", "\"version\":99"))))).StatusCode);
         Assert.Equal(HttpStatusCode.RequestEntityTooLarge, (await client.PutAsync($"/v1/backups/{Guid.NewGuid()}",
-            Content(new byte[BackupStorage.MaximumBytes + 1]))).StatusCode);
-        for (var index = 0; index < BackupStorage.MaximumCopies; index++)
+            Content(new byte[30 * 1024 * 1024 + 1]))).StatusCode);
+        for (var index = 0; index < 10; index++)
             Assert.Equal(HttpStatusCode.Created, (await client.PutAsync($"/v1/backups/{Guid.NewGuid()}", Content())).StatusCode);
         Assert.Equal(HttpStatusCode.Conflict, (await client.PutAsync($"/v1/backups/{Guid.NewGuid()}", Content())).StatusCode);
-        Assert.Equal(BackupStorage.MaximumCopies, (await client.GetFromJsonAsync<BackupInfo[]>("/v1/backups"))!.Length);
+        Assert.Equal(10, (await client.GetFromJsonAsync<BackupInfo[]>("/v1/backups"))!.Length);
     }
 
     /// <summary>Очистка требует внутренний ключ, повторяется безопасно и запрещает последующие PUT.</summary>
