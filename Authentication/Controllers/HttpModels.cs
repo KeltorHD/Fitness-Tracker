@@ -45,7 +45,34 @@ public sealed record AccountPage(string Name, string ReturnUrl, string[] Logins,
 public sealed record LoginPage(string ReturnUrl, string[] Providers);
 
 /// <summary>Модель Razor регистрации без паролей.</summary>
-public sealed record RegistrationPage(string ReturnUrl, string Email, string[] Providers);
+public sealed record RegistrationPage(string ReturnUrl, string Email, string[] Providers, bool EmailRegistrationAvailable);
+
+/// <summary>HTTP-форма повторной отправки письма без приватного ToString.</summary>
+public sealed record EmailResendRequest(string? Email = null, string? ReturnUrl = "/account")
+{
+    /// <summary>Скрывает адрес.</summary>
+    public override string ToString() => nameof(EmailResendRequest);
+}
+
+/// <summary>HTTP-параметры ссылки подтверждения.</summary>
+public sealed record EmailConfirmationRequest(string? UserId = null, string? Code = null)
+{
+    /// <summary>Скрывает токен.</summary>
+    public override string ToString() => nameof(EmailConfirmationRequest);
+}
+
+/// <summary>Razor-модель ожидания письма.</summary>
+public sealed record EmailPendingPage(string ReturnUrl, bool Available, bool Submitted);
+
+/// <summary>Razor-модель явного подтверждения адреса.</summary>
+public sealed record EmailConfirmPage(string UserId, string Code, bool CanConfirm)
+{
+    /// <summary>Скрывает токен.</summary>
+    public override string ToString() => nameof(EmailConfirmPage);
+}
+
+/// <summary>Razor-модель результата подтверждения.</summary>
+public sealed record EmailCompletePage(bool Succeeded);
 
 /// <summary>Стабильный JSON-контракт профиля для iOS.</summary>
 public sealed record AccountProfileResponse(string Id, string Name, DateTimeOffset CreatedAt, string[] Logins);

@@ -21,6 +21,15 @@ services:
       Ntfy__QueueCapacity: ${NTFY_QUEUE_CAPACITY:-128}
       Ntfy__TimeoutSeconds: ${NTFY_TIMEOUT_SECONDS:-5}
       Auth__Issuer: https://${AUTH_DOMAIN}/
+      Smtp__Enabled: ${SMTP_ENABLED:-false}
+      Smtp__Host: ${SMTP_HOST:-}
+      Smtp__Port: ${SMTP_PORT:-587}
+      Smtp__Security: ${SMTP_SECURITY:-StartTls}
+      Smtp__Username: ${SMTP_USERNAME:-}
+      Smtp__Password: ${SMTP_PASSWORD:-}
+      Smtp__FromAddress: ${SMTP_FROM_ADDRESS:-}
+      Smtp__FromName: ${SMTP_FROM_NAME:-FitnessTracker}
+      Smtp__TimeoutSeconds: ${SMTP_TIMEOUT_SECONDS:-10}
       Auth__RedirectUri: https://${AUTH_DOMAIN}/ios/oauth/callback
       Auth__AppleAppIdentifier: ${IOS_APP_IDENTIFIER:-}
       Auth__PersonalCallbackScheme: ${IOS_PERSONAL_CALLBACK_SCHEME:-}

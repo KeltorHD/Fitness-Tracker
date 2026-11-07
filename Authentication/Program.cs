@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Npgsql;
 using FitnessTracker.ServerLogging;
 using OpenIddict.Abstractions;
@@ -34,6 +35,15 @@ public partial class Program
         builder.Services.AddScoped<BrowserNavigation>();
         builder.Services.AddScoped<AccountService>();
         builder.Services.AddScoped<PasswordService>();
+        builder.Services.AddOptions<SmtpOptions>()
+            .BindConfiguration("Smtp")
+            .Validate(options => options.Validate())
+            .ValidateOnStart();
+        builder.Services.AddScoped<MailKit.Net.Smtp.ISmtpClient>(_ => new MailKit.Net.Smtp.SmtpClient());
+        builder.Services.AddScoped<IAccountEmailSender, SmtpEmailSender>();
+        builder.Services.AddScoped<EmailConfirmationService>();
+        builder.Services.AddSingleton<EmailConfirmationThrottle>();
+        builder.Services.TryAddSingleton(TimeProvider.System);
         builder.Services.AddScoped<PasskeyService>();
         builder.Services.AddScoped<ExternalLoginService>();
         builder.Services.AddScoped<AuthorizationService>();
@@ -51,7 +61,7 @@ public partial class Program
             options.Lockout.MaxFailedAccessAttempts = 5;
             options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
             options.SignIn.RequireConfirmedEmail = false;
-            options.SignIn.RequireConfirmedAccount = false;
+            options.SignIn.RequireConfirmedAccount = true;
             options.Password.RequiredLength = 12;
             options.Password.RequiredUniqueChars = 4;
             options.Password.RequireDigit = false;
@@ -59,6 +69,8 @@ public partial class Program
             options.Password.RequireUppercase = false;
             options.Password.RequireNonAlphanumeric = false;
         }).AddEntityFrameworkStores<AuthDbContext>().AddDefaultTokenProviders();
+        builder.Services.AddScoped<IUserConfirmation<ApplicationUser>, EmailAccountConfirmation>();
+        builder.Services.Configure<DataProtectionTokenProviderOptions>(options => options.TokenLifespan = TimeSpan.FromHours(2));
         builder.Services.Configure<PasswordHasherOptions>(options => options.IterationCount = 210_000);
         builder.Services.AddScoped<EmailAccounts>();
         builder.Services.AddSingleton<UnknownPasswordCheck>();

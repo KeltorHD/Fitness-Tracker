@@ -43,6 +43,7 @@ public sealed class AuthenticationMappingHttpTests
             ["Id"] = existingId,
             ["UserId"] = existingId,
             ["EmailConfirmed"] = "true",
+            ["EmailConfirmationRequired"] = "false",
             ["SecurityStamp"] = "injected-stamp",
             ["PasswordHash"] = "injected-hash",
             ["DisplayName"] = "Injected name"
@@ -55,10 +56,15 @@ public sealed class AuthenticationMappingHttpTests
             Assert.Equal(existingHash, (await database.Users.SingleAsync(user => user.Id == existingId)).PasswordHash);
             var created = await database.Users.SingleAsync(user => user.Id != existingId);
             Assert.False(created.EmailConfirmed);
+            Assert.True(created.EmailConfirmationRequired);
             Assert.NotEqual("injected-stamp", created.SecurityStamp);
             Assert.NotEqual("injected-hash", created.PasswordHash);
             Assert.Equal("Пользователь", created.DisplayName);
         }
+
+        await EmailConfirmationTests.ConfirmMailAsync(factory, client);
+        using var login = await CredentialsTests.PostAsync(client, "/login", "/login/password", new()
+        { ["email"] = "new@fitness.test", ["password"] = "New-account-password-123" });
 
         // Assert: настоящий OAuth exchange ведёт к профилю нового владельца, без приватных Identity полей.
         var verifier = WebEncoders.Base64UrlEncode(RandomNumberGenerator.GetBytes(32));

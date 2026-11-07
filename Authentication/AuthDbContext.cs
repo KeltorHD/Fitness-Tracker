@@ -6,6 +6,8 @@ namespace FitnessTracker.Authentication;
 
 public sealed class ApplicationUser : IdentityUser
 {
+    /// <summary>Только новые локальные регистрации требуют email; прежние строки получают false при миграции.</summary>
+    public bool EmailConfirmationRequired { get; set; }
     public string DisplayName { get; set; } = "";
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 }

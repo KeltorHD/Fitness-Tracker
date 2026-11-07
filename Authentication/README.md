@@ -1,6 +1,6 @@
 # FitnessTracker Authentication
 
-Самостоятельный ASP.NET Core Identity + OpenIddict сервер: Google, Apple, Яндекс, PKCE, refresh tokens и управление аккаунтом. Регистрация и вход по email/паролю без подтверждения почты, а также passkey реализованы. Миграция AddPasskeys включена в проект; применяйте миграции перед обновлением сервера, подробности в серверной инструкции.
+Самостоятельный ASP.NET Core Identity + OpenIddict сервер: Google, Apple, Яндекс, PKCE, refresh tokens и управление аккаунтом. Регистрация и вход по email/паролю и passkey реализованы. Только новые локальные аккаунты требуют подтверждения адреса по ссылке из письма. Отправка — стандартный SMTP (включая Stalwart), настройки `SMTP_*` в `.env`; при выключенном SMTP новые email-регистрации недоступны, прежние аккаунты продолжают входить. Миграция `RequireConfirmationForNewEmailAccounts` сохраняет прежние данные и применяется автоматически при запуске. Подробности и переменные ntfy/SMTP — в [серверной инструкции](../docs/SERVER.md).
 
 [Архитектура, endpoints, провайдеры, migrations и Docker Compose](../docs/SERVER.md). В solution нет зависимости от проекта Backend; удаление копий вызывает его внутренний HTTP endpoint.
 

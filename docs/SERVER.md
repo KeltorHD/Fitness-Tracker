@@ -1,6 +1,6 @@
 # Аутентификация и серверные резервные копии
 
-Основа — [согласованная переписка](https://chatgpt.com/share/6aea2280-e498-83eb-be07-a822dfac1c8d): два самостоятельных .NET-приложения, ASP.NET Core Identity + OpenIddict, Google/Apple/Яндекс, PostgreSQL, Docker Compose и Authorization Code + PKCE. Добавлены регистрация/вход по email и паролю без подтверждения почты и passkey как альтернатива паролю; восстановление по почте пока не реализовано.
+Основа — [согласованная переписка](https://chatgpt.com/share/6aea2280-e498-83eb-be07-a822dfac1c8d): два самостоятельных .NET-приложения, ASP.NET Core Identity + OpenIddict, Google/Apple/Яндекс, PostgreSQL, Docker Compose и Authorization Code + PKCE. Добавлены регистрация/вход по email и паролю с подтверждением новых адресов через SMTP и passkey как альтернатива паролю; восстановление по почте пока не реализовано.
 
 ## Проекты
 
@@ -72,7 +72,10 @@ Keychain item изолирован по bundle ID и issuer, не синхрон
 | Auth POST | `/connect/introspect` | RFC 7662, только confidential Backend client; внешний доступ закрыт Nginx |
 | Auth GET | `/login` | Выбор включённых провайдеров |
 | Auth POST | `/login/{provider}` | Начало внешнего входа / явной привязки; antiforgery |
-| Auth GET/POST | `/register` | Регистрация email/пароль без подтверждения почты |
+| Auth GET/POST | `/register` | Регистрация email/пароль с обязательным подтверждением новых аккаунтов |
+| Auth GET | `/email/verify` | Ожидание подтверждения и форма повтора письма |
+| Auth POST | `/email/resend` | Повторная отправка; одинаковый ответ для всех email, throttle и antiforgery |
+| Auth GET/POST | `/email/confirm` | GET показывает форму, POST проверяет Identity token; автоматического входа нет |
 | Auth POST | `/login/password` | Парольный вход с lockout и antiforgery |
 | Auth POST | `/passkeys/register/options`, `/passkeys/register` | Создание аккаунта без пароля |
 | Auth POST | `/passkeys/login/options`, `/passkeys/login` | Вход по discoverable passkey |
@@ -297,7 +300,35 @@ FITNESS_TRACKER_AUTH_DOMAIN = auth.example.com
 
 ## Email, пароль и passkey
 
-Регистрация `/register` создаёт локальный аккаунт с email и паролем от 12 до 128 символов (не менее четырёх разных символов), либо с email и passkey без пароля. Письма и коды не отправляются; `EmailConfirmed` остаётся `false`. Адрес служит логином, но владение им не проверяется. Восстановление доступа по неподтверждённой почте не реализовано. Локальный email нормализуется Identity и получает уникальный username; совпадение email с Google/Apple/Яндекс не объединяет аккаунты. Внешние способы добавляются явным действием из аккаунта.
+Регистрация `/register` создаёт локальный аккаунт с email и паролем от 12 до 128 символов (не менее четырёх разных символов), либо с email и passkey без пароля. **Новые регистрации требуют подтверждения почты**: письмо содержит ссылку, действующую два часа. До подтверждения не выдаются browser cookie и OAuth-токены. Сам GET ссылки ничего не меняет: пользователь явно подтверждает адрес кнопкой (antiforgery POST), после чего входит с паролем или passkey. Письмо не содержит OAuth state/PKCE/callback, вход по ссылке не выполняется.
+
+**Прежние аккаунты продолжают работать без проверки email.** Миграция `RequireConfirmationForNewEmailAccounts` добавляет `EmailConfirmationRequired=false` существующим строкам; только новая локальная регистрация устанавливает `true`. Значение `EmailConfirmed` прежних пользователей не подделывается, пароли/passkey/сессии и копии сохраняются. Внешние провайдеры сохраняют свой прежний сценарий. Совпадение email с Google/Apple/Яндекс не объединяет аккаунты. Восстановление пароля по почте в эту функцию не входит.
+
+### SMTP и Stalwart
+
+Отправка использует MailKit и обычный SMTP submission. API Stalwart или другого провайдера не требуется. В `.env` Authentication задайте, например:
+
+```dotenv
+SMTP_ENABLED=true
+SMTP_HOST=mail.example.com
+SMTP_PORT=587
+SMTP_SECURITY=StartTls
+SMTP_USERNAME=fitness@example.com
+SMTP_PASSWORD=replace-with-smtp-password
+SMTP_FROM_ADDRESS=fitness@example.com
+SMTP_FROM_NAME=FitnessTracker
+SMTP_TIMEOUT_SECONDS=10
+```
+
+`StartTls` требует STARTTLS без автоматического перехода на plaintext. Для TLS с первого байта используйте `SslOnConnect` и обычно порт `465`. Проверка сертификата остаётся включённой; SMTP host должен соответствовать сертификату и быть доступен из контейнера. `localhost` внутри Authentication указывает на сам контейнер, поэтому для Stalwart на хосте задайте доступный DNS/IP хоста; для отдельного контейнера — имя в общей Docker-сети. `None` разрешён только как явный выбор для доверенной внутренней сети. Username/password можно оставить пустыми, если настроен ограниченный внутренний SMTP relay. На почтовом сервере разрешите выбранного отправителя; DNS SPF/DKIM/DMARC и доставку на внешние ящики настраивает владелец сервера.
+
+По умолчанию `SMTP_ENABLED=false`: новая email/пароль и email/passkey регистрация недоступна (серая кнопка), старые аккаунты продолжают входить. Для обычного запуска без Compose используйте ключи `Smtp__Enabled`, `Smtp__Host`, `Smtp__Port`, `Smtp__Security`, `Smtp__Username`, `Smtp__Password`, `Smtp__FromAddress`, `Smtp__FromName`, `Smtp__TimeoutSeconds`. Они требуются только Authentication. Не коммитьте `.env`.
+
+Повторная отправка — `/email/verify`; POST `/email/resend` защищён antiforgery и credential rate limit. Ответ одинаков для неизвестного, подтверждённого и ожидающего аккаунта. Письмо отправляется не чаще раза в минуту на нормализованный адрес, в ограниченном in-memory cache (на экземпляр Auth; при рестарте cache очищается). SMTP ошибки не удаляют созданный аккаунт, в лог попадает только безопасный код доставки без получателя/ссылки/SMTP ответа. Автоматических повторов и постоянной почтовой очереди нет: при сбое пользователь запрашивает письмо снова. Успешный SMTP submission не гарантирует доставку в папку «Входящие».
+
+Для обновления сохраните имеющиеся `.env`, каталоги БД/keys и сертификаты, добавьте SMTP-настройки и выполните `docker compose up -d --build authentication backend`. Новая миграция применяется автоматически до HTTP; удалять БД или повторно запускать setup не нужно. Проверка через новый тестовый аккаунт: регистрация → письмо → явное подтверждение → вход. В мобильной сессии после подтверждения в почтовом браузере вернитесь в окно входа приложения и нажмите «Продолжить вход после подтверждения».
+
+Токены генерирует/проверяет штатный [Identity DataProtectionTokenProvider](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/accconfirm?view=aspnetcore-10.0); сохраняйте прежний Data Protection key ring. Письма собираются как text/plain + text/html через [MailKit](https://www.nuget.org/packages/MailKit).
 
 Пароли хеширует Identity V3 (PBKDF2-HMAC-SHA512, 210 000 итераций), пять неудачных попыток включают блокировку на 15 минут. Credential endpoints дополнительно ограничены 20 запросами в минуту на IP и защищены antiforgery. Ошибка входа не раскрывает наличие email. HTTPS cookies имеют HttpOnly, Secure и ограниченный срок; в HTML пароль не возвращается.
 
@@ -443,7 +474,9 @@ dotnet ef migrations has-pending-model-changes --project Backend
 | `Unit` / `HTTP` | `Tests/Server/ProviderSelectionTests.cs` | Полнота credentials, серые кнопки и доступные tooltip для ненастроенных способов, запрет прямого POST, сохранение активного входа и привязки настроенного провайдера |
 | `HTTP` | `Tests/Server/AuthenticationMappingHttpTests.cs` | Защита от overposting, точный публичный профиль после настоящего OAuth exchange, безопасное сообщение PRG/TempData без credentials в HTML |
 | `Unit` | `Tests/Server/PasskeySchemaTests.cs` | Согласованность snapshot и модели, AddPasskeys добавляет только таблицу/индекс, прежние колонки не сужаются |
-| `HTTP` | `Tests/Server/CredentialsTests.cs` | Email/password без подтверждения, нормализация/уникальность, CSRF, lockout, отсутствие email merge, реальные WebAuthn attestation/assertion, origin/RP/UV/signature/replay, управление ключами и отзыв |
+| `HTTP` | `Tests/Server/CredentialsTests.cs` | Email/password с подтверждением новых адресов, нормализация/уникальность, CSRF, lockout, отсутствие email merge, реальные WebAuthn attestation/assertion, origin/RP/UV/signature/replay, управление ключами и отзыв |
+| `HTTP` | `Tests/Server/EmailConfirmationTests.cs` | Новый password/passkey аккаунт без сессии до проверки почты, явный POST, неправильный/просроченный/stamp-bound токен, resend/throttle, SMTP failure и сохранность прежнего входа |
+| `Unit` | `Tests/Server/SmtpEmailTests.cs` | Независимый SMTP transport, обязательный режим TLS, MIME text/HTML, безопасные ошибки, отмена и валидация конфигурации; без реального сервера |
 | `HTTP` | `Tests/Server/AppAssociationTests.cs` | AASA только с настроенным App ID, безопасный HTTPS fallback без отражения code/state |
 | `HTTP` | `Tests/Server/BackendTests.cs` | JWT/subject и изоляция пользователей без scopes, отсутствие дополнительных прав от scopes в токене, MIME type, SHA-256/headers/фиксированное время, квота, идемпотентность, откат при отказе/отмене записи |
 | `HTTP` | `Tests/Server/AuthenticationTests.cs` | PKCE, code/refresh/revoke, блокировка аккаунта, scopes, prompt=none, antiforgery, внешние привязки, отзыв сессий/гонка отвязки и удаление данных |

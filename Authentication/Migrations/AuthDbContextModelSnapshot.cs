@@ -46,6 +46,9 @@ namespace FitnessTracker.Authentication.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
+                    b.Property<bool>("EmailConfirmationRequired")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
 
