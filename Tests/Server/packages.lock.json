@@ -1062,6 +1062,7 @@
       "fitnesstracker.authentication": {
         "type": "Project",
         "dependencies": {
+          "FitnessTracker.ServerLogging": "[1.0.0, )",
           "Mapster": "[10.0.14, )",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "[10.0.14, )",
           "Microsoft.AspNetCore.OpenApi": "[10.0.14, )",
@@ -1074,10 +1075,14 @@
       "fitnesstracker.backend": {
         "type": "Project",
         "dependencies": {
+          "FitnessTracker.ServerLogging": "[1.0.0, )",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "[10.0.14, )",
           "Microsoft.AspNetCore.OpenApi": "[10.0.14, )",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "[10.0.3, )"
         }
+      },
+      "fitnesstracker.serverlogging": {
+        "type": "Project"
       }
     }
   }

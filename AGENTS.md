@@ -62,6 +62,7 @@ Authentication/                      # Identity/OpenIddict, внешние вх�
 Authentication/Migrations/           # EF Core migrations AuthDbContext
 Backend/                             # JWT-защищённый API резервных копий
 Backend/Migrations/                  # EF Core migrations BackupDbContext
+ServerLogging/                       # Общая инфраструктура ILogger → ntfy, без доменных моделей и БД
 Tests/Server/                        # xUnit: HTTP/Identity/SQLite и отдельная категория PostgreSQL
 Sources/FitnessTrackerCore/             # Domain, правила, расчёты, repository protocols
 Sources/FitnessTrackerCore/Resources/   # Небольшие SPM resources библиотеки упражнений

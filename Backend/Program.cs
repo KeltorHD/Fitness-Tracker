@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.IdentityModel.Tokens;
 using Npgsql;
+using FitnessTracker.ServerLogging;
 
 namespace FitnessTracker.Backend;
 
@@ -23,6 +24,7 @@ public partial class Program
         var config = builder.Configuration;
         builder.Logging.AddFilter("Microsoft.AspNetCore", LogLevel.Warning);
         builder.Logging.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Warning);
+        builder.Logging.AddNtfy("Backend");
         builder.WebHost.ConfigureKestrel(options => options.Limits.MaxRequestBodySize = BackupStorage.MaximumBytes);
         builder.Services.AddProblemDetails();
         builder.Services.AddOpenApi();
@@ -94,7 +96,8 @@ public partial class Program
             protection.ProtectKeysWithCertificate(X509CertificateLoader.LoadPkcs12FromFile(
                 config["Certificates:Encryption:Path"] ?? throw new InvalidOperationException("Missing Backend encryption certificate."),
                 config["Certificates:Encryption:Password"]));
-        var app = builder.Build();
+        await using var app = builder.Build();
+        await using var ntfy = app.Services.StartNtfyLogging();
         app.UseForwardedHeaders();
         app.UseExceptionHandler();
         if (!app.Environment.IsDevelopment()) app.UseHsts();
@@ -142,24 +145,32 @@ public partial class Program
         });
         app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
         if (app.Environment.IsDevelopment()) app.MapOpenApi();
-        if (!app.Environment.IsEnvironment("Testing"))
+        try
         {
-            await using var scope = app.Services.CreateAsyncScope();
-            var database = scope.ServiceProvider.GetRequiredService<BackupDbContext>();
-            var cancellationToken = app.Lifetime.ApplicationStopping;
-            // Отдельное непулируемое соединение удерживает блокировку до конца startup.
-            var startupSettings = new NpgsqlConnectionStringBuilder(database.Database.GetConnectionString())
+            if (!app.Environment.IsEnvironment("Testing"))
             {
-                Pooling = false,
-                ApplicationName = "FitnessTracker startup"
-            };
-            await using var startupConnection = new NpgsqlConnection(startupSettings.ConnectionString);
-            await startupConnection.OpenAsync(cancellationToken);
-            await using var startupLock = new NpgsqlCommand("SELECT pg_advisory_lock(447295635001)", startupConnection);
-            await startupLock.ExecuteNonQueryAsync(cancellationToken);
-            await database.GetService<IHistoryRepository>().CreateIfNotExistsAsync(cancellationToken);
-            await database.Database.MigrateAsync(cancellationToken);
-            if (args.Contains("--migrate")) return;
+                await using var scope = app.Services.CreateAsyncScope();
+                var database = scope.ServiceProvider.GetRequiredService<BackupDbContext>();
+                var cancellationToken = app.Lifetime.ApplicationStopping;
+                // Отдельное непулируемое соединение удерживает блокировку до конца startup.
+                var startupSettings = new NpgsqlConnectionStringBuilder(database.Database.GetConnectionString())
+                {
+                    Pooling = false,
+                    ApplicationName = "FitnessTracker startup"
+                };
+                await using var startupConnection = new NpgsqlConnection(startupSettings.ConnectionString);
+                await startupConnection.OpenAsync(cancellationToken);
+                await using var startupLock = new NpgsqlCommand("SELECT pg_advisory_lock(447295635001)", startupConnection);
+                await startupLock.ExecuteNonQueryAsync(cancellationToken);
+                await database.GetService<IHistoryRepository>().CreateIfNotExistsAsync(cancellationToken);
+                await database.Database.MigrateAsync(cancellationToken);
+                if (args.Contains("--migrate")) return;
+            }
+        }
+        catch (Exception exception)
+        {
+            app.Logger.LogCritical(exception, "Backend database startup failed.");
+            throw;
         }
         await app.RunAsync();
     }

@@ -13,6 +13,13 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       AllowedHosts: ${AUTH_DOMAIN:?Set AUTH_DOMAIN in .env}
+      Ntfy__Enabled: ${NTFY_ENABLED:-false}
+      Ntfy__ServerUrl: ${NTFY_SERVER_URL:-}
+      Ntfy__Topic: ${AUTH_NTFY_TOPIC:-}
+      Ntfy__Token: ${NTFY_TOKEN:-}
+      Ntfy__MinimumLevel: ${AUTH_NTFY_MIN_LEVEL:-Warning}
+      Ntfy__QueueCapacity: ${NTFY_QUEUE_CAPACITY:-128}
+      Ntfy__TimeoutSeconds: ${NTFY_TIMEOUT_SECONDS:-5}
       Auth__Issuer: https://${AUTH_DOMAIN}/
       Auth__RedirectUri: https://${AUTH_DOMAIN}/ios/oauth/callback
       Auth__AppleAppIdentifier: ${IOS_APP_IDENTIFIER:-}
@@ -90,6 +97,13 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       AllowedHosts: ${API_DOMAIN:?Set API_DOMAIN in .env};backend
+      Ntfy__Enabled: ${NTFY_ENABLED:-false}
+      Ntfy__ServerUrl: ${NTFY_SERVER_URL:-}
+      Ntfy__Topic: ${BACKEND_NTFY_TOPIC:-}
+      Ntfy__Token: ${NTFY_TOKEN:-}
+      Ntfy__MinimumLevel: ${BACKEND_NTFY_MIN_LEVEL:-Warning}
+      Ntfy__QueueCapacity: ${NTFY_QUEUE_CAPACITY:-128}
+      Ntfy__TimeoutSeconds: ${NTFY_TIMEOUT_SECONDS:-5}
       Auth__Issuer: https://${AUTH_DOMAIN}/
       Auth__IntrospectionClientSecret: ${BACKEND_INTROSPECTION_SECRET:?Set BACKEND_INTROSPECTION_SECRET in .env}
       ConnectionStrings__Database: Host=backend-db;Database=${BACKEND_DB_NAME:-fitnesstracker_backend};Username=${BACKEND_DB_USER:-fitnesstracker_backend};Password=${BACKEND_DB_PASSWORD:?Set BACKEND_DB_PASSWORD in .env (keep the existing database password)}

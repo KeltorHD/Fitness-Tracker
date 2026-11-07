@@ -9,9 +9,10 @@
 | Существующий `project.yml`, `Apple/`, `Sources/` | Нативное iOS/watchOS-приложение и независимый Swift Core; пути сохранены |
 | `Authentication/FitnessTracker.Authentication.csproj` | Пользователи Identity, внешние входы, OAuth/OIDC, сессии, привязки, удаление аккаунта |
 | `Backend/FitnessTracker.Backend.csproj` | Backend приложения; текущая функция — резервные копии. Собственные правила доступа, JWT через discovery/JWKS и проверка отзыва через introspection Auth Server |
+| `ServerLogging/FitnessTracker.ServerLogging.csproj` | Общий необязательный ILogger provider для ntfy: маскирование, очередь и HTTP transport; не владеет пользователями, архивами или БД |
 | `FitnessTracker.Server.sln` | Оба серверных проекта и отдельный тестовый проект `Tests/Server` |
 
-Требуется .NET 10 SDK. Версии пакетов и lock-файлы закреплены. Внутренних ссылок между серверными проектами нет: обмен идёт по HTTP и общему документированному контракту. В production сервисы используют раздельные PostgreSQL-базы и учётные данные. SwiftData остаётся основным локальным хранилищем приложения; сервер не синхронизирует записи и не заменяет CloudKit.
+Требуется .NET 10 SDK. Версии пакетов и lock-файлы закреплены. Authentication и Backend не ссылаются друг на друга: обмен идёт по HTTP и документированному контракту. Общая ServerLogging нужна только для одинаковой инфраструктуры уведомлений в двух процессах. В production сервисы используют раздельные PostgreSQL-базы и учётные данные. SwiftData остаётся основным локальным хранилищем приложения; сервер не синхронизирует записи и не заменяет CloudKit.
 
 ```mermaid
 flowchart LR
@@ -241,6 +242,32 @@ docker compose logs --tail=100 authentication backend
 Откройте `https://auth.example.com/login` и проверьте вход настроенным провайдером. `/health` подтверждает только работу процесса. Для обновления прежней Compose-конфигурации с контейнерным proxy остановите старый proxy/orphan перед передачей 80/443 хостовому Nginx; рабочие БД и volumes сохраняются.
 
 Официальные источники: [Nginx reverse proxy](https://nginx.org/en/docs/http/ngx_http_proxy_module.html), [ASP.NET Core forwarded headers](https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/proxy-load-balancer?view=aspnetcore-10.0), [Docker port publishing](https://docs.docker.com/engine/network/port-publishing/), [автоматический IPAM Docker](https://docs.docker.com/reference/cli/docker/network/create/#specify-advanced-options), [external-сети Compose](https://docs.docker.com/reference/compose-file/networks/#external), [применение EF-миграций](https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/applying), [PostgreSQL advisory locks](https://www.postgresql.org/docs/current/functions-admin.html#FUNCTIONS-ADVISORY-LOCKS).
+
+## Логи в ntfy
+
+Оба сервиса могут дополнительно отправлять сообщения стандартного ILogger в ntfy. Интеграция выключена по умолчанию; обычные console/Docker logs сохраняются. Задайте в `.env`:
+
+```dotenv
+NTFY_ENABLED=true
+NTFY_SERVER_URL=https://ntfy.example.com/
+NTFY_TOKEN=your-ntfy-access-token
+AUTH_NTFY_TOPIC=your-private-auth-topic
+BACKEND_NTFY_TOPIC=your-private-backend-topic
+AUTH_NTFY_MIN_LEVEL=Warning
+BACKEND_NTFY_MIN_LEVEL=Error
+NTFY_QUEUE_CAPACITY=128
+NTFY_TIMEOUT_SECONDS=5
+```
+
+Server URL — корень ntfy, без topic/credentials/query/fragment. Токен необязателен для серверов, допускающих anonymous publish; для логов используйте закрытые topics с контролем доступа. Поддержаны `Trace`, `Debug`, `Information`, `Warning`, `Error`, `Critical`, `None`; порог включителен и независим от console/category filters. `None` отключает отправку конкретного сервиса. Приоритет уведомления: Critical → 5, Error → 4, Warning → 3, остальные → 2. [Формат JSON publish и bearer authentication](https://docs.ntfy.sh/publish/) соответствует стандартному API ntfy.
+
+Без Compose те же настройки задаются стандартными environment keys `Ntfy__Enabled`, `Ntfy__ServerUrl`, `Ntfy__Topic`, `Ntfy__Token`, `Ntfy__MinimumLevel`, `Ntfy__QueueCapacity`, `Ntfy__TimeoutSeconds`. Конфигурация считывается при старте; после изменения `.env` пересоздайте сервисы: `docker compose up -d --build authentication backend`. Включённая интеграция проверяет URL, topic, уровень и ограничения до открытия HTTP listener. Отключённая не создаёт HTTP transport.
+
+По выбранному режиму отправляются текст сообщения и исключения с маскированием. До очереди скрываются известные секретные настройки (также пароль внутри connection string и JSON/URL encoding), чувствительные structured fields, bearer/basic headers, cookies, JWT/JWE, email и OAuth query-параметры. Полные archive/credential/claims payloads подавляются, scopes не отправляются; длинные записи пропускаются либо обрезаются уже после маскирования по границе UTF-8. Trace/Debug/Information OpenIddict, MVC ModelBinding и HttpLogging отправляются только как события без содержимого protocol/form payload и текста exception; подробности остаются в локальных логах. Это защита известных форматов, а не распознавание произвольных медицинских/личных данных: не добавляйте такие данные в исходные ILogger-сообщения.
+
+Доставка асинхронная, очередь ограничена 128 записями (настройка 1–1024). При переполнении запись отбрасывается без ожидания сети. HTTP timeout — 5 секунд (настройка 1–30), redirect/cookies отключены, bearer не включается в URL. Отказ HTTP/transport не ломает запросы: неудачная запись не повторяется, следующие 30 секунд публикации подавляются, затем новые записи снова доставляются. Счётчик потерь и безопасная диагностика идут только в локальные логи. Исходящие HTTP logs самого transport отключены, чтобы не создавать рекурсивные уведомления. Это best-effort уведомления, не долговечное хранилище/аудит всех событий.
+
+Worker запускается до миграций; ошибка инициализации БД логируется как Critical. Shutdown даёт очереди до пяти секунд, затем отменяет собственный transport. Ошибки конфигурации до создания host могут быть доступны только в локальном stderr. Код интеграции проверяется fake HTTP-тестами без публикаций в реальные topics.
 
 ## Провайдеры
 
