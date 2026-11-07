@@ -9,9 +9,10 @@ struct TemplateExerciseCard: View {
   let item: TemplateExercise
   let index: Int
   let onTechnique: () -> Void
+  var previousResult: WorkoutExercise? = nil
+  var unit: WeightUnit = .kilograms
   var onRemove: (() -> Void)? = nil
-  var onMoveUp: (() -> Void)? = nil
-  var onMoveDown: (() -> Void)? = nil
+  var onReplace: (() -> Void)? = nil
 
   private var entry: ExerciseLibraryEntry? {
     ExerciseLibrary.entry(
@@ -22,7 +23,12 @@ struct TemplateExerciseCard: View {
   private var name: String { entry?.name ?? item.exercise.name }
 
   private var summary: String {
-    L10n.countText(item.setCount, kind: "set", locale: locale)
+    guard let previousResult else {
+      return L10n.text("Пока нет выполненных подходов", locale: locale)
+    }
+    return WorkoutExerciseSummary.text(
+      previousResult, completedOnly: true, unit: unit, locale: locale,
+      numberLocale: L10n.numberLocale)
   }
 
   var body: some View {
@@ -52,29 +58,14 @@ struct TemplateExerciseCard: View {
           .accessibilityLabel(L10n.format("Убрать упражнение: %@", name, locale: locale))
           .accessibilityIdentifier("removeTemplateExercise_\(item.id)")
         }
-        if onMoveUp != nil || onMoveDown != nil {
-          Menu {
-            if let onMoveUp {
-              Button(
-                L10n.text("Переместить выше", locale: locale), systemImage: "arrow.up",
-                action: onMoveUp
-              )
-              .accessibilityIdentifier("moveTemplateExerciseUp_\(item.id)")
-            }
-            if let onMoveDown {
-              Button(
-                L10n.text("Переместить ниже", locale: locale), systemImage: "arrow.down",
-                action: onMoveDown
-              )
-              .accessibilityIdentifier("moveTemplateExerciseDown_\(item.id)")
-            }
-          } label: {
-            Image(systemName: "arrow.up.arrow.down")
+        if let onReplace {
+          Button(action: onReplace) {
+            Image(systemName: "arrow.triangle.2.circlepath")
               .frame(width: 44, height: 44).contentShape(.rect)
           }
           .buttonStyle(.borderless)
-          .accessibilityLabel(L10n.text("Изменить порядок упражнений", locale: locale))
-          .accessibilityIdentifier("reorderTemplateExercise_\(item.id)")
+          .accessibilityLabel(L10n.text("Заменить упражнение", locale: locale))
+          .accessibilityIdentifier("replaceTemplateExercise_\(item.id)")
         }
       }.padding(FitTheme.cardPadding)
       Divider().padding(.horizontal, FitTheme.cardPadding)
@@ -87,7 +78,12 @@ struct TemplateExerciseCard: View {
         } else {
           Text(item.exercise.muscle.title).font(.subheadline).foregroundStyle(.secondary)
         }
+        if previousResult != nil {
+          Text(L10n.text("Последние результаты", locale: locale)).font(.caption).foregroundStyle(
+            .secondary)
+        }
         Text(summary).font(.subheadline).foregroundStyle(.primary)
+          .accessibilityIdentifier("templateExerciseResult_\(item.id)")
         Button(action: onTechnique) {
           HStack(spacing: 8) {
             Label(L10n.text("Техника выполнения", locale: locale), systemImage: "info.circle")

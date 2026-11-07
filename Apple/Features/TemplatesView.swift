@@ -108,6 +108,8 @@ struct TemplateOverviewView: View {
   @State private var confirmDelete = false
   @State private var technique: Exercise?
   @State private var selectedVariationID: UUID?
+  @State private var previousResults: [UUID: WorkoutExercise] = [:]
+  @AppStorage("weightUnit") private var unit: WeightUnit = .kilograms
   let template: WorkoutTemplate
   private var current: WorkoutTemplate {
     store.templates.first { $0.id == template.id } ?? template
@@ -139,11 +141,14 @@ struct TemplateOverviewView: View {
           ])
           ForEach(Array(selectedExercises.enumerated()), id: \.element.id) { index, item in
             TemplateExerciseCard(
-              item: item, index: index, onTechnique: { technique = item.exercise })
+              item: item, index: index, onTechnique: { technique = item.exercise },
+              previousResult: previousResults[item.id], unit: unit)
           }
         }.padding(16)
       }
     }.background(FitTheme.paper).navigationBarTitleDisplayMode(.inline)
+      .onChange(of: selectedExercises, initial: true) { refreshResults() }
+      .onChange(of: store.workouts) { refreshResults() }
       .navigationDestination(item: $technique) { exercise in
         ExerciseDetailView(exercise: exercise)
       }
@@ -184,18 +189,29 @@ struct TemplateOverviewView: View {
         }
       }
   }
+
+  private func refreshResults() {
+    previousResults = TemplateExercise.previousResults(
+      for: selectedExercises, history: store.workouts)
+  }
 }
 
 struct TemplateEditor: View {
+  @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
   @Environment(AppStore.self) private var store
   @Environment(\.dismiss) private var dismiss
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
   @State var template: WorkoutTemplate
   @State var selectedVariationID: UUID? = nil
   @State private var picking = false
   @State private var technique: Exercise?
   @State private var validationMessage: String?
   @State private var deletingVariation = false
+  @State private var replacement: TemplateExercise?
+  @State private var previousResults: [UUID: WorkoutExercise] = [:]
+  @State private var reorderRevision = 0
+  @AppStorage("weightUnit") private var unit: WeightUnit = .kilograms
   @FocusState private var focusedField: Field?
 
   private enum Field: Hashable { case name, variationName }
@@ -218,10 +234,14 @@ struct TemplateEditor: View {
 
   private var variationName: Binding<String> {
     Binding(
-      get: { template.variations.first { $0.id == selectedVariationID }?.name ?? "" },
+      get: {
+        template.variations.first { $0.id == selectedVariationID }?.name
+          ?? template.baseVariationName ?? L10n.format("Вариант %@", "1", locale: locale)
+      },
       set: { name in
         guard let index = template.variations.firstIndex(where: { $0.id == selectedVariationID })
         else {
+          template.baseVariationName = name
           return
         }
         template.variations[index].name = name
@@ -241,17 +261,17 @@ struct TemplateEditor: View {
         Section {
           if !template.variations.isEmpty {
             TemplateVariationSelector(template: template, selection: $selectedVariationID)
-            if selectedVariationID != nil {
-              TextField(L10n.text("Название вариации", locale: locale), text: variationName)
-                .focused($focusedField, equals: .variationName)
-                .submitLabel(.done)
-                .onSubmit { focusedField = nil }
-                .accessibilityIdentifier("templateVariationName")
-              Button(L10n.text("Удалить вариацию", locale: locale), role: .destructive) {
-                focusedField = nil
-                deletingVariation = true
-              }.accessibilityIdentifier("deleteTemplateVariation")
-            }
+          }
+          TextField(L10n.text("Название вариации", locale: locale), text: variationName)
+            .focused($focusedField, equals: .variationName)
+            .submitLabel(.done)
+            .onSubmit { focusedField = nil }
+            .accessibilityIdentifier("templateVariationName")
+          if selectedVariationID != nil {
+            Button(L10n.text("Удалить вариацию", locale: locale), role: .destructive) {
+              focusedField = nil
+              deletingVariation = true
+            }.accessibilityIdentifier("deleteTemplateVariation")
           }
           Button(L10n.text("Добавить вариацию", locale: locale), systemImage: "square.on.square") {
             addVariation()
@@ -286,26 +306,47 @@ struct TemplateEditor: View {
               "Необязательно. Выбор включит фильтр по основным мышцам при добавлении упражнений.",
               locale: locale))
         }
-        ForEach(Array(selectedExercises.enumerated()), id: \.element.id) { index, item in
-          Section {
+        Section {
+          ForEach(Array(selectedExercises.enumerated()), id: \.element.id) { index, item in
             TemplateExerciseCard(
               item: item, index: index, onTechnique: { technique = item.exercise },
+              previousResult: previousResults[item.id], unit: unit,
               onRemove: { removeExercise(item.id) },
-              onMoveUp: canMoveExercise(item.id, by: -1) ? { moveExercise(item.id, by: -1) } : nil,
-              onMoveDown: canMoveExercise(item.id, by: 1)
-                ? { moveExercise(item.id, by: 1) } : nil
+              onReplace: {
+                focusedField = nil
+                replacement = item
+              }
             )
-            .listRowInsets(EdgeInsets())
+            .listRowInsets(EdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0))
             .listRowSeparator(.hidden).listRowBackground(Color.clear)
+            .contentShape(.rect)
+            .moveDisabled(false)
+            .accessibilityHint(
+              L10n.text("Удерживайте и перетащите, чтобы изменить порядок.", locale: locale)
+            )
             .swipeActions(edge: .trailing, allowsFullSwipe: false) {
               Button(role: .destructive) {
                 removeExercise(item.id)
               } label: {
                 Label(L10n.text("Убрать упражнение", locale: locale), systemImage: "minus.circle")
               }
+              .tint(.red)
               .accessibilityIdentifier("swipeRemoveTemplateExercise_\(item.id)")
+              Button {
+                focusedField = nil
+                replacement = item
+              } label: {
+                Label(
+                  L10n.text("Заменить упражнение", locale: locale),
+                  systemImage: "arrow.triangle.2.circlepath")
+              }
+              .tint(colorTheme.accent)
+              .accessibilityIdentifier("swipeReplaceTemplateExercise_\(item.id)")
             }
           }
+          .onMove(perform: moveExercises)
+          // Refresh UIKit's drag snapshot after applying the new order.
+          .id(reorderRevision)
         }
         Button(L10n.text("Добавить упражнение", locale: locale), systemImage: "plus") {
           focusedField = nil
@@ -374,11 +415,26 @@ struct TemplateEditor: View {
         }
       }
       .sheet(isPresented: $picking) {
-        ExercisePicker(initialGroups: template.muscleGroups, initialMuscles: template.muscles) {
+        ExercisePicker(
+          initialGroups: template.muscleGroups, initialMuscles: template.muscles,
+          initialRegions: template.muscleRegions
+        ) {
           exerciseBinding.wrappedValue.append(TemplateExercise(exercise: $0))
         }
       }
-      .onChange(of: selectedVariationID) { focusedField = nil }
+      .sheet(item: $replacement) { item in
+        ExercisePicker { exercise in
+          var rows = selectedExercises
+          guard let index = rows.firstIndex(where: { $0.id == item.id }) else { return }
+          rows[index] = item.replacing(with: exercise)
+          exerciseBinding.wrappedValue = rows
+        }
+      }
+      .onChange(of: selectedExercises, initial: true) { refreshResults() }
+      .onChange(of: store.workouts) { refreshResults() }
+      .onChange(of: selectedVariationID) {
+        focusedField = nil
+      }
       .confirmationDialog(
         L10n.text("Удалить вариацию?", locale: locale), isPresented: $deletingVariation,
         titleVisibility: .visible
@@ -392,7 +448,7 @@ struct TemplateEditor: View {
       .alert(
         "FitnessTracker",
         isPresented: Binding(
-          get: { validationMessage != nil && !picking && !deletingVariation },
+          get: { validationMessage != nil && !picking && replacement == nil && !deletingVariation },
           set: { if !$0 { dismissValidationMessage() } })
       ) {
         Button(L10n.text("Понятно", locale: locale)) { dismissValidationMessage() }
@@ -401,7 +457,7 @@ struct TemplateEditor: View {
       }
       .archiveTransferPresenter(
         when: store.showingTemplateEditor && !picking && !deletingVariation
-          && validationMessage == nil
+          && replacement == nil && validationMessage == nil
       )
       .safeAreaInset(edge: .top) { if store.isDemoMode { DemoModeBanner() } }
     }
@@ -431,34 +487,26 @@ struct TemplateEditor: View {
     }
   }
 
-  private func moveExercise(_ id: UUID, by offset: Int) {
-    focusedField = nil
-    var rows = selectedExercises
-    guard let index = rows.firstIndex(where: { $0.id == id }) else { return }
-    let groupID = rows[index].supersetID
-    let indices = groupID.map { id in rows.indices.filter { rows[$0].supersetID == id } } ?? [index]
-    guard let first = indices.first, let last = indices.last else { return }
-    let neighbor = offset < 0 ? first - 1 : last + 1
-    guard rows.indices.contains(neighbor) else { return }
-    let neighborGroup = rows[neighbor].supersetID
-    let neighborIndices =
-      neighborGroup.map { id in
-        rows.indices.filter { rows[$0].supersetID == id }
-      } ?? [neighbor]
-    guard let start = neighborIndices.first, let end = neighborIndices.last else { return }
-    rows.move(fromOffsets: IndexSet(indices), toOffset: offset < 0 ? start : end + 1)
-    exerciseBinding.wrappedValue = TemplateExercise.normalizingSupersets(rows)
+  private func refreshResults() {
+    previousResults = TemplateExercise.previousResults(
+      for: selectedExercises, history: store.workouts)
   }
 
-  private func canMoveExercise(_ id: UUID, by offset: Int) -> Bool {
-    let rows = selectedExercises
-    guard let index = rows.firstIndex(where: { $0.id == id }) else { return false }
-    let indices =
-      rows[index].supersetID.map { id in
-        rows.indices.filter { rows[$0].supersetID == id }
-      } ?? [index]
-    guard let first = indices.first, let last = indices.last else { return false }
-    return offset < 0 ? first > 0 : last < rows.count - 1
+  private func moveExercises(from source: IndexSet, to destination: Int) {
+    guard source.count == 1, let index = source.first,
+      selectedExercises.indices.contains(index)
+    else { return }
+    focusedField = nil
+    do {
+      let rows = try TemplateExercise.moving(
+        selectedExercises[index].id, to: destination, in: selectedExercises)
+      withAnimation(reduceMotion ? nil : .snappy(duration: 0.25)) {
+        exerciseBinding.wrappedValue = rows
+        reorderRevision += 1
+      }
+    } catch {
+      validationMessage = error.localizedDescription
+    }
   }
 
 }

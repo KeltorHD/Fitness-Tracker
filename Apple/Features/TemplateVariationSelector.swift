@@ -9,7 +9,7 @@ struct TemplateVariationSelector: View {
   @Binding var selection: UUID?
 
   private var choices: [(id: UUID, name: String)] {
-    [(template.id, L10n.format("Вариант %@", "1", locale: locale))]
+    [(template.id, template.baseVariationName ?? L10n.format("Вариант %@", "1", locale: locale))]
       + template.variations.enumerated().map { index, variation in
         (
           variation.id,
