@@ -26,17 +26,26 @@ import XCTest
 }
 
 extension ExerciseLibraryFilterTests {
-  func testTemplateGroupsAreActiveImmediatelyAndCanBeChangedOrReset() {
+  func testTemplateGroupsAreActiveImmediatelyAndCanBeChangedOrReset() throws {
     let groups: Set<MuscleGroup> = [.chest, .arms]
     let model = ExerciseLibraryViewModel(groups: groups)
     XCTAssertEqual(model.groups, groups)
     XCTAssertFalse(model.results.isEmpty)
-    XCTAssertEqual(Set(model.results.map(\.group)), groups)
+    XCTAssertTrue(groups.isSubset(of: Set(model.results.map(\.group))))
+    XCTAssertTrue(model.results.allSatisfy { model.muscleSelection.matches($0) })
+    // A coarse shoulder classification can still have a selected primary triceps muscle.
+    let mixedMuscles = try XCTUnwrap(
+      ExerciseLibrary.entries.first { $0.sourceID == "Kettlebell_Halo_With_Overhead_Extension" })
+    XCTAssertEqual(mixedMuscles.group, .shoulders)
+    XCTAssertTrue(mixedMuscles.primaryMuscleIDs.contains(.triceps))
+    XCTAssertTrue(model.results.contains { $0.id == mixedMuscles.id })
     model.search = "жим"
     model.equipment = [.barbell]
     XCTAssertFalse(model.results.isEmpty)
     XCTAssertTrue(
-      model.results.allSatisfy { groups.contains($0.group) && $0.equipment == .barbell })
+      model.results.allSatisfy {
+        model.muscleSelection.matches($0) && $0.equipment == .barbell
+      })
     let selectedIDs = Set(model.results.map(\.id))
     model.language = .english
     XCTAssertEqual(Set(model.results.map(\.id)), selectedIDs)

@@ -253,8 +253,10 @@ private struct ArchiveFileStub: ArchiveFileHandling {
     let files = ArchiveFileService()
     let archive = makeArchive()
     let data = try await files.encode(archive)
-    for suffix in ["json", "fitnesstracker", "FITNESS_TRACKER"] {
-      let url = directory.appendingPathComponent("fixture.\(suffix)")
+    for (index, suffix) in [
+      "json", "JSON", "fitnesstracker", "FITNESSTRACKER", "fitsession", "FITSESSION",
+    ].enumerated() {
+      let url = directory.appendingPathComponent("fixture-\(index).\(suffix)")
       try data.write(to: url)
       let restored = try await files.read(url)
       XCTAssertEqual(restored.workouts, archive.workouts)
@@ -265,9 +267,18 @@ private struct ArchiveFileStub: ArchiveFileHandling {
       _ = try await files.read(oversized)
       XCTFail("Oversized archive was accepted")
     } catch { XCTAssertEqual(error as? WorkoutArchiveError, .tooLarge) }
-    do {
-      _ = try await files.read(directory.appendingPathComponent("unsupported.txt"))
-      XCTFail("Unsupported extension was accepted")
-    } catch { XCTAssertTrue(error is ArchiveFileError) }
+    for suffix in ["txt", "FITNESS_TRACKER"] {
+      let unsupported = directory.appendingPathComponent("unsupported.\(suffix)")
+      try data.write(to: unsupported)
+      do {
+        _ = try await files.read(unsupported)
+        XCTFail("Unsupported extension was accepted: \(suffix)")
+      } catch {
+        switch error {
+        case ArchiveFileError.unsupportedFile: break
+        default: XCTFail("Unexpected error for unsupported extension: \(error)")
+        }
+      }
+    }
   }
 }
