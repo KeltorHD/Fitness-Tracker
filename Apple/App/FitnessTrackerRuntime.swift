@@ -27,6 +27,9 @@ import Foundation
       defaults = .standard
     }
     if testing { defaults.removePersistentDomain(forName: "FitnessTracker.UITests") }
+    if testing, ProcessInfo.processInfo.arguments.contains("--ui-testing-training-groups") {
+      try TrainingGroupsUITestFixture.seed(into: repository)
+    }
     defaults.register(defaults: ["weeklyGoal": 3, "liveActivities": !testing])
     let accountSession: AccountSession?
     do {

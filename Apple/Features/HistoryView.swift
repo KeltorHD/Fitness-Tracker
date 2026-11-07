@@ -12,6 +12,7 @@ struct HistoryView: View {
   @Environment(\.scenePhase) private var phase
   @State private var model = HistoryViewModel()
   @State private var pendingDelete: Workout?
+  @State private var templateDraft: WorkoutTemplate?
   @State private var showWeekStats = true
   var body: some View {
     NavigationStack {
@@ -76,6 +77,7 @@ struct HistoryView: View {
               workout: workout, unit: unit,
               onSelect: { selected = workout },
               onRepeat: { store.repeatWorkout(workout) },
+              onCreateTemplate: { createTemplate(from: workout) },
               onDelete: { pendingDelete = workout }
             )
             .cardListRow()
@@ -86,6 +88,12 @@ struct HistoryView: View {
                 Label(L10n.text("Удалить", locale: locale), systemImage: "trash")
               }.tint(.red)
                 .accessibilityIdentifier("swipeDeleteWorkout_\(workout.id)")
+              Button {
+                createTemplate(from: workout)
+              } label: {
+                Label(L10n.text("Создать шаблон", locale: locale), systemImage: "list.clipboard")
+              }.tint(colorTheme.accent)
+                .accessibilityIdentifier("swipeCreateTemplateFromHistory_\(workout.id)")
             }
           }
         }
@@ -132,6 +140,9 @@ struct HistoryView: View {
         .presentationDragIndicator(.visible)
       }
       .onChange(of: store.workouts, initial: true) { refresh() }
+      .sheet(item: $templateDraft, onDismiss: { store.showingTemplateEditor = false }) { draft in
+        TemplateEditor(template: draft).onAppear { store.showingTemplateEditor = true }
+      }
       .onChange(of: calendar) { refresh() }
       .onChange(of: phase) { if phase == .active { refresh() } }
       .confirmationDialog(
@@ -151,6 +162,14 @@ struct HistoryView: View {
   }
 
   private func refresh() { model.refresh(workouts: store.workouts, calendar: calendar) }
+
+  private func createTemplate(from workout: Workout) {
+    do {
+      templateDraft = try WorkoutEngine.makeTemplate(from: workout)
+    } catch {
+      store.error = error.localizedDescription
+    }
+  }
 
   private var weekStrip: some View {
     HStack(spacing: 0) {

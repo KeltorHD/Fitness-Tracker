@@ -73,6 +73,7 @@ struct WorkoutDetailView: View {
       ToolbarItem(placement: .topBarLeading) {
         Button(L10n.text("Закрыть", locale: locale), systemImage: "chevron.down") { dismiss() }
           .foregroundStyle(.primary)
+          .accessibilityIdentifier("closeWorkoutDetail")
       }
       ToolbarItem(placement: .topBarTrailing) {
         Menu {
@@ -81,7 +82,7 @@ struct WorkoutDetailView: View {
           }
           Button(L10n.text("Сохранить как шаблон", locale: locale), systemImage: "list.clipboard") {
             createTemplate()
-          }
+          }.accessibilityIdentifier("createTemplateFromWorkoutMenu")
           ShareLink(item: WorkoutDocument(workout: session), preview: SharePreview(session.name)) {
             Label(L10n.text("Поделиться JSON", locale: locale), systemImage: "square.and.arrow.up")
           }
@@ -104,10 +105,11 @@ struct WorkoutDetailView: View {
         Button {
           createTemplate()
         } label: {
-          Image(systemName: "plus").font(.title2).frame(width: 48, height: 48).background(
+          Image(systemName: "list.clipboard").font(.title2).frame(width: 48, height: 48).background(
             FitTheme.card, in: .circle)
         }
         .accessibilityLabel(L10n.text("Сохранить как шаблон", locale: locale))
+        .accessibilityIdentifier("createTemplateFromWorkout")
         Spacer()
         Button(L10n.text("Повторить", locale: locale)) {
           if let onRepeat {
@@ -202,6 +204,10 @@ struct WorkoutEditorView: View {
           ForEach(workout.exercises) { item in
             VStack(alignment: .leading, spacing: 5) {
               Text(L10n.exerciseName(item.exercise, locale: locale)).font(.headline)
+              if item.supersetID != nil {
+                Label(L10n.text("Суперсет", locale: locale), systemImage: "link")
+                  .font(.caption).foregroundStyle(colorTheme.accent)
+              }
               Text(
                 L10n.countText(
                   item.sets.filter { $0.completedAt != nil }.count, kind: "completed.set",
@@ -212,14 +218,21 @@ struct WorkoutEditorView: View {
             }
             .swipeActions(edge: .trailing, allowsFullSwipe: false) {
               Button(role: .destructive) {
-                workout.exercises.removeAll { $0.id == item.id }
+                workout.exercises = WorkoutExercise.normalizingSupersets(
+                  workout.exercises.filter { $0.id != item.id })
               } label: {
                 Label(L10n.text("Убрать упражнение", locale: locale), systemImage: "minus.circle")
               }
             }
           }
-          .onMove { workout.exercises.move(fromOffsets: $0, toOffset: $1) }
-          .onDelete { workout.exercises.remove(atOffsets: $0) }
+          .onMove {
+            workout.exercises.move(fromOffsets: $0, toOffset: $1)
+            workout.exercises = WorkoutExercise.normalizingSupersets(workout.exercises)
+          }
+          .onDelete {
+            workout.exercises.remove(atOffsets: $0)
+            workout.exercises = WorkoutExercise.normalizingSupersets(workout.exercises)
+          }
         }
         if let message { Text(L10n.text(message, locale: locale)).foregroundStyle(.red) }
       }

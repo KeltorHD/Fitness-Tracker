@@ -4,6 +4,51 @@ import XCTest
 @testable import FitnessTracker
 
 @MainActor final class PersistenceTests: XCTestCase {
+  func testTemplateVariationsAndSupersetMembershipSurvivePersistenceAndArchiveImport() throws {
+    let repository = try SwiftDataWorkoutRepository(inMemory: true)
+    let date = Date(timeIntervalSince1970: 1_700_000_000)
+    let groupID = UUID()
+    let template = WorkoutTemplate(
+      name: "Вариации",
+      exercises: [TemplateExercise(exercise: ExerciseCatalog.all[0])],
+      variations: [
+        WorkoutTemplateVariation(
+          name: "Суперсет",
+          exercises: [
+            TemplateExercise(exercise: ExerciseCatalog.all[1], setCount: 2, supersetID: groupID),
+            TemplateExercise(exercise: ExerciseCatalog.all[2], setCount: 2, supersetID: groupID),
+          ])
+      ])
+    let variation = try XCTUnwrap(template.variations.first)
+    var workout = try template.resolvedVariation(id: variation.id).start(at: date)
+    let first = try XCTUnwrap(workout.exercises.first)
+    try WorkoutEngine.completeSet(
+      in: &workout, exerciseID: first.id, setID: first.sets[0].id,
+      repetitions: 8, weightKG: 40, at: date)
+    try repository.saveTemplate(template)
+    try repository.save(workout)
+    XCTAssertEqual(try repository.templates(), [template])
+    XCTAssertEqual(try repository.workouts(), [workout])
+    XCTAssertEqual(workout.nextPendingSet?.exerciseID, workout.exercises[1].id)
+    var completionIndex = 1
+    for row in workout.exercises {
+      for set in row.sets where !set.isFullyCompleted {
+        completionIndex += 1
+        try WorkoutEngine.completeSet(
+          in: &workout, exerciseID: row.id, setID: set.id, repetitions: 8, weightKG: 40,
+          at: date.addingTimeInterval(Double(completionIndex)))
+      }
+    }
+    try WorkoutEngine.finish(&workout, at: date.addingTimeInterval(600))
+    let archive = try WorkoutArchiveCodec.decode(
+      WorkoutArchiveCodec.encode(WorkoutArchive(workouts: [workout], templates: [template])))
+    let restored = try SwiftDataWorkoutRepository(inMemory: true)
+    _ = try restored.importArchive(archive)
+    XCTAssertEqual(try restored.templates(), [template])
+    XCTAssertEqual(try restored.workouts(), [workout])
+    XCTAssertEqual(archive.workouts, [workout])
+  }
+
   func testDropStagesAndMixedTemplateTargetsRoundTrip() throws {
     let repository = try SwiftDataWorkoutRepository(inMemory: true)
     let date = Date(timeIntervalSince1970: 1_700_000_000)

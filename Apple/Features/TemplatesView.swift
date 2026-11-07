@@ -27,6 +27,12 @@ struct TemplatesView: View {
               VStack(alignment: .leading, spacing: 4) {
                 Text(template.name).font(.title3.weight(.semibold)).foregroundStyle(.primary)
                 TemplateMuscleGroups(template: template)
+                if !template.variations.isEmpty {
+                  Text(
+                    L10n.format(
+                      "Вариаций: %@", String(template.variations.count + 1), locale: locale)
+                  ).font(.caption).foregroundStyle(.secondary)
+                }
               }
               Spacer(minLength: 0)
             }.padding(.horizontal, 18).padding(.vertical, 20)
@@ -101,9 +107,13 @@ struct TemplateOverviewView: View {
   @State private var editing = false
   @State private var confirmDelete = false
   @State private var technique: Exercise?
+  @State private var selectedVariationID: UUID?
   let template: WorkoutTemplate
   private var current: WorkoutTemplate {
     store.templates.first { $0.id == template.id } ?? template
+  }
+  private var selectedExercises: [TemplateExercise] {
+    current.variations.first { $0.id == selectedVariationID }?.exercises ?? current.exercises
   }
   var body: some View {
     ScrollView {
@@ -111,11 +121,14 @@ struct TemplateOverviewView: View {
         WorkoutHero(title: current.name)
         VStack(spacing: 20) {
           TemplateMuscleGroups(template: current)
+          if !current.variations.isEmpty {
+            TemplateVariationSelector(template: current, selection: $selectedVariationID)
+          }
           WorkoutSummaryCard(metrics: [
-            (title: L10n.text("Упражнения", locale: locale), value: "\(current.exercises.count)"),
+            (title: L10n.text("Упражнения", locale: locale), value: "\(selectedExercises.count)"),
             (
               title: L10n.text("Подходы", locale: locale),
-              value: "\(current.exercises.reduce(0) { $0 + $1.setCount })"
+              value: "\(selectedExercises.reduce(0) { $0 + $1.setCount })"
             ),
             (
               title: L10n.text("Отдых", locale: locale),
@@ -124,7 +137,7 @@ struct TemplateOverviewView: View {
                 : L10n.format("%@ с", String(current.restSeconds), locale: locale)
             ),
           ])
-          ForEach(Array(current.exercises.enumerated()), id: \.element.id) { index, item in
+          ForEach(Array(selectedExercises.enumerated()), id: \.element.id) { index, item in
             TemplateExerciseCard(
               item: item, index: index, onTechnique: { technique = item.exercise })
           }
@@ -151,7 +164,15 @@ struct TemplateOverviewView: View {
         }
       }
       .sheet(isPresented: $editing, onDismiss: { store.showingTemplateEditor = false }) {
-        TemplateEditor(template: current).onAppear { store.showingTemplateEditor = true }
+        TemplateEditor(template: current, selectedVariationID: selectedVariationID)
+          .onAppear { store.showingTemplateEditor = true }
+      }
+      .onChange(of: current.variations) {
+        if let selectedVariationID,
+          !current.variations.contains(where: { $0.id == selectedVariationID })
+        {
+          self.selectedVariationID = nil
+        }
       }
       .confirmationDialog(
         L10n.text("Удалить шаблон?", locale: locale), isPresented: $confirmDelete,
@@ -170,14 +191,78 @@ struct TemplateEditor: View {
   @Environment(AppStore.self) private var store
   @Environment(\.dismiss) private var dismiss
   @State var template: WorkoutTemplate
+  @State var selectedVariationID: UUID? = nil
   @State private var picking = false
   @State private var technique: Exercise?
   @State private var validationMessage: String?
+  @State private var deletingVariation = false
+  @FocusState private var focusedField: Field?
+
+  private enum Field: Hashable { case name, variationName }
+
+  private var selectedExercises: [TemplateExercise] {
+    template.variations.first { $0.id == selectedVariationID }?.exercises ?? template.exercises
+  }
+
+  private var exerciseBinding: Binding<[TemplateExercise]> {
+    Binding(
+      get: { selectedExercises },
+      set: { rows in
+        if let index = template.variations.firstIndex(where: { $0.id == selectedVariationID }) {
+          template.variations[index].exercises = rows
+        } else {
+          template.exercises = rows
+        }
+      })
+  }
+
+  private var variationName: Binding<String> {
+    Binding(
+      get: { template.variations.first { $0.id == selectedVariationID }?.name ?? "" },
+      set: { name in
+        guard let index = template.variations.firstIndex(where: { $0.id == selectedVariationID })
+        else {
+          return
+        }
+        template.variations[index].name = name
+      })
+  }
+
   var body: some View {
     NavigationStack {
       List {
         Section(L10n.text("Название", locale: locale)) {
           TextField(L10n.text("Название плана", locale: locale), text: $template.name)
+            .focused($focusedField, equals: .name)
+            .submitLabel(.done)
+            .onSubmit { focusedField = nil }
+            .accessibilityIdentifier("templateName")
+        }
+        Section {
+          if !template.variations.isEmpty {
+            TemplateVariationSelector(template: template, selection: $selectedVariationID)
+            if selectedVariationID != nil {
+              TextField(L10n.text("Название вариации", locale: locale), text: variationName)
+                .focused($focusedField, equals: .variationName)
+                .submitLabel(.done)
+                .onSubmit { focusedField = nil }
+                .accessibilityIdentifier("templateVariationName")
+              Button(L10n.text("Удалить вариацию", locale: locale), role: .destructive) {
+                focusedField = nil
+                deletingVariation = true
+              }.accessibilityIdentifier("deleteTemplateVariation")
+            }
+          }
+          Button(L10n.text("Добавить вариацию", locale: locale), systemImage: "square.on.square") {
+            addVariation()
+          }.accessibilityIdentifier("addTemplateVariation")
+        } header: {
+          Text(L10n.text("Вариации упражнений", locale: locale))
+        } footer: {
+          Text(
+            L10n.text(
+              "У каждой вариации свой список упражнений. Нужную можно выбрать перед началом тренировки.",
+              locale: locale))
         }
         Section {
           NavigationLink {
@@ -201,11 +286,14 @@ struct TemplateEditor: View {
               "Необязательно. Выбор включит фильтр по основным мышцам при добавлении упражнений.",
               locale: locale))
         }
-        ForEach(Array(template.exercises.enumerated()), id: \.element.id) { index, item in
+        ForEach(Array(selectedExercises.enumerated()), id: \.element.id) { index, item in
           Section {
             TemplateExerciseCard(
               item: item, index: index, onTechnique: { technique = item.exercise },
-              onRemove: { removeExercise(item.id) }
+              onRemove: { removeExercise(item.id) },
+              onMoveUp: canMoveExercise(item.id, by: -1) ? { moveExercise(item.id, by: -1) } : nil,
+              onMoveDown: canMoveExercise(item.id, by: 1)
+                ? { moveExercise(item.id, by: 1) } : nil
             )
             .listRowInsets(EdgeInsets())
             .listRowSeparator(.hidden).listRowBackground(Color.clear)
@@ -220,8 +308,9 @@ struct TemplateEditor: View {
           }
         }
         Button(L10n.text("Добавить упражнение", locale: locale), systemImage: "plus") {
+          focusedField = nil
           picking = true
-        }
+        }.accessibilityIdentifier("addTemplateExercise")
         Section {
           DisclosureGroup(L10n.text("Параметры выполнения", locale: locale)) {
             TemplateTrainingDays(selection: $template.preferredWeekdays)
@@ -245,7 +334,7 @@ struct TemplateEditor: View {
                 "Отдых общий для всех упражнений. При произвольном отдыхе таймер не запускается.",
                 locale: locale)
             ).font(.caption).foregroundStyle(.secondary)
-            ForEach($template.exercises) { $exercise in
+            ForEach(exerciseBinding) { $exercise in
               VStack(alignment: .leading, spacing: 12) {
                 Text(L10n.exerciseName(exercise.exercise, locale: locale)).font(.headline)
                 TemplateExerciseParameters(exercise: $exercise)
@@ -254,11 +343,11 @@ struct TemplateEditor: View {
           }
           .accessibilityIdentifier("templateExecutionParameters")
         }
-        if let validationMessage {
-          Text(L10n.text(validationMessage, locale: locale)).foregroundStyle(.red)
-        }
       }
       .listStyle(.insetGrouped)
+      .scrollDismissesKeyboard(.interactively)
+      .accessibilityElement(children: .contain)
+      .accessibilityIdentifier("templateEditorList")
       .navigationDestination(item: $technique) { exercise in
         ExerciseDetailView(exercise: exercise)
       }
@@ -272,6 +361,7 @@ struct TemplateEditor: View {
         }
         ToolbarItem(placement: .confirmationAction) {
           Button(L10n.text("Сохранить", locale: locale)) {
+            focusedField = nil
             do {
               try Validation.template(template)
               if store.save(template: template) {
@@ -280,21 +370,95 @@ struct TemplateEditor: View {
                 validationMessage = store.error
               }
             } catch { validationMessage = error.localizedDescription }
-          }
+          }.accessibilityIdentifier("saveTemplate")
         }
       }
       .sheet(isPresented: $picking) {
         ExercisePicker(initialGroups: template.muscleGroups, initialMuscles: template.muscles) {
-          template.exercises.append(TemplateExercise(exercise: $0))
+          exerciseBinding.wrappedValue.append(TemplateExercise(exercise: $0))
         }
       }
-      .archiveTransferPresenter(when: store.showingTemplateEditor && !picking)
+      .onChange(of: selectedVariationID) { focusedField = nil }
+      .confirmationDialog(
+        L10n.text("Удалить вариацию?", locale: locale), isPresented: $deletingVariation,
+        titleVisibility: .visible
+      ) {
+        Button(L10n.text("Удалить", locale: locale), role: .destructive) {
+          template.variations.removeAll { $0.id == selectedVariationID }
+          selectedVariationID = nil
+        }.accessibilityIdentifier("confirmDeleteTemplateVariation")
+        Button(L10n.text("Отмена", locale: locale), role: .cancel) {}
+      }
+      .alert(
+        "FitnessTracker",
+        isPresented: Binding(
+          get: { validationMessage != nil && !picking && !deletingVariation },
+          set: { if !$0 { dismissValidationMessage() } })
+      ) {
+        Button(L10n.text("Понятно", locale: locale)) { dismissValidationMessage() }
+      } message: {
+        Text(L10n.text(validationMessage ?? "", locale: locale))
+      }
+      .archiveTransferPresenter(
+        when: store.showingTemplateEditor && !picking && !deletingVariation
+          && validationMessage == nil
+      )
       .safeAreaInset(edge: .top) { if store.isDemoMode { DemoModeBanner() } }
     }
   }
 
   private func removeExercise(_ id: UUID) {
-    template.exercises.removeAll { $0.id == id }
+    focusedField = nil
+    exerciseBinding.wrappedValue = TemplateExercise.normalizingSupersets(
+      selectedExercises.filter { $0.id != id })
+  }
+
+  private func dismissValidationMessage() {
+    if let validationMessage, store.error == validationMessage { store.error = nil }
+    validationMessage = nil
+  }
+
+  private func addVariation() {
+    focusedField = nil
+    do {
+      let name = L10n.format("Вариант %@", String(template.variations.count + 2), locale: locale)
+      let variation = try template.makeVariation(name: name, copying: selectedVariationID)
+      template.variations.append(variation)
+      selectedVariationID = variation.id
+      validationMessage = nil
+    } catch {
+      validationMessage = error.localizedDescription
+    }
+  }
+
+  private func moveExercise(_ id: UUID, by offset: Int) {
+    focusedField = nil
+    var rows = selectedExercises
+    guard let index = rows.firstIndex(where: { $0.id == id }) else { return }
+    let groupID = rows[index].supersetID
+    let indices = groupID.map { id in rows.indices.filter { rows[$0].supersetID == id } } ?? [index]
+    guard let first = indices.first, let last = indices.last else { return }
+    let neighbor = offset < 0 ? first - 1 : last + 1
+    guard rows.indices.contains(neighbor) else { return }
+    let neighborGroup = rows[neighbor].supersetID
+    let neighborIndices =
+      neighborGroup.map { id in
+        rows.indices.filter { rows[$0].supersetID == id }
+      } ?? [neighbor]
+    guard let start = neighborIndices.first, let end = neighborIndices.last else { return }
+    rows.move(fromOffsets: IndexSet(indices), toOffset: offset < 0 ? start : end + 1)
+    exerciseBinding.wrappedValue = TemplateExercise.normalizingSupersets(rows)
+  }
+
+  private func canMoveExercise(_ id: UUID, by offset: Int) -> Bool {
+    let rows = selectedExercises
+    guard let index = rows.firstIndex(where: { $0.id == id }) else { return false }
+    let indices =
+      rows[index].supersetID.map { id in
+        rows.indices.filter { rows[$0].supersetID == id }
+      } ?? [index]
+    guard let first = indices.first, let last = indices.last else { return false }
+    return offset < 0 ? first > 0 : last < rows.count - 1
   }
 
 }

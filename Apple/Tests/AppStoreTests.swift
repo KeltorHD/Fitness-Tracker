@@ -13,6 +13,7 @@ import XCTest
 @MainActor private final class FailingWorkoutRepository: WorkoutRepository {
   let memory = MemoryWorkoutRepository()
   var failSaves = false
+  var failTemplateSaves = false
   var failTemplateReads = false
   var failBodyWeightReads = false
   var failBodyWeightReadsAfterWrite = false
@@ -28,7 +29,10 @@ import XCTest
     if failSaves { throw failure }
     try memory.save(workout)
   }
-  func saveTemplate(_ template: WorkoutTemplate) throws { try memory.saveTemplate(template) }
+  func saveTemplate(_ template: WorkoutTemplate) throws {
+    if failTemplateSaves { throw failure }
+    try memory.saveTemplate(template)
+  }
   func deleteWorkout(id: UUID) throws { try memory.deleteWorkout(id: id) }
   func deleteTemplate(id: UUID) throws { try memory.deleteTemplate(id: id) }
   func bodyWeights() throws -> [BodyWeightEntry] {
@@ -60,6 +64,109 @@ import XCTest
 }
 
 @MainActor final class AppStoreTests: XCTestCase {
+  func testSelectedVariationStartsWithItsSupersetWithoutChangingSavedTemplate() throws {
+    let repository = MemoryWorkoutRepository()
+    let groupID = UUID()
+    let variation = WorkoutTemplateVariation(
+      name: "Гантели",
+      exercises: [
+        TemplateExercise(exercise: ExerciseCatalog.all[1], setCount: 2, supersetID: groupID),
+        TemplateExercise(exercise: ExerciseCatalog.all[2], setCount: 2, supersetID: groupID),
+      ])
+    let template = WorkoutTemplate(
+      name: "Грудь", exercises: [TemplateExercise(exercise: ExerciseCatalog.all[0])],
+      restSeconds: 90, variations: [variation])
+    try repository.saveTemplate(template)
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    store.start(template: try template.resolvedVariation(id: variation.id))
+    let workout = try XCTUnwrap(store.active)
+    XCTAssertEqual(workout.exercises.map(\.exercise.id), variation.exercises.map(\.exercise.id))
+    XCTAssertEqual(workout.exercises.map { $0.sets.count }, [2, 2])
+    XCTAssertTrue(
+      workout.exercises.flatMap(\.sets).allSatisfy {
+        $0.repetitions == 0 && $0.weightKG == 0 && $0.completedAt == nil
+      })
+    let newGroupID = try XCTUnwrap(workout.exercises.first?.supersetID)
+    XCTAssertNotEqual(newGroupID, groupID)
+    XCTAssertTrue(workout.exercises.allSatisfy { $0.supersetID == newGroupID })
+    store.reload()
+    XCTAssertEqual(store.active, workout)
+    XCTAssertEqual(try repository.templates(), [template])
+    XCTAssertEqual(store.templates, [template])
+  }
+
+  func testSupersetSaveFailureDoesNotChangeGroupOrStartRest() throws {
+    let repository = FailingWorkoutRepository()
+    let date = Date(timeIntervalSince1970: 1_700_000_000)
+    let first = WorkoutExercise(
+      exercise: ExerciseCatalog.all[0], sets: [WorkoutSet(repetitions: 0)])
+    let second = WorkoutExercise(
+      exercise: ExerciseCatalog.all[1], sets: [WorkoutSet(repetitions: 0)])
+    var workout = Workout(
+      name: "Суперсет", startedAt: date, exercises: [first, second], restSeconds: 90)
+    _ = try WorkoutEngine.groupExercises([first.id, second.id], in: &workout)
+    try repository.save(workout)
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    repository.failSaves = true
+    XCTAssertFalse(
+      store.mutate {
+        try WorkoutEngine.completeSet(
+          in: &$0, exerciseID: first.id, setID: first.sets[0].id,
+          repetitions: 8, weightKG: 40, at: date.addingTimeInterval(1))
+      })
+    XCTAssertEqual(store.active, workout)
+    XCTAssertEqual(try repository.workouts(), [workout])
+    XCTAssertNil(store.active?.restEndsAt)
+    repository.failSaves = false
+    XCTAssertTrue(
+      store.mutate {
+        try WorkoutEngine.completeSet(
+          in: &$0, exerciseID: first.id, setID: first.sets[0].id,
+          repetitions: 8, weightKG: 40, at: date.addingTimeInterval(1))
+      })
+    XCTAssertNil(store.active?.restEndsAt)
+    XCTAssertEqual(store.active?.nextPendingSet?.exerciseID, second.id)
+    store.reload()
+    XCTAssertEqual(store.active?.nextPendingSet?.exerciseID, second.id)
+  }
+
+  func testEditedTemplateFromHistoryIsSavedWithoutChangingHistoryAndCanRetryFailure() throws {
+    let repository = FailingWorkoutRepository()
+    let date = Date(timeIntervalSince1970: 1_700_000_000)
+    var history = Workout(
+      name: "Прошлая тренировка", startedAt: date,
+      exercises: [
+        WorkoutExercise(
+          exercise: ExerciseCatalog.all[0],
+          sets: [WorkoutSet(repetitions: 8, weightKG: 40, completedAt: date)]),
+        WorkoutExercise(
+          exercise: ExerciseCatalog.all[1],
+          sets: [WorkoutSet(repetitions: 10, weightKG: 30, completedAt: date)]),
+      ])
+    try WorkoutEngine.finish(&history, at: date.addingTimeInterval(600))
+    try repository.save(history)
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    var draft = try WorkoutEngine.makeTemplate(from: history)
+    XCTAssertTrue(store.templates.isEmpty)
+    draft.name = "Новый план"
+    draft.exercises.removeFirst()
+    draft.exercises.append(TemplateExercise(exercise: ExerciseCatalog.all[2], setCount: 2))
+    repository.failTemplateSaves = true
+    XCTAssertFalse(store.save(template: draft))
+    XCTAssertTrue(store.templates.isEmpty)
+    XCTAssertNotNil(store.error)
+    XCTAssertEqual(try repository.workouts(), [history])
+    repository.failTemplateSaves = false
+    XCTAssertTrue(store.save(template: draft))
+    XCTAssertEqual(store.templates, [draft])
+    XCTAssertEqual(store.completed, [history])
+    XCTAssertEqual(try repository.workouts(), [history])
+    XCTAssertNil(store.active)
+  }
+
   func testAllStagesRequireExplicitFinishAndFailedFinishCanBeRetried() throws {
     let date = Date(timeIntervalSince1970: 1_700_000_000)
     let warmup = WorkoutSet(repetitions: 12, weightKG: 10, isWarmup: true)

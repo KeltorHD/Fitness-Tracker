@@ -16,6 +16,8 @@ struct WorkoutStartView: View {
   @Environment(\.scenePhase) private var phase
   @State private var currentDate = Date()
   @State private var selectedIDs: [UUID] = []
+  @State private var selectedVariations: [UUID: UUID] = [:]
+  @State private var selectionError: String?
   @State private var expandedIDs: Set<UUID> = []
   @State private var filter = WorkoutTemplateFilter()
   @State private var suggestions = WorkoutTemplateSuggestions(
@@ -94,7 +96,21 @@ struct WorkoutStartView: View {
         let availableIDs = Set(store.templates.map(\.id))
         selectedIDs.removeAll { !availableIDs.contains($0) }
         expandedIDs.formIntersection(availableIDs)
+        selectedVariations = selectedVariations.filter { templateID, variationID in
+          store.templates.first { $0.id == templateID }?.variations.contains {
+            $0.id == variationID
+          } == true
+        }
         refresh()
+      }
+      .alert(
+        L10n.text("Не удалось выбрать вариацию", locale: locale),
+        isPresented: Binding(
+          get: { selectionError != nil }, set: { if !$0 { selectionError = nil } })
+      ) {
+        Button(L10n.text("Понятно", locale: locale)) { selectionError = nil }
+      } message: {
+        Text(L10n.text(selectionError ?? "", locale: locale))
       }
     }
   }
@@ -185,7 +201,14 @@ struct WorkoutStartView: View {
         if templates.isEmpty {
           if !addingToWorkout { onSelect(.empty) }
         } else {
-          onSelect(.templates(templates))
+          do {
+            let resolved = try templates.map {
+              try $0.resolvedVariation(id: selectedVariations[$0.id])
+            }
+            onSelect(.templates(resolved))
+          } catch {
+            selectionError = error.localizedDescription
+          }
         }
       }
       .buttonStyle(.glassProminent).controlSize(.large)
@@ -209,6 +232,9 @@ struct WorkoutStartView: View {
     let selectionIndex = selectedIDs.firstIndex(of: template.id)
     return WorkoutStartTemplateCard(
       template: template, selectionIndex: selectionIndex,
+      selectedVariationID: Binding(
+        get: { selectedVariations[template.id] },
+        set: { selectedVariations[template.id] = $0 }),
       isExpanded: Binding(
         get: { expandedIDs.contains(template.id) },
         set: { expanded in
@@ -231,8 +257,13 @@ private struct WorkoutStartTemplateCard: View {
   @Environment(\.accessibilityReduceMotion) private var reduceMotion
   let template: WorkoutTemplate
   let selectionIndex: Int?
+  @Binding var selectedVariationID: UUID?
   @Binding var isExpanded: Bool
   let toggleSelection: () -> Void
+
+  private var selectedExercises: [TemplateExercise] {
+    template.variations.first { $0.id == selectedVariationID }?.exercises ?? template.exercises
+  }
 
   var body: some View {
     VStack(alignment: .leading, spacing: 8) {
@@ -266,13 +297,19 @@ private struct WorkoutStartTemplateCard: View {
       }
       .buttonStyle(.plain).accessibilityIdentifier("startWorkoutTemplate_\(template.id)")
       .accessibilityAddTraits(selectionIndex == nil ? [] : [.isSelected])
+      if !template.variations.isEmpty {
+        TemplateVariationSelector(template: template, selection: $selectedVariationID)
+          .onChange(of: selectedVariationID) {
+            withAnimation(reduceMotion ? nil : .snappy(duration: 0.24)) { isExpanded = true }
+          }
+      }
       Button {
         withAnimation(reduceMotion ? nil : .snappy(duration: 0.24)) {
           isExpanded.toggle()
         }
       } label: {
         HStack(spacing: 8) {
-          Text(L10n.format("Упражнения: %@", String(template.exercises.count), locale: locale))
+          Text(L10n.format("Упражнения: %@", String(selectedExercises.count), locale: locale))
           Spacer(minLength: 0)
           Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
             .accessibilityHidden(true)
@@ -284,7 +321,7 @@ private struct WorkoutStartTemplateCard: View {
       .accessibilityLabel(
         L10n.text(isExpanded ? "Скрыть упражнения" : "Показать упражнения", locale: locale)
       )
-      .accessibilityValue(String(template.exercises.count))
+      .accessibilityValue(String(selectedExercises.count))
       .accessibilityIdentifier("expandStartTemplate_\(template.id)")
       if isExpanded {
         Divider()
@@ -304,11 +341,11 @@ private struct WorkoutStartTemplateCard: View {
 
   private var exercisePreview: some View {
     LazyVStack(alignment: .leading, spacing: 12) {
-      if template.exercises.isEmpty {
+      if selectedExercises.isEmpty {
         Text(L10n.text("В шаблоне нет упражнений.", locale: locale))
           .font(.subheadline).foregroundStyle(.secondary)
       }
-      ForEach(Array(template.exercises.enumerated()), id: \.element.id) { index, item in
+      ForEach(Array(selectedExercises.enumerated()), id: \.element.id) { index, item in
         HStack(alignment: .top, spacing: 10) {
           Text(String(index + 1)).monospacedDigit().foregroundStyle(.secondary)
             .accessibilityHidden(true)
