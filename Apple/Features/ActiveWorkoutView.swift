@@ -346,6 +346,7 @@ struct ActiveWorkoutView: View {
               get: { store.active?.notes ?? "" },
               set: { text in store.mutate { $0.notes = text } }), axis: .vertical
           )
+          .accessibilityIdentifier("workoutNotes")
           .padding().background(FitTheme.card, in: .rect(cornerRadius: FitTheme.radius))
         }
         .padding(.top, 12)
@@ -399,43 +400,40 @@ struct ActiveWorkoutView: View {
         || (row.supersetID != nil
           && workout.groupContaining(exerciseID: row.id)?.exercises.first?.id != row.id)
     )
-    .contextMenu {
-      if workout.status == .active {
-        Button(L10n.text("Объединить в суперсет", locale: locale), systemImage: "link") {
-          supersetRequest = WorkoutSupersetRequest(
-            workoutID: workout.id, initialRowID: row.id)
-        }.disabled(workout.exercises.count < 2)
-          .accessibilityIdentifier("groupWorkoutExercise")
-        if let supersetID = row.supersetID {
-          Button(L10n.text("Разъединить суперсет", locale: locale), systemImage: "link") {
-            ungroup(supersetID, workout: workout)
-          }.accessibilityIdentifier("ungroupWorkoutExercises")
-        }
-      }
-    }
     .swipeActions(edge: .leading, allowsFullSwipe: false) {
       if workout.status == .active {
-        Button(L10n.text("Добавить перед", locale: locale), systemImage: "arrow.up.to.line") {
+        Button {
           insertion = InsertionRequest(workoutID: workout.id, position: .before(row.id))
-        }.tint(colorTheme.accent).accessibilityIdentifier("insertWorkoutExerciseBefore")
-        Button(L10n.text("Добавить после", locale: locale), systemImage: "arrow.down.to.line") {
+        } label: {
+          Image(systemName: "arrow.up.to.line")
+        }
+        .accessibilityLabel(L10n.text("Добавить перед", locale: locale))
+        .tint(colorTheme.accent).accessibilityIdentifier("insertWorkoutExerciseBefore")
+        Button {
           insertion = InsertionRequest(workoutID: workout.id, position: .after(row.id))
-        }.tint(.secondary).accessibilityIdentifier("insertWorkoutExerciseAfter")
+        } label: {
+          Image(systemName: "arrow.down.to.line")
+        }
+        .accessibilityLabel(L10n.text("Добавить после", locale: locale))
+        .tint(.secondary).accessibilityIdentifier("insertWorkoutExerciseAfter")
       }
     }
     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
       if workout.status == .active {
-        Button(
-          L10n.text("Удалить упражнение", locale: locale), systemImage: "trash"
-        ) {
+        Button {
           pendingRemoval = RemovalRequest(workoutID: workout.id, row: row)
-        }.tint(.red).accessibilityIdentifier("removeWorkoutExercise")
-        Button(
-          L10n.text("Заменить упражнение", locale: locale),
-          systemImage: "arrow.triangle.2.circlepath"
-        ) {
+        } label: {
+          Image(systemName: "trash")
+        }
+        .accessibilityLabel(L10n.text("Удалить упражнение", locale: locale))
+        .tint(.red).accessibilityIdentifier("removeWorkoutExercise")
+        Button {
           replacement = ReplacementRequest(workoutID: workout.id, rowID: row.id)
-        }.tint(colorTheme.accent).accessibilityIdentifier("replaceWorkoutExercise")
+        } label: {
+          Image(systemName: "arrow.triangle.2.circlepath")
+        }
+        .accessibilityLabel(L10n.text("Заменить упражнение", locale: locale))
+        .tint(colorTheme.accent).accessibilityIdentifier("replaceWorkoutExercise")
       }
     }
   }
@@ -518,10 +516,13 @@ struct ExercisePicker: View {
   var selectionHint: String? = nil
   var initialGroups: Set<MuscleGroup> = []
   var initialMuscles: Set<ExerciseMuscle> = []
+  var initialRegions: Set<ExerciseMuscleRegion> = []
   let select: (Exercise) -> Void
   var body: some View {
     NavigationStack {
-      ExerciseLibraryView(initialGroups: initialGroups, initialMuscles: initialMuscles) {
+      ExerciseLibraryView(
+        initialGroups: initialGroups, initialMuscles: initialMuscles, initialRegions: initialRegions
+      ) {
         exercise in
         select(exercise)
         dismiss()

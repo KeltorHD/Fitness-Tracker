@@ -6852,19 +6852,19 @@
         }
       }
     },
-    "Мышцы плеча": {
+    "Мышцы плечевого сустава": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Мышцы плеча"
+            "value": "Мышцы плечевого сустава"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Shoulder muscles"
+            "value": "Shoulder joint muscles"
           }
         }
       }
@@ -12054,6 +12054,23 @@
         }
       }
     },
+    "Развёрнуто": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Развёрнуто"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expanded"
+          }
+        }
+      }
+    },
     "Разгибатели спины": {
       "extractionState": "manual",
       "localizations": {
@@ -12815,6 +12832,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "The heart rate monitor disconnected. Connect again."
+          }
+        }
+      }
+    },
+    "Свёрнуто": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Свёрнуто"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Collapsed"
           }
         }
       }
@@ -15012,6 +15046,23 @@
         }
       }
     },
+    "Удерживайте и перетащите, чтобы изменить порядок.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Удерживайте и перетащите, чтобы изменить порядок."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touch and hold, then drag to reorder."
+          }
+        }
+      }
+    },
     "Удерживайте стопы на полу и контролируйте опускание снаряда. Используйте страховку.": {
       "extractionState": "manual",
       "localizations": {
@@ -15263,6 +15314,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bluetooth device"
+          }
+        }
+      }
+    },
+    "Уточнить области": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Уточнить области"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Refine regions"
           }
         }
       }

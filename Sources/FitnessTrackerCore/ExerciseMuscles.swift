@@ -23,7 +23,7 @@ public enum ExerciseMuscle: String, Codable, CaseIterable, Sendable {
     case .calves: "Мышцы голени"
     case .abductors: "Отводящие мышцы бедра"
     case .adductors: "Приводящие мышцы бедра"
-    case .shoulders: "Мышцы плеча"
+    case .shoulders: "Мышцы плечевого сустава"
     case .neck: "Мышцы шеи"
     case .biceps: "Бицепс"
     case .triceps: "Трицепс"

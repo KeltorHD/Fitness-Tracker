@@ -18,7 +18,7 @@ import XCTest
             TemplateExercise(exercise: ExerciseCatalog.all[1], setCount: 2, supersetID: groupID),
             TemplateExercise(exercise: ExerciseCatalog.all[2], setCount: 2, supersetID: groupID),
           ])
-      ])
+      ], baseVariationName: "Основной жим", muscleRegions: [.chestUpper, .deltoidAnterior])
     let variation = try XCTUnwrap(template.variations.first)
     var workout = try template.resolvedVariation(id: variation.id).start(at: date)
     let first = try XCTUnwrap(workout.exercises.first)

@@ -952,11 +952,15 @@
   "Малая ягодичная мышца": "Gluteus minimus",
   "Икроножная мышца · обе головки": "Gastrocnemius · both heads",
   "Камбаловидная мышца": "Soleus",
-  "Мышцы плеча": "Shoulder muscles",
   "Мышцы голени": "Calf muscles",
   "Мышцы и области": "Muscles and regions",
   "Последние результаты": "Latest results",
   "Пока нет выполненных подходов": "No recorded sets yet",
   "Области груди и пресса — части одной мышцы, а не отдельные мышцы. Фильтр показывает упражнения с отмеченной областью; полная изоляция не подразумевается.": "Chest and abdominal regions are parts of one muscle, not separate muscles. The filter shows exercises tagged for that region; complete isolation is not implied.",
-  "Фильтр учитывает основные мышцы и отмеченные области.": "The filter uses primary muscles and tagged regions."
+  "Фильтр учитывает основные мышцы и отмеченные области.": "The filter uses primary muscles and tagged regions.",
+  "Уточнить области": "Refine regions",
+  "Мышцы плечевого сустава": "Shoulder joint muscles",
+  "Развёрнуто": "Expanded",
+  "Свёрнуто": "Collapsed",
+  "Удерживайте и перетащите, чтобы изменить порядок.": "Touch and hold, then drag to reorder."
 }

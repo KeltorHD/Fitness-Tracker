@@ -8,11 +8,13 @@ struct ExerciseLibraryView: View {
 
   init(
     initialGroups: Set<MuscleGroup> = [], initialMuscles: Set<ExerciseMuscle> = [],
+    initialRegions: Set<ExerciseMuscleRegion> = [],
     onSelect: ((Exercise) -> Void)? = nil
   ) {
     self.onSelect = onSelect
     _model = State(
-      initialValue: ExerciseLibraryViewModel(groups: initialGroups, muscles: initialMuscles))
+      initialValue: ExerciseLibraryViewModel(
+        groups: initialGroups, muscles: initialMuscles, regions: initialRegions))
   }
 
   var body: some View {
