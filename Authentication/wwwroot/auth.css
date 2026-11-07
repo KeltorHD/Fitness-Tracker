@@ -143,6 +143,9 @@ button:disabled { cursor: default; opacity: .55; }
 .card-navigation { margin: 1.3rem 0 0; font-size: .85rem; text-align: center; line-height: 1.6; }
 .privacy-note { color: var(--muted); margin: 1rem 0 0; font-size: .75rem; text-align: center; line-height: 1.5; }
 .status-message { font-size: .83rem; line-height: 1.5; color: var(--muted); }
+.passkey-error-details { margin-top: .75rem; color: var(--muted); font-size: .8rem; line-height: 1.5; }
+.passkey-error-details summary { cursor: pointer; color: var(--accent); }
+.passkey-error-details pre { max-width: 100%; white-space: pre-wrap; overflow-wrap: anywhere; font-size: .75rem; }
 [data-passkey-status]:empty { display: none; }
 .form-alert { padding: .8rem; margin: 1rem 0; border: 1px solid currentColor; border-radius: .75rem; font-size: .85rem; line-height: 1.5; }
 [role="alert"], .validation-summary-errors { color: var(--error); }
