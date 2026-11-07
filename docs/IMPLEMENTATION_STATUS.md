@@ -1,6 +1,6 @@
 # Статусы модулей
 
-Последняя полная проверка Swift: 2026-11-08, Ubuntu 24.04 x86_64, Swift 6.2.1, Swift language mode 6, 269 Core tests и все portable checks. Предыдущий Apple-прогон 2026-11-07: на Mac с Xcode 27.2 (27B52) и iPhone 16 Pro Simulator / iOS 27.2 прошли 96 Apple unit tests. Проверка серверов: 2026-11-07, .NET 10 и PostgreSQL 16.6.
+Последняя полная проверка Swift: 2026-11-08, Ubuntu 24.04 x86_64, Swift 6.2.1, Swift language mode 6, 269 Core tests и все portable checks. Предыдущий Apple-прогон 2026-11-07: на Mac с Xcode 27.2 (27B52) и iPhone 16 Pro Simulator / iOS 27.2 прошли 96 Apple unit tests. Проверка серверов: 2026-11-08, .NET 10 и PostgreSQL 18; 193 xUnit-теста, форматирование и пять Python-тестов скриптов прошли. Пять вариантов небезопасной конфигурации startup дополнительно прошли 20 повторных прогонов (100 проверок).
 
 **Implemented** означает наличие реализации в исходниках. **Linux-tested** означает выполнение тестов соответствующего Core-кода либо серверных unit/HTTP/PostgreSQL-сценариев; состав проверки указан в строке модуля. Синтаксический разбор Apple-файлов и проверка ресурсов не считаются функциональным тестированием SwiftUI или Apple SDK.
 
