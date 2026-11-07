@@ -109,6 +109,7 @@ struct TemplateOverviewView: View {
   @State private var technique: Exercise?
   @State private var selectedVariationID: UUID?
   @State private var previousResults: [UUID: WorkoutExercise] = [:]
+  @State private var exerciseOrder = TemplateExerciseOrder()
   @AppStorage("weightUnit") private var unit: WeightUnit = .kilograms
   let template: WorkoutTemplate
   private var current: WorkoutTemplate {
@@ -139,15 +140,20 @@ struct TemplateOverviewView: View {
                 : L10n.format("%@ с", String(current.restSeconds), locale: locale)
             ),
           ])
-          ForEach(Array(selectedExercises.enumerated()), id: \.element.id) { index, item in
+          ForEach(selectedExercises) { item in
             TemplateExerciseCard(
-              item: item, index: index, onTechnique: { technique = item.exercise },
+              item: item, index: selectedExercises.firstIndex(where: { $0.id == item.id }) ?? 0,
+              order: exerciseOrder,
+              onTechnique: { technique = item.exercise },
               previousResult: previousResults[item.id], unit: unit)
           }
         }.padding(16)
       }
     }.background(FitTheme.paper).navigationBarTitleDisplayMode(.inline)
-      .onChange(of: selectedExercises, initial: true) { refreshResults() }
+      .onChange(of: selectedExercises, initial: true) { _, rows in
+        exerciseOrder.update(rows)
+        refreshResults()
+      }
       .onChange(of: store.workouts) { refreshResults() }
       .navigationDestination(item: $technique) { exercise in
         ExerciseDetailView(exercise: exercise)
@@ -210,6 +216,7 @@ struct TemplateEditor: View {
   @State private var deletingVariation = false
   @State private var replacement: TemplateExercise?
   @State private var previousResults: [UUID: WorkoutExercise] = [:]
+  @State private var exerciseOrder = TemplateExerciseOrder()
   @State private var reorderRevision = 0
   @AppStorage("weightUnit") private var unit: WeightUnit = .kilograms
   @FocusState private var focusedField: Field?
@@ -307,9 +314,11 @@ struct TemplateEditor: View {
               locale: locale))
         }
         Section {
-          ForEach(Array(selectedExercises.enumerated()), id: \.element.id) { index, item in
+          ForEach(selectedExercises) { item in
             TemplateExerciseCard(
-              item: item, index: index, onTechnique: { technique = item.exercise },
+              item: item, index: selectedExercises.firstIndex(where: { $0.id == item.id }) ?? 0,
+              order: exerciseOrder,
+              onTechnique: { technique = item.exercise },
               previousResult: previousResults[item.id], unit: unit,
               onRemove: { removeExercise(item.id) },
               onReplace: {
@@ -430,7 +439,10 @@ struct TemplateEditor: View {
           exerciseBinding.wrappedValue = rows
         }
       }
-      .onChange(of: selectedExercises, initial: true) { refreshResults() }
+      .onChange(of: selectedExercises, initial: true) { _, rows in
+        exerciseOrder.update(rows)
+        refreshResults()
+      }
       .onChange(of: store.workouts) { refreshResults() }
       .onChange(of: selectedVariationID) {
         focusedField = nil
@@ -502,6 +514,7 @@ struct TemplateEditor: View {
         selectedExercises[index].id, to: destination, in: selectedExercises)
       withAnimation(reduceMotion ? nil : .snappy(duration: 0.25)) {
         exerciseBinding.wrappedValue = rows
+        exerciseOrder.update(rows)
         reorderRevision += 1
       }
     } catch {

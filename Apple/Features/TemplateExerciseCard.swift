@@ -1,4 +1,5 @@
 import FitnessTrackerCore
+import Observation
 import SwiftUI
 
 /// One exercise is one card. The header, technique and removal are separate accessible actions.
@@ -8,6 +9,7 @@ struct TemplateExerciseCard: View {
   @Environment(\.dynamicTypeSize) private var typeSize
   let item: TemplateExercise
   let index: Int
+  var order: TemplateExerciseOrder? = nil
   let onTechnique: () -> Void
   var previousResult: WorkoutExercise? = nil
   var unit: WeightUnit = .kilograms
@@ -35,8 +37,12 @@ struct TemplateExerciseCard: View {
     VStack(alignment: .leading, spacing: 0) {
       HStack(alignment: .top, spacing: 12) {
         VStack(alignment: .leading, spacing: 6) {
-          Text(L10n.format("Упражнение %@", String(index + 1), locale: locale))
-            .font(.caption).foregroundStyle(.secondary)
+          Text(
+            L10n.format(
+              "Упражнение %@", String((order?.index(for: item.id) ?? index) + 1), locale: locale)
+          )
+          .font(.caption).foregroundStyle(.secondary)
+          .accessibilityIdentifier("templateExercisePosition_\(item.id)")
           if item.supersetID != nil {
             Label(L10n.text("Суперсет", locale: locale), systemImage: "link")
               .font(.caption.weight(.semibold)).foregroundStyle(colorTheme.accent)
@@ -102,5 +108,18 @@ struct TemplateExerciseCard: View {
     .themeGlow(in: RoundedRectangle(cornerRadius: FitTheme.exerciseCardRadius))
     .accessibilityElement(children: .contain)
     .accessibilityIdentifier("templateExerciseCard_\(item.id)")
+  }
+}
+
+/// Keeps ordinals live when UIKit retains a row's content during a native move.
+@MainActor @Observable final class TemplateExerciseOrder {
+  private var positions: [UUID: Int] = [:]
+
+  func index(for rowID: UUID) -> Int? { positions[rowID] }
+
+  func update(_ rows: [TemplateExercise]) {
+    positions = Dictionary(
+      rows.enumerated().map { ($0.element.id, $0.offset) },
+      uniquingKeysWith: { first, _ in first })
   }
 }

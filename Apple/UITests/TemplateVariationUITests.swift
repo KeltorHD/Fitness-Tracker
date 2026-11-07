@@ -93,9 +93,21 @@ final class TemplateVariationUITests: XCTestCase {
       try await Task.sleep(for: .milliseconds(100))
     }
     XCTAssertLessThan(second.frame.minY, first.frame.minY)
-    attachScreenshot("Template exercises reordered by dragging", in: app)
     let movedCell = editor.cells.containing(.staticText, identifier: "Тест: жим в наклоне")
       .firstMatch
+    let followingCell = editor.cells.containing(.staticText, identifier: "Тест: жим штанги")
+      .firstMatch
+    let position = NSPredicate(format: "identifier BEGINSWITH %@", "templateExercisePosition_")
+    let movedPosition = movedCell.staticTexts.matching(position).firstMatch
+    let followingPosition = followingCell.staticTexts.matching(position).firstMatch
+    while (movedPosition.label.filter(\.isNumber) != "1"
+      || followingPosition.label.filter(\.isNumber) != "2") && ContinuousClock.now < deadline
+    {
+      try await Task.sleep(for: .milliseconds(100))
+    }
+    attachScreenshot("Template exercises reordered by dragging", in: app)
+    XCTAssertEqual(movedPosition.label.filter(\.isNumber), "1", movedPosition.label)
+    XCTAssertEqual(followingPosition.label.filter(\.isNumber), "2", followingPosition.label)
     let replaceID = movedCell.buttons.matching(
       NSPredicate(format: "identifier BEGINSWITH %@", "replaceTemplateExercise_")
     ).firstMatch.identifier.replacingOccurrences(of: "replaceTemplateExercise_", with: "")
@@ -112,6 +124,8 @@ final class TemplateVariationUITests: XCTestCase {
       NSPredicate(format: "identifier BEGINSWITH %@", "templateExerciseCard_"))
     reveal(cards.firstMatch, in: app, named: "reopened first card")
     XCTAssertTrue(cards.firstMatch.staticTexts["Тест: жим в наклоне"].exists)
+    XCTAssertEqual(
+      cards.firstMatch.staticTexts.matching(position).firstMatch.label.filter(\.isNumber), "1")
   }
 
   @MainActor func testBottomContentClearsTheNavigationBarOnTemplatesAndResults() {
