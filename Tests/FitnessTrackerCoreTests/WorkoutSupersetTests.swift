@@ -325,3 +325,78 @@ private func record(_ workout: inout Workout, row: Int, set: Int, seconds: Doubl
   #expect(split.allSatisfy { $0.supersetID == nil })
   #expect(split.map(\.id) == [rows[0].id, rows[2].id, rows[1].id])
 }
+
+@Test func addingSupersetRoundAppendsOneBlankMemberSetAndPreservesRecordedWorkAndRest() throws {
+  var workout = groupedWorkout()
+  workout.exercises[0].sets[1].loadMultiplier = 2
+  try record(&workout, row: 0, set: 0, seconds: 1)
+  try record(&workout, row: 1, set: 0, seconds: 2)
+  let original = workout
+  let groupID = try #require(workout.exercises[0].supersetID)
+  try WorkoutEngine.addSupersetRound(supersetID: groupID, to: &workout)
+  #expect(workout.exercises.map { $0.sets.count } == [3, 3, 1])
+  #expect(workout.restEndsAt == original.restEndsAt)
+  for index in 0..<2 {
+    #expect(Array(workout.exercises[index].sets.prefix(2)) == original.exercises[index].sets)
+    let set = workout.exercises[index].sets[2]
+    #expect(set.repetitions == 0 && set.weightKG == 0 && set.completedAt == nil)
+    #expect(set.note == nil && set.dropStages == nil && !set.isWarmup)
+    #expect(set.loadMultiplier == original.exercises[index].sets.last?.loadMultiplier)
+  }
+  #expect(workout.exercises[2] == original.exercises[2])
+  #expect(workout.volume == original.volume)
+  #expect(Set(workout.exercises.flatMap(\.sets).map(\.id)).count == workout.totalSets)
+  try Validation.workout(workout)
+}
+
+@Test func addingSupersetRoundAlignsUnequalMembersBeforeAddingNewSharedOrdinal() throws {
+  var workout = groupedWorkout(firstCount: 3, secondCount: 1)
+  try record(&workout, row: 0, set: 0, seconds: 1)
+  try record(&workout, row: 1, set: 0, seconds: 2)
+  try record(&workout, row: 0, set: 1, seconds: 3)
+  let original = workout
+  #expect(workout.restEndsAt == supersetDate.addingTimeInterval(93))
+  let groupID = try #require(workout.exercises[0].supersetID)
+  try WorkoutEngine.addSupersetRound(supersetID: groupID, to: &workout)
+  #expect(workout.exercises.map { $0.sets.count } == [4, 4, 1])
+  #expect(Array(workout.exercises[0].sets.prefix(3)) == original.exercises[0].sets)
+  #expect(workout.exercises[1].sets[0] == original.exercises[1].sets[0])
+  #expect(
+    workout.exercises[1].sets.dropFirst().allSatisfy {
+      $0.repetitions == 0 && $0.weightKG == 0 && $0.completedAt == nil
+    })
+  #expect(workout.restEndsAt == nil)
+  #expect(workout.nextPendingSet?.exerciseID == workout.exercises[1].id)
+  #expect(workout.nextPendingSet?.roundIndex == 1)
+  #expect(workout.volume == original.volume)
+  try Validation.workout(workout)
+}
+
+@Test func addingSupersetRoundRejectsLimitsMissingGroupsAndInactiveStatesAtomically() throws {
+  var workout = groupedWorkout(firstCount: 30, secondCount: 1)
+  let original = workout
+  let groupID = try #require(workout.exercises[0].supersetID)
+  #expect(throws: TrainingError.invalidSetCount) {
+    try WorkoutEngine.addSupersetRound(supersetID: groupID, to: &workout)
+  }
+  #expect(workout == original)
+  #expect(throws: TrainingError.invalidSuperset) {
+    try WorkoutEngine.addSupersetRound(supersetID: UUID(), to: &workout)
+  }
+  #expect(workout == original)
+  try WorkoutEngine.pause(&workout, at: supersetDate)
+  let paused = workout
+  #expect(throws: TrainingError.invalidState) {
+    try WorkoutEngine.addSupersetRound(supersetID: groupID, to: &workout)
+  }
+  #expect(workout == paused)
+
+  var malformed = groupedWorkout()
+  let malformedID = try #require(malformed.exercises[0].supersetID)
+  malformed.exercises[1].supersetID = nil
+  let invalid = malformed
+  #expect(throws: TrainingError.invalidSuperset) {
+    try WorkoutEngine.addSupersetRound(supersetID: malformedID, to: &malformed)
+  }
+  #expect(malformed == invalid)
+}

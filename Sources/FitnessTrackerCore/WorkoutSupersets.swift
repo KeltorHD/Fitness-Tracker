@@ -128,6 +128,25 @@ extension WorkoutEngine {
     workout = candidate
   }
 
+  /// Adds one shared round, filling missing member ordinals with fresh blank sets first.
+  public static func addSupersetRound(supersetID: UUID, to workout: inout Workout) throws {
+    guard workout.status == .active else { throw TrainingError.invalidState }
+    guard let group = workout.exerciseGroups.first(where: { $0.supersetID == supersetID }),
+      group.isSuperset
+    else { throw TrainingError.invalidSuperset }
+    try Validation.workout(workout)
+    let targetCount = group.roundCount + 1
+    guard targetCount <= 30 else { throw TrainingError.invalidSetCount }
+    var candidate = workout
+    for row in group.exercises {
+      for _ in row.sets.count..<targetCount {
+        try addSet(exerciseID: row.id, to: &candidate)
+      }
+    }
+    try Validation.workout(candidate)
+    workout = candidate
+  }
+
   static func normalizeSupersets(in rows: inout [WorkoutExercise]) {
     let invalid = SupersetStructure.invalidIDs(in: rows.map(\.supersetID))
     for index in rows.indices {
