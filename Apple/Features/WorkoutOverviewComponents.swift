@@ -6,6 +6,8 @@ struct WorkoutSessionSummary: View {
   let workout: Workout
   let unit: WeightUnit
   var showsDuration = true
+  var bodyWeightKG: Double?
+  var editBodyWeight: (() -> Void)?
   var body: some View {
     TimelineView(.periodic(from: .now, by: 1)) { timeline in
       WorkoutSummaryCard(
@@ -29,7 +31,21 @@ struct WorkoutSessionSummary: View {
                 ? String(workout.completedSets)
                 : "\(workout.fullyCompletedSets)/\(workout.totalSets)"
             ),
-          ])
+          ]
+          + (editBodyWeight != nil
+            ? [
+              (
+                title: L10n.text("Вес тела", locale: locale),
+                value: bodyWeightKG.map {
+                  "\(unit.display($0).formatted(.number.locale(L10n.numberLocale).precision(.fractionLength(0...2)))) \(L10n.text(unit.rawValue, locale: locale))"
+                } ?? "—"
+              )
+            ] : []),
+        metricAction: editBodyWeight.map {
+          WorkoutSummaryCard.MetricAction(
+            index: showsDuration ? 3 : 2, identifier: "editWorkoutBodyWeight",
+            hint: L10n.text("Изменить вес", locale: locale), perform: $0)
+        })
     }
   }
 }
@@ -40,6 +56,7 @@ struct WorkoutExerciseListRow: View {
   let index: Int
   let unit: WeightUnit
   let completedOnly: Bool
+  var showsThumbnail = true
   var body: some View {
     HStack(alignment: .top, spacing: 14) {
       Text(String(index + 1)).font(.body).monospacedDigit().foregroundStyle(.secondary)
@@ -53,7 +70,7 @@ struct WorkoutExerciseListRow: View {
         )
         .font(.subheadline).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
       }.frame(maxWidth: .infinity, alignment: .leading)
-      WorkoutExerciseThumbnail(exercise: row.exercise)
+      if showsThumbnail { WorkoutExerciseThumbnail(exercise: row.exercise) }
     }.foregroundStyle(.primary).padding(.vertical, 16).contentShape(.rect)
   }
 }

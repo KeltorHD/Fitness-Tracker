@@ -54,7 +54,7 @@ public enum WorkoutArchiveError: Error, Equatable, LocalizedError, Sendable {
     case .invalidFile: "Файл повреждён или не содержит данные FitnessTracker."
     case .unsupportedVersion:
       "Версия формата файла не поддерживается. Попробуйте обновить FitnessTracker."
-    case .tooLarge: "Файл превышает допустимый размер 20 МБ."
+    case .tooLarge: "Файл превышает допустимый размер 30 МБ."
     case .tooManyRecords:
       "В одном файле допускается до 10 000 тренировок, 1 000 планов и 10 000 записей веса."
     case .duplicateID: "В файле обнаружены повторяющиеся записи. Импорт не выполнен."
@@ -63,7 +63,7 @@ public enum WorkoutArchiveError: Error, Equatable, LocalizedError, Sendable {
 }
 
 public enum WorkoutArchiveCodec {
-  public static let maximumBytes = 20 * 1024 * 1024
+  public static let maximumBytes = 30 * 1024 * 1024
 
   public static func encode(_ archive: WorkoutArchive) throws -> Data {
     try validate(archive)

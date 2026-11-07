@@ -10,6 +10,7 @@ options:
 settings:
   base:
     FITNESS_TRACKER_CLOUD_SYNC_AVAILABLE: 'YES'
+    FITNESS_TRACKER_AUTH_CALLBACK_MODE: https
   configs:
     Debug:
       FITNESS_TRACKER_APS_ENVIRONMENT: development
@@ -17,8 +18,10 @@ settings:
       FITNESS_TRACKER_APS_ENVIRONMENT: production
     PersonalDebug:
       FITNESS_TRACKER_CLOUD_SYNC_AVAILABLE: 'NO'
+      FITNESS_TRACKER_AUTH_CALLBACK_MODE: customScheme
     PersonalRelease:
       FITNESS_TRACKER_CLOUD_SYNC_AVAILABLE: 'NO'
+      FITNESS_TRACKER_AUTH_CALLBACK_MODE: customScheme
 configs:
   Debug: debug
   Release: release

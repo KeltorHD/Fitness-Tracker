@@ -16,10 +16,13 @@ struct BodyWeightHistoryItem: Identifiable {
   func refresh(entries: [BodyWeightEntry], workouts: [Workout]) {
     summary = BodyWeightSummary(entries: entries, workouts: workouts, now: now())
     let names = Dictionary(workouts.map { ($0.id, $0.name) }, uniquingKeysWith: { _, last in last })
+    let linkedWorkouts = Dictionary(
+      entries.compactMap { entry in entry.workoutID.map { (entry.id, $0) } },
+      uniquingKeysWith: { _, last in last })
     items = summary.points.map { point in
       let name: String?
       switch point.source {
-      case .measurement: name = nil
+      case .measurement(let id): name = linkedWorkouts[id].flatMap { names[$0] }
       case .workout(let id): name = names[id]
       }
       return BodyWeightHistoryItem(point: point, workoutName: name)

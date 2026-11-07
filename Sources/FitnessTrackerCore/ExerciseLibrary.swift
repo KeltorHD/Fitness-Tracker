@@ -67,6 +67,8 @@ public struct ExerciseLibraryEntry: Identifiable, Codable, Hashable, Sendable {
   public let level: ExerciseDifficulty
   public let primaryMuscles: [String]
   public let secondaryMuscles: [String]
+  /// Reviewed local anatomical/training-region annotations; absent in older catalog payloads.
+  public let trainingRegions: [ExerciseMuscleRegion]?
   public let steps: [String]
   /// Paths relative to the iOS-only ExerciseMedia folder; no runtime network requests.
   public let images: [String]
@@ -160,6 +162,7 @@ public enum ExerciseLibrary {
         !entry.primaryMuscles.isEmpty,
         entry.primaryMuscleIDs.count == entry.primaryMuscles.count,
         entry.secondaryMuscleIDs.count == entry.secondaryMuscles.count,
+        Set(entry.muscleRegions).count == entry.muscleRegions.count,
         missingImages ? entry.images.isEmpty : entry.images.count == 2,
         Set(entry.images).count == entry.images.count,
         entry.images.allSatisfy({ path in

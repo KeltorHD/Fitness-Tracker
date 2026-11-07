@@ -181,13 +181,20 @@ func invalidWeightsAreRejected(_ weight: Double) {
   workout.exercises.append(workout.exercises[0])
   #expect(throws: TrainingError.duplicateID) { try Validation.workout(workout) }
 }
-@Test func addSetCopiesTargetsButResetsCompletion() throws {
+@Test func addSetStartsBlankAndPreservesLoadMultiplierWithoutChangingRecordedWork() throws {
   var workout = try finished()
   workout.status = .active
   workout.endedAt = nil
+  workout.exercises[0].sets[0].loadMultiplier = 2
+  let original = workout.exercises[0].sets[0]
   try WorkoutEngine.addSet(exerciseID: workout.exercises[0].id, to: &workout)
   #expect(workout.exercises[0].sets.last?.completedAt == nil)
-  #expect(workout.exercises[0].sets.last?.weightKG == 100)
+  #expect(workout.exercises[0].sets.last?.weightKG == 0)
+  #expect(workout.exercises[0].sets.last?.repetitions == 0)
+  #expect(workout.exercises[0].sets.last?.loadMultiplier == 2)
+  #expect(workout.exercises[0].sets.last?.id != original.id)
+  #expect(workout.exercises[0].sets[0] == original)
+  try Validation.workout(workout)
 }
 @Test @MainActor func repositoryUpsertDeleteAndValidation() throws {
   let repo = MemoryWorkoutRepository()
@@ -226,6 +233,8 @@ func invalidWeightsAreRejected(_ weight: Double) {
   #expect(workout.exercises.last?.exercise.id == shared.id)
   #expect(Set(workout.exercises.map(\.id)).count == 6)
   #expect(Set(workout.exercises.flatMap(\.sets).map(\.id)).count == 6)
+  let added = workout.exercises.filter { $0.id != first.id && $0.id != second.id }
+  #expect(added.flatMap(\.sets).allSatisfy { $0.repetitions == 0 && $0.weightKG == 0 })
   try Validation.workout(workout)
 }
 
@@ -391,16 +400,17 @@ func exerciseStructureChangesRejectNonActiveWorkouts(_ status: WorkoutStatus) th
   #expect(template.exercises[0].plannedSets?.first?.note == "Technique updated")
 }
 
-@Test func insertingSetUsesAnchorTargetsWithoutCopyingNoteOrCompletion() throws {
+@Test func insertingSetStartsBlankWithAnchorMultiplierWithoutCopyingNoteOrCompletion() throws {
   var workout = session()
   let row = workout.exercises[0].id
   let anchor = workout.exercises[0].sets[0].id
   workout.exercises[0].sets[0].note = "Only this set"
+  workout.exercises[0].sets[0].loadMultiplier = 3
   workout.exercises[0].sets.append(WorkoutSet(repetitions: 12, weightKG: 20))
   let last = workout.exercises[0].sets[1].id
   try WorkoutEngine.addSet(exerciseID: row, to: &workout, after: anchor)
   let added = workout.exercises[0].sets[1]
-  #expect(added.repetitions == 5 && added.weightKG == 100)
+  #expect(added.repetitions == 0 && added.weightKG == 0 && added.loadMultiplier == 3)
   #expect(added.note == nil && added.completedAt == nil && added.id != anchor)
   #expect(workout.exercises[0].sets[2].id == last)
   let snapshot = workout
@@ -574,7 +584,8 @@ func templateAdditionRejectsNonActiveSessions(_ status: WorkoutStatus) {
     id == row.id && workout.exercises.count == 1 && workout.exercises[0].exercise == replacement)
   #expect(workout.exercises[0].sets[0].id != row.sets[0].id)
   #expect(
-    workout.exercises[0].sets[0].weightKG == 0 && workout.exercises[0].sets[0].completedAt == nil)
+    workout.exercises[0].sets[0].weightKG == 0 && workout.exercises[0].sets[0].repetitions == 0
+      && workout.exercises[0].sets[0].completedAt == nil)
   #expect(
     workout.id == original.id && workout.startedAt == original.startedAt
       && workout.restSeconds == original.restSeconds)
@@ -597,6 +608,7 @@ func templateAdditionRejectsNonActiveSessions(_ status: WorkoutStatus) {
   #expect(
     workout.exercises[1].id == id && id != row.id && workout.exercises[1].exercise == replacement)
   #expect(workout.exercises[1].sets.allSatisfy { $0.completedAt == nil && $0.note == nil })
+  #expect(workout.exercises[1].sets.allSatisfy { $0.repetitions == 0 && $0.weightKG == 0 })
   #expect(workout.volume == original.volume && workout.restEndsAt == original.restEndsAt)
   #expect(workout.name == original.name && workout.startedAt == original.startedAt)
 }

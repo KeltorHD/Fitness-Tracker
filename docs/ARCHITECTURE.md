@@ -85,3 +85,6 @@ Optional loadMultiplier сохраняет номинальный вес, изм
 ## Этапы дропсета
 
 WorkoutSet сохраняет основной этап и optional dropStages. Core исполняет этапы последовательно, блокирует изменение выполненных значений, запускает отдых после последнего и считает объём по фактическим данным. fullyCompletedSets определяет live progress, completedSets — наличие записанной работы. plannedSets сохраняет mixed targets шаблонов без потерь; новые архивы v4, старые payloads читаются с nil optional fields. [Детали](DROP_SETS.md).
+## Серверные сервисы
+
+`Authentication` и `Backend` — два независимых ASP.NET Core приложения в `FitnessTracker.Server.sln`, рядом с прежним Swift/XcodeGen-проектом. Identity/OpenIddict управляют аккаунтами и OAuth; Backend принимает только бэкапы существующего `WorkoutArchive` и проверяет JWT по issuer/JWKS. Локальный repository и CloudKit не заменяются серверной синхронизацией. `AccountSession` владеет токенами, общей ротацией и Keychain через DI; `AccountBackupViewModel` координирует явные uploads и скачивание с проверкой целостности. Восстановление использует прежние `ArchiveImportPlan`/preview/transaction. [Полный контракт и ограничения](SERVER.md).

@@ -8,3 +8,13 @@ Config/Local.xcconfig
 .DS_Store
 __pycache__/
 .venv/
+**/bin/
+**/obj/
+.local/
+.env
+.env.*
+!.env.example
+*.pfx
+*.p12
+*.p8
+TestResults/

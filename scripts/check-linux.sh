@@ -37,8 +37,20 @@ bin_path="$("$swift_bin" build "${flags[@]}" --show-bin-path)"
   Apple/Services/HeartRateBluetooth.swift Apple/Services/LiveHeartRate.swift Apple/Services/ServiceError.swift \
   Apple/Features/TrackerViewModel.swift Apple/Features/WorkoutHeartRateViewModel.swift \
   Apple/Features/HealthChartsViewModel.swift \
-  Apple/Features/TrackerDeviceProfile.swift Apple/Shared/AppCompatibility.swift
+  Apple/Features/TrackerDeviceProfile.swift Apple/Shared/AppCompatibility.swift \
+  Apple/Services/ServerContracts.swift Apple/Services/ServerHTTPClient.swift \
+  Apple/Services/AccountSession.swift Apple/Services/RemoteBackupClient.swift \
+  Apple/Features/AccountBackupViewModel.swift
 echo 'Portable presentation/data subset: Swift 6 type check passed (no Apple SDK).'
+# OAuth contracts and presentation state use HTTP fixtures, without browser or Apple SDK.
+"$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
+  -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \
+  "$bin_path"/FitnessTrackerCore.build/*.swift.o \
+  Apple/Services/ServerContracts.swift Apple/Services/ServerHTTPClient.swift \
+  Apple/Services/AccountSession.swift Apple/Services/RemoteBackupClient.swift \
+  Apple/Features/AccountBackupViewModel.swift Tests/PortableAccountChecks/main.swift \
+  -o "$bin_path/portable-account-checks"
+"$bin_path/portable-account-checks"
 # Exercise chart presentation with real Core data, without SwiftUI/Charts SDK stand-ins.
 "$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
   -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \

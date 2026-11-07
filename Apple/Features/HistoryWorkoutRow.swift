@@ -8,6 +8,7 @@ struct HistoryWorkoutRow: View {
   let unit: WeightUnit
   let onSelect: () -> Void
   let onRepeat: () -> Void
+  let onCreateTemplate: () -> Void
   let onDelete: () -> Void
 
   var body: some View {
@@ -41,10 +42,15 @@ struct HistoryWorkoutRow: View {
             .font(.subheadline).foregroundStyle(.secondary)
           }.frame(maxWidth: .infinity, alignment: .leading).fitCard()
         }.buttonStyle(.plain)
+          .accessibilityIdentifier("historyWorkout_\(workout.id)")
           .contextMenu {
             Button(L10n.text("Повторить", locale: locale), systemImage: "arrow.counterclockwise") {
               onRepeat()
             }
+            Button(L10n.text("Создать шаблон", locale: locale), systemImage: "list.clipboard") {
+              onCreateTemplate()
+            }
+            .accessibilityIdentifier("createTemplateFromHistory_\(workout.id)")
             Button(L10n.text("Удалить", locale: locale), systemImage: "trash", role: .destructive) {
               onDelete()
             }

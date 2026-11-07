@@ -1,0 +1,162 @@
+services:
+  authentication:
+    build:
+      context: .
+      dockerfile: Authentication/Dockerfile
+    restart: unless-stopped
+    read_only: true
+    tmpfs: [/tmp]
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+    ports:
+      - "127.0.0.1:${AUTH_HTTP_PORT:-5080}:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      AllowedHosts: ${AUTH_DOMAIN:?Set AUTH_DOMAIN in .env}
+      Auth__Issuer: https://${AUTH_DOMAIN}/
+      Auth__RedirectUri: https://${AUTH_DOMAIN}/ios/oauth/callback
+      Auth__AppleAppIdentifier: ${IOS_APP_IDENTIFIER:-}
+      Auth__PersonalCallbackScheme: ${IOS_PERSONAL_CALLBACK_SCHEME:-}
+      Auth__IntrospectionClientSecret: ${BACKEND_INTROSPECTION_SECRET:?Set BACKEND_INTROSPECTION_SECRET in .env}
+      ConnectionStrings__Database: Host=auth-db;Database=fitnesstracker_auth;Username=fitnesstracker_auth;Password=${AUTH_DB_PASSWORD:?Run scripts/setup-server.sh}
+      ReverseProxy__Address: ${SERVER_NETWORK_GATEWAY:?Run python3 scripts/setup-server-network.py}
+      DataProtection__Path: /app/keys
+      Certificates__Signing__Path: /run/certificates/signing.pfx
+      Certificates__Signing__Password: ${CERTIFICATE_PASSWORD:?Run scripts/setup-server.sh}
+      Certificates__Encryption__Path: /run/certificates/encryption.pfx
+      Certificates__Encryption__Password: ${CERTIFICATE_PASSWORD}
+      Backend__InternalUrl: http://backend:8080/
+      Backend__ServiceKey: ${BACKEND_SERVICE_KEY:?Run scripts/setup-server.sh}
+      Providers__Google__Enabled: ${GOOGLE_ENABLED:-false}
+      Providers__Google__ClientId: ${GOOGLE_CLIENT_ID:-}
+      Providers__Google__ClientSecret: ${GOOGLE_CLIENT_SECRET:-}
+      Providers__Yandex__Enabled: ${YANDEX_ENABLED:-false}
+      Providers__Yandex__ClientId: ${YANDEX_CLIENT_ID:-}
+      Providers__Yandex__ClientSecret: ${YANDEX_CLIENT_SECRET:-}
+      Providers__Apple__Enabled: ${APPLE_ENABLED:-false}
+      Providers__Apple__ClientId: ${APPLE_CLIENT_ID:-}
+      Providers__Apple__TeamId: ${APPLE_TEAM_ID:-}
+      Providers__Apple__KeyId: ${APPLE_KEY_ID:-}
+      Providers__Apple__PrivateKeyPath: /run/certificates/apple.p8
+    volumes:
+      - type: bind
+        source: ${AUTH_CERTIFICATES_PATH:-./.local/certificates}
+        target: /run/certificates
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ${AUTH_KEYS_PATH:-./.local/auth-keys}
+        target: /app/keys
+    depends_on:
+      auth-db:
+        condition: service_healthy
+      auth-storage-init:
+        condition: service_completed_successfully
+
+  # Prepare only the mounted key directory; Authentication keeps its non-root UID.
+  auth-storage-init:
+    image: mcr.microsoft.com/dotnet/aspnet:10.0
+    user: "0:0"
+    restart: "no"
+    network_mode: none
+    read_only: true
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+    cap_add: [CHOWN, FOWNER]
+    entrypoint: [/bin/sh, -ec]
+    command:
+      - |
+        chown "$${APP_UID}:$${APP_UID}" /keys
+        chmod 0700 /keys
+    volumes:
+      - type: bind
+        source: ${AUTH_KEYS_PATH:-./.local/auth-keys}
+        target: /keys
+
+  backend:
+    build:
+      context: .
+      dockerfile: Backend/Dockerfile
+    restart: unless-stopped
+    read_only: true
+    tmpfs: [/tmp]
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+    ports:
+      - "127.0.0.1:${API_HTTP_PORT:-5081}:8080"
+    extra_hosts:
+      - "${AUTH_DOMAIN}:${SERVER_NETWORK_GATEWAY:?Run python3 scripts/setup-server-network.py}"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      AllowedHosts: ${API_DOMAIN:?Set API_DOMAIN in .env};backend
+      Auth__Issuer: https://${AUTH_DOMAIN}/
+      Auth__IntrospectionClientSecret: ${BACKEND_INTROSPECTION_SECRET:?Set BACKEND_INTROSPECTION_SECRET in .env}
+      ConnectionStrings__Database: Host=backend-db;Database=${BACKEND_DB_NAME:-fitnesstracker_backend};Username=${BACKEND_DB_USER:-fitnesstracker_backend};Password=${BACKEND_DB_PASSWORD:?Set BACKEND_DB_PASSWORD in .env (keep the existing database password)}
+      DataProtection__Path: /app/keys
+      Certificates__Encryption__Path: /run/certificates/encryption.pfx
+      Certificates__Encryption__Password: ${CERTIFICATE_PASSWORD}
+      ReverseProxy__Address: ${SERVER_NETWORK_GATEWAY:?Run python3 scripts/setup-server-network.py}
+      Backend__ServiceKey: ${BACKEND_SERVICE_KEY}
+    volumes:
+      - type: bind
+        source: ${BACKEND_KEYS_PATH:-./.local/backend-keys}
+        target: /app/keys
+      - type: bind
+        source: ${BACKEND_CERTIFICATES_PATH:-./.local/backend-certificates}
+        target: /run/certificates
+        read_only: true
+        bind:
+          create_host_path: false
+    depends_on:
+      backend-db:
+        condition: service_healthy
+      backend-storage-init:
+        condition: service_completed_successfully
+
+  backend-storage-init:
+    extends:
+      service: auth-storage-init
+    volumes:
+      - type: bind
+        source: ${BACKEND_KEYS_PATH:-./.local/backend-keys}
+        target: /keys
+
+  auth-db:
+    image: postgres:18-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: fitnesstracker_auth
+      POSTGRES_USER: fitnesstracker_auth
+      POSTGRES_PASSWORD: ${AUTH_DB_PASSWORD}
+    volumes:
+      - type: bind
+        source: ${AUTH_DB_DATA_PATH:-./.local/auth-db}
+        target: /var/lib/postgresql
+    healthcheck:
+      test: [CMD-SHELL, pg_isready -U fitnesstracker_auth -d fitnesstracker_auth]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  backend-db:
+    image: postgres:18-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${BACKEND_DB_NAME:-fitnesstracker_backend}
+      POSTGRES_USER: ${BACKEND_DB_USER:-fitnesstracker_backend}
+      POSTGRES_PASSWORD: ${BACKEND_DB_PASSWORD}
+    volumes:
+      - type: bind
+        source: ${BACKEND_DB_DATA_PATH:-./.local/backend-db}
+        target: /var/lib/postgresql
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}"']
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+networks:
+  default:
+    external: true
+    name: ${SERVER_NETWORK_NAME:-fitness-tracker-server}

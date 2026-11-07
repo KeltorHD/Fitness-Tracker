@@ -18,6 +18,7 @@ struct SettingsView: View {
   let model: SettingsViewModel
   @State private var cloudRequest = 0
   @State private var notificationsRequested = false
+  @State private var editingBodyWeight = false
   var body: some View {
     Form {
       Section(L10n.text("Тренировка", locale: locale)) {
@@ -97,6 +98,17 @@ struct SettingsView: View {
           SettingsLabel(
             title: L10n.text("Единицы измерения", locale: locale), symbol: "scalemass")
         }
+        Button {
+          editingBodyWeight = true
+        } label: {
+          HStack {
+            SettingsLabel(title: L10n.text("Вес тела", locale: locale), symbol: "scalemass.fill")
+            Spacer()
+            Text(bodyWeightValue).foregroundStyle(.secondary)
+          }.foregroundStyle(.primary)
+        }
+        .accessibilityLabel(L10n.text("Вес тела", locale: locale))
+        .accessibilityValue(bodyWeightValue).accessibilityIdentifier("settingsBodyWeight")
         NavigationLink {
           List {
             Text(
@@ -116,6 +128,12 @@ struct SettingsView: View {
         }.disabled(store.isDemoMode)
       }
       Section {
+        NavigationLink {
+          AccountBackupView()
+        } label: {
+          SettingsLabel(
+            title: L10n.text("Аккаунт и копии", locale: locale), symbol: "person.crop.circle")
+        }.disabled(store.isDemoMode).accessibilityIdentifier("openAccountBackups")
         if AppCapabilities.current.supportsCloudSync {
           Toggle(isOn: $cloud) {
             SettingsLabel(
@@ -204,6 +222,10 @@ struct SettingsView: View {
       L10n.text("Настройки", locale: locale)
     )
     .tint(colorTheme.accent)
+    .sheet(isPresented: $editingBodyWeight) {
+      BodyWeightEditor(
+        initialWeightKG: store.currentBodyWeightKG, updatesCurrentWeight: true, unit: unit)
+    }
     .task(id: cloudRequest) {
       if cloudRequest > 0 && AppCapabilities.current.supportsCloudSync {
         await model.checkCloudAccount()
@@ -220,6 +242,13 @@ struct SettingsView: View {
     .onChange(of: goal) { store.refreshIntegrations() }
     .onChange(of: widgetSharing) { store.refreshIntegrations() }
     .onChange(of: liveActivities) { store.refreshIntegrations() }
+  }
+
+  private var bodyWeightValue: String {
+    guard let weight = store.currentBodyWeightKG else { return "—" }
+    let value = unit.display(weight).formatted(
+      .number.locale(L10n.numberLocale).precision(.fractionLength(0...2)))
+    return "\(value) \(L10n.text(unit.rawValue, locale: locale))"
   }
 }
 

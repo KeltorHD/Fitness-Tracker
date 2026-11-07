@@ -9,6 +9,7 @@ struct MuscleSelectionView: View {
   @Binding var selection: ExerciseMuscleSelection
   var showsDoneButton = false
   @State private var expandedGroups: Set<MuscleGroup> = []
+  @State private var expandedMuscles: Set<ExerciseMuscle> = []
 
   private var groups: [MuscleGroup] {
     MuscleGroup.allCases.filter {
@@ -32,33 +33,19 @@ struct MuscleSelectionView: View {
       Section {
         ForEach(groups, id: \.self) { group in
           let children = ExerciseMuscle.inGroup(group)
-          if children.isEmpty {
-            groupLabel(group)
-          } else {
-            DisclosureGroup(
-              isExpanded: Binding(
-                get: { expandedGroups.contains(group) },
-                set: { expanded in
-                  if expanded { expandedGroups.insert(group) } else { expandedGroups.remove(group) }
-                })
-            ) {
-              ForEach(children, id: \.self) { muscle in
-                Toggle(
-                  L10n.text(muscle.title, locale: locale),
-                  isOn: Binding(
-                    get: { selection.contains(muscle) },
-                    set: { selection.set(muscle, selected: $0) })
-                )
-                .accessibilityIdentifier("muscle_\(muscle.rawValue)")
-              }
-            } label: {
-              groupLabel(group)
+          groupLabel(group)
+          if expandedGroups.contains(group) {
+            ForEach(children, id: \.self) { muscle in
+              muscleRow(muscle)
             }
-            .accessibilityIdentifier("expandMuscleGroup_\(group.rawValue)")
           }
         }
       } footer: {
-        Text(L10n.text("Фильтр учитывает основные мышцы упражнения.", locale: locale))
+        Text(L10n.text("Фильтр учитывает основные мышцы и отмеченные области.", locale: locale))
+        Text(
+          L10n.text(
+            "Области груди и пресса — части одной мышцы, а не отдельные мышцы. Фильтр показывает упражнения с отмеченной областью; полная изоляция не подразумевается.",
+            locale: locale))
       }
     }
     .tint(colorTheme.accent)
@@ -73,6 +60,70 @@ struct MuscleSelectionView: View {
     }
     .onAppear {
       expandedGroups.formUnion(groups.filter { selection.state(of: $0) != .none })
+      expandedMuscles.formUnion(
+        ExerciseMuscle.allCases.filter { selection.state(ofMuscle: $0) == .partial })
+    }
+  }
+
+  @ViewBuilder private func muscleRow(_ muscle: ExerciseMuscle) -> some View {
+    let regions = ExerciseMuscleRegion.inMuscle(muscle)
+    if regions.isEmpty {
+      selectionToggle(
+        muscle.title, identifier: "muscle_\(muscle.rawValue)",
+        isOn: Binding(
+          get: { selection.contains(muscle) }, set: { selection.set(muscle, selected: $0) }))
+    } else {
+      let state = selection.state(ofMuscle: muscle)
+      selectionToggle(
+        muscle.title, identifier: "muscle_\(muscle.rawValue)",
+        isOn: Binding(
+          get: { selection.state(ofMuscle: muscle) == .all },
+          set: { selection.set(muscle, selected: $0) }),
+        partiallySelected: state == .partial)
+      Button {
+        if !expandedMuscles.insert(muscle).inserted { expandedMuscles.remove(muscle) }
+      } label: {
+        HStack {
+          Text(L10n.text("Уточнить области", locale: locale)).font(.subheadline)
+          Spacer(minLength: 0)
+          Image(systemName: expandedMuscles.contains(muscle) ? "chevron.down" : "chevron.right")
+            .font(.caption.weight(.semibold)).accessibilityHidden(true)
+        }.frame(maxWidth: .infinity, minHeight: 44).contentShape(.rect)
+      }
+      .buttonStyle(.borderless)
+      .accessibilityValue(
+        L10n.text(expandedMuscles.contains(muscle) ? "Развёрнуто" : "Свёрнуто", locale: locale)
+      )
+      .accessibilityIdentifier("expandMuscle_\(muscle.rawValue)")
+      if expandedMuscles.contains(muscle) {
+        ForEach(regions, id: \.self) { region in
+          selectionToggle(
+            region.title, identifier: "muscleRegion_\(region.rawValue)",
+            isOn: Binding(
+              get: { selection.contains(region) }, set: { selection.set(region, selected: $0) }))
+        }
+      }
+    }
+  }
+
+  private func selectionToggle(
+    _ title: String, identifier: String, isOn: Binding<Bool>, partiallySelected: Bool = false
+  ) -> some View {
+    HStack(spacing: 8) {
+      HStack {
+        Text(L10n.text(title, locale: locale))
+        if partiallySelected {
+          Image(systemName: "minus.circle.fill").foregroundStyle(colorTheme.accent)
+        }
+      }
+      .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+      .contentShape(.rect)
+      .onTapGesture { isOn.wrappedValue.toggle() }
+      .accessibilityHidden(true)
+      Toggle(L10n.text(title, locale: locale), isOn: isOn)
+        .labelsHidden()
+        .accessibilityHint(partiallySelected ? L10n.text("Частично выбрано", locale: locale) : "")
+        .accessibilityIdentifier(identifier)
     }
   }
 
@@ -103,8 +154,27 @@ struct MuscleSelectionView: View {
       )
       .accessibilityAddTraits(state == .all ? [.isSelected] : [])
       .accessibilityIdentifier("muscleGroup_\(group.rawValue)")
-      Text(MuscleSelectionText.groupTitle(group, locale: locale))
-        .font(.headline).foregroundStyle(.primary)
+      if ExerciseMuscle.inGroup(group).isEmpty {
+        Text(MuscleSelectionText.groupTitle(group, locale: locale)).font(.headline)
+      } else {
+        Button {
+          if !expandedGroups.insert(group).inserted { expandedGroups.remove(group) }
+        } label: {
+          HStack {
+            Text(MuscleSelectionText.groupTitle(group, locale: locale))
+              .font(.headline).foregroundStyle(.primary)
+            Spacer(minLength: 0)
+            Image(systemName: expandedGroups.contains(group) ? "chevron.down" : "chevron.right")
+              .font(.caption.weight(.semibold)).foregroundStyle(.secondary)
+              .accessibilityHidden(true)
+          }.frame(maxWidth: .infinity, minHeight: 44).contentShape(.rect)
+        }
+        .buttonStyle(.borderless)
+        .accessibilityValue(
+          L10n.text(expandedGroups.contains(group) ? "Развёрнуто" : "Свёрнуто", locale: locale)
+        )
+        .accessibilityIdentifier("expandMuscleGroup_\(group.rawValue)")
+      }
     }
   }
 }
@@ -120,11 +190,13 @@ enum MuscleSelectionText {
       .map { groupTitle($0, locale: locale) }
     let muscles = ExerciseMuscle.allCases.filter { selection.muscles.contains($0) }
       .map { L10n.text($0.title, locale: locale) }
-    return (groups + muscles).joined(separator: ", ")
+    let regions = ExerciseMuscleRegion.allCases.filter { selection.regions.contains($0) }
+      .map { L10n.text($0.title, locale: locale) }
+    return (groups + muscles + regions).joined(separator: ", ")
   }
 
   static func compactSummary(_ selection: ExerciseMuscleSelection, locale: Locale) -> String {
-    let count = selection.groups.count + selection.muscles.count
+    let count = selection.groups.count + selection.muscles.count + selection.regions.count
     return count > 1
       ? L10n.format("Мышцы: %@", String(count), locale: locale)
       : summary(selection, locale: locale)

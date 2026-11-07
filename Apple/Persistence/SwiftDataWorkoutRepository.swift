@@ -71,7 +71,39 @@ import SwiftData
     try Validation.bodyWeightEntry(entry)
     try upsert(id: entry.id, kind: "bodyWeight", data: JSONEncoder().encode(entry))
   }
+  func saveBodyWeight(_ entry: BodyWeightEntry, updating workout: Workout?) throws {
+    try Validation.bodyWeightEntry(entry)
+    if let workout { try Validation.workout(workout) }
+    let entryData = try JSONEncoder().encode(entry)
+    let workoutData = try workout.map { try JSONEncoder().encode($0) }
+    do {
+      try stageUpsert(id: entry.id, kind: "bodyWeight", data: entryData)
+      if let workout, let workoutData {
+        try stageUpsert(id: workout.id, kind: "workout", data: workoutData)
+      }
+      try context.save()
+    } catch {
+      context.rollback()
+      throw error
+    }
+  }
   func deleteBodyWeight(id: UUID) throws { try remove(id: id, kind: "bodyWeight") }
+  func deleteBodyWeight(id: UUID, updating workout: Workout?) throws {
+    if let workout { try Validation.workout(workout) }
+    let workoutData = try workout.map { try JSONEncoder().encode($0) }
+    do {
+      for record in try allRecords(kind: "bodyWeight") where record.recordID == id {
+        context.delete(record)
+      }
+      if let workout, let workoutData {
+        try stageUpsert(id: workout.id, kind: "workout", data: workoutData)
+      }
+      try context.save()
+    } catch {
+      context.rollback()
+      throw error
+    }
+  }
   func importArchive(_ archive: WorkoutArchive) throws -> ArchiveImportSummary {
     let plan = try ArchiveImportPlan(
       archive: archive, existingWorkouts: self.workouts(), existingTemplates: self.templates(),
@@ -110,18 +142,21 @@ import SwiftData
   }
   private func upsert(id: UUID, kind: String, data: Data) throws {
     do {
-      let matches = try allRecords(kind: kind).filter { $0.recordID == id }
-      if let record = matches.first {
-        record.payload = data
-        record.modifiedAt = Date()
-        for duplicate in matches.dropFirst() { context.delete(duplicate) }
-      } else {
-        context.insert(StoredRecord(id: id, kind: kind, payload: data))
-      }
+      try stageUpsert(id: id, kind: kind, data: data)
       try context.save()
     } catch {
       context.rollback()
       throw error
+    }
+  }
+  private func stageUpsert(id: UUID, kind: String, data: Data) throws {
+    let matches = try allRecords(kind: kind).filter { $0.recordID == id }
+    if let record = matches.first {
+      record.payload = data
+      record.modifiedAt = Date()
+      for duplicate in matches.dropFirst() { context.delete(duplicate) }
+    } else {
+      context.insert(StoredRecord(id: id, kind: kind, payload: data))
     }
   }
   private func remove(id: UUID, kind: String) throws {

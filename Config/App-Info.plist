@@ -48,6 +48,14 @@
 	</array>
 	<key>FitnessTrackerAppGroup</key>
 	<string>$(FITNESS_TRACKER_APP_GROUP)</string>
+	<key>FitnessTrackerAuthenticationURL</key>
+	<string>$(FITNESS_TRACKER_AUTH_URL)</string>
+	<key>FitnessTrackerBackendURL</key>
+	<string>$(FITNESS_TRACKER_BACKEND_URL)</string>
+	<key>FitnessTrackerAuthenticationCallbackMode</key>
+	<string>$(FITNESS_TRACKER_AUTH_CALLBACK_MODE)</string>
+	<key>FitnessTrackerAuthenticationCallbackScheme</key>
+	<string>$(FITNESS_TRACKER_AUTH_CALLBACK_SCHEME)</string>
 	<key>FitnessTrackerCloudContainer</key>
 	<string>$(FITNESS_TRACKER_CLOUD_CONTAINER)</string>
 	<key>FitnessTrackerCloudSyncAvailable</key>
@@ -61,6 +69,14 @@
 			<array>
 				<string>fitnesstracker</string>
 				<string>fitsession</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>FitnessTracker.Authentication</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>$(FITNESS_TRACKER_AUTH_CALLBACK_SCHEME)</string>
 			</array>
 		</dict>
 	</array>

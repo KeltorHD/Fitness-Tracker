@@ -1,0 +1,78 @@
+# Include inside the existing Nginx http context (for example, conf.d/fitnesstracker.conf).
+# Example hosts may share a certificate covering both names (for example, *.example.com).
+# Set both TLS paths to its actual location on your host; the paths below are examples.
+# If AUTH_HTTP_PORT/API_HTTP_PORT change, update the corresponding proxy_pass ports below.
+# Generate .local/nginx.generated.conf with scripts/setup-server-network.py first.
+
+server {
+    listen 80;
+    server_name auth.example.com api.example.com;
+    access_log off;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name auth.example.com;
+
+    ssl_certificate /etc/nginx/ssl/example.com/fullchain.pem;
+    ssl_certificate_key /etc/nginx/ssl/example.com/privkey.pem;
+
+    # Standard access logs contain callback query strings with OAuth codes.
+    access_log off;
+    # Upstream error logs also include the full callback URI. Application logs
+    # provide diagnostics without persisting OAuth codes in host Nginx logs.
+    error_log /dev/null;
+    client_max_body_size 1m;
+    proxy_cache off;
+
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    # Single trusted proxy: overwrite client-supplied forwarded headers.
+    proxy_set_header X-Forwarded-For $remote_addr;
+    proxy_set_header Connection "";
+    proxy_read_timeout 60s;
+
+    # Replaced with the actual Docker subnet by scripts/setup-server-network.py.
+    location ~* ^/connect/introspect(?:/|$) {
+        allow 127.0.0.1;
+        allow @SERVER_NETWORK_SUBNET@;
+        deny all;
+        proxy_pass http://127.0.0.1:5080;
+    }
+
+    location / {
+        proxy_pass http://127.0.0.1:5080;
+    }
+}
+
+server {
+    listen 443 ssl;
+    server_name api.example.com;
+
+    ssl_certificate /etc/nginx/ssl/example.com/fullchain.pem;
+    ssl_certificate_key /etc/nginx/ssl/example.com/privkey.pem;
+
+    access_log off;
+    client_max_body_size 30m;
+    proxy_cache off;
+
+    # ASP.NET routes are case-insensitive; block every case of the internal prefix.
+    location ~* ^/internal(?:/|$) {
+        return 404;
+    }
+
+    location / {
+        proxy_pass http://127.0.0.1:5081;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header Connection "";
+        # Stream archives without buffering their contents to Nginx temporary files.
+        proxy_request_buffering off;
+        proxy_buffering off;
+        proxy_read_timeout 120s;
+    }
+}
