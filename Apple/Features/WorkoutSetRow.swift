@@ -273,11 +273,6 @@ struct WorkoutSetRow<ContextActions: View>: View {
         maxWidth: typeSize.isAccessibilitySize ? .infinity : min(inputWidth, 100), minHeight: 44
       )
       .layoutPriority(1)
-      .background {
-        RoundedRectangle(cornerRadius: 8)
-          .fill(active ? colorTheme.accent.opacity(0.12) : FitTheme.paper.opacity(0.65))
-          .padding(.vertical, 6)
-      }
       Spacer(minLength: 0)
     }
     .frame(maxWidth: .infinity, minHeight: 44)
