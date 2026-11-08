@@ -330,6 +330,32 @@ SMTP_TIMEOUT_SECONDS=10
 
 Токены генерирует/проверяет штатный [Identity DataProtectionTokenProvider](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/accconfirm?view=aspnetcore-10.0); сохраняйте прежний Data Protection key ring. Письма собираются как text/plain + text/html через [MailKit](https://www.nuget.org/packages/MailKit).
 
+### Диагностика SMTP в консоли
+
+События отправки видны в обычных Docker logs:
+
+```bash
+docker compose logs --since=10m -f authentication
+```
+
+Для категорий `FitnessTracker.Authentication.EmailConfirmationService` и `FitnessTracker.Authentication.SmtpEmailSender` в `appsettings.json` включён `Information`; общий порог приложения остаётся `Warning`. Отправка в ntfy дополнительная и использует собственный настроенный порог.
+
+Одна попытка имеет случайный `AttemptId`, общий для сервиса и SMTP-транспорта. Последовательно записываются запрос, подготовка MIME, подключение/согласование TLS (host, порт, режим, фактический TLS protocol), аутентификация, передача письма и закрытие соединения. Завершение этапов содержит длительность в миллисекундах. `SMTP submit: accepted_by_smtp` и `Email confirmation accepted by SMTP server` означают принятие письма SMTP-сервером; доставку получателю проверяйте в очереди/логах почтового сервера. Ошибка QUIT после принятия отмечается отдельно и не запускает повторную отправку.
+
+Пропуски имеют событие `Email confirmation skipped` с причиной `smtp_disabled`, `invalid_address`, `throttled`, `account_not_found`, `confirmation_not_required` или `already_confirmed`. Браузер по-прежнему получает одинаковый ответ, без раскрытия наличия аккаунта. Отсутствие вообще всех почтовых событий означает, что запрос не дошёл до этого сценария, фильтры логирования были переопределены или запущена прежняя сборка.
+
+При сбое видны этап (`prepare`, `connect`, `authenticate`, `submit`), безопасный код (`smtp_timeout`, `smtp_tls_failed`, `smtp_auth_failed`, `smtp_rejected`, `smtp_unavailable`, `smtp_not_supported`, `smtp_not_ready`, `smtp_invalid_message`) и ID попытки. Для отказа SMTP также выводится числовой status code. При отмене запроса пишется отдельное событие отмены. Адреса отправителя/получателя, логин/пароль, тело письма, ссылка/токен и полный текст ответа SMTP не логируются; MailKit ProtocolLogger не включается.
+
+Compose преобразует имена из `.env` в `Smtp__*` внутри контейнера; регистр имеет значение. Проверка без вывода пароля:
+
+```bash
+docker compose exec -T authentication printenv Smtp__Enabled Smtp__Host Smtp__Port Smtp__Security
+```
+
+Для SMTPS на порту `465` ожидается `SslOnConnect`; для обязательного STARTTLS, обычно на `587`, — `StartTls`.
+
+### Пароль и passkey
+
 Пароли хеширует Identity V3 (PBKDF2-HMAC-SHA512, 210 000 итераций), пять неудачных попыток включают блокировку на 15 минут. Credential endpoints дополнительно ограничены 20 запросами в минуту на IP и защищены antiforgery. Ошибка входа не раскрывает наличие email. HTTPS cookies имеют HttpOnly, Secure и ограниченный срок; в HTML пароль не возвращается.
 
 Passkey использует встроенный WebAuthn в ASP.NET Core Identity 10: RP ID равен точному host `Auth:Issuer`, origin должен точно совпадать с HTTPS origin issuer; cross-origin iframe запрещён. User verification и discoverable credential обязательны. Проверку подписи, challenge, RP hash, user handle, UV и счётчика выполняет Identity. Сервер хранит публичный ключ, приватный ключ остаётся у аутентификатора. Attestation `none` подходит для потребительского входа и не подтверждает модель/производителя устройства. [Документация Microsoft](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/passkeys/?view=aspnetcore-10.0).

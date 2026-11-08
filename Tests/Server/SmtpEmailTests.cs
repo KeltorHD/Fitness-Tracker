@@ -5,6 +5,7 @@ using MailKit;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging;
 using MimeKit;
 using Xunit;
 
@@ -24,9 +25,11 @@ public sealed class SmtpEmailTests
         using var client = new SmtpCapture();
         var options = Configured();
         options.Security = security;
-        var sender = new SmtpEmailSender(client, Options.Create(options));
+        using var logs = new TestEmailLogs();
+        using var loggers = logs.Factory();
+        var sender = new SmtpEmailSender(client, Options.Create(options), loggers.CreateLogger<SmtpEmailSender>());
         const string link = "https://auth.example.com/email/confirm?userId=synthetic&code=synthetic_token";
-        await sender.SendConfirmationAsync("recipient@example.com", link, CancellationToken.None);
+        await sender.SendConfirmationAsync("recipient@example.com", link, "test-attempt", CancellationToken.None);
         Assert.Equal(("smtp.example.com", 587, expected), client.Connection);
         Assert.Equal(("smtp-user", "smtp-private-password"), client.Credentials);
         Assert.Equal("fitness@example.com", client.From);
@@ -37,6 +40,9 @@ public sealed class SmtpEmailTests
         Assert.DoesNotContain(options.Password, client.Html);
         Assert.True(client.QuitSent);
         Assert.Null(client.ServerCertificateValidationCallback);
+        Assert.Equal(new[] { 4201, 4202, 4203, 4204, 4205, 4206, 4208, 4209, 4210, 4211 }, logs.Entries.Select(item => item.EventId));
+        Assert.All(logs.Entries, item => Assert.Equal("test-attempt", item.Fields["AttemptId"]));
+        AssertNoSecrets(logs);
     }
 
     /// <summary>Ни ответ SMTP с адресом, ни исходное exception не выходят за транспортную границу.</summary>
@@ -45,15 +51,24 @@ public sealed class SmtpEmailTests
     [InlineData("auth", "smtp_auth_failed")]
     [InlineData("reject", "smtp_rejected")]
     [InlineData("timeout", "smtp_timeout")]
+    [InlineData("unsupported", "smtp_not_supported")]
     public async Task TransportFailuresHaveOnlySafeCodeAsync(string failure, string code)
     {
         using var client = new SmtpCapture { Failure = failure };
-        var sender = new SmtpEmailSender(client, Options.Create(Configured()));
+        using var logs = new TestEmailLogs();
+        using var loggers = logs.Factory();
+        var sender = new SmtpEmailSender(client, Options.Create(Configured()), loggers.CreateLogger<SmtpEmailSender>());
         var error = await Assert.ThrowsAsync<EmailDeliveryException>(() => sender.SendConfirmationAsync(
-            "recipient@example.com", "https://auth.example.com/email/confirm?code=private", CancellationToken.None));
+            "recipient@example.com", "https://auth.example.com/email/confirm?code=private", "test-attempt", CancellationToken.None));
         Assert.Equal(code, error.Message);
         Assert.Null(error.InnerException);
         Assert.DoesNotContain("recipient", error.ToString());
+        var failed = Assert.Single(logs.Entries, item => item.EventId == 4212);
+        Assert.Equal(code, failed.Fields["DeliveryCode"]);
+        Assert.Equal(failure switch { "auth" or "unsupported" => "authenticate", "reject" => "submit", _ => "connect" }, error.Stage);
+        Assert.Equal(error.Stage, failed.Fields["Stage"]);
+        Assert.DoesNotContain(logs.Entries, item => item.EventId == 4209);
+        AssertNoSecrets(logs);
     }
 
     /// <summary>Отмена вызывающего кода сохраняется; ошибка QUIT после принятия письма не приводит к повтору.</summary>
@@ -61,14 +76,52 @@ public sealed class SmtpEmailTests
     public async Task CancellationAndDisconnectHaveDistinctOutcomesAsync()
     {
         using var client = new SmtpCapture();
-        var sender = new SmtpEmailSender(client, Options.Create(Configured()));
+        using var logs = new TestEmailLogs();
+        using var loggers = logs.Factory();
+        var sender = new SmtpEmailSender(client, Options.Create(Configured()), loggers.CreateLogger<SmtpEmailSender>());
         using var canceled = new CancellationTokenSource();
         canceled.Cancel();
         await Assert.ThrowsAnyAsync<OperationCanceledException>(() => sender.SendConfirmationAsync(
-            "recipient@example.com", "https://auth.example.com/", canceled.Token));
+            "recipient@example.com", "https://auth.example.com/", "test-attempt", canceled.Token));
+        Assert.Contains(logs.Entries, item => item.EventId == 4213);
+        logs.Entries.Clear();
         client.Failure = "disconnect";
-        await sender.SendConfirmationAsync("recipient@example.com", "https://auth.example.com/", CancellationToken.None);
+        await sender.SendConfirmationAsync("recipient@example.com", "https://auth.example.com/", "test-attempt", CancellationToken.None);
         Assert.NotNull(client.Text);
+        Assert.Contains(logs.Entries, item => item.EventId == 4209);
+        Assert.Contains(logs.Entries, item => item.EventId == 4214);
+        Assert.DoesNotContain(logs.Entries, item => item.EventId == 4212);
+        AssertNoSecrets(logs);
+    }
+
+    /// <summary>Внутренний relay без credentials показывает пропуск AUTH, не пытаясь аутентифицироваться.</summary>
+    [Fact]
+    public async Task UnauthenticatedRelayLogsSkippedAuthenticationAsync()
+    {
+        using var client = new SmtpCapture();
+        using var logs = new TestEmailLogs();
+        using var loggers = logs.Factory();
+        var options = Configured();
+        options.Username = "";
+        options.Password = "";
+        var sender = new SmtpEmailSender(client, Options.Create(options), loggers.CreateLogger<SmtpEmailSender>());
+        await sender.SendConfirmationAsync("recipient@example.com", "https://auth.example.com/?code=private", "test-attempt", CancellationToken.None);
+        Assert.Contains(logs.Entries, item => item.EventId == 4207);
+        Assert.DoesNotContain(logs.Entries, item => item.EventId is 4205 or 4206);
+        Assert.Contains(logs.Entries, item => item.EventId == 4209);
+        AssertNoSecrets(logs);
+    }
+
+    /// <summary>Проверяет реальные raw fields логов, а не только отредактированную копию для ntfy.</summary>
+    private static void AssertNoSecrets(TestEmailLogs logs)
+    {
+        foreach (var item in logs.Entries)
+        {
+            var text = item.Message + " " + string.Join(" ", item.Fields.Values);
+            foreach (var secret in new[] { "recipient@example.com", "fitness@example.com", "smtp-user", "smtp-private-password", "synthetic_token", "code=private", "userId=", "private SMTP", "private QUIT" })
+                Assert.DoesNotContain(secret, text);
+            Assert.Null(item.Exception);
+        }
     }
 
     /// <summary>Плохие настройки отвергаются без вывода их значений; отключённый SMTP не требует секретов.</summary>
@@ -146,6 +199,7 @@ public sealed class SmtpEmailTests
         public override Task AuthenticateAsync(Encoding encoding, ICredentials credentials, CancellationToken cancellationToken = default)
         {
             if (Failure == "auth") throw new MailKit.Security.AuthenticationException("private SMTP password response");
+            if (Failure == "unsupported") throw new NotSupportedException("private SMTP auth response");
             var credential = credentials.GetCredential(new Uri("smtp://smtp.example.com"), "PLAIN")
                 ?? throw new InvalidOperationException("Fixture credentials are required.");
             Credentials = (credential.UserName, credential.Password);
