@@ -70,6 +70,19 @@
         "resolved": "4.0.1",
         "contentHash": "8CoAaZkniVekR1ycJyxn+hOz+6ZQCDPcoIsIs6ujd4WyFcBMlxGNU15Qb8Uxd4iO4UmOuETb0M6vzBbwX/mfLA=="
       },
+      "BouncyCastle.Cryptography": {
+        "type": "Transitive",
+        "resolved": "2.7.0",
+        "contentHash": "U+12df8UEWHgBi04YVf/Lgi2dy3SItlIYvHjjEVa/BngCQIzDCDRBk50DDByCfDvSbe5pRNFr3b7UrVK2kMcLw=="
+      },
+      "MailKit": {
+        "type": "Transitive",
+        "resolved": "4.18.2",
+        "contentHash": "ofqddpSbdrD00NqTD0ZyVfKvrl/ZZ70VFFEQ+DuR8r8CdbY3U02/sdb0CSQBNUqJifsXfVHIwRe1ToR2MvJJkw==",
+        "dependencies": {
+          "MimeKit": "4.18.2"
+        }
+      },
       "Mapster": {
         "type": "Transitive",
         "resolved": "10.0.14",
@@ -718,6 +731,15 @@
           "Microsoft.TestPlatform.ObjectModel": "18.11.0"
         }
       },
+      "MimeKit": {
+        "type": "Transitive",
+        "resolved": "4.18.2",
+        "contentHash": "aYnwCCq+ZgQIsnHSJd3TMeGqf/Rz/9jYEItXpOoG3E2REOCZtLishwBSDFl2wQ/W2SB5wBsvE38DgHZ0IEyz4Q==",
+        "dependencies": {
+          "BouncyCastle.Cryptography": "2.7.0",
+          "System.Security.Cryptography.Pkcs": "10.0.13"
+        }
+      },
       "Npgsql": {
         "type": "Transitive",
         "resolved": "10.0.3",
@@ -1062,6 +1084,8 @@
       "fitnesstracker.authentication": {
         "type": "Project",
         "dependencies": {
+          "FitnessTracker.ServerLogging": "[1.0.0, )",
+          "MailKit": "[4.18.2, )",
           "Mapster": "[10.0.14, )",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "[10.0.14, )",
           "Microsoft.AspNetCore.OpenApi": "[10.0.14, )",
@@ -1074,10 +1098,14 @@
       "fitnesstracker.backend": {
         "type": "Project",
         "dependencies": {
+          "FitnessTracker.ServerLogging": "[1.0.0, )",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "[10.0.14, )",
           "Microsoft.AspNetCore.OpenApi": "[10.0.14, )",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "[10.0.3, )"
         }
+      },
+      "fitnesstracker.serverlogging": {
+        "type": "Project"
       }
     }
   }

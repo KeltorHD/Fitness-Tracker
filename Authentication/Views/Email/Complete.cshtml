@@ -1,0 +1,12 @@
+@model FitnessTracker.Authentication.Controllers.EmailCompletePage
+<div class="card-heading"><h1 id="page-title" data-localize>Подтверждение почты</h1></div>
+@if (Model.Succeeded)
+{
+  <p class="privacy-note" role="status" data-localize>Адрес подтверждён. Вернитесь в приложение и продолжите вход с паролем или passkey.</p>
+  <a class="button button-primary" href="/login" data-localize>Войти</a>
+}
+else
+{
+  <p class="form-alert" role="alert" data-localize>Ссылка недействительна или срок её действия истёк. Запросите новое письмо.</p>
+  <a class="button button-primary" href="/email/verify" data-localize>Отправить письмо повторно</a>
+}

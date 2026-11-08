@@ -17,6 +17,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{87008D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitnessTracker.Server.Tests", "Tests\Server\FitnessTracker.Server.Tests.csproj", "{BED54166-1754-4160-91F0-8114FA63F39C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ServerLogging", "ServerLogging", "{A2EFE3A0-0D5E-3C8B-E24F-87B94E0E458D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitnessTracker.ServerLogging", "ServerLogging\FitnessTracker.ServerLogging.csproj", "{8E8A3424-981F-4974-A23D-49D73810C16F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +67,18 @@ Global
 		{BED54166-1754-4160-91F0-8114FA63F39C}.Release|x64.Build.0 = Release|Any CPU
 		{BED54166-1754-4160-91F0-8114FA63F39C}.Release|x86.ActiveCfg = Release|Any CPU
 		{BED54166-1754-4160-91F0-8114FA63F39C}.Release|x86.Build.0 = Release|Any CPU
+		{8E8A3424-981F-4974-A23D-49D73810C16F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E8A3424-981F-4974-A23D-49D73810C16F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E8A3424-981F-4974-A23D-49D73810C16F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8E8A3424-981F-4974-A23D-49D73810C16F}.Debug|x64.Build.0 = Debug|Any CPU
+		{8E8A3424-981F-4974-A23D-49D73810C16F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8E8A3424-981F-4974-A23D-49D73810C16F}.Debug|x86.Build.0 = Debug|Any CPU
+		{8E8A3424-981F-4974-A23D-49D73810C16F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E8A3424-981F-4974-A23D-49D73810C16F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E8A3424-981F-4974-A23D-49D73810C16F}.Release|x64.ActiveCfg = Release|Any CPU
+		{8E8A3424-981F-4974-A23D-49D73810C16F}.Release|x64.Build.0 = Release|Any CPU
+		{8E8A3424-981F-4974-A23D-49D73810C16F}.Release|x86.ActiveCfg = Release|Any CPU
+		{8E8A3424-981F-4974-A23D-49D73810C16F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -72,5 +88,6 @@ Global
 		{84B45B75-9A1A-4FE1-A5B0-CFF48DC9AB2B} = {1AE8ACA6-933B-BF2A-3671-3E2EAC007D16}
 		{87008D2B-D29E-68B5-A223-E2B1CD68373E} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 		{BED54166-1754-4160-91F0-8114FA63F39C} = {87008D2B-D29E-68B5-A223-E2B1CD68373E}
+		{8E8A3424-981F-4974-A23D-49D73810C16F} = {A2EFE3A0-0D5E-3C8B-E24F-87B94E0E458D}
 	EndGlobalSection
 EndGlobal

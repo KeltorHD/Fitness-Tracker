@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Npgsql;
+using FitnessTracker.ServerLogging;
 using OpenIddict.Abstractions;
 using OpenIddict.Validation.AspNetCore;
 
@@ -21,6 +23,7 @@ public partial class Program
         builder.Logging.AddFilter("OpenIddict", LogLevel.Warning);
         builder.Logging.AddFilter("Microsoft.AspNetCore", LogLevel.Warning);
         builder.Logging.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Warning);
+        builder.Logging.AddNtfy("Authentication");
         builder.Services.AddProblemDetails();
         builder.Services.AddControllersWithViews(options =>
         {
@@ -32,6 +35,15 @@ public partial class Program
         builder.Services.AddScoped<BrowserNavigation>();
         builder.Services.AddScoped<AccountService>();
         builder.Services.AddScoped<PasswordService>();
+        builder.Services.AddOptions<SmtpOptions>()
+            .BindConfiguration("Smtp")
+            .Validate(options => options.Validate())
+            .ValidateOnStart();
+        builder.Services.AddScoped<MailKit.Net.Smtp.ISmtpClient>(_ => new MailKit.Net.Smtp.SmtpClient());
+        builder.Services.AddScoped<IAccountEmailSender, SmtpEmailSender>();
+        builder.Services.AddScoped<EmailConfirmationService>();
+        builder.Services.AddSingleton<EmailConfirmationThrottle>();
+        builder.Services.TryAddSingleton(TimeProvider.System);
         builder.Services.AddScoped<PasskeyService>();
         builder.Services.AddScoped<ExternalLoginService>();
         builder.Services.AddScoped<AuthorizationService>();
@@ -49,7 +61,7 @@ public partial class Program
             options.Lockout.MaxFailedAccessAttempts = 5;
             options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
             options.SignIn.RequireConfirmedEmail = false;
-            options.SignIn.RequireConfirmedAccount = false;
+            options.SignIn.RequireConfirmedAccount = true;
             options.Password.RequiredLength = 12;
             options.Password.RequiredUniqueChars = 4;
             options.Password.RequireDigit = false;
@@ -57,6 +69,8 @@ public partial class Program
             options.Password.RequireUppercase = false;
             options.Password.RequireNonAlphanumeric = false;
         }).AddEntityFrameworkStores<AuthDbContext>().AddDefaultTokenProviders();
+        builder.Services.AddScoped<IUserConfirmation<ApplicationUser>, EmailAccountConfirmation>();
+        builder.Services.Configure<DataProtectionTokenProviderOptions>(options => options.TokenLifespan = TimeSpan.FromHours(2));
         builder.Services.Configure<PasswordHasherOptions>(options => options.IterationCount = 210_000);
         builder.Services.AddScoped<EmailAccounts>();
         builder.Services.AddSingleton<UnknownPasswordCheck>();
@@ -181,7 +195,8 @@ public partial class Program
                     : RateLimitPartition.GetFixedWindowLimiter("ip:" + (context.Connection.RemoteIpAddress?.ToString() ?? "unknown"),
                         _ => new FixedWindowRateLimiterOptions { PermitLimit = 120, Window = TimeSpan.FromMinutes(1) }));
         });
-        var app = builder.Build();
+        await using var app = builder.Build();
+        await using var ntfy = app.Services.StartNtfyLogging();
         app.UseForwardedHeaders();
         app.UseExceptionHandler();
         if (!app.Environment.IsDevelopment()) app.UseHsts();
@@ -203,34 +218,42 @@ public partial class Program
         app.MapControllers();
         app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
         if (app.Environment.IsDevelopment()) app.MapOpenApi();
-        if (!app.Environment.IsEnvironment("Testing"))
+        try
         {
-            await using var scope = app.Services.CreateAsyncScope();
-            var database = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
-            var cancellationToken = app.Lifetime.ApplicationStopping;
-            // Блокировка живёт на отдельном непулируемом соединении: EF может менять
-            // свои транзакции/соединения, а весь startup остаётся последовательным.
-            var startupSettings = new NpgsqlConnectionStringBuilder(database.Database.GetConnectionString())
+            if (!app.Environment.IsEnvironment("Testing"))
             {
-                Pooling = false,
-                ApplicationName = "FitnessTracker startup"
-            };
-            await using var startupConnection = new NpgsqlConnection(startupSettings.ConnectionString);
-            await startupConnection.OpenAsync(cancellationToken);
-            await using var startupLock = new NpgsqlCommand("SELECT pg_advisory_lock(447295635001)", startupConnection);
-            await startupLock.ExecuteNonQueryAsync(cancellationToken);
-            // Обычный запуск обновляет схему до открытия HTTP listener.
-            if (!args.Contains("--configure-clients") || args.Contains("--migrate"))
-            {
-                // Npgsql обнаруживает отсутствие history через SQL exception.
-                // Штатное создание таблицы заранее исключает ложный CommandError при первом запуске.
-                await database.GetService<IHistoryRepository>().CreateIfNotExistsAsync(cancellationToken);
-                await database.Database.MigrateAsync(cancellationToken);
+                await using var scope = app.Services.CreateAsyncScope();
+                var database = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
+                var cancellationToken = app.Lifetime.ApplicationStopping;
+                // Блокировка живёт на отдельном непулируемом соединении: EF может менять
+                // свои транзакции/соединения, а весь startup остаётся последовательным.
+                var startupSettings = new NpgsqlConnectionStringBuilder(database.Database.GetConnectionString())
+                {
+                    Pooling = false,
+                    ApplicationName = "FitnessTracker startup"
+                };
+                await using var startupConnection = new NpgsqlConnection(startupSettings.ConnectionString);
+                await startupConnection.OpenAsync(cancellationToken);
+                await using var startupLock = new NpgsqlCommand("SELECT pg_advisory_lock(447295635001)", startupConnection);
+                await startupLock.ExecuteNonQueryAsync(cancellationToken);
+                // Обычный запуск обновляет схему до открытия HTTP listener.
+                if (!args.Contains("--configure-clients") || args.Contains("--migrate"))
+                {
+                    // Npgsql обнаруживает отсутствие history через SQL exception.
+                    // Штатное создание таблицы заранее исключает ложный CommandError при первом запуске.
+                    await database.GetService<IHistoryRepository>().CreateIfNotExistsAsync(cancellationToken);
+                    await database.Database.MigrateAsync(cancellationToken);
+                }
+                await using var transaction = await database.Database.BeginTransactionAsync(cancellationToken);
+                await AuthConfiguration.RegisterClient(scope.ServiceProvider, config, cancellationToken);
+                await transaction.CommitAsync(cancellationToken);
+                if (args.Contains("--migrate") || args.Contains("--configure-clients")) return;
             }
-            await using var transaction = await database.Database.BeginTransactionAsync(cancellationToken);
-            await AuthConfiguration.RegisterClient(scope.ServiceProvider, config, cancellationToken);
-            await transaction.CommitAsync(cancellationToken);
-            if (args.Contains("--migrate") || args.Contains("--configure-clients")) return;
+        }
+        catch (Exception exception)
+        {
+            app.Logger.LogCritical(exception, "Authentication database/client startup failed.");
+            throw;
         }
         await app.RunAsync();
     }

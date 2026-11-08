@@ -1,0 +1,23 @@
+@model FitnessTracker.Authentication.Controllers.EmailPendingPage
+<div class="card-heading">
+  <h1 id="page-title" data-localize>Подтвердите электронную почту</h1>
+  <p data-localize>Откройте письмо FitnessTracker и подтвердите адрес по ссылке. Ссылка действует 2 часа.</p>
+</div>
+@if (Model.Submitted)
+{
+  <p class="privacy-note" role="status" data-localize>Если аккаунт ожидает подтверждения, письмо будет отправлено. Проверьте также папку «Спам». Повторить отправку можно через минуту.</p>
+}
+@if (Model.Available)
+{
+<form class="credential-form" method="post" action="/email/resend" asp-antiforgery="true">
+  <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+  <label for="email" data-localize>Электронная почта</label>
+  <div class="input-field"><partial name="_Icon" model='@("mail")' /><input id="email" name="email" type="email" autocomplete="email" autocapitalize="none" spellcheck="false" maxlength="254" placeholder="you@example.com" required /></div>
+  <button class="button button-primary" type="submit" data-localize>Отправить письмо повторно</button>
+</form>
+}
+else
+{
+  <p class="privacy-note" data-localize>Отправка писем временно недоступна. Попробуйте позже.</p>
+}
+<p class="card-navigation"><a href="@Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString("/login", "returnUrl", Model.ReturnUrl)" data-localize>Продолжить вход после подтверждения</a></p>

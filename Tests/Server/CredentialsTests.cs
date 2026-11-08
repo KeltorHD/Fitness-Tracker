@@ -18,9 +18,9 @@ namespace FitnessTracker.Server.Tests;
 [Trait("Category", "HTTP")]
 public sealed class CredentialsTests
 {
-    /// <summary>Регистрация не подтверждает email, пароль хранится как hash, нормализованный повтор не создаёт аккаунт.</summary>
+    /// <summary>Регистрация ждёт подтверждения email, пароль хранится как hash, нормализованный повтор не создаёт аккаунт.</summary>
     [Fact]
-    public async Task PasswordRegistrationAndLoginDoNotRequireEmailConfirmationAsync()
+    public async Task PasswordRegistrationAndLoginRequireEmailConfirmationAsync()
     {
         // Arrange: полностью пустая Identity-БД и форма с настоящим antiforgery cookie/token.
         using var factory = new AuthFactory();
@@ -28,7 +28,7 @@ public sealed class CredentialsTests
         using var created = await PostAsync(client, "/register", "/register", new()
         { ["email"] = "Example@fitness.test", ["password"] = "a-long-test-password", ["confirmPassword"] = "a-long-test-password", ["returnUrl"] = "https://attacker.test/" });
         Assert.Equal(HttpStatusCode.Redirect, created.StatusCode);
-        Assert.Equal("/account", created.Headers.Location?.OriginalString);
+        Assert.StartsWith("/email/verify?", created.Headers.Location?.OriginalString);
         using (var scope = factory.Services.CreateScope())
         {
             var user = await scope.ServiceProvider.GetRequiredService<AuthDbContext>().Users.SingleAsync();
@@ -38,8 +38,8 @@ public sealed class CredentialsTests
             Assert.True(await scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>().CheckPasswordAsync(user, "a-long-test-password"));
         }
 
-        // Act: выход в браузере, вход с другим регистром email, повторная регистрация того же локального адреса.
-        using var logout = await PostAsync(client, "/account", "/account/logout", new());
+        // Act: подтверждение адреса, вход с другим регистром email и повторная регистрация того же адреса.
+        await EmailConfirmationTests.ConfirmMailAsync(factory, client);
         using var loggedIn = await PostAsync(client, "/login", "/login/password", new()
         { ["email"] = "example@FITNESS.test", ["password"] = "a-long-test-password" });
         Assert.Equal(HttpStatusCode.Redirect, loggedIn.StatusCode);
@@ -85,6 +85,8 @@ public sealed class CredentialsTests
     [Theory]
     [InlineData("/register")]
     [InlineData("/login/password")]
+    [InlineData("/email/resend")]
+    [InlineData("/email/confirm")]
     [InlineData("/passkeys/register/options")]
     [InlineData("/passkeys/login/options")]
     public async Task CredentialEndpointsRequireAntiforgeryAsync(string endpoint)
@@ -143,8 +145,8 @@ public sealed class CredentialsTests
             Assert.Single(await users.GetPasskeysAsync(user));
         }
 
-        // Act: после выхода пароль не нужен; сервер проверяет подпись сохранённым публичным ключом.
-        using var logout = await PostAsync(client, "/account", "/account/logout", new());
+        // Act: после подтверждения адреса пароль не нужен; сервер проверяет подпись сохранённым публичным ключом.
+        await EmailConfirmationTests.ConfirmMailAsync(factory, client);
         // Парольные попытки не блокируют пользователя, у которого есть только passkey.
         for (var attempt = 0; attempt < 5; attempt++)
         {
@@ -207,6 +209,9 @@ public sealed class CredentialsTests
         using var registered = await PostAsync(client, "/register", "/register", new()
         { ["email"] = "enroll@fitness.test", ["password"] = "a-long-test-password", ["confirmPassword"] = "a-long-test-password" });
         Assert.Equal(HttpStatusCode.Redirect, registered.StatusCode);
+        await EmailConfirmationTests.ConfirmMailAsync(factory, client);
+        using var passwordLogin = await PostAsync(client, "/login", "/login/password", new()
+        { ["email"] = "enroll@fitness.test", ["password"] = "a-long-test-password" });
         using var options = await PostAsync(client, "/account", "/account/passkeys/options", new());
         Assert.Equal(HttpStatusCode.OK, options.StatusCode);
         using var enrollment = await PostAsync(client, "/account", "/account/passkeys", new()

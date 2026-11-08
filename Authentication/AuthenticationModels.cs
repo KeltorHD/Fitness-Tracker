@@ -49,10 +49,37 @@ public sealed record AccountProfileData(string Id, string Name, DateTimeOffset C
 public sealed record LoginPageData(string ReturnUrl, string[] Providers);
 
 /// <summary>Страница регистрации без пароля.</summary>
-public sealed record RegistrationPageData(string ReturnUrl, string Email, string[] Providers);
+public sealed record RegistrationPageData(string ReturnUrl, string Email, string[] Providers, bool EmailRegistrationAvailable);
 
 /// <summary>Результат регистрации: безопасные поля формы и ошибка либо разрешённое продолжение.</summary>
-public sealed record PasswordRegistrationOutcome(string ReturnUrl, string Email, string? Error, string[] Providers);
+public sealed record PasswordRegistrationOutcome(string ReturnUrl, string Email, string? Error, string[] Providers, bool EmailRegistrationAvailable);
+
+/// <summary>Форма повтора письма без раскрытия существования аккаунта.</summary>
+public sealed record EmailResendInput(string? Email, string? ReturnUrl)
+{
+    /// <summary>Исключает адрес из строкового логирования.</summary>
+    public override string ToString() => nameof(EmailResendInput);
+}
+
+/// <summary>Защищённый токен подтверждения; не предназначен для логирования.</summary>
+public sealed record EmailConfirmationInput(string? UserId, string? Code)
+{
+    /// <summary>Исключает токен из строкового логирования.</summary>
+    public override string ToString() => nameof(EmailConfirmationInput);
+}
+
+/// <summary>Страница ожидания и повторной отправки без приватных полей.</summary>
+public sealed record EmailPendingPageData(string ReturnUrl, bool Available, bool Submitted);
+
+/// <summary>Сведения формы явного подтверждения после перехода по ссылке.</summary>
+public sealed record EmailConfirmPageData(string UserId, string Code, bool CanConfirm)
+{
+    /// <summary>Не раскрывает токен при строковом логировании.</summary>
+    public override string ToString() => nameof(EmailConfirmPageData);
+}
+
+/// <summary>Результат подтверждения без автоматического входа.</summary>
+public sealed record EmailConfirmationOutcome(bool Succeeded);
 
 /// <summary>Продолжение парольного входа и безопасное сообщение для браузера.</summary>
 public sealed record PasswordLoginOutcome(string ReturnUrl, string? Error);

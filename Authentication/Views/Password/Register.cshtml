@@ -8,6 +8,8 @@
 {
   <div class="form-alert" asp-validation-summary="All" role="alert" data-localize-errors></div>
 }
+@if (Model.EmailRegistrationAvailable)
+{
 <form class="credential-form" method="post" action="/register" asp-antiforgery="true" data-registration>
   <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
   <label for="email" data-localize>Электронная почта</label>
@@ -33,6 +35,15 @@
   <p class="status-message" data-passkey-status role="status" aria-live="polite"></p>
 </form>
 <noscript><p class="privacy-note">Для passkey включите JavaScript или используйте пароль.</p></noscript>
+<p class="privacy-note" data-localize>Для входа потребуется подтвердить адрес по ссылке в письме.</p>
+}
+else
+{
+  <span class="button provider-button unavailable-provider" role="button" aria-disabled="true" tabindex="0" aria-describedby="unavailable-email">
+    <span data-localize>Создать аккаунт по email</span>
+    <span id="unavailable-email" class="provider-tooltip" role="tooltip">В разработке</span>
+  </span>
+  <p class="privacy-note" data-localize>Регистрация по email временно недоступна.</p>
+}
 <partial name="_Providers" model="@(new FitnessTracker.Authentication.Controllers.LoginPage(Model.ReturnUrl, Model.Providers))" />
 <p class="card-navigation"><span data-localize>Уже есть аккаунт?</span> <a href="@Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString("/login", "returnUrl", Model.ReturnUrl)" data-localize>Войти</a></p>
-<p class="privacy-note" data-localize>Без писем и кодов подтверждения.</p>
