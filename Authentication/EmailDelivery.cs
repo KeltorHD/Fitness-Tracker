@@ -89,12 +89,7 @@ public sealed class SmtpEmailSender(ISmtpClient client, IOptions<SmtpOptions> co
             message.From.Add(new MailboxAddress(options.FromName, options.FromAddress));
             message.To.Add(MailboxAddress.Parse(email));
             message.Subject = "Подтвердите электронную почту — FitnessTracker";
-            var link = System.Net.WebUtility.HtmlEncode(confirmationLink);
-            message.Body = new BodyBuilder
-            {
-                TextBody = $"Подтвердите адрес электронной почты для FitnessTracker:\n\n{confirmationLink}\n\nСсылка действует 2 часа. Если вы не создавали аккаунт, проигнорируйте письмо.",
-                HtmlBody = $"<html lang=\"ru\"><body><h1>Подтвердите электронную почту</h1><p>Вы создали аккаунт FitnessTracker.</p><p><a href=\"{link}\">Подтвердить адрес</a></p><p>Ссылка действует 2 часа. Если вы не создавали аккаунт, проигнорируйте письмо.</p></body></html>"
-            }.ToMessageBody();
+            message.Body = ConfirmationEmailTemplate.CreateBody(confirmationLink);
             LogStage(4202, stage, "completed", attemptId, stageStarted);
             var security = options.Security switch
             {
