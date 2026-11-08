@@ -29,6 +29,14 @@ import XCTest
 }
 
 @MainActor final class PresentationModelTests: XCTestCase {
+  func testMuscleSummaryLabelsRegionParentsAndKeepsRelatedEntriesTogether() {
+    let selection = ExerciseMuscleSelection(
+      muscles: [.triceps], regions: [.bicepsLong, .chestUpper])
+    let summary = MuscleSelectionText.summary(selection, locale: Locale(identifier: "ru_RU"))
+    XCTAssertEqual(
+      summary,
+      "Грудные мышцы: Верх груди · ключичная часть; Бицепс: Бицепс · длинная головка; Трицепс")
+  }
   func testExternalSupersetCompletionSelectsNextMemberAndKeepsUnsavedDrafts() throws {
     let first = WorkoutExercise(
       exercise: Exercise(name: "A", muscle: .legs),

@@ -1023,5 +1023,7 @@
   "Выбранный день": "Selected day",
   "Штрихкод": "Barcode",
   "Штрихкод (необязательно)": "Barcode (optional)",
-  "Для поиска новых продуктов нужен интернет. Недавние, избранные и ручной ввод доступны без сети.": "Searching for new foods requires internet. Recent foods, favorites and manual entry work offline."
+  "Для поиска новых продуктов нужен интернет. Недавние, избранные и ручной ввод доступны без сети.": "Searching for new foods requires internet. Recent foods, favorites and manual entry work offline.",
+  "Области: %@": "Regions: %@",
+  "%@: %@": "%@: %@"
 }

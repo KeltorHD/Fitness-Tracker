@@ -67,47 +67,56 @@ struct MuscleSelectionView: View {
 
   @ViewBuilder private func muscleRow(_ muscle: ExerciseMuscle) -> some View {
     let regions = ExerciseMuscleRegion.inMuscle(muscle)
-    if regions.isEmpty {
-      selectionToggle(
-        muscle.title, identifier: "muscle_\(muscle.rawValue)",
-        isOn: Binding(
-          get: { selection.contains(muscle) }, set: { selection.set(muscle, selected: $0) }))
-    } else {
+    VStack(alignment: .leading, spacing: 4) {
       let state = selection.state(ofMuscle: muscle)
       selectionToggle(
         muscle.title, identifier: "muscle_\(muscle.rawValue)",
         isOn: Binding(
-          get: { selection.state(ofMuscle: muscle) == .all },
+          get: {
+            regions.isEmpty ? selection.contains(muscle) : selection.state(ofMuscle: muscle) == .all
+          },
           set: { selection.set(muscle, selected: $0) }),
         partiallySelected: state == .partial)
-      Button {
-        if !expandedMuscles.insert(muscle).inserted { expandedMuscles.remove(muscle) }
-      } label: {
-        HStack {
-          Text(L10n.text("Уточнить области", locale: locale)).font(.subheadline)
-          Spacer(minLength: 0)
-          Image(systemName: expandedMuscles.contains(muscle) ? "chevron.down" : "chevron.right")
-            .font(.caption.weight(.semibold)).accessibilityHidden(true)
-        }.frame(maxWidth: .infinity, minHeight: 44).contentShape(.rect)
-      }
-      .buttonStyle(.borderless)
-      .accessibilityValue(
-        L10n.text(expandedMuscles.contains(muscle) ? "Развёрнуто" : "Свёрнуто", locale: locale)
-      )
-      .accessibilityIdentifier("expandMuscle_\(muscle.rawValue)")
-      if expandedMuscles.contains(muscle) {
-        ForEach(regions, id: \.self) { region in
-          selectionToggle(
-            region.title, identifier: "muscleRegion_\(region.rawValue)",
-            isOn: Binding(
-              get: { selection.contains(region) }, set: { selection.set(region, selected: $0) }))
+      if !regions.isEmpty {
+        Button {
+          if !expandedMuscles.insert(muscle).inserted { expandedMuscles.remove(muscle) }
+        } label: {
+          HStack {
+            Text(
+              L10n.format("Области: %@", L10n.text(muscle.title, locale: locale), locale: locale)
+            ).font(.subheadline)
+            Spacer(minLength: 0)
+            Image(systemName: expandedMuscles.contains(muscle) ? "chevron.down" : "chevron.right")
+              .font(.caption.weight(.semibold)).accessibilityHidden(true)
+          }.frame(maxWidth: .infinity, minHeight: 44).contentShape(.rect)
+        }
+        .buttonStyle(.borderless)
+        .accessibilityValue(
+          L10n.text(expandedMuscles.contains(muscle) ? "Развёрнуто" : "Свёрнуто", locale: locale)
+        )
+        .accessibilityIdentifier("expandMuscle_\(muscle.rawValue)")
+        if expandedMuscles.contains(muscle) {
+          ForEach(regions, id: \.self) { region in
+            selectionToggle(
+              region.title, identifier: "muscleRegion_\(region.rawValue)",
+              isOn: Binding(
+                get: { selection.contains(region) }, set: { selection.set(region, selected: $0) }),
+              accessibilityTitle: L10n.format(
+                "%@: %@", L10n.text(muscle.title, locale: locale),
+                L10n.text(region.title, locale: locale), locale: locale)
+            )
+            .padding(.leading, 24)
+          }
         }
       }
     }
+    .padding(.leading, 12)
+    .padding(.vertical, 4)
   }
 
   private func selectionToggle(
-    _ title: String, identifier: String, isOn: Binding<Bool>, partiallySelected: Bool = false
+    _ title: String, identifier: String, isOn: Binding<Bool>, partiallySelected: Bool = false,
+    accessibilityTitle: String? = nil
   ) -> some View {
     HStack(spacing: 8) {
       HStack {
@@ -122,6 +131,7 @@ struct MuscleSelectionView: View {
       .accessibilityHidden(true)
       Toggle(L10n.text(title, locale: locale), isOn: isOn)
         .labelsHidden()
+        .accessibilityLabel(accessibilityTitle ?? L10n.text(title, locale: locale))
         .accessibilityHint(partiallySelected ? L10n.text("Частично выбрано", locale: locale) : "")
         .accessibilityIdentifier(identifier)
     }
@@ -186,13 +196,29 @@ enum MuscleSelectionText {
 
   static func summary(_ selection: ExerciseMuscleSelection, locale: Locale) -> String {
     guard !selection.isEmpty else { return L10n.text("Все мышцы", locale: locale) }
-    let groups = MuscleGroup.allCases.filter { selection.groups.contains($0) }
-      .map { groupTitle($0, locale: locale) }
-    let muscles = ExerciseMuscle.allCases.filter { selection.muscles.contains($0) }
-      .map { L10n.text($0.title, locale: locale) }
-    let regions = ExerciseMuscleRegion.allCases.filter { selection.regions.contains($0) }
-      .map { L10n.text($0.title, locale: locale) }
-    return (groups + muscles + regions).joined(separator: ", ")
+    var labels: [String] = []
+    for group in MuscleGroup.allCases {
+      if selection.groups.contains(group) {
+        labels.append(groupTitle(group, locale: locale))
+        continue
+      }
+      for muscle in ExerciseMuscle.inGroup(group) {
+        if selection.muscles.contains(muscle) {
+          labels.append(L10n.text(muscle.title, locale: locale))
+          continue
+        }
+        let regions = ExerciseMuscleRegion.inMuscle(muscle)
+          .filter { selection.regions.contains($0) }
+          .map { L10n.text($0.title, locale: locale) }
+        if !regions.isEmpty {
+          labels.append(
+            L10n.format(
+              "%@: %@", L10n.text(muscle.title, locale: locale),
+              regions.joined(separator: ", "), locale: locale))
+        }
+      }
+    }
+    return labels.joined(separator: "; ")
   }
 
   static func compactSummary(_ selection: ExerciseMuscleSelection, locale: Locale) -> String {

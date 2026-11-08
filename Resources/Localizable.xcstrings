@@ -324,6 +324,23 @@
         }
       }
     },
+    "%@: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: %@"
+          }
+        }
+      }
+    },
     "+ %@ мл": {
       "extractionState": "manual",
       "localizations": {
@@ -9602,6 +9619,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Chest and abdominal regions are parts of one muscle, not separate muscles. The filter shows exercises tagged for that region; complete isolation is not implied."
+          }
+        }
+      }
+    },
+    "Области: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Области: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Regions: %@"
           }
         }
       }

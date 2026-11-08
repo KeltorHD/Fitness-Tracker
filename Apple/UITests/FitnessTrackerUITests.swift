@@ -1,6 +1,129 @@
 import XCTest
 
 final class FitnessTrackerUITests: XCTestCase {
+  @MainActor func testNewExerciseRestoresAllThreeHistoricalSetsWithoutCompletionMarks() {
+    let app = launch()
+    let start = app.buttons["workoutStartAction"]
+    XCTAssertTrue(start.waitForExistence(timeout: 10))
+    start.tap()
+    chooseFreeWorkout(in: app)
+    addGobletExercise(in: app)
+    let exercise = app.buttons["openWorkoutExercise"].firstMatch
+    exercise.tap()
+    XCTAssertTrue(app.buttons["addWorkoutSet"].waitForExistence(timeout: 5))
+    app.buttons["addWorkoutSet"].tap()
+    app.buttons["addWorkoutSet"].tap()
+    for (weight, repetitions) in [(30, 12), (35, 10), (40, 8)] {
+      fillWorkoutSet(in: app, weight: weight, repetitions: repetitions)
+      app.buttons["completeSet"].tap()
+    }
+    let finish = app.buttons["finishWorkout"]
+    XCTAssertTrue(finish.waitForExistence(timeout: 5))
+    finish.tap()
+    let notice = app.alerts["Готово"]
+    XCTAssertTrue(notice.waitForExistence(timeout: 5))
+    notice.buttons["Хорошо"].tap()
+    XCTAssertTrue(start.waitForExistence(timeout: 5))
+    start.tap()
+    chooseFreeWorkout(in: app)
+    addGobletExercise(in: app)
+    exercise.tap()
+    let weights = app.textFields.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "setWeight_"))
+    let repetitions = app.textFields.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "setRepetitions_"))
+    XCTAssertTrue(weights.firstMatch.waitForExistence(timeout: 5))
+    XCTAssertEqual(weights.count, 3)
+    XCTAssertEqual(repetitions.count, 3)
+    for (index, pair) in [(30, 12), (35, 10), (40, 8)].enumerated() {
+      XCTAssertEqual(weights.element(boundBy: index).value as? String, String(pair.0))
+      XCTAssertEqual(repetitions.element(boundBy: index).value as? String, String(pair.1))
+    }
+    XCTAssertFalse(
+      app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "correctSetWeight_"))
+        .firstMatch.exists)
+    let screen = XCTAttachment(screenshot: app.screenshot())
+    screen.name = "Three historical targets restored as pending sets"
+    screen.lifetime = .keepAlways
+    add(screen)
+  }
+
+  @MainActor func testUncompletedInputsSurviveClosingAndReopeningExercise() {
+    let app = launch()
+    XCTAssertTrue(app.buttons["workoutStartAction"].waitForExistence(timeout: 10))
+    app.buttons["workoutStartAction"].tap()
+    chooseFreeWorkout(in: app)
+    addGobletExercise(in: app)
+    let exercise = app.buttons["openWorkoutExercise"].firstMatch
+    XCTAssertTrue(exercise.waitForExistence(timeout: 5))
+    exercise.tap()
+    let pendingRepetitions = app.textFields.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "setRepetitions_")
+    )
+    .firstMatch
+    XCTAssertTrue(pendingRepetitions.waitForExistence(timeout: 5))
+    pendingRepetitions.tap()
+    app.buttons["numberPadDigit_1"].tap()
+    app.buttons["numberPadDigit_1"].tap()
+    app.buttons["numberPadHide"].tap()
+    app.buttons["closeWorkoutExercise"].tap()
+    XCTAssertTrue(exercise.waitForExistence(timeout: 5))
+    exercise.tap()
+    let pendingWeight = app.textFields.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "setWeight_")
+    )
+    .firstMatch
+    XCTAssertTrue(pendingWeight.waitForExistence(timeout: 5))
+    assertEmptyWorkoutField(pendingWeight)
+    XCTAssertEqual(pendingRepetitions.value as? String, "11")
+    fillWorkoutSet(in: app, weight: 45, repetitions: 11)
+    app.buttons["closeWorkoutExercise"].tap()
+    XCTAssertTrue(exercise.waitForExistence(timeout: 5))
+    exercise.tap()
+    let weight = app.textFields.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "setWeight_")
+    ).firstMatch
+    let repetitions = app.textFields.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "setRepetitions_")
+    ).firstMatch
+    XCTAssertTrue(weight.waitForExistence(timeout: 5))
+    XCTAssertEqual(weight.value as? String, "45")
+    XCTAssertEqual(repetitions.value as? String, "11")
+    XCTAssertTrue(app.buttons["completeSet"].isEnabled)
+    app.buttons["closeWorkoutExercise"].tap()
+    XCTAssertTrue(exercise.waitForExistence(timeout: 5))
+    let screen = XCTAttachment(screenshot: app.screenshot())
+    screen.name = "Pending values retained in workout overview"
+    screen.lifetime = .keepAlways
+    add(screen)
+  }
+
+  @MainActor func testMuscleRegionsStayWithTheirNamedParent() {
+    let app = launch()
+    XCTAssertTrue(app.buttons["workoutStartAction"].waitForExistence(timeout: 10))
+    app.buttons["workoutStartAction"].tap()
+    chooseFreeWorkout(in: app)
+    app.buttons["addExercise"].tap()
+    app.buttons["chooseExerciseMuscles"].tap()
+    let arms = app.buttons["expandMuscleGroup_arms"]
+    reveal(arms, in: app)
+    arms.tap()
+    let regions = app.buttons["expandMuscle_biceps"]
+    XCTAssertTrue(regions.waitForExistence(timeout: 5))
+    XCTAssertEqual(regions.label, "Области: Бицепс")
+    regions.tap()
+    let longHead = app.switches["muscleRegion_bicepsLong"]
+    let shortHead = app.switches["muscleRegion_bicepsShort"]
+    XCTAssertTrue(longHead.waitForExistence(timeout: 5))
+    XCTAssertTrue(longHead.label.hasPrefix("Бицепс:"))
+    reveal(shortHead, in: app)
+    shortHead.tap()
+    XCTAssertEqual(app.switches["muscle_triceps"].value as? String, "0")
+    let screen = XCTAttachment(screenshot: app.screenshot())
+    screen.name = "Muscle region hierarchy"
+    screen.lifetime = .keepAlways
+    add(screen)
+  }
   @MainActor func testSettingsFromWorkoutMenusKeepTheSessionAndExerciseDraft() {
     let app = launch()
     XCTAssertTrue(app.buttons["workoutStartAction"].waitForExistence(timeout: 10))
