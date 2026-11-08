@@ -6,8 +6,9 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 namespace FitnessTracker.Server.Tests;
 
-/// <summary>Собирает текст и structured fields только почтовых категорий, без сети и глобального Console.</summary>
-internal sealed class TestEmailLogs : ILoggerProvider
+/// <summary>Собирает текст и structured fields почтовых событий или выбранной категории без сети и глобального Console.</summary>
+/// <param name="selectedCategory">Отдельная категория для проверки регистрации; по умолчанию только отправка почты.</param>
+internal sealed class TestEmailLogs(string? selectedCategory = null) : ILoggerProvider
 {
     /// <summary>События доставки из текущего изолированного теста.</summary>
     internal ConcurrentQueue<Entry> Entries { get; } = new();
@@ -26,8 +27,13 @@ internal sealed class TestEmailLogs : ILoggerProvider
         .AddProvider(this));
 
     /// <summary>Не захватывает посторонние framework события и request scopes.</summary>
-    public ILogger CreateLogger(string categoryName) => categoryName == typeof(EmailConfirmationService).FullName ||
-        categoryName == typeof(SmtpEmailSender).FullName ? new Capture(this) : NullLogger.Instance;
+    public ILogger CreateLogger(string categoryName)
+    {
+        var included = selectedCategory is null
+            ? categoryName == typeof(EmailConfirmationService).FullName || categoryName == typeof(SmtpEmailSender).FullName
+            : categoryName == selectedCategory;
+        return included ? new Capture(this) : NullLogger.Instance;
+    }
 
     /// <summary>Коллектор не владеет внешними ресурсами.</summary>
     public void Dispose() { }
