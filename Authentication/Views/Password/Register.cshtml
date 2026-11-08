@@ -6,7 +6,13 @@
 </div>
 @if (!ViewData.ModelState.IsValid)
 {
-  <div class="form-alert" asp-validation-summary="All" role="alert" data-localize-errors></div>
+  <div class="form-alert" role="alert">
+    <div asp-validation-summary="All" data-localize-errors></div>
+    @if (Model.EmailRegistrationAvailable)
+    {
+      <p><a href="@Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString("/login", "returnUrl", Model.ReturnUrl)" data-localize>Войти</a> · <a href="@Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString("/email/verify", "returnUrl", Model.ReturnUrl)" data-localize>Запросить письмо подтверждения</a></p>
+    }
+  </div>
 }
 @if (Model.EmailRegistrationAvailable)
 {

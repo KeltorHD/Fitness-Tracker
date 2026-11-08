@@ -368,6 +368,14 @@ docker compose exec -T authentication printenv Smtp__Enabled Smtp__Host Smtp__Po
 
 Для SMTPS на порту `465` ожидается `SslOnConnect`; для обязательного STARTTLS, обычно на `587`, — `StartTls`.
 
+### Ошибки регистрации
+
+Категория `FitnessTracker.Authentication.PasswordService` также имеет порог `Information`. Событие `4300` отмечает начало регистрации с паролем, `4301` — отказ с причиной и разрешёнными кодами Identity, `4302` — создание аккаунта перед отправкой подтверждения. Начало и результат связывает случайный `AttemptId`. Причины: `smtp_disabled`, `invalid_email`, `password_length`, `password_mismatch`, `password_policy`, `account_conflict` и `identity_rejected`. Например, повторная регистрация нормализованного адреса даёт `account_conflict` / `DuplicateUserName`; конкурентный конфликт PostgreSQL имеет отдельное поле `DatabaseCode=23505`. Ввод пользователя, ID/имя аккаунта, пароль, исходные описания Identity и исключения в эти события не попадают. Неизвестные коды заменяются на `unknown_identity_error`.
+
+Форма отдельно объясняет неверный email, длину пароля, недостаточное разнообразие символов и несовпадение паролей. При отказе создания она предлагает войти или запросить новое письмо, с рабочими ссылками и сохранением локального продолжения. Публичный ответ не подтверждает существование конкретного аккаунта. Сообщения доступны на русском и английском.
+
+Если email уже использовался, аккаунт мог сохраниться после первой попытки даже при сбое SMTP. Войдите с первоначальным паролем: ожидающий аккаунт перейдёт на `/email/verify`, где можно запросить письмо ещё раз (с учётом минутного лимита). Повторная регистрация не меняет прежний пароль и не отправляет новое письмо. Для обновления диагностики и формы достаточно пересобрать Authentication; новые переменные и миграции не требуются.
+
 ### Пароль и passkey
 
 Пароли хеширует Identity V3 (PBKDF2-HMAC-SHA512, 210 000 итераций), пять неудачных попыток включают блокировку на 15 минут. Credential endpoints дополнительно ограничены 20 запросами в минуту на IP и защищены antiforgery. Ошибка входа не раскрывает наличие email. HTTPS cookies имеют HttpOnly, Secure и ограниченный срок; в HTML пароль не возвращается.
@@ -516,6 +524,7 @@ dotnet ef migrations has-pending-model-changes --project Backend
 | `Unit` | `Tests/Server/PasskeySchemaTests.cs` | Согласованность snapshot и модели, AddPasskeys добавляет только таблицу/индекс, прежние колонки не сужаются |
 | `HTTP` | `Tests/Server/CredentialsTests.cs` | Email/password с подтверждением новых адресов, нормализация/уникальность, CSRF, lockout, отсутствие email merge, реальные WebAuthn attestation/assertion, origin/RP/UV/signature/replay, управление ключами и отзыв |
 | `HTTP` | `Tests/Server/EmailConfirmationTests.cs` | Новый password/passkey аккаунт без сессии до проверки почты, явный POST, неправильный/просроченный/stamp-bound токен, resend/throttle, SMTP failure и сохранность прежнего входа |
+| `HTTP` | `Tests/Server/RegistrationDiagnosticsTests.cs` | Повторная регистрация подтверждённого/ожидающего аккаунта, сохранность пароля и продолжение входа, понятные ошибки данных, shipped logging filters и отсутствие приватных полей Identity/DB в логах |
 | `Unit` | `Tests/Server/SmtpEmailTests.cs` | Независимый SMTP transport, обязательный режим TLS, MIME text/HTML, безопасные ошибки, отмена и валидация конфигурации; без реального сервера |
 | `Unit` | `Tests/Server/ConfirmationEmailTests.cs` | Кнопка и полный URL после MIME round-trip, точные параметры токена, plain text, ссылки после удаления CSS и отказ небезопасным URI без утечки значений |
 | `HTTP` | `Tests/Server/AppAssociationTests.cs` | AASA только с настроенным App ID, безопасный HTTPS fallback без отражения code/state |
