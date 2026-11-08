@@ -7,16 +7,16 @@ namespace FitnessTracker.Server.Tests;
 internal sealed class TestEmailSender : IAccountEmailSender
 {
     /// <summary>Письма с синтетическими адресами и токенами одноразового host.</summary>
-    internal ConcurrentQueue<(string Email, string Link)> Messages { get; } = new();
+    internal ConcurrentQueue<(string Email, string Link, string AttemptId)> Messages { get; } = new();
     /// <summary>Управляемый безопасный отказ транспорта.</summary>
     internal bool Fails { get; set; }
 
     /// <summary>Учитывает отмену и имитирует принятый SMTP либо недоступность.</summary>
-    public Task SendConfirmationAsync(string email, string confirmationLink, CancellationToken cancellationToken)
+    public Task SendConfirmationAsync(string email, string confirmationLink, string attemptId, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
         if (Fails) throw new EmailDeliveryException("smtp_unavailable");
-        Messages.Enqueue((email, confirmationLink));
+        Messages.Enqueue((email, confirmationLink, attemptId));
         return Task.CompletedTask;
     }
 }

@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using MailKit;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Options;
@@ -9,7 +11,7 @@ namespace FitnessTracker.Authentication;
 public interface IAccountEmailSender
 {
     /// <summary>Отправляет ссылку подтверждения; не пишет адрес или токен в логи.</summary>
-    Task SendConfirmationAsync(string email, string confirmationLink, CancellationToken cancellationToken);
+    Task SendConfirmationAsync(string email, string confirmationLink, string attemptId, CancellationToken cancellationToken);
 }
 
 /// <summary>Явный режим SMTP без автоматического downgrade STARTTLS.</summary>
@@ -64,54 +66,130 @@ public sealed class SmtpOptions
 }
 
 /// <summary>Отправляет MIME-письмо через стандартный SMTP; протокольные логи отключены.</summary>
-public sealed class SmtpEmailSender(ISmtpClient client, IOptions<SmtpOptions> configured) : IAccountEmailSender
+public sealed class SmtpEmailSender(ISmtpClient client, IOptions<SmtpOptions> configured,
+    ILogger<SmtpEmailSender> logger) : IAccountEmailSender
 {
     /// <summary>Использует MailKit async/TLS и DI-scoped client; локальный SMTP совместим без vendor API.</summary>
-    public async Task SendConfirmationAsync(string email, string confirmationLink, CancellationToken cancellationToken)
+    public async Task SendConfirmationAsync(string email, string confirmationLink, string attemptId, CancellationToken cancellationToken)
     {
         var options = configured.Value;
-        if (!options.Enabled) throw new EmailDeliveryException("smtp_disabled");
+        if (!options.Enabled)
+        {
+            logger.LogInformation(new EventId(4200, "SmtpDisabled"), "SMTP submission skipped: smtp_disabled; attempt {AttemptId}.", attemptId);
+            throw new EmailDeliveryException("smtp_disabled", "configuration");
+        }
         using var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         timeout.CancelAfter(TimeSpan.FromSeconds(options.TimeoutSeconds));
         using var message = new MimeMessage();
-        message.From.Add(new MailboxAddress(options.FromName, options.FromAddress));
-        message.To.Add(MailboxAddress.Parse(email));
-        message.Subject = "Подтвердите электронную почту — FitnessTracker";
-        var link = System.Net.WebUtility.HtmlEncode(confirmationLink);
-        message.Body = new BodyBuilder
-        {
-            TextBody = $"Подтвердите адрес электронной почты для FitnessTracker:\n\n{confirmationLink}\n\nСсылка действует 2 часа. Если вы не создавали аккаунт, проигнорируйте письмо.",
-            HtmlBody = $"<html lang=\"ru\"><body><h1>Подтвердите электронную почту</h1><p>Вы создали аккаунт FitnessTracker.</p><p><a href=\"{link}\">Подтвердить адрес</a></p><p>Ссылка действует 2 часа. Если вы не создавали аккаунт, проигнорируйте письмо.</p></body></html>"
-        }.ToMessageBody();
+        var stage = "prepare";
+        var stageStarted = Stopwatch.GetTimestamp();
         try
         {
+            LogStage(4201, stage, "started", attemptId, stageStarted);
+            message.From.Add(new MailboxAddress(options.FromName, options.FromAddress));
+            message.To.Add(MailboxAddress.Parse(email));
+            message.Subject = "Подтвердите электронную почту — FitnessTracker";
+            var link = System.Net.WebUtility.HtmlEncode(confirmationLink);
+            message.Body = new BodyBuilder
+            {
+                TextBody = $"Подтвердите адрес электронной почты для FitnessTracker:\n\n{confirmationLink}\n\nСсылка действует 2 часа. Если вы не создавали аккаунт, проигнорируйте письмо.",
+                HtmlBody = $"<html lang=\"ru\"><body><h1>Подтвердите электронную почту</h1><p>Вы создали аккаунт FitnessTracker.</p><p><a href=\"{link}\">Подтвердить адрес</a></p><p>Ссылка действует 2 часа. Если вы не создавали аккаунт, проигнорируйте письмо.</p></body></html>"
+            }.ToMessageBody();
+            LogStage(4202, stage, "completed", attemptId, stageStarted);
             var security = options.Security switch
             {
                 SmtpSecurity.StartTls => SecureSocketOptions.StartTls,
                 SmtpSecurity.SslOnConnect => SecureSocketOptions.SslOnConnect,
                 _ => SecureSocketOptions.None
             };
+            stage = "connect";
+            stageStarted = Stopwatch.GetTimestamp();
+            logger.LogInformation(new EventId(4203, "SmtpConnecting"),
+                "SMTP connect/TLS started: host {Host}; port {Port}; security {Security}; timeout {TimeoutSeconds} s; attempt {AttemptId}.",
+                options.Host, options.Port, options.Security, options.TimeoutSeconds, attemptId);
             await client.ConnectAsync(options.Host, options.Port, security, timeout.Token);
+            logger.LogInformation(new EventId(4204, "SmtpConnected"),
+                "SMTP connect/TLS completed: secure {IsSecure}; protocol {TlsProtocol}; elapsed {ElapsedMs} ms; attempt {AttemptId}.",
+                client.IsSecure, client.IsSecure ? client.SslProtocol : null, ElapsedMs(stageStarted), attemptId);
+            stage = "authenticate";
+            stageStarted = Stopwatch.GetTimestamp();
             if (options.Username.Length > 0)
+            {
+                LogStage(4205, stage, "started", attemptId, stageStarted);
                 await client.AuthenticateAsync(options.Username, options.Password, timeout.Token);
+                LogStage(4206, stage, "completed", attemptId, stageStarted);
+            }
+            else LogStage(4207, stage, "skipped_no_credentials", attemptId, stageStarted);
+            stage = "submit";
+            stageStarted = Stopwatch.GetTimestamp();
+            LogStage(4208, stage, "started", attemptId, stageStarted);
             await client.SendAsync(message, timeout.Token);
+            LogStage(4209, stage, "accepted_by_smtp", attemptId, stageStarted);
         }
         catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
         {
-            throw new EmailDeliveryException("smtp_timeout");
+            throw Failure("smtp_timeout", stage, attemptId, stageStarted);
         }
-        catch (SslHandshakeException) { throw new EmailDeliveryException("smtp_tls_failed"); }
-        catch (MailKit.Security.AuthenticationException) { throw new EmailDeliveryException("smtp_auth_failed"); }
-        catch (SmtpCommandException) { throw new EmailDeliveryException("smtp_rejected"); }
+        catch (OperationCanceledException)
+        {
+            LogStage(4213, stage, "canceled", attemptId, stageStarted);
+            throw;
+        }
+        catch (SslHandshakeException) { throw Failure("smtp_tls_failed", stage, attemptId, stageStarted); }
+        catch (MailKit.Security.AuthenticationException) { throw Failure("smtp_auth_failed", stage, attemptId, stageStarted); }
+        catch (SmtpCommandException error)
+        {
+            // Только стандартный код SMTP, не текст ответа с возможным адресом получателя.
+            logger.LogInformation(new EventId(4215, "SmtpReplyRejected"),
+                "SMTP reply rejected: status {StatusCode}; error {ErrorCode}; stage {Stage}; attempt {AttemptId}.",
+                (int)error.StatusCode, error.ErrorCode, stage, attemptId);
+            throw Failure("smtp_rejected", stage, attemptId, stageStarted);
+        }
+        catch (Exception error) when (error is ServiceNotConnectedException or ServiceNotAuthenticatedException)
+        { throw Failure("smtp_not_ready", stage, attemptId, stageStarted); }
+        catch (NotSupportedException) { throw Failure("smtp_not_supported", stage, attemptId, stageStarted); }
+        catch (FormatException) { throw Failure("smtp_invalid_message", stage, attemptId, stageStarted); }
         catch (Exception error) when (error is IOException or System.Net.Sockets.SocketException or SmtpProtocolException)
         {
-            throw new EmailDeliveryException("smtp_unavailable");
+            throw Failure("smtp_unavailable", stage, attemptId, stageStarted);
         }
         // Сервер уже принял письмо. Ошибка QUIT не должна превращать успешную доставку в повтор.
-        try { if (client.IsConnected) await client.DisconnectAsync(true, timeout.Token); }
-        catch (Exception error) when (error is IOException or OperationCanceledException or SmtpProtocolException or SmtpCommandException) { return; }
+        stageStarted = Stopwatch.GetTimestamp();
+        LogStage(4210, "disconnect", "started", attemptId, stageStarted);
+        try
+        {
+            if (client.IsConnected) await client.DisconnectAsync(true, timeout.Token);
+            LogStage(4211, "disconnect", "completed", attemptId, stageStarted);
+        }
+        catch (Exception error) when (error is IOException or OperationCanceledException or SmtpProtocolException or SmtpCommandException)
+        {
+            logger.LogInformation(new EventId(4214, "SmtpDisconnectFailed"),
+                "SMTP disconnect failed after acceptance: {ErrorType}; elapsed {ElapsedMs} ms; attempt {AttemptId}.",
+                error.GetType().Name, ElapsedMs(stageStarted), attemptId);
+        }
     }
+
+    /// <summary>Пишет только этап, результат, длительность и серверный ID попытки, без SMTP payload.</summary>
+    private void LogStage(int eventId, string stage, string result, string attemptId, long started) =>
+        logger.LogInformation(new EventId(eventId, "SmtpStage"),
+            "SMTP {Stage}: {Result}; elapsed {ElapsedMs} ms; attempt {AttemptId}.", stage, result, ElapsedMs(started), attemptId);
+
+    /// <summary>Фиксирует безопасный код и этап; исходное exception не передаётся в logger или inner exception.</summary>
+    private EmailDeliveryException Failure(string code, string stage, string attemptId, long started)
+    {
+        logger.LogInformation(new EventId(4212, "SmtpStageFailed"),
+            "SMTP {Stage}: failed; code {DeliveryCode}; elapsed {ElapsedMs} ms; attempt {AttemptId}.",
+            stage, code, ElapsedMs(started), attemptId);
+        return new(code, stage);
+    }
+
+    /// <summary>Измеряет этап монотонными часами, независимо от смены системного времени.</summary>
+    private static long ElapsedMs(long started) => (long)Stopwatch.GetElapsedTime(started).TotalMilliseconds;
 }
 
 /// <summary>Содержит только безопасный код доставки, без адреса, ссылки, SMTP ответа или пароля.</summary>
-public sealed class EmailDeliveryException(string code) : Exception(code);
+public sealed class EmailDeliveryException(string code, string stage = "submit") : Exception(code)
+{
+    /// <summary>Безопасный этап сбоя, заданный транспортом, без данных SMTP-сервера.</summary>
+    public string Stage { get; } = stage;
+}
