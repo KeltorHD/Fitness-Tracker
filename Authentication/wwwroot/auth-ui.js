@@ -40,11 +40,9 @@ const english = {
   "Создать аккаунт с passkey": "Create account with passkey",
   "Уже есть аккаунт?": "Already have an account?",
   "Войти": "Sign in",
-  "Для входа потребуется подтвердить адрес по ссылке в письме.": "Confirm your address using the email link before signing in.",
   "Создать аккаунт по email": "Create account with email",
   "Регистрация по email временно недоступна.": "Email registration is temporarily unavailable.",
   "Подтвердите электронную почту": "Confirm your email",
-  "Откройте письмо FitnessTracker и подтвердите адрес по ссылке. Ссылка действует 2 часа.": "Open the FitnessTracker email and confirm your address using the link. The link expires in 2 hours.",
   "Если аккаунт ожидает подтверждения, письмо будет отправлено. Проверьте также папку «Спам». Повторить отправку можно через минуту.": "If the account needs confirmation, an email will be sent. Check your spam folder too. You can request another email in a minute.",
   "Отправить письмо повторно": "Resend confirmation email",
   "Продолжить вход после подтверждения": "Continue signing in after confirmation",
@@ -95,7 +93,11 @@ const english = {
   "Слишком много попыток. Подождите минуту.": "Too many attempts. Please wait a minute.",
   "Не удалось выполнить действие. Повторите попытку.": "Unable to complete this action. Please try again.",
   "Укажите корректный email.": "Enter a valid email address.",
-  "Не удалось подтвердить passkey. Повторите попытку.": "Unable to verify the passkey. Please try again."
+  "Не удалось подтвердить passkey. Повторите попытку.": "Unable to verify the passkey. Please try again.",
+  "Подтвердите почту в течение 2 часов после регистрации, иначе неподтверждённый аккаунт будет удалён.": "Confirm your email within 2 hours of registration or the unconfirmed account will be deleted.",
+  "Откройте письмо FitnessTracker и подтвердите адрес в течение 2 часов после регистрации. Повторное письмо не продлевает срок.": "Open your FitnessTracker email and confirm your address within 2 hours of registration. Another email does not extend this deadline.",
+  "Через 2 часа неподтверждённый аккаунт удаляется. Если срок истёк, зарегистрируйтесь заново.": "Unconfirmed accounts are deleted after 2 hours. If the deadline has passed, register again.",
+  "Если с регистрации прошло 2 часа, создайте аккаунт заново.": "If 2 hours have passed since registration, create your account again."
 };
 
 // Только настройки оформления. Credentials и содержимое полей не сохраняются.

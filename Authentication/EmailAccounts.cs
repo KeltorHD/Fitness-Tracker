@@ -8,7 +8,7 @@ using MimeKit;
 namespace FitnessTracker.Authentication;
 
 /// <summary>Отделяет локальные email-аккаунты от внешних профилей с тем же неподтверждённым адресом.</summary>
-public sealed class EmailAccounts(UserManager<ApplicationUser> users)
+public sealed class EmailAccounts(UserManager<ApplicationUser> users, TimeProvider clock)
 {
     /// <summary>Проверяет и обрезает адрес; владение почтой этим не подтверждается.</summary>
     public static string? ValidateEmail(string? email)
@@ -38,6 +38,7 @@ public sealed class EmailAccounts(UserManager<ApplicationUser> users)
         Email = email,
         EmailConfirmed = false,
         EmailConfirmationRequired = true,
+        CreatedAt = clock.GetUtcNow(),
         DisplayName = "Пользователь"
     };
 }

@@ -87,6 +87,10 @@ namespace FitnessTracker.Authentication.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CreatedAt")
+                        .HasDatabaseName("IX_AspNetUsers_PendingConfirmationCreatedAt")
+                        .HasFilter("\"EmailConfirmationRequired\" AND NOT \"EmailConfirmed\"");
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 

@@ -41,7 +41,8 @@ public sealed class EmailConfirmationThrottle(TimeProvider clock) : IDisposable
 /// <summary>Ведёт выдачу/проверку штатных Identity email tokens, не выполняя автоматический вход по ссылке.</summary>
 public sealed class EmailConfirmationService(UserManager<ApplicationUser> users, EmailAccounts accounts,
     IAccountEmailSender sender, IOptions<SmtpOptions> smtp, IConfiguration config,
-    EmailConfirmationThrottle throttle, BrowserNavigation navigation, ILogger<EmailConfirmationService> logger)
+    EmailConfirmationThrottle throttle, BrowserNavigation navigation, PendingRegistrationCleanup pendingRegistrations,
+    ILogger<EmailConfirmationService> logger)
 {
     /// <summary>Новая email-регистрация доступна только при настроенной доставке.</summary>
     public bool IsAvailable => smtp.Value.Enabled;
@@ -77,6 +78,7 @@ public sealed class EmailConfirmationService(UserManager<ApplicationUser> users,
         if (user is null) LogSkipped(attemptId, "account_not_found");
         else if (!user.EmailConfirmationRequired) LogSkipped(attemptId, "confirmation_not_required");
         else if (user.EmailConfirmed) LogSkipped(attemptId, "already_confirmed");
+        else if (pendingRegistrations.IsExpired(user)) LogSkipped(attemptId, "registration_expired");
         else await SendAsync(user, user.Email!, attemptId, cancellationToken);
         return result;
     }
@@ -94,7 +96,7 @@ public sealed class EmailConfirmationService(UserManager<ApplicationUser> users,
         try { token = new UTF8Encoding(false, true).GetString(WebEncoders.Base64UrlDecode(input.Code!)); }
         catch (Exception error) when (error is FormatException or DecoderFallbackException) { return new(false); }
         var user = await users.FindByIdAsync(input.UserId!);
-        if (user is null) return new(false);
+        if (user is null || pendingRegistrations.IsExpired(user)) return new(false);
         var confirmed = await users.ConfirmEmailAsync(user, token);
         return new(confirmed.Succeeded);
     }

@@ -12,7 +12,7 @@ namespace FitnessTracker.Authentication;
 public sealed class PasskeyService(UserManager<ApplicationUser> users, SignInManager<ApplicationUser> signIn,
     EmailAccounts accounts, PasskeyChallenges challenges, AuthDbContext database, BrowserNavigation navigation,
     IOpenIddictAuthorizationManager authorizations, IOpenIddictTokenManager tokens, IHttpContextAccessor contexts,
-    EmailConfirmationService emailConfirmation)
+    EmailConfirmationService emailConfirmation, PendingRegistrationCleanup pendingRegistrations)
 {
     /// <summary>Связывает email и новый ID с защищённым attestation state без создания пользователя.</summary>
     public async Task<string> StartRegistrationAsync(ClaimsPrincipal principal, PasskeyRegistrationInput input,
@@ -41,6 +41,7 @@ public sealed class PasskeyService(UserManager<ApplicationUser> users, SignInMan
         var result = await signIn.PerformPasskeyAttestationAsync(input.CredentialJson!);
         if (!result.Succeeded || EmailAccounts.ValidateRegistrationEmail(result.UserEntity.Name) is not { } address ||
             !Guid.TryParse(result.UserEntity.Id, out _)) throw Failure();
+        await pendingRegistrations.DeleteForRegistrationAsync(users.NormalizeName(accounts.UserName(address)), cancellationToken);
         await using var transaction = await database.Database.BeginTransactionAsync(IsolationLevel.Serializable, cancellationToken);
         var user = accounts.NewUser(address, result.UserEntity.Id);
         if (await users.FindByPasskeyIdAsync(result.Passkey.CredentialId) is not null) throw Failure();

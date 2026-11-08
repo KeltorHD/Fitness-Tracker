@@ -44,6 +44,10 @@ public partial class Program
         builder.Services.AddScoped<EmailConfirmationService>();
         builder.Services.AddSingleton<EmailConfirmationThrottle>();
         builder.Services.TryAddSingleton(TimeProvider.System);
+        builder.Services.AddScoped<PendingRegistrationCleanup>();
+        // HTTP fixtures управляют временем и очисткой явно; обычный запуск начинает её после миграций.
+        if (!builder.Environment.IsEnvironment("Testing"))
+            builder.Services.AddHostedService<PendingRegistrationCleanupWorker>();
         builder.Services.AddScoped<PasskeyService>();
         builder.Services.AddScoped<ExternalLoginService>();
         builder.Services.AddScoped<AuthorizationService>();
@@ -70,7 +74,7 @@ public partial class Program
             options.Password.RequireNonAlphanumeric = false;
         }).AddEntityFrameworkStores<AuthDbContext>().AddDefaultTokenProviders();
         builder.Services.AddScoped<IUserConfirmation<ApplicationUser>, EmailAccountConfirmation>();
-        builder.Services.Configure<DataProtectionTokenProviderOptions>(options => options.TokenLifespan = TimeSpan.FromHours(2));
+        builder.Services.Configure<DataProtectionTokenProviderOptions>(options => options.TokenLifespan = PendingRegistrationCleanup.Lifetime);
         builder.Services.Configure<PasswordHasherOptions>(options => options.IterationCount = 210_000);
         builder.Services.AddScoped<EmailAccounts>();
         builder.Services.AddSingleton<UnknownPasswordCheck>();
