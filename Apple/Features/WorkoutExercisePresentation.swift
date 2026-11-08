@@ -2,7 +2,7 @@ import FitnessTrackerCore
 import Foundation
 import Observation
 
-struct WorkoutSetDraft: Equatable {
+struct WorkoutSetDraft {
   var weight: String {
     get { weightText }
     set {
@@ -129,9 +129,7 @@ enum WorkoutExerciseAdvance { case stay, moved, finished }
   private let draftStore: WorkoutExerciseDraftStore
   private(set) var drafts: [UUID: WorkoutSetDraft] {
     get { draftStore.values }
-    set {
-      if draftStore.values != newValue { draftStore.values = newValue }
-    }
+    set { draftStore.values = newValue }
   }
   private(set) var previousValues: PreviousWorkoutValues?
   @ObservationIgnored private var history: [Workout] = []

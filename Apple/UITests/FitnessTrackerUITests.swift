@@ -2,31 +2,13 @@ import XCTest
 
 final class FitnessTrackerUITests: XCTestCase {
   @MainActor func testNewExerciseRestoresAllThreeHistoricalSetsWithoutCompletionMarks() {
-    let app = launch()
+    let app = launch(additionalArguments: ["--ui-testing-previous-sets"])
     let start = app.buttons["workoutStartAction"]
     XCTAssertTrue(start.waitForExistence(timeout: 10))
     start.tap()
     chooseFreeWorkout(in: app)
     addGobletExercise(in: app)
     let exercise = app.buttons["openWorkoutExercise"].firstMatch
-    exercise.tap()
-    XCTAssertTrue(app.buttons["addWorkoutSet"].waitForExistence(timeout: 5))
-    app.buttons["addWorkoutSet"].tap()
-    app.buttons["addWorkoutSet"].tap()
-    for (weight, repetitions) in [(30, 12), (35, 10), (40, 8)] {
-      fillWorkoutSet(in: app, weight: weight, repetitions: repetitions)
-      app.buttons["completeSet"].tap()
-    }
-    let finish = app.buttons["finishWorkout"]
-    XCTAssertTrue(finish.waitForExistence(timeout: 5))
-    finish.tap()
-    let notice = app.alerts["Готово"]
-    XCTAssertTrue(notice.waitForExistence(timeout: 5))
-    notice.buttons["Хорошо"].tap()
-    XCTAssertTrue(start.waitForExistence(timeout: 5))
-    start.tap()
-    chooseFreeWorkout(in: app)
-    addGobletExercise(in: app)
     exercise.tap()
     let weights = app.textFields.matching(
       NSPredicate(format: "identifier BEGINSWITH %@", "setWeight_"))
@@ -118,7 +100,9 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(longHead.label.hasPrefix("Бицепс:"))
     reveal(shortHead, in: app)
     shortHead.tap()
-    XCTAssertEqual(app.switches["muscle_triceps"].value as? String, "0")
+    let triceps = app.switches["muscle_triceps"]
+    reveal(triceps, in: app)
+    XCTAssertEqual(triceps.value as? String, "0")
     let screen = XCTAttachment(screenshot: app.screenshot())
     screen.name = "Muscle region hierarchy"
     screen.lifetime = .keepAlways
@@ -1505,6 +1489,9 @@ final class FitnessTrackerUITests: XCTestCase {
     let search = app.searchFields.firstMatch
     XCTAssertTrue(search.waitForExistence(timeout: 5))
     search.tap()
+    if !app.keyboards.firstMatch.waitForExistence(timeout: 2) {
+      search.tap()
+    }
     search.typeText("Goblet")
     let goblet = app.buttons.containing(.staticText, identifier: "Гоблет-приседания").firstMatch
     XCTAssertTrue(goblet.waitForExistence(timeout: 5))

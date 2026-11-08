@@ -15080,6 +15080,23 @@
         }
       }
     },
+    "Тест: три предыдущих подхода": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Тест: три предыдущих подхода"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Test: three previous sets"
+          }
+        }
+      }
+    },
     "Техника выполнения": {
       "extractionState": "manual",
       "localizations": {

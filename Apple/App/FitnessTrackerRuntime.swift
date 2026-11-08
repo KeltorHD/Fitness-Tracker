@@ -30,6 +30,9 @@ import Foundation
     if testing, ProcessInfo.processInfo.arguments.contains("--ui-testing-training-groups") {
       try TrainingGroupsUITestFixture.seed(into: repository)
     }
+    if testing, ProcessInfo.processInfo.arguments.contains("--ui-testing-previous-sets") {
+      try TrainingGroupsUITestFixture.seedPreviousSets(into: repository)
+    }
     defaults.register(defaults: ["weeklyGoal": 3, "liveActivities": !testing])
     let accountSession: AccountSession?
     do {
