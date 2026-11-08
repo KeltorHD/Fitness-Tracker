@@ -202,7 +202,9 @@ public partial class Program
         if (!app.Environment.IsDevelopment()) app.UseHsts();
         app.Use(async (context, next) =>
         {
-            context.Response.Headers.CacheControl = "no-store";
+            // Совпадает с требованиями antiforgery, чтобы формы не перезаписывали заголовки с Warning.
+            context.Response.Headers.CacheControl = "no-cache, no-store";
+            context.Response.Headers.Pragma = "no-cache";
             context.Response.Headers["Referrer-Policy"] = "no-referrer";
             context.Response.Headers["X-Content-Type-Options"] = "nosniff";
             context.Response.Headers.ContentSecurityPolicy = "default-src 'none'; style-src 'self'; script-src 'self'; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'";

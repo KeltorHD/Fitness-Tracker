@@ -396,6 +396,8 @@ Challenge живёт не более пяти минут и расходуетс
 
 Скрипты и CSS загружаются с собственного origin, SVG-иконки встроены в HTML; внешних шрифтов/CDN нет. Строгая CSP сохранена. Пустая сводка ошибок Razor не рендерится, чтобы штатный скрытый `li` не добавлял запрещённый inline style. Сообщения и переводы вставляются через textContent. Локально Chromium проверил обе темы/RU/EN на 320, 393, 768 и 1440 px, отсутствие горизонтального переполнения, сохранение настроек, password toggle/confirmation, passwordless register/logout/login через настоящий WebAuthn с виртуальным authenticator и одноразовой PostgreSQL, отсутствие пароля в passkey requests и регистрацию без JavaScript. Ошибок JavaScript/CSP нет. Safari, VoiceOver и iOS WebAuthenticationSession требуют проверки на устройстве.
 
+Authentication заранее выставляет `Cache-Control: no-cache, no-store` и `Pragma: no-cache`, согласованные с antiforgery. Это запрещает хранение ответов с токенами форм. Прежнее предупреждение `DefaultAntiforgery[8]` означало, что ASP.NET добавлял недостающий `no-cache` к заранее заданному `no-store` ([реализация ASP.NET Core](https://github.com/dotnet/aspnetcore/blob/v10.0.0/src/Antiforgery/src/Internal/DefaultAntiforgery.cs#L331)). После исправления перезапись не нужна; фильтры логирования и проверка CSRF остаются включены. Настройки Nginx менять не требуется.
+
 [Реальные браузерные скриншоты](previews/README.md#работающие-страницы-2026-11-07) сохранены в репозитории. Для обновления оформления получите изменения и пересоберите сервис:
 
 ```bash
@@ -531,6 +533,7 @@ dotnet ef migrations has-pending-model-changes --project Backend
 | `HTTP` | `Tests/Server/BackendTests.cs` | JWT/subject и изоляция пользователей без scopes, отсутствие дополнительных прав от scopes в токене, MIME type, SHA-256/headers/фиксированное время, квота, идемпотентность, откат при отказе/отмене записи |
 | `HTTP` | `Tests/Server/AuthenticationTests.cs` | PKCE, code/refresh/revoke, блокировка аккаунта, scopes, prompt=none, antiforgery, внешние привязки, отзыв сессий/гонка отвязки и удаление данных |
 | `HTTP` | `Tests/Server/AuthenticationSecurityTests.cs` | IP-лимит OAuth errors/discovery применяется до обработки запросов OpenIddict |
+| `HTTP` | `Tests/Server/AntiforgeryCacheTests.cs` | Антикеширование пяти форм и ответа с ошибкой валидации, наличие antiforgery token и отсутствие предупреждения о перезаписи заголовков при штатных logging filters |
 | `HTTP` | `Tests/Server/BackendSecurityTests.cs` | Запрет unsigned/HS256 JWT, обязательный exp и запрет преждевременного использования токена |
 | `HTTP` | `Tests/Server/HostNginxForwardingTests.cs` | Исходный HTTPS за доверенным proxy, отказ поддельному `X-Forwarded-Proto` от чужого peer, IPv4 и IPv4-mapped IPv6 |
 | `HTTP` | `Tests/Server/BackendIntrospectionTests.cs` | Отсутствие positive cache, 401/503 и сохранность данных, recovery с прежним JWT, rate limit до обращения к Auth, startup validation |

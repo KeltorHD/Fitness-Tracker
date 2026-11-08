@@ -22,7 +22,8 @@ public sealed class AppAssociationTests
         { BaseAddress = new Uri("https://localhost"), AllowAutoRedirect = false });
         using var response = await client.GetAsync("/.well-known/apple-app-site-association");
         Assert.Equal(status, response.StatusCode);
-        Assert.Equal("no-store", response.Headers.CacheControl?.ToString());
+        Assert.True(response.Headers.CacheControl?.NoStore is true);
+        Assert.True(response.Headers.CacheControl?.NoCache is true);
         if (status != HttpStatusCode.OK) return;
         var association = await response.Content.ReadFromJsonAsync<JsonElement>();
         Assert.Equal(identifier, Assert.Single(association.GetProperty("webcredentials").GetProperty("apps").EnumerateArray()).GetString());
@@ -41,6 +42,7 @@ public sealed class AppAssociationTests
         Assert.DoesNotContain("secret-", content);
         Assert.DoesNotContain("attacker", content);
         Assert.Null(response.Headers.Location);
-        Assert.Equal("no-store", response.Headers.CacheControl?.ToString());
+        Assert.True(response.Headers.CacheControl?.NoStore is true);
+        Assert.True(response.Headers.CacheControl?.NoCache is true);
     }
 }
