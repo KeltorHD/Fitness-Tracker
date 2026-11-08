@@ -6,6 +6,7 @@ struct WorkoutExerciseView: View {
   @Environment(\.locale) private var locale
   @Environment(AppStore.self) private var store
   @Environment(\.dismiss) private var dismiss
+  @Environment(\.scenePhase) private var scenePhase
   @State private var model: WorkoutExercisePresentation
   @State private var error: String?
   @State private var noteRequest: SetNoteRequest?
@@ -27,10 +28,8 @@ struct WorkoutExerciseView: View {
     if store.active?.id == workoutID { return store.active }
     return store.workouts.first { $0.id == workoutID }
   }
-  init(workout: Workout, exerciseID: UUID, unit: WeightUnit) {
+  init(workout: Workout, presentation: WorkoutExercisePresentation) {
     workoutID = workout.id
-    let presentation = WorkoutExercisePresentation(
-      workout: workout, exerciseID: exerciseID, unit: unit, locale: L10n.numberLocale)
     _model = State(initialValue: presentation)
     _numberPad = State(
       initialValue: WorkoutNumberPadModel(editor: presentation, locale: L10n.numberLocale))
@@ -98,7 +97,16 @@ struct WorkoutExerciseView: View {
     .onChange(of: store.workouts, initial: true) { _, history in
       if let workout { model.updateHistory(history, for: workout) }
     }
-    .onDisappear { numberPad.dismiss() }
+    .onDisappear {
+      numberPad.dismiss()
+      store.saveExerciseInputs(model, workoutID: workoutID)
+    }
+    .onChange(of: numberPad.field) { _, _ in
+      store.saveExerciseInputs(model, workoutID: workoutID)
+    }
+    .onChange(of: scenePhase) { _, phase in
+      if phase != .active { store.saveExerciseInputs(model, workoutID: workoutID) }
+    }
     .onChange(of: store.tracker.recording?.workoutID) { heartRateExpanded = false }
     .onChange(of: store.tracker.deviceProfile) { heartRateExpanded = false }
     .fullScreenCover(item: $mediaExercise) { ExerciseMediaViewer(exercise: $0) }
@@ -693,10 +701,22 @@ struct WorkoutExerciseSheet: View {
   let workout: Workout
   let exerciseID: UUID
   let unit: WeightUnit
+  @State private var presentation: WorkoutExercisePresentation?
 
   var body: some View {
     NavigationStack {
-      WorkoutExerciseView(workout: workout, exerciseID: exerciseID, unit: unit)
+      if let presentation {
+        WorkoutExerciseView(workout: workout, presentation: presentation)
+      } else {
+        ProgressView()
+      }
+    }
+    .task {
+      guard presentation == nil else { return }
+      let current = store.workouts.first { $0.id == workout.id } ?? workout
+      presentation = WorkoutExercisePresentation(
+        workout: current, exerciseID: exerciseID, unit: unit, locale: L10n.numberLocale,
+        history: store.workouts, draftStore: store.exerciseDrafts(for: current, unit: unit))
     }
     .tint(colorTheme.accent)
     .presentationDetents([.large])

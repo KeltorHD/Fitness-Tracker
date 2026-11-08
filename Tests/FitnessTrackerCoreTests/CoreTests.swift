@@ -3,6 +3,52 @@ import Testing
 
 @testable import FitnessTrackerCore
 
+@Test func pendingInputsPersistIndependentlyWithoutCompletingOrStartingRest() throws {
+  let row = WorkoutExercise(exercise: ExerciseCatalog.all[0], sets: [WorkoutSet(repetitions: 0)])
+  var workout = Workout(name: "Ввод", exercises: [row], restSeconds: 90)
+  try WorkoutEngine.updatePendingValues([row.sets[0].id: .init(weightKG: 42.5)], in: &workout)
+  #expect(workout.exercises[0].sets[0].weightKG == 42.5)
+  #expect(workout.exercises[0].sets[0].repetitions == 0)
+  try WorkoutEngine.pause(&workout)
+  try WorkoutEngine.updatePendingValues([row.sets[0].id: .init(repetitions: 11)], in: &workout)
+  let restored = try JSONDecoder().decode(Workout.self, from: JSONEncoder().encode(workout))
+  #expect(restored.exercises[0].sets[0].repetitions == 11)
+  #expect(restored.exercises[0].sets[0].weightKG == 42.5)
+  #expect(restored.completedSets == 0 && restored.volume == 0 && restored.restEndsAt == nil)
+}
+
+@Test func pendingInputUpdatesRejectRecordedTargetsAndInvalidBatchesAtomically() throws {
+  let row = WorkoutExercise(
+    exercise: ExerciseCatalog.all[0],
+    sets: [WorkoutSet(weightKG: 50, dropStages: [DropSetStage(weightKG: 40)])])
+  var workout = Workout(name: "Дропсет", exercises: [row])
+  let target = row.sets[0].id
+  let drop = try #require(row.sets[0].dropStages?.first?.id)
+  try WorkoutEngine.updatePendingValues(
+    [target: .init(weightKG: 30), drop: .init(weightKG: 20)], in: &workout)
+  let original = workout
+  #expect(throws: TrainingError.invalidDropSet) {
+    try WorkoutEngine.updatePendingValues([target: .init(weightKG: 10)], in: &workout)
+  }
+  #expect(workout == original)
+  #expect(throws: TrainingError.missingSet) {
+    try WorkoutEngine.updatePendingValues(
+      [target: .init(repetitions: 12), UUID(): .init(weightKG: 10)], in: &workout)
+  }
+  #expect(workout == original)
+  try WorkoutEngine.completeSet(
+    in: &workout, exerciseID: row.id, setID: target, repetitions: 8, weightKG: 30)
+  let recorded = workout
+  #expect(throws: TrainingError.invalidState) {
+    try WorkoutEngine.updatePendingValues([target: .init(weightKG: 35)], in: &workout)
+  }
+  #expect(workout == recorded)
+  try WorkoutEngine.finish(&workout)
+  #expect(throws: TrainingError.invalidState) {
+    try WorkoutEngine.updatePendingValues([drop: .init(weightKG: 15)], in: &workout)
+  }
+}
+
 private let epoch = Date(timeIntervalSince1970: 1_700_000_000)
 private func session() -> Workout {
   Workout(

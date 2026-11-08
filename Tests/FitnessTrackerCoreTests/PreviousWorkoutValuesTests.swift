@@ -3,6 +3,64 @@ import Testing
 
 @testable import FitnessTrackerCore
 
+@Test func applyingHistoryCopiesAllRecordedTargetsWithFreshIDsOnlyOnce() throws {
+  let date = Date(timeIntervalSince1970: 1000)
+  let exercise = Exercise(name: "Жим", muscle: .chest)
+  let sets = [
+    WorkoutSet(repetitions: 15, weightKG: 20, isWarmup: true, completedAt: date),
+    WorkoutSet(repetitions: 10, weightKG: 40, completedAt: date, note: "Историческая заметка"),
+    WorkoutSet(
+      repetitions: 8, weightKG: 50, completedAt: date,
+      dropStages: [DropSetStage(repetitions: 6, weightKG: 35, completedAt: date)]),
+    WorkoutSet(repetitions: 5, weightKG: 60),
+  ]
+  let previous = try previousValuesFixture(
+    at: date, rows: [WorkoutExercise(exercise: exercise, sets: sets)])
+  let row = WorkoutExercise(exercise: exercise, sets: [WorkoutSet(repetitions: 0)])
+  var workout = Workout(name: "Новая", startedAt: date.addingTimeInterval(1000), exercises: [row])
+  try WorkoutEngine.applyPreviousTargets(to: [row.id], in: &workout, history: [previous])
+  let copied = workout.exercises[0].sets
+  #expect(copied.count == 3)
+  #expect(copied.map(\.repetitions) == [15, 10, 8])
+  #expect(copied.map(\.weightKG) == [20, 40, 50])
+  #expect(copied[0].isWarmup && copied[2].dropStages?.first?.weightKG == 35)
+  #expect(copied.allSatisfy { $0.note == nil })
+  #expect(workout.completedSets == 0 && workout.volume == 0 && workout.restEndsAt == nil)
+  #expect(
+    Set(sets.flatMap(\.stages).map(\.id)).isDisjoint(with: copied.flatMap(\.stages).map(\.id)))
+  try WorkoutEngine.removeSet(exerciseID: row.id, setID: copied[2].id, from: &workout)
+  let edited = workout
+  try WorkoutEngine.applyPreviousTargets(to: [row.id], in: &workout, history: [previous])
+  #expect(workout == edited)
+  let restored = try JSONDecoder().decode(Workout.self, from: JSONEncoder().encode(workout))
+  #expect(restored == workout)
+}
+
+@Test func applyingHistoryKeepsRepeatedOccurrencesAndDoesNotFillFromOlderSessions() throws {
+  let date = Date(timeIntervalSince1970: 1000)
+  let exercise = Exercise(name: "Тяга", muscle: .back)
+  let history = try previousValuesFixture(
+    at: date,
+    rows: [
+      WorkoutExercise(exercise: exercise, sets: [WorkoutSet(weightKG: 40, completedAt: date)]),
+      WorkoutExercise(
+        exercise: exercise,
+        sets: [
+          WorkoutSet(weightKG: 55, completedAt: date), WorkoutSet(weightKG: 60, completedAt: date),
+        ]),
+    ])
+  let rows = (0..<3).map { _ in
+    WorkoutExercise(exercise: exercise, sets: [WorkoutSet(repetitions: 0)])
+  }
+  var current = Workout(name: "Сейчас", startedAt: date.addingTimeInterval(1000), exercises: rows)
+  try WorkoutEngine.applyPreviousTargets(
+    to: Set(rows.map(\.id)), in: &current, history: [history])
+  #expect(current.exercises.map { $0.sets.count } == [1, 2, 1])
+  #expect(current.exercises[0].sets.map(\.weightKG) == [40])
+  #expect(current.exercises[1].sets.map(\.weightKG) == [55, 60])
+  #expect(current.exercises[2].sets[0].repetitions == 0)
+}
+
 private func previousValuesFixture(
   at date: Date, rows: [WorkoutExercise], id: UUID = UUID()
 ) throws -> Workout {

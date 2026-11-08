@@ -7,8 +7,52 @@ public enum WorkoutExerciseInsertion: Equatable, Sendable {
   case after(UUID)
 }
 
+/// Independently entered numeric values; nil leaves the corresponding target unchanged.
+public struct WorkoutSetInputValues: Equatable, Sendable {
+  public let repetitions: Int?
+  public let weightKG: Double?
+
+  public init(repetitions: Int? = nil, weightKG: Double? = nil) {
+    self.repetitions = repetitions
+    self.weightKG = weightKG
+  }
+}
+
 /// Value-based state machine. Callers persist a new value only after a successful mutation.
 public enum WorkoutEngine {
+  /// Saves pending input without marking targets complete or changing rest and selection.
+  public static func updatePendingValues(
+    _ values: [UUID: WorkoutSetInputValues], in workout: inout Workout
+  ) throws {
+    guard [.active, .paused].contains(workout.status) else { throw TrainingError.invalidState }
+    var candidate = workout
+    var remaining = Set(values.keys)
+    for row in candidate.exercises.indices {
+      for index in candidate.exercises[row].sets.indices {
+        var set = candidate.exercises[row].sets[index]
+        if let input = values[set.id] {
+          guard set.completedAt == nil else { throw TrainingError.invalidState }
+          if let weight = input.weightKG { set.weightKG = weight }
+          if let repetitions = input.repetitions { set.repetitions = repetitions }
+          remaining.remove(set.id)
+        }
+        if var stages = set.dropStages {
+          for stage in stages.indices {
+            guard let input = values[stages[stage].id] else { continue }
+            guard stages[stage].completedAt == nil else { throw TrainingError.invalidState }
+            if let weight = input.weightKG { stages[stage].weightKG = weight }
+            if let repetitions = input.repetitions { stages[stage].repetitions = repetitions }
+            remaining.remove(stages[stage].id)
+          }
+          set.dropStages = stages
+        }
+        candidate.exercises[row].sets[index] = set
+      }
+    }
+    guard remaining.isEmpty else { throw TrainingError.missingSet }
+    try Validation.workout(candidate)
+    workout = candidate
+  }
   public static func setBodyWeight(_ weightKG: Double?, in workout: inout Workout) throws {
     guard [.active, .paused].contains(workout.status) else { throw TrainingError.invalidState }
     if let weightKG { try Validation.bodyWeight(weightKG) }
@@ -133,8 +177,7 @@ public enum WorkoutEngine {
       return TemplateExercise(
         exercise: item.exercise, setCount: completed.count, repetitions: first.repetitions,
         weightKG: first.weightKG, loadMultiplier: first.loadMultiplier,
-        plannedSets: completed.contains(where: { $0.isWarmup || $0.isDropSet || $0.note != nil })
-          ? completed.map { $0.freshCopy(performedOnly: true) } : nil,
+        plannedSets: completed.map { $0.freshCopy(performedOnly: true) },
         supersetID: item.supersetID.map { id in
           if let existing = groupIDs[id] { return existing }
           let new = UUID()

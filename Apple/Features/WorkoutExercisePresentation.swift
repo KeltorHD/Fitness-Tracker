@@ -2,7 +2,7 @@ import FitnessTrackerCore
 import Foundation
 import Observation
 
-struct WorkoutSetDraft {
+struct WorkoutSetDraft: Equatable {
   var weight: String {
     get { weightText }
     set {
@@ -88,6 +88,26 @@ struct WorkoutSetDraft {
         loadMultiplier: result.loadMultiplier))
     return result
   }
+
+  /// Persist complete valid pairs; an absent weight must never turn into an implicit zero load.
+  func pendingValues(unit: WeightUnit) -> WorkoutSetInputValues? {
+    guard weightWasEdited || repetitionsWereEdited,
+      let weight = try? weightInKG(unit: unit), let repetitions = try? repetitionCount()
+    else { return nil }
+    return WorkoutSetInputValues(repetitions: repetitions, weightKG: weight)
+  }
+}
+
+/// Session-owned text survives dismissal, including explicit clears and unfinished decimals.
+@MainActor @Observable final class WorkoutExerciseDraftStore {
+  let workoutID: UUID
+  let unit: WeightUnit
+  var values: [UUID: WorkoutSetDraft] = [:]
+
+  init(workoutID: UUID, unit: WeightUnit) {
+    self.workoutID = workoutID
+    self.unit = unit
+  }
 }
 
 struct WorkoutSetCompletion {
@@ -106,7 +126,13 @@ enum WorkoutExerciseAdvance { case stay, moved, finished }
   private(set) var selectedStageID: UUID?
   var selectedTargetID: UUID? { selectedStageID ?? selectedSetID }
   private(set) var selectedSetID: UUID?
-  private(set) var drafts: [UUID: WorkoutSetDraft] = [:]
+  private let draftStore: WorkoutExerciseDraftStore
+  private(set) var drafts: [UUID: WorkoutSetDraft] {
+    get { draftStore.values }
+    set {
+      if draftStore.values != newValue { draftStore.values = newValue }
+    }
+  }
   private(set) var previousValues: PreviousWorkoutValues?
   @ObservationIgnored private var history: [Workout] = []
   @ObservationIgnored private var pendingCompletionID: UUID?
@@ -115,13 +141,19 @@ enum WorkoutExerciseAdvance { case stay, moved, finished }
   private let workoutID: UUID
 
   init(
-    workout: Workout, exerciseID: UUID, unit: WeightUnit, locale: Locale, history: [Workout] = []
+    workout: Workout, exerciseID: UUID, unit: WeightUnit, locale: Locale, history: [Workout] = [],
+    draftStore: WorkoutExerciseDraftStore? = nil
   ) {
     self.exerciseID = exerciseID
     self.unit = unit
     self.locale = locale
     self.history = history
     workoutID = workout.id
+    if let draftStore, draftStore.workoutID == workout.id, draftStore.unit == unit {
+      self.draftStore = draftStore
+    } else {
+      self.draftStore = WorkoutExerciseDraftStore(workoutID: workout.id, unit: unit)
+    }
     refresh(workout)
     focusPendingSuperset(in: workout)
   }
@@ -173,6 +205,19 @@ enum WorkoutExerciseAdvance { case stay, moved, finished }
   }
   func editWeight(_ text: String, setID: UUID) { drafts[setID]?.weight = text }
   func editRepetitions(_ text: String, setID: UUID) { drafts[setID]?.repetitions = text }
+  func pendingValues(in workout: Workout) -> [UUID: WorkoutSetInputValues] {
+    guard workout.id == workoutID else { return [:] }
+    var values: [UUID: WorkoutSetInputValues] = [:]
+    for stage in workout.exercises.flatMap(\.sets).flatMap(\.stages)
+    where stage.completedAt == nil {
+      guard let input = drafts[stage.id]?.pendingValues(unit: unit),
+        input.weightKG.map({ $0 != stage.weightKG }) == true
+          || input.repetitions.map({ $0 != stage.repetitions }) == true
+      else { continue }
+      values[stage.id] = input
+    }
+    return values
+  }
   func updateHistory(_ history: [Workout], for workout: Workout) {
     guard workout.id == workoutID else { return }
     self.history = history

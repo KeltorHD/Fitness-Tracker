@@ -5,6 +5,8 @@ public struct PreviousWorkoutValues: Equatable, Sendable {
   public let workoutID: UUID
   public let date: Date
   public let stages: [UUID: DropSetStage]
+  /// Full recorded structure, used once when a new exercise is added to a session.
+  public let recordedSets: [WorkoutSet]
 
   /// Repeated exercises match by occurrence; warmup and working sets have separate ordinals.
   /// Unperformed historical targets retain their positions and never become suggestions.
@@ -57,5 +59,34 @@ public struct PreviousWorkoutValues: Equatable, Sendable {
     workoutID = previous.workout.id
     date = previous.workout.startedAt
     stages = values
+    recordedSets = previous.row.sets.filter { $0.completedAt != nil }
+  }
+}
+
+extension WorkoutEngine {
+  /// Copies the latest recorded count and values only into newly created, empty exercise rows.
+  /// Existing edits, removed sets, completed targets and explicitly repeated sessions stay intact.
+  public static func applyPreviousTargets(
+    to rowIDs: Set<UUID>, in workout: inout Workout, history: [Workout]
+  ) throws {
+    guard workout.status == .active else { throw TrainingError.invalidState }
+    var candidate = workout
+    for index in candidate.exercises.indices {
+      let row = candidate.exercises[index]
+      guard rowIDs.contains(row.id),
+        row.sets.allSatisfy({
+          $0.completedAt == nil && $0.repetitions == 0 && $0.weightKG == 0 && !$0.isDropSet
+        }),
+        let previous = PreviousWorkoutValues(exerciseRowID: row.id, in: workout, history: history)
+      else { continue }
+      candidate.exercises[index].sets = previous.recordedSets.enumerated().map { offset, set in
+        var copy = set.freshCopy(performedOnly: true)
+        // A historical note describes that session. Only explicit current plan notes carry over.
+        copy.note = row.sets.indices.contains(offset) ? row.sets[offset].note : nil
+        return copy
+      }
+    }
+    try Validation.workout(candidate)
+    workout = candidate
   }
 }

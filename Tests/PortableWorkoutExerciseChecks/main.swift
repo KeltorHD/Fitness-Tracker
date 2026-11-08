@@ -126,9 +126,65 @@ private func rejects(_ action: () throws -> Void) throws {
     try checkAutomaticExerciseAdvance(at: date)
     try checkAdvanceGuards(at: date)
     try checkAdvanceWrapsToEarlierPendingExercise(at: date)
+    try checkReopenedInputs(at: date)
     print(
       "Portable workout exercise presentation: localized/strict input, pounds precision, draft retention, repeated exercise identity, paging/reordering/removal, completion, pause/history guards and summaries passed (no Apple SDK)."
     )
+  }
+
+  @MainActor private static func checkReopenedInputs(at date: Date) throws {
+    let row = WorkoutExercise(
+      exercise: Exercise(name: "Drafts", muscle: .chest),
+      sets: [WorkoutSet(repetitions: 0), WorkoutSet(repetitions: 0), WorkoutSet(repetitions: 0)])
+    var workout = Workout(name: "Shared drafts", startedAt: date, exercises: [row])
+    let shared = WorkoutExerciseDraftStore(workoutID: workout.id, unit: .kilograms)
+    let model = WorkoutExercisePresentation(
+      workout: workout, exerciseID: row.id, unit: .kilograms, locale: Locale(identifier: "ru_RU"),
+      draftStore: shared)
+    model.editWeight("42,5", setID: row.sets[0].id)
+    model.editRepetitions("11", setID: row.sets[0].id)
+    model.editWeight("", setID: row.sets[1].id)
+    model.editRepetitions("8", setID: row.sets[1].id)
+    model.editRepetitions("12", setID: row.sets[2].id)
+    try WorkoutEngine.updatePendingValues(model.pendingValues(in: workout), in: &workout)
+    let reopened = WorkoutExercisePresentation(
+      workout: workout, exerciseID: row.id, unit: .kilograms, locale: Locale(identifier: "ru_RU"),
+      draftStore: shared)
+    try expect(
+      reopened.drafts[row.sets[0].id]?.weight == "42,5"
+        && reopened.drafts[row.sets[0].id]?.repetitions == "11"
+        && reopened.drafts[row.sets[1].id]?.weight == ""
+        && reopened.drafts[row.sets[2].id]?.weight == ""
+        && reopened.drafts[row.sets[2].id]?.repetitions == "12"
+        && workout.exercises[0].sets[2].repetitions == 0,
+      "Recreating the screen preserves entered text and explicit clears")
+    try expect(reopened.pendingValues(in: workout).isEmpty, "Unchanged input does not write again")
+    let restored = try JSONDecoder().decode(Workout.self, from: JSONEncoder().encode(workout))
+    let relaunched = WorkoutExercisePresentation(
+      workout: restored, exerciseID: row.id, unit: .kilograms, locale: Locale(identifier: "en_US"))
+    try expect(
+      relaunched.drafts[row.sets[0].id]?.weight == "42.5"
+        && relaunched.drafts[row.sets[0].id]?.repetitions == "11"
+        && restored.completedSets == 0 && restored.restEndsAt == nil,
+      "Saved valid input survives restoring a session without completing a set")
+    var unrelated = workout
+    unrelated.id = UUID()
+    let isolated = WorkoutExercisePresentation(
+      workout: unrelated, exerciseID: row.id, unit: .kilograms, locale: Locale(identifier: "en_US"),
+      draftStore: shared)
+    try expect(
+      isolated.drafts[row.sets[0].id]?.weight == "42.5",
+      "A different session never reuses another workout's raw drafts")
+    let original = workout
+    model.editWeight("invalid", setID: row.sets[0].id)
+    try expect(
+      model.pendingValues(in: workout).isEmpty, "Invalid text does not corrupt numeric data")
+    let invalidReopened = WorkoutExercisePresentation(
+      workout: workout, exerciseID: row.id, unit: .kilograms, locale: Locale(identifier: "ru_RU"),
+      draftStore: shared)
+    try expect(
+      invalidReopened.drafts[row.sets[0].id]?.weight == "invalid" && workout == original,
+      "Invalid input remains editable after reopening")
   }
 
   @MainActor private static func checkAutomaticExerciseAdvance(at date: Date) throws {

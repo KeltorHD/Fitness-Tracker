@@ -39,6 +39,7 @@ import WidgetKit
   @ObservationIgnored private let archiveFiles: any ArchiveFileHandling
   @ObservationIgnored private let accountSession: AccountSession?
   @ObservationIgnored private let now: () -> Date
+  @ObservationIgnored private var exerciseDraftStore: WorkoutExerciseDraftStore?
   @ObservationIgnored lazy var accountBackups: AccountBackupViewModel? = {
     guard let accountSession else { return nil }
     return AccountBackupViewModel(
@@ -198,6 +199,7 @@ import WidgetKit
     }
   }
   private func resetWorkspacePresentation() {
+    exerciseDraftStore = nil
     error = nil
     notice = nil
     showSession = false
@@ -226,6 +228,7 @@ import WidgetKit
     bodyWeights = measurements
     let unfinished = loaded.filter { [.active, .paused].contains($0.status) }
     active = unfinished.first { $0.id == active?.id } ?? unfinished.first
+    if exerciseDraftStore?.workoutID != active?.id { exerciseDraftStore = nil }
     currentBodyWeightKG =
       BodyWeightSummary(entries: measurements, workouts: loaded, now: now()).latest?.weightKG
       ?? active?.bodyWeightKG
@@ -415,6 +418,8 @@ import WidgetKit
   }
   private func activate(_ workout: Workout) throws {
     var workout = workout
+    try WorkoutEngine.applyPreviousTargets(
+      to: Set(workout.exercises.map(\.id)), in: &workout, history: workouts)
     try WorkoutEngine.setBodyWeight(currentBodyWeightKG, in: &workout)
     try repository.save(workout)
     try loadRepository()
@@ -469,8 +474,16 @@ import WidgetKit
   }
   @discardableResult func mutate(_ action: (inout Workout) throws -> Void) -> Bool {
     guard var workout = active else { return false }
+    let original = workout
     do {
       try action(&workout)
+      if workout.status == .active {
+        let added = workout.exercises.filter { row in
+          !original.exercises.contains { $0.id == row.id && $0.exercise.id == row.exercise.id }
+        }
+        try WorkoutEngine.applyPreviousTargets(
+          to: Set(added.map(\.id)), in: &workout, history: workouts)
+      }
       try repository.save(workout)
       try loadRepository()
       refreshIntegrations()
@@ -481,6 +494,26 @@ import WidgetKit
         message: "Не удалось сохранить изменения тренировки. Попробуйте ещё раз.")
       return false
     }
+  }
+  func exerciseDrafts(for workout: Workout, unit: WeightUnit) -> WorkoutExerciseDraftStore {
+    guard active?.id == workout.id else {
+      return WorkoutExerciseDraftStore(workoutID: workout.id, unit: unit)
+    }
+    if let exerciseDraftStore,
+      exerciseDraftStore.workoutID == workout.id, exerciseDraftStore.unit == unit
+    {
+      return exerciseDraftStore
+    }
+    let drafts = WorkoutExerciseDraftStore(workoutID: workout.id, unit: unit)
+    exerciseDraftStore = drafts
+    return drafts
+  }
+
+  func saveExerciseInputs(_ model: WorkoutExercisePresentation, workoutID: UUID) {
+    guard let active, active.id == workoutID else { return }
+    let values = model.pendingValues(in: active)
+    guard !values.isEmpty else { return }
+    mutate { try WorkoutEngine.updatePendingValues(values, in: &$0) }
   }
   func finish() {
     guard mutate({ try WorkoutEngine.finish(&$0) }) else { return }
