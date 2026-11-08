@@ -330,6 +330,20 @@ SMTP_TIMEOUT_SECONDS=10
 
 Токены генерирует/проверяет штатный [Identity DataProtectionTokenProvider](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/accconfirm?view=aspnetcore-10.0); сохраняйте прежний Data Protection key ring. Письма собираются как text/plain + text/html через [MailKit](https://www.nuget.org/packages/MailKit).
 
+### Оформление письма и ссылки
+
+HTML-шаблон — `Authentication/EmailTemplates/Confirmation.html`, встроенный ресурс сборки Authentication. Он повторяет оформление страницы входа: сиреневый фон, светлая карточка, логотип FitnessTracker и оранжево-пурпурная кнопка; тёмная тема включается в поддерживающих её почтовых клиентах. Таблицы и основные inline-стили сохраняют читаемость при ограниченной поддержке CSS; внешних изображений, шрифтов, скриптов и трекинга нет.
+
+Кнопка «Подтвердить почту» и видимый полный адрес под ней — обычные HTTPS-ссылки на одну страницу подтверждения. Адрес можно целиком скопировать; тот же URL включён в текстовую MIME-часть. Renderer экранирует HTML, не добавляя переносы или сокращения внутрь URL; MIME-тесты проверяют сохранность параметров после сериализации. GET по-прежнему только открывает страницу: подтверждение требует явной кнопки на сайте. Новое оформление появится в письмах, отправленных после обновления Authentication:
+
+```bash
+docker compose up -d --build authentication
+```
+
+Если письмо оказалось в «Спаме», ограничения почтового сервиса могут мешать переходу. Для собственного запрошенного письма в Яндекс Почте отметьте «Не спам» и снова откройте его во «Входящих» ([справка Яндекса](https://yandex.ru/support/yandex-360/customers/mail/ru/web/spam.html)). Новый HTML не гарантирует доставку во «Входящие»: репутацию отправляющего IP и настройки SPF/DKIM/DMARC проверяют отдельно. Истёкшую ссылку замените повторной отправкой на `/email/verify`.
+
+Иллюстративные HTML-превью с демонстрационным, недействительным токеном: [светлое](previews/auth-email-light.png), [тёмное](previews/auth-email-dark.png), [мобильная ширина](previews/auth-email-mobile.png). Они получены в Chromium; отображение внутри Яндекс Почты, Outlook и других почтовых клиентов требует отдельной проверки.
+
 ### Диагностика SMTP в консоли
 
 События отправки видны в обычных Docker logs:
@@ -503,6 +517,7 @@ dotnet ef migrations has-pending-model-changes --project Backend
 | `HTTP` | `Tests/Server/CredentialsTests.cs` | Email/password с подтверждением новых адресов, нормализация/уникальность, CSRF, lockout, отсутствие email merge, реальные WebAuthn attestation/assertion, origin/RP/UV/signature/replay, управление ключами и отзыв |
 | `HTTP` | `Tests/Server/EmailConfirmationTests.cs` | Новый password/passkey аккаунт без сессии до проверки почты, явный POST, неправильный/просроченный/stamp-bound токен, resend/throttle, SMTP failure и сохранность прежнего входа |
 | `Unit` | `Tests/Server/SmtpEmailTests.cs` | Независимый SMTP transport, обязательный режим TLS, MIME text/HTML, безопасные ошибки, отмена и валидация конфигурации; без реального сервера |
+| `Unit` | `Tests/Server/ConfirmationEmailTests.cs` | Кнопка и полный URL после MIME round-trip, точные параметры токена, plain text, ссылки после удаления CSS и отказ небезопасным URI без утечки значений |
 | `HTTP` | `Tests/Server/AppAssociationTests.cs` | AASA только с настроенным App ID, безопасный HTTPS fallback без отражения code/state |
 | `HTTP` | `Tests/Server/BackendTests.cs` | JWT/subject и изоляция пользователей без scopes, отсутствие дополнительных прав от scopes в токене, MIME type, SHA-256/headers/фиксированное время, квота, идемпотентность, откат при отказе/отмене записи |
 | `HTTP` | `Tests/Server/AuthenticationTests.cs` | PKCE, code/refresh/revoke, блокировка аккаунта, scopes, prompt=none, antiforgery, внешние привязки, отзыв сессий/гонка отвязки и удаление данных |
