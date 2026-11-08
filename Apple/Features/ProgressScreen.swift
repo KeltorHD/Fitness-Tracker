@@ -110,6 +110,7 @@ struct ProgressScreen: View {
                 locale: locale)
             )
             .font(.caption).foregroundStyle(.secondary)
+            .accessibilityIdentifier("resultsFooter")
           }
         }.padding(.horizontal, 16).padding(.top, 12).padding(.bottom, 24)
       }.background(FitTheme.paper).navigationTitle(L10n.text("Результаты", locale: locale))

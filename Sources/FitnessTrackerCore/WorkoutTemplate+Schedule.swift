@@ -96,15 +96,16 @@ public struct WorkoutTemplateFilter: Equatable, Sendable {
       guard matchesMuscles(template) else { return false }
       if !equipment.isEmpty {
         guard
-          template.exercises.contains(where: {
+          (template.exercises + template.variations.flatMap(\.exercises)).contains(where: {
             equipment.contains(Self.library[$0.exercise.id]?.equipment ?? .unspecified)
           })
         else { return false }
       }
       guard !tokens.isEmpty else { return true }
       let names =
-        [template.name]
-        + template.exercises.flatMap { item in
+        [template.name] + [template.baseVariationName].compactMap { $0 }
+        + template.variations.map(\.name)
+        + (template.exercises + template.variations.flatMap(\.exercises)).flatMap { item in
           guard let entry = Self.library[item.exercise.id] else { return [item.exercise.name] }
           return [item.exercise.name, entry.name, entry.englishName] + entry.aliases
         }
@@ -120,9 +121,12 @@ public struct WorkoutTemplateFilter: Equatable, Sendable {
     if !preference.isEmpty {
       return !muscles.groups.isDisjoint(with: preference.groups)
         || ExerciseMuscle.allCases.contains { muscles.contains($0) && preference.contains($0) }
+        || ExerciseMuscleRegion.allCases.contains {
+          muscles.contains($0) && preference.contains($0)
+        }
     }
     // Legacy templates without explicit targets are discoverable by their actual exercises.
-    return template.exercises.contains { item in
+    return (template.exercises + template.variations.flatMap(\.exercises)).contains { item in
       if let entry = Self.library[item.exercise.id] { return muscles.matches(entry) }
       return muscles.groups.contains(item.exercise.muscle)
     }

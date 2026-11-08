@@ -4,10 +4,16 @@ public struct BodyWeightEntry: Identifiable, Codable, Equatable, Sendable {
   public var id: UUID
   public var measuredAt: Date
   public var weightKG: Double
-  public init(id: UUID = UUID(), measuredAt: Date = Date(), weightKG: Double) {
+  /// An explicitly shared weigh-in can outlive its workout, including cancellation/deletion.
+  /// Nil keeps independent and legacy measurements independent.
+  public var workoutID: UUID?
+  public init(
+    id: UUID = UUID(), measuredAt: Date = Date(), weightKG: Double, workoutID: UUID? = nil
+  ) {
     self.id = id
     self.measuredAt = measuredAt
     self.weightKG = weightKG
+    self.workoutID = workoutID
   }
 }
 
@@ -28,8 +34,9 @@ public struct BodyWeightPoint: Identifiable, Equatable, Sendable {
   public let weightKG: Double
 }
 
-/// Independent weigh-ins plus completed workout snapshots. A workout's weight has one source of
-/// truth and is never copied into a second record. Active/cancelled workouts do not enter history.
+/// Independent weigh-ins plus completed workout snapshots. Explicitly linked weigh-ins retain
+/// their own date and survive cancellation; equal completed snapshots do not add a second point.
+/// Matching unrelated measurements by weight or date would erase real records, so links are explicit.
 public struct BodyWeightSummary: Equatable, Sendable {
   public let points: [BodyWeightPoint]
   public var latest: BodyWeightPoint? { points.first }
@@ -38,13 +45,19 @@ public struct BodyWeightSummary: Equatable, Sendable {
     return latest.weightKG - previous.weightKG
   }
   public init(entries: [BodyWeightEntry], workouts: [Workout], now: Date = Date()) {
-    let measurements = entries.filter { $0.measuredAt <= now }.map {
+    let recorded = entries.filter { $0.measuredAt <= now }
+    var linkedWeights: [UUID: Set<Double>] = [:]
+    for entry in recorded {
+      if let id = entry.workoutID { linkedWeights[id, default: []].insert(entry.weightKG) }
+    }
+    let measurements = recorded.map {
       BodyWeightPoint(source: .measurement($0.id), date: $0.measuredAt, weightKG: $0.weightKG)
     }
     let sessions = workouts.compactMap { workout -> BodyWeightPoint? in
       guard workout.status == .completed, workout.startedAt <= now,
         let weight = workout.bodyWeightKG
       else { return nil }
+      guard linkedWeights[workout.id]?.contains(weight) != true else { return nil }
       return BodyWeightPoint(
         source: .workout(workout.id), date: workout.startedAt, weightKG: weight)
     }

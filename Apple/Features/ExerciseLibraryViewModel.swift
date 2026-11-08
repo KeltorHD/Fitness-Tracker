@@ -8,7 +8,8 @@ import Observation
   var groups: Set<MuscleGroup> {
     get { muscleSelection.groups }
     set {
-      muscleSelection = ExerciseMuscleSelection(groups: newValue, muscles: muscleSelection.muscles)
+      muscleSelection = ExerciseMuscleSelection(
+        groups: newValue, muscles: muscleSelection.muscles, regions: muscleSelection.regions)
     }
   }
   var equipment: Set<ExerciseEquipment> = [] { didSet { refresh() } }
@@ -20,6 +21,7 @@ import Observation
 
   init(
     groups: Set<MuscleGroup> = [], muscles: Set<ExerciseMuscle> = [],
+    regions: Set<ExerciseMuscleRegion> = [],
     find:
       @escaping (String, ExerciseMuscleSelection, Set<ExerciseEquipment>, AppLanguage) ->
       [ExerciseLibraryEntry] =
@@ -28,7 +30,7 @@ import Observation
       }
   ) {
     self.find = find
-    let selection = ExerciseMuscleSelection(groups: groups, muscles: muscles)
+    let selection = ExerciseMuscleSelection(groups: groups, muscles: muscles, regions: regions)
     muscleSelection = selection
     results = find("", selection, [], .russian)
   }

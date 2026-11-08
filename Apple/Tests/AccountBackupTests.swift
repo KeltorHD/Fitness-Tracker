@@ -108,7 +108,8 @@ private final class AccountURLProtocol: URLProtocol {
     let writes = await credentials.writes
     XCTAssertEqual(value?.refreshToken, "new-refresh")
     XCTAssertEqual(writes, 1)
-    let endpoint = session.configuration.authenticationURL.appendingPathComponent("connect/token")
+    let configuration = await session.configuration
+    let endpoint = configuration.authenticationURL.appendingPathComponent("connect/token")
       .absoluteString
     XCTAssertEqual(AccountURLProtocol.counts.withLock { $0[endpoint] }, 1)
   }

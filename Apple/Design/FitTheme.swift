@@ -87,8 +87,16 @@ struct SummaryChip: View {
 }
 
 struct WorkoutSummaryCard: View {
+  struct MetricAction {
+    let index: Int
+    let identifier: String
+    let hint: String
+    let perform: () -> Void
+  }
+
   @Environment(\.dynamicTypeSize) private var typeSize
   let metrics: [(title: String, value: String)]
+  var metricAction: MetricAction?
 
   var body: some View {
     Group {
@@ -96,20 +104,36 @@ struct WorkoutSummaryCard: View {
         VStack(alignment: .leading, spacing: 12) {
           ForEach(Array(metrics.enumerated()), id: \.offset) { index, metric in
             if index > 0 { Divider() }
-            metricView(metric)
+            metricView(metric, at: index)
           }
         }
       } else {
         HStack(alignment: .top, spacing: 12) {
-          ForEach(Array(metrics.enumerated()), id: \.offset) { _, metric in
-            metricView(metric).frame(maxWidth: .infinity, alignment: .leading)
+          ForEach(Array(metrics.enumerated()), id: \.offset) { index, metric in
+            metricView(metric, at: index).frame(maxWidth: .infinity, alignment: .leading)
           }
         }
       }
     }.frame(maxWidth: .infinity, alignment: .leading).fitCard()
   }
 
-  private func metricView(_ metric: (title: String, value: String)) -> some View {
+  @ViewBuilder private func metricView(_ metric: (title: String, value: String), at index: Int)
+    -> some View
+  {
+    if let metricAction, metricAction.index == index {
+      Button(action: metricAction.perform) {
+        metricLabel(metric).frame(maxWidth: .infinity, minHeight: 44, alignment: .topLeading)
+          .contentShape(.rect)
+      }
+      .buttonStyle(.plain)
+      .accessibilityLabel(metric.title).accessibilityValue(metric.value)
+      .accessibilityHint(metricAction.hint).accessibilityIdentifier(metricAction.identifier)
+    } else {
+      metricLabel(metric)
+    }
+  }
+
+  private func metricLabel(_ metric: (title: String, value: String)) -> some View {
     VStack(alignment: .leading, spacing: 6) {
       Text(metric.title).font(.caption).foregroundStyle(.secondary)
       Text(metric.value).font(.headline).monospacedDigit().foregroundStyle(.primary)

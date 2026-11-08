@@ -36,7 +36,8 @@ struct BodyWeightCard: View {
         }
       }
     }
-    .resultsCard().accessibilityIdentifier("bodyWeightCard")
+    .resultsCard().accessibilityElement(children: .contain)
+    .accessibilityIdentifier("bodyWeightCard")
     .sheet(isPresented: $recording) { BodyWeightEditor(unit: unit) }
   }
 

@@ -72,6 +72,8 @@ struct WorkoutNavigationBar: View {
     }
     .padding(.horizontal, 12)
     .padding(.bottom, 4)
+    .accessibilityElement(children: .contain)
+    .accessibilityIdentifier("workoutNavigationBar")
     .animation(reduceMotion ? nil : .snappy(duration: 0.28), value: selection)
     .animation(reduceMotion ? nil : .snappy(duration: 0.28), value: drag == nil)
     .transaction { transaction in

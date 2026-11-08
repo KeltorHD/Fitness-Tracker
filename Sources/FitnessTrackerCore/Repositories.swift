@@ -9,9 +9,25 @@ import Foundation
   func deleteTemplate(id: UUID) throws
   func bodyWeights() throws -> [BodyWeightEntry]
   func saveBodyWeight(_ entry: BodyWeightEntry) throws
+  /// Save a weigh-in and its optional ongoing-session snapshot together, or change neither.
+  func saveBodyWeight(_ entry: BodyWeightEntry, updating workout: Workout?) throws
   func deleteBodyWeight(id: UUID) throws
+  /// Remove a shared weigh-in and update its optional session snapshot atomically.
+  func deleteBodyWeight(id: UUID, updating workout: Workout?) throws
   /// Validate the complete archive, then add new records in a single transaction or change nothing.
   func importArchive(_ archive: WorkoutArchive) throws -> ArchiveImportSummary
+}
+
+extension WorkoutRepository {
+  public func saveBodyWeight(_ entry: BodyWeightEntry, updating workout: Workout?) throws {
+    // A repository without multi-record transactions must reject before making the first write.
+    guard workout == nil else { throw TrainingError.invalidState }
+    try saveBodyWeight(entry)
+  }
+  public func deleteBodyWeight(id: UUID, updating workout: Workout?) throws {
+    guard workout == nil else { throw TrainingError.invalidState }
+    try deleteBodyWeight(id: id)
+  }
 }
 
 @MainActor public protocol HealthWorkoutExporting {
@@ -51,7 +67,19 @@ import Foundation
     try Validation.bodyWeightEntry(entry)
     measurements[entry.id] = entry
   }
+  public func saveBodyWeight(_ entry: BodyWeightEntry, updating workout: Workout?) throws {
+    try Validation.bodyWeightEntry(entry)
+    if let workout { try Validation.workout(workout) }
+    // All throwing validation precedes both writes.
+    measurements[entry.id] = entry
+    if let workout { sessions[workout.id] = workout }
+  }
   public func deleteBodyWeight(id: UUID) throws { measurements[id] = nil }
+  public func deleteBodyWeight(id: UUID, updating workout: Workout?) throws {
+    if let workout { try Validation.workout(workout) }
+    measurements[id] = nil
+    if let workout { sessions[workout.id] = workout }
+  }
   public func importArchive(_ archive: WorkoutArchive) throws -> ArchiveImportSummary {
     let plan = try ArchiveImportPlan(
       archive: archive, existingWorkouts: workouts(), existingTemplates: templates(),

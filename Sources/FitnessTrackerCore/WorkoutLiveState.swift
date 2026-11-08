@@ -52,10 +52,11 @@ public struct WorkoutLiveState: Codable, Hashable, Sendable {
       restStartsAt = nil
       restEndsAt = nil
     }
-    let exercise = workout.exercises.first { $0.sets.contains { !$0.isFullyCompleted } }
+    let next = workout.nextPendingSet
+    let exercise = next.flatMap { next in workout.exercises.first { $0.id == next.exerciseID } }
     nextExerciseName = exercise.map { String($0.exercise.name.prefix(80)) }
-    nextSetNumber = exercise?.sets.firstIndex { !$0.isFullyCompleted }.map { $0 + 1 }
-    if let set = exercise?.sets.first(where: { !$0.isFullyCompleted }), set.isDropSet {
+    nextSetNumber = next.map { $0.setIndex + 1 }
+    if let next, let set = exercise?.sets.first(where: { $0.id == next.setID }), set.isDropSet {
       nextDropStageNumber = set.stages.firstIndex { $0.completedAt == nil }.map { $0 + 1 }
       nextDropStageCount = set.stages.count
     } else {

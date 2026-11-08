@@ -12,10 +12,14 @@ struct ActiveWorkoutView: View {
   @State private var showingHealthCharts = false
   @AppStorage("workoutHeartRateVisible") private var showsHeartRate = true
   @State private var insertion: InsertionRequest?
+  @State private var replacement: ReplacementRequest?
+  @State private var supersetRequest: WorkoutSupersetRequest?
   @State private var templateAddition: TemplateAdditionRequest?
   @State private var pendingRemoval: RemovalRequest?
   @State private var reorderRevision = 0
   @State private var selectedExercise: WorkoutExercise?
+  @State private var mediaExercise: Exercise?
+  @State private var editingBodyWeight = false
   @State private var confirmCancel = false
   @State private var renaming = false
   @State private var workoutName = ""
@@ -27,6 +31,12 @@ struct ActiveWorkoutView: View {
 
   private struct TemplateAdditionRequest: Identifiable {
     let id: UUID
+  }
+
+  private struct ReplacementRequest: Identifiable {
+    let id = UUID()
+    let workoutID: UUID
+    let rowID: UUID
   }
 
   private struct RemovalRequest {
@@ -46,9 +56,14 @@ struct ActiveWorkoutView: View {
           }
           .navigationTitle("").navigationBarTitleDisplayMode(.inline)
           .safeAreaInset(edge: .bottom, spacing: 0) {
-            SessionControls(workout: workout) {
-              insertion = InsertionRequest(workoutID: workout.id, position: .end)
-            }
+            SessionControls(
+              workout: workout, cancel: { confirmCancel = true },
+              addTemplates: { templateAddition = TemplateAdditionRequest(id: workout.id) },
+              addExercise: {
+                insertion = InsertionRequest(workoutID: workout.id, position: .end)
+              }
+            )
+            .padding(.bottom, 8)
           }
           .toolbar {
             ToolbarItem(placement: .topBarLeading) {
@@ -58,13 +73,9 @@ struct ActiveWorkoutView: View {
             }
             ToolbarItem(placement: .principal) {
               VStack(spacing: 1) {
-                HStack(spacing: 6) {
-                  Image(systemName: "dumbbell.fill").accessibilityHidden(true)
-                  Text(workout.name)
-                    .lineLimit(1).truncationMode(.tail).layoutPriority(1)
-                    .accessibilityIdentifier("activeWorkoutTitle")
-                }
-                .font(.headline)
+                Text(workout.name)
+                  .font(.headline).lineLimit(1).truncationMode(.tail)
+                  .accessibilityIdentifier("activeWorkoutTitle")
                 TimelineView(.periodic(from: .now, by: 1)) { timeline in
                   let duration =
                     workout.durationIsKnown == false
@@ -93,12 +104,11 @@ struct ActiveWorkoutView: View {
                 Button(L10n.text("Добавить упражнение", locale: locale), systemImage: "plus") {
                   insertion = InsertionRequest(workoutID: workout.id, position: .end)
                 }.disabled(workout.status != .active)
-                Button(
-                  L10n.text("Добавить шаблоны", locale: locale),
-                  systemImage: "rectangle.stack.badge.plus"
-                ) {
-                  templateAddition = TemplateAdditionRequest(id: workout.id)
-                }.disabled(workout.status != .active)
+                Button(L10n.text("Объединить в суперсет", locale: locale), systemImage: "link") {
+                  supersetRequest = WorkoutSupersetRequest(workoutID: workout.id)
+                }
+                .disabled(workout.status != .active || workout.exercises.count < 2)
+                .accessibilityIdentifier("groupWorkoutExercises")
                 if !store.isDemoMode {
                   Button(
                     L10n.text(
@@ -115,6 +125,7 @@ struct ActiveWorkoutView: View {
                   L10n.text("Отменить тренировку", locale: locale), systemImage: "trash",
                   role: .destructive
                 ) { confirmCancel = true }
+                .accessibilityIdentifier("cancelWorkoutMenu")
                 Section { SettingsLink() }
               } label: {
                 Image(systemName: "ellipsis").foregroundStyle(.primary)
@@ -143,14 +154,41 @@ struct ActiveWorkoutView: View {
               guard case .templates(let templates) = selection else { return }
               let saved = store.mutate { current in
                 guard current.id == request.id else { throw TrainingError.invalidState }
-                try WorkoutEngine.addTemplates(templates, to: &current)
+                try WorkoutEngine.addTemplates(templates, to: &current, prefillTargets: false)
               }
               if saved { templateAddition = nil }
+            }
+          }
+          .sheet(item: $replacement) { request in
+            ExercisePicker(
+              selectionHint:
+                "При замене записанные подходы останутся у прежнего упражнения. Новое упражнение начнётся с начальных параметров."
+            ) { exercise in
+              store.mutate { current in
+                guard current.id == request.workoutID else { throw TrainingError.invalidState }
+                try WorkoutEngine.replaceExercise(id: request.rowID, with: exercise, in: &current)
+              }
             }
           }
           .sheet(item: $selectedExercise) { row in
             WorkoutExerciseSheet(workout: workout, exerciseID: row.id, unit: unit)
           }
+          .sheet(item: $supersetRequest) { request in
+            WorkoutSupersetEditor(workout: workout, initialRowID: request.initialRowID) { ids in
+              let saved = store.mutate { current in
+                guard current.id == request.workoutID else { throw TrainingError.invalidState }
+                _ = try WorkoutEngine.groupExercises(ids, in: &current)
+              }
+              return saved
+                ? nil
+                : store.error ?? "Не удалось сохранить изменения тренировки. Попробуйте ещё раз."
+            }
+          }
+          .sheet(isPresented: $editingBodyWeight) {
+            BodyWeightEditor(
+              workout: workout, initialWeightKG: store.currentBodyWeightKG, unit: unit)
+          }
+          .fullScreenCover(item: $mediaExercise) { ExerciseMediaViewer(exercise: $0) }
           .confirmationDialog(
             L10n.text("Удалить упражнение из тренировки?", locale: locale),
             isPresented: Binding(
@@ -181,7 +219,10 @@ struct ActiveWorkoutView: View {
           ) {
             Button(L10n.text("Отменить тренировку", locale: locale), role: .destructive) {
               store.cancel()
-            }
+            }.accessibilityIdentifier("confirmCancelWorkout")
+            Button(L10n.text("Отмена", locale: locale), role: .cancel) {
+              confirmCancel = false
+            }.accessibilityIdentifier("dismissCancelWorkout")
           }
       } else {
         ContentUnavailableView(
@@ -189,7 +230,9 @@ struct ActiveWorkoutView: View {
       }
     }
     .archiveTransferPresenter(
-      when: selectedExercise == nil && insertion == nil && templateAddition == nil && !renaming
+      when: selectedExercise == nil && mediaExercise == nil && !editingBodyWeight
+        && insertion == nil && replacement == nil && supersetRequest == nil
+        && templateAddition == nil && !renaming
         && !confirmCancel
         && pendingRemoval == nil && !store.showingBodyWeightEditor
     )
@@ -197,6 +240,8 @@ struct ActiveWorkoutView: View {
     .onChange(of: store.tracker.deviceProfile) { heartRateExpanded = false }
     .onChange(of: store.active?.id) { _, id in
       if insertion?.workoutID != id { insertion = nil }
+      if replacement?.workoutID != id { replacement = nil }
+      if supersetRequest?.workoutID != id { supersetRequest = nil }
       if templateAddition?.id != id { templateAddition = nil }
       if pendingRemoval?.workoutID != id { pendingRemoval = nil }
     }
@@ -204,7 +249,9 @@ struct ActiveWorkoutView: View {
       L10n.text("Ошибка", locale: locale),
       isPresented: Binding(
         get: {
-          store.error != nil && selectedExercise == nil && insertion == nil
+          store.error != nil && selectedExercise == nil && mediaExercise == nil
+            && !editingBodyWeight && insertion == nil && replacement == nil
+            && supersetRequest == nil
             && templateAddition == nil && !renaming
             && !confirmCancel
             && pendingRemoval == nil && !store.archiveTransfer.isPresented
@@ -220,8 +267,11 @@ struct ActiveWorkoutView: View {
   private func overview(_ workout: Workout) -> some View {
     List {
       Section {
-        WorkoutSessionSummary(workout: workout, unit: unit, showsDuration: false).padding(
-          .vertical, 16)
+        WorkoutSessionSummary(
+          workout: workout, unit: unit, showsDuration: false,
+          bodyWeightKG: workout.bodyWeightKG ?? store.currentBodyWeightKG,
+          editBodyWeight: { editingBodyWeight = true }
+        ).padding(.vertical, 16)
         if showsHeartRate, !store.isDemoMode {
           WorkoutLiveHeartRateChart(
             workoutID: workout.id, isExpanded: heartRateExpanded,
@@ -265,68 +315,41 @@ struct ActiveWorkoutView: View {
       .listRowBackground(FitTheme.paper)
       Section {
         ForEach(Array(workout.exercises.enumerated()), id: \.element.id) { index, row in
-          Button {
-            selectedExercise = row
-          } label: {
-            WorkoutExerciseListRow(row: row, index: index, unit: unit, completedOnly: false)
-          }
-          .buttonStyle(.plain).accessibilityIdentifier("openWorkoutExercise")
-          .moveDisabled(workout.status != .active)
-          .swipeActions(edge: .leading, allowsFullSwipe: false) {
-            if workout.status == .active {
-              Button(L10n.text("Добавить перед", locale: locale), systemImage: "arrow.up.to.line") {
-                insertion = InsertionRequest(workoutID: workout.id, position: .before(row.id))
-              }.tint(colorTheme.accent).accessibilityIdentifier("insertWorkoutExerciseBefore")
-              Button(L10n.text("Добавить после", locale: locale), systemImage: "arrow.down.to.line")
-              {
-                insertion = InsertionRequest(workoutID: workout.id, position: .after(row.id))
-              }.tint(.secondary).accessibilityIdentifier("insertWorkoutExerciseAfter")
-            }
-          }
-          .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-            if workout.status == .active {
-              Button(
-                L10n.text("Удалить упражнение", locale: locale), systemImage: "trash"
-              ) {
-                pendingRemoval = RemovalRequest(workoutID: workout.id, row: row)
-              }.tint(.red).accessibilityIdentifier("removeWorkoutExercise")
-            }
-          }
+          exerciseRow(row, index: index, workout: workout)
         }
         .onMove { source, destination in
           var reordered = workout.exercises
           reordered.move(fromOffsets: source, toOffset: destination)
+          let groups = workout.exerciseGroups
+          var visited: Set<UUID> = []
+          let groupedOrder = reordered.flatMap { row -> [WorkoutExercise] in
+            guard let group = groups.first(where: { $0.exercises.contains { $0.id == row.id } }),
+              visited.insert(group.id).inserted
+            else { return [] }
+            return group.exercises
+          }
           let saved = store.mutate { current in
             guard current.id == workout.id else { throw TrainingError.invalidState }
-            try WorkoutEngine.reorderExercises(reordered.map(\.id), in: &current)
+            try WorkoutEngine.reorderExercises(groupedOrder.map(\.id), in: &current)
           }
-          // Rebuild the native list after a failed save to discard its temporary drag order.
-          if !saved { reorderRevision += 1 }
+          // Reset the native drag order whenever it tried to split a superset or saving failed.
+          if !saved || reordered.map(\.id) != groupedOrder.map(\.id) { reorderRevision += 1 }
         }
       }
       .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
       .listRowBackground(FitTheme.paper)
       Section {
-        Button(
-          L10n.text("Добавить шаблоны", locale: locale), systemImage: "rectangle.stack.badge.plus"
-        ) {
-          templateAddition = TemplateAdditionRequest(id: workout.id)
-        }
-        .disabled(workout.status != .active).accessibilityIdentifier("addWorkoutTemplates")
-        .font(.headline).frame(maxWidth: .infinity, alignment: .leading).padding(.vertical, 20)
         VStack(spacing: 16) {
-          WorkoutBodyWeightRow(workout: workout).fitCard()
           TextField(
             L10n.text("Заметка о тренировке", locale: locale),
             text: Binding(
               get: { store.active?.notes ?? "" },
               set: { text in store.mutate { $0.notes = text } }), axis: .vertical
           )
+          .accessibilityIdentifier("workoutNotes")
           .padding().background(FitTheme.card, in: .rect(cornerRadius: FitTheme.radius))
-          Button(L10n.text("Отменить тренировку", locale: locale), role: .destructive) {
-            confirmCancel = true
-          }
         }
+        .padding(.top, 12)
       }
       .listRowSeparator(.hidden)
       .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
@@ -338,6 +361,152 @@ struct ActiveWorkoutView: View {
     .background(FitTheme.paper).scrollDismissesKeyboard(.interactively)
     .accessibilityIdentifier("activeWorkoutScroll")
   }
+  private func exerciseRow(_ row: WorkoutExercise, index: Int, workout: Workout) -> some View {
+    VStack(spacing: 0) {
+      if let group = workout.groupContaining(exerciseID: row.id), group.isSuperset,
+        group.exercises.first?.id == row.id
+      {
+        supersetHeading(group, workout: workout)
+      }
+      HStack(alignment: .top, spacing: 14) {
+        Button {
+          selectedExercise = row
+        } label: {
+          WorkoutExerciseListRow(
+            row: row, index: index, unit: unit, completedOnly: false, showsThumbnail: false)
+        }
+        .buttonStyle(.plain).accessibilityIdentifier("openWorkoutExercise")
+        if let entry = ExerciseLibrary.entry(for: row.exercise.id),
+          entry.generatedMedia != nil || !entry.images.isEmpty
+        {
+          Button {
+            mediaExercise = row.exercise
+          } label: {
+            WorkoutExerciseThumbnail(exercise: row.exercise)
+              .frame(minWidth: 44, minHeight: 44).contentShape(.rect)
+          }
+          .buttonStyle(.plain).padding(.vertical, 16)
+          .accessibilityLabel(L10n.text("Открыть фото и анимацию упражнения", locale: locale))
+          .accessibilityValue(L10n.exerciseName(row.exercise, locale: locale))
+          .accessibilityIdentifier("openWorkoutExerciseMedia")
+        }
+      }
+    }
+    .padding(.horizontal, row.supersetID == nil ? 0 : 12)
+    .padding(.bottom, isLastSupersetRow(row, in: workout) ? 12 : 0)
+    .listRowBackground(exerciseBackground(row, workout: workout))
+    .moveDisabled(
+      workout.status != .active
+        || (row.supersetID != nil
+          && workout.groupContaining(exerciseID: row.id)?.exercises.first?.id != row.id)
+    )
+    .swipeActions(edge: .leading, allowsFullSwipe: false) {
+      if workout.status == .active {
+        Button {
+          insertion = InsertionRequest(workoutID: workout.id, position: .before(row.id))
+        } label: {
+          Image(systemName: "arrow.up.to.line")
+        }
+        .accessibilityLabel(L10n.text("Добавить перед", locale: locale))
+        .tint(colorTheme.accent).accessibilityIdentifier("insertWorkoutExerciseBefore")
+        Button {
+          insertion = InsertionRequest(workoutID: workout.id, position: .after(row.id))
+        } label: {
+          Image(systemName: "arrow.down.to.line")
+        }
+        .accessibilityLabel(L10n.text("Добавить после", locale: locale))
+        .tint(.secondary).accessibilityIdentifier("insertWorkoutExerciseAfter")
+      }
+    }
+    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+      if workout.status == .active {
+        Button {
+          pendingRemoval = RemovalRequest(workoutID: workout.id, row: row)
+        } label: {
+          Image(systemName: "trash")
+        }
+        .accessibilityLabel(L10n.text("Удалить упражнение", locale: locale))
+        .tint(.red).accessibilityIdentifier("removeWorkoutExercise")
+        Button {
+          replacement = ReplacementRequest(workoutID: workout.id, rowID: row.id)
+        } label: {
+          Image(systemName: "arrow.triangle.2.circlepath")
+        }
+        .accessibilityLabel(L10n.text("Заменить упражнение", locale: locale))
+        .tint(colorTheme.accent).accessibilityIdentifier("replaceWorkoutExercise")
+      }
+    }
+  }
+
+  private func supersetHeading(_ group: WorkoutExerciseGroup, workout: Workout) -> some View {
+    HStack(spacing: 8) {
+      Button {
+        selectedExercise = group.exercises.first
+      } label: {
+        HStack(spacing: 8) {
+          Label(L10n.text("Суперсет", locale: locale), systemImage: "link")
+            .font(.headline)
+          Text("\(group.completedRounds)/\(group.roundCount)")
+            .font(.subheadline).monospacedDigit()
+        }.frame(maxWidth: .infinity, minHeight: 44, alignment: .leading).contentShape(.rect)
+      }
+      .buttonStyle(.plain)
+      .accessibilityLabel(L10n.text("Открыть суперсет", locale: locale))
+      .accessibilityValue(
+        L10n.format(
+          "%@ из %@", String(group.completedRounds), String(group.roundCount), locale: locale)
+      )
+      .accessibilityIdentifier("openWorkoutSuperset_\(group.id)")
+      if workout.status == .active, let supersetID = group.supersetID {
+        Menu {
+          Button(L10n.text("Добавить в суперсет", locale: locale), systemImage: "plus") {
+            supersetRequest = WorkoutSupersetRequest(
+              workoutID: workout.id, initialRowID: group.exercises.first?.id)
+          }
+          Button(L10n.text("Разъединить суперсет", locale: locale), systemImage: "link") {
+            ungroup(supersetID, workout: workout)
+          }.accessibilityIdentifier("ungroupWorkoutExercises")
+        } label: {
+          Image(systemName: "ellipsis").frame(width: 44, height: 44).contentShape(.rect)
+        }
+        .accessibilityLabel(L10n.text("Действия суперсета", locale: locale))
+        .accessibilityIdentifier("workoutSupersetActions_\(group.id)")
+      }
+    }
+    .foregroundStyle(colorTheme.accent).padding(.top, 8)
+    .accessibilityElement(children: .contain)
+    .accessibilityIdentifier("workoutSuperset_\(group.id)")
+  }
+
+  private func ungroup(_ supersetID: UUID, workout: Workout) {
+    store.mutate { current in
+      guard current.id == workout.id else { throw TrainingError.invalidState }
+      try WorkoutEngine.ungroupExercises(supersetID: supersetID, in: &current)
+    }
+  }
+
+  private func isLastSupersetRow(_ row: WorkoutExercise, in workout: Workout) -> Bool {
+    guard row.supersetID != nil else { return false }
+    return workout.groupContaining(exerciseID: row.id)?.exercises.last?.id == row.id
+  }
+
+  @ViewBuilder private func exerciseBackground(_ row: WorkoutExercise, workout: Workout)
+    -> some View
+  {
+    if let group = workout.groupContaining(exerciseID: row.id), group.isSuperset {
+      let top = group.exercises.first?.id == row.id
+      let bottom = group.exercises.last?.id == row.id
+      UnevenRoundedRectangle(
+        topLeadingRadius: top ? FitTheme.radius : 0,
+        bottomLeadingRadius: bottom ? FitTheme.radius : 0,
+        bottomTrailingRadius: bottom ? FitTheme.radius : 0,
+        topTrailingRadius: top ? FitTheme.radius : 0
+      ).fill(FitTheme.card).padding(.horizontal, 16)
+    } else {
+      FitTheme.paper
+    }
+  }
+
 }
 
 struct ExercisePicker: View {
@@ -347,10 +516,13 @@ struct ExercisePicker: View {
   var selectionHint: String? = nil
   var initialGroups: Set<MuscleGroup> = []
   var initialMuscles: Set<ExerciseMuscle> = []
+  var initialRegions: Set<ExerciseMuscleRegion> = []
   let select: (Exercise) -> Void
   var body: some View {
     NavigationStack {
-      ExerciseLibraryView(initialGroups: initialGroups, initialMuscles: initialMuscles) {
+      ExerciseLibraryView(
+        initialGroups: initialGroups, initialMuscles: initialMuscles, initialRegions: initialRegions
+      ) {
         exercise in
         select(exercise)
         dismiss()

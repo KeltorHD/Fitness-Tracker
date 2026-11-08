@@ -6,6 +6,7 @@ struct WorkoutSetGroupView: View {
   let set: WorkoutSet
   let index: Int
   let workout: Workout
+  let exerciseID: UUID
   let model: WorkoutExercisePresentation
   let numberPad: WorkoutNumberPadModel
   let notesExpanded: Bool
@@ -67,6 +68,7 @@ struct WorkoutSetGroupView: View {
 
   private func row(_ value: WorkoutSet, index: Int, marker: String? = nil) -> some View {
     let child = marker != nil
+    let hasNote = value.note?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false
     return WorkoutSetRow(
       set: value, index: index, marker: marker, unit: model.unit, notesExpanded: notesExpanded,
       editable: workout.status == .active && value.completedAt == nil,
@@ -80,17 +82,24 @@ struct WorkoutSetGroupView: View {
         model.select(value.id, in: workout)
       },
       advance: { numberPad.advance(in: workout) }, editCompleted: { editCompleted(value) },
-      openNote: child ? nil : openNote,
+      openNote: child || !hasNote ? nil : openNote,
       contextActions: { contextActions(for: value, isChild: child) }
     )
     .listRowBackground(set.isDropSet ? FitTheme.paper : Color.clear)
     .listRowSeparator(set.isDropSet ? .hidden : .automatic)
     .id("number-\(value.id.uuidString)")
     .swipeActions(edge: .leading, allowsFullSwipe: false) {
-      if workout.status == .active, numberPad.field == nil {
-        Button(action: addAfter) {
-          Label(L10n.text("Добавить подход после", locale: locale), systemImage: "plus")
-        }.disabled((model.exercise(in: workout)?.sets.count ?? 30) >= 30)
+      if numberPad.field == nil {
+        if workout.status == .active {
+          Button(action: addAfter) {
+            Label(L10n.text("Добавить подход после", locale: locale), systemImage: "plus")
+          }.disabled((exercise?.sets.count ?? 30) >= 30)
+        }
+        if !child, [.active, .paused].contains(workout.status) {
+          Button(action: openNote) {
+            Label(L10n.text("Заметка к подходу", locale: locale), systemImage: "note.text")
+          }.tint(.secondary).accessibilityIdentifier("noteSwipe_\(set.id)")
+        }
       }
     }
     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
@@ -104,7 +113,7 @@ struct WorkoutSetGroupView: View {
                 ? "Удалить этап дропсета"
                 : set.isDropSet ? "Удалить группу дропсета" : "Удалить подход", locale: locale),
             systemImage: "trash")
-        }.tint(.red).disabled(!child && (model.exercise(in: workout)?.sets.count ?? 0) <= 1)
+        }.tint(.red).disabled(!child && (exercise?.sets.count ?? 0) <= 1)
           .accessibilityIdentifier("removeSetTarget_\(value.id)")
       }
     }
@@ -121,7 +130,7 @@ struct WorkoutSetGroupView: View {
       Button(action: addAfter) {
         Label(L10n.text("Добавить подход после", locale: locale), systemImage: "plus")
       }
-      .disabled((model.exercise(in: workout)?.sets.count ?? 30) >= 30)
+      .disabled((exercise?.sets.count ?? 30) >= 30)
       if set.completedAt == nil {
         if !set.isDropSet {
           Button(
@@ -149,7 +158,11 @@ struct WorkoutSetGroupView: View {
         L10n.text(set.isDropSet ? "Удалить группу дропсета" : "Удалить подход", locale: locale),
         role: .destructive, action: remove
       )
-      .disabled((model.exercise(in: workout)?.sets.count ?? 0) <= 1)
+      .disabled((exercise?.sets.count ?? 0) <= 1)
     }
+  }
+
+  private var exercise: WorkoutExercise? {
+    workout.exercises.first { $0.id == exerciseID }
   }
 }
