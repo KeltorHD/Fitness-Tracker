@@ -12,7 +12,6 @@ struct WorkoutExerciseView: View {
   @State private var noteRequest: SetNoteRequest?
   @State private var mediaExercise: Exercise?
   @State private var removal: DropGroupRemovalRequest?
-  @State private var correction: CompletedSetRequest?
   @State private var exerciseAction: ExerciseActionRequest?
   @State private var heartRateExpanded = false
   @State private var showingHeartRateSettings = false
@@ -141,25 +140,6 @@ struct WorkoutExerciseView: View {
           try WorkoutEngine.setNote(
             text, exerciseID: request.exerciseID, setID: request.id, in: &$0)
         }
-      }
-    }
-    .sheet(item: $correction) { request in
-      CompletedSetEditor(request: request, unit: model.unit) { repetitions, weight in
-        guard let workout else { return TrainingError.invalidState.localizedDescription }
-        do {
-          // Show domain validation in the editor before attempting persistence.
-          var checked = workout
-          try WorkoutEngine.correctCompletedTarget(
-            in: &checked, exerciseID: request.exerciseID, targetID: request.set.id,
-            repetitions: repetitions, weightKG: weight)
-          let saved = mutate(workout) {
-            try WorkoutEngine.correctCompletedTarget(
-              in: &$0, exerciseID: request.exerciseID, targetID: request.set.id,
-              repetitions: repetitions, weightKG: weight)
-          }
-          return saved
-            ? nil : store.error ?? "Не удалось сохранить изменения тренировки. Попробуйте ещё раз."
-        } catch { return error.localizedDescription }
       }
     }
     .confirmationDialog(
@@ -451,10 +431,6 @@ struct WorkoutExerciseView: View {
           try WorkoutEngine.removeDropStage(
             in: &$0, exerciseID: row.id, setID: set.id, stageID: stageID)
         }
-      },
-      editCompleted: { target in
-        numberPad.dismiss()
-        correction = CompletedSetRequest(id: target.id, exerciseID: row.id, set: target)
       },
       openNote: {
         numberPad.dismiss()
@@ -796,60 +772,6 @@ private struct SetNoteSheet: View {
 private struct DropGroupRemovalRequest {
   let exerciseID: UUID
   let setID: UUID
-}
-
-private struct CompletedSetRequest: Identifiable {
-  let id: UUID
-  let exerciseID: UUID
-  let set: WorkoutSet
-}
-
-private struct CompletedSetEditor: View {
-  @Environment(\.dismiss) private var dismiss
-  @Environment(\.locale) private var locale
-  let request: CompletedSetRequest
-  let unit: WeightUnit
-  let save: (Int, Double) -> String?
-  @State private var draft: WorkoutSetDraft
-  @State private var error: String?
-
-  init(request: CompletedSetRequest, unit: WeightUnit, save: @escaping (Int, Double) -> String?) {
-    self.request = request
-    self.unit = unit
-    self.save = save
-    _draft = State(
-      initialValue: WorkoutSetDraft(set: request.set, unit: unit, locale: L10n.numberLocale))
-  }
-  var body: some View {
-    NavigationStack {
-      Form {
-        TextField(
-          L10n.format("Вес, %@", L10n.text(unit.rawValue, locale: locale), locale: locale),
-          text: $draft.weight
-        )
-        .keyboardType(.decimalPad).accessibilityIdentifier("correctCompletedWeight")
-        TextField(L10n.text("Повторения", locale: locale), text: $draft.repetitions)
-          .keyboardType(.numberPad).accessibilityIdentifier("correctCompletedRepetitions")
-        if let error { Text(L10n.text(error, locale: locale)).foregroundStyle(.red) }
-      }
-      .navigationTitle(L10n.text("Изменить выполненный подход", locale: locale))
-      .navigationBarTitleDisplayMode(.inline)
-      .toolbar {
-        ToolbarItem(placement: .cancellationAction) {
-          Button(L10n.text("Отмена", locale: locale)) { dismiss() }
-        }
-        ToolbarItem(placement: .confirmationAction) {
-          Button(L10n.text("Сохранить", locale: locale)) {
-            do {
-              let repetitions = try draft.repetitionCount()
-              let weight = try draft.weightInKG(unit: unit)
-              if let message = save(repetitions, weight) { error = message } else { dismiss() }
-            } catch { self.error = error.localizedDescription }
-          }.accessibilityIdentifier("saveCompletedSetCorrection")
-        }
-      }
-    }.presentationDetents([.medium, .large])
-  }
 }
 
 private struct ExerciseActionRequest: Identifiable {

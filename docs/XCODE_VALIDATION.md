@@ -2,10 +2,20 @@
 
 Пункты без отметки остаются **непроверенными** до выполнения на macOS/устройстве. Для выполненных проверок указаны устройство, ОС, версия Xcode и результат.
 
+## Единый ввод выполненных подходов — 2026-11-09
+
+- [x] `testWorkoutTableEditsCompletedRowsWithTheSameNumericPanel`: выполнить подход 50 кг × 10, нажать ту же ячейку, ввести 60 кг × 12 обычной цифровой панелью, закрыть свайпом и открыть повторно. Значения сохранены без отдельной формы.
+- [ ] Проверить завершённые этапы дропсета, валидацию убывания веса, паузу, ошибку сохранения, VoiceOver и Dynamic Type.
+
+Xcode 27.2 (27B52), iPhone 17 Simulator / iOS 27.2: два UI-сценария `testUncompletedInputsSurviveClosingAndReopeningExercise` и `testWorkoutTableEditsCompletedRowsWithTheSameNumericPanel` прошли в `InlineCompleted-20261109.xcresult`. Финальный прогон всех 101 Apple unit tests успешен: `InlineCompletedUnits-20261109.xcresult`, `TEST SUCCEEDED`. Проверка выполненной ячейки сохраняет точные килограммы за отображением в фунтах. Полный Linux-прогон: 279 Core tests и все portable/static checks прошли.
+
 ## Шторки без стрелок закрытия — 2026-11-09
 
 - [ ] На Mac выполнить `testUncompletedInputsSurviveClosingAndReopeningExercise` и `testExerciseHeaderCanReplaceUnusedExercise`: закрытие карточки drag вниз сохраняет ввод; стрелки в заголовке нет, счётчик виден и таймер центрирован.
+- [x] Закрытие карточки drag вниз и сохранение ввода проверены повторным открытием в `InlineCompleted-20261109.xcresult`. Геометрическая проверка центрирования отдельным header-тестом остаётся выше.
 - [ ] Вручную проверить закрытие обзора активной тренировки и истории, readonly-упражнение без нижней стрелки, VoiceOver и крупный Dynamic Type. Системный ползунок остаётся доступным.
+
+Попытка `SheetDismissal-20261109.xcresult`: сборка с Apple SDK прошла, UI runner не запустился (`Timed out waiting for AX loaded notification`). Сценарии не считаются выполненными; выделенный симулятор перезапущен для следующего прогона.
 
 ## Добавление подхода с последними значениями — 2026-11-09
 

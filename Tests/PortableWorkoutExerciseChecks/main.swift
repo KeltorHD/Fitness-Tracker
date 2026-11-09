@@ -47,8 +47,8 @@ private func rejects(_ action: () throws -> Void) throws {
       at: date.addingTimeInterval(1))
     model.refresh(workout)
     try expect(
-      model.selectedSetID == first.sets[1].id && model.drafts[first.sets[0].id] == nil,
-      "Saved completion advances selection and clears its draft")
+      model.selectedSetID == first.sets[1].id && model.drafts[first.sets[0].id]?.weight != nil,
+      "Saved completion advances selection while keeping editable recorded values")
     try expect(workout.volume == 935, "Completion uses the Core multiplier semantics")
     model.select(first.sets[0].id, in: workout)
     try expect(
@@ -518,7 +518,8 @@ private func rejects(_ action: () throws -> Void) throws {
     history.exercises[0].sets[0].weightKG = 30
     model.updateHistory([history], for: workout)
     try expect(
-      model.drafts[warmup.set.id] == nil && workout.exercises[0].sets[0].weightKG == 20,
+      try model.drafts[warmup.set.id]?.weightInKG(unit: .pounds) == 20
+        && workout.exercises[0].sets[0].weightKG == 20,
       "Completed fields remain frozen even when their history source changes")
     let existing = WorkoutExercise(
       exercise: exercise, sets: [WorkoutSet(repetitions: 6, weightKG: 0)])
@@ -577,7 +578,8 @@ private func rejects(_ action: () throws -> Void) throws {
     let child = try model.completion(in: workout)
     try expect(
       child.stageID == stage.id && child.set.completedAt != nil
-        && child.set.dropStages?.first?.repetitions == 7 && model.drafts[base.set.id] == nil,
+        && child.set.dropStages?.first?.repetitions == 7
+        && model.drafts[base.set.id]?.weight != nil,
       "Completed drop base is frozen and edited pending stage survives a history refresh")
   }
 
@@ -710,7 +712,7 @@ private func rejects(_ action: () throws -> Void) throws {
       model.advance(afterSaving: first, in: workout) == .stay,
       "An intermediate drop cannot advance the exercise")
     try expect(
-      model.selectedStageID == stages[1].id && model.drafts[stages[0].id] == nil
+      model.selectedStageID == stages[1].id && model.drafts[stages[0].id]?.weight != nil
         && workout.restEndsAt == nil,
       "Completed drop fields freeze; future draft remains ready without rest")
     let last = try model.completion(in: workout)

@@ -265,7 +265,7 @@ import XCTest
     model.refresh(workout)
     history.exercises[0].sets[0].weightKG = 30
     model.updateHistory([history], for: workout)
-    XCTAssertNil(model.drafts[row.sets[0].id])
+    XCTAssertEqual(try model.drafts[row.sets[0].id]?.weightInKG(unit: .pounds), 25.123456)
     XCTAssertEqual(workout.exercises[0].sets[0].weightKG, 25.123456)
   }
 

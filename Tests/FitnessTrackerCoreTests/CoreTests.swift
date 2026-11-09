@@ -49,6 +49,32 @@ import Testing
   }
 }
 
+@Test func editableValuesPreserveRecordedDatesRestAndRejectInvalidBatches() throws {
+  var workout = session()
+  let row = workout.exercises[0]
+  try WorkoutEngine.completeSet(
+    in: &workout, exerciseID: row.id, setID: row.sets[0].id,
+    repetitions: 5, weightKG: 100, at: epoch.addingTimeInterval(1))
+  let recorded = workout
+  try WorkoutEngine.updateEditableValues(
+    [row.sets[0].id: .init(repetitions: 8, weightKG: 90)], in: &workout)
+  var expected = recorded
+  expected.exercises[0].sets[0].repetitions = 8
+  expected.exercises[0].sets[0].weightKG = 90
+  #expect(workout == expected)
+  #expect(workout.volume == 720 && workout.completedSets == 1)
+  #expect(throws: TrainingError.invalidWeight) {
+    try WorkoutEngine.updateEditableValues([row.sets[0].id: .init(weightKG: -1)], in: &workout)
+  }
+  #expect(workout == expected)
+  try WorkoutEngine.finish(&workout, at: epoch.addingTimeInterval(2))
+  let finished = workout
+  #expect(throws: TrainingError.invalidState) {
+    try WorkoutEngine.updateEditableValues([row.sets[0].id: .init(weightKG: 50)], in: &workout)
+  }
+  #expect(workout == finished)
+}
+
 private let epoch = Date(timeIntervalSince1970: 1_700_000_000)
 private func session() -> Workout {
   Workout(

@@ -511,9 +511,9 @@ import WidgetKit
 
   func saveExerciseInputs(_ model: WorkoutExercisePresentation, workoutID: UUID) {
     guard let active, active.id == workoutID else { return }
-    let values = model.pendingValues(in: active)
+    let values = model.pendingValues(in: active, includingCompleted: true)
     guard !values.isEmpty else { return }
-    mutate { try WorkoutEngine.updatePendingValues(values, in: &$0) }
+    mutate { try WorkoutEngine.updateEditableValues(values, in: &$0) }
   }
   func finish() {
     guard mutate({ try WorkoutEngine.finish(&$0) }) else { return }

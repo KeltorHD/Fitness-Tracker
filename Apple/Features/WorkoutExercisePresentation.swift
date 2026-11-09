@@ -17,6 +17,7 @@ struct WorkoutSetDraft {
       repetitionsWereEdited = true
     }
   }
+  private var completedAt: Date?
   private var weightText = ""
   private var repetitionText = ""
   private var weightWasEdited = false
@@ -33,6 +34,11 @@ struct WorkoutSetDraft {
   mutating func refresh(
     set: WorkoutSet, previous: DropSetStage?, unit: WeightUnit, locale: Locale
   ) {
+    if completedAt != set.completedAt {
+      weightWasEdited = false
+      repetitionsWereEdited = false
+      completedAt = set.completedAt
+    }
     if !weightWasEdited {
       let isEmpty = set.completedAt == nil && set.repetitions == 0 && set.weightKG == 0
       let kilograms = isEmpty ? previous?.weightKG : set.weightKG
@@ -210,11 +216,13 @@ enum WorkoutExerciseAdvance { case stay, moved, finished }
     guard let source, drafts[targetID] != nil else { return }
     drafts[targetID] = source
   }
-  func pendingValues(in workout: Workout) -> [UUID: WorkoutSetInputValues] {
+  func pendingValues(in workout: Workout, includingCompleted: Bool = false) -> [UUID:
+    WorkoutSetInputValues]
+  {
     guard workout.id == workoutID else { return [:] }
     var values: [UUID: WorkoutSetInputValues] = [:]
     for stage in workout.exercises.flatMap(\.sets).flatMap(\.stages)
-    where stage.completedAt == nil {
+    where includingCompleted || stage.completedAt == nil {
       guard let input = drafts[stage.id]?.pendingValues(unit: unit),
         input.weightKG.map({ $0 != stage.weightKG }) == true
           || input.repetitions.map({ $0 != stage.repetitions }) == true
@@ -260,15 +268,15 @@ enum WorkoutExerciseAdvance { case stay, moved, finished }
       selectedStageID = nil
     }
     previousValues = PreviousWorkoutValues(exerciseRowID: exerciseID, in: workout, history: history)
-    let pending = workout.exercises.flatMap(\.sets).flatMap(\.stages).filter {
-      $0.completedAt == nil
-    }
+    let pending = workout.exercises.flatMap(\.sets).flatMap(\.stages)
     let ids = Set(pending.map(\.id))
     drafts = drafts.filter { ids.contains($0.key) }
     for row in workout.exercises {
       let previous = PreviousWorkoutValues(exerciseRowID: row.id, in: workout, history: history)
-      for stage in row.sets.flatMap(\.stages) where stage.completedAt == nil {
-        let set = WorkoutSet(id: stage.id, repetitions: stage.repetitions, weightKG: stage.weightKG)
+      for stage in row.sets.flatMap(\.stages) {
+        let set = WorkoutSet(
+          id: stage.id, repetitions: stage.repetitions, weightKG: stage.weightKG,
+          completedAt: stage.completedAt)
         if drafts[stage.id] == nil {
           drafts[stage.id] = WorkoutSetDraft(
             set: set, unit: unit, locale: locale, previous: previous?.stages[stage.id])
@@ -301,7 +309,9 @@ enum WorkoutExerciseAdvance { case stay, moved, finished }
       prepared.dropStages = try stages.map { stage in
         guard stage.completedAt == nil, let draft = drafts[stage.id] else { return stage }
         let value = try draft.validatedSet(
-          from: WorkoutSet(id: stage.id, repetitions: stage.repetitions, weightKG: stage.weightKG),
+          from: WorkoutSet(
+            id: stage.id, repetitions: stage.repetitions, weightKG: stage.weightKG,
+            completedAt: stage.completedAt),
           unit: unit)
         return DropSetStage(id: stage.id, repetitions: value.repetitions, weightKG: value.weightKG)
       }

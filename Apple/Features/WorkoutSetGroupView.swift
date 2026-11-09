@@ -15,7 +15,6 @@ struct WorkoutSetGroupView: View {
   let addAfter: () -> Void
   let remove: () -> Void
   let removeStage: (UUID) -> Void
-  let editCompleted: (WorkoutSet) -> Void
   let openNote: () -> Void
 
   var body: some View {
@@ -71,7 +70,8 @@ struct WorkoutSetGroupView: View {
     let hasNote = value.note?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false
     return WorkoutSetRow(
       set: value, index: index, marker: marker, unit: model.unit, notesExpanded: notesExpanded,
-      editable: workout.status == .active && value.completedAt == nil,
+      editable: workout.status == .active
+        || (workout.status == .paused && value.completedAt != nil),
       showsDropMetadata: false, canCorrectCompleted: [.active, .paused].contains(workout.status),
       selected: value.id == model.selectedTargetID && workout.status == .active,
       weight: model.drafts[value.id]?.weight ?? "",
@@ -81,7 +81,7 @@ struct WorkoutSetGroupView: View {
         numberPad.dismiss()
         model.select(value.id, in: workout)
       },
-      advance: { numberPad.advance(in: workout) }, editCompleted: { editCompleted(value) },
+      advance: { numberPad.advance(in: workout) },
       openNote: child || !hasNote ? nil : openNote,
       contextActions: { contextActions(for: value, isChild: child) }
     )
@@ -122,9 +122,6 @@ struct WorkoutSetGroupView: View {
   @ViewBuilder private func contextActions(for value: WorkoutSet, isChild: Bool) -> some View {
     Button(action: openNote) {
       Label(L10n.text("Заметка к подходу", locale: locale), systemImage: "note.text")
-    }
-    if value.completedAt != nil, [.active, .paused].contains(workout.status) {
-      Button(L10n.text("Изменить выполненный подход", locale: locale)) { editCompleted(value) }
     }
     if workout.status == .active {
       Button(action: addAfter) {

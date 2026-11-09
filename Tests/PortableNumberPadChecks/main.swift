@@ -40,9 +40,10 @@ private func expect(_ condition: Bool, _ message: String) throws {
     pad.decimal()
     try expect(pad.text == "3", "Repetitions reject decimal separators")
     pad.advance(in: workout)
-    try expect(pad.field == .weight(second.id), "Next skips completed rows")
+    try expect(
+      pad.field == .weight(completed.id), "Next visits recorded cells using the same editor")
     pad.advance(in: workout)
-    try expect(pad.field == .repetitions(second.id), "Weight advances to repetitions")
+    try expect(pad.field == .repetitions(completed.id), "Weight advances to repetitions")
     pad.begin(.weight(first.id), in: workout)
     pad.clear()
     pad.digit(4)
@@ -58,7 +59,7 @@ private func expect(_ condition: Bool, _ message: String) throws {
       "Copy down updates following ordinary weight targets")
     try expect(
       editor.drafts[drop.id]?.weight == "60" && editor.drafts[other.sets[0].id]?.weight == "90"
-        && editor.drafts[completed.id] == nil,
+        && editor.drafts[completed.id]?.weight == "80",
       "Copy cannot change drop weights, another exercise or completed rows")
     pad.begin(.repetitions(first.id), in: workout)
     pad.clear()
@@ -119,7 +120,18 @@ private func expect(_ condition: Bool, _ message: String) throws {
     pad.dismiss()
     try expect(editor.drafts[first.id]?.weight == "1501", "Hiding retains the draft for correction")
     pad.begin(.weight(completed.id), in: workout)
-    try expect(pad.field == nil, "Completed fields cannot open the panel")
+    try expect(pad.field == .weight(completed.id), "Completed fields open the same panel")
+    let recordedDate = workout.exercises[0].sets[1].completedAt
+    pad.digit(7)
+    pad.digit(5)
+    try expect(pad.text == "75", "First insertion replaces the recorded weight")
+    let edits = editor.pendingValues(in: workout, includingCompleted: true)
+    try WorkoutEngine.updateEditableValues(
+      [completed.id: edits[completed.id] ?? .init()], in: &workout)
+    try expect(
+      workout.exercises[0].sets[1].weightKG == 75
+        && workout.exercises[0].sets[1].completedAt == recordedDate,
+      "Recorded input saves without completing again")
     pad.begin(.weight(first.id), in: workout)
     try WorkoutEngine.pause(&workout, at: date.addingTimeInterval(2))
     editor.refresh(workout)
@@ -136,8 +148,8 @@ private func expect(_ condition: Bool, _ message: String) throws {
     editor.refresh(workout)
     pad.reconcile(workout)
     try expect(
-      pad.field == nil && editor.drafts[first.id] == nil,
-      "External completion cannot leave an editable stale field")
+      pad.field == .weight(first.id) && editor.drafts[first.id]?.weight == "50",
+      "External completion refreshes recorded values without losing the numeric editor")
     pad.begin(.weight(second.id), in: workout)
     pad.reconcile(nil)
     try expect(pad.field == nil, "Workout removal dismisses the panel")
@@ -150,7 +162,7 @@ private func expect(_ condition: Bool, _ message: String) throws {
     try checkFirstInsertionReplacement(date: date)
     try checkNativeSelectionCallbacks(date: date)
     print(
-      "Portable number pad: first insertion replacement, native caret, range replacement, C/backspace, decimal/bounds, field traversal, copy isolation, draft-only changes, immutable completions, pause/removal, legacy zero reps and pounds precision passed (no Apple SDK)."
+      "Portable number pad: first insertion replacement, native caret, range replacement, C/backspace, decimal/bounds, field traversal, copy isolation, draft-only changes, inline recorded edits, pause/removal, legacy zero reps and pounds precision passed (no Apple SDK)."
     )
   }
 

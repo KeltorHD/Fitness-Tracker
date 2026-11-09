@@ -24,6 +24,20 @@ public enum WorkoutEngine {
   public static func updatePendingValues(
     _ values: [UUID: WorkoutSetInputValues], in workout: inout Workout
   ) throws {
+    try updateValues(values, in: &workout, includingCompleted: false)
+  }
+
+  /// Edits numeric cells in an ongoing session, preserving completion dates and rest.
+  public static func updateEditableValues(
+    _ values: [UUID: WorkoutSetInputValues], in workout: inout Workout
+  ) throws {
+    try updateValues(values, in: &workout, includingCompleted: true)
+  }
+
+  private static func updateValues(
+    _ values: [UUID: WorkoutSetInputValues], in workout: inout Workout,
+    includingCompleted: Bool
+  ) throws {
     guard [.active, .paused].contains(workout.status) else { throw TrainingError.invalidState }
     var candidate = workout
     var remaining = Set(values.keys)
@@ -31,7 +45,9 @@ public enum WorkoutEngine {
       for index in candidate.exercises[row].sets.indices {
         var set = candidate.exercises[row].sets[index]
         if let input = values[set.id] {
-          guard set.completedAt == nil else { throw TrainingError.invalidState }
+          guard includingCompleted || set.completedAt == nil else {
+            throw TrainingError.invalidState
+          }
           if let weight = input.weightKG { set.weightKG = weight }
           if let repetitions = input.repetitions { set.repetitions = repetitions }
           remaining.remove(set.id)
@@ -39,7 +55,9 @@ public enum WorkoutEngine {
         if var stages = set.dropStages {
           for stage in stages.indices {
             guard let input = values[stages[stage].id] else { continue }
-            guard stages[stage].completedAt == nil else { throw TrainingError.invalidState }
+            guard includingCompleted || stages[stage].completedAt == nil else {
+              throw TrainingError.invalidState
+            }
             if let weight = input.weightKG { stages[stage].weightKG = weight }
             if let repetitions = input.repetitions { stages[stage].repetitions = repetitions }
             remaining.remove(stages[stage].id)
