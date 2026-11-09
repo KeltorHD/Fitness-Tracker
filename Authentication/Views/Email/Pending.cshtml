@@ -1,7 +1,7 @@
 @model FitnessTracker.Authentication.Controllers.EmailPendingPage
 <div class="card-heading">
   <h1 id="page-title" data-localize>Подтвердите электронную почту</h1>
-  <p data-localize>Откройте письмо FitnessTracker и подтвердите адрес по ссылке. Ссылка действует 2 часа.</p>
+  <p data-localize>Откройте письмо FitnessTracker и подтвердите адрес в течение 2 часов после регистрации. Повторное письмо не продлевает срок.</p>
 </div>
 @if (Model.Submitted)
 {
@@ -21,3 +21,5 @@ else
   <p class="privacy-note" data-localize>Отправка писем временно недоступна. Попробуйте позже.</p>
 }
 <p class="card-navigation"><a href="@Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString("/login", "returnUrl", Model.ReturnUrl)" data-localize>Продолжить вход после подтверждения</a></p>
+<p class="privacy-note" data-localize>Через 2 часа неподтверждённый аккаунт удаляется. Если срок истёк, зарегистрируйтесь заново.</p>
+<p class="card-navigation"><a href="@Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString("/register", "returnUrl", Model.ReturnUrl)" data-localize>Создать аккаунт</a></p>

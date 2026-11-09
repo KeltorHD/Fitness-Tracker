@@ -83,9 +83,26 @@ public sealed class AuthFactory(IPAddress? peerAddress = null, string? trustedPr
             services.RemoveAll<IAccountEmailSender>();
             services.AddSingleton<IAccountEmailSender>(EmailSender);
             services.RemoveAll<IDbContextOptionsConfiguration<AuthDbContext>>();
-            services.AddDbContext<AuthDbContext>(options => options.UseSqlite(_connection).UseOpenIddict());
+            services.AddDbContext<AuthDbContext>(options => options
+                .UseSqlite(_connection)
+                .UseOpenIddict()
+                .ReplaceService<IModelCustomizer, AuthSqliteModelCustomizer>());
             services.AddHttpClient<BackupCleanup>().ConfigurePrimaryHttpMessageHandler(() => new CleanupHandler(this));
         });
+    }
+
+    /// <summary>Только SQLite fixture хранит CreatedAt как UTC DateTime для сравнения сроков; PostgreSQL проверяется отдельно.</summary>
+    private sealed class AuthSqliteModelCustomizer(ModelCustomizerDependencies dependencies) : RelationalModelCustomizer(dependencies)
+    {
+        /// <summary>Обходит отсутствие SQL-сравнения DateTimeOffset у SQLite без изменения production-модели.</summary>
+        public override void Customize(ModelBuilder modelBuilder, DbContext context)
+        {
+            base.Customize(modelBuilder, context);
+            modelBuilder.UseOpenIddict();
+            modelBuilder.Entity<ApplicationUser>().Property(user => user.CreatedAt).HasConversion(
+                value => value.UtcDateTime,
+                value => new DateTimeOffset(DateTime.SpecifyKind(value, DateTimeKind.Utc)));
+        }
     }
 
     /// <summary>Подставляет реальный TCP peer до production middleware обработки forwarded headers.</summary>

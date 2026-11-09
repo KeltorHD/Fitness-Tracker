@@ -19,6 +19,10 @@ public sealed class AuthDbContext(DbContextOptions<AuthDbContext> options)
     {
         base.OnModelCreating(builder);
         builder.Entity<ApplicationUser>().Property(user => user.DisplayName).HasMaxLength(200);
+        builder.Entity<ApplicationUser>()
+            .HasIndex(user => user.CreatedAt)
+            .HasDatabaseName("IX_AspNetUsers_PendingConfirmationCreatedAt")
+            .HasFilter("\"EmailConfirmationRequired\" AND NOT \"EmailConfirmed\"");
         // Добавляем штатное хранилище passkey, сохраняя прежние размеры Identity-колонок.
         builder.Entity<IdentityUserPasskey<string>>(passkey =>
         {

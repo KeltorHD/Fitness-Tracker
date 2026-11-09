@@ -6,7 +6,7 @@ namespace FitnessTracker.Authentication;
 /// <summary>Выполняет регистрацию и парольный вход, сохраняя lockout и разделение локальных/внешних аккаунтов.</summary>
 public sealed class PasswordService(UserManager<ApplicationUser> users, SignInManager<ApplicationUser> signIn,
     EmailAccounts accounts, UnknownPasswordCheck unknownPassword, BrowserNavigation navigation, IConfiguration config,
-    EmailConfirmationService emailConfirmation, ILogger<PasswordService> logger)
+    EmailConfirmationService emailConfirmation, PendingRegistrationCleanup pendingRegistrations, ILogger<PasswordService> logger)
 {
     private const string REGISTRATION_FAILURE = "Не удалось создать аккаунт. Если вы уже регистрировались, войдите или запросите новое письмо подтверждения.";
 
@@ -31,6 +31,7 @@ public sealed class PasswordService(UserManager<ApplicationUser> users, SignInMa
             return Reject(returnUrl, address, attemptId, "password_length", "Пароль должен содержать от 12 до 128 символов.");
         if (input.Password != input.ConfirmPassword)
             return Reject(returnUrl, address, attemptId, "password_mismatch", "Пароли не совпадают.");
+        await pendingRegistrations.DeleteForRegistrationAsync(users.NormalizeName(accounts.UserName(address)), cancellationToken);
         var user = accounts.NewUser(address);
         IdentityResult result;
         try { result = await users.CreateAsync(user, input.Password); }

@@ -8,8 +8,10 @@ namespace FitnessTracker.Server.Tests;
 
 /// <summary>Собирает текст и structured fields почтовых событий или выбранной категории без сети и глобального Console.</summary>
 /// <param name="selectedCategory">Отдельная категория для проверки регистрации; по умолчанию только отправка почты.</param>
-internal sealed class TestEmailLogs(string? selectedCategory = null) : ILoggerProvider
+/// <param name="onEntry">Необязательный сигнал завершения фоновой операции без polling и задержек.</param>
+internal sealed class TestEmailLogs(string? selectedCategory = null, Action<TestEmailLogs.Entry>? onEntry = null) : ILoggerProvider
 {
+    private readonly Action<Entry>? _onEntry = onEntry;
     /// <summary>События доставки из текущего изолированного теста.</summary>
     internal ConcurrentQueue<Entry> Entries { get; } = new();
 
@@ -66,7 +68,9 @@ internal sealed class TestEmailLogs(string? selectedCategory = null) : ILoggerPr
         {
             var fields = state is IEnumerable<KeyValuePair<string, object?>> values
                 ? values.ToDictionary(item => item.Key, item => item.Value?.ToString()) : [];
-            owner.Entries.Enqueue(new(logLevel, eventId.Id, formatter(state, exception), fields, exception));
+            var entry = new Entry(logLevel, eventId.Id, formatter(state, exception), fields, exception);
+            owner.Entries.Enqueue(entry);
+            owner._onEntry?.Invoke(entry);
         }
     }
 }

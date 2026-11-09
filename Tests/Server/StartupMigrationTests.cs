@@ -60,7 +60,7 @@ public sealed class StartupMigrationTests
         }
         await using (var database = new AuthDbContext(options))
         {
-            Assert.Equal(3, (await database.Database.GetAppliedMigrationsAsync(cancellationToken)).Count());
+            Assert.Equal(4, (await database.Database.GetAppliedMigrationsAsync(cancellationToken)).Count());
             Assert.Empty(await database.Database.GetPendingMigrationsAsync(cancellationToken));
             Assert.Empty(await database.UserPasskeys.ToListAsync(cancellationToken));
             if (!previousSchema)
