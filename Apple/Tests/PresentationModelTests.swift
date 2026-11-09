@@ -83,8 +83,8 @@ import XCTest
     model.refresh(workout)
     XCTAssertEqual(model.exerciseID, first.id)
     XCTAssertEqual(model.selectedSetID, workout.exercises[0].sets[1].id)
-    XCTAssertEqual(model.drafts[workout.exercises[0].sets[1].id]?.weight, "")
-    XCTAssertEqual(model.drafts[workout.exercises[1].sets[1].id]?.repetitions, "")
+    XCTAssertEqual(model.drafts[workout.exercises[0].sets[1].id]?.weight, "40")
+    XCTAssertEqual(model.drafts[workout.exercises[1].sets[1].id]?.repetitions, "12")
   }
 
   func testCompletingStandaloneExerciseEntersPartiallyCompletedSupersetInRoundOrder() throws {

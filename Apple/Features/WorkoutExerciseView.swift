@@ -442,9 +442,7 @@ struct WorkoutExerciseView: View {
       configureDrop: { configureDrop(workout, setID: set.id, adding: $0, exerciseID: row.id) },
       addAfter: {
         numberPad.dismiss()
-        mutate(workout) {
-          try WorkoutEngine.addSet(exerciseID: row.id, to: &$0, after: set.id)
-        }
+        addSet(in: workout, exerciseID: row.id, after: set.id)
       },
       remove: {
         numberPad.dismiss()
@@ -607,14 +605,34 @@ struct WorkoutExerciseView: View {
       try action(&value)
     }
   }
-  private func addSet(in workout: Workout) {
-    mutate(workout) { current in
-      if let group = current.groupContaining(exerciseID: model.exerciseID), group.isSuperset,
+  private func addSet(in workout: Workout, exerciseID: UUID? = nil, after setID: UUID? = nil) {
+    let exerciseID = exerciseID ?? model.exerciseID
+    let group = workout.groupContaining(exerciseID: exerciseID)
+    let rows =
+      setID == nil && group?.isSuperset == true
+      ? group?.exercises ?? [] : workout.exercises.filter { $0.id == exerciseID }
+    let sources = Dictionary(
+      uniqueKeysWithValues: rows.compactMap { row in
+        (setID ?? row.sets.last?.id).map { (row.id, $0) }
+      })
+    let originalIDs = Set(workout.exercises.flatMap(\.sets).map(\.id))
+    let saved = mutate(workout) { current in
+      let inputs = model.pendingValues(in: current)
+      if !inputs.isEmpty { try WorkoutEngine.updatePendingValues(inputs, in: &current) }
+      if setID == nil, let group = current.groupContaining(exerciseID: exerciseID),
+        group.isSuperset,
         let supersetID = group.supersetID
       {
         try WorkoutEngine.addSupersetRound(supersetID: supersetID, to: &current)
       } else {
-        try WorkoutEngine.addSet(exerciseID: model.exerciseID, to: &current)
+        try WorkoutEngine.addSet(exerciseID: exerciseID, to: &current, after: setID)
+      }
+    }
+    guard saved, let current = store.active, current.id == workout.id else { return }
+    for row in current.exercises {
+      guard let sourceID = sources[row.id] else { continue }
+      for set in row.sets where !originalIDs.contains(set.id) {
+        model.inheritInput(from: sourceID, for: set.id, in: current)
       }
     }
   }

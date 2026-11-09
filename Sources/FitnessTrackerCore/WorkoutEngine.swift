@@ -316,9 +316,11 @@ public enum WorkoutEngine {
     } else {
       index = workout.exercises[i].sets.endIndex
     }
-    let multiplier = index > 0 ? workout.exercises[i].sets[index - 1].loadMultiplier : nil
+    let previous = index > 0 ? workout.exercises[i].sets[index - 1] : nil
     workout.exercises[i].sets.insert(
-      WorkoutSet(repetitions: 0, loadMultiplier: multiplier), at: index)
+      WorkoutSet(
+        repetitions: previous?.repetitions ?? 0, weightKG: previous?.weightKG ?? 0,
+        loadMultiplier: previous?.loadMultiplier), at: index)
     if workout.exercises[i].supersetID != nil { reconcileRest(in: &workout) }
   }
 

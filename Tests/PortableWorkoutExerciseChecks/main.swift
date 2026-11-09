@@ -127,9 +127,50 @@ private func rejects(_ action: () throws -> Void) throws {
     try checkAdvanceGuards(at: date)
     try checkAdvanceWrapsToEarlierPendingExercise(at: date)
     try checkReopenedInputs(at: date)
+    try checkInheritedInputs(at: date)
     print(
       "Portable workout exercise presentation: localized/strict input, pounds precision, draft retention, repeated exercise identity, paging/reordering/removal, completion, pause/history guards and summaries passed (no Apple SDK)."
     )
+  }
+
+  @MainActor private static func checkInheritedInputs(at date: Date) throws {
+    let row = WorkoutExercise(exercise: ExerciseCatalog.all[0], sets: [WorkoutSet(repetitions: 0)])
+    var workout = Workout(name: "Add draft", startedAt: date, exercises: [row])
+    let model = WorkoutExercisePresentation(
+      workout: workout, exerciseID: row.id, unit: .kilograms, locale: Locale(identifier: "ru_RU"))
+    model.editWeight("42,", setID: row.sets[0].id)
+    try WorkoutEngine.addSet(exerciseID: row.id, to: &workout)
+    let added = workout.exercises[0].sets[1].id
+    model.inheritInput(from: row.sets[0].id, for: added, in: workout)
+    try expect(
+      model.drafts[added]?.weight == "42," && model.drafts[added]?.repetitions == "",
+      "Adding preserves displayed partial input without inventing repetitions")
+    model.editWeight("42,5", setID: added)
+    model.editRepetitions("11", setID: added)
+    try WorkoutEngine.addSet(exerciseID: row.id, to: &workout)
+    let last = workout.exercises[0].sets[2].id
+    model.inheritInput(from: added, for: last, in: workout)
+    model.select(last, in: workout)
+    let request = try model.completion(in: workout)
+    try expect(
+      request.set.weightKG == 42.5 && request.set.repetitions == 11,
+      "The added target uses the last displayed values, including unsaved drafts")
+    try expect(
+      workout.completedSets == 0 && workout.volume == 0,
+      "Copying input never completes a set")
+    let precise = WorkoutSet(repetitions: 12, weightKG: 45.123456)
+    let preciseRow = WorkoutExercise(exercise: row.exercise, sets: [precise])
+    var poundsWorkout = Workout(name: "Pounds", exercises: [preciseRow])
+    let poundsModel = WorkoutExercisePresentation(
+      workout: poundsWorkout, exerciseID: preciseRow.id, unit: .pounds,
+      locale: Locale(identifier: "en_US"))
+    try WorkoutEngine.addSet(exerciseID: preciseRow.id, to: &poundsWorkout)
+    let copied = poundsWorkout.exercises[0].sets[1].id
+    poundsModel.inheritInput(from: precise.id, for: copied, in: poundsWorkout)
+    poundsModel.select(copied, in: poundsWorkout)
+    try expect(
+      try poundsModel.completion(in: poundsWorkout).set.weightKG == precise.weightKG,
+      "Copied unedited pounds preserve exact stored kilograms behind rounded display")
   }
 
   @MainActor private static func checkReopenedInputs(at date: Date) throws {

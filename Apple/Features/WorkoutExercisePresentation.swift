@@ -203,6 +203,13 @@ enum WorkoutExerciseAdvance { case stay, moved, finished }
   }
   func editWeight(_ text: String, setID: UUID) { drafts[setID]?.weight = text }
   func editRepetitions(_ text: String, setID: UUID) { drafts[setID]?.repetitions = text }
+  func inheritInput(from sourceID: UUID, for targetID: UUID, in workout: Workout) {
+    guard workout.id == workoutID else { return }
+    let source = drafts[sourceID]
+    refresh(workout)
+    guard let source, drafts[targetID] != nil else { return }
+    drafts[targetID] = source
+  }
   func pendingValues(in workout: Workout) -> [UUID: WorkoutSetInputValues] {
     guard workout.id == workoutID else { return [:] }
     var values: [UUID: WorkoutSetInputValues] = [:]

@@ -83,6 +83,15 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertEqual(weight.value as? String, "45")
     XCTAssertEqual(repetitions.value as? String, "11")
     XCTAssertTrue(app.buttons["completeSet"].isEnabled)
+    app.buttons["addWorkoutSet"].tap()
+    let copiedWeights = app.textFields.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "setWeight_"))
+    let copiedRepetitions = app.textFields.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "setRepetitions_"))
+    XCTAssertTrue(copiedWeights.element(boundBy: 1).waitForExistence(timeout: 5))
+    XCTAssertEqual(copiedWeights.count, 2)
+    XCTAssertEqual(copiedWeights.element(boundBy: 1).value as? String, "45")
+    XCTAssertEqual(copiedRepetitions.element(boundBy: 1).value as? String, "11")
     app.buttons["closeWorkoutExercise"].tap()
     XCTAssertTrue(exercise.waitForExistence(timeout: 5))
     let screen = XCTAttachment(screenshot: app.screenshot())

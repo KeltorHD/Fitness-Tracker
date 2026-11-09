@@ -326,7 +326,7 @@ private func record(_ workout: inout Workout, row: Int, set: Int, seconds: Doubl
   #expect(split.map(\.id) == [rows[0].id, rows[2].id, rows[1].id])
 }
 
-@Test func addingSupersetRoundAppendsOneBlankMemberSetAndPreservesRecordedWorkAndRest() throws {
+@Test func addingSupersetRoundCopiesEachMembersLastValuesAndPreservesRecordedWorkAndRest() throws {
   var workout = groupedWorkout()
   workout.exercises[0].sets[1].loadMultiplier = 2
   try record(&workout, row: 0, set: 0, seconds: 1)
@@ -339,7 +339,8 @@ private func record(_ workout: inout Workout, row: Int, set: Int, seconds: Doubl
   for index in 0..<2 {
     #expect(Array(workout.exercises[index].sets.prefix(2)) == original.exercises[index].sets)
     let set = workout.exercises[index].sets[2]
-    #expect(set.repetitions == 0 && set.weightKG == 0 && set.completedAt == nil)
+    #expect(set.repetitions == original.exercises[index].sets.last?.repetitions)
+    #expect(set.weightKG == original.exercises[index].sets.last?.weightKG && set.completedAt == nil)
     #expect(set.note == nil && set.dropStages == nil && !set.isWarmup)
     #expect(set.loadMultiplier == original.exercises[index].sets.last?.loadMultiplier)
   }
@@ -363,7 +364,8 @@ private func record(_ workout: inout Workout, row: Int, set: Int, seconds: Doubl
   #expect(workout.exercises[1].sets[0] == original.exercises[1].sets[0])
   #expect(
     workout.exercises[1].sets.dropFirst().allSatisfy {
-      $0.repetitions == 0 && $0.weightKG == 0 && $0.completedAt == nil
+      $0.repetitions == original.exercises[1].sets[0].repetitions
+        && $0.weightKG == original.exercises[1].sets[0].weightKG && $0.completedAt == nil
     })
   #expect(workout.restEndsAt == nil)
   #expect(workout.nextPendingSet?.exerciseID == workout.exercises[1].id)
