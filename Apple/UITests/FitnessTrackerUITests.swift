@@ -34,7 +34,7 @@ final class FitnessTrackerUITests: XCTestCase {
     screen.name = "Three historical targets restored as pending sets"
     screen.lifetime = .keepAlways
     add(screen)
-    app.buttons["closeWorkoutExercise"].tap()
+    dismissWorkoutSheet(in: app)
     XCTAssertTrue(exercise.waitForExistence(timeout: 5))
     exercise.tap()
     XCTAssertTrue(note.waitForExistence(timeout: 5))
@@ -59,7 +59,7 @@ final class FitnessTrackerUITests: XCTestCase {
     app.buttons["numberPadDigit_1"].tap()
     app.buttons["numberPadDigit_1"].tap()
     app.buttons["numberPadHide"].tap()
-    app.buttons["closeWorkoutExercise"].tap()
+    dismissWorkoutSheet(in: app)
     XCTAssertTrue(exercise.waitForExistence(timeout: 5))
     exercise.tap()
     let pendingWeight = app.textFields.matching(
@@ -70,7 +70,7 @@ final class FitnessTrackerUITests: XCTestCase {
     assertEmptyWorkoutField(pendingWeight)
     XCTAssertEqual(pendingRepetitions.value as? String, "11")
     fillWorkoutSet(in: app, weight: 45, repetitions: 11)
-    app.buttons["closeWorkoutExercise"].tap()
+    dismissWorkoutSheet(in: app)
     XCTAssertTrue(exercise.waitForExistence(timeout: 5))
     exercise.tap()
     let weight = app.textFields.matching(
@@ -92,12 +92,20 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertEqual(copiedWeights.count, 2)
     XCTAssertEqual(copiedWeights.element(boundBy: 1).value as? String, "45")
     XCTAssertEqual(copiedRepetitions.element(boundBy: 1).value as? String, "11")
-    app.buttons["closeWorkoutExercise"].tap()
+    dismissWorkoutSheet(in: app)
     XCTAssertTrue(exercise.waitForExistence(timeout: 5))
     let screen = XCTAttachment(screenshot: app.screenshot())
     screen.name = "Pending values retained in workout overview"
     screen.lifetime = .keepAlways
     add(screen)
+  }
+
+  @MainActor private func dismissWorkoutSheet(in app: XCUIApplication) {
+    app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.12))
+      .press(
+        forDuration: 0.1,
+        thenDragTo:
+          app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.95)))
   }
 
   @MainActor func testMuscleRegionsStayWithTheirNamedParent() {
@@ -337,9 +345,8 @@ final class FitnessTrackerUITests: XCTestCase {
     let clock = app.staticTexts["activeExerciseDuration"]
     XCTAssertTrue(clock.exists)
     XCTAssertEqual(clock.frame.midX, app.frame.midX, accuracy: 1)
-    XCTAssertLessThan(
-      app.buttons["closeWorkoutExercise"].frame.minX,
-      app.staticTexts["activeExercisePosition"].frame.minX)
+    XCTAssertFalse(app.buttons["closeWorkoutExercise"].exists)
+    XCTAssertTrue(app.staticTexts["activeExercisePosition"].exists)
     actions.tap()
     app.buttons["replaceCurrentExercise"].tap()
     let custom = app.buttons["Своё упражнение"]
@@ -607,7 +614,7 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(app.buttons["addExercise"].waitForExistence(timeout: 5))
     XCTAssertFalse(app.buttons["finishWorkout"].isEnabled)
     XCTAssertFalse(app.buttons["openWorkoutExercise"].exists)
-    app.buttons["Свернуть"].tap()
+    dismissWorkoutSheet(in: app)
     XCTAssertTrue(start.waitForExistence(timeout: 5))
     XCTAssertEqual(start.label, "Продолжить тренировку")
     app.buttons["navigationTab_1"].tap()
@@ -858,7 +865,7 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(app.textFields[firstWeightID].waitForNonExistence(timeout: 5))
     assertEmptyWorkoutField(weights.firstMatch)
     assertEmptyWorkoutField(repetitions.firstMatch)
-    app.buttons["closeWorkoutExercise"].tap()
+    dismissWorkoutSheet(in: app)
     XCTAssertTrue(app.buttons["finishWorkout"].waitForExistence(timeout: 5))
     XCTAssertTrue(app.buttons["finishWorkout"].isEnabled)
   }
@@ -1027,7 +1034,7 @@ final class FitnessTrackerUITests: XCTestCase {
     rows.element(boundBy: 1).tap()
     XCTAssertTrue(app.buttons["addWorkoutSet"].waitForExistence(timeout: 5))
     app.buttons["addWorkoutSet"].tap()
-    app.buttons["closeWorkoutExercise"].tap()
+    dismissWorkoutSheet(in: app)
     XCTAssertTrue(finish.waitForExistence(timeout: 5))
     XCTAssertEqual(finish.value as? String, "Выполнено этапов: 2 из 3")
     XCTAssertTrue(finish.isEnabled)
@@ -1134,7 +1141,7 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertEqual(input.value as? String, "74,1")
     app.navigationBars["Записать вес"].buttons["Отмена"].tap()
     XCTAssertTrue(input.waitForNonExistence(timeout: 5))
-    app.buttons["Свернуть"].tap()
+    dismissWorkoutSheet(in: app)
     XCTAssertTrue(app.buttons["navigationTab_2"].waitForExistence(timeout: 5))
     app.buttons["navigationTab_2"].tap()
     let history = app.buttons["openBodyWeightHistory"]
@@ -1170,7 +1177,7 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertEqual(input.value as? String, "73,2")
     app.navigationBars["Записать вес"].buttons["Отмена"].tap()
     XCTAssertTrue(input.waitForNonExistence(timeout: 5))
-    app.buttons["Свернуть"].tap()
+    dismissWorkoutSheet(in: app)
     let start = app.buttons["workoutStartAction"]
     XCTAssertTrue(start.waitForExistence(timeout: 5))
     let settings = app.buttons["openSettings"]
@@ -1437,7 +1444,7 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(app.buttons["openWorkoutExercise"].firstMatch.waitForExistence(timeout: 5))
     XCTAssertTrue(app.staticTexts["activeWorkoutTitle"].label.contains("Свободная тренировка"))
     XCTAssertFalse(app.buttons["finishWorkout"].isEnabled)
-    app.buttons["Свернуть"].tap()
+    dismissWorkoutSheet(in: app)
     app.buttons["workoutStartAction"].tap()
     XCTAssertTrue(app.buttons["openWorkoutExercise"].firstMatch.waitForExistence(timeout: 5))
   }
@@ -1693,7 +1700,7 @@ final class FitnessTrackerUITests: XCTestCase {
     start.tap()
     app.buttons["startSelectedTemplates"].tap()
     XCTAssertTrue(app.buttons["addExercise"].waitForExistence(timeout: 5))
-    app.buttons["Свернуть"].tap()
+    dismissWorkoutSheet(in: app)
     app.buttons["openSettings"].tap()
     let themes = app.buttons["openColorThemePicker"]
     reveal(themes, in: app)
@@ -1709,7 +1716,7 @@ final class FitnessTrackerUITests: XCTestCase {
     start.tap()
     XCTAssertTrue(app.buttons["addExercise"].waitForExistence(timeout: 5))
     XCTAssertFalse(app.buttons["startSelectedTemplates"].exists)
-    app.buttons["Свернуть"].tap()
+    dismissWorkoutSheet(in: app)
     app.terminate()
     app.launch()
     XCTAssertTrue(app.buttons["openSettings"].waitForExistence(timeout: 10))
@@ -1899,7 +1906,7 @@ final class FitnessTrackerUITests: XCTestCase {
     self.add(exerciseScreenshot)
     fillWorkoutSet(in: app)
     complete.tap()
-    app.buttons["closeWorkoutExercise"].tap()
+    dismissWorkoutSheet(in: app)
     XCTAssertTrue(finish.waitForExistence(timeout: 5))
     XCTAssertTrue(finish.isEnabled)
     XCTAssertTrue(finish.isHittable)
@@ -1917,7 +1924,7 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(app.buttons["startWorkout"].waitForExistence(timeout: 10))
     app.buttons["startWorkout"].tap()
     chooseFreeWorkout(in: app)
-    app.buttons["Свернуть"].tap()
+    dismissWorkoutSheet(in: app)
     app.buttons["startWorkout"].tap()
     XCTAssertTrue(app.buttons["addExercise"].waitForExistence(timeout: 5))
     let finish = app.buttons["finishWorkout"]

@@ -63,7 +63,7 @@ struct WorkoutExerciseView: View {
                 == true, completionTrigger: lastCompletion,
               previous: { move(-1, in: workout) }, next: { move(1, in: workout) },
               add: { addSet(in: workout) }, complete: { complete(in: workout) },
-              pause: { pause(workout) }, close: { dismiss() })
+              pause: { pause(workout) })
           }
         }.padding(.horizontal, 8).padding(.bottom, 8)
       } else {
@@ -199,28 +199,19 @@ struct WorkoutExerciseView: View {
       } else {
         // Equal side slots keep the clock centered independently of the counter width.
         HStack(spacing: 0) {
-          headerLeading(workout).frame(width: 96)
+          headerLeading(workout).frame(width: 52)
           workoutClock(workout).frame(maxWidth: .infinity)
-          exerciseMenu(workout).frame(width: 96, alignment: .trailing)
+          exerciseMenu(workout).frame(width: 52, alignment: .trailing)
         }
       }
     }.buttonStyle(.plain).foregroundStyle(.primary).padding(.horizontal, 4).padding(.top, 8)
   }
 
   private func headerLeading(_ workout: Workout) -> some View {
-    HStack(spacing: 4) {
-      Button {
-        numberPad.dismiss()
-        dismiss()
-      } label: {
-        Image(systemName: "chevron.down").frame(width: 44, height: 44).contentShape(.rect)
-      }.accessibilityLabel(L10n.text("К списку упражнений", locale: locale))
-        .accessibilityIdentifier("closeWorkoutExercise")
-      Text("\(navigationIndex(in: workout) + 1)/\(workout.exerciseGroups.count)")
-        .font(.subheadline).foregroundStyle(.secondary).lineLimit(1).minimumScaleFactor(0.6)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .accessibilityIdentifier("activeExercisePosition")
-    }
+    Text("\(navigationIndex(in: workout) + 1)/\(workout.exerciseGroups.count)")
+      .font(.subheadline).foregroundStyle(.secondary).lineLimit(1).minimumScaleFactor(0.6)
+      .frame(maxWidth: .infinity, alignment: .leading)
+      .accessibilityIdentifier("activeExercisePosition")
   }
 
   private func workoutClock(_ workout: Workout) -> some View {
