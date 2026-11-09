@@ -12,8 +12,12 @@ import Foundation
     }
     let date = Date().addingTimeInterval(-3600)
     let values = [(30.0, 12), (35.0, 10), (40.0, 8)]
+    let notes: [String?] = ["Рабочий подход", nil, "Заметка"]
     let row = WorkoutExercise(
-      exercise: exercise, sets: values.map { WorkoutSet(repetitions: $0.1, weightKG: $0.0) })
+      exercise: exercise,
+      sets: values.enumerated().map { index, value in
+        WorkoutSet(repetitions: value.1, weightKG: value.0, note: notes[index])
+      })
     var workout = Workout(name: "Тест: три предыдущих подхода", startedAt: date, exercises: [row])
     for (index, set) in row.sets.enumerated() {
       try WorkoutEngine.completeSet(

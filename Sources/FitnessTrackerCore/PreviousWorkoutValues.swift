@@ -79,10 +79,19 @@ extension WorkoutEngine {
         }),
         let previous = PreviousWorkoutValues(exerciseRowID: row.id, in: workout, history: history)
       else { continue }
-      candidate.exercises[index].sets = previous.recordedSets.enumerated().map { offset, set in
+      let plannedWarmups = row.sets.filter(\.isWarmup)
+      let plannedWorking = row.sets.filter { !$0.isWarmup }
+      var warmupIndex = 0
+      var workingIndex = 0
+      candidate.exercises[index].sets = previous.recordedSets.map { set in
         var copy = set.freshCopy(performedOnly: true)
-        // A historical note describes that session. Only explicit current plan notes carry over.
-        copy.note = row.sets.indices.contains(offset) ? row.sets[offset].note : nil
+        let ordinal = set.isWarmup ? warmupIndex : workingIndex
+        let planned = set.isWarmup ? plannedWarmups : plannedWorking
+        if set.isWarmup { warmupIndex += 1 } else { workingIndex += 1 }
+        // Current plan notes take priority; otherwise retain the previous set's note.
+        if planned.indices.contains(ordinal), let note = planned[ordinal].note {
+          copy.note = note
+        }
         return copy
       }
     }

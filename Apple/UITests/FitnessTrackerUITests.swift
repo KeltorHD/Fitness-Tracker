@@ -17,6 +17,12 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(weights.firstMatch.waitForExistence(timeout: 5))
     XCTAssertEqual(weights.count, 3)
     XCTAssertEqual(repetitions.count, 3)
+    let firstSetID = String(weights.firstMatch.identifier.dropFirst("setWeight_".count))
+    let note = app.buttons["setNote_\(firstSetID)"]
+    XCTAssertTrue(note.exists)
+    XCTAssertEqual(note.value as? String, "Рабочий подход")
+    let thirdSetID = String(weights.element(boundBy: 2).identifier.dropFirst("setWeight_".count))
+    XCTAssertEqual(app.buttons["setNote_\(thirdSetID)"].value as? String, "Заметка")
     for (index, pair) in [(30, 12), (35, 10), (40, 8)].enumerated() {
       XCTAssertEqual(weights.element(boundBy: index).value as? String, String(pair.0))
       XCTAssertEqual(repetitions.element(boundBy: index).value as? String, String(pair.1))
@@ -28,6 +34,11 @@ final class FitnessTrackerUITests: XCTestCase {
     screen.name = "Three historical targets restored as pending sets"
     screen.lifetime = .keepAlways
     add(screen)
+    app.buttons["closeWorkoutExercise"].tap()
+    XCTAssertTrue(exercise.waitForExistence(timeout: 5))
+    exercise.tap()
+    XCTAssertTrue(note.waitForExistence(timeout: 5))
+    XCTAssertEqual(note.value as? String, "Рабочий подход")
   }
 
   @MainActor func testUncompletedInputsSurviveClosingAndReopeningExercise() {
