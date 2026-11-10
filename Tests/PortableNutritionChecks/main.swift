@@ -74,7 +74,14 @@ private final class FoodURLProtocol: URLProtocol {
     let product =
       #"{"code":"12345678","product_name":"Food","nutriments":{"energy-kcal_100g":100,"proteins_100g":10,"fat_100g":2,"carbohydrates_100g":10}}"#
     let body: String
-    if url.path.contains("/product/") {
+    if url.path.contains("/product/7622210769459") {
+      // OFF returned this minimal successful response for the reported Oreo barcode.
+      body = #"{"status":1,"product":{"code":"7622210769459","ecoscore_tags":["unknown"]}}"#
+    } else if url.path.contains("/product/00000000") {
+      body = #"{"status":0,"status_verbose":"product not found"}"#
+    } else if url.path.contains("/product/11111111") {
+      body = #"{"status":1}"#
+    } else if url.path.contains("/product/") {
       body = "{\"status\":1,\"product\":\(product)}"
     } else if query == "invalid" {
       body = "<html>Invalid</html>"
@@ -187,6 +194,23 @@ private final class FoodURLProtocol: URLProtocol {
     precondition(products.count == 1 && products.first?.per100Units.calories == 100)
     let barcode = try await client.search("12345678", preferRussian: false)
     precondition(barcode.count == 1)
+    let barcodeClient = OpenFoodFactsClient(session: session)
+    do {
+      _ = try await barcodeClient.search("7622210769459", preferRussian: true)
+      preconditionFailure("An existing empty card was reported as an absent product")
+    } catch FoodSearchError.incompleteProduct {}
+    let absent = try await barcodeClient.search("00000000", preferRussian: true)
+    precondition(absent.isEmpty)
+    do {
+      _ = try await barcodeClient.search("11111111", preferRussian: true)
+      preconditionFailure("Accepted a successful status without a product")
+    } catch FoodSearchError.invalidResponse {}
+    let errorModel = FoodSearchModel(client: barcodeClient)
+    errorModel.query = "7622210769459"
+    await errorModel.search(preferRussian: true)
+    precondition(
+      errorModel.error == FoodSearchError.incompleteProduct.errorDescription
+        && !errorModel.searched && !errorModel.isLoading)
     for query in ["limit", "server", "invalid"] {
       do {
         _ = try await client.search(query, preferRussian: false)

@@ -1026,5 +1026,6 @@
   "Для поиска новых продуктов нужен интернет. Недавние, избранные и ручной ввод доступны без сети.": "Searching for new foods requires internet. Recent foods, favorites and manual entry work offline.",
   "Области: %@": "Regions: %@",
   "%@: %@": "%@: %@",
-  "Тест: три предыдущих подхода": "Test: three previous sets"
+  "Тест: три предыдущих подхода": "Test: three previous sets",
+  "Продукт найден в базе, но его название или КБЖУ не заполнены. Введите данные с упаковки вручную.": "The product was found, but its name or nutrition data is missing. Enter the package information manually."
 }

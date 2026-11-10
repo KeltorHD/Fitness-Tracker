@@ -12343,6 +12343,23 @@
         }
       }
     },
+    "Продукт найден в базе, но его название или КБЖУ не заполнены. Введите данные с упаковки вручную.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Продукт найден в базе, но его название или КБЖУ не заполнены. Введите данные с упаковки вручную."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The product was found, but its name or nutrition data is missing. Enter the package information manually."
+          }
+        }
+      }
+    },
     "Продукты с полными КБЖУ не найдены. Попробуйте другое название или ручной ввод.": {
       "extractionState": "manual",
       "localizations": {
