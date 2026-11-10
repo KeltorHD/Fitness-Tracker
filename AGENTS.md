@@ -17,8 +17,8 @@
 ## 2. Стек и продуктовые ограничения
 
 - Swift 6, строгая проверка concurrency.
-- SwiftUI, **iOS 26+**, **watchOS 26+**.
-- Нативный Apple Liquid Glass.
+- SwiftUI, **iOS 26+**, **watchOS 10+** (по запросу пользователя: Apple Watch SE первого поколения).
+- Нативный Apple Liquid Glass на iOS/watchOS 26+; на watchOS 10–11 — совместимые нативные стили с проверкой availability.
 - SwiftData, UserDefaults для настроек, Keychain для секретов при необходимости.
 - HealthKit, CloudKit, ActivityKit, WidgetKit, App Intents, WatchConnectivity и UserNotifications.
 - Swift Package Manager для независимого Core; XcodeGen для структуры Xcode-проекта.
@@ -332,7 +332,7 @@ Python-зависимости — в requirements-dev.txt. Полный check sc
 
 ### macOS / Xcode
 
-Используй полный совместимый Xcode с iOS/watchOS 26 SDK. После изменения структуры выполни:
+Используй полный совместимый Xcode с iOS/watchOS 26 SDK или новее. Минимальные версии приложения: iOS 26 и watchOS 10; на Watch младше 26 используй нативные совместимые стили, сохраняя Liquid Glass через availability на новых ОС. После изменения структуры выполни:
 
 ```bash
 xcodegen generate

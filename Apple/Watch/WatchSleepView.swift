@@ -11,8 +11,8 @@ struct WatchSleepView: View {
         Text(L10n.text("Пробуждение", locale: locale)).font(.title2.bold())
         if let error = store.sleepAlarm.error { Text(error).font(.footnote).foregroundStyle(.red) }
         if store.sleepAlarm.ringing {
-          Button(L10n.text("Выключить", locale: locale)) { store.sleepAlarm.stop() }.buttonStyle(
-            .glassProminent)
+          Button(L10n.text("Выключить", locale: locale)) { store.sleepAlarm.stop() }
+            .watchButtonStyle()
         } else {
           if let plan = store.sleepAlarm.plans.filter({ $0.canArmWatch(at: .now) }).min(by: {
             $0.fireDate < $1.fireDate
@@ -32,7 +32,7 @@ struct WatchSleepView: View {
               Text(L10n.text("Подготовка запрошена на Watch", locale: locale)).font(.caption)
             }
             Button(L10n.text("Подготовить будильник", locale: locale)) { store.sleepAlarm.arm() }
-              .buttonStyle(.glassProminent)
+              .watchButtonStyle()
           } else {
             Text(L10n.text("Создайте будильник в дневнике сна на iPhone.", locale: locale))
           }

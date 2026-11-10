@@ -83,7 +83,7 @@ struct WatchWorkoutView: View {
                       repetitions: reps, weightKG: weight)
                   }
                 }
-              }.buttonStyle(.glassProminent).disabled(workout.status != .active)
+              }.watchButtonStyle().disabled(workout.status != .active)
                 .onChange(of: target.id, initial: true) {
                   reps = target.repetitions
                   weight = target.weightKG
@@ -104,15 +104,15 @@ struct WatchWorkoutView: View {
                   try WorkoutEngine.pause(&value)
                 }
               }
-            }.buttonStyle(.glass)
+            }.watchButtonStyle(prominent: false)
             Button(L10n.text("Завершить", locale: locale)) { store.finish() }.disabled(
               workout.completedSets == 0)
             Button(L10n.text("Отменить", locale: locale), role: .destructive) { cancel = true }
           } else {
             Image(systemName: "dumbbell.fill").font(.largeTitle).foregroundStyle(Color.accentColor)
             Text(L10n.text("Ваш следующий подход", locale: locale)).font(.headline)
-            Button(L10n.text("Начать · Всё тело A", locale: locale)) { store.start() }.buttonStyle(
-              .glassProminent)
+            Button(L10n.text("Начать · Всё тело A", locale: locale)) { store.start() }
+              .watchButtonStyle()
             Text(
               L10n.format(
                 "%@ ожидают передачи на iPhone", String(store.pending.count),

@@ -6,7 +6,7 @@ options:
   developmentLanguage: ru
   deploymentTarget:
     iOS: '26.0'
-    watchOS: '26.0'
+    watchOS: '10.0'
 settings:
   base:
     FITNESS_TRACKER_CLOUD_SYNC_AVAILABLE: 'YES'
