@@ -8,6 +8,20 @@ import Observation
   func activeIDs() throws -> Set<UUID>
 }
 
+enum SleepWatchConnection: Equatable, Sendable {
+  case checking, notPaired, appNotInstalled, unreachable, reachable
+  var message: String {
+    switch self {
+    case .checking: "Проверяем подключение Apple Watch"
+    case .notPaired: "Apple Watch не связаны с этим iPhone"
+    case .appNotInstalled:
+      "Установите FitnessTracker на Apple Watch через Xcode или приложение Watch."
+    case .unreachable: "Откройте FitnessTracker на Apple Watch, чтобы подтвердить связь."
+    case .reachable: "Apple Watch на связи"
+    }
+  }
+}
+
 enum SleepAlarmError: Error, LocalizedError {
   case invalid, permission, unreadable, unavailable, watchUnavailable
   var errorDescription: String? {
@@ -57,8 +71,8 @@ private struct SleepAlarmArchive: Codable {
   private(set) var watchArmed: Set<UUID> = []
   private(set) var watchOnlyConfirmed: Set<UUID> = []
   private(set) var phoneSilenced: Set<UUID> = []
-  private(set) var watchPaired = false
-  private(set) var watchReachable = false
+  private(set) var watchConnection = SleepWatchConnection.checking
+  var watchReachable: Bool { watchConnection == .reachable }
   private(set) var lastWatchAlert: Date?
   private(set) var busy = false
   var notice: String?
@@ -98,9 +112,8 @@ private struct SleepAlarmArchive: Codable {
       }
     }
   }
-  func setWatchConnection(paired: Bool, reachable: Bool) {
-    watchPaired = paired
-    watchReachable = paired && reachable
+  func setWatchConnection(_ connection: SleepWatchConnection) {
+    watchConnection = connection
   }
   func add(fireDate: Date, windowMinutes: Int, delivery: SleepAlarmDelivery = .phoneAndWatch) async
     -> Bool
@@ -169,6 +182,10 @@ private struct SleepAlarmArchive: Codable {
       if let old { try scheduler.cancel(old.id) }
       apply(updated, watchOnly: handoffs, data: data, cleanup: cleanup)
       if let old { clearStatus(old.id) }
+      if let old, old.canArmWatch(at: now()) {
+        notice =
+          "Откройте FitnessTracker на Watch, чтобы подтвердить изменение или выключение сигнала на часах."
+      }
       if enabled { systemConfirmed.insert(plan.id) }
       publish()
       return true
@@ -248,11 +265,15 @@ private struct SleepAlarmArchive: Codable {
       SleepAlarmSync(
         revision: Date(timeIntervalSince1970: stamp),
         plans: plans.filter {
-          $0.isEnabled && (systemConfirmed.contains($0.id) || watchOnlyConfirmed.contains($0.id))
+          $0.isEnabled && $0.delivery.includesWatch
+            && (systemConfirmed.contains($0.id) || watchOnlyConfirmed.contains($0.id))
         }))
   }
   func receive(_ event: SleepAlarmWatchEvent) {
-    guard readable, let plan = plans.first(where: { $0 == event.plan && $0.isEnabled }),
+    guard readable,
+      let plan = plans.first(where: {
+        $0 == event.plan && $0.isEnabled && $0.delivery.includesWatch
+      }),
       event.date <= now().addingTimeInterval(30),
       latestWatchEvent[plan.id].map({ event.date >= $0 }) ?? true
     else { return }

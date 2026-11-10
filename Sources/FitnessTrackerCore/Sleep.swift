@@ -165,7 +165,9 @@ public struct SleepNight: Identifiable, Equatable, Sendable {
 }
 
 public enum SleepAlarmDelivery: String, Codable, CaseIterable, Sendable {
-  case phoneAndWatch, watchOnly
+  // Keep legacy raw values: existing alarms retain their delivery selection.
+  case phoneAndWatch, watchOnly, phoneOnly
+  public var includesWatch: Bool { self != .phoneOnly }
 }
 
 public struct SleepAlarmPlan: Codable, Equatable, Identifiable, Sendable {
@@ -200,9 +202,10 @@ public struct SleepAlarmPlan: Codable, Equatable, Identifiable, Sendable {
   }
   public var isValid: Bool {
     fireDate.timeIntervalSince1970.isFinite && [0, 5, 10, 15, 20, 30].contains(windowMinutes)
+      && (delivery != .phoneOnly || windowMinutes == 0)
   }
   public func canArmWatch(at now: Date) -> Bool {
-    isValid && isEnabled && (windowMinutes > 0 || delivery == .watchOnly) && fireDate > now
+    isValid && isEnabled && delivery.includesWatch && fireDate > now
       && watchStart <= now.addingTimeInterval(36 * 3600)
   }
 }
@@ -231,7 +234,9 @@ public struct SleepAlarmWatchEvent: Codable, Equatable, Sendable {
     self.date = date
   }
   public func canCancelBackup(for candidate: SleepAlarmPlan, now: Date) -> Bool {
-    candidate == plan && candidate.isValid && kind == .dismissed && date >= plan.windowStart
+    candidate == plan && candidate.isValid && candidate.isEnabled
+      && candidate.delivery.includesWatch
+      && kind == .dismissed && date >= plan.windowStart
       && date <= plan.fireDate.addingTimeInterval(60) && date <= now.addingTimeInterval(30)
   }
 }

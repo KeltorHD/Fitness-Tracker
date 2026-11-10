@@ -127,8 +127,8 @@ import WidgetKit
     sleepAlarms.send = { [weak watch] value in watch?.sendSleepAlarms(value) }
     watch.sleepEvent = { [weak sleepAlarms] event in sleepAlarms?.receive(event) }
     watch.sleepReady = { [weak sleepAlarms] in sleepAlarms?.refresh() }
-    watch.sleepConnection = { [weak sleepAlarms] paired, reachable in
-      sleepAlarms?.setWatchConnection(paired: paired, reachable: reachable)
+    watch.sleepConnection = { [weak sleepAlarms] connection in
+      sleepAlarms?.setWatchConnection(connection)
     }
     watch.receive = { [weak self] workout in self?.importWatch(workout) ?? false }
     watch.failure = { [weak self] error in

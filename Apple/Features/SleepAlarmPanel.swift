@@ -56,7 +56,9 @@ struct SleepAlarmPanel: View {
                 editor = SleepAlarmEditorTarget(plan: plan)
               } label: {
                 HStack(spacing: 5) {
-                  Image(systemName: plan.delivery == .watchOnly ? "applewatch" : "alarm")
+                  Image(
+                    systemName: plan.delivery == .watchOnly
+                      ? "applewatch" : (plan.delivery == .phoneOnly ? "iphone" : "alarm"))
                   Text(plan.fireDate, format: .dateTime.hour().minute()).monospacedDigit()
                 }.font(.caption.weight(.medium)).padding(.horizontal, 10).padding(.vertical, 8)
               }.buttonStyle(.glass)
@@ -132,6 +134,7 @@ struct SleepAlarmPanel: View {
   }
   private func status(_ plan: SleepAlarmPlan) -> String {
     if !plan.isEnabled { return "Выключен" }
+    if plan.delivery == .phoneOnly { return "На iPhone" }
     if plan.delivery == .watchOnly {
       if store.phoneSilenced.contains(plan.id) {
         return store.watchFailed.contains(plan.id)
@@ -141,7 +144,7 @@ struct SleepAlarmPanel: View {
     }
     if !store.systemConfirmed.contains(plan.id) { return "Системный резерв требует проверки" }
     return store.watchArmed.contains(plan.id)
-      ? "Watch готов · резерв на iPhone" : "Сигнал на iPhone"
+      ? "На всех устройствах" : "iPhone готов · Watch ожидает подготовки"
   }
 }
 
@@ -162,6 +165,31 @@ private struct SleepAlarmEditor: View {
     _window = State(initialValue: plan?.windowMinutes ?? 20)
     _delivery = State(initialValue: plan?.delivery ?? .phoneAndWatch)
   }
+  private var deliveryMenu: some View {
+    Menu {
+      ForEach([SleepAlarmDelivery.phoneOnly, .watchOnly, .phoneAndWatch], id: \.self) { option in
+        Button {
+          delivery = option
+        } label: {
+          Label(
+            L10n.text(option.menuTitle, locale: locale),
+            systemImage: delivery == option ? "checkmark" : option.menuSymbol)
+        }
+        .disabled(option == .watchOnly && !store.watchReachable && plan?.delivery != .watchOnly)
+      }
+    } label: {
+      HStack(spacing: 6) {
+        Text(L10n.text("Где будить", locale: locale)).foregroundStyle(.primary)
+        Spacer()
+        Text(L10n.text(delivery.menuTitle, locale: locale))
+        Image(systemName: "chevron.up.chevron.down").font(.caption.bold())
+      }.contentShape(.rect)
+    }
+    .disabled(store.busy)
+    .accessibilityLabel(L10n.text("Где будить", locale: locale))
+    .accessibilityValue(L10n.text(delivery.menuTitle, locale: locale))
+    .accessibilityIdentifier("sleepAlarmDelivery")
+  }
   var body: some View {
     NavigationStack {
       Form {
@@ -169,43 +197,43 @@ private struct SleepAlarmEditor: View {
           DatePicker(
             L10n.text("Разбудить не позднее", locale: locale), selection: $fireDate, in: Date()...,
             displayedComponents: [.date, .hourAndMinute])
-          Picker(L10n.text("Окно до будильника", locale: locale), selection: $window) {
-            ForEach([0, 5, 10, 15, 20, 30], id: \.self) { value in
-              Text(
-                value == 0
-                  ? L10n.text("Без умного окна", locale: locale)
-                  : L10n.format("%@ мин", String(value), locale: locale)
-              ).tag(value)
-            }
-          }.accessibilityIdentifier("sleepAlarmWindow")
+          if delivery.includesWatch {
+            Picker(L10n.text("Окно до будильника", locale: locale), selection: $window) {
+              ForEach([0, 5, 10, 15, 20, 30], id: \.self) { value in
+                Text(
+                  value == 0
+                    ? L10n.text("Без умного окна", locale: locale)
+                    : L10n.format("%@ мин", String(value), locale: locale)
+                ).tag(value)
+              }
+            }.accessibilityIdentifier("sleepAlarmWindow")
+          }
         } footer: {
           Text(
             L10n.text(
-              "Будильник на выбранную дату. Часы могут разбудить в пределах окна до этого времени.",
+              delivery == .phoneOnly
+                ? "Будильник на выбранную дату с сигналом в указанное время."
+                : "Будильник на выбранную дату. Часы могут разбудить в пределах окна до этого времени.",
               locale: locale))
         }
         Section {
-          Picker(L10n.text("Где будить", locale: locale), selection: $delivery) {
-            Text(L10n.text("iPhone с резервом", locale: locale)).tag(
-              SleepAlarmDelivery.phoneAndWatch)
-            Text(L10n.text("Только Apple Watch", locale: locale)).tag(SleepAlarmDelivery.watchOnly)
-              .disabled(!store.watchReachable && plan?.delivery != .watchOnly)
-          }.accessibilityIdentifier("sleepAlarmDelivery")
-          Label(
-            L10n.text(
-              store.watchReachable
-                ? "Apple Watch на связи" : "Откройте приложение на Watch для подключения",
-              locale: locale),
-            systemImage: store.watchReachable
-              ? "applewatch.radiowaves.left.and.right" : "applewatch"
-          )
-          .font(.subheadline).foregroundStyle(.secondary)
+          deliveryMenu
+          if delivery.includesWatch {
+            Label(
+              L10n.text(store.watchConnection.message, locale: locale),
+              systemImage: store.watchReachable
+                ? "applewatch.radiowaves.left.and.right" : "applewatch"
+            ).font(.subheadline).foregroundStyle(.secondary)
+              .accessibilityIdentifier("sleepWatchConnection")
+          }
         } footer: {
           Text(
             L10n.text(
-              delivery == .watchOnly
-                ? "После подтверждения подготовки на Watch сигнал iPhone будет выключен. При разрядке или сбое часов телефон не подстрахует. До подтверждения резерв остаётся включён."
-                : "Часы могут разбудить раньше. Системный сигнал iPhone остаётся резервом до нажатия «Выключить» на Watch.",
+              delivery == .phoneOnly
+                ? "Сигнал срабатывает на iPhone в указанное время. Умное окно отключено. iOS может автоматически дублировать системный будильник на парных Apple Watch."
+                : delivery == .watchOnly
+                  ? "После подтверждения подготовки на Watch сигнал iPhone будет выключен. При разрядке или сбое часов телефон не подстрахует. До подтверждения резерв остаётся включён."
+                  : "Часы могут разбудить раньше. Системный сигнал iPhone остаётся резервом до нажатия «Выключить» на Watch.",
               locale: locale))
         }
         if let error = store.error { Text(L10n.text(error, locale: locale)).foregroundStyle(.red) }
@@ -227,5 +255,29 @@ private struct SleepAlarmEditor: View {
         L10n.text(plan == nil ? "Новый будильник" : "Изменить будильник", locale: locale)
       ).navigationBarTitleDisplayMode(.inline)
     }.interactiveDismissDisabled(store.busy)
+      .onChange(of: delivery) { old, new in
+        if new == .phoneOnly {
+          window = 0
+        } else if old == .phoneOnly {
+          window = plan?.windowMinutes ?? 20
+        }
+      }
+  }
+}
+
+extension SleepAlarmDelivery {
+  fileprivate var menuTitle: String {
+    switch self {
+    case .phoneOnly: "На iPhone"
+    case .watchOnly: "На Apple Watch"
+    case .phoneAndWatch: "На всех устройствах"
+    }
+  }
+  fileprivate var menuSymbol: String {
+    switch self {
+    case .phoneOnly: "iphone"
+    case .watchOnly: "applewatch"
+    case .phoneAndWatch: "alarm"
+    }
   }
 }

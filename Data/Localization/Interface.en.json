@@ -1154,5 +1154,16 @@
   "Проверьте подготовку будильника на Watch. В режиме «только часы» резерв на iPhone может быть выключен.": "Check that your Watch alarm is ready. In Watch-only mode, the iPhone backup may be turned off.",
   "в среднем": "on average",
   "Подготовка запрошена на Watch": "Preparation requested on Watch",
-  "Подготовить будильник": "Prepare alarm"
+  "Подготовить будильник": "Prepare alarm",
+  "На iPhone": "On iPhone",
+  "На Apple Watch": "On Apple Watch",
+  "На всех устройствах": "On all devices",
+  "Будильник на выбранную дату с сигналом в указанное время.": "A one-time alarm on the selected date at the specified time.",
+  "Сигнал срабатывает на iPhone в указанное время. Умное окно отключено. iOS может автоматически дублировать системный будильник на парных Apple Watch.": "The alarm sounds on iPhone at the specified time. The smart window is off. iOS may automatically mirror the system alarm to paired Apple Watch.",
+  "Проверяем подключение Apple Watch": "Checking Apple Watch connection",
+  "Apple Watch не связаны с этим iPhone": "Apple Watch is not paired with this iPhone",
+  "Установите FitnessTracker на Apple Watch через Xcode или приложение Watch.": "Install FitnessTracker on Apple Watch using Xcode or the Watch app.",
+  "Откройте FitnessTracker на Apple Watch, чтобы подтвердить связь.": "Open FitnessTracker on Apple Watch to confirm the connection.",
+  "Откройте FitnessTracker на Watch, чтобы подтвердить изменение или выключение сигнала на часах.": "Open FitnessTracker on Watch to confirm changing or disabling the Watch alarm.",
+  "iPhone готов · Watch ожидает подготовки": "iPhone ready · prepare Watch"
 }

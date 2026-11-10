@@ -28,7 +28,7 @@ import WatchKit
       do {
         let sync = try JSONDecoder().decode(SleepAlarmSync.self, from: data)
         guard sync.isValid else { throw SleepAlarmErrorForWatch.invalid }
-        plans = sync.plans
+        plans = sync.plans.filter { $0.delivery.includesWatch }
         revision = sync.revision
       } catch {
         readable = false
@@ -46,7 +46,7 @@ import WatchKit
     guard readable, sync.isValid, sync.revision >= revision else { return }
     do {
       UserDefaults.standard.set(try JSONEncoder().encode(sync), forKey: "watchSleepAlarms.v1")
-      plans = sync.plans
+      plans = sync.plans.filter { $0.delivery.includesWatch }
       revision = sync.revision
       if let armedPlan, plans.contains(armedPlan),
         runtime?.state == .scheduled || runtime?.state == .running
@@ -136,7 +136,7 @@ import WatchKit
   }
   private func startSensors(for identity: ObjectIdentifier) {
     guard runtime.map(ObjectIdentifier.init) == identity, let plan = armedPlan,
-      readable, plans.contains(plan)
+      readable, plan.delivery.includesWatch, plans.contains(plan)
     else { return }
     detector = SmartWakeDetector()
     sensorUnavailable = false

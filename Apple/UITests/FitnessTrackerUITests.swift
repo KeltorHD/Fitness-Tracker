@@ -1,6 +1,69 @@
 import XCTest
 
 final class FitnessTrackerUITests: XCTestCase {
+  @MainActor func testSleepAlarmOffersThreeDestinationsAndPhoneNeedsNoWatch() {
+    let app = launch(additionalArguments: ["--ui-testing-sleep", "-sleepDiaryEnabled", "NO"])
+    let section = app.segmentedControls["diarySection"]
+    XCTAssertTrue(section.waitForExistence(timeout: 10))
+    section.buttons["Сон"].tap()
+    app.buttons["addSleepAlarm"].tap()
+    let delivery = app.descendants(matching: .any).matching(identifier: "sleepAlarmDelivery")
+      .firstMatch
+    XCTAssertTrue(delivery.waitForExistence(timeout: 5))
+    delivery.tap()
+    XCTAssertTrue(app.buttons["На всех устройствах"].exists)
+    XCTAssertTrue(app.buttons["На Apple Watch"].exists)
+    XCTAssertFalse(app.buttons["На Apple Watch"].isEnabled)
+    app.buttons["На iPhone"].tap()
+    XCTAssertFalse(
+      app.descendants(matching: .any).matching(identifier: "sleepAlarmWindow").firstMatch.exists)
+    XCTAssertFalse(
+      app.descendants(matching: .any).matching(identifier: "sleepWatchConnection").firstMatch.exists
+    )
+    let editor = XCTAttachment(screenshot: app.screenshot())
+    editor.name = "Phone delivery needs no Watch app, system mirroring explained"
+    editor.lifetime = .keepAlways
+    add(editor)
+    app.buttons["saveSleepAlarm"].tap()
+    XCTAssertTrue(app.buttons["expandSleepAlarms"].waitForExistence(timeout: 5))
+    app.buttons["expandSleepAlarms"].tap()
+    let edit = app.buttons.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "editSleepAlarm_")
+    ).firstMatch
+    XCTAssertTrue(edit.waitForExistence(timeout: 5))
+    edit.tap()
+    XCTAssertTrue(app.navigationBars["Изменить будильник"].waitForExistence(timeout: 5))
+    delivery.tap()
+    let allDevices = app.buttons["На всех устройствах"]
+    XCTAssertTrue(allDevices.waitForExistence(timeout: 5))
+    allDevices.tap()
+    XCTAssertTrue(
+      app.descendants(matching: .any).matching(identifier: "sleepAlarmWindow").firstMatch.exists)
+    app.buttons["saveSleepAlarm"].tap()
+    XCTAssertTrue(
+      app.staticTexts["iPhone готов · Watch ожидает подготовки"].waitForExistence(timeout: 5))
+  }
+
+  @MainActor func testWatchOnlyDestinationKeepsPhoneReserveUntilConfirmation() {
+    let app = launch(additionalArguments: [
+      "--ui-testing-sleep", "--ui-testing-sleep-watch", "-sleepDiaryEnabled", "NO",
+    ])
+    let section = app.segmentedControls["diarySection"]
+    XCTAssertTrue(section.waitForExistence(timeout: 10))
+    section.buttons["Сон"].tap()
+    app.buttons["addSleepAlarm"].tap()
+    let delivery = app.descendants(matching: .any).matching(identifier: "sleepAlarmDelivery")
+      .firstMatch
+    XCTAssertTrue(delivery.waitForExistence(timeout: 5))
+    delivery.tap()
+    let watch = app.buttons["На Apple Watch"]
+    XCTAssertTrue(watch.isEnabled)
+    watch.tap()
+    app.buttons["saveSleepAlarm"].tap()
+    XCTAssertTrue(
+      app.staticTexts["iPhone включён до подтверждения Watch"].waitForExistence(timeout: 5))
+  }
+
   @MainActor func testSleepInsightsSelectStageAndMonth() {
     let app = launch(additionalArguments: ["--ui-testing-sleep", "-sleepDiaryEnabled", "YES"])
     let section = app.segmentedControls["diarySection"]
@@ -58,7 +121,8 @@ final class FitnessTrackerUITests: XCTestCase {
     app.buttons["saveSleepAlarm"].tap()
     XCTAssertTrue(app.staticTexts["Выключен"].waitForExistence(timeout: 5))
     enabled.tap()
-    XCTAssertTrue(app.staticTexts["Сигнал на iPhone"].waitForExistence(timeout: 5))
+    XCTAssertTrue(
+      app.staticTexts["iPhone готов · Watch ожидает подготовки"].waitForExistence(timeout: 5))
   }
 
   @MainActor func testSleepDiaryOpensAlarmEditorWithoutHealthPermission() {

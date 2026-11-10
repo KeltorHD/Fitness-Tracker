@@ -53,6 +53,13 @@ import Foundation
       repository: repository, health: HealthKitService(), defaults: defaults,
       platformServicesEnabled: !testing, accountSession: accountSession,
       sleepAlarmScheduler: SleepUITestFixture.scheduler())
+    #if DEBUG
+      if testing, ProcessInfo.processInfo.arguments.contains("--ui-testing-sleep") {
+        store.sleepAlarms.setWatchConnection(
+          ProcessInfo.processInfo.arguments.contains("--ui-testing-sleep-watch")
+            ? .reachable : .appNotInstalled)
+      }
+    #endif
     cachedStore = store
     return store
   }

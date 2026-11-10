@@ -528,6 +528,23 @@
         }
       }
     },
+    "Apple Watch не связаны с этим iPhone": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Watch не связаны с этим iPhone"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Watch is not paired with this iPhone"
+          }
+        }
+      }
+    },
     "Apple «Здоровье»": {
       "extractionState": "manual",
       "localizations": {
@@ -881,6 +898,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "iPhone stays on until Watch confirms"
+          }
+        }
+      }
+    },
+    "iPhone готов · Watch ожидает подготовки": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPhone готов · Watch ожидает подготовки"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPhone ready · prepare Watch"
           }
         }
       }
@@ -1782,6 +1816,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Only this drop stage will be deleted."
+          }
+        }
+      }
+    },
+    "Будильник на выбранную дату с сигналом в указанное время.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Будильник на выбранную дату с сигналом в указанное время."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A one-time alarm on the selected date at the specified time."
           }
         }
       }
@@ -8331,6 +8382,23 @@
         }
       }
     },
+    "На Apple Watch": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "На Apple Watch"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On Apple Watch"
+          }
+        }
+      }
+    },
     "На Mi Band 10 откройте Настройки → Share HR и включите передачу пульса. Держите браслет рядом с iPhone.": {
       "extractionState": "manual",
       "localizations": {
@@ -8361,6 +8429,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "On WATCH GT 6 Pro, open Settings → HR Data Broadcasts and start broadcasting. Keep the watch near your iPhone and tap Find heart rate monitor."
+          }
+        }
+      }
+    },
+    "На iPhone": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "На iPhone"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On iPhone"
+          }
+        }
+      }
+    },
+    "На всех устройствах": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "На всех устройствах"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On all devices"
           }
         }
       }
@@ -11493,6 +11595,40 @@
         }
       }
     },
+    "Откройте FitnessTracker на Apple Watch, чтобы подтвердить связь.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Откройте FitnessTracker на Apple Watch, чтобы подтвердить связь."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open FitnessTracker on Apple Watch to confirm the connection."
+          }
+        }
+      }
+    },
+    "Откройте FitnessTracker на Watch, чтобы подтвердить изменение или выключение сигнала на часах.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Откройте FitnessTracker на Watch, чтобы подтвердить изменение или выключение сигнала на часах."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open FitnessTracker on Watch to confirm changing or disabling the Watch alarm."
+          }
+        }
+      }
+    },
     "Откройте FitnessTracker на Watch, чтобы подтвердить отмену умного окна.": {
       "extractionState": "manual",
       "localizations": {
@@ -13873,6 +14009,23 @@
         }
       }
     },
+    "Проверяем подключение Apple Watch": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Проверяем подключение Apple Watch"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Checking Apple Watch connection"
+          }
+        }
+      }
+    },
     "Прогресс к недельной цели.": {
       "extractionState": "manual",
       "localizations": {
@@ -15552,6 +15705,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "iPhone alarm"
+          }
+        }
+      }
+    },
+    "Сигнал срабатывает на iPhone в указанное время. Умное окно отключено. iOS может автоматически дублировать системный будильник на парных Apple Watch.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сигнал срабатывает на iPhone в указанное время. Умное окно отключено. iOS может автоматически дублировать системный будильник на парных Apple Watch."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The alarm sounds on iPhone at the specified time. The smart window is off. iOS may automatically mirror the system alarm to paired Apple Watch."
           }
         }
       }
@@ -18340,6 +18510,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Successful read: %@"
+          }
+        }
+      }
+    },
+    "Установите FitnessTracker на Apple Watch через Xcode или приложение Watch.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Установите FitnessTracker на Apple Watch через Xcode или приложение Watch."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Install FitnessTracker on Apple Watch using Xcode or the Watch app."
           }
         }
       }

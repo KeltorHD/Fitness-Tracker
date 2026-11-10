@@ -89,7 +89,8 @@ private let sleepDay = Date(timeIntervalSince1970: 1_700_006_400)
       at: now))
   #expect(!SleepAlarmPlan(fireDate: now, windowMinutes: 30).canArmWatch(at: now))
   #expect(
-    !SleepAlarmPlan(fireDate: now.addingTimeInterval(3600), windowMinutes: 0).canArmWatch(at: now))
+    !SleepAlarmPlan(fireDate: now.addingTimeInterval(3600), windowMinutes: 0, delivery: .phoneOnly)
+      .canArmWatch(at: now))
   #expect(!SleepAlarmPlan(fireDate: now, windowMinutes: 31).isValid)
   #expect(!SleepAlarmPlan(fireDate: Date(timeIntervalSince1970: .nan), windowMinutes: 20).isValid)
   #expect(!SleepAlarmSync(revision: now, plans: [plan, plan]).isValid)
@@ -261,4 +262,20 @@ private let sleepDay = Date(timeIntervalSince1970: 1_700_006_400)
   #expect(
     !SleepAlarmPlan(fireDate: sleepDay, windowMinutes: 20, isEnabled: false).canArmWatch(
       at: sleepDay.addingTimeInterval(-120)))
+}
+
+@Test func sleepAlarmDeliveryRoutesPhoneAndWatchIndependently() {
+  let now = sleepDay.addingTimeInterval(-3600)
+  let phone = SleepAlarmPlan(fireDate: sleepDay, windowMinutes: 0, delivery: .phoneOnly)
+  let watch = SleepAlarmPlan(fireDate: sleepDay, windowMinutes: 0, delivery: .watchOnly)
+  let all = SleepAlarmPlan(fireDate: sleepDay, windowMinutes: 0, delivery: .phoneAndWatch)
+  #expect(phone.isValid)
+  #expect(!phone.canArmWatch(at: now))
+  #expect(watch.canArmWatch(at: now))
+  #expect(all.canArmWatch(at: now))
+  #expect(!SleepAlarmPlan(fireDate: sleepDay, windowMinutes: 20, delivery: .phoneOnly).isValid)
+  #expect(
+    !SleepAlarmWatchEvent(plan: phone, kind: .dismissed, date: sleepDay).canCancelBackup(
+      for: phone, now: sleepDay))
+  #expect(SleepAlarmDelivery.allCases.count == 3)
 }
