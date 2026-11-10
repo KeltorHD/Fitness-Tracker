@@ -22,6 +22,7 @@ import WidgetKit
   private(set) var switchingDemo = false
   private(set) var workspaceID = UUID()
   let nutrition: NutritionDiaryModel?
+  let sleepAlarms: SleepAlarmStore
   let settings: SettingsViewModel
   let tracker: TrackerViewModel
   let healthCharts: HealthChartsViewModel
@@ -88,6 +89,7 @@ import WidgetKit
     healthCharts: HealthChartsViewModel? = nil,
     accountSession: AccountSession? = nil, now: @escaping () -> Date = Date.init
   ) {
+    self.sleepAlarms = SleepAlarmStore(scheduler: SystemSleepAlarm(), defaults: defaults, now: now)
     self.repository = WorkoutWorkspaceRepository(personal: repository)
     self.nutrition = (repository as? any NutritionRepository).map {
       NutritionDiaryModel(repository: $0)
@@ -120,6 +122,9 @@ import WidgetKit
         })
     self.tracker.onHeartRateChange = { [weak self] in self?.scheduleHeartRateUpdate() }
     self.healthCharts.onHeartRateChange = { [weak self] in self?.scheduleHeartRateUpdate() }
+    sleepAlarms.send = { [weak watch] value in watch?.sendSleepAlarms(value) }
+    watch.sleepEvent = { [weak sleepAlarms] event in sleepAlarms?.receive(event) }
+    watch.sleepReady = { [weak sleepAlarms] in sleepAlarms?.refresh() }
     watch.receive = { [weak self] workout in self?.importWatch(workout) ?? false }
     watch.failure = { [weak self] error in
       self?.report(
@@ -131,6 +136,7 @@ import WidgetKit
   func startServices() {
     guard platformServicesEnabled, !servicesStarted else { return }
     servicesStarted = true
+    sleepAlarms.refresh()
     watch.activate()
     refreshIntegrations()
   }

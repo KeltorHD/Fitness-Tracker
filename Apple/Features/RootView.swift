@@ -160,6 +160,7 @@ struct RootView: View {
     .task(id: phase) {
       if phase == .active {
         store.reload()
+        store.sleepAlarms.refresh()
         store.refreshIntegrations()
       } else if phase == .background {
         await store.prepareForBackground()

@@ -3,6 +3,18 @@ import Foundation
 import WatchConnectivity
 
 @MainActor final class PhoneWatchBridge: NSObject, WCSessionDelegate {
+  var sleepEvent: ((SleepAlarmWatchEvent) -> Void)?
+  var sleepReady: (() -> Void)?
+  func sendSleepAlarms(_ value: SleepAlarmSync) {
+    guard WCSession.isSupported(), WCSession.default.activationState == .activated,
+      WCSession.default.isPaired, WCSession.default.isWatchAppInstalled
+    else { return }
+    do {
+      try WCSession.default.updateApplicationContext([
+        "sleepAlarms": try JSONEncoder().encode(value)
+      ])
+    } catch { failure?(error) }
+  }
   var receive: ((Workout) -> Bool)?
   var failure: ((any Error) -> Void)?
   func activate() {
@@ -14,11 +26,26 @@ import WatchConnectivity
     _ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState,
     error: Error?
   ) {
-    if let error { Task { @MainActor in self.failure?(error) } }
+    if let error {
+      Task { @MainActor in self.failure?(error) }
+    } else {
+      Task { @MainActor in self.sleepReady?() }
+    }
   }
   nonisolated func sessionDidBecomeInactive(_ session: WCSession) {}
   nonisolated func sessionDidDeactivate(_ session: WCSession) { session.activate() }
+  nonisolated func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
+    self.session(session, didReceiveUserInfo: message)
+  }
   nonisolated func session(_ session: WCSession, didReceiveUserInfo userInfo: [String: Any] = [:]) {
+    if let data = userInfo["sleepAlarmEvent"] as? Data {
+      Task { @MainActor in
+        do {
+          self.sleepEvent?(try JSONDecoder().decode(SleepAlarmWatchEvent.self, from: data))
+        } catch { self.failure?(error) }
+      }
+      return
+    }
     guard let data = userInfo["workout"] as? Data else { return }
     Task { @MainActor in
       do {

@@ -20,6 +20,10 @@
 	<string>FitnessTracker</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+	<key>WKBackgroundModes</key>
+	<array><string>alarm</string></array>
+	<key>NSMotionUsageDescription</key>
+	<string>Оценивать движения запястья в выбранном окне умного будильника.</string>
 	<key>WKApplication</key>
 	<true/>
 	<key>WKCompanionAppBundleIdentifier</key>

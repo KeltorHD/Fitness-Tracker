@@ -1,6 +1,6 @@
 import SwiftUI
 
-private enum DiarySection: Int, Hashable { case workouts, nutrition }
+private enum DiarySection: Int, Hashable { case workouts, nutrition, sleep }
 
 struct DashboardView: View {
   @Environment(AppStore.self) private var store
@@ -16,6 +16,7 @@ struct DashboardView: View {
           Picker(L10n.text("Раздел дневника", locale: locale), selection: $section) {
             Text(L10n.text("Тренировки", locale: locale)).tag(DiarySection.workouts)
             Text(L10n.text("Питание", locale: locale)).tag(DiarySection.nutrition)
+            Text(L10n.text("Сон", locale: locale)).tag(DiarySection.sleep)
           }.pickerStyle(.segmented).accessibilityIdentifier("diarySection")
           HStack {
             Button(L10n.text("Предыдущий день", locale: locale), systemImage: "chevron.left") {
@@ -51,6 +52,15 @@ struct DashboardView: View {
                 L10n.text("Питание недоступно", locale: locale), systemImage: "fork.knife")
             }
           }.tag(DiarySection.nutrition)
+          Group {
+            if store.isDemoMode {
+              ContentUnavailableView(
+                L10n.text("Данные сна недоступны в демо-режиме", locale: locale),
+                systemImage: "bed.double")
+            } else {
+              SleepDiaryView(date: $date, isSelected: section == .sleep, alarms: store.sleepAlarms)
+            }
+          }.tag(DiarySection.sleep)
         }.tabViewStyle(.page(indexDisplayMode: .never))
       }
       .background(FitTheme.paper).navigationTitle(L10n.text("Дневник", locale: locale))

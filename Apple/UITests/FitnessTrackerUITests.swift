@@ -1,6 +1,30 @@
 import XCTest
 
 final class FitnessTrackerUITests: XCTestCase {
+  @MainActor func testSleepDiaryOpensAlarmEditorWithoutHealthPermission() {
+    let app = launch(additionalArguments: ["-sleepDiaryEnabled", "NO"])
+    let section = app.segmentedControls["diarySection"]
+    XCTAssertTrue(section.waitForExistence(timeout: 10))
+    section.buttons["Сон"].tap()
+    XCTAssertTrue(app.buttons["enableSleepDiary"].waitForExistence(timeout: 10))
+    let addAlarm = app.buttons["addSleepAlarm"]
+    reveal(addAlarm, in: app)
+    XCTAssertTrue(addAlarm.isHittable)
+    let diary = XCTAttachment(screenshot: app.screenshot())
+    diary.name = "Sleep diary before Health opt-in"
+    diary.lifetime = .keepAlways
+    add(diary)
+    addAlarm.tap()
+    XCTAssertTrue(app.buttons["saveSleepAlarm"].waitForExistence(timeout: 5))
+    XCTAssertTrue(app.navigationBars["Новый будильник"].exists)
+    XCTAssertTrue(
+      app.descendants(matching: .any).matching(identifier: "sleepAlarmWindow").firstMatch.exists)
+    let editor = XCTAttachment(screenshot: app.screenshot())
+    editor.name = "Sleep alarm deadline and smart window editor"
+    editor.lifetime = .keepAlways
+    add(editor)
+  }
+
   @MainActor func testNewExerciseRestoresAllThreeHistoricalSetsWithoutCompletionMarks() {
     let app = launch(additionalArguments: ["--ui-testing-previous-sets"])
     let start = app.buttons["workoutStartAction"]

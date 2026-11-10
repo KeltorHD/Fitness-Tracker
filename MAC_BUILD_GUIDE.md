@@ -8,6 +8,8 @@
 
 После объединения дневников снова выполните `xcodegen generate`: добавлены `FoodBarcodeScanner.swift` и `NutritionToolsView.swift`. В «Дневнике» проверьте свайп между тренировками и питанием, общую дату, ручное добавление/избранное, воду и копирование дня. Для сканера нужен поддерживаемый физический iPhone/iPad: VisionKit + разрешение камеры `NSCameraUsageDescription` (локализовано RU/EN). На Simulator/при отказе доступен ручной ввод кода; дополнительная capability камеры не требуется. Кадры сканера не сохраняются/не отправляются. Сканирование EAN-8/EAN-13, camera lifecycle и SwiftData/CloudKit round-trip новых kinds требуют Xcode/устройства.
 
+После добавления дневника сна выполните `xcodegen generate`: добавлены AlarmKit для системного резервного сигнала и режим `alarm` для WatchKit. На iPhone откройте «Дневник → Сон», разрешите чтение сна и установите будильник; перед сном подтвердите ближайшее умное окно в FitnessTracker на Watch. Требуются iOS/watchOS 26+. Оценка движения не определяет фазу сна. Настройка, ограничения синхронизации и сценарий проверки на физических устройствах — в [SLEEP.md](docs/SLEEP.md).
+
 ## 1. Инструменты
 
 Установите **полный Xcode 26 или новее**, совместимый с вашей версией macOS, с iOS 26 и watchOS 26 SDK. Одних Command Line Tools недостаточно. Версию macOS выбирайте по [таблице совместимости Xcode](https://developer.apple.com/support/xcode/). Откройте Xcode, примите лицензию и установите iPhone/watchOS Simulator runtimes через Settings → Components.

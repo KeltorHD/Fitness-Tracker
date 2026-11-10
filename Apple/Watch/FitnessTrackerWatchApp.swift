@@ -1,10 +1,18 @@
 import FitnessTrackerCore
 import SwiftUI
+import WatchKit
 
 @main struct FitnessTrackerWatchApp: App {
-  @State private var store = WatchStore()
+  @State private var page = 0
+  @WKApplicationDelegateAdaptor(WatchApplicationDelegate.self) private var delegate
   var body: some Scene {
-    WindowGroup { WatchWorkoutView().environment(store).environment(\.locale, L10n.locale) }
+    WindowGroup {
+      TabView(selection: $page) {
+        WatchWorkoutView().tag(0)
+        WatchSleepView().tag(1)
+      }.onChange(of: delegate.store.sleepAlarm.ringing) { _, value in if value { page = 1 } }
+        .environment(delegate.store).environment(\.locale, L10n.locale)
+    }
   }
 }
 

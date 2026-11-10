@@ -150,6 +150,8 @@ targets:
       - Apple/Shared/AppCompatibility.swift
       - path: Resources/Localizable.xcstrings
         buildPhase: resources
+      - path: Resources/InfoPlist.xcstrings
+        buildPhase: resources
       - path: Resources/WatchAssets.xcassets
       - path: Resources/PrivacyInfo.xcprivacy
         buildPhase: resources
