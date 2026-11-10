@@ -20,8 +20,7 @@ private func expect(_ condition: Bool, _ message: String) throws {
   }
   func cancel(_ id: UUID) throws {
     if failCancel { throw CheckFailure(message: "Private cancellation details") }
-    cancelled.append(id)
-    ids.remove(id)
+    if ids.remove(id) != nil { cancelled.append(id) }
   }
   func activeIDs() throws -> Set<UUID> {
     if failRead { throw CheckFailure(message: "Private read details") }
@@ -56,6 +55,93 @@ private func expect(_ condition: Bool, _ message: String) throws {
 }
 
 @main private struct PortableSleepChecks {
+  @MainActor private static func checkWatchHandoffAndEditing() async throws {
+    let suite = "FitnessTracker.SleepHandoffChecks.\(UUID())"
+    guard let defaults = UserDefaults(suiteName: suite) else {
+      throw CheckFailure(message: "Defaults")
+    }
+    defer { defaults.removePersistentDomain(forName: suite) }
+    let now = Date(timeIntervalSince1970: 1_700_000_000)
+    let scheduler = Scheduler()
+    let store = SleepAlarmStore(scheduler: scheduler, defaults: defaults, now: { now })
+    try expect(
+      !(await store.add(
+        fireDate: now.addingTimeInterval(3600), windowMinutes: 20, delivery: .watchOnly)),
+      "Offline Watch cannot select watch-only")
+    store.setWatchConnection(paired: true, reachable: true)
+    try expect(
+      await store.add(
+        fireDate: now.addingTimeInterval(3600), windowMinutes: 20, delivery: .watchOnly),
+      "Reserve installed before Watch handoff")
+    guard let plan = store.plans.first else { throw CheckFailure(message: "Watch plan") }
+    try expect(
+      scheduler.ids == [plan.id] && store.phoneSilenced.isEmpty,
+      "Phone stays armed until fresh exact Watch acknowledgement")
+    let legacy = SleepAlarmPlan(
+      id: plan.id, fireDate: plan.fireDate, windowMinutes: plan.windowMinutes)
+    store.receive(SleepAlarmWatchEvent(plan: legacy, kind: .armed, date: now))
+    try expect(scheduler.ids == [plan.id], "Old Watch version cannot silence phone")
+    store.receive(SleepAlarmWatchEvent(plan: plan, kind: .armed, date: now.addingTimeInterval(-61)))
+    try expect(scheduler.ids == [plan.id], "Stale acknowledgement cannot silence phone")
+    scheduler.failCancel = true
+    store.receive(SleepAlarmWatchEvent(plan: plan, kind: .armed, date: now))
+    try expect(
+      scheduler.ids == [plan.id] && store.phoneSilenced.isEmpty, "Failed handoff keeps phone backup"
+    )
+    scheduler.failCancel = false
+    let restored = SleepAlarmStore(scheduler: scheduler, defaults: defaults, now: { now })
+    restored.refresh()
+    try expect(
+      restored.plans == [plan] && scheduler.ids.isEmpty && restored.phoneSilenced == [plan.id],
+      "Persisted handoff resumes after process interruption")
+    restored.refresh()
+    try expect(restored.plans == [plan], "Watch-only plan survives absence from AlarmKit")
+    restored.receive(SleepAlarmWatchEvent(plan: plan, kind: .failed, date: now))
+    try expect(
+      restored.watchFailed == [plan.id] && scheduler.ids.isEmpty,
+      "Watch-only failure never silently enables phone sound")
+    restored.setWatchConnection(paired: false, reachable: false)
+    try expect(
+      await restored.update(
+        plan, fireDate: now.addingTimeInterval(7200), windowMinutes: 10, delivery: .phoneAndWatch),
+      "User can restore phone delivery without Watch connection")
+    guard let edited = restored.plans.first else { throw CheckFailure(message: "Edited plan") }
+    try expect(
+      edited.id != plan.id && scheduler.ids == [edited.id],
+      "Editing replaces reserve and rejects old event IDs")
+    restored.receive(SleepAlarmWatchEvent(plan: plan, kind: .dismissed, date: plan.windowStart))
+    try expect(restored.plans == [edited], "Old dismissal cannot remove edited plan")
+    scheduler.failCancel = true
+    try expect(
+      !(await restored.update(
+        edited, fireDate: now.addingTimeInterval(10800), windowMinutes: 5, delivery: .phoneAndWatch)),
+      "Editing reports cancellation failure")
+    try expect(
+      restored.plans == [edited] && scheduler.ids.count == 2,
+      "Failed rollback retains old plan and cleanup intent")
+    scheduler.failCancel = false
+    let recovered = SleepAlarmStore(scheduler: scheduler, defaults: defaults, now: { now })
+    recovered.refresh()
+    try expect(
+      recovered.plans == [edited] && scheduler.ids == [edited.id],
+      "Restart cleans uncommitted system reserve")
+    try expect(await recovered.setEnabled(false, for: edited), "Disable keeps editable settings")
+    guard let disabled = recovered.plans.first else { throw CheckFailure(message: "Disabled plan") }
+    try expect(
+      !disabled.isEnabled && scheduler.ids.isEmpty, "Disabled alarms have no system reserve")
+    recovered.refresh()
+    try expect(recovered.plans == [disabled], "Refresh preserves disabled settings")
+    try expect(await recovered.setEnabled(true, for: disabled), "Enable schedules a fresh reserve")
+    guard let enabled = recovered.plans.first else { throw CheckFailure(message: "Enabled plan") }
+    try expect(
+      enabled.isEnabled && enabled.id != disabled.id && scheduler.ids == [enabled.id],
+      "Enable cannot accept old Watch acknowledgement")
+    defaults.set(try JSONEncoder().encode([legacy]), forKey: "sleepAlarmPlans.v1")
+    let migrated = SleepAlarmStore(scheduler: scheduler, defaults: defaults, now: { now })
+    try expect(
+      migrated.plans == [legacy] && migrated.watchOnlyConfirmed.isEmpty,
+      "Legacy array migration preserves phone backup preference")
+  }
   @MainActor static func main() async throws {
     let suite = "FitnessTracker.SleepChecks.\(UUID())"
     guard let defaults = UserDefaults(suiteName: suite) else {
@@ -148,6 +234,7 @@ private func expect(_ condition: Bool, _ message: String) throws {
     scheduler.ids = []
     store.refresh()
     try expect(store.plans.isEmpty, "Removed system alarms are reconciled")
+    try await checkWatchHandoffAndEditing()
     let corrupt = Data("broken settings".utf8)
     defaults.set(corrupt, forKey: "sleepAlarmPlans.v1")
     let broken = SleepAlarmStore(scheduler: scheduler, defaults: defaults, now: clock)

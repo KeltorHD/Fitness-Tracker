@@ -5,6 +5,13 @@ import WatchConnectivity
 @MainActor final class PhoneWatchBridge: NSObject, WCSessionDelegate {
   var sleepEvent: ((SleepAlarmWatchEvent) -> Void)?
   var sleepReady: (() -> Void)?
+  var sleepConnection: ((Bool, Bool) -> Void)?
+  private func updateSleepConnection() {
+    let session = WCSession.default
+    let paired =
+      session.activationState == .activated && session.isPaired && session.isWatchAppInstalled
+    sleepConnection?(paired, paired && session.isReachable)
+  }
   func sendSleepAlarms(_ value: SleepAlarmSync) {
     guard WCSession.isSupported(), WCSession.default.activationState == .activated,
       WCSession.default.isPaired, WCSession.default.isWatchAppInstalled
@@ -29,10 +36,24 @@ import WatchConnectivity
     if let error {
       Task { @MainActor in self.failure?(error) }
     } else {
-      Task { @MainActor in self.sleepReady?() }
+      Task { @MainActor in
+        self.updateSleepConnection()
+        self.sleepReady?()
+      }
     }
   }
-  nonisolated func sessionDidBecomeInactive(_ session: WCSession) {}
+  nonisolated func sessionDidBecomeInactive(_ session: WCSession) {
+    Task { @MainActor in self.sleepConnection?(false, false) }
+  }
+  nonisolated func sessionReachabilityDidChange(_ session: WCSession) {
+    Task { @MainActor in self.updateSleepConnection() }
+  }
+  nonisolated func sessionWatchStateDidChange(_ session: WCSession) {
+    Task { @MainActor in
+      self.updateSleepConnection()
+      self.sleepReady?()
+    }
+  }
   nonisolated func sessionDidDeactivate(_ session: WCSession) { session.activate() }
   nonisolated func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
     self.session(session, didReceiveUserInfo: message)

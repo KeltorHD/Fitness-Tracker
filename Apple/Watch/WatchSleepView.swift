@@ -18,15 +18,20 @@ struct WatchSleepView: View {
             $0.fireDate < $1.fireDate
           }) {
             Text(plan.fireDate, format: .dateTime.day().month().hour().minute()).font(.headline)
-            HStack(spacing: 4) {
-              Text(plan.windowStart, style: .time)
-              Text(verbatim: "—")
-              Text(plan.fireDate, style: .time)
+            if plan.delivery == .watchOnly {
+              Text(L10n.text("Только Apple Watch", locale: locale)).font(.caption.bold())
+            }
+            if plan.windowMinutes > 0 {
+              HStack(spacing: 4) {
+                Text(plan.windowStart, style: .time)
+                Text(verbatim: "—")
+                Text(plan.fireDate, style: .time)
+              }
             }
             if store.sleepAlarm.armedPlan == plan {
-              Text(L10n.text("Окно запрошено на Watch", locale: locale)).font(.caption)
+              Text(L10n.text("Подготовка запрошена на Watch", locale: locale)).font(.caption)
             }
-            Button(L10n.text("Подготовить умное окно", locale: locale)) { store.sleepAlarm.arm() }
+            Button(L10n.text("Подготовить будильник", locale: locale)) { store.sleepAlarm.arm() }
               .buttonStyle(.glassProminent)
           } else {
             Text(L10n.text("Создайте будильник в дневнике сна на iPhone.", locale: locale))

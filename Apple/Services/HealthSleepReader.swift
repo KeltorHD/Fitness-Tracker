@@ -20,7 +20,7 @@ import HealthKit
     guard HKHealthStore.isHealthDataAvailable() else {
       throw ServiceError.unavailable("HealthKit недоступен на этом устройстве.")
     }
-    let days = (-6...0).compactMap { calendar.date(byAdding: .day, value: $0, to: day) }
+    let days = (-29...0).compactMap { calendar.date(byAdding: .day, value: $0, to: day) }
     guard let first = days.first.flatMap({ SleepNight.window(endingOn: $0, calendar: calendar) }),
       let last = SleepNight.window(endingOn: day, calendar: calendar)
     else { return [] }

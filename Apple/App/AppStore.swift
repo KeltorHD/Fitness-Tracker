@@ -87,9 +87,11 @@ import WidgetKit
     archiveFiles: any ArchiveFileHandling = ArchiveFileService(),
     tracker: TrackerViewModel? = nil,
     healthCharts: HealthChartsViewModel? = nil,
-    accountSession: AccountSession? = nil, now: @escaping () -> Date = Date.init
+    accountSession: AccountSession? = nil, sleepAlarmScheduler: (any SleepAlarmScheduling)? = nil,
+    now: @escaping () -> Date = Date.init
   ) {
-    self.sleepAlarms = SleepAlarmStore(scheduler: SystemSleepAlarm(), defaults: defaults, now: now)
+    self.sleepAlarms = SleepAlarmStore(
+      scheduler: sleepAlarmScheduler ?? SystemSleepAlarm(), defaults: defaults, now: now)
     self.repository = WorkoutWorkspaceRepository(personal: repository)
     self.nutrition = (repository as? any NutritionRepository).map {
       NutritionDiaryModel(repository: $0)
@@ -125,6 +127,9 @@ import WidgetKit
     sleepAlarms.send = { [weak watch] value in watch?.sendSleepAlarms(value) }
     watch.sleepEvent = { [weak sleepAlarms] event in sleepAlarms?.receive(event) }
     watch.sleepReady = { [weak sleepAlarms] in sleepAlarms?.refresh() }
+    watch.sleepConnection = { [weak sleepAlarms] paired, reachable in
+      sleepAlarms?.setWatchConnection(paired: paired, reachable: reachable)
+    }
     watch.receive = { [weak self] workout in self?.importWatch(workout) ?? false }
     watch.failure = { [weak self] error in
       self?.report(

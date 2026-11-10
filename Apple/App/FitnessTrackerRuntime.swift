@@ -51,7 +51,8 @@ import Foundation
     }
     let store = AppStore(
       repository: repository, health: HealthKitService(), defaults: defaults,
-      platformServicesEnabled: !testing, accountSession: accountSession)
+      platformServicesEnabled: !testing, accountSession: accountSession,
+      sleepAlarmScheduler: SleepUITestFixture.scheduler())
     cachedStore = store
     return store
   }

@@ -69,9 +69,10 @@ import WatchKit
       error = L10n.text("Нет умного будильника на ближайшие 36 часов.")
       return
     }
-    let start = max(plan.windowStart, Date().addingTimeInterval(2))
+    let start = max(plan.watchStart, Date().addingTimeInterval(2))
     guard start < plan.fireDate else {
-      error = L10n.text("Окно уже заканчивается. Резервный будильник остаётся на iPhone.")
+      error = statusMessage(
+        "Окно уже заканчивается. Резервный будильник остаётся на iPhone.", for: plan)
       return
     }
     if armedPlan == plan, !sensorUnavailable,
@@ -99,8 +100,8 @@ import WatchKit
           }
           if session.state == .invalid { return }
         }
-        self?.error = L10n.text(
-          "Watch ещё не подтвердили умное окно. Резервный будильник остаётся на iPhone.")
+        self?.error = self?.statusMessage(
+          "Watch ещё не подтвердили умное окно. Резервный будильник остаётся на iPhone.", for: plan)
       }
     } catch { self.error = L10n.text("Не удалось сохранить будильник на Watch.") }
   }
@@ -145,6 +146,7 @@ import WatchKit
       do { try await Task.sleep(for: .seconds(delay)) } catch { return }
       self?.fire(plan)
     }
+    guard plan.windowMinutes > 0 else { return }
     guard motion.isAccelerometerAvailable else {
       sensorUnavailable = true
       error = L10n.text("Датчик движения недоступен. Разбудим в конце окна.")
@@ -186,6 +188,12 @@ import WatchKit
     runtime?.notifyUser(hapticType: .notification, repeatHandler: { _ in 2 })
     send?(SleepAlarmWatchEvent(plan: plan, kind: .alerted, date: Date()))
   }
+  private func statusMessage(_ fallback: String, for plan: SleepAlarmPlan) -> String {
+    L10n.text(
+      plan.delivery == .watchOnly
+        ? "Проверьте подготовку будильника на Watch. В режиме «только часы» резерв на iPhone может быть выключен."
+        : fallback)
+  }
   nonisolated func extendedRuntimeSessionDidStart(
     _ extendedRuntimeSession: WKExtendedRuntimeSession
   ) {
@@ -220,8 +228,8 @@ import WatchKit
           // runtime first, so its later callback cannot acknowledge another plan.
           self.send?(SleepAlarmWatchEvent(plan: plan, kind: .dismissed, date: .now))
         } else {
-          self.error = L10n.text(
-            "Умное окно на Watch остановлено. Резервный будильник остаётся на iPhone.")
+          self.error = self.statusMessage(
+            "Умное окно на Watch остановлено. Резервный будильник остаётся на iPhone.", for: plan)
           self.send?(SleepAlarmWatchEvent(plan: plan, kind: .failed, date: .now))
         }
       }

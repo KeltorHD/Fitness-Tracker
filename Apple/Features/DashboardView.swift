@@ -58,7 +58,9 @@ struct DashboardView: View {
                 L10n.text("Данные сна недоступны в демо-режиме", locale: locale),
                 systemImage: "bed.double")
             } else {
-              SleepDiaryView(date: $date, isSelected: section == .sleep, alarms: store.sleepAlarms)
+              SleepDiaryView(
+                date: $date, isSelected: section == .sleep, alarms: store.sleepAlarms,
+                reader: SleepUITestFixture.reader())
             }
           }.tag(DiarySection.sleep)
         }.tabViewStyle(.page(indexDisplayMode: .never))

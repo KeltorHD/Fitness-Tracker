@@ -1,6 +1,66 @@
 import XCTest
 
 final class FitnessTrackerUITests: XCTestCase {
+  @MainActor func testSleepInsightsSelectStageAndMonth() {
+    let app = launch(additionalArguments: ["--ui-testing-sleep", "-sleepDiaryEnabled", "YES"])
+    let section = app.segmentedControls["diarySection"]
+    XCTAssertTrue(section.waitForExistence(timeout: 10))
+    section.buttons["Сон"].tap()
+    XCTAssertTrue(app.staticTexts["selectedSleepDuration"].waitForExistence(timeout: 10))
+    let header = XCTAttachment(screenshot: app.screenshot())
+    header.name = "Interactive sleep overview with labeled UI fixture data"
+    header.lifetime = .keepAlways
+    add(header)
+    let deep = app.buttons["sleepStage_deep"]
+    reveal(deep, in: app)
+    deep.tap()
+    let detail = app.descendants(matching: .any).matching(identifier: "selectedSleepPhase")
+      .firstMatch
+    XCTAssertTrue(detail.waitForExistence(timeout: 5))
+    XCTAssertTrue(deep.isSelected)
+    let phase = XCTAttachment(screenshot: app.screenshot())
+    phase.name = "Selected deep sleep interval with UI fixture data"
+    phase.lifetime = .keepAlways
+    add(phase)
+    let period = app.segmentedControls["sleepTrendPeriod"]
+    reveal(period, in: app)
+    period.buttons["Месяц"].tap()
+    XCTAssertTrue(period.buttons["Месяц"].isSelected)
+    XCTAssertTrue(app.staticTexts["29 ночей с данными"].exists)
+    let month = XCTAttachment(screenshot: app.screenshot())
+    month.name = "Sleep month chart excluding one missing night, UI fixture data"
+    month.lifetime = .keepAlways
+    add(month)
+  }
+
+  @MainActor func testSleepAlarmCanBeCreatedDisabledAndEditedWithoutSystemAlarm() {
+    let app = launch(additionalArguments: ["--ui-testing-sleep", "-sleepDiaryEnabled", "NO"])
+    let section = app.segmentedControls["diarySection"]
+    XCTAssertTrue(section.waitForExistence(timeout: 10))
+    section.buttons["Сон"].tap()
+    let addAlarm = app.buttons["addSleepAlarm"]
+    XCTAssertTrue(addAlarm.waitForExistence(timeout: 10))
+    addAlarm.tap()
+    app.buttons["saveSleepAlarm"].tap()
+    XCTAssertTrue(addAlarm.waitForExistence(timeout: 5))
+    app.buttons["expandSleepAlarms"].tap()
+    let enabled = app.switches.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "enableSleepAlarm_")
+    ).firstMatch
+    XCTAssertTrue(enabled.waitForExistence(timeout: 5))
+    enabled.tap()
+    XCTAssertTrue(app.staticTexts["Выключен"].waitForExistence(timeout: 5))
+    let edit = app.buttons.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "editSleepAlarm_")
+    ).firstMatch
+    edit.tap()
+    XCTAssertTrue(app.navigationBars["Изменить будильник"].waitForExistence(timeout: 5))
+    app.buttons["saveSleepAlarm"].tap()
+    XCTAssertTrue(app.staticTexts["Выключен"].waitForExistence(timeout: 5))
+    enabled.tap()
+    XCTAssertTrue(app.staticTexts["Сигнал на iPhone"].waitForExistence(timeout: 5))
+  }
+
   @MainActor func testSleepDiaryOpensAlarmEditorWithoutHealthPermission() {
     let app = launch(additionalArguments: ["-sleepDiaryEnabled", "NO"])
     let section = app.segmentedControls["diarySection"]
