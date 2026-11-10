@@ -166,3 +166,99 @@ private let sleepDay = Date(timeIntervalSince1970: 1_700_006_400)
   let invalidMovement = detector.ingest(at: plan.windowStart, movement: .nan, plan: plan)
   #expect(!invalidMovement)
 }
+
+@Test func sleepInsightsKeepGapsUnknownAndJoinAdjacentSleepStages() throws {
+  let calendar = sleepCalendar()
+  let window = try #require(SleepNight.window(endingOn: sleepDay, calendar: calendar))
+  let start = window.start.addingTimeInterval(3600)
+  func sample(_ startMinute: Double, _ minutes: Double, _ stage: SleepStage) -> SleepSample {
+    SleepSample(
+      interval: DateInterval(
+        start: start.addingTimeInterval(startMinute * 60), duration: minutes * 60), stage: stage,
+      sourceID: "test", sourceName: "test")
+  }
+  let night = SleepNight(
+    day: sleepDay, calendar: calendar,
+    samples: [
+      sample(0, 180, .inBed), sample(20, 30, .core), sample(50, 30, .deep),
+      sample(80, 10, .awake), sample(100, 20, .rem),
+    ])
+  #expect(night.sleepOnsetLatency == 1200.0)
+  #expect(night.asleep == 4800.0)
+  #expect(night.longestSleepEpisode == 3600.0)
+  #expect(night.awakeDuration == 600.0)
+  #expect(night.efficiency == 80.0 / 180)
+  #expect(night.fraction(.deep) == 30.0 / 80)
+  #expect(night.fraction(.awake) == nil)
+  #expect(night.period(at: start.addingTimeInterval(50 * 60))?.stage == .deep)
+  #expect(night.period(at: start.addingTimeInterval(95 * 60)) == nil)
+  #expect(night.period(at: start.addingTimeInterval(120 * 60)) == nil)
+  #expect(night.period(at: Date(timeIntervalSince1970: .nan)) == nil)
+}
+
+@Test func sleepEfficiencyRequiresBedCoverageAndLatencyRequiresKnownBedtime() throws {
+  let calendar = sleepCalendar()
+  let window = try #require(SleepNight.window(endingOn: sleepDay, calendar: calendar))
+  func sample(_ offset: Double, _ hours: Double, _ stage: SleepStage) -> SleepSample {
+    SleepSample(
+      interval: DateInterval(
+        start: window.start.addingTimeInterval(offset * 3600), duration: hours * 3600),
+      stage: stage, sourceID: "test", sourceName: "test")
+  }
+  let missingBed = SleepNight(
+    day: sleepDay, calendar: calendar, samples: [sample(2, 5, .unspecified)])
+  #expect(missingBed.efficiency == nil)
+  #expect(missingBed.sleepOnsetLatency == nil)
+  #expect(missingBed.awakeDuration == nil)
+  let gap = SleepNight(
+    day: sleepDay, calendar: calendar,
+    samples: [sample(0, 3, .inBed), sample(4, 3, .inBed), sample(2, 4, .core)])
+  #expect(gap.efficiency == nil)
+  let clipped = SleepNight(
+    day: sleepDay, calendar: calendar, samples: [sample(-1, 9, .inBed), sample(2, 5, .core)])
+  #expect(clipped.sleepOnsetLatency == nil)
+}
+
+@Test func sleepTrendExcludesUnrecordedNightsAndComparesOnlyPreviousCalendarDay() throws {
+  let calendar = sleepCalendar()
+  let day = calendar.startOfDay(for: sleepDay)
+  let nights = try (-29...0).map { offset -> SleepNight in
+    let date = try #require(calendar.date(byAdding: .day, value: offset, to: day))
+    let window = try #require(SleepNight.window(endingOn: date, calendar: calendar))
+    let samples =
+      offset == -1
+      ? []
+      : [
+        SleepSample(
+          interval: DateInterval(start: window.start, duration: offset == 0 ? 8 * 3600 : 6 * 3600),
+          stage: .unspecified, sourceID: "test", sourceName: "test")
+      ]
+    return SleepNight(day: date, calendar: calendar, samples: samples)
+  }
+  let week = SleepTrend(nights: nights, endingOn: day, days: 7, calendar: calendar)
+  #expect(week.nights.count == 7)
+  #expect(week.recorded.count == 6)
+  #expect(week.average == 22_800.0)
+  #expect(week.shortest == 21_600.0)
+  #expect(week.longest == 28_800.0)
+  #expect(week.differenceFromPrevious(try #require(nights.last), calendar: calendar) == nil)
+  #expect(
+    SleepTrend(nights: nights, endingOn: day, days: 30, calendar: calendar).recorded.count == 29)
+}
+
+@Test func legacySleepAlarmPlansKeepPhoneReserveAndEnabledState() throws {
+  let plan = SleepAlarmPlan(fireDate: sleepDay, windowMinutes: 20)
+  let data = try JSONEncoder().encode(plan)
+  var json = try #require(JSONSerialization.jsonObject(with: data) as? [String: Any])
+  json.removeValue(forKey: "delivery")
+  json.removeValue(forKey: "isEnabled")
+  let decoded = try JSONDecoder().decode(
+    SleepAlarmPlan.self, from: JSONSerialization.data(withJSONObject: json))
+  #expect(decoded == plan)
+  let watch = SleepAlarmPlan(fireDate: sleepDay, windowMinutes: 0, delivery: .watchOnly)
+  #expect(watch.canArmWatch(at: sleepDay.addingTimeInterval(-120)))
+  #expect(watch.watchStart == sleepDay.addingTimeInterval(-60))
+  #expect(
+    !SleepAlarmPlan(fireDate: sleepDay, windowMinutes: 20, isEnabled: false).canArmWatch(
+      at: sleepDay.addingTimeInterval(-120)))
+}

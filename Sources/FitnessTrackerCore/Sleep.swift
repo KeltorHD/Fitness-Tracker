@@ -49,6 +49,8 @@ public struct SleepNight: Identifiable, Equatable, Sendable {
   public let periods: [SleepPeriod]
   public let sourceName: String?
   public let inBed: TimeInterval?
+  public let sleepOnsetLatency: TimeInterval?
+  public let efficiency: Double?
   public var asleep: TimeInterval? {
     let value = periods.filter { $0.stage.isAsleep }.reduce(0) { $0 + $1.interval.duration }
     return value > 0 ? value : nil
@@ -137,25 +139,71 @@ public struct SleepNight: Identifiable, Equatable, Sendable {
       previous = date
     }
     periods = result
+    let bedIntervals = chosen.filter { $0.stage == .inBed }.map(\.interval)
+    if let first = result.first(where: { $0.stage.isAsleep }),
+      let bed = bedIntervals.filter({
+        $0.start >= window.start && $0.start <= first.interval.start
+          && $0.end > first.interval.start
+      }).min(by: { $0.start < $1.start })
+    {
+      sleepOnsetLatency = first.interval.start.timeIntervalSince(max(bed.start, window.start))
+    } else {
+      sleepOnsetLatency = nil
+    }
+    let asleepPeriods = result.filter { $0.stage.isAsleep }
+    let sleepDuration = asleepPeriods.reduce(0) { $0 + $1.interval.duration }
+    let covered = asleepPeriods.allSatisfy { period in
+      let overlap = TrackerCalculations.sleepDuration(bedIntervals, within: period.interval) ?? 0
+      return abs(overlap - period.interval.duration) < 0.001
+    }
+    if covered, sleepDuration > 0, let inBed, inBed >= sleepDuration {
+      efficiency = sleepDuration / inBed
+    } else {
+      efficiency = nil
+    }
   }
+}
+
+public enum SleepAlarmDelivery: String, Codable, CaseIterable, Sendable {
+  case phoneAndWatch, watchOnly
 }
 
 public struct SleepAlarmPlan: Codable, Equatable, Identifiable, Sendable {
   public let id: UUID
   public let fireDate: Date
   public let windowMinutes: Int
+  public let delivery: SleepAlarmDelivery
+  public let isEnabled: Bool
   public var windowStart: Date { fireDate.addingTimeInterval(-Double(windowMinutes) * 60) }
-  public init(id: UUID = UUID(), fireDate: Date, windowMinutes: Int) {
+  public var watchStart: Date { fireDate.addingTimeInterval(-Double(max(1, windowMinutes)) * 60) }
+  public init(
+    id: UUID = UUID(), fireDate: Date, windowMinutes: Int,
+    delivery: SleepAlarmDelivery = .phoneAndWatch, isEnabled: Bool = true
+  ) {
     self.id = id
     self.fireDate = fireDate
     self.windowMinutes = windowMinutes
+    self.delivery = delivery
+    self.isEnabled = isEnabled
+  }
+  private enum CodingKeys: String, CodingKey {
+    case id, fireDate, windowMinutes, delivery, isEnabled
+  }
+  public init(from decoder: any Decoder) throws {
+    let values = try decoder.container(keyedBy: CodingKeys.self)
+    id = try values.decode(UUID.self, forKey: .id)
+    fireDate = try values.decode(Date.self, forKey: .fireDate)
+    windowMinutes = try values.decode(Int.self, forKey: .windowMinutes)
+    delivery =
+      try values.decodeIfPresent(SleepAlarmDelivery.self, forKey: .delivery) ?? .phoneAndWatch
+    isEnabled = try values.decodeIfPresent(Bool.self, forKey: .isEnabled) ?? true
   }
   public var isValid: Bool {
     fireDate.timeIntervalSince1970.isFinite && [0, 5, 10, 15, 20, 30].contains(windowMinutes)
   }
   public func canArmWatch(at now: Date) -> Bool {
-    isValid && windowMinutes > 0 && fireDate > now
-      && windowStart <= now.addingTimeInterval(36 * 3600)
+    isValid && isEnabled && (windowMinutes > 0 || delivery == .watchOnly) && fireDate > now
+      && watchStart <= now.addingTimeInterval(36 * 3600)
   }
 }
 
