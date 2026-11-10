@@ -29,6 +29,14 @@ public partial class Program
         builder.Services.AddDbContext<BackupDbContext>(options => options.UseNpgsql(
             config.GetConnectionString("Database") ?? "Host=localhost;Database=fitnesstracker_backend;Username=fitnesstracker_backend"));
         builder.Services.AddSingleton(TimeProvider.System);
+        builder.Services.AddSingleton<FoodSearch>();
+        builder.Services.AddHttpClient("perek", client => client.Timeout = TimeSpan.FromSeconds(8))
+            .ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler
+            {
+                AllowAutoRedirect = false,
+                UseCookies = false,
+                PooledConnectionLifetime = TimeSpan.FromMinutes(5)
+            }).RemoveAllLoggers();
         builder.Services.AddScoped<BackupStorage>();
         builder.Services.AddOptions<IntrospectionOptions>()
             .BindConfiguration("Auth")
@@ -81,6 +89,9 @@ public partial class Program
         builder.Services.AddRateLimiter(options =>
         {
             options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+            options.AddPolicy("foods", context => RateLimitPartition.GetFixedWindowLimiter(
+                context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+                _ => new FixedWindowRateLimiterOptions { PermitLimit = 12, Window = TimeSpan.FromMinutes(1) }));
             options.AddPolicy("backups", context => RateLimitPartition.GetFixedWindowLimiter(
                 context.User.FindFirst("sub")?.Value ?? context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
                 _ => new FixedWindowRateLimiterOptions { PermitLimit = 30, Window = TimeSpan.FromMinutes(1) }));
@@ -140,6 +151,13 @@ public partial class Program
             await storage.DeleteAccount(id.ToString(), ct);
             return Results.NoContent();
         });
+        // Публичный каталог доступен без аккаунта; IP-лимит и общий бюджет защищают ключ поставщика.
+        app.MapGet("/v1/foods/search", async (string? q, FoodSearch search, HttpContext context, CancellationToken ct) =>
+        {
+            var result = await search.SearchAsync(q ?? "", ct);
+            if (result.RetryAfter > 0) context.Response.Headers.RetryAfter = result.RetryAfter.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            return Results.Json(new { products = result.Products }, statusCode: result.Status);
+        }).RequireRateLimiting("foods");
         app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
         if (app.Environment.IsDevelopment()) app.MapOpenApi();
         if (!app.Environment.IsEnvironment("Testing"))

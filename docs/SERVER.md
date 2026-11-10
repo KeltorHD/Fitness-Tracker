@@ -449,3 +449,7 @@ dotnet test FitnessTracker.Server.sln --no-build --no-restore -m:1 --filter 'Cat
 Apple XCTest `AccountBackupTests` проверяют callback validation, одну ротацию для параллельных запросов, ошибки сети/Keychain, истёкшую сессию и проверку целостности; `ArchiveTransferTests` проверяет подтверждение восстановления. Их запуск требует Xcode. Foundation-часть добавлена в Swift 6 type-check скрипта `check-linux.sh`; SwiftUI/Keychain/CryptoKit и реальный вход требуют Apple SDK/устройства. Чек-лист: [XCODE_VALIDATION.md](XCODE_VALIDATION.md).
 
 Официальные источники: [OpenIddict ASP.NET Core](https://documentation.openiddict.com/integrations/aspnet-core), [Web providers](https://documentation.openiddict.com/integrations/web-providers), [пример Velusia](https://github.com/openiddict/openiddict-samples/tree/dev/samples/Velusia), [Apple WebAuthenticationSession](https://developer.apple.com/documentation/authenticationservices/webauthenticationsession), [Google OIDC](https://developers.google.com/identity/openid-connect/openid-connect), [Яндекс ID](https://yandex.ru/dev/id/doc/ru/), [Sign in with Apple](https://developer.apple.com/documentation/signinwithapplerestapi).
+
+## Опциональный поиск продуктов
+
+Публичный `GET /v1/foods/search?q=...` — отдельный от защищённых резервных копий маршрут Backend. Ключ perek.us остаётся в серверной конфигурации, ограничения общие для всех клиентов. Настройка, HTTP-контракт, кеш, лимиты и fallback приложения: [FOOD_SEARCH.md](FOOD_SEARCH.md).

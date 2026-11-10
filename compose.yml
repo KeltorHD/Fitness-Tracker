@@ -98,6 +98,7 @@ services:
       Certificates__Encryption__Password: ${CERTIFICATE_PASSWORD}
       ReverseProxy__Address: ${SERVER_NETWORK_GATEWAY:?Run python3 scripts/setup-server-network.py}
       Backend__ServiceKey: ${BACKEND_SERVICE_KEY}
+      FoodSearch__PerekApiKey: ${PEREK_API_KEY:-}
     volumes:
       - type: bind
         source: ${BACKEND_KEYS_PATH:-./.local/backend-keys}

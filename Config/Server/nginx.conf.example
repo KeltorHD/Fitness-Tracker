@@ -55,6 +55,8 @@ server {
     ssl_certificate_key /etc/nginx/ssl/example.com/privkey.pem;
 
     access_log off;
+    # Food search queries may describe personal dietary choices.
+    error_log /dev/null;
     client_max_body_size 30m;
     proxy_cache off;
 
