@@ -63,10 +63,11 @@ public struct FoodProduct: Codable, Equatable, Identifiable, Sendable {
   public var per100Units: Nutrients
   public var imageURL: URL?
   public var sourceURL: URL?
+  public var barcode: String?
   public init(
     id: String = UUID().uuidString, name: String, brand: String = "",
     per100Units: Nutrients, unit: FoodQuantityUnit = .grams, imageURL: URL? = nil,
-    sourceURL: URL? = nil
+    sourceURL: URL? = nil, barcode: String? = nil
   ) {
     self.id = id
     self.name = name
@@ -75,6 +76,7 @@ public struct FoodProduct: Codable, Equatable, Identifiable, Sendable {
     self.per100Units = per100Units
     self.imageURL = imageURL
     self.sourceURL = sourceURL
+    self.barcode = barcode
   }
   public func validate() throws {
     guard !id.isEmpty, id.count <= 100,

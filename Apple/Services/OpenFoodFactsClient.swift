@@ -9,7 +9,7 @@ protocol FoodSearching: Sendable {
   func search(_ query: String, preferRussian: Bool) async throws -> [FoodProduct]
 }
 
-enum FoodSearchError: Error, LocalizedError {
+enum FoodSearchError: Error, LocalizedError, Equatable {
   case unavailable, rateLimited, invalidResponse, invalidQuery, incompleteProduct
   var errorDescription: String? {
     switch self {

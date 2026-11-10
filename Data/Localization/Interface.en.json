@@ -1027,5 +1027,6 @@
   "Области: %@": "Regions: %@",
   "%@: %@": "%@: %@",
   "Тест: три предыдущих подхода": "Test: three previous sets",
-  "Продукт найден в базе, но его название или КБЖУ не заполнены. Введите данные с упаковки вручную.": "The product was found, but its name or nutrition data is missing. Enter the package information manually."
+  "Продукт найден в базе, но его название или КБЖУ не заполнены. Введите данные с упаковки вручную.": "The product was found, but its name or nutrition data is missing. Enter the package information manually.",
+  "Данные: perek.us": "Data: perek.us"
 }

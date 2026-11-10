@@ -160,6 +160,7 @@ private struct FoodPortionEditor: View {
         )
         .font(.subheadline).foregroundStyle(.secondary)
       }
+      FoodProductSource(product: portion.product)
       Button(L10n.text("Убрать продукт", locale: locale), role: .destructive, action: remove).font(
         .caption)
     }.onChange(of: text) { portion.amount = (try? NutritionInput.number(text)) ?? .nan }

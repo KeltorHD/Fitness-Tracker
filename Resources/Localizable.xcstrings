@@ -3758,6 +3758,23 @@
         }
       }
     },
+    "Данные: perek.us": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Данные: perek.us"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data: perek.us"
+          }
+        }
+      }
+    },
     "Дата": {
       "extractionState": "manual",
       "localizations": {

@@ -57,7 +57,7 @@ struct FoodProductPicker: View {
             L10n.text(favorite ? "Убрать из избранного" : "Добавить в избранное", locale: locale),
             systemImage: favorite ? "star.fill" : "star"
           ) { diary.toggleFavorite(selected) }.accessibilityIdentifier("favoriteSelectedFood")
-          if let code = FoodBarcode.normalized(selected.id) {
+          if let code = FoodBarcode.normalized(selected.barcode ?? selected.id) {
             LabeledContent(L10n.text("Штрихкод", locale: locale), value: code).font(.caption)
           }
           Picker(
@@ -70,6 +70,7 @@ struct FoodProductPicker: View {
             }
           }
           NutrientValues(value: selected.per100Units)
+          FoodProductSource(product: selected)
           Text(
             L10n.format(
               selected.unit == .grams ? "%@ ккал на 100 г" : "%@ ккал на 100 мл",
@@ -99,7 +100,7 @@ struct FoodProductPicker: View {
           }
           Button(L10n.text("Добавить в блюдо", locale: locale)) { finish(selected) }
             .accessibilityIdentifier("confirmProduct")
-          if let url = selected.sourceURL {
+          if let url = selected.sourceURL, !selected.id.hasPrefix("perek:") {
             Link(L10n.text("Источник продукта", locale: locale), destination: url)
           }
         }
@@ -197,12 +198,15 @@ struct FoodProductPicker: View {
   }
   private func productRow(_ product: FoodProduct) -> some View {
     HStack(spacing: 12) {
-      Button {
-        selected = product
-        amount = "100"
-      } label: {
-        productLabel(product)
-      }.buttonStyle(.plain)
+      VStack(alignment: .leading, spacing: 4) {
+        Button {
+          selected = product
+          amount = "100"
+        } label: {
+          productLabel(product)
+        }.buttonStyle(.plain)
+        FoodProductSource(product: product)
+      }
       Spacer(minLength: 0)
       let favorite = diary.favorites.contains { $0.id == product.id }
       Button {

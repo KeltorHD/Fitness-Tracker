@@ -22,7 +22,10 @@ import Observation
   @ObservationIgnored private let personal: any NutritionRepository
   @ObservationIgnored private var demo: MemoryNutritionRepository?
   private var repository: any NutritionRepository { demo ?? personal }
-  init(repository: any NutritionRepository, foodSearch: any FoodSearching = OpenFoodFactsClient()) {
+  init(
+    repository: any NutritionRepository,
+    foodSearch: any FoodSearching = FoodSearchClient.configured()
+  ) {
     self.foodSearch = foodSearch
     personal = repository
     reload()
@@ -31,7 +34,10 @@ import Observation
   private(set) var savedMeals: [FoodEntry] = []
   func localProduct(barcode: String) -> FoodProduct? {
     guard let code = FoodBarcode.normalized(barcode) else { return nil }
-    return (favorites + recentProducts).first { FoodBarcode.normalized($0.id) == code }
+    return (favorites + recentProducts).first {
+      let legacy = $0.id.hasPrefix("off:") ? String($0.id.dropFirst(4)) : $0.id
+      return FoodBarcode.normalized($0.barcode ?? legacy) == code
+    }
   }
   func reload() {
     do {
@@ -214,7 +220,7 @@ import Observation
   var error: String?
   @ObservationIgnored private let client: any FoodSearching
   @ObservationIgnored private var generation = UUID()
-  init(client: any FoodSearching = OpenFoodFactsClient()) { self.client = client }
+  init(client: any FoodSearching = FoodSearchClient.configured()) { self.client = client }
   func clearResults() {
     generation = UUID()
     results = []

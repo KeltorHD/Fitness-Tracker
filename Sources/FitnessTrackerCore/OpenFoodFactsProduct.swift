@@ -58,7 +58,7 @@ public struct OpenFoodFactsProduct: Decodable, Sendable {
       id: "off:\(code)", name: name, brand: brands ?? "",
       per100Units: Nutrients(calories: calories, protein: protein, fat: fat, carbohydrates: carbs),
       unit: basis, imageURL: image,
-      sourceURL: URL(string: "https://world.openfoodfacts.org/product/\(code)"))
+      sourceURL: URL(string: "https://world.openfoodfacts.org/product/\(code)"), barcode: code)
     guard (try? product.validate()) != nil else { return nil }
     return product
   }

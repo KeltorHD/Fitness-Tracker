@@ -47,6 +47,28 @@ private enum Failure: Error { case expected }
   }
 }
 
+private actor CatalogStub: FoodSearching {
+  let products: [FoodProduct]
+  let failure: FoodSearchError?
+  private(set) var calls = 0
+  init(_ products: [FoodProduct] = [], failure: FoodSearchError? = nil) {
+    self.products = products
+    self.failure = failure
+  }
+  func search(_ query: String, preferRussian: Bool) async throws -> [FoodProduct] {
+    calls += 1
+    try Task.checkCancellation()
+    if let failure { throw failure }
+    return products
+  }
+}
+
+private struct CancelledCatalog: FoodSearching {
+  func search(_ query: String, preferRussian: Bool) async throws -> [FoodProduct] {
+    throw CancellationError()
+  }
+}
+
 private actor SlowSearch: FoodSearching {
   private var didStart = false
   func started() -> Bool { didStart }
@@ -65,6 +87,20 @@ private final class FoodURLProtocol: URLProtocol {
   override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
   override func startLoading() {
     guard let url = request.url else { preconditionFailure("Missing URL") }
+    if url.host == "api.test" {
+      precondition(request.value(forHTTPHeaderField: "X-Api-Key") == nil)
+      let product = FoodProduct(
+        id: "perek:sample", name: "Oreo", brand: "Oreo",
+        per100Units: Nutrients(calories: 480, protein: 5, fat: 20, carbohydrates: 70),
+        sourceURL: URL(string: "https://perek.us/food/test/oreo"), barcode: "7622210769459")
+      let body = try! JSONEncoder().encode(["products": [product]])
+      let response = HTTPURLResponse(
+        url: url, statusCode: 200, httpVersion: nil, headerFields: nil)!
+      client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+      client?.urlProtocol(self, didLoad: body)
+      client?.urlProtocolDidFinishLoading(self)
+      return
+    }
     let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
     let query = components?.queryItems?.first { $0.name == "search_terms" }?.value ?? ""
     let status = query == "limit" ? 429 : query == "server" ? 503 : 200
@@ -227,8 +263,50 @@ private final class FoodURLProtocol: URLProtocol {
       _ = try await client.search("food", preferRussian: false)
       preconditionFailure("Missing rate limit")
     } catch FoodSearchError.rateLimited {}  // Expected local request budget exhaustion.
+    try await checkCatalogRouting(session: session)
     print(
       "Nutrition: persistence failures, demo isolation, input, stale/cancelled search, HTTP fixtures and rate limit passed (no network)."
     )
   }
+  @MainActor private static func checkCatalogRouting(session: URLSession) async throws {
+    let backend = BackendFoodSearchClient(
+      baseURL: URL(string: "https://api.test")!, session: session)
+    let primary = try await backend.search("7622210769459", preferRussian: true)
+    precondition(primary.first?.barcode == "7622210769459" && primary.first?.unit == .grams)
+    let skipped = CatalogStub([], failure: .unavailable)
+    let routed = try await FoodSearchClient(primary: backend, fallback: skipped).search(
+      "7622210769459", preferRussian: true)
+    let skippedCalls = await skipped.calls
+    precondition(routed == primary && skippedCalls == 0)
+    for failure in [nil, FoodSearchError.unavailable, .rateLimited, .invalidResponse] {
+      let fallback = CatalogStub(primary)
+      let combined = FoodSearchClient(
+        primary: CatalogStub([], failure: failure), fallback: fallback)
+      let results = try await combined.search("oreo", preferRussian: true)
+      let calls = await fallback.calls
+      precondition(results == primary && calls == 1)
+    }
+    let cancelledFallback = CatalogStub(primary)
+    do {
+      _ = try await FoodSearchClient(primary: CancelledCatalog(), fallback: cancelledFallback)
+        .search("oreo", preferRussian: true)
+      preconditionFailure("Cancellation started a fallback request")
+    } catch is CancellationError {}
+    let calls = await cancelledFallback.calls
+    precondition(calls == 0)
+    let product = primary[0]
+    let data = try JSONEncoder().encode(product)
+    let restored = try JSONDecoder().decode(FoodProduct.self, from: data)
+    precondition(restored == product)
+    let memory = MemoryNutritionRepository()
+    let diary = NutritionDiaryModel(repository: memory)
+    diary.toggleFavorite(product)
+    precondition(diary.localProduct(barcode: "7622210769459") == product)
+    var legacy = try JSONSerialization.jsonObject(with: data) as! [String: Any]
+    legacy.removeValue(forKey: "barcode")
+    let decoded = try JSONDecoder().decode(
+      FoodProduct.self, from: JSONSerialization.data(withJSONObject: legacy))
+    precondition(decoded.barcode == nil && decoded.name == product.name)
+  }
+
 }

@@ -131,33 +131,39 @@ struct NutritionDiaryView: View {
                 .foregroundStyle(.secondary).cardListRow()
             }
             ForEach(entries) { entry in
-              Button {
-                sheet = .food(entry)
-              } label: {
-                FoodEntryRow(entry: entry).fitCard()
-              }
-              .buttonStyle(.plain).cardListRow().accessibilityIdentifier("foodEntry_\(entry.id)")
-              .contextMenu {
-                Button(L10n.text("Изменить", locale: locale)) { sheet = .food(entry) }
-                Button(L10n.text("Повторить на другую дату", locale: locale)) {
-                  sheet = .food(
-                    entry.repeated(
-                      on: NutritionCalendar.date(on: date, timeOf: entry.date, calendar: calendar)))
+              VStack(alignment: .leading, spacing: 5) {
+                Button {
+                  sheet = .food(entry)
+                } label: {
+                  FoodEntryRow(entry: entry)
                 }
-                Button(
-                  L10n.text(
-                    entry.isSavedMeal ? "Убрать из сохранённых блюд" : "Сохранить блюдо",
-                    locale: locale)
-                ) {
-                  var updated = entry
-                  updated.isSavedMeal.toggle()
-                  model.save(updated)
+                .buttonStyle(.plain).accessibilityIdentifier("foodEntry_\(entry.id)")
+                ForEach(entry.portions.filter { $0.product.id.hasPrefix("perek:") }) { portion in
+                  FoodProductSource(product: portion.product)
                 }
-                Button(L10n.text("Удалить", locale: locale)) { pendingDelete = entry }
-              }
-              .swipeActions(allowsFullSwipe: false) {
-                Button(L10n.text("Удалить", locale: locale)) { pendingDelete = entry }.tint(.red)
-              }
+              }.fitCard().cardListRow()
+                .contextMenu {
+                  Button(L10n.text("Изменить", locale: locale)) { sheet = .food(entry) }
+                  Button(L10n.text("Повторить на другую дату", locale: locale)) {
+                    sheet = .food(
+                      entry.repeated(
+                        on: NutritionCalendar.date(on: date, timeOf: entry.date, calendar: calendar)
+                      ))
+                  }
+                  Button(
+                    L10n.text(
+                      entry.isSavedMeal ? "Убрать из сохранённых блюд" : "Сохранить блюдо",
+                      locale: locale)
+                  ) {
+                    var updated = entry
+                    updated.isSavedMeal.toggle()
+                    model.save(updated)
+                  }
+                  Button(L10n.text("Удалить", locale: locale)) { pendingDelete = entry }
+                }
+                .swipeActions(allowsFullSwipe: false) {
+                  Button(L10n.text("Удалить", locale: locale)) { pendingDelete = entry }.tint(.red)
+                }
             }
             Button(L10n.text("Добавить еду", locale: locale), systemImage: "plus.circle.fill") {
               sheet = .food(
@@ -195,13 +201,18 @@ struct NutritionDiaryView: View {
         if !model.savedMeals.isEmpty {
           DisclosureGroup(L10n.text("Сохранённые блюда", locale: locale)) {
             ForEach(model.savedMeals) { entry in
-              Button {
-                sheet = .food(
-                  entry.repeated(
-                    on: NutritionCalendar.date(on: date, timeOf: .now, calendar: calendar)))
-              } label: {
-                FoodEntryRow(entry: entry)
-              }.buttonStyle(.plain)
+              VStack(alignment: .leading, spacing: 5) {
+                Button {
+                  sheet = .food(
+                    entry.repeated(
+                      on: NutritionCalendar.date(on: date, timeOf: .now, calendar: calendar)))
+                } label: {
+                  FoodEntryRow(entry: entry)
+                }.buttonStyle(.plain)
+                ForEach(entry.portions.filter { $0.product.id.hasPrefix("perek:") }) { portion in
+                  FoodProductSource(product: portion.product)
+                }
+              }
             }
           }.cardListRow()
         }
@@ -306,5 +317,18 @@ struct FoodDatabaseAttribution: View {
   }
   @ViewBuilder private func link(_ title: String, _ address: String) -> some View {
     if let url = URL(string: address) { Link(L10n.text(title, locale: locale), destination: url) }
+  }
+}
+
+/// Attribution travels with the saved product, including offline diary entries.
+struct FoodProductSource: View {
+  @Environment(\.locale) private var locale
+  let product: FoodProduct
+  var body: some View {
+    if product.id.hasPrefix("perek:"), let url = product.sourceURL,
+      url.scheme == "https", url.host == "perek.us"
+    {
+      Link(L10n.text("Данные: perek.us", locale: locale), destination: url).font(.caption)
+    }
   }
 }
