@@ -84,6 +84,23 @@ public sealed class FoodSearchTests
         Assert.Equal(HttpStatusCode.BadRequest, invalid.StatusCode);
     }
 
+    /// <summary>Неверный секрет не попадает в HTTP-заголовок, исключение транспорта или ответ клиенту.</summary>
+    [Fact]
+    public async Task InvalidHeaderKeyIsRejectedBeforeProviderCallAsync()
+    {
+        var handler = new ProviderHandler();
+        using var fixture = new BackendFactory();
+        using var factory = fixture.WithWebHostBuilder(builder => builder
+            .ConfigureAppConfiguration((_, configuration) => configuration.AddInMemoryCollection(
+                new Dictionary<string, string?> { ["FoodSearch:PerekApiKey"] = "private\nkey" }))
+            .ConfigureServices(services => services.AddHttpClient("perek").ConfigurePrimaryHttpMessageHandler(() => handler)));
+        using var client = factory.CreateClient();
+        using var response = await client.GetAsync("/v1/foods/search?q=milk");
+        Assert.Equal(HttpStatusCode.ServiceUnavailable, response.StatusCode);
+        Assert.Equal(0, handler.Calls);
+        Assert.DoesNotContain("private", await response.Content.ReadAsStringAsync());
+    }
+
     /// <summary>Общий дневной бюджет действует между пользователями и восстанавливается по UTC, а не после каждого запроса.</summary>
     [Fact]
     public async Task SharedDailyBudgetResetsOnlyOnTheNextUtcDayAsync()

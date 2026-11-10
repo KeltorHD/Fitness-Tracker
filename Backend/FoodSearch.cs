@@ -24,7 +24,7 @@ internal sealed class FoodSearch(IHttpClientFactory clients, IConfiguration conf
         if (query.Length is < 2 or > 100 || (barcode && query.Length is < 8 or > 14))
             return new(400, []);
         var key = config["FoodSearch:PerekApiKey"];
-        if (string.IsNullOrWhiteSpace(key)) return new(503, []);
+        if (string.IsNullOrWhiteSpace(key) || key.Length > 1024 || key.Any(c => c < '!' || c > '~')) return new(503, []);
         await _gate.WaitAsync(cancellationToken);
         try
         {
