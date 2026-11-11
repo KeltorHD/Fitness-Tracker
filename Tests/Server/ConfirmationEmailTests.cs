@@ -1,11 +1,11 @@
 using System.Net;
 using System.Text.RegularExpressions;
-using FitnessTracker.Authentication;
+using FitLife.Authentication;
 using Microsoft.AspNetCore.WebUtilities;
 using MimeKit;
 using Xunit;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Проверяет реальные MIME части, кликабельные HTTPS-ссылки и fallback без изменения токена.</summary>
 [Trait("Category", "Unit")]
@@ -23,7 +23,7 @@ public sealed class ConfirmationEmailTests
         using var message = new MimeMessage();
         message.From.Add(MailboxAddress.Parse("fitness@example.com"));
         message.To.Add(MailboxAddress.Parse("recipient@example.com"));
-        message.Subject = "Подтвердите электронную почту — FitnessTracker";
+        message.Subject = "Подтвердите электронную почту — FitLife";
         message.Body = ConfirmationEmailTemplate.CreateBody(link);
         using var stream = new MemoryStream();
         message.WriteTo(FormatOptions.Default, stream);

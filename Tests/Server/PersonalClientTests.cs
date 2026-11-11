@@ -4,7 +4,7 @@ using System.Net.Http.Json;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
-using FitnessTracker.Authentication;
+using FitLife.Authentication;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using OpenIddict.Abstractions;
 using Xunit;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Проверяет отдельный Personal Team client, точный callback, PKCE и изоляцию от HTTPS client.</summary>
 [Trait("Category", "HTTP")]

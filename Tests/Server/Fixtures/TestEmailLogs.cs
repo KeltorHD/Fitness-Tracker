@@ -1,10 +1,10 @@
 using System.Collections.Concurrent;
-using FitnessTracker.Authentication;
+using FitLife.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Собирает текст и structured fields почтовых событий или выбранной категории без сети и глобального Console.</summary>
 /// <param name="selectedCategory">Отдельная категория для проверки регистрации; по умолчанию только отправка почты.</param>

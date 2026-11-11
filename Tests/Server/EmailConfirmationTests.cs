@@ -2,16 +2,16 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using FitnessTracker.Authentication;
+using FitLife.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Xunit;
-using static FitnessTracker.Server.Tests.CredentialsTests;
+using static FitLife.Server.Tests.CredentialsTests;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Проверяет подтверждение email через реальные MVC/Identity и изолированный почтовый outbox.</summary>
 [Trait("Category", "HTTP")]

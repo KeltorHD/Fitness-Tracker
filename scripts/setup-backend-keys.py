@@ -47,7 +47,7 @@ def prepare(root):
     with tempfile.TemporaryDirectory(prefix=".backend-certificate-", dir=directory) as temporary:
         files = Path(temporary)
         run(["openssl", "req", "-x509", "-newkey", "rsa:3072", "-sha256", "-nodes", "-days", "730",
-             "-subj", "/CN=FitnessTracker Backend encryption", "-keyout", str(files / "key.pem"),
+             "-subj", "/CN=FitLife Backend encryption", "-keyout", str(files / "key.pem"),
              "-out", str(files / "certificate.pem")], root, environment)
         run(["openssl", "pkcs12", "-export", "-inkey", str(files / "key.pem"), "-in", str(files / "certificate.pem"),
              "-out", str(files / "encryption.pfx"), "-passout", "env:FITNESS_TRACKER_BACKEND_CERTIFICATE_PASSWORD"], root, environment)

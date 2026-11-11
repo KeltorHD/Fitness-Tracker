@@ -1,9 +1,9 @@
 using System.Text.Json;
-using FitnessTracker.ServerLogging;
+using FitLife.ServerLogging;
 using Microsoft.Extensions.Configuration;
 using Xunit;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Проверяет реальные варианты секретов в текстовых, JSON и callback логах.</summary>
 [Trait("Category", "Unit")]

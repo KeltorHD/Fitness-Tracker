@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import Foundation
 
 #if canImport(FoundationNetworking)
@@ -51,7 +51,7 @@ private final class FoodURLProtocol: URLProtocol {
     let query = components?.queryItems?.first { $0.name == "search_terms" }?.value ?? ""
     let status = query == "limit" ? 429 : query == "server" ? 503 : 200
     precondition(
-      request.value(forHTTPHeaderField: "User-Agent")?.hasPrefix("FitnessTracker/") == true)
+      request.value(forHTTPHeaderField: "User-Agent")?.hasPrefix("FitLife/") == true)
     precondition(url.scheme == "https")
     let product =
       #"{"code":"12345678","product_name":"Food","nutriments":{"energy-kcal_100g":100,"proteins_100g":10,"fat_100g":2,"carbohydrates_100g":10}}"#

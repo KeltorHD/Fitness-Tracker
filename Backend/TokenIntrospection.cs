@@ -2,7 +2,7 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
 
-namespace FitnessTracker.Backend;
+namespace FitLife.Backend;
 
 /// <summary>Конфигурация стандартной introspection; секрет принадлежит только серверным сервисам.</summary>
 internal sealed class IntrospectionOptions

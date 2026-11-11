@@ -93,7 +93,7 @@ struct RootView: View {
         && !store.showingBodyWeightEditor
     )
     .alert(
-      "FitnessTracker",
+      "FitLife",
       isPresented: Binding(
         get: {
           store.error != nil && !store.showSession && !store.showingWorkoutStart

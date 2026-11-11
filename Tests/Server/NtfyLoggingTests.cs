@@ -2,14 +2,14 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using FitnessTracker.ServerLogging;
+using FitLife.ServerLogging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Xunit;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Проверяет ntfy без сети, внешних topics, секретов и фиксированных задержек.</summary>
 [Trait("Category", "Unit")]
@@ -59,7 +59,7 @@ public sealed class NtfyLoggingTests
         Assert.Equal("application/json", sent.ContentType);
         using var document = JsonDocument.Parse(sent.Body);
         Assert.Equal("private-fixture-topic", document.RootElement.GetProperty("topic").GetString());
-        Assert.Equal("FitnessTracker Backend: Error", document.RootElement.GetProperty("title").GetString());
+        Assert.Equal("FitLife Backend: Error", document.RootElement.GetProperty("title").GetString());
         Assert.Equal(4, document.RootElement.GetProperty("priority").GetInt32());
         var message = document.RootElement.GetProperty("message").GetString()!;
         Assert.Contains("Ошибка соединения, status 503", message);
@@ -141,7 +141,7 @@ public sealed class NtfyLoggingTests
         Assert.Single(handler.Messages);
         Assert.Equal(1, calls);
         Assert.DoesNotContain("attacker", handler.Messages[0].Url);
-        Assert.False(provider.CreateLogger("FitnessTracker.ServerLogging.Ntfy").IsEnabled(LogLevel.Critical));
+        Assert.False(provider.CreateLogger("FitLife.ServerLogging.Ntfy").IsEnabled(LogLevel.Critical));
     }
 
     /// <summary>Clock advance восстанавливает доставку без повторной отправки потерянной записи.</summary>
@@ -222,7 +222,7 @@ public sealed class NtfyLoggingTests
         services.AddSingleton<IConfiguration>(Configuration(LogLevel.Debug));
         services.AddLogging(logging => logging.SetMinimumLevel(LogLevel.Critical)
             .AddFilter("Microsoft", LogLevel.Critical).AddNtfy("Authentication"));
-        services.AddHttpClient("FitnessTracker.Ntfy").ConfigurePrimaryHttpMessageHandler(() => handler);
+        services.AddHttpClient("FitLife.Ntfy").ConfigurePrimaryHttpMessageHandler(() => handler);
         await using var container = services.BuildServiceProvider();
         await using var lifetime = container.StartNtfyLogging();
         await container.GetRequiredService<NtfyLoggerProvider>().StartAsync(default);

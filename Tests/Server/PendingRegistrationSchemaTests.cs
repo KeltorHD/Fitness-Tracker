@@ -1,8 +1,8 @@
-using FitnessTracker.Authentication.Migrations;
+using FitLife.Authentication.Migrations;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using Xunit;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Проверяет additive миграцию индекса без изменения или пересоздания пользовательских данных.</summary>
 [Trait("Category", "Unit")]

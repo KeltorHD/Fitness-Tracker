@@ -1,4 +1,4 @@
-namespace FitnessTracker.Authentication;
+namespace FitLife.Authentication;
 
 /// <summary>Удаляет серверные копии через внутренний HTTP-контракт до удаления Identity-профиля.</summary>
 public sealed class BackupCleanup(HttpClient client, IConfiguration config)

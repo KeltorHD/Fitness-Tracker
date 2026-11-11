@@ -1,7 +1,7 @@
-import FitnessTrackerCore
+import FitLifeCore
 import XCTest
 
-@testable import FitnessTracker
+@testable import FitLife
 
 @MainActor final class ExerciseLibraryFilterTests: XCTestCase {
   func testBodySelectionCombinesWithSearchEquipmentAndLanguage() {

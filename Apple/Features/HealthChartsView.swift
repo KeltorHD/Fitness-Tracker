@@ -1,5 +1,5 @@
 import Charts
-import FitnessTrackerCore
+import FitLifeCore
 import SwiftUI
 
 struct HealthChartsView: View {
@@ -44,7 +44,7 @@ struct HealthChartsView: View {
             if model.points.isEmpty && snapshot.steps.allSatisfy({ $0.steps == nil }) {
               Text(
                 L10n.text(
-                  "Нет доступных данных. Проверьте синхронизацию приложения трекера и разрешения FitnessTracker в «Здоровье».",
+                  "Нет доступных данных. Проверьте синхронизацию приложения трекера и разрешения FitLife в «Здоровье».",
                   locale: locale)
               ).font(.footnote).foregroundStyle(.secondary)
             }

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
-namespace FitnessTracker.Backend;
+namespace FitLife.Backend;
 
 /// <summary>Отличает сбой discovery/JWKS от неверного JWT, чтобы временный отказ Auth не завершал сессию iOS.</summary>
 internal sealed class DependencyAwareJwtBearerEvents : JwtBearerEvents

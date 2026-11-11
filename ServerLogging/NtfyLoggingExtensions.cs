@@ -4,7 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 
-namespace FitnessTracker.ServerLogging;
+namespace FitLife.ServerLogging;
 
 /// <summary>Подключает одинаковый ILogger sink к двум независимым серверным приложениям.</summary>
 public static class NtfyLoggingExtensions
@@ -15,7 +15,7 @@ public static class NtfyLoggingExtensions
         logging.Services.TryAddSingleton(TimeProvider.System);
         logging.Services.AddSingleton(services => NtfyOptions.Read(services.GetRequiredService<IConfiguration>()));
         logging.Services.AddSingleton(services => new NtfyLogRedactor(services.GetRequiredService<IConfiguration>()));
-        logging.Services.AddHttpClient("FitnessTracker.Ntfy", (services, client) =>
+        logging.Services.AddHttpClient("FitLife.Ntfy", (services, client) =>
             client.Timeout = TimeSpan.FromSeconds(services.GetRequiredService<NtfyOptions>().TimeoutSeconds))
             .ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler
             {
@@ -27,8 +27,8 @@ public static class NtfyLoggingExtensions
         logging.Services.AddSingleton(services => new NtfyLoggerProvider(
             services.GetRequiredService<NtfyOptions>(), services.GetRequiredService<NtfyLogRedactor>(),
             services.GetRequiredService<TimeProvider>(), serviceName,
-            () => (services.GetRequiredService<IHttpClientFactory>().CreateClient("FitnessTracker.Ntfy"),
-                services.GetRequiredService<ILoggerFactory>().CreateLogger("FitnessTracker.ServerLogging.Ntfy"))));
+            () => (services.GetRequiredService<IHttpClientFactory>().CreateClient("FitLife.Ntfy"),
+                services.GetRequiredService<ILoggerFactory>().CreateLogger("FitLife.ServerLogging.Ntfy"))));
         logging.Services.AddSingleton<ILoggerProvider>(services => services.GetRequiredService<NtfyLoggerProvider>());
         logging.Services.AddSingleton<IHostedService>(services => services.GetRequiredService<NtfyLoggerProvider>());
         // Собственный порог не зависит от console LogLevel и category filters другого провайдера.

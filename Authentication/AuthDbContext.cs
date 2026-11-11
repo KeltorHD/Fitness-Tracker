@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace FitnessTracker.Authentication;
+namespace FitLife.Authentication;
 
 public sealed class ApplicationUser : IdentityUser
 {

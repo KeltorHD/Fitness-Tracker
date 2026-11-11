@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace FitnessTracker.Backend;
+namespace FitLife.Backend;
 
 public sealed class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<BackupDbContext>
 {

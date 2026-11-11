@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import Foundation
 
 struct WidgetSnapshot: Codable, Sendable {
@@ -7,7 +7,7 @@ struct WidgetSnapshot: Codable, Sendable {
   var updatedAt: Date
   static let empty = WidgetSnapshot(workoutsThisWeek: 0, weeklyGoal: 3, updatedAt: .now)
   private static func sharedDefaults() throws -> UserDefaults {
-    guard let group = Bundle.main.object(forInfoDictionaryKey: "FitnessTrackerAppGroup") as? String,
+    guard let group = Bundle.main.object(forInfoDictionaryKey: "FitLifeAppGroup") as? String,
       !group.isEmpty, !group.contains("$("), let defaults = UserDefaults(suiteName: group)
     else { throw WidgetSnapshotError.unavailable }
     return defaults

@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import Foundation
 
 // Executable behavior checks of the real Foundation/Observation subset. No Apple SDK or radios.
@@ -86,11 +86,13 @@ private actor RecordingStub: HeartRateRecordingRepository {
     )
     try expect(
       AppCompatibility.weeklyWidgetKind == "FitSession.Weekly", "Installed widgets keep their kind")
-    for scheme in ["fitsession", "fitnesstracker"] {
+    for scheme in ["fitlife", "FITLIFE", "fitnesstracker", "FITNESSTRACKER", "fitsession"] {
       guard let url = URL(string: scheme + "://workout?id=" + UUID().uuidString) else {
         throw CheckFailure(message: "URL fixture")
       }
-      try expect(AppCompatibility.acceptsURL(url), "Both URL generations open the existing workout")
+      try expect(
+        AppCompatibility.acceptsURL(url), "Current and legacy URL schemes open the existing workout"
+      )
     }
     guard let foreignURL = URL(string: "https://example.com/workout") else {
       throw CheckFailure(message: "URL fixture")
@@ -108,7 +110,7 @@ private actor RecordingStub: HeartRateRecordingRepository {
     try expect(
       !betweenTicks.isFreshForDisplay(at: tick, now: tick.addingTimeInterval(0.2)),
       "Truly future measurements stay invalid")
-    let suite = "FitnessTracker.PortableTrackerTests.\(UUID().uuidString)"
+    let suite = "FitLife.PortableTrackerTests.\(UUID().uuidString)"
     guard let defaults = UserDefaults(suiteName: suite) else {
       throw CheckFailure(message: "defaults")
     }

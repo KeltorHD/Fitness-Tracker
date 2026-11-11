@@ -1,7 +1,7 @@
 using System.Net;
 using System.Net.Http.Json;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Подменяет только HTTP-ответ Auth; проверка подписи JWT и остальной Backend остаются настоящими.</summary>
 internal sealed class IntrospectionStub : HttpMessageHandler

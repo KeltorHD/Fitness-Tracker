@@ -53,17 +53,17 @@ struct ServerConfiguration: Equatable, Sendable {
   }
 
   static func configured(info: [String: Any]) throws -> Self? {
-    let auth = info["FitnessTrackerAuthenticationURL"] as? String ?? ""
-    let api = info["FitnessTrackerBackendURL"] as? String ?? ""
+    let auth = info["FitLifeAuthenticationURL"] as? String ?? ""
+    let api = info["FitLifeBackendURL"] as? String ?? ""
     guard !auth.isEmpty || !api.isEmpty else { return nil }
     guard let authURL = URL(string: auth), let apiURL = URL(string: api) else {
       throw ServerError.invalidConfiguration
     }
     let callback: ServerCallback
-    switch info["FitnessTrackerAuthenticationCallbackMode"] as? String ?? "https" {
+    switch info["FitLifeAuthenticationCallbackMode"] as? String ?? "https" {
     case "https": callback = .https
     case "customScheme":
-      callback = .customScheme(info["FitnessTrackerAuthenticationCallbackScheme"] as? String ?? "")
+      callback = .customScheme(info["FitLifeAuthenticationCallbackScheme"] as? String ?? "")
     default: throw ServerError.invalidConfiguration
     }
     return try Self(authenticationURL: authURL, backendURL: apiURL, callback: callback)

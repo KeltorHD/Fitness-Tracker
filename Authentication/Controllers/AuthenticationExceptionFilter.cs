@@ -2,7 +2,7 @@ using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace FitnessTracker.Authentication.Controllers;
+namespace FitLife.Authentication.Controllers;
 
 /// <summary>Преобразует ожидаемые отказы сервисов на единой HTTP-границе через Mapster.</summary>
 public sealed class AuthenticationExceptionFilter(IMapper mapper) : IExceptionFilter

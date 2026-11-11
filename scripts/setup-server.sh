@@ -27,7 +27,7 @@ export FITNESS_TRACKER_CERTIFICATE_PASSWORD="$certificate_password"
 for purpose in signing encryption; do
   # These protect OpenIddict tokens/Data Protection; Nginx manages HTTPS separately.
   openssl req -x509 -newkey rsa:3072 -sha256 -nodes -days 730 \
-    -subj "/CN=FitnessTracker $purpose" \
+    -subj "/CN=FitLife $purpose" \
     -keyout ".local/certificates/$purpose.key" -out ".local/certificates/$purpose.crt" 2>/dev/null
   openssl pkcs12 -export -inkey ".local/certificates/$purpose.key" \
     -in ".local/certificates/$purpose.crt" -out ".local/certificates/$purpose.pfx" \

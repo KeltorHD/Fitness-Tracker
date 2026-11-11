@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OpenIddict.Abstractions;
 
-namespace FitnessTracker.Authentication;
+namespace FitLife.Authentication;
 
 /// <summary>Управляет аккаунтом и удалением данных, не формируя HTTP-ответов.</summary>
 public sealed class AccountService(UserManager<ApplicationUser> users, SignInManager<ApplicationUser> signIn,

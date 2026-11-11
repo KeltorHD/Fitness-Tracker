@@ -13,9 +13,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
-using FitnessTracker.Authentication;
+using FitLife.Authentication;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Изолирует Identity/OpenIddict и подменяет только внешний HTTP-сервис удаления копий.</summary>
 /// <param name="peerAddress">Сетевой адрес непосредственного отправителя для проверки reverse proxy.</param>

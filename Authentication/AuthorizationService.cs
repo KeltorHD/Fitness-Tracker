@@ -6,7 +6,7 @@ using OpenIddict.Abstractions;
 using OpenIddict.Server.AspNetCore;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
-namespace FitnessTracker.Authentication;
+namespace FitLife.Authentication;
 
 /// <summary>Выдаёт authorization codes и токены с проверкой актуального состояния Identity-пользователя.</summary>
 public sealed class AuthorizationService(UserManager<ApplicationUser> users,

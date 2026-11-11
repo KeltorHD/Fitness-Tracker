@@ -17,7 +17,7 @@
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>CFBundleDisplayName</key>
-	<string>FitnessTracker</string>
+	<string>FitLife</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -46,34 +46,35 @@
 		<string>remote-notification</string>
 		<string>bluetooth-central</string>
 	</array>
-	<key>FitnessTrackerAppGroup</key>
+	<key>FitLifeAppGroup</key>
 	<string>$(FITNESS_TRACKER_APP_GROUP)</string>
-	<key>FitnessTrackerAuthenticationURL</key>
+	<key>FitLifeAuthenticationURL</key>
 	<string>$(FITNESS_TRACKER_AUTH_URL)</string>
-	<key>FitnessTrackerBackendURL</key>
+	<key>FitLifeBackendURL</key>
 	<string>$(FITNESS_TRACKER_BACKEND_URL)</string>
-	<key>FitnessTrackerAuthenticationCallbackMode</key>
+	<key>FitLifeAuthenticationCallbackMode</key>
 	<string>$(FITNESS_TRACKER_AUTH_CALLBACK_MODE)</string>
-	<key>FitnessTrackerAuthenticationCallbackScheme</key>
+	<key>FitLifeAuthenticationCallbackScheme</key>
 	<string>$(FITNESS_TRACKER_AUTH_CALLBACK_SCHEME)</string>
-	<key>FitnessTrackerCloudContainer</key>
+	<key>FitLifeCloudContainer</key>
 	<string>$(FITNESS_TRACKER_CLOUD_CONTAINER)</string>
-	<key>FitnessTrackerCloudSyncAvailable</key>
+	<key>FitLifeCloudSyncAvailable</key>
 	<string>$(FITNESS_TRACKER_CLOUD_SYNC_AVAILABLE)</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
 			<key>CFBundleURLName</key>
-			<string>FitnessTracker</string>
+			<string>FitLife</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
+				<string>fitlife</string>
 				<string>fitnesstracker</string>
 				<string>fitsession</string>
 			</array>
 		</dict>
 		<dict>
 			<key>CFBundleURLName</key>
-			<string>FitnessTracker.Authentication</string>
+			<string>FitLife.Authentication</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>$(FITNESS_TRACKER_AUTH_CALLBACK_SCHEME)</string>
@@ -88,7 +89,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>com.fitnesstracker.archive</string>
 			<key>UTTypeDescription</key>
-			<string>Архив FitnessTracker</string>
+			<string>Архив FitLife</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.json</string>
@@ -107,7 +108,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>com.fitsession.archive</string>
 			<key>UTTypeDescription</key>
-			<string>Архив FitnessTracker (старый формат)</string>
+			<string>Архив FitLife (старый формат)</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.json</string>
@@ -127,7 +128,7 @@
 	<array>
 		<dict>
 			<key>CFBundleTypeName</key>
-			<string>Архив FitnessTracker</string>
+			<string>Архив FitLife</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSHandlerRank</key>
@@ -140,7 +141,7 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
-			<string>JSON FitnessTracker</string>
+			<string>JSON FitLife</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSHandlerRank</key>

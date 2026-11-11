@@ -5,7 +5,7 @@ using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
 
-namespace FitnessTracker.Authentication;
+namespace FitLife.Authentication;
 
 /// <summary>Граница отправки писем, не зависящая от Stalwart или другого SMTP-сервиса.</summary>
 public interface IAccountEmailSender
@@ -43,7 +43,7 @@ public sealed class SmtpOptions
     /// <summary>Mailbox отправителя, разрешённый почтовым сервером.</summary>
     public string FromAddress { get; set; } = "";
     /// <summary>Отображаемое имя отправителя.</summary>
-    public string FromName { get; set; } = "FitnessTracker";
+    public string FromName { get; set; } = "FitLife";
     /// <summary>Общий предел времени подключения, аутентификации и отправки.</summary>
     public int TimeoutSeconds { get; set; } = 10;
 
@@ -88,7 +88,7 @@ public sealed class SmtpEmailSender(ISmtpClient client, IOptions<SmtpOptions> co
             LogStage(4201, stage, "started", attemptId, stageStarted);
             message.From.Add(new MailboxAddress(options.FromName, options.FromAddress));
             message.To.Add(MailboxAddress.Parse(email));
-            message.Subject = "Подтвердите электронную почту — FitnessTracker";
+            message.Subject = "Подтвердите электронную почту — FitLife";
             message.Body = ConfirmationEmailTemplate.CreateBody(confirmationLink);
             LogStage(4202, stage, "completed", attemptId, stageStarted);
             var security = options.Security switch

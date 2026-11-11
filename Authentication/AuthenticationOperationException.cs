@@ -1,4 +1,4 @@
-namespace FitnessTracker.Authentication;
+namespace FitLife.Authentication;
 
 /// <summary>Ожидаемые отказы пользовательского сценария, без привязки к MVC result types.</summary>
 public enum AuthenticationFailure

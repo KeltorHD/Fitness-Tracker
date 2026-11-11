@@ -1,6 +1,6 @@
 using System.Security.Claims;
 
-namespace FitnessTracker.Authentication;
+namespace FitLife.Authentication;
 
 /// <summary>Продолжение браузерного сценария, проверяемое сервисом навигации.</summary>
 public sealed record NavigationInput(string? ReturnUrl);

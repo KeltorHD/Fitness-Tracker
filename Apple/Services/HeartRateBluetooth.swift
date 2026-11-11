@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import Foundation
 
 struct HeartRateDevice: Identifiable, Equatable, Sendable {

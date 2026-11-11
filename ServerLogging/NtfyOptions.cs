@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace FitnessTracker.ServerLogging;
+namespace FitLife.ServerLogging;
 
 /// <summary>Настройки необязательной отправки логов, в том числе через Ntfy__* environment keys.</summary>
 public sealed class NtfyOptions

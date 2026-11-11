@@ -1,11 +1,11 @@
-import FitnessTrackerCore
+import FitLifeCore
 import XCTest
 
-@testable import FitnessTracker
+@testable import FitLife
 
 final class WidgetSnapshotTests: XCTestCase {
   func testColorThemeCanBeSharedWithoutWorkoutOptInAndSurvivesClearingSummary() throws {
-    let suite = "FitnessTracker.ColorThemeTests.\(UUID().uuidString)"
+    let suite = "FitLife.ColorThemeTests.\(UUID().uuidString)"
     let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
     defer { defaults.removePersistentDomain(forName: suite) }
     XCTAssertNil(try WidgetSnapshot.colorThemeID(from: defaults))
@@ -23,7 +23,7 @@ final class WidgetSnapshotTests: XCTestCase {
   }
 
   func testLanguageCanBeSharedWithoutPublishingWorkoutData() throws {
-    let suite = "FitnessTracker.LanguageTests.\(UUID().uuidString)"
+    let suite = "FitLife.LanguageTests.\(UUID().uuidString)"
     let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
     defer { defaults.removePersistentDomain(forName: suite) }
     try WidgetSnapshot.publishLanguage(.english, to: defaults)
@@ -34,7 +34,7 @@ final class WidgetSnapshotTests: XCTestCase {
   }
 
   func testCorruptSnapshotIsReportedAndPreserved() throws {
-    let suite = "FitnessTracker.SnapshotTests.\(UUID().uuidString)"
+    let suite = "FitLife.SnapshotTests.\(UUID().uuidString)"
     let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
     defer { defaults.removePersistentDomain(forName: suite) }
     let corrupt = Data("invalid JSON".utf8)
@@ -50,7 +50,7 @@ final class WidgetSnapshotTests: XCTestCase {
   }
 
   func testInvalidValuesDoNotOverwriteAnExistingSnapshot() throws {
-    let suite = "FitnessTracker.SnapshotTests.\(UUID().uuidString)"
+    let suite = "FitLife.SnapshotTests.\(UUID().uuidString)"
     let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
     defer { defaults.removePersistentDomain(forName: suite) }
     let date = Date(timeIntervalSince1970: 100)

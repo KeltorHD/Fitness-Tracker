@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import Foundation
 
 /// Device-local sensor data. Never stored in the SwiftData/CloudKit aggregate or App Group.

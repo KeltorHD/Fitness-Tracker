@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import Foundation
 
 private struct CheckFailure: Error { let message: String }
@@ -61,7 +61,7 @@ private func expect(_ condition: Bool, _ message: String) throws {
 
 @main private struct PortableHealthChartsChecks {
   @MainActor static func main() async throws {
-    let suite = "FitnessTracker.HealthChartsChecks.\(UUID())"
+    let suite = "FitLife.HealthChartsChecks.\(UUID())"
     guard let defaults = UserDefaults(suiteName: suite) else {
       throw CheckFailure(message: "Defaults")
     }

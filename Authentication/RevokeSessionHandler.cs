@@ -3,7 +3,7 @@ using OpenIddict.Server;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 using static OpenIddict.Server.OpenIddictServerEvents;
 
-namespace FitnessTracker.Authentication;
+namespace FitLife.Authentication;
 
 /// <summary>Расширяет стандартный revoke OpenIddict до атомарного отзыва одной сессии и всех её токенов.</summary>
 public sealed class RevokeSessionHandler(AuthDbContext database, IOpenIddictTokenManager tokens,

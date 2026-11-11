@@ -4,8 +4,8 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Xml.Linq;
-using FitnessTracker.Authentication;
-using FitnessTracker.Backend;
+using FitLife.Authentication;
+using FitLife.Backend;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -19,7 +19,7 @@ using Npgsql;
 using OpenIddict.Abstractions;
 using Xunit;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Проверяет обычный Production startup на отдельных PostgreSQL-БД без ручного --migrate.</summary>
 [Trait("Category", "PostgreSQL")]
@@ -232,7 +232,7 @@ public sealed class StartupMigrationTests
         var secondStart = Task.Run(() => second.CreateClient(), cancellationToken);
         await using (var waiting = new NpgsqlCommand("""
             SELECT count(*) FROM pg_stat_activity
-            WHERE datname = current_database() AND application_name = 'FitnessTracker startup'
+            WHERE datname = current_database() AND application_name = 'FitLife startup'
                 AND wait_event_type = 'Lock'
             """, gate))
         {
@@ -306,7 +306,7 @@ public sealed class StartupMigrationTests
             if (!File.Exists(pfx))
             {
                 using var rsa = RSA.Create(2048);
-                var request = new CertificateRequest("CN=FitnessTracker isolated startup", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+                var request = new CertificateRequest("CN=FitLife isolated startup", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
                 using var certificate = request.CreateSelfSigned(DateTimeOffset.UtcNow.AddMinutes(-5), DateTimeOffset.UtcNow.AddDays(1));
                 File.WriteAllBytes(pfx, certificate.Export(X509ContentType.Pfx, "test-only-password"));
             }

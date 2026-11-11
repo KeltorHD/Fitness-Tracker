@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace FitnessTracker.Authentication;
+namespace FitLife.Authentication;
 
 public sealed class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AuthDbContext>
 {

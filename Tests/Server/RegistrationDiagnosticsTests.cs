@@ -1,5 +1,5 @@
 using System.Net;
-using FitnessTracker.Authentication;
+using FitLife.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -8,9 +8,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Npgsql;
 using Xunit;
-using static FitnessTracker.Server.Tests.CredentialsTests;
+using static FitLife.Server.Tests.CredentialsTests;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Проверяет понятные ошибки регистрации, безопасные console logs и продолжение прежнего входа.</summary>
 [Trait("Category", "HTTP")]

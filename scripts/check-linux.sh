@@ -45,7 +45,7 @@ echo 'Portable presentation/data subset: Swift 6 type check passed (no Apple SDK
 # OAuth contracts and presentation state use HTTP fixtures, without browser or Apple SDK.
 "$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
   -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \
-  "$bin_path"/FitnessTrackerCore.build/*.swift.o \
+  "$bin_path"/FitLifeCore.build/*.swift.o \
   Apple/Services/ServerContracts.swift Apple/Services/ServerHTTPClient.swift \
   Apple/Services/AccountSession.swift Apple/Services/RemoteBackupClient.swift \
   Apple/Features/AccountBackupViewModel.swift Tests/PortableAccountChecks/main.swift \
@@ -54,26 +54,26 @@ echo 'Portable presentation/data subset: Swift 6 type check passed (no Apple SDK
 # Exercise chart presentation with real Core data, without SwiftUI/Charts SDK stand-ins.
 "$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
   -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \
-  "$bin_path"/FitnessTrackerCore.build/*.swift.o \
+  "$bin_path"/FitLifeCore.build/*.swift.o \
   Apple/Features/ExerciseProgressViewModel.swift Apple/Features/ProgressViewModel.swift \
   Apple/Features/BodyWeightViewModel.swift \
   Tests/PortableProgressChecks/main.swift -o "$bin_path/portable-progress-checks"
 "$bin_path/portable-progress-checks"
 "$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
   -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \
-  "$bin_path"/FitnessTrackerCore.build/*.swift.o Apple/Features/BodyWeightViewModel.swift \
+  "$bin_path"/FitLifeCore.build/*.swift.o Apple/Features/BodyWeightViewModel.swift \
   Tests/PortableWeightChecks/main.swift -o "$bin_path/portable-weight-checks"
 "$bin_path/portable-weight-checks"
 "$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
   -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \
-  "$bin_path"/FitnessTrackerCore.build/*.swift.o Apple/Design/WorkoutFormatting.swift Apple/Shared/L10n.swift \
+  "$bin_path"/FitLifeCore.build/*.swift.o Apple/Design/WorkoutFormatting.swift Apple/Shared/L10n.swift \
   Tests/PortableCSVChecks/main.swift \
   -o "$bin_path/portable-csv-checks"
 "$bin_path/portable-csv-checks"
 # Exercise the real tracker presentation/storage subset with fakes, without radio/HealthKit calls.
 "$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
   -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \
-  "$bin_path"/FitnessTrackerCore.build/*.swift.o \
+  "$bin_path"/FitLifeCore.build/*.swift.o \
   Apple/Services/LocalHeartRateRepository.swift Apple/Services/HeartRateBluetooth.swift Apple/Services/LiveHeartRate.swift \
   Apple/Services/ServiceError.swift Apple/Features/TrackerViewModel.swift \
   Apple/Features/WorkoutHeartRateViewModel.swift Apple/Features/TrackerDeviceProfile.swift \
@@ -83,7 +83,7 @@ echo 'Portable presentation/data subset: Swift 6 type check passed (no Apple SDK
 "$bin_path/portable-tracker-checks"
 "$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
   -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \
-  "$bin_path"/FitnessTrackerCore.build/*.swift.o \
+  "$bin_path"/FitLifeCore.build/*.swift.o \
   Apple/Services/LocalHeartRateRepository.swift Apple/Services/HeartRateBluetooth.swift Apple/Services/LiveHeartRate.swift \
   Apple/Services/ServiceError.swift Apple/Features/TrackerViewModel.swift \
   Apple/Features/TrackerDeviceProfile.swift Apple/Shared/AppCompatibility.swift \
@@ -91,25 +91,25 @@ echo 'Portable presentation/data subset: Swift 6 type check passed (no Apple SDK
 "$bin_path/portable-airpods-checks"
 "$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
   -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \
-  "$bin_path"/FitnessTrackerCore.build/*.swift.o Apple/Features/HealthChartsViewModel.swift \
+  "$bin_path"/FitLifeCore.build/*.swift.o Apple/Features/HealthChartsViewModel.swift \
   Tests/PortableHealthChartsChecks/main.swift -o "$bin_path/portable-health-charts-checks"
 "$bin_path/portable-health-charts-checks"
 "$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
   -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \
-  "$bin_path"/FitnessTrackerCore.build/*.swift.o Apple/Shared/L10n.swift \
+  "$bin_path"/FitLifeCore.build/*.swift.o Apple/Shared/L10n.swift \
   Apple/Features/WorkoutExercisePresentation.swift \
   Tests/PortableWorkoutExerciseChecks/main.swift -o "$bin_path/portable-workout-exercise-checks"
 "$bin_path/portable-workout-exercise-checks"
 "$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
   -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \
-  "$bin_path"/FitnessTrackerCore.build/*.swift.o Apple/Shared/L10n.swift \
+  "$bin_path"/FitLifeCore.build/*.swift.o Apple/Shared/L10n.swift \
   Apple/Features/WorkoutExercisePresentation.swift Apple/Features/WorkoutNumberPadModel.swift \
   Tests/PortableNumberPadChecks/main.swift -o "$bin_path/portable-number-pad-checks"
 "$bin_path/portable-number-pad-checks"
 # Nutrition uses the real URLSession client with URLProtocol fixtures; no network requests.
 "$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
   -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \
-  "$bin_path"/FitnessTrackerCore.build/*.swift.o \
+  "$bin_path"/FitLifeCore.build/*.swift.o \
   Apple/Services/OpenFoodFactsClient.swift Apple/Features/NutritionDiaryModel.swift \
   Tests/PortableNutritionChecks/main.swift -o "$bin_path/portable-nutrition-checks"
 "$bin_path/portable-nutrition-checks"

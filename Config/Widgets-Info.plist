@@ -17,7 +17,7 @@
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>CFBundleDisplayName</key>
-	<string>FitnessTracker Widgets</string>
+	<string>FitLife Widgets</string>
 	<key>CFBundlePackageType</key>
 	<string>XPC!</string>
 	<key>NSExtension</key>
@@ -25,7 +25,7 @@
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.widgetkit-extension</string>
 	</dict>
-	<key>FitnessTrackerAppGroup</key>
+	<key>FitLifeAppGroup</key>
 	<string>$(FITNESS_TRACKER_APP_GROUP)</string>
 	<key>CFBundleLocalizations</key>
 	<array>

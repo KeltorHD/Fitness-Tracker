@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import Foundation
 
 private struct WeightCheckFailure: Error { let message: String }

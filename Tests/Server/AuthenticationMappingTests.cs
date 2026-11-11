@@ -1,13 +1,13 @@
 using System.Security.Claims;
-using FitnessTracker.Authentication;
-using FitnessTracker.Authentication.Controllers;
+using FitLife.Authentication;
+using FitLife.Authentication.Controllers;
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using OpenIddict.Abstractions;
 using OpenIddict.Server.AspNetCore;
 using Xunit;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Проверяет границы контроллеров, запрет неявного entity mapping и сохранность OAuth principal.</summary>
 [Trait("Category", "Unit")]

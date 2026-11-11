@@ -1,9 +1,9 @@
-# FitnessTracker
+# FitLife
 
 Нативный журнал силовых тренировок: **Swift 6, SwiftUI, iOS 26+, Apple Liquid Glass**.
 Разработка ведётся на Linux. Сборка, запуск и проверка Apple-интеграций выполняются на Mac в Xcode.
 
-После обновления переименованного проекта выполните `xcodegen generate`, откройте **FitnessTracker.xcodeproj** и выберите **FitnessTracker Personal**. Существующий `Config/Local.xcconfig` и зарегистрированные идентификаторы сохраняйте. [Переименование и совместимость](docs/RENAME.md).
+После обновления переименованного проекта выполните `xcodegen generate`, откройте **FitLife.xcodeproj** и выберите **FitLife Personal**. Существующий `Config/Local.xcconfig` и зарегистрированные идентификаторы сохраняйте. [Переименование и совместимость](docs/RENAME.md).
 
 ## Что реализовано
 
@@ -67,19 +67,19 @@ swift format lint --strict --recursive Sources Tests Apple Package.swift
 
 ```bash
 bash scripts/setup-macos.sh
-open FitnessTracker.xcodeproj
+open FitLife.xcodeproj
 ```
 
 Понадобятся полный Xcode 26+ с iOS/watchOS 26 SDK и XcodeGen 2.44+. Скрипт устанавливает XcodeGen через имеющийся Homebrew, создаёт локальную конфигурацию, проверяет пакет и выполняет `xcodegen generate`. Signing, Apple Developer resources и первая сборка описаны в [MAC_BUILD_GUIDE.md](MAC_BUILD_GUIDE.md).
 
-Для бесплатной **Personal Team** выберите схему **FitnessTracker Personal**: iCloud/Push отключены, история хранится локально. Полная схема **FitnessTracker** сохраняет эти capabilities для Apple Developer Program. Укажите свою Team во вложенных targets и уникальный Bundle ID в Config/Local.xcconfig; не оставляйте `com.yourcompany.fitnesstracker`.
+Для бесплатной **Personal Team** выберите схему **FitLife Personal**: iCloud/Push отключены, история хранится локально. Полная схема **FitLife** сохраняет эти capabilities для Apple Developer Program. Укажите свою Team во вложенных targets и уникальный Bundle ID в Config/Local.xcconfig; не оставляйте `com.yourcompany.fitnesstracker`.
 
 ## Структура
 
 ```text
 Package.swift                      # Только Foundation/Core, Swift 6
-Sources/FitnessTrackerCore/             # Модели, state machine, расчёты, протоколы
-Tests/FitnessTrackerCoreTests/          # Linux/macOS Swift Testing
+Sources/FitLifeCore/             # Модели, state machine, расчёты, протоколы
+Tests/FitLifeCoreTests/          # Linux/macOS Swift Testing
 Tests/PortableTrackerChecks/        # Исполняемые проверки Foundation/Observation с fakes
 Apple/App/                         # DI, точка входа, состояние приложения
 Apple/Design/                      # Liquid Glass и общие компоненты

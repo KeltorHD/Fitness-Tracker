@@ -1,7 +1,7 @@
-import FitnessTrackerCore
+import FitLifeCore
 import XCTest
 
-@testable import FitnessTracker
+@testable import FitLife
 
 @MainActor private final class ControlledCloudAccount: CloudAccountChecking {
   private(set) var requests: [CheckedContinuation<CloudAccountStatus, any Error>] = []

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using MimeKit;
 
-namespace FitnessTracker.Authentication;
+namespace FitLife.Authentication;
 
 /// <summary>Отделяет локальные email-аккаунты от внешних профилей с тем же неподтверждённым адресом.</summary>
 public sealed class EmailAccounts(UserManager<ApplicationUser> users, TimeProvider clock)

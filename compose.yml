@@ -28,7 +28,7 @@ services:
       Smtp__Username: ${SMTP_USERNAME:-}
       Smtp__Password: ${SMTP_PASSWORD:-}
       Smtp__FromAddress: ${SMTP_FROM_ADDRESS:-}
-      Smtp__FromName: ${SMTP_FROM_NAME:-FitnessTracker}
+      Smtp__FromName: ${SMTP_FROM_NAME:-FitLife}
       Smtp__TimeoutSeconds: ${SMTP_TIMEOUT_SECONDS:-10}
       Auth__RedirectUri: https://${AUTH_DOMAIN}/ios/oauth/callback
       Auth__AppleAppIdentifier: ${IOS_APP_IDENTIFIER:-}

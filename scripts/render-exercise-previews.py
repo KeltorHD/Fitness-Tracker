@@ -14,7 +14,7 @@ import textwrap
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / 'docs/previews'
-DATA = json.loads((ROOT / 'Sources/FitnessTrackerCore/Resources/ExerciseLibrary.ru.json').read_text())
+DATA = json.loads((ROOT / 'Sources/FitLifeCore/Resources/ExerciseLibrary.ru.json').read_text())
 ENTRIES = {item['sourceID']: item for item in DATA['entries']}
 INK, MUTED, ACCENT, BG = '#191919', '#8e8e93', '#ff4f33', '#ffffff'
 
@@ -231,7 +231,7 @@ def heart_rate_live():
     s+=rect(16,173,358,103,'white',22)+text(30,202,'Модель трекера',14)+text(358,202,'AirPods Pro 3  ⌄',14,MUTED,400,'end')
     s+=rect(30,221,344,0.5,'#e5e5e5')+text(30,252,'Режим трекера',14)+text(358,252,'Apple «Здоровье»  ⌄',13,MUTED,400,'end')
     s+=text(30,307,'ПУЛЬС ВО ВРЕМЯ ТРЕНИРОВКИ',11,MUTED,500)+rect(16,321,358,375,'white',22)
-    s+=wrap(30,347,'Наденьте AirPods Pro 3 и подключите их к iPhone. В настройках iOS → AirPods → Пульс включите измерение. Затем начните тренировку в FitnessTracker и включите приём пульса.',chars=46,size=12,line=18,limit=5)
+    s+=wrap(30,347,'Наденьте AirPods Pro 3 и подключите их к iPhone. В настройках iOS → AirPods → Пульс включите измерение. Затем начните тренировку в FitLife и включите приём пульса.',chars=46,size=12,line=18,limit=5)
     s+=wrap(30,449,'Этот режим предназначен для AirPods Pro 3 с датчиком пульса. iOS выбирает доступный источник; вместе с AirPods может использоваться Apple Watch.',chars=48,size=11,color=MUTED,line=16,limit=4)
     s+=text(30,536,'♥',23,'#ef4b4b')+text(63,536,'128 уд/мин',19,INK,500)
     s+=wrap(30,563,'Приём пульса включён. Если измерения нет, проверьте посадку AirPods и доступ к пульсу.',chars=48,size=11,color=MUTED,line=16,limit=3)
@@ -388,7 +388,7 @@ if __name__ == '__main__':
                            ('heart-rate-overview', [heart_rate_live(), heart_rate_history()])]:
         board_width = 40 + len(selected) * 410
         board = rect(0, 0, board_width, 1020, '#ebebeb')
-        board += text(30, 38, 'FitnessTracker · дизайн по вашим референсам', 25, INK, 700)
+        board += text(30, 38, 'FitLife · дизайн по вашим референсам', 25, INK, 700)
         board += text(30, 63, 'Демонстрационные данные. Это макеты, не скриншоты Xcode; Liquid Glass проверяется на Mac.', 12, MUTED)
         for i, content in enumerate(selected):
             board += f'<svg x="{30 + i * 410}" y="85" width="390" height="900" viewBox="0 0 390 900">{content}</svg>'

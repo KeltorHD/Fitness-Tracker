@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import Foundation
 import Synchronization
 
@@ -124,16 +124,16 @@ private final class AccountProtocol: URLProtocol {
       } catch ServerError.invalidConfiguration {}
     }
     var info: [String: Any] = [
-      "FitnessTrackerAuthenticationURL": auth.absoluteString,
-      "FitnessTrackerBackendURL": api.absoluteString,
+      "FitLifeAuthenticationURL": auth.absoluteString,
+      "FitLifeBackendURL": api.absoluteString,
     ]
     let legacyConfiguration = try ServerConfiguration.configured(info: info)
     precondition(legacyConfiguration?.callback == .https)
-    info["FitnessTrackerAuthenticationCallbackMode"] = "customScheme"
-    info["FitnessTrackerAuthenticationCallbackScheme"] = "com.example.fitnesstracker"
+    info["FitLifeAuthenticationCallbackMode"] = "customScheme"
+    info["FitLifeAuthenticationCallbackScheme"] = "com.example.fitnesstracker"
     let personalConfiguration = try ServerConfiguration.configured(info: info)
     precondition(personalConfiguration?.callback == .customScheme("com.example.fitnesstracker"))
-    info["FitnessTrackerAuthenticationCallbackMode"] = "$(UNEXPANDED_MODE)"
+    info["FitLifeAuthenticationCallbackMode"] = "$(UNEXPANDED_MODE)"
     do {
       _ = try ServerConfiguration.configured(info: info)
       preconditionFailure("Accepted unknown callback mode")

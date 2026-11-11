@@ -1,4 +1,4 @@
-@model FitnessTracker.Authentication.Controllers.RegistrationPage
+@model FitLife.Authentication.Controllers.RegistrationPage
 @{ ViewData["PageClass"] = "page-register"; }
 <div class="card-heading">
   <h1 id="page-title" data-localize>Создать аккаунт</h1>
@@ -51,5 +51,5 @@ else
   </span>
   <p class="privacy-note" data-localize>Регистрация по email временно недоступна.</p>
 }
-<partial name="_Providers" model="@(new FitnessTracker.Authentication.Controllers.LoginPage(Model.ReturnUrl, Model.Providers))" />
+<partial name="_Providers" model="@(new FitLife.Authentication.Controllers.LoginPage(Model.ReturnUrl, Model.Providers))" />
 <p class="card-navigation"><span data-localize>Уже есть аккаунт?</span> <a href="@Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString("/login", "returnUrl", Model.ReturnUrl)" data-localize>Войти</a></p>

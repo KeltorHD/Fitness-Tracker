@@ -12,9 +12,9 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.IdentityModel.Tokens;
 using Npgsql;
-using FitnessTracker.ServerLogging;
+using FitLife.ServerLogging;
 
-namespace FitnessTracker.Backend;
+namespace FitLife.Backend;
 
 public partial class Program
 {
@@ -156,7 +156,7 @@ public partial class Program
                 var startupSettings = new NpgsqlConnectionStringBuilder(database.Database.GetConnectionString())
                 {
                     Pooling = false,
-                    ApplicationName = "FitnessTracker startup"
+                    ApplicationName = "FitLife startup"
                 };
                 await using var startupConnection = new NpgsqlConnection(startupSettings.ConnectionString);
                 await startupConnection.OpenAsync(cancellationToken);

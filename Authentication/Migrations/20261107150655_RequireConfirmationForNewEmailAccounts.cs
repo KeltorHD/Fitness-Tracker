@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace FitnessTracker.Authentication.Migrations
+namespace FitLife.Authentication.Migrations
 {
     /// <inheritdoc />
     public partial class RequireConfirmationForNewEmailAccounts : Migration

@@ -1,9 +1,9 @@
 using System.Text;
 using System.Text.Json.Nodes;
-using FitnessTracker.Backend;
+using FitLife.Backend;
 using Xunit;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Проверяет совместимость и границы архива без БД, HTTP и внешних зависимостей.</summary>
 [Trait("Category", "Unit")]

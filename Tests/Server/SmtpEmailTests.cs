@@ -1,6 +1,6 @@
 using System.Net;
 using System.Text;
-using FitnessTracker.Authentication;
+using FitLife.Authentication;
 using MailKit;
 using MailKit.Net.Smtp;
 using MailKit.Security;
@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 using MimeKit;
 using Xunit;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Проверяет SMTP TLS, MIME, таймауты и безопасные ошибки без сети и реального почтового сервиса.</summary>
 [Trait("Category", "Unit")]

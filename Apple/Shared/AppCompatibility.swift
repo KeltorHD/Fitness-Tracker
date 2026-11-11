@@ -10,6 +10,6 @@ enum AppCompatibility {
 
   static func acceptsURL(_ url: URL) -> Bool {
     guard let scheme = url.scheme?.lowercased() else { return false }
-    return scheme == "fitnesstracker" || scheme == "fitsession"
+    return ["fitlife", "fitnesstracker", "fitsession"].contains(scheme)
   }
 }

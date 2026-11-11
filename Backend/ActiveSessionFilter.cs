@@ -1,4 +1,4 @@
-namespace FitnessTracker.Backend;
+namespace FitLife.Backend;
 
 /// <summary>Проверяет отзыв после JWT, прав и rate limit, до чтения/изменения резервных копий.</summary>
 internal sealed class ActiveSessionFilter(TokenIntrospection introspection) : IEndpointFilter

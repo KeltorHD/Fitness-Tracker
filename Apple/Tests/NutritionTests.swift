@@ -1,9 +1,9 @@
-import FitnessTrackerCore
+import FitLifeCore
 import ImageIO
 import UIKit
 import XCTest
 
-@testable import FitnessTracker
+@testable import FitLife
 
 @MainActor final class NutritionTests: XCTestCase {
   func testSwiftDataFoodAndGoalRoundTripWithoutChangingWorkoutRecords() throws {

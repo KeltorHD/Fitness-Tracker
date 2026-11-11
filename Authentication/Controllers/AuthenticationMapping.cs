@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.WebUtilities;
 using OpenIddict.Server.AspNetCore;
 
-namespace FitnessTracker.Authentication.Controllers;
+namespace FitLife.Authentication.Controllers;
 
 /// <summary>Явно преобразует HTTP-контракты и данные сервисов, не маппит Identity/EF entities.</summary>
 public static class AuthenticationMapping

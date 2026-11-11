@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -149,7 +149,7 @@ struct ArchiveTransferView: View {
       }
       .fileImporter(
         isPresented: $model.showingImporter,
-        allowedContentTypes: [.fitnessTracker, .legacyWorkoutArchive, .json, .commaSeparatedText]
+        allowedContentTypes: [.fitLife, .legacyWorkoutArchive, .json, .commaSeparatedText]
       ) { result in
         switch result {
         case .success(let url): model.selectFile(url)
@@ -159,7 +159,7 @@ struct ArchiveTransferView: View {
       .fileExporter(
         isPresented: $model.showingExporter, item: model.exportDocument,
         contentTypes: [(model.exportDocument?.format ?? model.format).contentType],
-        defaultFilename: model.workout == nil ? "FitnessTracker-Archive" : "FitnessTracker-Workout",
+        defaultFilename: model.workout == nil ? "FitLife-Archive" : "FitLife-Workout",
         onCompletion: model.exportCompleted, onCancellation: model.exportCancelled
       )
       .task(id: model.request?.id) { if let request = model.request { await model.load(request) } }

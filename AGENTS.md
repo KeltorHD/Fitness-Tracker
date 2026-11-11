@@ -1,10 +1,10 @@
-# AGENTS.md — FitnessTracker
+# AGENTS.md — FitLife
 
 Эти правила действуют для всего репозитория. Выполняй конкретные инструкции пользователя и сохраняй ранее согласованные требования проекта. Не меняй стек, архитектуру или продуктовые решения без причины, связанной с текущей задачей.
 
 ## 1. Роль и ответственность
 
-Ты — senior iOS/.NET engineer, разрабатывающий нативный журнал силовых тренировок FitnessTracker и его серверные приложения Authentication и Backend.
+Ты — senior iOS/.NET engineer, разрабатывающий нативный журнал силовых тренировок FitLife и его серверные приложения Authentication и Backend.
 
 - Пиши понятный, поддерживаемый и тестируемый Swift- и C#-код.
 - Следуй Apple Human Interface Guidelines и используй нативные Apple API.
@@ -31,7 +31,7 @@
 
 Все функции приложения бесплатны. Не возвращай Pro, paywall, покупки, подписки или StoreKit без нового явного требования пользователя. Основной интерфейс — на русском языке.
 
-Название продукта — FitnessTracker. Прежние storage/wire identifiers в AppCompatibility, legacy archive IDs и aliases Config/Base.xcconfig сохраняются только для совместимости установленных данных; не переименовывай их без явной миграции. Правила — в docs/RENAME.md.
+Название продукта — FitLife. Прежние storage/wire identifiers в AppCompatibility, legacy archive IDs и aliases Config/Base.xcconfig сохраняются только для совместимости установленных данных; не переименовывай их без явной миграции. Правила — в docs/RENAME.md.
 
 ## 3. Окружение: Linux сначала, macOS позже
 
@@ -42,7 +42,7 @@
 - Продолжай писать полноценные SwiftUI `.swift`-файлы.
 - Не пытайся запускать Xcode или iOS Simulator.
 - Не заменяй интерфейс на Flutter, React Native, WebView или другой UI-фреймворк.
-- Собирай и тестируй FitnessTrackerCore через SPM.
+- Собирай и тестируй FitLifeCore через SPM.
 - Проверяй структуру, ресурсы, форматирование и синтаксис Apple-файлов.
 - Не называй эти проверки успешной iOS/watchOS-компиляцией или проверкой интерфейса.
 - Серверы Authentication и Backend собирай и тестируй через .NET SDK из `global.json`; их проверки доступны на Linux независимо от Apple SDK.
@@ -55,7 +55,7 @@
 
 ```text
 Package.swift
-FitnessTracker.Server.sln             # Независимые серверы Authentication/Backend и их тесты
+FitLife.Server.sln             # Независимые серверы Authentication/Backend и их тесты
 Directory.Build.props                # Общие .NET settings, nullable и warnings as errors
 global.json                          # Версия .NET SDK и допустимый roll-forward
 Authentication/                      # Identity/OpenIddict, внешние входы, аккаунты и сессии
@@ -64,9 +64,9 @@ Backend/                             # JWT-защищённый API резерв
 Backend/Migrations/                  # EF Core migrations BackupDbContext
 ServerLogging/                       # Общая инфраструктура ILogger → ntfy, без доменных моделей и БД
 Tests/Server/                        # xUnit: HTTP/Identity/SQLite и отдельная категория PostgreSQL
-Sources/FitnessTrackerCore/             # Domain, правила, расчёты, repository protocols
-Sources/FitnessTrackerCore/Resources/   # Небольшие SPM resources библиотеки упражнений
-Tests/FitnessTrackerCoreTests/          # Swift Testing на Linux/macOS
+Sources/FitLifeCore/             # Domain, правила, расчёты, repository protocols
+Sources/FitLifeCore/Resources/   # Небольшие SPM resources библиотеки упражнений
+Tests/FitLifeCoreTests/          # Swift Testing на Linux/macOS
 Apple/App/                         # App entry, DI, AppStore, runtime
 Apple/Design/                      # FitTheme, общие компоненты, Liquid Glass
 Apple/Features/                    # SwiftUI-экраны и presentation logic
@@ -121,7 +121,7 @@ Authentication и Backend — самостоятельные исполняем�
 - Предпочитай initializer-based DI.
 - Вводи протоколы ради тестирования, замены реализации или отделения внешнего сервиса, а не для каждого класса.
 - Не добавляй глобальные изменяемые singleton-объекты.
-- Существующий FitnessTrackerRuntime обеспечивает один AppStore/ModelContext в app process, включая холодный запуск LiveActivityIntent. Сохраняй это поведение; не создавай конкурирующий context из intent или View.
+- Существующий FitLifeRuntime обеспечивает один AppStore/ModelContext в app process, включая холодный запуск LiveActivityIntent. Сохраняй это поведение; не создавай конкурирующий context из intent или View.
 
 ## 8. Swift coding standards
 
@@ -186,7 +186,7 @@ Authentication и Backend — самостоятельные исполняем�
 - BackgroundTaskLease предоставляет ограниченное время завершения обновлений; expiration handler должен отменить работу и освободить task.
 - Не создавай Live Activity произвольно из background; сохраняй ограничения ActivityKit и настройки пользователя.
 - LiveActivityIntent сохраняет изменения и ожидает необходимые updates до возврата из perform().
-- FITNESS_TRACKER_APP определён только для главного app target; shared intents не должны открывать SwiftData из widget extension.
+- FITLIFE_APP определён только для главного app target; shared intents не должны открывать SwiftData из widget extension.
 - Повторные и устаревшие действия должны быть безопасны: pause/resume идемпотентны, старый skip-rest не сбрасывает новый отдых.
 - Watch outbox удаляет запись только после подтверждения успешного сохранения на iPhone. Повторная доставка не создаёт дубликаты.
 
@@ -298,15 +298,15 @@ bash scripts/check-server.sh
 Отдельные проверки:
 
 ```bash
-dotnet restore FitnessTracker.Server.sln --locked-mode
-dotnet build FitnessTracker.Server.sln --no-restore --disable-build-servers -m:1
-dotnet test FitnessTracker.Server.sln --no-build --no-restore -m:1 --filter 'Category!=PostgreSQL'
-dotnet format FitnessTracker.Server.sln --verify-no-changes --no-restore
+dotnet restore FitLife.Server.sln --locked-mode
+dotnet build FitLife.Server.sln --no-restore --disable-build-servers -m:1
+dotnet test FitLife.Server.sln --no-build --no-restore -m:1 --filter 'Category!=PostgreSQL'
+dotnet format FitLife.Server.sln --verify-no-changes --no-restore
 ```
 
 Для запуска только интеграционной категории задай `FITNESS_TRACKER_TEST_POSTGRES` connection string к одноразовому PostgreSQL и используй `--filter 'Category=PostgreSQL'` в команде `dotnet test`. Это xUnit Trait `Category`, не NUnit `TestCategory`. Окружение и зависимости описаны в `docs/SERVER.md` и `.github/workflows/server.yml`.
 
-Форматируй изменённые C#-файлы через `dotnet format FitnessTracker.Server.sln --no-restore --include` со списком их путей. Сохраняй исходные окончания строк существующих файлов и не форматируй посторонние исходники. Автоматический ReSharper/Husky pre-commit hook в этом проекте не настроен.
+Форматируй изменённые C#-файлы через `dotnet format FitLife.Server.sln --no-restore --include` со списком их путей. Сохраняй исходные окончания строк существующих файлов и не форматируй посторонние исходники. Автоматический ReSharper/Husky pre-commit hook в этом проекте не настроен.
 
 ### Linux: Swift
 
@@ -337,20 +337,20 @@ Python-зависимости — в requirements-dev.txt. Полный check sc
 
 ```bash
 xcodegen generate
-xcodebuild -list -project FitnessTracker.xcodeproj
-xcodebuild -showdestinations -project FitnessTracker.xcodeproj -scheme FitnessTracker
+xcodebuild -list -project FitLife.xcodeproj
+xcodebuild -showdestinations -project FitLife.xcodeproj -scheme FitLife
 ```
 
 Затем собери и протестируй реальную схему на доступном Simulator. Подставь найденный UDID вместо примера:
 
 ```bash
-xcodebuild -project FitnessTracker.xcodeproj -scheme FitnessTracker \
+xcodebuild -project FitLife.xcodeproj -scheme FitLife \
   -destination 'platform=iOS Simulator,id=AVAILABLE-SIMULATOR-UDID' build
-xcodebuild -project FitnessTracker.xcodeproj -scheme FitnessTracker \
+xcodebuild -project FitLife.xcodeproj -scheme FitLife \
   -destination 'platform=iOS Simulator,id=AVAILABLE-SIMULATOR-UDID' test
 ```
 
-Существующие Apple test targets — FitnessTrackerTests и FitnessTrackerUITests; отдельные схемы — FitnessTrackerWatch и FitnessTrackerWidgets. Для capabilities следуй MAC_BUILD_GUIDE.md. При отсутствии SDK/Simulator честно укажи, что соответствующая проверка не выполнена.
+Существующие Apple test targets — FitLifeTests и FitLifeUITests; отдельные схемы — FitLifeWatch и FitLifeWidgets. Для capabilities следуй MAC_BUILD_GUIDE.md. При отсутствии SDK/Simulator честно укажи, что соответствующая проверка не выполнена.
 
 Для правок только документации достаточно проверить содержание, пути и git diff --check; не запускай несвязанные сборки без причины. После успешных релевантных проверок не повторяй их без новых изменений или выявленного риска.
 
@@ -440,7 +440,7 @@ PNG/SVG в docs/previews — явно подписанные иллюстрат�
 
 ### Серверные тесты
 
-- Используй существующий xUnit-проект `Tests/Server/FitnessTracker.Server.Tests.csproj`. Не создавай по отдельному тестовому проекту на каждый класс и не меняй framework ради соглашений другого репозитория.
+- Используй существующий xUnit-проект `Tests/Server/FitLife.Server.Tests.csproj`. Не создавай по отдельному тестовому проекту на каждый класс и не меняй framework ради соглашений другого репозитория.
 - Для нового значимого поведения добавляй содержательные тесты; при исправлении ошибки — регрессионный сценарий. Проверяй happy path, ошибки и границы, отмену, валидацию, сериализацию и значимые defaults. Не ограничивайся проверками присваивания свойств.
 - Unit-тесты изолируй через DI и fakes: без реальной сети, внешних секретов, фиксированных задержек и зависимости от порядка запуска. Не добавляй mock-библиотеку, если достаточно простой подмены.
 - HTTP/Identity-тесты используют `WebApplicationFactory` и SQLite fixtures; они проверяют статусы, тела и побочные эффекты через реальные компоненты. Не выдавай их за проверку настоящего PostgreSQL, DNS/TLS или входа в Google/Apple/Яндекс.

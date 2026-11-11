@@ -4,7 +4,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Проверяет безопасную публикацию webcredentials и отсутствие OAuth-кода на fallback странице.</summary>
 [Trait("Category", "HTTP")]

@@ -1,11 +1,11 @@
 const english = {
-  "Аккаунт FitnessTracker": "FitnessTracker account",
+  "Аккаунт FitLife": "FitLife account",
   "Перейти к содержимому": "Skip to content",
   "Тема оформления": "Appearance",
   "Светлая тема": "Light theme",
   "Тёмная тема": "Dark theme",
   "Язык интерфейса": "Language",
-  "О FitnessTracker": "About FitnessTracker",
+  "О FitLife": "About FitLife",
   "Твои тренировки, питание и прогресс —": "Your workouts, nutrition and progress —",
   "в одном месте": "all in one place",
   "Тренировки": "Workouts",
@@ -47,7 +47,7 @@ const english = {
   "Отправить письмо повторно": "Resend confirmation email",
   "Продолжить вход после подтверждения": "Continue signing in after confirmation",
   "Отправка писем временно недоступна. Попробуйте позже.": "Email delivery is temporarily unavailable. Try again later.",
-  "Нажмите кнопку, если вы создавали аккаунт FitnessTracker с этим адресом.": "Press the button if you created a FitnessTracker account with this address.",
+  "Нажмите кнопку, если вы создавали аккаунт FitLife с этим адресом.": "Press the button if you created a FitLife account with this address.",
   "Подтвердить адрес": "Confirm address",
   "Ссылка недействительна или срок её действия истёк. Запросите новое письмо.": "The link is invalid or has expired. Request another email.",
   "Подтверждение почты": "Email confirmation",
@@ -95,7 +95,7 @@ const english = {
   "Укажите корректный email.": "Enter a valid email address.",
   "Не удалось подтвердить passkey. Повторите попытку.": "Unable to verify the passkey. Please try again.",
   "Подтвердите почту в течение 2 часов после регистрации, иначе неподтверждённый аккаунт будет удалён.": "Confirm your email within 2 hours of registration or the unconfirmed account will be deleted.",
-  "Откройте письмо FitnessTracker и подтвердите адрес в течение 2 часов после регистрации. Повторное письмо не продлевает срок.": "Open your FitnessTracker email and confirm your address within 2 hours of registration. Another email does not extend this deadline.",
+  "Откройте письмо FitLife и подтвердите адрес в течение 2 часов после регистрации. Повторное письмо не продлевает срок.": "Open your FitLife email and confirm your address within 2 hours of registration. Another email does not extend this deadline.",
   "Через 2 часа неподтверждённый аккаунт удаляется. Если срок истёк, зарегистрируйтесь заново.": "Unconfirmed accounts are deleted after 2 hours. If the deadline has passed, register again.",
   "Если с регистрации прошло 2 часа, создайте аккаунт заново.": "If 2 hours have passed since registration, create your account again."
 };
@@ -121,7 +121,7 @@ export function setMessage(element, source) {
 }
 
 function localize() {
-  document.title = translate("Аккаунт FitnessTracker");
+  document.title = translate("Аккаунт FitLife");
   for (const element of document.querySelectorAll("[data-localize], .provider-tooltip, [data-localize-errors] li")) {
     const source = element.dataset.localize || element.textContent.trim();
     setMessage(element, source);

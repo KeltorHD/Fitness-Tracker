@@ -1,6 +1,6 @@
 using Npgsql;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Создаёт отдельную БД на явно выбранном тестовом PostgreSQL и гарантирует её удаление.</summary>
 internal sealed class PostgresDatabase : IAsyncDisposable

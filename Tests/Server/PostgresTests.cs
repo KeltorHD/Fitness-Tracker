@@ -1,5 +1,5 @@
-using FitnessTracker.Authentication;
-using FitnessTracker.Backend;
+using FitLife.Authentication;
+using FitLife.Backend;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -11,7 +11,7 @@ using OpenIddict.Server;
 using System.Security.Claims;
 using Xunit;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Проверяет настоящие PostgreSQL-миграции и конкурирующие операции в изолированных базах.</summary>
 [Trait("Category", "PostgreSQL")]

@@ -7,10 +7,10 @@
 | Проект | Назначение |
 | --- | --- |
 | Существующий `project.yml`, `Apple/`, `Sources/` | Нативное iOS/watchOS-приложение и независимый Swift Core; пути сохранены |
-| `Authentication/FitnessTracker.Authentication.csproj` | Пользователи Identity, внешние входы, OAuth/OIDC, сессии, привязки, удаление аккаунта |
-| `Backend/FitnessTracker.Backend.csproj` | Backend приложения; текущая функция — резервные копии. Собственные правила доступа, JWT через discovery/JWKS и проверка отзыва через introspection Auth Server |
-| `ServerLogging/FitnessTracker.ServerLogging.csproj` | Общий необязательный ILogger provider для ntfy: маскирование, очередь и HTTP transport; не владеет пользователями, архивами или БД |
-| `FitnessTracker.Server.sln` | Оба серверных проекта и отдельный тестовый проект `Tests/Server` |
+| `Authentication/FitLife.Authentication.csproj` | Пользователи Identity, внешние входы, OAuth/OIDC, сессии, привязки, удаление аккаунта |
+| `Backend/FitLife.Backend.csproj` | Backend приложения; текущая функция — резервные копии. Собственные правила доступа, JWT через discovery/JWKS и проверка отзыва через introspection Auth Server |
+| `ServerLogging/FitLife.ServerLogging.csproj` | Общий необязательный ILogger provider для ntfy: маскирование, очередь и HTTP transport; не владеет пользователями, архивами или БД |
+| `FitLife.Server.sln` | Оба серверных проекта и отдельный тестовый проект `Tests/Server` |
 
 Требуется .NET 10 SDK. Версии пакетов и lock-файлы закреплены. Authentication и Backend не ссылаются друг на друга: обмен идёт по HTTP и документированному контракту. Общая ServerLogging нужна только для одинаковой инфраструктуры уведомлений в двух процессах. В production сервисы используют раздельные PostgreSQL-базы и учётные данные. SwiftData остаётся основным локальным хранилищем приложения; сервер не синхронизирует записи и не заменяет CloudKit.
 
@@ -316,7 +316,7 @@ SMTP_SECURITY=StartTls
 SMTP_USERNAME=fitness@example.com
 SMTP_PASSWORD=replace-with-smtp-password
 SMTP_FROM_ADDRESS=fitness@example.com
-SMTP_FROM_NAME=FitnessTracker
+SMTP_FROM_NAME=FitLife
 SMTP_TIMEOUT_SECONDS=10
 ```
 
@@ -338,11 +338,11 @@ Authentication запускает очистку после startup migrations �
 
 **Подтверждённые, прежние и внешние аккаунты сохраняются.** На первом запуске после обновления также очищаются уже имеющиеся просроченные регистрации, требующие подтверждения. Миграция `AddPendingRegistrationExpiryIndex` добавляет только частичный индекс по существующему `CreatedAt`; она применяется автоматически. Удалять каталоги БД, запускать setup заново или задавать новые env не нужно.
 
-Категория `FitnessTracker.Authentication.PendingRegistrationCleanup` пишет `Information`: событие `4400`, количество удалённых записей и операция `scheduled`/`registration`, без email и ID пользователей. Ошибка фоновой очистки — `4401` с безопасным типом исключения; следующая попытка выполняется через минуту. Несколько экземпляров Auth могут выполнять очистку параллельно: повторный условный DELETE не затрагивает новый или уже подтверждённый профиль.
+Категория `FitLife.Authentication.PendingRegistrationCleanup` пишет `Information`: событие `4400`, количество удалённых записей и операция `scheduled`/`registration`, без email и ID пользователей. Ошибка фоновой очистки — `4401` с безопасным типом исключения; следующая попытка выполняется через минуту. Несколько экземпляров Auth могут выполнять очистку параллельно: повторный условный DELETE не затрагивает новый или уже подтверждённый профиль.
 
 ### Оформление письма и ссылки
 
-HTML-шаблон — `Authentication/EmailTemplates/Confirmation.html`, встроенный ресурс сборки Authentication. Он повторяет оформление страницы входа: сиреневый фон, светлая карточка, логотип FitnessTracker и оранжево-пурпурная кнопка; тёмная тема включается в поддерживающих её почтовых клиентах. Таблицы и основные inline-стили сохраняют читаемость при ограниченной поддержке CSS; внешних изображений, шрифтов, скриптов и трекинга нет.
+HTML-шаблон — `Authentication/EmailTemplates/Confirmation.html`, встроенный ресурс сборки Authentication. Он повторяет оформление страницы входа: сиреневый фон, светлая карточка, логотип FitLife и оранжево-пурпурная кнопка; тёмная тема включается в поддерживающих её почтовых клиентах. Таблицы и основные inline-стили сохраняют читаемость при ограниченной поддержке CSS; внешних изображений, шрифтов, скриптов и трекинга нет.
 
 Кнопка «Подтвердить почту» и видимый полный адрес под ней — обычные HTTPS-ссылки на одну страницу подтверждения. Адрес можно целиком скопировать; тот же URL включён в текстовую MIME-часть. Renderer экранирует HTML, не добавляя переносы или сокращения внутрь URL; MIME-тесты проверяют сохранность параметров после сериализации. GET по-прежнему только открывает страницу: подтверждение требует явной кнопки на сайте. Новое оформление появится в письмах, отправленных после обновления Authentication:
 
@@ -362,7 +362,7 @@ docker compose up -d --build authentication
 docker compose logs --since=10m -f authentication
 ```
 
-Для категорий `FitnessTracker.Authentication.EmailConfirmationService` и `FitnessTracker.Authentication.SmtpEmailSender` в `appsettings.json` включён `Information`; общий порог приложения остаётся `Warning`. Отправка в ntfy дополнительная и использует собственный настроенный порог.
+Для категорий `FitLife.Authentication.EmailConfirmationService` и `FitLife.Authentication.SmtpEmailSender` в `appsettings.json` включён `Information`; общий порог приложения остаётся `Warning`. Отправка в ntfy дополнительная и использует собственный настроенный порог.
 
 Одна попытка имеет случайный `AttemptId`, общий для сервиса и SMTP-транспорта. Последовательно записываются запрос, подготовка MIME, подключение/согласование TLS (host, порт, режим, фактический TLS protocol), аутентификация, передача письма и закрытие соединения. Завершение этапов содержит длительность в миллисекундах. `SMTP submit: accepted_by_smtp` и `Email confirmation accepted by SMTP server` означают принятие письма SMTP-сервером; доставку получателю проверяйте в очереди/логах почтового сервера. Ошибка QUIT после принятия отмечается отдельно и не запускает повторную отправку.
 
@@ -380,7 +380,7 @@ docker compose exec -T authentication printenv Smtp__Enabled Smtp__Host Smtp__Po
 
 ### Ошибки регистрации
 
-Категория `FitnessTracker.Authentication.PasswordService` также имеет порог `Information`. Событие `4300` отмечает начало регистрации с паролем, `4301` — отказ с причиной и разрешёнными кодами Identity, `4302` — создание аккаунта перед отправкой подтверждения. Начало и результат связывает случайный `AttemptId`. Причины: `smtp_disabled`, `invalid_email`, `password_length`, `password_mismatch`, `password_policy`, `account_conflict` и `identity_rejected`. Например, повторная регистрация нормализованного адреса даёт `account_conflict` / `DuplicateUserName`; конкурентный конфликт PostgreSQL имеет отдельное поле `DatabaseCode=23505`. Ввод пользователя, ID/имя аккаунта, пароль, исходные описания Identity и исключения в эти события не попадают. Неизвестные коды заменяются на `unknown_identity_error`.
+Категория `FitLife.Authentication.PasswordService` также имеет порог `Information`. Событие `4300` отмечает начало регистрации с паролем, `4301` — отказ с причиной и разрешёнными кодами Identity, `4302` — создание аккаунта перед отправкой подтверждения. Начало и результат связывает случайный `AttemptId`. Причины: `smtp_disabled`, `invalid_email`, `password_length`, `password_mismatch`, `password_policy`, `account_conflict` и `identity_rejected`. Например, повторная регистрация нормализованного адреса даёт `account_conflict` / `DuplicateUserName`; конкурентный конфликт PostgreSQL имеет отдельное поле `DatabaseCode=23505`. Ввод пользователя, ID/имя аккаунта, пароль, исходные описания Identity и исключения в эти события не попадают. Неизвестные коды заменяются на `unknown_identity_error`.
 
 Форма отдельно объясняет неверный email, длину пароля, недостаточное разнообразие символов и несовпадение паролей. При отказе создания она предлагает войти или запросить новое письмо, с рабочими ссылками и сохранением локального продолжения. Публичный ответ не подтверждает существование конкретного аккаунта. Сообщения доступны на русском и английском.
 
@@ -429,23 +429,23 @@ docker compose up -d --build authentication
 
 ## Вход для бесплатной Personal Team
 
-Схема `FitnessTracker Personal` выбирает `PersonalDebug`/`PersonalRelease` и `customScheme` callback. Схема `FitnessTracker` сохраняет HTTPS callback и требования Associated Domains. Оба варианта используют HTTPS для Auth/API, PKCE S256, те же ограничения scopes, токенов и доступа к копиям. Keychain items различаются OAuth client ID; прежний ключ HTTPS-сессии сохраняется.
+Схема `FitLife Personal` выбирает `PersonalDebug`/`PersonalRelease` и `customScheme` callback. Схема `FitLife` сохраняет HTTPS callback и требования Associated Domains. Оба варианта используют HTTPS для Auth/API, PKCE S256, те же ограничения scopes, токенов и доступа к копиям. Keychain items различаются OAuth client ID; прежний ключ HTTPS-сессии сохраняется.
 
-Выберите reverse-DNS URL-схему под вашим контролем, например `com.example.fitnesstracker`. В `.env` сервера добавьте:
+Выберите reverse-DNS URL-схему под вашим контролем, например `com.example.fitlife`. В `.env` сервера добавьте:
 
 ```dotenv
-IOS_PERSONAL_CALLBACK_SCHEME=com.example.fitnesstracker
+IOS_PERSONAL_CALLBACK_SCHEME=com.example.fitlife
 ```
 
-После обновления кода выполните `docker compose up -d --build authentication`. Auth зарегистрирует отдельный public client `fitnesstracker-ios-personal` с единственным redirect `com.example.fitnesstracker:/ios/oauth/callback`. Регистрация идемпотентна; отдельный `--configure-clients` не нужен. Изменений EF-модели и новых миграций нет. `IOS_APP_IDENTIFIER` для этого режима можно оставить пустым; AASA и Associated Domains нужны только HTTPS-сборке. Пустой `IOS_PERSONAL_CALLBACK_SCHEME` отключает Personal client и удаляет его прежние OAuth authorizations/tokens при следующем обычном startup; HTTPS client остаётся доступным. Пробелы и некорректная схема считаются ошибкой конфигурации.
+После обновления кода выполните `docker compose up -d --build authentication`. Auth зарегистрирует отдельный public client `fitnesstracker-ios-personal` с единственным redirect `com.example.fitlife:/ios/oauth/callback`. Регистрация идемпотентна; отдельный `--configure-clients` не нужен. Изменений EF-модели и новых миграций нет. `IOS_APP_IDENTIFIER` для этого режима можно оставить пустым; AASA и Associated Domains нужны только HTTPS-сборке. Пустой `IOS_PERSONAL_CALLBACK_SCHEME` отключает Personal client и удаляет его прежние OAuth authorizations/tokens при следующем обычном startup; HTTPS client остаётся доступным. Пробелы и некорректная схема считаются ошибкой конфигурации.
 
 На Mac добавьте в существующий `Config/Local.xcconfig`, сохранив Team/Bundle ID и HTTPS URL серверов:
 
 ```xcconfig
-FITNESS_TRACKER_AUTH_CALLBACK_SCHEME = com.example.fitnesstracker
+FITNESS_TRACKER_AUTH_CALLBACK_SCHEME = com.example.fitlife
 ```
 
-Значение должно точно совпадать с серверным. По умолчанию схема берётся из `FITNESS_TRACKER_BUNDLE_ID`. После этого выполните `xcodegen generate`, откройте `FitnessTracker.xcodeproj` и запустите `FitnessTracker Personal`. Генерация обязательна после этого обновления: изменились build settings и регистрация URL-схемы в Info.plist. Параметр `FITNESS_TRACKER_AUTH_CALLBACK_MODE` выбирается схемой сборки; автоматического перехода с HTTPS на private-use URI при ошибке нет. Отмена браузера показывает нейтральное сообщение «Вход в аккаунт не завершён.», а отменённая задача закрытого экрана не публикует устаревшие ошибки.
+Значение должно точно совпадать с серверным. По умолчанию схема берётся из `FITNESS_TRACKER_BUNDLE_ID`. После этого выполните `xcodegen generate`, откройте `FitLife.xcodeproj` и запустите `FitLife Personal`. Генерация обязательна после этого обновления: изменились build settings и регистрация URL-схемы в Info.plist. Параметр `FITNESS_TRACKER_AUTH_CALLBACK_MODE` выбирается схемой сборки; автоматического перехода с HTTPS на private-use URI при ошибке нет. Отмена браузера показывает нейтральное сообщение «Вход в аккаунт не завершён.», а отменённая задача закрытого экрана не публикует устаревшие ошибки.
 
 Private-use URI предусмотрены [RFC 8252](https://www.rfc-editor.org/rfc/rfc8252.html#section-7.1). Они не доказывают связь приложения с доменом: другое приложение может зарегистрировать такую же схему. PKCE защищает обмен перехваченного code, но не является подтверждением подлинности приложения. Поэтому режим включается явно на сервере, имеет отдельный client ID и не расширяет разрешённые callbacks HTTPS client. Не используйте generic schemes `fitnesstracker`/`fitsession` и не передавайте токены в callback URL.
 
@@ -455,7 +455,7 @@ Private-use URI предусмотрены [RFC 8252](https://www.rfc-editor.org
 
 В `.env` оставьте `IOS_APP_IDENTIFIER` пустым до регистрации приложения. После получения App ID укажите `AppIDPrefix.BundleID`, например формат `ABCDEFGHIJ.ru.yourcompany.fitnesstracker` (пример, не готовый идентификатор). Используйте именно App ID Prefix из Apple, который не всегда равен Team ID. Затем пересоздайте Auth container с новым env и проверьте `https://auth.example.com/.well-known/apple-app-site-association`: JSON `webcredentials.apps` должен содержать ваш настоящий App ID. До настройки endpoint отвечает 404, при неверном формате — 503; редиректа и публикации вымышленных ID нет.
 
-Главный target в полной схеме `FitnessTracker` содержит `webcredentials:$(FITNESS_TRACKER_AUTH_DOMAIN)`. Пример значения — `auth.example.com`; реальный host задайте только в игнорируемом `Config/Local.xcconfig` через `FITNESS_TRACKER_AUTH_DOMAIN`, согласованно с `FITNESS_TRACKER_AUTH_URL`. В Apple Developer включите Associated Domains для App ID и обновите provisioning. Personal Team схема сохраняет прежние entitlements и использует отдельный private-use callback; HTTPS-вход проверяйте в полной схеме с настроенной capability. Bundle ID совместимости не переименовывается автоматически. В `Config/Local.xcconfig` задайте выбранные HTTPS endpoints, как в примере выше. При смене домена согласованно измените локальный `FITNESS_TRACKER_AUTH_DOMAIN`, `Auth:Issuer`, redirect URI и серверные URL. Реальные адреса не нужно записывать в tracked-файлы. Выполните `--configure-clients`, чтобы заменить прежний redirect URI в существующей Auth-БД; старые уже выданные коды могут потребовать нового входа.
+Главный target в полной схеме `FitLife` содержит `webcredentials:$(FITNESS_TRACKER_AUTH_DOMAIN)`. Пример значения — `auth.example.com`; реальный host задайте только в игнорируемом `Config/Local.xcconfig` через `FITNESS_TRACKER_AUTH_DOMAIN`, согласованно с `FITNESS_TRACKER_AUTH_URL`. В Apple Developer включите Associated Domains для App ID и обновите provisioning. Personal Team схема сохраняет прежние entitlements и использует отдельный private-use callback; HTTPS-вход проверяйте в полной схеме с настроенной capability. Bundle ID совместимости не переименовывается автоматически. В `Config/Local.xcconfig` задайте выбранные HTTPS endpoints, как в примере выше. При смене домена согласованно измените локальный `FITNESS_TRACKER_AUTH_DOMAIN`, `Auth:Issuer`, redirect URI и серверные URL. Реальные адреса не нужно записывать в tracked-файлы. Выполните `--configure-clients`, чтобы заменить прежний redirect URI в существующей Auth-БД; старые уже выданные коды могут потребовать нового входа.
 
 Файл AASA и DNS/TLS должны быть доступны публично для Apple. Запись DNS-01, используемая при выдаче сертификата, сама не создаёт A/AAAA-записи сервисов: направьте оба настроенных имени на сервер. Nginx использует ваш настроенный сертификат. Возврат в приложение, browser passkey, отмена и повтор входа требуют отдельной проверки на настоящем iPhone после настройки Apple ID.
 
@@ -472,7 +472,7 @@ Private-use URI предусмотрены [RFC 8252](https://www.rfc-editor.org
 
 Backend отклоняет JWT с неверными issuer/audience/type/subject, чужой подписью, без подписи, с HS256 вместо RS256, без exp, истёкшие и ещё не вступившие в силу. Проверены чтение/запись чужих копий, внутренний service credential, идемпотентность, квота и сохранность данных при отказах; PostgreSQL-сценарии отдельно проверяют конкуренцию. Права локальны для Backend: JWT без scopes разрешает работу только со своими данными, а произвольные scopes не открывают чужие. Поддельные forwarded headers от неизвестного peer не подтверждают HTTPS. Веб-формы используют antiforgery, return URL ограничен локальным адресом, одинаковый email не объединяет аккаунты.
 
-`dotnet package list --project FitnessTracker.Server.sln --vulnerable --include-transitive --no-restore --format json` завершился успешно с источником NuGet.org и не сообщил об известных уязвимостях в трёх проектах. [Advisory OpenIddict GHSA-925x-4h4v-2792](https://github.com/openiddict/openiddict-core/security/advisories/GHSA-925x-4h4v-2792) исправлен с 7.7; используемая 7.7.2 находится вне затронутого диапазона.
+`dotnet package list --project FitLife.Server.sln --vulnerable --include-transitive --no-restore --format json` завершился успешно с источником NuGet.org и не сообщил об известных уязвимостях в трёх проектах. [Advisory OpenIddict GHSA-925x-4h4v-2792](https://github.com/openiddict/openiddict-core/security/advisories/GHSA-925x-4h4v-2792) исправлен с 7.7; используемая 7.7.2 находится вне затронутого диапазона.
 
 Остаются границы проверки и эксплуатационные риски:
 
@@ -556,8 +556,8 @@ dotnet ef migrations has-pending-model-changes --project Backend
 | Python / fake Docker | `Tests/Scripts/test_server_network.py` | Автоматический IPAM без фиксированного CIDR, повторная подготовка, сохранность credentials/COMPOSE_FILE, чужая сеть, исчерпание пула, устаревший export и безопасная генерация Nginx |
 
 ```bash
-dotnet test FitnessTracker.Server.sln --no-build --no-restore -m:1 --filter 'Category=Unit'
-dotnet test FitnessTracker.Server.sln --no-build --no-restore -m:1 --filter 'Category=HTTP'
+dotnet test FitLife.Server.sln --no-build --no-restore -m:1 --filter 'Category=Unit'
+dotnet test FitLife.Server.sln --no-build --no-restore -m:1 --filter 'Category=HTTP'
 ```
 
 Обычный прогон не вызывает внешних OAuth-провайдеров. HTTP fixtures используют настоящий in-memory host и собственную SQLite, очищают пользовательские configuration sources, явно отключают внешние providers и внедряют фиксированное время для метаданных. Отказ/отмена SaveChanges подменяются через EF interceptor, сохраняя настоящую транзакцию и проверки результата. Сценарии и вспомогательные классы имеют XML-описания на русском языке.

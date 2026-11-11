@@ -292,7 +292,7 @@
           "Microsoft.IdentityModel.Tokens": "8.19.2"
         }
       },
-      "fitnesstracker.serverlogging": {
+      "fitlife.serverlogging": {
         "type": "Project"
       }
     }

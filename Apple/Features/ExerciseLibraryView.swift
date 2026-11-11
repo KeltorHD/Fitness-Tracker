@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import SwiftUI
 
 struct ExerciseLibraryView: View {
@@ -263,7 +263,7 @@ struct ExerciseCreditsView: View {
   @Environment(\.locale) private var locale
   var body: some View {
     List {
-      Section(L10n.text("Библиотека FitnessTracker", locale: locale)) {
+      Section(L10n.text("Библиотека FitLife", locale: locale)) {
         Text(
           L10n.text(
             "876 упражнений и 1746 фотографий, встроенных в приложение.", locale: locale))

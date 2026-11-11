@@ -1,8 +1,8 @@
-import FitnessTrackerCore
+import FitLifeCore
 import UniformTypeIdentifiers
 import XCTest
 
-@testable import FitnessTracker
+@testable import FitLife
 
 private struct ArchiveFileStub: ArchiveFileHandling {
   let result: Result<WorkoutArchive, any Error>
@@ -238,8 +238,8 @@ private struct ArchiveFileStub: ArchiveFileHandling {
     XCTAssertEqual(model.exportDocument?.archive.workouts, archive.workouts)
     XCTAssertTrue(try XCTUnwrap(model.exportDocument).archive.templates.isEmpty)
     XCTAssertEqual(model.format, .json)
-    XCTAssertEqual(UTType.fitnessTracker.preferredFilenameExtension, "fitnesstracker")
-    XCTAssertTrue(UTType.fitnessTracker.conforms(to: .json))
+    XCTAssertEqual(UTType.fitLife.preferredFilenameExtension, "fitnesstracker")
+    XCTAssertTrue(UTType.fitLife.conforms(to: .json))
   }
 
   func testFileServiceReadsBothExtensionsAndRejectsOversizedOrUnsupportedFiles() async throws {

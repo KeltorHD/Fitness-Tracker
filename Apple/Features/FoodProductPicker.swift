@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import SwiftUI
 
 struct FoodProductPicker: View {

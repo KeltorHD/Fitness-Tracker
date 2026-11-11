@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-namespace FitnessTracker.Backend;
+namespace FitLife.Backend;
 
 /// <summary>
 ///     Проверяет транспортный формат архива до обращения к хранилищу; доменные правила остаются в Swift Core.

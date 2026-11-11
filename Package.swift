@@ -2,16 +2,16 @@
 import PackageDescription
 
 let package = Package(
-  name: "FitnessTrackerCore",
+  name: "FitLifeCore",
   platforms: [.iOS("26.0"), .watchOS("26.0"), .macOS(.v14)],
-  products: [.library(name: "FitnessTrackerCore", targets: ["FitnessTrackerCore"])],
+  products: [.library(name: "FitLifeCore", targets: ["FitLifeCore"])],
   targets: [
     .target(
-      name: "FitnessTrackerCore",
+      name: "FitLifeCore",
       resources: [
         .copy("Resources/ExerciseLibrary.ru.json"), .copy("Resources/ExerciseLibrary.en.json"),
       ]),
-    .testTarget(name: "FitnessTrackerCoreTests", dependencies: ["FitnessTrackerCore"]),
+    .testTarget(name: "FitLifeCoreTests", dependencies: ["FitLifeCore"]),
   ],
   swiftLanguageModes: [.v6]
 )

@@ -17,7 +17,7 @@
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>CFBundleDisplayName</key>
-	<string>FitnessTracker</string>
+	<string>FitLife</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>WKApplication</key>

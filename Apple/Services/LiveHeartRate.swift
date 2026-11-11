@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import Foundation
 
 enum LiveHeartRateState: Equatable, Sendable {

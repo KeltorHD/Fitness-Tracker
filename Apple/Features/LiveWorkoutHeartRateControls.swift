@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import SwiftUI
 
 struct LiveWorkoutHeartRateControls: View {
@@ -20,7 +20,7 @@ struct LiveWorkoutHeartRateControls: View {
           .disabled(!model.canStartLive).accessibilityIdentifier("startLiveHeartRate")
       }
       if model.attachedWorkoutStatus == nil {
-        Text(L10n.text("Сначала начните тренировку в FitnessTracker.", locale: locale)).font(
+        Text(L10n.text("Сначала начните тренировку в FitLife.", locale: locale)).font(
           .footnote
         ).foregroundStyle(.secondary)
       } else if model.attachedWorkoutStatus == .paused {

@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Npgsql;
-using FitnessTracker.ServerLogging;
+using FitLife.ServerLogging;
 using OpenIddict.Abstractions;
 using OpenIddict.Validation.AspNetCore;
 
-namespace FitnessTracker.Authentication;
+namespace FitLife.Authentication;
 
 public partial class Program
 {
@@ -236,7 +236,7 @@ public partial class Program
                 var startupSettings = new NpgsqlConnectionStringBuilder(database.Database.GetConnectionString())
                 {
                     Pooling = false,
-                    ApplicationName = "FitnessTracker startup"
+                    ApplicationName = "FitLife startup"
                 };
                 await using var startupConnection = new NpgsqlConnection(startupSettings.ConnectionString);
                 await startupConnection.OpenAsync(cancellationToken);
