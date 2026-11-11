@@ -49,6 +49,10 @@ for path in (ROOT / 'Authentication/Views').rglob('*.cshtml'):
     assert not re.search('fitsession|fitnesstracker', path.read_text(), re.I), f'Old auth branding: {path}'
 email = (ROOT / 'Authentication/EmailTemplates/Confirmation.html').read_text()
 assert not re.search('fitsession|fitnesstracker', email, re.I), 'Old email branding'
+for path in ['Authentication/wwwroot/auth-ui.js',
+             'ThirdParty/free-exercise-db/NOTICE.ru.md',
+             'Config/Server/nginx.conf.example']:
+    assert not re.search(r'fitness[\s_-]*tracker', (ROOT / path).read_text(), re.I), f'Old branding: {path}'
 
 # Xcode variable aliases must keep existing Local.xcconfig values and accept the new names.
 settings = dict(re.findall(r'^([A-Z_]+)\s*=\s*(.*?)\s*$',

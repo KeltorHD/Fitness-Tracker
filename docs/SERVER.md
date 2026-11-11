@@ -144,9 +144,11 @@ docker compose up -d --build
 Например, для данных PostgreSQL на другом диске:
 
 ```dotenv
-AUTH_DB_DATA_PATH=/srv/fitnesstracker/auth-db
-BACKEND_DB_DATA_PATH=/srv/fitnesstracker/backend-db
+AUTH_DB_DATA_PATH=/srv/fitlife/auth-db
+BACKEND_DB_DATA_PATH=/srv/fitlife/backend-db
 ```
+
+Для существующей установки сохраняйте настроенные пути, даже если в них прежнее название продукта: новые примеры не требуют переноса данных.
 
 Относительные пути считаются от каталога `compose.yml`; абсолютные могут указывать на другой диск. Пути с пробелами в `.env` заключайте в кавычки. Docker создаёт отсутствующие каталоги БД и Data Protection keys. Для PostgreSQL 18 монтируется родитель `/var/lib/postgresql`; фактический `PGDATA` — `18/docker` внутри выбранной папки. Базы создаются стандартным entrypoint PostgreSQL при первом запуске пустого хранилища: `fitnesstracker_auth` и `fitnesstracker_backend`, с отдельными пользователями того же имени. Backend подключается к `backend-db`; при необходимости логические имя БД и пользователь переопределяются через `BACKEND_DB_NAME` и `BACKEND_DB_USER`. Эти параметры не переименовывают уже существующую БД.
 
@@ -201,13 +203,13 @@ docker compose up -d --build
 
 ### Nginx на хосте
 
-Шаблон — [`Config/Server/nginx.conf.example`](../Config/Server/nginx.conf.example). Команда `python3 scripts/setup-server-network.py` подставляет в него домены, HTTP-порты и настоящую подсеть Docker, записывая результат в игнорируемый `.local/nginx.generated.conf`. Устанавливайте сгенерированный файл: исходный шаблон содержит незаполненный `@SERVER_NETWORK_SUBNET@` и не подходит для прямого копирования. Конфигурация включается внутри существующего `http` context, например через `/etc/nginx/conf.d/fitnesstracker.conf`. Если оба домена покрыты имеющимся wildcard-сертификатом, его можно использовать для обоих сервисов. Например, `*.example.com` покрывает `auth.example.com`, но не `auth.fitness.example.com`. В обоих virtual hosts укажите реальные пути `ssl_certificate`/`ssl_certificate_key` к вашему текущему сертификату. Путь `/etc/nginx/ssl/example.com/` в образце условный. Сертификат настраивается оператором и не передаётся в Docker. Если HTTP→HTTPS redirect уже настроен, объедините его с существующим server block. В образце используются обычные `listen 443 ssl`, поэтому он не требует новой директивы `http2`.
+Шаблон — [`Config/Server/nginx.conf.example`](../Config/Server/nginx.conf.example). Команда `python3 scripts/setup-server-network.py` подставляет в него домены, HTTP-порты и настоящую подсеть Docker, записывая результат в игнорируемый `.local/nginx.generated.conf`. Устанавливайте сгенерированный файл: исходный шаблон содержит незаполненный `@SERVER_NETWORK_SUBNET@` и не подходит для прямого копирования. Конфигурация включается внутри существующего `http` context, например через `/etc/nginx/conf.d/fitlife.conf`. Если оба домена покрыты имеющимся wildcard-сертификатом, его можно использовать для обоих сервисов. Например, `*.example.com` покрывает `auth.example.com`, но не `auth.fitness.example.com`. В обоих virtual hosts укажите реальные пути `ssl_certificate`/`ssl_certificate_key` к вашему текущему сертификату. Путь `/etc/nginx/ssl/example.com/` в образце условный. Сертификат настраивается оператором и не передаётся в Docker. Если HTTP→HTTPS redirect уже настроен, объедините его с существующим server block. В образце используются обычные `listen 443 ssl`, поэтому он не требует новой директивы `http2`.
 
 ```bash
 # При первом подключении этих virtual hosts скопируйте сгенерированную конфигурацию.
 # При обновлении перенесите изменения в существующую, сохраняя ваши TLS-пути.
-sudo cp .local/nginx.generated.conf /etc/nginx/conf.d/fitnesstracker.conf
-sudoedit /etc/nginx/conf.d/fitnesstracker.conf
+sudo cp .local/nginx.generated.conf /etc/nginx/conf.d/fitlife.conf
+sudoedit /etc/nginx/conf.d/fitlife.conf
 sudo nginx -t
 sudo systemctl reload nginx
 ```

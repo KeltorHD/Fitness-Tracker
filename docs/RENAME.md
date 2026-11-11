@@ -26,9 +26,10 @@ open FitLife.xcodeproj
 - Имя SwiftData configuration, путь локального пульса, имя Watch archive, HealthKit sync prefix и widget kind сохранены в `AppCompatibility`. Это защищает от создания пустого store, потери outbox/пульса, дублирования Health export и замены установленных виджетов. Строки для стабильных UUID CSV-импорта также сохранены.
 - Код `StoredRecord` и JSON полей тренировки не изменён. Архивы не включают настройки/permissions или локальные измерения пульса.
 - На сервере сохранены OAuth client IDs, JWT audience и security-stamp claim, имена cookies `__Host-FitnessTrackerAuth` / `__Host-FitnessTrackerPasskey`, Data Protection application names `FitnessTracker.Authentication` / `FitnessTracker.Backend`, имена БД/пользователей и Docker network. Существующие `.env`, bind mounts, сертификаты, ключи, аккаунты и сессии не требуют переноса ради названия.
-- Каталог checkout и адрес Git remote не определяют имя продукта; их переименование не требуется для сборки FitLife.
+- Репозиторий GitHub и каталог checkout пока называются `Fitness-Tracker`. Это отдельные имена инфраструктуры; проект и сборки называются FitLife.
+- Исторические скриншоты и сгенерированная иллюстрация входа сохраняют прежнее название. Они помечены как материалы до переименования в [описании превью](previews/README.md) и не включаются в app bundles.
 
-Прежние имена остаются в перечисленных технических идентификаторах, их конфигурации, тестах и этой инструкции. В интерфейсе, названиях targets/modules/assemblies используется FitLife.
+Прежние имена остаются в перечисленных технических идентификаторах, их конфигурации, тестах и документации о совместимости, а также в исторических материалах. `FitSessionCSVImporter` и соответствующие тесты называются по исходному стороннему CSV-формату. В интерфейсе, названиях targets/modules/assemblies используется FitLife.
 
 ## Проверки
 
