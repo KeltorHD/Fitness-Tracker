@@ -10,8 +10,8 @@ enum ServerCallback: Equatable, Sendable {
 }
 
 struct ServerConfiguration: Equatable, Sendable {
-  static let clientID = "fitnesstracker-ios"
-  static let personalClientID = "fitnesstracker-ios-personal"
+  static let clientID = "fitlife-ios"
+  static let personalClientID = "fitlife-ios-personal"
   static let callbackPath = "/ios/oauth/callback"
   let callbackHost: String
   let callback: ServerCallback

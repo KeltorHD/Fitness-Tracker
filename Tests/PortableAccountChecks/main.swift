@@ -35,7 +35,7 @@ private final class AccountProtocol: URLProtocol {
     let clientID = personal ? ServerConfiguration.personalClientID : ServerConfiguration.clientID
     let callback =
       personal
-      ? "com.example.fitnesstracker:/ios/oauth/callback"
+      ? "com.example.fitlife:/ios/oauth/callback"
       : "https://auth.example.com/ios/oauth/callback"
     let body: String
     if url.path == "/connect/token" || url.path == "/connect/revoke" {
@@ -93,12 +93,12 @@ private final class AccountProtocol: URLProtocol {
     let full = try ServerConfiguration(authenticationURL: auth, backendURL: api)
     let personal = try ServerConfiguration(
       authenticationURL: URL(string: "https://personal-auth.example.com/")!, backendURL: api,
-      callback: .customScheme("com.example.fitnesstracker"))
+      callback: .customScheme("com.example.fitlife"))
     let attempt = FixtureCryptography().authorizationAttempt()
     precondition(full.oauthClientID != personal.oauthClientID)
     precondition(full.callbackURL.absoluteString == "https://auth.example.com/ios/oauth/callback")
     precondition(
-      personal.callbackURL.absoluteString == "com.example.fitnesstracker:/ios/oauth/callback")
+      personal.callbackURL.absoluteString == "com.example.fitlife:/ios/oauth/callback")
     for configuration in [full, personal] {
       for manage in [false, true] {
         let request = try attempt.authorizationURL(
@@ -114,7 +114,7 @@ private final class AccountProtocol: URLProtocol {
       }
     }
     for scheme in [
-      "", "fitnesstracker", "https", "Com.example", "com..example", "com.-example", "com.example-",
+      "", "fitlife", "https", "Com.example", "com..example", "com.-example", "com.example-",
       "com.example:/callback", "com.example\n", "com." + String(repeating: "a", count: 64),
     ] {
       do {
@@ -130,9 +130,9 @@ private final class AccountProtocol: URLProtocol {
     let legacyConfiguration = try ServerConfiguration.configured(info: info)
     precondition(legacyConfiguration?.callback == .https)
     info["FitLifeAuthenticationCallbackMode"] = "customScheme"
-    info["FitLifeAuthenticationCallbackScheme"] = "com.example.fitnesstracker"
+    info["FitLifeAuthenticationCallbackScheme"] = "com.example.fitlife"
     let personalConfiguration = try ServerConfiguration.configured(info: info)
-    precondition(personalConfiguration?.callback == .customScheme("com.example.fitnesstracker"))
+    precondition(personalConfiguration?.callback == .customScheme("com.example.fitlife"))
     info["FitLifeAuthenticationCallbackMode"] = "$(UNEXPANDED_MODE)"
     do {
       _ = try ServerConfiguration.configured(info: info)
@@ -142,13 +142,13 @@ private final class AccountProtocol: URLProtocol {
     for callback in [
       "https://auth.example.com/ios/oauth/callback?code=a&state=expected-state",
       "com.example.other:/ios/oauth/callback?code=a&state=expected-state",
-      "com.example.fitnesstracker://host/ios/oauth/callback?code=a&state=expected-state",
-      "com.example.fitnesstracker:/ios/%6Fauth/callback?code=a&state=expected-state",
-      "com.example.fitnesstracker:/other?code=a&state=expected-state",
-      "com.example.fitnesstracker:/ios/oauth/callback?code=a&state=wrong",
-      "com.example.fitnesstracker:/ios/oauth/callback?code=a&state=expected-state&state=expected-state",
-      "com.example.fitnesstracker:/ios/oauth/callback?code=a&state=expected-state&iss=https%3A%2F%2Fattacker.example.com%2F",
-      "com.example.fitnesstracker:/ios/oauth/callback?code=a&state=expected-state#fragment",
+      "com.example.fitlife://host/ios/oauth/callback?code=a&state=expected-state",
+      "com.example.fitlife:/ios/%6Fauth/callback?code=a&state=expected-state",
+      "com.example.fitlife:/other?code=a&state=expected-state",
+      "com.example.fitlife:/ios/oauth/callback?code=a&state=wrong",
+      "com.example.fitlife:/ios/oauth/callback?code=a&state=expected-state&state=expected-state",
+      "com.example.fitlife:/ios/oauth/callback?code=a&state=expected-state&iss=https%3A%2F%2Fattacker.example.com%2F",
+      "com.example.fitlife:/ios/oauth/callback?code=a&state=expected-state#fragment",
     ] {
       do {
         _ = try attempt.code(from: URL(string: callback)!, configuration: personal)

@@ -33,9 +33,9 @@ def prepare(root):
     password = backend["environment"]["Certificates__Encryption__Password"]
     if not password:
         raise RuntimeError("CERTIFICATE_PASSWORD не должен быть пустым.")
-    environment["FITNESS_TRACKER_BACKEND_CERTIFICATE_PASSWORD"] = password
+    environment["FITLIFE_BACKEND_CERTIFICATE_PASSWORD"] = password
     if target.exists():
-        run(["openssl", "pkcs12", "-in", str(target), "-passin", "env:FITNESS_TRACKER_BACKEND_CERTIFICATE_PASSWORD", "-noout"], root, environment)
+        run(["openssl", "pkcs12", "-in", str(target), "-passin", "env:FITLIFE_BACKEND_CERTIFICATE_PASSWORD", "-noout"], root, environment)
         print("Существующий сертификат Backend проверен; ключи и .env сохранены.")
         return
     (root / ".local").mkdir(mode=0o700, exist_ok=True)
@@ -50,7 +50,7 @@ def prepare(root):
              "-subj", "/CN=FitLife Backend encryption", "-keyout", str(files / "key.pem"),
              "-out", str(files / "certificate.pem")], root, environment)
         run(["openssl", "pkcs12", "-export", "-inkey", str(files / "key.pem"), "-in", str(files / "certificate.pem"),
-             "-out", str(files / "encryption.pfx"), "-passout", "env:FITNESS_TRACKER_BACKEND_CERTIFICATE_PASSWORD"], root, environment)
+             "-out", str(files / "encryption.pfx"), "-passout", "env:FITLIFE_BACKEND_CERTIFICATE_PASSWORD"], root, environment)
         # Публикуем готовый PFX атомарно в пределах одной файловой системы.
         # link не заменит ключ, созданный другим параллельным запуском.
         generated = files / "encryption.pfx"

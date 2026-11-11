@@ -2,12 +2,13 @@
 
 Пункты без отметки остаются **непроверенными** до выполнения на macOS/устройстве. Для выполненных проверок указаны устройство, ОС, версия Xcode и результат.
 
-## Переименование в FitLife — 2026-11-11
+## FitLife без обратной совместимости — 2026-11-11
 
-- [ ] Выполнить `xcodegen generate`, открыть `FitLife.xcodeproj`, собрать и запустить схемы FitLife Personal / FitLife, FitLifeWatch и FitLifeWidgets. Запустить FitLifeTests и FitLifeUITests. Предыдущие проверки на Mac выполнены до этого переименования.
-- [ ] Обновить установленное приложение с теми же Team, Bundle ID, App Group и CloudKit container, сохранив Config/Local.xcconfig. Проверить прежние тренировки, настройки, Keychain-вход, пульс, Watch outbox и установленные виджеты.
-- [ ] Проверить название FitLife на iPhone/Watch, в виджете, разрешениях и системных диалогах, RU/EN и Dynamic Type. Экспортировать FitLife-архив и открыть прежние `.fitnesstracker` / `.fitsession` / `.json`.
-- [ ] Открыть тренировку по `fitlife://`, `fitnesstracker://` и `fitsession://`, включая холодный запуск из виджета и Live Activity. Отдельно проверить прежний настроенный OAuth callback.
+- [ ] Обновить Config/Local.xcconfig на текущие FITLIFE_*, зарегистрировать текущие Apple identifiers и выполнить `xcodegen generate`. Собрать FitLife Personal / FitLife, FitLifeWatch и FitLifeWidgets; запустить FitLifeTests и FitLifeUITests. Прежние aliases не применяются.
+- [ ] Проверить отдельное хранилище Workouts, папку пульса FitLife/HeartRate и Watch archive FitLife-watch.json. Ошибка открытия/сохранения остаётся ошибкой, без удаления store или перехода на пустую in-memory БД. Прежние хранилища автоматически не переносятся.
+- [ ] Экспортировать `.fitlife` / `.json` с com.fitlife.archive версии 4. Проверить отказ для предыдущих продуктовых форматов, версий 1–3, JSON без оболочки и отсутствующих обязательных коллекций.
+- [ ] Проверить ссылки fitlife:// из виджета и Live Activity, включая холодный запуск. Предыдущие продуктовые URL-схемы не должны открывать маршруты. Отдельно проверить текущий HTTPS/reverse-DNS OAuth callback и новый вход.
+- [ ] Добавить виджет FitLife.Weekly, проверить разрешения/текущий HealthKit sync prefix и все экраны на RU/EN, Dynamic Type, VoiceOver и обеих темах. Предыдущие Apple-проверки выполнены до смены этих контрактов.
 
 ## Доработки редактора, мышечных областей и нижних панелей — 2026-11-07
 
@@ -239,23 +240,15 @@
 - [ ] Заблокировать iPhone, проверить уведомления BLE и запись в фоне. Force quit/reboot не обещают продолжение; после открытия checkpoints доступны, подключение восстанавливается вручную.
 - [ ] Checkpoint/finish/background expiration: ограниченная работа, отмена pending tasks; ошибка сохранения видна, повтор сохраняет последние точки.
 - [ ] История: график со средним/максимумом и разрывами, длительная запись, Dynamic Type, VoiceOver и смена темы. Пройденный UI-тест не заменяет проверку радио.
-- [ ] Локальные файлы исключены из backup/CloudKit/App Group и защищены на iOS; JSON/.fitnesstracker, widgets/Live Activity/Watch не содержат новых sensor payloads.
+- [ ] Локальные файлы исключены из backup/CloudKit/App Group и защищены на iOS; JSON/.fitlife, widgets/Live Activity/Watch не содержат новых sensor payloads.
 - [ ] Отмена/удаление тренировки удаляет локальный sidecar; повреждённая запись сохраняется с ошибкой, отказ сохранения/чтения не создаёт пустую базу.
 - [ ] Запустить `testTrackerOffersBothModesWithoutRequestingPermissionsOnOpen` и весь существующий UI suite. На Linux UI-тест не запускался.
 
 Инструкция и точные ограничения: [MI_BAND.md](MI_BAND.md).
 
-## Переименование в FitLife
+## Текущие идентификаторы FitLife
 
-- [ ] `xcodegen generate` создаёт FitLife.xcodeproj со схемами FitLife Personal / FitLife / FitLifeWatch / FitLifeWidgets; package FitLifeCore и все test targets разрешаются.
-- [ ] Обновление поверх прежней установки с теми же Team/Bundle ID/App Group/CloudKit сохраняет историю, настройки, активную сессию, локальный пульс и Watch outbox; store не удаляется и не создаётся пустым при ошибке.
-- [ ] Имя FitLife видно на iPhone/Watch, в widgets, permissions, меню и обоих языках.
-- [ ] Установленный виджет обновляется с прежним kind; проверить Live Activity до/после обновления и legacy deep links.
-- [ ] `.fitnesstracker` / `.json` экспортируют новый brand и metadata, старые `.fitsession` и JSON version 1 открываются через Files/AirDrop без изменения данных и новых дубликатов.
-- [ ] Health export существующей тренировки не создаёт дубликат после переименования.
-- [ ] Старые и новые переменные Local.xcconfig дают те же реальные signing identifiers; новых профилей из-за имени продукта не требуется.
-
-Порядок обновления: [RENAME.md](RENAME.md).
+Актуальные проверки смены идентификаторов находятся в начале документа. Контракты, требования к новой конфигурации и отсутствие автоматического переноса описаны в [RENAME.md](RENAME.md).
 
 ## Сборка и тесты (общие сценарии)
 
@@ -352,10 +345,10 @@
 
 Показатели калорий, веса и замеров из скриншотов не подставляются как данные пользователя. Фото/GIF оригинального приложения не извлекаются. Полная карта: [REFERENCE_DESIGN.md](REFERENCE_DESIGN.md).
 
-## JSON и .fitnesstracker
+## JSON и .fitlife
 
-- [ ] После генерации проверить Info.plist: exported UTI com.fitnesstracker.archive → public.json, extension fitnesstracker, Viewer/Owner; public.json → Alternate; open-in-place enabled.
-- [ ] Сохранить полный архив и отдельную тренировку в обоих форматах. Фактические расширения `.json` и `.fitnesstracker` соответствуют выбору; UTF-8, русский текст, дробные даты и IDs сохраняются.
+- [ ] После генерации проверить Info.plist: exported UTI com.fitlife.archive → public.json, extension fitlife, Viewer/Owner; public.json → Alternate; open-in-place enabled.
+- [ ] Сохранить полный архив и отдельную тренировку в обоих форматах. Фактические расширения `.json` и `.fitlife` соответствуют выбору; UTF-8, русский текст, дробные даты и IDs сохраняются.
 - [ ] Импорт из локальных «Файлов», iCloud Drive и стороннего file provider; старый JSON одной тренировки также читается.
 - [ ] Open in FitLife/AirDrop: foreground, background и cold launch; startup store failure → retry не теряет URL.
 - [ ] Внешний файл во время active session, detail, создания/редактирования плана, editor/picker: один preview без потери черновиков и активной тренировки.
@@ -379,7 +372,7 @@
 - [ ] Ошибка чтения личного repository при выходе оставляет демо доступным и показывает ошибку; успешный retry возвращает личную историю. Запустить новые AppStoreTests.
 - [ ] В демо нет запросов HealthKit/Bluetooth, Live Activity, уведомлений отдыха и публикации виджета. Ранее опубликованная личная сводка не заменяется демо. Проверить завершение предыдущих updates перед входом.
 - [ ] При доставке Watch outbox в демо подтверждение не отправляется; после возврата и повторной доставки запись сохраняется в личном профиле один раз.
-- [ ] JSON/`.fitnesstracker` экспорт демо содержит явные имена и заметки; импорт в демо не затрагивает SwiftData/CloudKit. На втором устройстве демо не появляется.
+- [ ] JSON/`.fitlife` экспорт демо содержит явные имена и заметки; импорт в демо не затрагивает SwiftData/CloudKit. На втором устройстве демо не появляется.
 - [ ] Запустить UI-тест открытия/выхода; проверить переходы по вкладкам после сброса навигации и повторное открытие/закрытие профиля.
 
 [Состав и ограничения демо](DEMO_DATA.md).
@@ -421,7 +414,7 @@
 - [ ] Active/paused workout: указать/изменить/убрать вес; после завершения он виден в общей истории. Завершённую тренировку можно исправить. Повтор не копирует старый вес; active/cancelled данные не показываются как завершённые измерения.
 - [ ] Перезапуск личного store сохраняет записи и поля веса; ошибка save/read не меняет UI snapshot и не показывает успех. Новые записи используют прежний ModelContext/CloudKit store без очистки данных.
 - [ ] В демо изменения веса не затрагивают личные источники; выход/сброс/перезапуск возвращают личный профиль. При открытом редакторе смена профиля и второе archive sheet не конфликтуют. Alert не показывается за sheet.
-- [ ] Архив v2 round-trip: только вес, смешанные данные и одна тренировка; v1/legacy Workout мигрируют с пустыми полями веса. Missing/corrupt v2 collection, дубликаты, неверный вес/дата отклоняются атомарно. Повторный импорт не заменяет данные.
+- [ ] Архив FitLife v4 round-trip: только вес, смешанные данные и одна тренировка. Другие версии, JSON без оболочки, missing/corrupt коллекции, дубликаты и неверный вес/дата отклоняются атомарно. Повторный импорт не заменяет данные.
 - [ ] CloudKit на двух устройствах и повторная доставка Watch: правки веса на телефоне не стираются. Вес не передаётся автоматически в HealthKit, виджет или Watch.
 - [ ] Запустить новые PersistenceTests/AppStoreTests и UI tests: testBodyWeightCanBeRecordedFromResults, testBodyWeightIsSavedOnAnActiveWorkout, testHistoryMonthMenuPreservesCalendarNavigation. На Linux эти Apple-тесты не запускались.
 
@@ -436,7 +429,7 @@
 - [ ] Нет общей длительности: дневник/detail показывают «—», HealthKit button disabled и authorization не запрашивается. Repeat запускает новый обычный таймер. Не генерируются body weight, калории или паузы.
 - [ ] Кавычки, UTF-8 BOM, CRLF, многострочные заметки, десятичная запятая, повторяющиеся одинаковые подходы и группы более 30 подходов сохраняются. Некорректная строка отклоняет весь импорт с номером строки/полем без приватных значений.
 - [ ] Ошибка чтения/security-scoped URL, cancellation и отказ SwiftData save оставляют исходные данные/preview для повтора. Применение идёт одним save/rollback.
-- [ ] Новый экспорт v4 переносит multiplier/unknown-duration/zero reps и drops; v1/v2/v3 и прежний одиночный JSON читаются с прежней семантикой. Старое приложение отклоняет v4 вместо неверного расчёта объёма.
+- [ ] Текущий архив FitLife v4 переносит multiplier/unknown-duration/zero reps и drops; другие версии и одиночный JSON без оболочки отклоняются до записи в хранилище.
 - [ ] RU/EN errors и подсказки, VoiceOver, длинные имена, sheet/alert routing; запустить новые ArchiveTransferTests и AppStoreTests. На Linux эти Apple-тесты не выполнялись.
 
 [Документация CSV](CSV_IMPORT.md).
@@ -480,7 +473,7 @@
 - [ ] При выполнении каждого этапа сохраняются реальные вес/повторы/дата. Промежуточного отдыха нет, после последнего — один отдых. Пауза, пропуск отдыха, внешние Live Activity actions, сворачивание/восстановление и быстрый двойной tap безопасны.
 - [ ] Ошибка SwiftData save сохраняет draft/selection для повтора и не показывает невыполненный этап как выполненный. Запустить testDropStagesAndMixedTemplateTargetsRoundTrip и testWarmupAndDropStagesCanBeConfiguredBeforeCompletion; эти тесты на Linux не запускались.
 - [ ] Завершить посреди группы: история различает выполненное и «Не выполнено», объём/повторы считают только факт. Группа — один подход; active/Live Activity progress ждёт её завершения. Разминка не входит в рабочий объём и рекорды.
-- [ ] Повтор, mixed template, JSON/.fitnesstracker v4, старые v1–v3, legacy .fitsession: данные и IDs сохраняются при переносе; новые IDs/пустые completion timestamps при новом запуске. В шаблонах mixed targets отображаются и не перезаписываются uniform controls.
+- [ ] Повтор, mixed template и текущий JSON/.fitlife v4: данные и IDs сохраняются при переносе; новые IDs/пустые completion timestamps при новом запуске. В шаблонах mixed targets отображаются и не перезаписываются uniform controls.
 - [ ] Watch logger следует очередному этапу, Live Activity/Dynamic Island показывают этап и не переходят к другому упражнению раньше времени. Проверить старый snapshot без optional stage fields, доставку Watch и CloudKit на двух актуальных клиентах.
 - [ ] RU/EN, кг/фунты, десятичный разделитель, Dynamic Type/VoiceOver, narrow screen, Dark/Increase Contrast/Reduce Transparency, много этапов и длинные ошибки.
 

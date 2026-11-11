@@ -6,14 +6,12 @@ import UniformTypeIdentifiers
 extension UTType {
   static let fitLife = UTType(
     exportedAs: WorkoutArchive.formatIdentifier, conformingTo: .json)
-  static let legacyWorkoutArchive = UTType(
-    exportedAs: WorkoutArchive.legacyFormatIdentifier, conformingTo: .json)
 }
 
 enum ArchiveExportFormat: String, CaseIterable, Identifiable, Sendable {
   case fitLife, json
   var id: Self { self }
-  var title: String { self == .json ? "JSON (.json)" : "FitLife (.fitnesstracker)" }
+  var title: String { self == .json ? "JSON (.json)" : "FitLife (.fitlife)" }
   var contentType: UTType { self == .json ? .json : .fitLife }
 }
 
@@ -25,7 +23,7 @@ struct ArchiveDocument: Transferable, Sendable {
   static var transferRepresentation: some TransferRepresentation {
     DataRepresentation(exportedContentType: .fitLife) { document in
       try await document.files.encode(document.archive)
-    }.suggestedFileName("FitLife.fitnesstracker").exportingCondition {
+    }.suggestedFileName("FitLife.fitlife").exportingCondition {
       $0.format == .fitLife
     }
     DataRepresentation(exportedContentType: .json) { document in

@@ -102,19 +102,15 @@ private func scheduledTemplate(_ name: String, days: Set<WorkoutWeekday> = []) -
   #expect(try repository.templates() == [template])
 }
 
-@Test func templatesWithoutTrainingDaysKeepTheirIdentityAndTargets() throws {
-  let template = scheduledTemplate("Старый шаблон")
+@Test func templatesRequireCurrentTrainingDayMetadata() throws {
+  let template = scheduledTemplate("Шаблон")
   var object = try #require(
     JSONSerialization.jsonObject(with: JSONEncoder().encode(template)) as? [String: Any])
   object.removeValue(forKey: "preferredWeekdays")
-  let data = try JSONSerialization.data(withJSONObject: object)
-  let restored = try JSONDecoder().decode(WorkoutTemplate.self, from: data)
-  #expect(restored == template)
-  #expect(restored.preferredWeekdays.isEmpty)
-  object.removeValue(forKey: "muscleGroups")
-  let originalFormat = try JSONDecoder().decode(
-    WorkoutTemplate.self, from: JSONSerialization.data(withJSONObject: object))
-  #expect(originalFormat == template)
+  #expect(throws: DecodingError.self) {
+    try JSONDecoder().decode(
+      WorkoutTemplate.self, from: JSONSerialization.data(withJSONObject: object))
+  }
 }
 
 @Test func templateSearchMatchesTemplateExerciseAndEnglishNamesWithoutChangingRecords() throws {

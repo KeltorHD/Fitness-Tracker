@@ -21,7 +21,7 @@ private struct WatchArchive: Codable {
       let folder = try FileManager.default.url(
         for: .applicationSupportDirectory, in: .userDomainMask,
         appropriateFor: nil, create: true)
-      archiveURL = folder.appendingPathComponent(AppCompatibility.watchArchiveFileName)
+      archiveURL = folder.appendingPathComponent(AppIdentifiers.watchArchiveFileName)
       if let archiveURL, FileManager.default.fileExists(atPath: archiveURL.path) {
         let archive = try JSONDecoder().decode(
           WatchArchive.self, from: Data(contentsOf: archiveURL))

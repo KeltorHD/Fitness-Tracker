@@ -196,26 +196,22 @@ func bodyWeightRejectsInvalidValuesWithoutChangingAWorkout(_ value: Double) thro
   #expect(try workspace.bodyWeights() == [own] && workspace.workouts().isEmpty)
 }
 
-@Test func bodyWeightMigrationReadsVersionOneAndOriginalWorkoutPayloads() throws {
+@Test func archiveRequiresCurrentVersionAndBodyWeightsCollection() throws {
   let archive = WorkoutArchive(
     workouts: [try weightedWorkout()], templates: [], exportedAt: weightDate)
   var object = try #require(
     JSONSerialization.jsonObject(with: WorkoutArchiveCodec.encode(archive)) as? [String: Any])
-  object["version"] = 1
+  for version in [0, 1, 2, 3, 5] {
+    object["version"] = version
+    #expect(throws: WorkoutArchiveError.unsupportedVersion) {
+      try WorkoutArchiveCodec.decode(JSONSerialization.data(withJSONObject: object))
+    }
+  }
+  object["version"] = WorkoutArchive.currentVersion
   object.removeValue(forKey: "bodyWeights")
-  var workouts = try #require(object["workouts"] as? [[String: Any]])
-  workouts[0].removeValue(forKey: "bodyWeightKG")
-  object["workouts"] = workouts
-  let restored = try WorkoutArchiveCodec.decode(JSONSerialization.data(withJSONObject: object))
-  #expect(restored.bodyWeights.isEmpty)
-  #expect(restored.workouts.first?.bodyWeightKG == nil)
-  #expect(restored.version == WorkoutArchive.currentVersion)
-  let original = try #require(workouts.first)
-  let decoder = JSONDecoder()
-  decoder.dateDecodingStrategy = .secondsSince1970
-  let legacyWorkout = try decoder.decode(
-    Workout.self, from: JSONSerialization.data(withJSONObject: original))
-  #expect(legacyWorkout.bodyWeightKG == nil)
+  #expect(throws: WorkoutArchiveError.invalidFile) {
+    try WorkoutArchiveCodec.decode(JSONSerialization.data(withJSONObject: object))
+  }
 }
 
 @Test @MainActor func bodyWeightImportIsAdditiveAtomicAndIdempotent() throws {

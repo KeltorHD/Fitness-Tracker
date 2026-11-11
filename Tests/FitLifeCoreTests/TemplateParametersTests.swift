@@ -71,10 +71,11 @@ import Testing
   #expect(workout.volume == 80)
 }
 
-@Test func legacyUniformTemplatePayloadKeepsRecordedTargetsAndCanStartWithoutPrefill() throws {
+@Test func uniformTemplatePayloadKeepsRecordedTargetsAndCanStartWithoutPrefill() throws {
   let legacy = """
     {
       "id": "00000000-0000-4000-8000-000000000001", "name": "План", "restSeconds": 120,
+      "muscleGroups": [], "muscles": [], "muscleRegions": [], "preferredWeekdays": [], "variations": [],
       "exercises": [{
         "id": "00000000-0000-4000-8000-000000000002", "setCount": 3,
         "repetitions": 7, "weightKG": 45, "loadMultiplier": 2,

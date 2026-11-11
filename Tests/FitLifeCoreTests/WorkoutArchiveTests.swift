@@ -46,36 +46,28 @@ private func archivedWorkout(at date: Date = archiveDate) throws -> Workout {
   #expect(abs(restored.duration() - workout.duration()) < 0.0001)
 }
 
-@Test func archiveAcceptsTheOriginalSingleWorkoutISO8601JSON() throws {
+@Test func archiveRejectsUnwrappedSingleWorkoutJSON() throws {
   let workout = try archivedWorkout()
   let encoder = JSONEncoder()
   encoder.dateEncodingStrategy = .iso8601
-  let restored = try WorkoutArchiveCodec.decode(encoder.encode(workout))
-  #expect(restored.workouts == [workout])
-  #expect(restored.templates.isEmpty)
+  #expect(throws: WorkoutArchiveError.invalidFile) {
+    try WorkoutArchiveCodec.decode(encoder.encode(workout))
+  }
 }
 
-@Test func archivesFromBeforeTheRenameImportWithoutChangingUserDataAndExportTheNewFormat() throws {
+@Test(arguments: ["com.fitnesstracker.archive", "com.fitsession.archive"])
+func archiveRejectsPreviousProductIdentifiers(_ format: String) throws {
   let workout = try archivedWorkout()
-  let current = WorkoutArchive(
-    workouts: [workout], templates: ExerciseCatalog.starterTemplates,
-    exportedAt: archiveDate)
+  let current = WorkoutArchive(workouts: [workout], templates: ExerciseCatalog.starterTemplates)
   var object = try #require(
     JSONSerialization.jsonObject(with: WorkoutArchiveCodec.encode(current)) as? [String: Any])
-  object["format"] = WorkoutArchive.legacyFormatIdentifier
-  let legacyData = try JSONSerialization.data(withJSONObject: object)
-  let restored = try WorkoutArchiveCodec.decode(legacyData)
-  #expect(restored == current)
-  #expect(restored.workouts == [workout])
-  #expect(restored.templates == current.templates)
+  object["format"] = format
+  let data = try JSONSerialization.data(withJSONObject: object)
+  #expect(throws: WorkoutArchiveError.invalidFile) { try WorkoutArchiveCodec.decode(data) }
   let decoder = JSONDecoder()
   decoder.dateDecodingStrategy = .secondsSince1970
-  let legacy = try decoder.decode(WorkoutArchive.self, from: legacyData)
-  #expect(try WorkoutArchiveCodec.decode(WorkoutArchiveCodec.encode(legacy)) == current)
-  object["version"] = 99
-  #expect(throws: WorkoutArchiveError.unsupportedVersion) {
-    try WorkoutArchiveCodec.decode(JSONSerialization.data(withJSONObject: object))
-  }
+  let unsupported = try decoder.decode(WorkoutArchive.self, from: data)
+  #expect(throws: WorkoutArchiveError.invalidFile) { try WorkoutArchiveCodec.encode(unsupported) }
 }
 
 @Test(arguments: ["not JSON", "[]", "{}", "{\"name\":\"Not a workout\"}"])
@@ -92,7 +84,7 @@ func invalidArchiveInputIsRejected(_ input: String) {
   #expect(throws: WorkoutArchiveError.unsupportedVersion) {
     try WorkoutArchiveCodec.decode(JSONSerialization.data(withJSONObject: object))
   }
-  object["version"] = 1
+  object["version"] = WorkoutArchive.currentVersion
   object["format"] = "some.other.app"
   #expect(throws: WorkoutArchiveError.invalidFile) {
     try WorkoutArchiveCodec.decode(JSONSerialization.data(withJSONObject: object))

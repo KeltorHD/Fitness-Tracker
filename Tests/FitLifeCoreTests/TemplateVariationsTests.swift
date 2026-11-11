@@ -86,19 +86,16 @@ private func variationTemplate() -> WorkoutTemplate {
   #expect(throws: TrainingError.duplicateID) { try Validation.template(template) }
 }
 
-@Test func templatesFromOlderPayloadsDecodeWithoutVariationsOrSupersets() throws {
+@Test func templatesRequireCurrentVariationsMetadata() throws {
   let template = WorkoutTemplate(
-    name: "Старый шаблон", exercises: [TemplateExercise(exercise: ExerciseCatalog.all[0])])
-  let encoded = try JSONEncoder().encode(template)
-  var object = try #require(JSONSerialization.jsonObject(with: encoded) as? [String: Any])
+    name: "Шаблон", exercises: [TemplateExercise(exercise: ExerciseCatalog.all[0])])
+  var object = try #require(
+    JSONSerialization.jsonObject(with: JSONEncoder().encode(template)) as? [String: Any])
   object.removeValue(forKey: "variations")
-  let legacy = try JSONSerialization.data(withJSONObject: object)
-  let restored = try JSONDecoder().decode(WorkoutTemplate.self, from: legacy)
-  #expect(restored == template)
-  #expect(restored.variations.isEmpty)
-  #expect(restored.exercises[0].supersetID == nil)
-  let started = try restored.start(at: variationDate)
-  #expect(started.exercises[0].supersetID == nil)
+  #expect(throws: DecodingError.self) {
+    try JSONDecoder().decode(
+      WorkoutTemplate.self, from: JSONSerialization.data(withJSONObject: object))
+  }
 }
 
 @Test func archiveRoundTripPreservesTemplateVariationsAndSupersets() throws {

@@ -6,7 +6,7 @@ final class AppCapabilitiesTests: XCTestCase {
   func testCloudAvailabilityFailsClosedForMissingOrUnexpandedConfiguration() {
     for info: [String: Any] in [
       [:], ["FitLifeCloudSyncAvailable": "NO"],
-      ["FitLifeCloudSyncAvailable": "$(FITNESS_TRACKER_CLOUD_SYNC_AVAILABLE)"],
+      ["FitLifeCloudSyncAvailable": "$(FITLIFE_CLOUD_SYNC_AVAILABLE)"],
       ["FitLifeCloudSyncAvailable": true],
     ] {
       XCTAssertFalse(AppCapabilities(info: info).supportsCloudSync)

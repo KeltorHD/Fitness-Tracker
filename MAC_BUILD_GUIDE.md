@@ -1,8 +1,8 @@
 # FitLife: первая сборка на macOS
 
-Для проверки новой аутентификации и копий выполните `xcodegen generate`, добавьте HTTPS-адреса серверов в существующий `Config/Local.xcconfig` по [SERVER.md](docs/SERVER.md) и запустите `AccountBackupTests`. Для бесплатной `FitLife Personal` согласуйте `FITNESS_TRACKER_AUTH_CALLBACK_SCHEME` на Mac и `IOS_PERSONAL_CALLBACK_SCHEME` на сервере по [инструкции Personal Team](docs/SERVER.md#вход-для-бесплатной-personal-team): эта сборка использует отдельный URL-scheme callback с PKCE, без Associated Domains. Полная схема сохраняет HTTPS callback. Реальные provider flows требуют настройки Auth Server и кабинетов Google/Apple/Яндекс; наличие исходников не означает проверки входа на устройстве. Без серверных адресов приложение продолжает работать локально.
+Для проверки новой аутентификации и копий выполните `xcodegen generate`, добавьте HTTPS-адреса серверов в существующий `Config/Local.xcconfig` по [SERVER.md](docs/SERVER.md) и запустите `AccountBackupTests`. Для бесплатной `FitLife Personal` согласуйте `FITLIFE_AUTH_CALLBACK_SCHEME` на Mac и `IOS_PERSONAL_CALLBACK_SCHEME` на сервере по [инструкции Personal Team](docs/SERVER.md#вход-для-бесплатной-personal-team): эта сборка использует отдельный URL-scheme callback с PKCE, без Associated Domains. Полная схема сохраняет HTTPS callback. Реальные provider flows требуют настройки Auth Server и кабинетов Google/Apple/Яндекс; наличие исходников не означает проверки входа на устройстве. Без серверных адресов приложение продолжает работать локально.
 
-После переименования закройте прежний проект, выполните `git pull --ff-only` и `xcodegen generate`, затем откройте **FitLife.xcodeproj**. Выберите **FitLife Personal**. Сохраняйте значения Team, Bundle ID, App Group и CloudKit из существующего `Config/Local.xcconfig`: прежние переменные поддержаны aliases. Не удаляйте приложение/store. [Правила обновления](docs/RENAME.md).
+Для FitLife выполните `git pull --ff-only`, обновите Config/Local.xcconfig по текущему примеру с FITLIFE_* и запустите `xcodegen generate`. Откройте **FitLife.xcodeproj**, выберите **FitLife Personal** и настройте Team/зарегистрированные identifiers. Прежние aliases, хранилища и архивы автоматически не переносятся. [Текущие контракты](docs/RENAME.md).
 
 После добавления питания повторите `xcodegen generate`: новые файлы входят только в основной iOS target. Запустите `NutritionTests` и `testDiaryCanLogManualFoodWithoutNetwork`, затем проверьте PhotosPicker и запись с фото в SwiftData/CloudKit по [чек-листу](docs/XCODE_VALIDATION.md). На Linux эти Apple-сценарии не выполнялись. Дополнительные ключи API и разрешения медиатеки для системного выбора фото не требуются.
 
@@ -39,7 +39,7 @@ open FitLife.xcodeproj
 
 ## 2. Идентификаторы и Signing
 
-Для **бесплатной Personal Team** используйте схему **FitLife Personal**. Она выбирает PersonalDebug/PersonalRelease и Config/PersonalTeam.entitlements без iCloud и Push Notifications. История сохраняется в локальной SwiftData; JSON/.fitnesstracker, Liquid Glass, HealthKit, локальные уведомления, Live Activity/Dynamic Island, WidgetKit/App Groups и Watch сохраняются. Доступность HealthKit и App Groups для бесплатного Apple Developer account указана в [таблице Apple](https://developer.apple.com/help/account/reference/supported-capabilities-ios); фактический provisioning следует проверить на устройстве.
+Для **бесплатной Personal Team** используйте схему **FitLife Personal**. Она выбирает PersonalDebug/PersonalRelease и Config/PersonalTeam.entitlements без iCloud и Push Notifications. История сохраняется в локальной SwiftData; JSON/.fitlife, Liquid Glass, HealthKit, локальные уведомления, Live Activity/Dynamic Island, WidgetKit/App Groups и Watch сохраняются. Доступность HealthKit и App Groups для бесплатного Apple Developer account указана в [таблице Apple](https://developer.apple.com/help/account/reference/supported-capabilities-ios); фактический provisioning следует проверить на устройстве.
 
 Схема **FitLife** сохраняет полный набор capabilities и требует подходящей команды Apple Developer Program для iCloud/Push. Это различие конфигураций сборки, платных функций внутри приложения нет.
 
@@ -48,14 +48,14 @@ open FitLife.xcodeproj
 1. Обновите репозиторий и выполните `xcodegen generate` в его корне, затем `open FitLife.xcodeproj`.
 2. Выберите **FitLife Personal → ваш iPhone**.
 3. Укажите Personal Team для FitLife, FitLifeWidgets и FitLifeWatch в Signing & Capabilities с Automatically manage signing.
-4. Замените `com.yourcompany.fitlife` в Config/Local.xcconfig на свой уникальный FITNESS_TRACKER_BUNDLE_ID, например `com.alexanderproshchenkov.fitlife`. App Group и IDs вложенных targets выводятся из него автоматически. Для сохранения Team после следующей генерации внесите реальный Team ID в DEVELOPMENT_TEAM локального файла.
+4. Замените `com.yourcompany.fitlife` в Config/Local.xcconfig на свой уникальный FITLIFE_BUNDLE_ID, например `com.alexanderproshchenkov.fitlife`. App Group и IDs вложенных targets выводятся из него автоматически. Для сохранения Team после следующей генерации внесите реальный Team ID в DEVELOPMENT_TEAM локального файла.
 5. Нажмите ⌘R. Не удаляйте capabilities из Config/App.entitlements: они используются полной схемой.
 
 Заполните `Config/Local.xcconfig`:
 
 ```xcconfig
 DEVELOPMENT_TEAM = YOURTEAMID
-FITNESS_TRACKER_BUNDLE_ID = com.yourcompany.fitlife
+FITLIFE_BUNDLE_ID = com.yourcompany.fitlife
 ```
 
 App Group и CloudKit ID автоматически выводятся из Bundle ID:
@@ -80,7 +80,7 @@ App Group и CloudKit ID автоматически выводятся из Bund
 
 Платные сервисы требуют соответствующего членства Apple Developer и ресурсов в портале. Simulator signing обычно не нужен, но включённые entitlements могут потребовать настроить Team или отдельные profiles перед запуском на устройстве. Не удаляйте реальные capability-файлы, чтобы скрыть ошибки provisioning.
 
-`aps-environment` задаётся через `FITNESS_TRACKER_APS_ENVIRONMENT`: Debug → development, Release → production; финальные значения проверьте в подписанном архиве. Live Activities обновляются локально, не требуют ActivityKit push token. Push capability используется для системной синхронизации CloudKit.
+`aps-environment` задаётся через `FITLIFE_APS_ENVIRONMENT`: Debug → development, Release → production; финальные значения проверьте в подписанном архиве. Live Activities обновляются локально, не требуют ActivityKit push token. Push capability используется для системной синхронизации CloudKit.
 
 ## 3. Генерация, Simulator и первая сборка
 
@@ -168,7 +168,7 @@ git status --short
 
 ## Импорт и экспорт файлов
 
-После установки приложения проверьте **Настройки → Данные → Импорт и экспорт**: сохранить архив в `.json` и `.fitnesstracker`, открыть его из «Файлов», подтвердить preview и повторить импорт без дублей. Проверьте export одной тренировки из меню карточки, iCloud Drive, cold launch и передачу через Share/AirDrop. Регистрация UTI находится в App-Info.plist; дополнительных entitlements для этих диалогов не требуется. Код рассчитан на iOS 26, без document APIs iOS 27. Правила формата и ограничения: [IMPORT_EXPORT.md](docs/IMPORT_EXPORT.md), сценарии: [XCODE_VALIDATION.md](docs/XCODE_VALIDATION.md).
+После установки приложения проверьте **Настройки → Данные → Импорт и экспорт**: сохранить архив в `.json` и `.fitlife`, открыть его из «Файлов», подтвердить preview и повторить импорт без дублей. Проверьте export одной тренировки из меню карточки, iCloud Drive, cold launch и передачу через Share/AirDrop. Регистрация UTI находится в App-Info.plist; дополнительных entitlements для этих диалогов не требуется. Код рассчитан на iOS 26, без document APIs iOS 27. Правила формата и ограничения: [IMPORT_EXPORT.md](docs/IMPORT_EXPORT.md), сценарии: [XCODE_VALIDATION.md](docs/XCODE_VALIDATION.md).
 
 ## Mi Band / два режима трекера
 
@@ -192,7 +192,7 @@ git status --short
 
 Обновите репозиторий и выполните `xcodegen generate`: добавлены BodyWeightCard/Editor/HistoryView/ViewModel и адаптивный asset ResultsSurface. На «Результатах» проверьте крупные круглые даты календаря без многоточий, меню «История → …», нейтральные карточки и контурные tabs. Сравните с предоставленным образцом на том же iPhone; Linux не проверяет фактическую геометрию SwiftUI.
 
-В **Результаты → Весы → Записать** сохраните вес и проверьте историю/изменение, затем укажите вес в активной и завершённой тренировке. После завершения её значение должно появиться в общей истории, повтор тренировки начинается без веса. Проверьте точку/запятую, кг/фунты, исправление, удаление, ошибки сохранения, demo reset/exit и рестарт с личным SwiftData store. Архивы v1 должны читаться, новый экспорт v2 включает взвешивания; старому приложению для чтения v2 нужно обновление. Новых capabilities нет.
+В **Результаты → Весы → Записать** сохраните вес и проверьте историю/изменение, затем укажите вес в активной и завершённой тренировке. После завершения её значение должно появиться в общей истории, повтор тренировки начинается без веса. Проверьте точку/запятую, кг/фунты, исправление, удаление, ошибки сохранения, demo reset/exit и рестарт с личным SwiftData store. Текущий архив FitLife v4 включает взвешивания; прежние версии и JSON без оболочки отклоняются. Новых capabilities нет.
 
 Запустите новые AppStoreTests/PersistenceTests и три UI-сценария веса/меню месяца. Проверьте CloudKit на двух устройствах при включённой синхронизации и повторный Watch outbox без потери веса, изменённого на iPhone. [Правила](docs/BODY_WEIGHT.md), [полный checklist](docs/XCODE_VALIDATION.md).
 
@@ -200,7 +200,7 @@ git status --short
 
 После обновления выполните `xcodegen generate`: в Info.plist добавлена регистрация системного CSV document type. На iPhone откройте **Настройки → Данные → Импорт и экспорт → Выбрать файл**, выберите первый CSV, проверьте часовой пояс/сводку и подтвердите импорт; затем повторите со вторым файлом. Те же CSV можно открыть из «Файлов» через FitLife. До подтверждения данные не должны меняться, повторный импорт не создаёт копии.
 
-Проверьте множители веса, нулевые/пропущенные подходы, заметки и прочерк вместо неизвестной длительности. HealthKit export без длительности недоступен. Новый JSON-экспорт использует v3 и переносит эти поля; v1/v2 по-прежнему читаются. Запустите новый ArchiveTransferTests CSV flow и AppStoreTests для HealthKit guard. Linux проверил оба пользовательских CSV целиком и Core; picker, file providers, signing и Apple UI требуют Xcode. [Правила и границы](docs/CSV_IMPORT.md).
+Проверьте множители веса, нулевые/пропущенные подходы, заметки и прочерк вместо неизвестной длительности. HealthKit export без длительности недоступен. JSON-экспорт использует только текущий архив FitLife v4 и переносит эти поля. Запустите новый ArchiveTransferTests CSV flow и AppStoreTests для HealthKit guard. Linux проверил оба пользовательских CSV целиком и Core; picker, file providers, signing и Apple UI требуют Xcode. [Правила и границы](docs/CSV_IMPORT.md).
 
 ## AirPods Pro 3: первая проверка на iPhone
 
@@ -252,4 +252,4 @@ git status --short
 
 В этом обновлении изменены только существующие исходники: если Xcode-проект был сгенерирован после предыдущих добавлений файлов, повторять `xcodegen generate` не нужно. Достаточно pull и сборки ⌘B/запуска ⌘R. Кнопки общего старта теперь открывают полноразмерный выбор шаблонов с поиском и фильтрами; «Без шаблона» закреплено компактно сверху. Тема по умолчанию — зелёный «Лес», явно выбранная тема сохраняется. [Сценарии проверки](docs/XCODE_VALIDATION.md#старт-с-приоритетом-шаблонов-поиск-и-фильтры).
 
-Для HTTPS callback используйте полную схему `FitLife` с Associated Domains `webcredentials:$(FITNESS_TRACKER_AUTH_DOMAIN)`, настоящим App ID Prefix.Bundle ID и соответствующим provisioning. Пример host — `auth.example.com`; реальный `FITNESS_TRACKER_AUTH_DOMAIN` и HTTPS URL задайте в игнорируемом `Config/Local.xcconfig`. Задайте `IOS_APP_IDENTIFIER` на Auth Server и проверьте AASA по [SERVER.md](docs/SERVER.md#привязка-https-callback-к-ios). Пока Apple ID не зарегистрирован, возврат на iPhone не считается настроенным. Personal Team схема сохраняет прежние entitlements и использует отдельный private-use callback с PKCE по инструкции в SERVER.md.
+Для HTTPS callback используйте полную схему `FitLife` с Associated Domains `webcredentials:$(FITLIFE_AUTH_DOMAIN)`, настоящим App ID Prefix.Bundle ID и соответствующим provisioning. Пример host — `auth.example.com`; реальный `FITLIFE_AUTH_DOMAIN` и HTTPS URL задайте в игнорируемом `Config/Local.xcconfig`. Задайте `IOS_APP_IDENTIFIER` на Auth Server и проверьте AASA по [SERVER.md](docs/SERVER.md#привязка-https-callback-к-ios). Пока Apple ID не зарегистрирован, возврат на iPhone не считается настроенным. Personal Team схема сохраняет прежние entitlements и использует отдельный private-use callback с PKCE по инструкции в SERVER.md.

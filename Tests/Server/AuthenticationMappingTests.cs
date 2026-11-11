@@ -51,7 +51,7 @@ public sealed class AuthenticationMappingTests
         var mapper = new Mapper(AuthenticationMapping.Create());
         var principal = new ClaimsPrincipal(new ClaimsIdentity("Bearer"))
             .SetClaim(OpenIddictConstants.Claims.Subject, Guid.NewGuid().ToString())
-            .SetClaim("fitnesstracker:security_stamp", "protected-cookie-version")
+            .SetClaim("fitlife:security_stamp", "protected-cookie-version")
             .SetAuthorizationId("authorization-family")
             .SetScopes("profile", "offline_access");
 
@@ -62,7 +62,7 @@ public sealed class AuthenticationMappingTests
         Assert.Same(principal, approved.Principal);
         Assert.Equal(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme, approved.AuthenticationScheme);
         Assert.Equal("authorization-family", approved.Principal.GetAuthorizationId());
-        Assert.Equal("protected-cookie-version", approved.Principal.GetClaim("fitnesstracker:security_stamp"));
+        Assert.Equal("protected-cookie-version", approved.Principal.GetClaim("fitlife:security_stamp"));
         Assert.Equal(OpenIddictConstants.Errors.InvalidGrant,
             denied.Properties?.Items[OpenIddictServerAspNetCoreConstants.Properties.Error]);
         Assert.Equal(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme, Assert.Single(denied.AuthenticationSchemes));

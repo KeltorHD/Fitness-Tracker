@@ -72,32 +72,23 @@ private actor RecordingStub: HeartRateRecordingRepository {
 
 @main private struct PortableTrackerChecks {
   @MainActor static func main() async throws {
-    try expect(
-      AppCompatibility.storeConfiguration == "FitSession",
-      "Rename must preserve the installed database location")
-    try expect(
-      AppCompatibility.heartRateDirectory == "FitSession/HeartRate",
-      "Rename must retain existing sensor recordings")
-    try expect(
-      AppCompatibility.watchArchiveFileName == "FitSession-watch.json",
-      "Rename must retain the Watch outbox")
-    try expect(
-      AppCompatibility.healthSyncPrefix == "FitSession.", "Rename must not duplicate Health exports"
-    )
-    try expect(
-      AppCompatibility.weeklyWidgetKind == "FitSession.Weekly", "Installed widgets keep their kind")
-    for scheme in ["fitlife", "FITLIFE", "fitnesstracker", "FITNESSTRACKER", "fitsession"] {
+    try expect(AppIdentifiers.storeConfiguration == "Workouts", "Current workout store")
+    try expect(AppIdentifiers.heartRateDirectory == "FitLife/HeartRate", "Current pulse directory")
+    try expect(AppIdentifiers.watchArchiveFileName == "FitLife-watch.json", "Current Watch archive")
+    try expect(AppIdentifiers.healthSyncPrefix == "FitLife.", "Current Health export identity")
+    try expect(AppIdentifiers.weeklyWidgetKind == "FitLife.Weekly", "Current widget identity")
+    for scheme in ["fitlife", "FITLIFE"] {
       guard let url = URL(string: scheme + "://workout?id=" + UUID().uuidString) else {
         throw CheckFailure(message: "URL fixture")
       }
-      try expect(
-        AppCompatibility.acceptsURL(url), "Current and legacy URL schemes open the existing workout"
-      )
+      try expect(AppIdentifiers.acceptsURL(url), "FitLife URLs open the workout")
     }
-    guard let foreignURL = URL(string: "https://example.com/workout") else {
-      throw CheckFailure(message: "URL fixture")
+    for scheme in ["fitnesstracker", "FITNESSTRACKER", "fitsession", "https"] {
+      guard let url = URL(string: scheme + "://workout?id=" + UUID().uuidString) else {
+        throw CheckFailure(message: "URL fixture")
+      }
+      try expect(!AppIdentifiers.acceptsURL(url), "Previous and unrelated URL schemes are rejected")
     }
-    try expect(!AppCompatibility.acceptsURL(foreignURL), "Unrelated URLs are not app routes")
     let tick = Date(timeIntervalSince1970: 1_700_000_000)
     let betweenTicks = HeartRateReading(date: tick.addingTimeInterval(0.6), beatsPerMinute: 90)
     try expect(!betweenTicks.isFresh(at: tick), "A scheduled tick may precede a new valid reading")

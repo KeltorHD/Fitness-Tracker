@@ -29,7 +29,7 @@ import HealthKit
     let builder = HKWorkoutBuilder(healthStore: store, configuration: config, device: nil)
     try await builder.beginCollection(at: workout.startedAt)
     try await builder.addMetadata([
-      HKMetadataKeySyncIdentifier: AppCompatibility.healthSyncPrefix + workout.id.uuidString,
+      HKMetadataKeySyncIdentifier: AppIdentifiers.healthSyncPrefix + workout.id.uuidString,
       HKMetadataKeySyncVersion: 1,
       HKMetadataKeyWorkoutBrandName: "FitLife",
     ])

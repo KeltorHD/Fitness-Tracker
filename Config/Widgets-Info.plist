@@ -26,7 +26,7 @@
 		<string>com.apple.widgetkit-extension</string>
 	</dict>
 	<key>FitLifeAppGroup</key>
-	<string>$(FITNESS_TRACKER_APP_GROUP)</string>
+	<string>$(FITLIFE_APP_GROUP)</string>
 	<key>CFBundleLocalizations</key>
 	<array>
 		<string>ru</string>

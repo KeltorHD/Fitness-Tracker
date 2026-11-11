@@ -1,13 +1,9 @@
 import Foundation
 
-/// The .json and .fitnesstracker extensions share this versioned, UTF-8 JSON payload.
-/// Wire identifiers and extensions stay stable when the displayed product name changes.
+/// The .json and .fitlife extensions share the current FitLife UTF-8 JSON payload.
 public struct WorkoutArchive: Codable, Equatable, Sendable {
-  public static let formatIdentifier = "com.fitnesstracker.archive"
-  /// Read-only compatibility with archives created before the product rename.
-  public static let legacyFormatIdentifier = "com.fitsession.archive"
-  public static let fileExtension = "fitnesstracker"
-  public static let legacyFileExtension = "fitsession"
+  public static let formatIdentifier = "com.fitlife.archive"
+  public static let fileExtension = "fitlife"
   public static let currentVersion = 4
   public let format: String
   public let version: Int
@@ -28,23 +24,6 @@ public struct WorkoutArchive: Codable, Equatable, Sendable {
     self.bodyWeights = bodyWeights
   }
 
-  private enum CodingKeys: String, CodingKey {
-    case format, version, exportedAt, workouts, templates, bodyWeights
-  }
-  public init(from decoder: any Decoder) throws {
-    let values = try decoder.container(keyedBy: CodingKeys.self)
-    format = try values.decode(String.self, forKey: .format)
-    version = try values.decode(Int.self, forKey: .version)
-    exportedAt = try values.decode(Date.self, forKey: .exportedAt)
-    workouts = try values.decode([Workout].self, forKey: .workouts)
-    templates = try values.decode([WorkoutTemplate].self, forKey: .templates)
-    // Explicit v1 migration: these archives did not contain independent weigh-ins.
-    if version >= 2 {
-      bodyWeights = try values.decode([BodyWeightEntry].self, forKey: .bodyWeights)
-    } else {
-      bodyWeights = try values.decodeIfPresent([BodyWeightEntry].self, forKey: .bodyWeights) ?? []
-    }
-  }
 }
 
 public enum WorkoutArchiveError: Error, Equatable, LocalizedError, Sendable {
@@ -70,12 +49,9 @@ public enum WorkoutArchiveCodec {
     try validate(archive)
     let encoder = JSONEncoder()
     encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
-    // Numeric Unix seconds preserve subsecond pause intervals, unlike the old ISO-8601 export.
+    // Numeric Unix seconds preserve subsecond pause intervals.
     encoder.dateEncodingStrategy = .secondsSince1970
-    let current = WorkoutArchive(
-      workouts: archive.workouts, templates: archive.templates, bodyWeights: archive.bodyWeights,
-      exportedAt: archive.exportedAt)
-    let data = try encoder.encode(current)
+    let data = try encoder.encode(archive)
     guard data.count <= maximumBytes else { throw WorkoutArchiveError.tooLarge }
     return data
   }
@@ -83,36 +59,17 @@ public enum WorkoutArchiveCodec {
   public static func decode(_ data: Data) throws -> WorkoutArchive {
     guard data.count <= maximumBytes else { throw WorkoutArchiveError.tooLarge }
     do {
-      guard let object = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+      guard let object = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+        object["format"] as? String == WorkoutArchive.formatIdentifier
+      else {
         throw WorkoutArchiveError.invalidFile
       }
-      let archive: WorkoutArchive
-      if object["format"] != nil || object["version"] != nil || object["workouts"] != nil {
-        guard let format = object["format"] as? String,
-          [WorkoutArchive.formatIdentifier, WorkoutArchive.legacyFormatIdentifier].contains(format)
-        else {
-          throw WorkoutArchiveError.invalidFile
-        }
-        guard let version = object["version"] as? Int,
-          (1...WorkoutArchive.currentVersion).contains(version)
-        else {
-          throw WorkoutArchiveError.unsupportedVersion
-        }
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .secondsSince1970
-        let decoded = try decoder.decode(WorkoutArchive.self, from: data)
-        try validate(decoded)
-        archive = WorkoutArchive(
-          workouts: decoded.workouts, templates: decoded.templates,
-          bodyWeights: decoded.bodyWeights,
-          exportedAt: decoded.exportedAt)
-      } else {
-        // Compatibility with WorkoutDocument's original single-workout JSON export.
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
-        let workout = try decoder.decode(Workout.self, from: data)
-        archive = WorkoutArchive(workouts: [workout], templates: [], exportedAt: workout.startedAt)
+      guard object["version"] as? Int == WorkoutArchive.currentVersion else {
+        throw WorkoutArchiveError.unsupportedVersion
       }
+      let decoder = JSONDecoder()
+      decoder.dateDecodingStrategy = .secondsSince1970
+      let archive = try decoder.decode(WorkoutArchive.self, from: data)
       try validate(archive)
       return archive
     } catch let error as WorkoutArchiveError {
@@ -124,21 +81,11 @@ public enum WorkoutArchiveCodec {
   }
 
   public static func validate(_ archive: WorkoutArchive) throws {
-    guard
-      [WorkoutArchive.formatIdentifier, WorkoutArchive.legacyFormatIdentifier].contains(
-        archive.format)
-    else {
+    guard archive.format == WorkoutArchive.formatIdentifier else {
       throw WorkoutArchiveError.invalidFile
     }
-    guard (1...WorkoutArchive.currentVersion).contains(archive.version) else {
+    guard archive.version == WorkoutArchive.currentVersion else {
       throw WorkoutArchiveError.unsupportedVersion
-    }
-    if archive.version < 4 {
-      let hasDrops = archive.workouts.contains {
-        $0.exercises.contains { $0.sets.contains(where: \.isDropSet) }
-      }
-      let hasPlans = archive.templates.contains { $0.exercises.contains { $0.plannedSets != nil } }
-      guard !hasDrops && !hasPlans else { throw WorkoutArchiveError.invalidFile }
     }
     guard archive.exportedAt.timeIntervalSince1970.isFinite else {
       throw WorkoutArchiveError.invalidFile

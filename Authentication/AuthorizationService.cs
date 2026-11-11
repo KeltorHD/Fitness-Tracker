@@ -18,7 +18,7 @@ public sealed class AuthorizationService(UserManager<ApplicationUser> users,
         ?? throw new InvalidOperationException("An OAuth HTTP context is required.");
 
     /// <summary>Версия учётных данных только в защищённых code/refresh payloads, без публикации в JWT.</summary>
-    private const string SECURITY_STAMP_CLAIM = "fitnesstracker:security_stamp";
+    private const string SECURITY_STAMP_CLAIM = "fitlife:security_stamp";
 
     /// <summary>Продолжает PKCE-вход либо требует аутентификацию разрешённого пользователя.</summary>
     public async Task<OAuthDecision> AuthorizeAsync(CancellationToken cancellationToken)

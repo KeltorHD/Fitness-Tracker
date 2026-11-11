@@ -78,7 +78,7 @@ private struct ArchiveFileStub: ArchiveFileHandling {
         ).summary
       },
       commit: { try repository.importArchive($0) })
-    model.openFile(URL(fileURLWithPath: "/fixture.fitnesstracker"))
+    model.openFile(URL(fileURLWithPath: "/fixture.fitlife"))
     await model.load(try XCTUnwrap(model.request))
     XCTAssertEqual(model.preview?.summary.addedWorkouts, 1)
     XCTAssertTrue(try repository.workouts().isEmpty)
@@ -184,7 +184,7 @@ private struct ArchiveFileStub: ArchiveFileHandling {
     let oldRequest = try XCTUnwrap(model.request)
     let first = Task { await model.load(oldRequest) }
     await files.waitForRead(count: 1)
-    model.selectFile(URL(fileURLWithPath: "/new.fitnesstracker"))
+    model.selectFile(URL(fileURLWithPath: "/new.fitlife"))
     let newRequest = try XCTUnwrap(model.request)
     let second = Task { await model.load(newRequest) }
     await files.waitForRead(count: 2)
@@ -195,7 +195,7 @@ private struct ArchiveFileStub: ArchiveFileHandling {
     files.requests[1].resume(returning: archive)
     await second.value
     XCTAssertFalse(model.isLoading)
-    XCTAssertEqual(model.preview?.fileName, "new.fitnesstracker")
+    XCTAssertEqual(model.preview?.fileName, "new.fitlife")
   }
 
   func testReadCancellationDoesNotShowAnErrorOrPreview() async throws {
@@ -238,7 +238,7 @@ private struct ArchiveFileStub: ArchiveFileHandling {
     XCTAssertEqual(model.exportDocument?.archive.workouts, archive.workouts)
     XCTAssertTrue(try XCTUnwrap(model.exportDocument).archive.templates.isEmpty)
     XCTAssertEqual(model.format, .json)
-    XCTAssertEqual(UTType.fitLife.preferredFilenameExtension, "fitnesstracker")
+    XCTAssertEqual(UTType.fitLife.preferredFilenameExtension, "fitlife")
     XCTAssertTrue(UTType.fitLife.conforms(to: .json))
   }
 
@@ -254,20 +254,20 @@ private struct ArchiveFileStub: ArchiveFileHandling {
     let archive = makeArchive()
     let data = try await files.encode(archive)
     for (index, suffix) in [
-      "json", "JSON", "fitnesstracker", "FITNESSTRACKER", "fitsession", "FITSESSION",
+      "json", "JSON", "fitlife", "FITLIFE",
     ].enumerated() {
       let url = directory.appendingPathComponent("fixture-\(index).\(suffix)")
       try data.write(to: url)
       let restored = try await files.read(url)
       XCTAssertEqual(restored.workouts, archive.workouts)
     }
-    let oversized = directory.appendingPathComponent("large.fitnesstracker")
+    let oversized = directory.appendingPathComponent("large.fitlife")
     try Data(repeating: 0, count: WorkoutArchiveCodec.maximumBytes + 1).write(to: oversized)
     do {
       _ = try await files.read(oversized)
       XCTFail("Oversized archive was accepted")
     } catch { XCTAssertEqual(error as? WorkoutArchiveError, .tooLarge) }
-    for suffix in ["txt", "FITNESS_TRACKER"] {
+    for suffix in ["txt", "fitnesstracker", "FITNESSTRACKER", "fitsession", "FITSESSION"] {
       let unsupported = directory.appendingPathComponent("unsupported.\(suffix)")
       try data.write(to: unsupported)
       do {

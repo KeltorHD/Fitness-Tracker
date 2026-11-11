@@ -7,7 +7,7 @@ export DOTNET_NOLOGO=1
 dotnet restore FitLife.Server.sln --locked-mode
 dotnet build FitLife.Server.sln --no-restore --disable-build-servers -m:1
 test_flags=(--filter 'Category!=PostgreSQL')
-if [[ -n "${FITNESS_TRACKER_TEST_POSTGRES:-}" ]]; then test_flags=(); fi
+if [[ -n "${FITLIFE_TEST_POSTGRES:-}" ]]; then test_flags=(); fi
 dotnet test FitLife.Server.sln --no-build --no-restore -m:1 "${test_flags[@]}"
 dotnet format FitLife.Server.sln --verify-no-changes --no-restore
 bash -n scripts/setup-server.sh scripts/check-server.sh

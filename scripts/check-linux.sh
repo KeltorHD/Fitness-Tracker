@@ -37,7 +37,7 @@ bin_path="$("$swift_bin" build "${flags[@]}" --show-bin-path)"
   Apple/Services/HeartRateBluetooth.swift Apple/Services/LiveHeartRate.swift Apple/Services/ServiceError.swift \
   Apple/Features/TrackerViewModel.swift Apple/Features/WorkoutHeartRateViewModel.swift \
   Apple/Features/HealthChartsViewModel.swift \
-  Apple/Features/TrackerDeviceProfile.swift Apple/Shared/AppCompatibility.swift \
+  Apple/Features/TrackerDeviceProfile.swift Apple/Shared/AppIdentifiers.swift \
   Apple/Services/ServerContracts.swift Apple/Services/ServerHTTPClient.swift \
   Apple/Services/AccountSession.swift Apple/Services/RemoteBackupClient.swift \
   Apple/Features/AccountBackupViewModel.swift
@@ -77,7 +77,7 @@ echo 'Portable presentation/data subset: Swift 6 type check passed (no Apple SDK
   Apple/Services/LocalHeartRateRepository.swift Apple/Services/HeartRateBluetooth.swift Apple/Services/LiveHeartRate.swift \
   Apple/Services/ServiceError.swift Apple/Features/TrackerViewModel.swift \
   Apple/Features/WorkoutHeartRateViewModel.swift Apple/Features/TrackerDeviceProfile.swift \
-  Apple/Shared/AppCompatibility.swift \
+  Apple/Shared/AppIdentifiers.swift \
   Tests/PortableTrackerChecks/main.swift \
   -o "$bin_path/portable-tracker-checks"
 "$bin_path/portable-tracker-checks"
@@ -86,7 +86,7 @@ echo 'Portable presentation/data subset: Swift 6 type check passed (no Apple SDK
   "$bin_path"/FitLifeCore.build/*.swift.o \
   Apple/Services/LocalHeartRateRepository.swift Apple/Services/HeartRateBluetooth.swift Apple/Services/LiveHeartRate.swift \
   Apple/Services/ServiceError.swift Apple/Features/TrackerViewModel.swift \
-  Apple/Features/TrackerDeviceProfile.swift Apple/Shared/AppCompatibility.swift \
+  Apple/Features/TrackerDeviceProfile.swift Apple/Shared/AppIdentifiers.swift \
   Tests/PortableAirPodsChecks/main.swift -o "$bin_path/portable-airpods-checks"
 "$bin_path/portable-airpods-checks"
 "$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \

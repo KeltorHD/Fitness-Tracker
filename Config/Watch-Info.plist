@@ -23,7 +23,7 @@
 	<key>WKApplication</key>
 	<true/>
 	<key>WKCompanionAppBundleIdentifier</key>
-	<string>$(FITNESS_TRACKER_BUNDLE_ID)</string>
+	<string>$(FITLIFE_BUNDLE_ID)</string>
 	<key>WKRunsIndependentlyOfCompanionApp</key>
 	<true/>
 	<key>CFBundleLocalizations</key>

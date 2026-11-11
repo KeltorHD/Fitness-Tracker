@@ -3,16 +3,15 @@ import Testing
 
 @testable import FitLifeCore
 
-@Test func legacyTemplatesDecodeWithoutMuscleGroups() throws {
-  let original = ExerciseCatalog.starterTemplates[0]
-  let encoded = try JSONEncoder().encode(original)
-  var object = try #require(JSONSerialization.jsonObject(with: encoded) as? [String: Any])
+@Test func templatesRequireCurrentMuscleGroupMetadata() throws {
+  let template = ExerciseCatalog.starterTemplates[0]
+  var object = try #require(
+    JSONSerialization.jsonObject(with: JSONEncoder().encode(template)) as? [String: Any])
   object.removeValue(forKey: "muscleGroups")
-  let legacyData = try JSONSerialization.data(withJSONObject: object)
-  let restored = try JSONDecoder().decode(WorkoutTemplate.self, from: legacyData)
-  #expect(restored == original)
-  #expect(restored.muscleGroups.isEmpty)
-  #expect(try restored.start().exercises.count == original.exercises.count)
+  #expect(throws: DecodingError.self) {
+    try JSONDecoder().decode(
+      WorkoutTemplate.self, from: JSONSerialization.data(withJSONObject: object))
+  }
 }
 
 @Test @MainActor func templateMuscleGroupsSurviveArchiveAndRepositoryRoundTrip() throws {

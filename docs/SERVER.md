@@ -39,7 +39,7 @@ MVC mapping сохраняет native principal OpenIddict, scheme и protocol e
 
 Приложение открывает системную `WebAuthenticationSession` из AuthenticationServices. Auth Server предлагает email/пароль, passkey и настроенные Google/Apple/Яндекс. OpenIddict проверяет внешние OAuth/OIDC-потоки, state, nonce и ответ провайдера. Полная сборка получает код на `https://auth.example.com/ios/oauth/callback`, Personal Team — на отдельно настроенную reverse-DNS URL-схему. Каждый клиент проверяет свой точный callback, state, issuer и отсутствие повторяющихся параметров, обменивает код с PKCE S256. Client secret в iOS отсутствует. Прежние generic schemes `fitnesstracker`/`fitsession` сохраняются только для совместимости и не принимаются как OAuth callbacks.
 
-HTTPS callback использует `.https(host:path:)` и `webcredentials` Associated Domains. Это требует настоящих App ID Prefix и Bundle ID, соответствующей capability/provisioning и файла AASA. До их настройки HTTPS-вход на iPhone не подтверждён. Для бесплатной Personal Team предусмотрен отдельный public client `fitnesstracker-ios-personal` с `.customScheme`, без Associated Domains. HTTPS client `fitnesstracker-ios` не принимает его redirect URI. [HTTPS callback Apple](https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession/callback/https(host:path:)), [custom scheme Apple](https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession/callback/customscheme%28_%3A%29).
+HTTPS callback использует `.https(host:path:)` и `webcredentials` Associated Domains. Это требует настоящих App ID Prefix и Bundle ID, соответствующей capability/provisioning и файла AASA. До их настройки HTTPS-вход на iPhone не подтверждён. Для бесплатной Personal Team предусмотрен отдельный public client `fitlife-ios-personal` с `.customScheme`, без Associated Domains. HTTPS client `fitlife-ios` не принимает его redirect URI. [HTTPS callback Apple](https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession/callback/https(host:path:)), [custom scheme Apple](https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession/callback/customscheme%28_%3A%29).
 
 iOS использует OAuth access/refresh tokens; профиль получает из защищённого `/v1/account`. ID token не используется как источник identity. Access token действует 10 минут, refresh — до 30 дней с ротацией. Повтор использованного refresh token отвергается и отзывает authorization family; окно повторного использования равно нулю. Параллельные iOS-запросы используют одну операцию обновления; новые токены сначала сохраняются в Keychain. При `invalid_grant` требуется новый вход. Потеря ответа token endpoint может потребовать повторного входа — автоматического повторного обмена использованного refresh нет.
 
@@ -55,7 +55,7 @@ Keychain item изолирован по bundle ID и issuer, не синхрон
 
 ### Проверка отзыва в Backend
 
-Сначала сохраняются прежние проверки RS256/issuer/audience/`at+jwt`/срока, затем права и per-user rate limit. До чтения body архива или вызова хранилища фильтр всей группы `/v1/backups` отправляет стандартный RFC 7662 POST на `https://AUTH_DOMAIN/connect/introspect`. JWT и отдельный `client_secret` передаются только в form body, не в URL. Backend зарегистрирован как confidential client `fitnesstracker-api` с единственным разрешением introspection; iOS остаётся public client без серверного секрета. Backend не читает БД Auth.
+Сначала сохраняются прежние проверки RS256/issuer/audience/`at+jwt`/срока, затем права и per-user rate limit. До чтения body архива или вызова хранилища фильтр всей группы `/v1/backups` отправляет стандартный RFC 7662 POST на `https://AUTH_DOMAIN/connect/introspect`. JWT и отдельный `client_secret` передаются только в form body, не в URL. Backend зарегистрирован как confidential client `fitlife-api` с единственным разрешением introspection; iOS остаётся public client без серверного секрета. Backend не читает БД Auth.
 
 Положительного кеша статуса, автоматического повтора и redirects нет; тайм-аут — 5 секунд, ответ ограничен 16 KiB и требует JSON boolean `active`. `active=false` даёт 401; отказ Auth, неверный service secret, rate limit, некорректный ответ и ошибка discovery/JWKS дают 503 с `code=authentication_unavailable`. Ключи JWKS могут кешироваться независимо от статуса сессии. После восстановления Auth тот же действующий JWT снова работает; существующий iOS HTTP-клиент не очищает credentials при 503. `/health` остаётся liveness и не требует Auth.
 
@@ -87,14 +87,14 @@ Keychain item изолирован по bundle ID и issuer, не синхрон
 | Auth GET | `/v1/account` | `{id,name,createdAt,logins}`; bearer token с UUID пользователя |
 | Auth DELETE | `/v1/account` | Очистка копий, отзыв токенов и удаление Identity-пользователя |
 | Backend GET | `/v1/backups` | Массив `{id,createdAt,archiveVersion,size,sha256}` без содержимого копий |
-| Backend PUT | `/v1/backups/{uuid}` | UTF-8 архив в body; `application/vnd.fitnesstracker+json` |
+| Backend PUT | `/v1/backups/{uuid}` | UTF-8 архив в body; `application/vnd.fitlife+json` |
 | Backend GET | `/v1/backups/{uuid}` | Исходные байты архива, ETag SHA-256 |
 | Backend DELETE | `/v1/backups/{uuid}` | Удаление одной собственной копии |
 | Backend DELETE | `/internal/users/{uuid}/backups` | Только внутренний service credential; хостовый Nginx возвращает 404 |
 | Оба GET | `/health` | Liveness процесса; не проверка подключения к БД |
 | Оба GET, Development | `/openapi/v1.json` | OpenAPI-документ |
 
-Для защищённых API нужен `Authorization: Bearer <access_token>`. Backend проверяет RS256, тип `at+jwt`, issuer, audience `fitnesstracker-api`, срок, допустимый `sub` и актуальный статус сессии через Auth. Разрешения на операции определяет сам Backend, без проверки прикладных OAuth scopes. Пользователь не передаёт owner ID в публичном API; все выборки ограничены subject токена. Чужая или отсутствующая копия возвращает одинаковый 404. При невозможности проверить статус возвращается 503, доступ к копиям закрыт. При обновлении развёртывайте изменённый iOS-клиент вместе с Auth: прежний запрос входа со scope `backups` новая регистрация клиента не принимает. Уже выданные access tokens могут использоваться до истечения срока/отзыва; scope не расширяет их права.
+Для защищённых API нужен `Authorization: Bearer <access_token>`. Backend проверяет RS256, тип `at+jwt`, issuer, audience `fitlife-api`, срок, допустимый `sub` и актуальный статус сессии через Auth. Разрешения на операции определяет сам Backend, без проверки прикладных OAuth scopes. Пользователь не передаёт owner ID в публичном API; все выборки ограничены subject токена. Чужая или отсутствующая копия возвращает одинаковый 404. При невозможности проверить статус возвращается 503, доступ к копиям закрыт. При обновлении развёртывайте изменённый iOS-клиент вместе с Auth: прежний запрос входа со scope `backups` новая регистрация клиента не принимает. Уже выданные access tokens могут использоваться до истечения срока/отзыва; scope не расширяет их права.
 
 PUT создаёт неизменяемую копию: 201 при создании, 200 при повторе тех же байтов и UUID, 409 при попытке заменить содержимое или превышении квоты. iOS сохраняет UUID и байты неудачной загрузки до повтора, чтобы потеря ответа не создавала дубликаты. Лимит — 10 копий до 30 MiB каждая (31 457 280 байт), то есть до 300 MiB архивов на аккаунт без учёта метаданных и служебных данных PostgreSQL; старые копии не удаляются автоматически. Некорректный envelope — 400, неподдерживаемый Content-Type — 415, слишком большой body — 413, ограничение частоты — 429. PostgreSQL advisory transaction lock сериализует проверку квоты и удаление аккаунта для одного UUID. Это квота одного аккаунта: она не ограничивает суммарное хранилище при открытой регистрации новых аккаунтов.
 
@@ -148,9 +148,9 @@ AUTH_DB_DATA_PATH=/srv/fitlife/auth-db
 BACKEND_DB_DATA_PATH=/srv/fitlife/backend-db
 ```
 
-Для существующей установки сохраняйте настроенные пути, даже если в них прежнее название продукта: новые примеры не требуют переноса данных.
+Пути в `.env` должны указывать на подготовленные хранилища текущей конфигурации. Перенос существующих данных выполняется отдельно от изменения настроек.
 
-Относительные пути считаются от каталога `compose.yml`; абсолютные могут указывать на другой диск. Пути с пробелами в `.env` заключайте в кавычки. Docker создаёт отсутствующие каталоги БД и Data Protection keys. Для PostgreSQL 18 монтируется родитель `/var/lib/postgresql`; фактический `PGDATA` — `18/docker` внутри выбранной папки. Базы создаются стандартным entrypoint PostgreSQL при первом запуске пустого хранилища: `fitnesstracker_auth` и `fitnesstracker_backend`, с отдельными пользователями того же имени. Backend подключается к `backend-db`; при необходимости логические имя БД и пользователь переопределяются через `BACKEND_DB_NAME` и `BACKEND_DB_USER`. Эти параметры не переименовывают уже существующую БД.
+Относительные пути считаются от каталога `compose.yml`; абсолютные могут указывать на другой диск. Пути с пробелами в `.env` заключайте в кавычки. Docker создаёт отсутствующие каталоги БД и Data Protection keys. Для PostgreSQL 18 монтируется родитель `/var/lib/postgresql`; фактический `PGDATA` — `18/docker` внутри выбранной папки. Базы создаются стандартным entrypoint PostgreSQL при первом запуске пустого хранилища: `authentication` и `backend`, с отдельными пользователями того же имени. Имена БД и пользователей задаются через `AUTH_DB_NAME`, `AUTH_DB_USER`, `BACKEND_DB_NAME` и `BACKEND_DB_USER`. Backend подключается к `backend-db`. Эти параметры не переименовывают уже существующую БД.
 
 Каждый storage-init запускается без сети, с read-only root filesystem и только capabilities `CHOWN`/`FOWNER`. Он назначает своему каталогу keys UID/GID runtime-образа .NET (`APP_UID`) и mode `0700`, затем завершается. Содержимое ключей не меняется. Приложение ожидает успешного завершения своего init и работает под непривилегированным UID. Существующие каталоги сертификатов требуются заранее: `setup-server.sh` создаёт их в стандартных местах; при смене путей сначала перенесите прежние PFX/P8, сохраняя права. Отсутствующий путь сертификатов вызывает ошибку запуска. Backend в Production требует постоянный key path и сертификат шифрования; перехода на временное хранилище нет.
 
@@ -174,32 +174,11 @@ Npgsql 10 по умолчанию пробует GSSAPI/Kerberos перед об
 
 Проверка исправления на Linux: полный `check-server.sh` прошёл, все 168 серверных тестов и пять Python-тестов сети успешны. PostgreSQL-сценарии дополнены проверкой отсутствия SQL CommandError при новом startup, отсутствия открытого master key в XML и успешной расшифровки защищённого значения после рестарта Backend с теми же PFX/key ring. Дополнительно собран runtime-образ с тем же native install, что в Dockerfile, на локальной базе .NET 10.0.0. Настоящие Auth и Backend запущены в Production с готовыми Debug-сборками, PostgreSQL 16.6 и временными сертификатами/папками: оба health 200, GSSAPI доступна, перечисленные ошибки в логах отсутствуют, key rings зашифрованы и переживают перезапуск. Это проверка runtime; полный production Compose build здесь не выполнялся. Изолированный setup/upgrade проверил PFX с custom path, права при umask 077, повторный запуск без перезаписи, отказ с неверным паролем и сохранность Auth/.env без вывода секретов. Рабочий сервер не менялся.
 
-### Переход с прежних volumes и имён Backend
+### Текущие имена баз
 
-Для существующей установки сначала остановите приложения и PostgreSQL, сохраните дампы обеих БД, `.env`, Data Protection keys и token certificates. Менять путь на пустую папку без переноса данных нельзя: PostgreSQL создаст новый кластер, а не перенесёт прежний. Само обновление Compose не копирует данные и не переименовывает логическую БД.
+Authentication использует БД и пользователя `authentication`, Backend — отдельные БД и пользователя `backend`. Имена не содержат название продукта и согласованы в Compose, `.env.example` и .NET defaults. Их можно задать через `AUTH_DB_NAME`, `AUTH_DB_USER`, `BACKEND_DB_NAME`, `BACKEND_DB_USER`.
 
-Если использовались bind mounts, задайте в новых `AUTH_DB_DATA_PATH`/`BACKEND_DB_DATA_PATH` именно прежние пути. Если использовались именованные volumes, скопируйте их содержимое в выбранные папки при остановленных БД, сохранив UID/GID, права и всю структуру, включая `18/docker`. Каталог Data Protection keys также переносится целиком с прежними файлами и владельцем. Физический перенос допустим только между одинаковыми major-версиями PostgreSQL; между версиями используйте dump/restore. Старые volumes сохраняйте до проверки перенесённых данных.
-
-В существующей `.env` переименуйте `BACKUP_DB_PASSWORD` в `BACKEND_DB_PASSWORD`, сохранив пароль. Если прежняя логическая БД/пользователь назывались `fitnesstracker_backups`, укажите их как параметры совместимости:
-
-```dotenv
-BACKEND_DB_NAME=fitnesstracker_backups
-BACKEND_DB_USER=fitnesstracker_backups
-```
-
-Новые установки по умолчанию используют `fitnesstracker_backend`. Для существующей БД эти параметры сохраняют доступ к прежним архивам без изменения их содержимого. Из старого storage override перенесите пути в `.env`; если `COMPOSE_FILE` подключал только этот override, удалите его настройку. Если override нужен и для других изменений, переименуйте в нём сервис `backup-db` в `backend-db` и согласуйте mounts с `.env`. После переноса выполните `python3 scripts/setup-server-network.py`, `docker compose config --quiet` и `docker compose up -d --build`; проверьте аккаунт и список прежних копий. Рабочие данные агент в этой задаче не переносит и не удаляет.
-
-### Обновление существующего сервера для introspection
-
-Если прежняя версия ещё не использовала introspection, добавьте в существующую `.env` `BACKEND_INTROSPECTION_SECRET`, сгенерированный `openssl rand -hex 32`. Сохраните прежние пароли, PFX и Data Protection keys. Подготовьте автоматическую сеть, затем обновите свой Nginx по сгенерированному образцу ниже: доступ к `/connect/introspect` разрешён только localhost и найденной Compose subnet.
-
-```bash
-python3 scripts/setup-server-network.py
-docker compose config --quiet
-docker compose up -d --build
-```
-
-Обычный запуск Auth теперь применяет включённые миграции, в том числе AddPasskeys, и создаёт/обновляет регистрации clients. При смене introspection secret обновите согласованно Auth и Backend. Пока секреты расходятся, Backend закрывает доступ с 503. `--configure-clients` сохранён как необязательный служебный режим: он обновляет регистрации в существующих таблицах и завершает процесс без миграций и HTTP.
+Для развёртывания подготовьте текущие БД и учётные записи. Изменение конфигурации не выполняет переименование PostgreSQL-БД и не переносит данные автоматически. Существующие папки, БД и ключи не удаляются. Ранее выпущенные cookies/токены и прежние Data Protection application names не используются; нужен новый вход. Обновите сервисы, `.env` и настройки iOS согласованно.
 
 ### Nginx на хосте
 
@@ -222,7 +201,7 @@ sudo systemctl reload nginx
 
 `python3 scripts/setup-server-network.py` создаёт bridge-сеть без заданного IPAM-диапазона: Docker сам выбирает свободную подсеть и gateway. Скрипт считывает их через `docker network inspect`, обновляет только `SERVER_NETWORK_NAME`, `SERVER_NETWORK_SUBNET`, `SERVER_NETWORK_GATEWAY` в существующей `.env` и готовит `.local/nginx.generated.conf`. Пароли, `COMPOSE_FILE`, настройки bind mounts, PFX и volumes сохраняются. Чтение Compose учитывает `.env`, в том числе `COMPOSE_FILE=compose.yml:.local/compose.storage.yml` на Linux. Скрипт не выводит секреты, не читает `.env` как shell-код и не меняет системный Nginx.
 
-По умолчанию сеть называется `fitness-tracker-server`; для отдельного экземпляра задайте другое `SERVER_NETWORK_NAME`. Повторная подготовка использует ту же сеть, а не выбирает новый диапазон. Чужая сеть с таким именем отклоняется. В Compose она объявлена `external`, поэтому обычный `docker compose down` её сохраняет. После переноса на другой сервер, удаления этой сети или изменения доменов/портов повторите подготовку и перенесите обновления в Nginx. При переходе со старой фиксированной сети обновляйте все сервисы через `docker compose up -d --build`, предварительно подготовив постоянные папки по разделу выше. Если свободные address pools Docker исчерпаны, скрипт завершится ошибкой, сохранив прежнюю конфигурацию; это требует настройки пула самого Docker, а не удаления БД.
+По умолчанию сеть называется `fitlife-server`; для отдельного экземпляра задайте другое `SERVER_NETWORK_NAME`. Повторная подготовка использует ту же сеть, а не выбирает новый диапазон. Чужая сеть с таким именем отклоняется. В Compose она объявлена `external`, поэтому обычный `docker compose down` её сохраняет. После переноса на другой сервер, удаления этой сети или изменения доменов/портов повторите подготовку и перенесите обновления в Nginx. При переходе со старой фиксированной сети обновляйте все сервисы через `docker compose up -d --build`, предварительно подготовив постоянные папки по разделу выше. Если свободные address pools Docker исчерпаны, скрипт завершится ошибкой, сохранив прежнюю конфигурацию; это требует настройки пула самого Docker, а не удаления БД.
 
 Найденный gateway — адрес хоста внутри bridge и ожидаемый TCP peer у запросов от хостового Nginx через опубликованные порты. Только этот дополнительный адрес передаётся обоим приложениям как `ReverseProxy:Address`; проверка доверенного proxy сохраняется. Экспортированные устаревшие `SERVER_NETWORK_*` перекрывают `.env`, поэтому скрипт попросит выполнить соответствующий `unset`. Этот способ рассчитан на обычный Docker Engine bridge в Linux; для rootless Docker или другого сетевого режима необходимо проверить фактический peer, сохраняя loopback-привязку портов.
 
@@ -291,12 +270,12 @@ Apple, Google и Яндекс всегда видны на странице вх
 Добавьте в существующий `Config/Local.xcconfig`, сохранив прежние Bundle ID/Team:
 
 ```xcconfig
-FITNESS_TRACKER_AUTH_URL = https:/$()/auth.example.com/
-FITNESS_TRACKER_BACKEND_URL = https:/$()/api.example.com/
-FITNESS_TRACKER_AUTH_DOMAIN = auth.example.com
+FITLIFE_AUTH_URL = https:/$()/auth.example.com/
+FITLIFE_BACKEND_URL = https:/$()/api.example.com/
+FITLIFE_AUTH_DOMAIN = auth.example.com
 ```
 
-`$()` нужен, чтобы xcconfig не считал `//` началом комментария. `FITNESS_TRACKER_AUTH_URL` и `FITNESS_TRACKER_BACKEND_URL` — корневые HTTPS URL без credentials, query и fragment; `FITNESS_TRACKER_AUTH_DOMAIN` — только host аутентификации. Выполните `xcodegen generate`, затем сборку/тесты iOS 26 SDK по MAC_BUILD_GUIDE.md. Серверный экран доступен в «Настройки → Аккаунт и копии». Без конфигурации или при ошибке её чтения локальное приложение продолжает работать. В демо-профиле серверные действия недоступны. Вход/выход не меняет локальную историю и не включает фоновые uploads.
+`$()` нужен, чтобы xcconfig не считал `//` началом комментария. `FITLIFE_AUTH_URL` и `FITLIFE_BACKEND_URL` — корневые HTTPS URL без credentials, query и fragment; `FITLIFE_AUTH_DOMAIN` — только host аутентификации. Выполните `xcodegen generate`, затем сборку/тесты iOS 26 SDK по MAC_BUILD_GUIDE.md. Серверный экран доступен в «Настройки → Аккаунт и копии». Без конфигурации или при ошибке её чтения локальное приложение продолжает работать. В демо-профиле серверные действия недоступны. Вход/выход не меняет локальную историю и не включает фоновые uploads.
 
 Перед публикацией актуализируйте App Store privacy labels и политику конфиденциальности для добровольной передачи Fitness/Health и данных аккаунта; manifest отражает связанные данные без tracking по [категориям Apple](https://developer.apple.com/documentation/bundleresources/app-privacy-configuration/nsprivacycollecteddatatypes/nsprivacycollecteddatatype).
 
@@ -439,15 +418,15 @@ docker compose up -d --build authentication
 IOS_PERSONAL_CALLBACK_SCHEME=com.example.fitlife
 ```
 
-После обновления кода выполните `docker compose up -d --build authentication`. Auth зарегистрирует отдельный public client `fitnesstracker-ios-personal` с единственным redirect `com.example.fitlife:/ios/oauth/callback`. Регистрация идемпотентна; отдельный `--configure-clients` не нужен. Изменений EF-модели и новых миграций нет. `IOS_APP_IDENTIFIER` для этого режима можно оставить пустым; AASA и Associated Domains нужны только HTTPS-сборке. Пустой `IOS_PERSONAL_CALLBACK_SCHEME` отключает Personal client и удаляет его прежние OAuth authorizations/tokens при следующем обычном startup; HTTPS client остаётся доступным. Пробелы и некорректная схема считаются ошибкой конфигурации.
+После обновления кода выполните `docker compose up -d --build authentication`. Auth зарегистрирует отдельный public client `fitlife-ios-personal` с единственным redirect `com.example.fitlife:/ios/oauth/callback`. Регистрация идемпотентна; отдельный `--configure-clients` не нужен. Изменений EF-модели и новых миграций нет. `IOS_APP_IDENTIFIER` для этого режима можно оставить пустым; AASA и Associated Domains нужны только HTTPS-сборке. Пустой `IOS_PERSONAL_CALLBACK_SCHEME` отключает Personal client и удаляет его прежние OAuth authorizations/tokens при следующем обычном startup; HTTPS client остаётся доступным. Пробелы и некорректная схема считаются ошибкой конфигурации.
 
 На Mac добавьте в существующий `Config/Local.xcconfig`, сохранив Team/Bundle ID и HTTPS URL серверов:
 
 ```xcconfig
-FITNESS_TRACKER_AUTH_CALLBACK_SCHEME = com.example.fitlife
+FITLIFE_AUTH_CALLBACK_SCHEME = com.example.fitlife
 ```
 
-Значение должно точно совпадать с серверным. По умолчанию схема берётся из `FITNESS_TRACKER_BUNDLE_ID`. После этого выполните `xcodegen generate`, откройте `FitLife.xcodeproj` и запустите `FitLife Personal`. Генерация обязательна после этого обновления: изменились build settings и регистрация URL-схемы в Info.plist. Параметр `FITNESS_TRACKER_AUTH_CALLBACK_MODE` выбирается схемой сборки; автоматического перехода с HTTPS на private-use URI при ошибке нет. Отмена браузера показывает нейтральное сообщение «Вход в аккаунт не завершён.», а отменённая задача закрытого экрана не публикует устаревшие ошибки.
+Значение должно точно совпадать с серверным. По умолчанию схема берётся из `FITLIFE_BUNDLE_ID`. После этого выполните `xcodegen generate`, откройте `FitLife.xcodeproj` и запустите `FitLife Personal`. Генерация обязательна после этого обновления: изменились build settings и регистрация URL-схемы в Info.plist. Параметр `FITLIFE_AUTH_CALLBACK_MODE` выбирается схемой сборки; автоматического перехода с HTTPS на private-use URI при ошибке нет. Отмена браузера показывает нейтральное сообщение «Вход в аккаунт не завершён.», а отменённая задача закрытого экрана не публикует устаревшие ошибки.
 
 Private-use URI предусмотрены [RFC 8252](https://www.rfc-editor.org/rfc/rfc8252.html#section-7.1). Они не доказывают связь приложения с доменом: другое приложение может зарегистрировать такую же схему. PKCE защищает обмен перехваченного code, но не является подтверждением подлинности приложения. Поэтому режим включается явно на сервере, имеет отдельный client ID и не расширяет разрешённые callbacks HTTPS client. Не используйте generic schemes `fitnesstracker`/`fitsession` и не передавайте токены в callback URL.
 
@@ -455,9 +434,9 @@ Private-use URI предусмотрены [RFC 8252](https://www.rfc-editor.org
 
 ## Привязка HTTPS callback к iOS
 
-В `.env` оставьте `IOS_APP_IDENTIFIER` пустым до регистрации приложения. После получения App ID укажите `AppIDPrefix.BundleID`, например формат `ABCDEFGHIJ.ru.yourcompany.fitnesstracker` (пример, не готовый идентификатор). Используйте именно App ID Prefix из Apple, который не всегда равен Team ID. Затем пересоздайте Auth container с новым env и проверьте `https://auth.example.com/.well-known/apple-app-site-association`: JSON `webcredentials.apps` должен содержать ваш настоящий App ID. До настройки endpoint отвечает 404, при неверном формате — 503; редиректа и публикации вымышленных ID нет.
+В `.env` оставьте `IOS_APP_IDENTIFIER` пустым до регистрации приложения. После получения App ID укажите `AppIDPrefix.BundleID`, например формат `ABCDEFGHIJ.ru.yourcompany.fitlife` (пример, не готовый идентификатор). Используйте именно App ID Prefix из Apple, который не всегда равен Team ID. Затем пересоздайте Auth container с новым env и проверьте `https://auth.example.com/.well-known/apple-app-site-association`: JSON `webcredentials.apps` должен содержать ваш настоящий App ID. До настройки endpoint отвечает 404, при неверном формате — 503; редиректа и публикации вымышленных ID нет.
 
-Главный target в полной схеме `FitLife` содержит `webcredentials:$(FITNESS_TRACKER_AUTH_DOMAIN)`. Пример значения — `auth.example.com`; реальный host задайте только в игнорируемом `Config/Local.xcconfig` через `FITNESS_TRACKER_AUTH_DOMAIN`, согласованно с `FITNESS_TRACKER_AUTH_URL`. В Apple Developer включите Associated Domains для App ID и обновите provisioning. Personal Team схема сохраняет прежние entitlements и использует отдельный private-use callback; HTTPS-вход проверяйте в полной схеме с настроенной capability. Bundle ID совместимости не переименовывается автоматически. В `Config/Local.xcconfig` задайте выбранные HTTPS endpoints, как в примере выше. При смене домена согласованно измените локальный `FITNESS_TRACKER_AUTH_DOMAIN`, `Auth:Issuer`, redirect URI и серверные URL. Реальные адреса не нужно записывать в tracked-файлы. Выполните `--configure-clients`, чтобы заменить прежний redirect URI в существующей Auth-БД; старые уже выданные коды могут потребовать нового входа.
+Главный target в полной схеме `FitLife` содержит `webcredentials:$(FITLIFE_AUTH_DOMAIN)`. Пример значения — `auth.example.com`; реальный host задайте только в игнорируемом `Config/Local.xcconfig` через `FITLIFE_AUTH_DOMAIN`, согласованно с `FITLIFE_AUTH_URL`. В Apple Developer включите Associated Domains для App ID и обновите provisioning. Personal Team схема сохраняет прежние entitlements и использует отдельный private-use callback; HTTPS-вход проверяйте в полной схеме с настроенной capability. Используйте текущий зарегистрированный Bundle ID FitLife и настройки FITLIFE_*; прежние aliases не читаются. В `Config/Local.xcconfig` задайте выбранные HTTPS endpoints, как в примере выше. При смене домена согласованно измените локальный `FITLIFE_AUTH_DOMAIN`, `Auth:Issuer`, redirect URI и серверные URL. Реальные адреса не нужно записывать в tracked-файлы. Выполните `--configure-clients`, чтобы заменить прежний redirect URI в существующей Auth-БД; старые уже выданные коды могут потребовать нового входа.
 
 Файл AASA и DNS/TLS должны быть доступны публично для Apple. Запись DNS-01, используемая при выдаче сертификата, сама не создаёт A/AAAA-записи сервисов: направьте оба настроенных имени на сервер. Nginx использует ваш настроенный сертификат. Возврат в приложение, browser passkey, отмена и повтор входа требуют отдельной проверки на настоящем iPhone после настройки Apple ID.
 
@@ -529,7 +508,7 @@ dotnet ef migrations has-pending-model-changes --project Backend
 
 | Категория | Исходники | Что проверяется |
 | --- | --- | --- |
-| `Unit` | `Tests/Server/BackupArchiveValidatorTests.cs` | v1–v4 и legacy format, обязательные поля, неверные JSON-типы/UTF-8, точные границы байтов и количества записей, безопасные ошибки; без БД и HTTP |
+| `Unit` | `Tests/Server/BackupArchiveValidatorTests.cs` | только com.fitlife.archive v4, отказ для прежних форматов/версий, обязательные поля, неверные JSON-типы/UTF-8, точные границы байтов и количества записей, безопасные ошибки; без БД и HTTP |
 | `Unit` | `Tests/Server/BackupCleanupTests.cs` | DELETE/service key контракт, ошибки статуса и конфигурации, передача отмены в HTTP handler без сети |
 | `Unit` | `Tests/Server/TokenIntrospectionTests.cs` | RFC 7662 POST/body, active boolean, protocol/HTTP/transport errors, ограничение ответа, отмена, отсутствие утечек секретов |
 | `Unit` | `Tests/Server/AuthenticationMappingTests.cs` | Зависимости тонких контроллеров, запрет неявного Identity entity mapping, сохранение principal/stamp/grant и OAuth error при HTTP mapping |
@@ -564,7 +543,7 @@ dotnet test FitLife.Server.sln --no-build --no-restore -m:1 --filter 'Category=H
 
 Обычный прогон не вызывает внешних OAuth-провайдеров. HTTP fixtures используют настоящий in-memory host и собственную SQLite, очищают пользовательские configuration sources, явно отключают внешние providers и внедряют фиксированное время для метаданных. Отказ/отмена SaveChanges подменяются через EF interceptor, сохраняя настоящую транзакцию и проверки результата. Сценарии и вспомогательные классы имеют XML-описания на русском языке.
 
-Для PostgreSQL задайте `FITNESS_TRACKER_TEST_POSTGRES` connection string к **одноразовому тестовому экземпляру** и запустите `check-server.sh`; он включит все 12 PostgreSQL-проверок. Только эту категорию запускают с `--filter 'Category=PostgreSQL'`. Без явной конфигурации прямой запуск категории завершается ошибкой, а не молчаливым пропуском. Fixture создаёт случайные отдельные базы с отключённым pooling и удаляет только их с отдельным cleanup deadline, включая сбой основного теста. Триггер отказа записи существует только в случайной тестовой БД сценария rollback. CI поднимает PostgreSQL 18; локально проверено на 16.6, на динамически выделенном localhost-порту. Файлы миграций для этих тестов не генерируются и не изменяются.
+Для PostgreSQL задайте `FITLIFE_TEST_POSTGRES` connection string к **одноразовому тестовому экземпляру** и запустите `check-server.sh`; он включит все 12 PostgreSQL-проверок. Только эту категорию запускают с `--filter 'Category=PostgreSQL'`. Без явной конфигурации прямой запуск категории завершается ошибкой, а не молчаливым пропуском. Fixture создаёт случайные отдельные базы с отключённым pooling и удаляет только их с отдельным cleanup deadline, включая сбой основного теста. Триггер отказа записи существует только в случайной тестовой БД сценария rollback. CI поднимает PostgreSQL 18; локально проверено на 16.6, на динамически выделенном localhost-порту. Файлы миграций для этих тестов не генерируются и не изменяются.
 
 После автоматизации развёртывания локально прошёл полный `check-server.sh`: locked restore, сборка без warnings/errors, 166 xUnit-сценариев (73 unit, 81 HTTP/Identity/SQLite, 12 PostgreSQL 16.6), `dotnet format` и пять Python-тестов скрипта сети. Отдельная проверка с настоящим Docker подтвердила автоматическое выделение свободной подсети, повторную подготовку без смены network ID, сохранение storage override и сети после `compose down`, согласованные proxy/extra_hosts и фактический HTTP peer gateway. Временный Nginx прошёл syntax/ACL/header и проверку отсутствия OAuth query в error log при 502. Production startup проверен с тестовыми PFX и БД через настоящий Main; рабочий сервер и его сертификаты не менялись. Визуальная проверка подсказок в браузере на реальных устройствах не выполнялась.
 

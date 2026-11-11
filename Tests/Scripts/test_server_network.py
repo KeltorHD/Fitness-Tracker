@@ -33,7 +33,7 @@ class ServerNetworkTests(unittest.TestCase):
         )
         (self.root / ".env").write_text(self.original_env)
         self.config = {
-            "name": "fitness-tracker", "networks": {"default": {"name": "fitness-tracker-server", "external": True}},
+            "name": "fitness-tracker", "networks": {"default": {"name": "fitlife-server", "external": True}},
             "services": {
                 name: {"environment": {"AllowedHosts": host}, "ports": [{"host_ip": "127.0.0.1", "target": 8080, "published": port}]}
                 for name, host, port in [("authentication", "auth.example.com", "6080"), ("backend", "api.example.com;backend", "6081")]

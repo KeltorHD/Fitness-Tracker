@@ -45,7 +45,7 @@ struct ArchiveTransferView: View {
         } footer: {
           Text(
             L10n.text(
-              "Поддерживаются .fitnesstracker, .json и CSV-журнал тренировок. Можно выбрать файл из другого приложения.",
+              "Поддерживаются .fitlife, .json и CSV-журнал тренировок. Можно выбрать файл из другого приложения.",
               locale: locale)
           )
         }
@@ -149,7 +149,7 @@ struct ArchiveTransferView: View {
       }
       .fileImporter(
         isPresented: $model.showingImporter,
-        allowedContentTypes: [.fitLife, .legacyWorkoutArchive, .json, .commaSeparatedText]
+        allowedContentTypes: [.fitLife, .json, .commaSeparatedText]
       ) { result in
         switch result {
         case .success(let url): model.selectFile(url)

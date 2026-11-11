@@ -77,7 +77,7 @@ private struct WeeklyWidgetView: View {
 }
 struct WeeklyWorkoutWidget: Widget {
   var body: some WidgetConfiguration {
-    StaticConfiguration(kind: AppCompatibility.weeklyWidgetKind, provider: WeeklyProvider()) {
+    StaticConfiguration(kind: AppIdentifiers.weeklyWidgetKind, provider: WeeklyProvider()) {
       WeeklyWidgetView(entry: $0).environment(\.locale, L10n.locale)
     }
     .configurationDisplayName("Ваша неделя").description("Прогресс к недельной цели.")

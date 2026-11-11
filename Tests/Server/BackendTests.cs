@@ -16,20 +16,20 @@ namespace FitLife.Server.Tests;
 public sealed class BackendTests
 {
     private static readonly byte[] _archive = Encoding.UTF8.GetBytes(
-        """{"format":"com.fitnesstracker.archive","version":4,"exportedAt":1700000000,"workouts":[],"templates":[],"bodyWeights":[]}""");
+        """{"format":"com.fitlife.archive","version":4,"exportedAt":1700000000,"workouts":[],"templates":[],"bodyWeights":[]}""");
 
     /// <summary>Создаёт отдельное HTTP body с MIME-типом архива для каждого запроса.</summary>
     private static ByteArrayContent Content(byte[]? data = null)
     {
         var content = new ByteArrayContent(data ?? _archive);
-        content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.fitnesstracker+json");
+        content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.fitlife+json");
         return content;
     }
 
     /// <summary>HTTP media type сравнивается без учёта регистра и допускает параметр charset.</summary>
     [Theory]
     [InlineData("Application/JSON; charset=utf-8")]
-    [InlineData("APPLICATION/VND.FITNESSTRACKER+JSON")]
+    [InlineData("APPLICATION/VND.FITLIFE+JSON")]
     public async Task AcceptsCaseInsensitiveMediaTypesAsync(string mediaType)
     {
         using var factory = new BackendFactory();
@@ -80,7 +80,7 @@ public sealed class BackendTests
         Assert.Equal($"/v1/backups/{id}", uploaded.Headers.Location?.ToString());
         Assert.Equal($"\"{info.Sha256}\"", download.Headers.ETag?.ToString());
         Assert.Equal("no-store", download.Headers.CacheControl?.ToString());
-        Assert.Equal("application/vnd.fitnesstracker+json", download.Content.Headers.ContentType?.MediaType);
+        Assert.Equal("application/vnd.fitlife+json", download.Content.Headers.ContentType?.MediaType);
         Assert.Equal(_archive.Length, download.Content.Headers.ContentLength);
         Assert.Equal(_archive, await download.Content.ReadAsByteArrayAsync());
     }

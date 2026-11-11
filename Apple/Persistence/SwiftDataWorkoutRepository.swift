@@ -25,7 +25,7 @@ import SwiftData
     let cloudID =
       Bundle.main.object(forInfoDictionaryKey: "FitLifeCloudContainer") as? String ?? ""
     let configuration = ModelConfiguration(
-      AppCompatibility.storeConfiguration, schema: schema, isStoredInMemoryOnly: inMemory,
+      AppIdentifiers.storeConfiguration, schema: schema, isStoredInMemoryOnly: inMemory,
       groupContainer: .none,
       cloudKitDatabase: cloudEnabled && !inMemory && AppCapabilities.current.supportsCloudSync
         ? .private(cloudID) : .none)

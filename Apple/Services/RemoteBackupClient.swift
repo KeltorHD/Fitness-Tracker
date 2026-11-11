@@ -28,7 +28,7 @@ struct RemoteBackupClient: Sendable {
     var request = URLRequest(url: endpoint(id))
     request.httpMethod = "PUT"
     request.httpBody = data
-    request.setValue("application/vnd.fitnesstracker+json", forHTTPHeaderField: "Content-Type")
+    request.setValue("application/vnd.fitlife+json", forHTTPHeaderField: "Content-Type")
     let result = try ServerJSON.decode(
       RemoteBackup.self, from: await session.authorizedData(request))
     try validate(result)

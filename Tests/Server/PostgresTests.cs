@@ -311,7 +311,7 @@ public sealed class PostgresTests
         try
         {
             await new BackupStorage(database, new FrozenTimeProvider(BackendFactory.BackupTime)).Put(owner, id,
-                """{"format":"com.fitnesstracker.archive","version":4,"exportedAt":1700000000,"workouts":[],"templates":[],"bodyWeights":[]}"""u8.ToArray(),
+                """{"format":"com.fitlife.archive","version":4,"exportedAt":1700000000,"workouts":[],"templates":[],"bodyWeights":[]}"""u8.ToArray(),
                 cancellationToken);
             return 201;
         }

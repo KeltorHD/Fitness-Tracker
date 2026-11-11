@@ -38,7 +38,7 @@ public struct WorkoutSet: Identifiable, Codable, Equatable, Sendable {
   public var completedAt: Date?
   public var loadMultiplier: Int?
   public var dropStages: [DropSetStage]?
-  /// Optional for backward-compatible workout archives and installed stores.
+  /// An optional note attached to this set.
   public var note: String?
   public init(
     id: UUID = UUID(), repetitions: Int = 8, weightKG: Double = 0,
@@ -97,7 +97,7 @@ public struct TemplateExercise: Identifiable, Codable, Equatable, Sendable {
   public var repetitions: Int
   public var weightKG: Double
   public var loadMultiplier: Int?
-  /// Lossless individual targets; nil retains legacy uniform targets.
+  /// Individual set targets; nil uses the uniform targets of this exercise.
   public var plannedSets: [WorkoutSet]?
   public var supersetID: UUID?
   public init(
@@ -125,7 +125,7 @@ public struct WorkoutTemplate: Identifiable, Codable, Equatable, Sendable {
   public var muscles: Set<ExerciseMuscle>
   public var muscleRegions: Set<ExerciseMuscleRegion>
   public var preferredWeekdays: Set<WorkoutWeekday>
-  /// The existing exercises remain the first variation, preserving installed templates.
+  /// The exercises property defines the first variation.
   public var variations: [WorkoutTemplateVariation]
   public var baseVariationName: String?
   public init(
@@ -146,29 +146,6 @@ public struct WorkoutTemplate: Identifiable, Codable, Equatable, Sendable {
     self.baseVariationName = baseVariationName
   }
 
-  private enum CodingKeys: String, CodingKey {
-    case id, name, exercises, restSeconds, muscleGroups, muscles, preferredWeekdays, variations
-    case baseVariationName, muscleRegions
-  }
-
-  public init(from decoder: Decoder) throws {
-    let container = try decoder.container(keyedBy: CodingKeys.self)
-    id = try container.decode(UUID.self, forKey: .id)
-    name = try container.decode(String.self, forKey: .name)
-    exercises = try container.decode([TemplateExercise].self, forKey: .exercises)
-    restSeconds = try container.decode(Int.self, forKey: .restSeconds)
-    // Additive migration: existing templates have no preferred filters or training days.
-    muscleGroups = try container.decodeIfPresent(Set<MuscleGroup>.self, forKey: .muscleGroups) ?? []
-    muscles = try container.decodeIfPresent(Set<ExerciseMuscle>.self, forKey: .muscles) ?? []
-    muscleRegions =
-      try container.decodeIfPresent(Set<ExerciseMuscleRegion>.self, forKey: .muscleRegions) ?? []
-    preferredWeekdays =
-      try container.decodeIfPresent(Set<WorkoutWeekday>.self, forKey: .preferredWeekdays) ?? []
-    variations =
-      try container.decodeIfPresent([WorkoutTemplateVariation].self, forKey: .variations) ?? []
-    baseVariationName = try container.decodeIfPresent(String.self, forKey: .baseVariationName)
-  }
-
   public var muscleSelection: ExerciseMuscleSelection {
     get { ExerciseMuscleSelection(groups: muscleGroups, muscles: muscles, regions: muscleRegions) }
     set {
@@ -178,7 +155,7 @@ public struct WorkoutTemplate: Identifiable, Codable, Equatable, Sendable {
     }
   }
 
-  /// Interactive logging can start without numeric targets while legacy plans remain readable.
+  /// Interactive logging can start without numeric targets.
   public func start(at date: Date = Date(), prefillTargets: Bool = true) throws -> Workout {
     try Validation.template(self)
     var groupIDs: [UUID: UUID] = [:]
@@ -237,9 +214,9 @@ public struct Workout: Identifiable, Codable, Equatable, Sendable {
   public var pauses: [WorkoutPause]
   public var pausedSeconds: TimeInterval
   public var notes: String
-  /// Explicitly recorded body weight for this session. Missing in legacy payloads; never inferred.
+  /// Explicitly recorded body weight for this session; never inferred.
   public var bodyWeightKG: Double?
-  /// False for imports without an end time. Nil means recorded duration for legacy/native sessions.
+  /// False for imports without an end time. Nil means recorded duration for native sessions.
   public var durationIsKnown: Bool?
   public init(
     id: UUID = UUID(), name: String, startedAt: Date = Date(),

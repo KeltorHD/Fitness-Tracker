@@ -4,13 +4,13 @@
 <dict>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>webcredentials:$(FITNESS_TRACKER_AUTH_DOMAIN)</string>
+		<string>webcredentials:$(FITLIFE_AUTH_DOMAIN)</string>
 	</array>
 	<key>com.apple.developer.healthkit</key>
 	<true/>
 	<key>com.apple.developer.icloud-container-identifiers</key>
 	<array>
-		<string>$(FITNESS_TRACKER_CLOUD_CONTAINER)</string>
+		<string>$(FITLIFE_CLOUD_CONTAINER)</string>
 	</array>
 	<key>com.apple.developer.icloud-services</key>
 	<array>
@@ -18,9 +18,9 @@
 	</array>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>$(FITNESS_TRACKER_APP_GROUP)</string>
+		<string>$(FITLIFE_APP_GROUP)</string>
 	</array>
 	<key>aps-environment</key>
-	<string>$(FITNESS_TRACKER_APS_ENVIRONMENT)</string>
+	<string>$(FITLIFE_APS_ENVIRONMENT)</string>
 </dict>
 </plist>

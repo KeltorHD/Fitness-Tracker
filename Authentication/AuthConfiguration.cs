@@ -9,10 +9,10 @@ namespace FitLife.Authentication;
 
 public static class AuthConfiguration
 {
-    public const string ClientId = "fitnesstracker-ios";
+    public const string ClientId = "fitlife-ios";
     /// <summary>Отдельный public client для Personal Team без Associated Domains.</summary>
-    public const string PersonalClientId = "fitnesstracker-ios-personal";
-    public const string Audience = "fitnesstracker-api";
+    public const string PersonalClientId = "fitlife-ios-personal";
+    public const string Audience = "fitlife-api";
     public const string Callback = "https://auth.example.com/ios/oauth/callback";
 
     public static X509Certificate2 Certificate(IConfiguration config, string name) =>

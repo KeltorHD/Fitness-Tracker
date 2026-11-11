@@ -5,7 +5,7 @@ public struct BodyWeightEntry: Identifiable, Codable, Equatable, Sendable {
   public var measuredAt: Date
   public var weightKG: Double
   /// An explicitly shared weigh-in can outlive its workout, including cancellation/deletion.
-  /// Nil keeps independent and legacy measurements independent.
+  /// Nil represents an independent measurement.
   public var workoutID: UUID?
   public init(
     id: UUID = UUID(), measuredAt: Date = Date(), weightKG: Double, workoutID: UUID? = nil

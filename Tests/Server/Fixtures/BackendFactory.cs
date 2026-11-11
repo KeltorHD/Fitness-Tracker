@@ -76,14 +76,14 @@ public sealed class BackendFactory(HttpMessageHandler? authHandler = null) : Web
                 options.ConfigurationManager = null;
                 options.Configuration = null;
                 options.TokenValidationParameters.ValidIssuer = "https://auth.test/";
-                options.TokenValidationParameters.ValidAudience = "fitnesstracker-api";
+                options.TokenValidationParameters.ValidAudience = "fitlife-api";
                 options.TokenValidationParameters.IssuerSigningKey = Key;
             });
         });
     }
 
     /// <summary>Создаёт HTTP-клиент с явно заданными свойствами JWT либо без аутентификации.</summary>
-    internal HttpClient Client(string? owner = null, string? scope = null, string audience = "fitnesstracker-api",
+    internal HttpClient Client(string? owner = null, string? scope = null, string audience = "fitlife-api",
         DateTime? expires = null, SecurityKey? key = null, string issuer = "https://auth.test/", string tokenType = "at+jwt")
     {
         var client = CreateClient(new WebApplicationFactoryClientOptions

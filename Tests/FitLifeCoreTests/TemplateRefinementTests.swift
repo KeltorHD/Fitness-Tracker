@@ -5,7 +5,7 @@ import Testing
 
 private let refinementDate = Date(timeIntervalSince1970: 1_700_000_000)
 
-@Test @MainActor func renamedFirstVariationAndRegionalPreferencesSurviveLegacyAndArchiveRoundTrips()
+@Test @MainActor func renamedFirstVariationAndRegionalPreferencesSurviveCurrentArchiveRoundTrips()
   throws
 {
   let row = TemplateExercise(exercise: Exercise(name: "Жим", muscle: .chest))
@@ -26,10 +26,10 @@ private let refinementDate = Date(timeIntervalSince1970: 1_700_000_000)
   var legacy = try #require(JSONSerialization.jsonObject(with: data) as? [String: Any])
   legacy.removeValue(forKey: "baseVariationName")
   legacy.removeValue(forKey: "muscleRegions")
-  let restored = try JSONDecoder().decode(
-    WorkoutTemplate.self, from: JSONSerialization.data(withJSONObject: legacy))
-  #expect(restored.baseVariationName == nil && restored.muscleRegions.isEmpty)
-  #expect(restored.exercises == template.exercises && restored.variations == template.variations)
+  #expect(throws: DecodingError.self) {
+    try JSONDecoder().decode(
+      WorkoutTemplate.self, from: JSONSerialization.data(withJSONObject: legacy))
+  }
   template.baseVariationName = "  "
   #expect(throws: TrainingError.invalidName) { try Validation.template(template) }
 }

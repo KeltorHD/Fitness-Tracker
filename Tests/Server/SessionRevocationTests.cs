@@ -18,7 +18,7 @@ namespace FitLife.Server.Tests;
 [Trait("Category", "HTTP")]
 public sealed class SessionRevocationTests
 {
-    private const string ARCHIVE = """{"format":"com.fitnesstracker.archive","version":4,"exportedAt":1700000000,"workouts":[],"templates":[],"bodyWeights":[]}""";
+    private const string ARCHIVE = """{"format":"com.fitlife.archive","version":4,"exportedAt":1700000000,"workouts":[],"templates":[],"bodyWeights":[]}""";
 
     /// <summary>Выход отзывает все поколения одной сессии немедленно, сохраняя другой вход того же пользователя.</summary>
     [Fact]
@@ -229,7 +229,7 @@ public sealed class SessionRevocationTests
         using var allowed = await IntrospectAsync(browser, tokens.Access, AuthConfiguration.Audience, AuthFactory.IntrospectionSecret);
         Assert.Equal(HttpStatusCode.OK, allowed.StatusCode);
         Assert.True((await allowed.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("active").GetBoolean());
-        Assert.DoesNotContain("fitnesstracker:security_stamp", await allowed.Content.ReadAsStringAsync());
+        Assert.DoesNotContain("fitlife:security_stamp", await allowed.Content.ReadAsStringAsync());
 
         using var scope = auth.Services.CreateScope();
         var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictApplicationManager>();

@@ -92,7 +92,7 @@ struct ArchiveImportPreview {
     let summary = try plan(archive)
     present()
     preview = ArchiveImportPreview(
-      archive: archive, fileName: "FitLife-Backup.fitnesstracker", summary: summary)
+      archive: archive, fileName: "FitLife-Backup.fitlife", summary: summary)
   }
 
   func selectFile(_ url: URL) {

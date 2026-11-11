@@ -107,17 +107,16 @@ import Testing
   #expect(try repository.templates().first?.muscleGroups.isEmpty == true)
 }
 
-@Test func legacyTemplateWithoutDetailedMusclesKeepsExistingGroupSelection() throws {
+@Test func templatesRequireCurrentDetailedMuscleMetadata() throws {
   let template = WorkoutTemplate(
     name: "Руки", exercises: ExerciseCatalog.starterTemplates[0].exercises, muscleGroups: [.arms])
   var object = try #require(
     JSONSerialization.jsonObject(with: JSONEncoder().encode(template)) as? [String: Any])
   object.removeValue(forKey: "muscles")
-  let restored = try JSONDecoder().decode(
-    WorkoutTemplate.self, from: JSONSerialization.data(withJSONObject: object))
-  #expect(restored == template)
-  #expect(restored.muscleSelection.state(of: .arms) == .all)
-  #expect(restored.muscleSelection.contains(.forearms))
+  #expect(throws: DecodingError.self) {
+    try JSONDecoder().decode(
+      WorkoutTemplate.self, from: JSONSerialization.data(withJSONObject: object))
+  }
 }
 
 @Test func libraryRejectsUnknownMusclesInsteadOfSilentlyDroppingThemFromFilters() throws {

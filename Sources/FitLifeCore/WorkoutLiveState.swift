@@ -16,7 +16,7 @@ public struct WorkoutLiveState: Codable, Hashable, Sendable {
   public let nextDropStageNumber: Int?
   public let nextDropStageCount: Int?
   public let heartRate: HeartRateReading?
-  /// Optional display metadata keeps installed activities compatible with older payloads.
+  /// Optional display metadata for the current activity.
   public let colorThemeID: String?
   public let workoutName: String?
 

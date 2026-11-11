@@ -2993,36 +2993,36 @@
         }
       }
     },
-    "Выберите файл .fitnesstracker или .json.": {
+    "Выберите файл .fitlife или .json.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Выберите файл .fitnesstracker или .json."
+            "value": "Выберите файл .fitlife или .json."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Choose a .fitnesstracker or .json file."
+            "value": "Choose a .fitlife or .json file."
           }
         }
       }
     },
-    "Выберите файл .fitnesstracker, .json или .csv.": {
+    "Выберите файл .fitlife, .json или .csv.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Выберите файл .fitnesstracker, .json или .csv."
+            "value": "Выберите файл .fitlife, .json или .csv."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Choose a .fitnesstracker, .json or .csv file."
+            "value": "Choose a .fitlife, .json or .csv file."
           }
         }
       }
@@ -10507,36 +10507,19 @@
         }
       }
     },
-    "Поддерживаются .fitnesstracker и .json. Можно выбрать архив или прежний JSON одной тренировки.": {
+    "Поддерживаются .fitlife, .json и CSV-журнал тренировок. Можно выбрать файл из другого приложения.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Поддерживаются .fitnesstracker и .json. Можно выбрать архив или прежний JSON одной тренировки."
+            "value": "Поддерживаются .fitlife, .json и CSV-журнал тренировок. Можно выбрать файл из другого приложения."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Supports .fitnesstracker and .json, including the original single-workout JSON export."
-          }
-        }
-      }
-    },
-    "Поддерживаются .fitnesstracker, .json и CSV-журнал тренировок. Можно выбрать файл из другого приложения.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Поддерживаются .fitnesstracker, .json и CSV-журнал тренировок. Можно выбрать файл из другого приложения."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Supports .fitnesstracker, .json and workout log CSV files. You can choose a file exported by another app."
+            "value": "Supports .fitlife, .json and workout log CSV files. You can choose a file exported by another app."
           }
         }
       }

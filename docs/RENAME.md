@@ -1,39 +1,39 @@
-# Переименование в FitLife
+# FitLife: текущие идентификаторы
 
-Приложение, виджеты, Watch, тексты RU/EN, разрешения, имена файлов экспорта, страницы входа и письма используют **FitLife**. Swift-пакет и тесты — `FitLifeCore` / `FitLifeCoreTests`, исходники — `Sources/FitLifeCore` и `Tests/FitLifeCoreTests`. Главный проект — `FitLife.xcodeproj`, схемы — **FitLife Personal**, **FitLife**, **FitLifeWatch**, **FitLifeWidgets**.
+По явному требованию пользователя переход на FitLife выполняется **без обратной совместимости** с прежними названиями продукта, архивами и настройками.
 
-Серверное решение — `FitLife.Server.sln`, проекты и assemblies — `FitLife.Authentication`, `FitLife.Backend`, `FitLife.ServerLogging`, `FitLife.Server.Tests`. Dockerfile, project references, package lock files и команды проверок используют новые имена. В EF Core обновлены только ссылки на пространства имён; IDs миграций, схема БД и операции миграций сохранены.
+Приложение, виджеты, Watch, RU/EN, разрешения, страницы входа, письма, документация и имена экспортов используют FitLife. Swift-пакет — `FitLifeCore`, тесты — `FitLifeCoreTests`. Xcode-проект — `FitLife.xcodeproj`, схемы — **FitLife Personal**, **FitLife**, **FitLifeWatch**, **FitLifeWidgets**. Серверное решение — `FitLife.Server.sln`, assemblies — `FitLife.Authentication`, `FitLife.Backend`, `FitLife.ServerLogging`, `FitLife.Server.Tests`.
 
-## Обновление на Mac
+## Контракты FitLife
+
+- Архив: `.fitlife` / `.json`, `format: com.fitlife.archive`, строго версия **4**, MIME `application/vnd.fitlife+json`. Обязательны `format`, `version`, `exportedAt`, `workouts`, `templates`, `bodyWeights`. Прежние продуктовые форматы, версии 1–3 и одиночный Workout JSON без оболочки отклоняются.
+- Ссылки приложения: только `fitlife://`. OAuth использует отдельный HTTPS callback либо явно настроенную reverse-DNS схему Personal Team.
+- Xcode: только `FITLIFE_*`, без aliases прежних переменных. Значения по умолчанию: `com.example.fitlife`, `group.$(FITLIFE_BUNDLE_ID)`, `iCloud.$(FITLIFE_BUNDLE_ID)`.
+- Локальная конфигурация SwiftData: `Workouts`; пульс: `FitLife/HeartRate`; Watch archive: `FitLife-watch.json`; HealthKit sync prefix: `FitLife.`; widget kind: `FitLife.Weekly`. Общие значения находятся в `Apple/Shared/AppIdentifiers.swift`.
+- OAuth clients: `fitlife-ios`, `fitlife-ios-personal`, confidential Backend/JWT audience: `fitlife-api`; security-stamp claim: `fitlife:security_stamp`.
+- Cookies: `__Host-FitLifeAuth`, `__Host-FitLifePasskey`; Data Protection application names: `FitLife.Authentication`, `FitLife.Backend`.
+- PostgreSQL: раздельные БД и пользователи **authentication** / **backend**, без названия продукта. Параметры `AUTH_DB_NAME`, `AUTH_DB_USER`, `BACKEND_DB_NAME`, `BACKEND_DB_USER` задают текущую конфигурацию.
+- Docker network: `fitlife-server`, label: `com.fitlife.project`.
+
+Импорт CSV из стороннего FitSession остаётся самостоятельной функцией импорта, а не поддержкой прежнего собственного архива. UUID упражнений и лицензированные исходные данные библиотеки не меняются.
+
+## Настройка и развёртывание
+
+На Mac обновите существующий `Config/Local.xcconfig` по `Config/Local.xcconfig.example`, задайте текущие `FITLIFE_*`, Team и зарегистрированные Apple identifiers, затем выполните:
 
 ```bash
-git pull --ff-only
 xcodegen generate
 open FitLife.xcodeproj
 ```
 
-Закройте прежний проект и выберите схему **FitLife Personal** для бесплатной Personal Team. Не открывайте только `Package.swift`: он собирает независимый Core. `Config/Local.xcconfig` сохраняется; скрипт установки его не перезаписывает.
+Прежние конфигурационные переменные больше не читаются. Новые локальные identifiers открывают отдельные хранилища; автоматического переноса прежних данных, пульса, Watch outbox и виджетов нет. Предыдущие cookies, токены и Data Protection purposes не поддерживаются; нужен новый вход.
 
-Для обновления установленного приложения сохраните прежние **значения** Bundle ID, App Group, CloudKit container и Team. Переменные `FITNESS_TRACKER_*` и aliases `FITSESSION_*` в `Config/Base.xcconfig` остаются совместимыми с существующим Local.xcconfig. Их технические имена не определяют отображаемое название приложения. Простое изменение имени продукта не требует новых Apple Developer resources.
+Для сервера подготовьте БД и пользователей `authentication` / `backend` и актуальную `.env` по [SERVER.md](SERVER.md). Изменение defaults не переименовывает существующие PostgreSQL-БД, пользователей, key rings или bind mounts. Репозиторные изменения не выполняют перенос, удаление или сброс рабочих данных. EF-миграции текущей схемы сохранены; обычный startup применяет их к настроенной БД.
 
-Не удаляйте установленное приложение или store ради переименования. Первая сборка нового проекта и обновление поверх старой установки требуют проверки в Xcode.
-
-## Совместимость
-
-- Имена новых экспортов начинаются с `FitLife`; расширения `.fitnesstracker` / `.json`, `format: com.fitnesstracker.archive`, MIME type и текущая версия 4 сохранены. Переименование не меняет wire format: файлы доступны прежним клиентам и Backend.
-- Прежние `.fitsession`, архивы версий 1–4 с `com.fitnesstracker.archive` / `com.fitsession.archive` и старый ISO-8601 JSON одной тренировки продолжают импортироваться. Миграции содержимого и сохранение workout/template UUID, дат и пользовательских строк не изменены.
-- Основная схема ссылок — `fitlife://`; `fitnesstracker://` и `fitsession://` принимаются для тех же маршрутов. Это не меняет отдельную настроенную OAuth callback scheme.
-- Имя SwiftData configuration, путь локального пульса, имя Watch archive, HealthKit sync prefix и widget kind сохранены в `AppCompatibility`. Это защищает от создания пустого store, потери outbox/пульса, дублирования Health export и замены установленных виджетов. Строки для стабильных UUID CSV-импорта также сохранены.
-- Код `StoredRecord` и JSON полей тренировки не изменён. Архивы не включают настройки/permissions или локальные измерения пульса.
-- На сервере сохранены OAuth client IDs, JWT audience и security-stamp claim, имена cookies `__Host-FitnessTrackerAuth` / `__Host-FitnessTrackerPasskey`, Data Protection application names `FitnessTracker.Authentication` / `FitnessTracker.Backend`, имена БД/пользователей и Docker network. Существующие `.env`, bind mounts, сертификаты, ключи, аккаунты и сессии не требуют переноса ради названия.
-- Репозиторий GitHub и каталог checkout пока называются `Fitness-Tracker`. Это отдельные имена инфраструктуры; проект и сборки называются FitLife.
-- Исторические скриншоты и сгенерированная иллюстрация входа сохраняют прежнее название. Они помечены как материалы до переименования в [описании превью](previews/README.md) и не включаются в app bundles.
-
-Прежние имена остаются в перечисленных технических идентификаторах, их конфигурации, тестах и документации о совместимости, а также в исторических материалах. `FitSessionCSVImporter` и соответствующие тесты называются по исходному стороннему CSV-формату. В интерфейсе, названиях targets/modules/assemblies используется FitLife.
+Имя GitHub-репозитория и каталог checkout пока `Fitness-Tracker`; это отдельные имена инфраструктуры. Исторические скриншоты до переименования помечены в [описании превью](previews/README.md) и не включаются в app bundles.
 
 ## Проверки
 
-- **Реализовано:** новое имя продукта, проекта, targets, схем, модуля Core, серверных проектов, RU/EN, ресурсов, страниц входа, писем и имён экспортов; поддержка прежних identities.
-- **Проверки на Linux:** `bash scripts/check-linux.sh` проверяет Core, portable behavior, стабильные пути и текущую/прежние схемы ссылок, конфигурацию, signing aliases, ресурсы, брендинг, синтаксис и форматирование Apple sources. `bash scripts/check-server.sh` выполняет locked restore, сборку, серверные тесты и проверку форматирования. Фактически выполненные проверки указываются в отчёте к изменению; эти команды не подтверждают работу Apple SDK.
-- **Требует Xcode:** генерация реального `.xcodeproj`, SDK type checking, signing, обновление существующего store, Watch/outbox, установленные widgets/Live Activities, открытие файлов из Files и внешний вид нового имени. На Linux эти проверки недоступны.
-- **Apple Developer configuration:** сохраняйте существующие идентификаторы и Team для обновления; новых capabilities не добавлено. Для новой установки используйте собственные зарегистрированные identifiers как обычно.
+`bash scripts/check-linux.sh` проверяет Core, portable behavior, новые идентификаторы и отказ для прежних схем/архивов, конфигурацию, ресурсы, локализации, синтаксис и форматирование. `bash scripts/check-server.sh` проверяет locked restore, сборку, unit/HTTP-тесты, formatting и серверные скрипты. PostgreSQL-категория запускается только с `FITLIFE_TEST_POSTGRES` к одноразовой БД.
+
+Генерация реального Xcode-проекта, SDK type checking, signing, SwiftData, Watch, widgets/Live Activities и интерфейс требуют проверки на macOS/устройстве. Фактически выполненные проверки указываются в отчёте и [статусах](IMPLEMENTATION_STATUS.md).

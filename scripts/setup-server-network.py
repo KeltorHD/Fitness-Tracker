@@ -11,7 +11,7 @@ import sys
 import tempfile
 
 
-PROJECT_LABEL = "com.fitnesstracker.project"
+PROJECT_LABEL = "com.fitlife.project"
 
 
 def docker(root, *arguments, environment=None, check=True):

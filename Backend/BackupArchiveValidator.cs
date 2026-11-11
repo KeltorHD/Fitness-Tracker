@@ -19,14 +19,13 @@ internal static class BackupArchiveValidator
             using var document = JsonDocument.Parse(payload, new JsonDocumentOptions { MaxDepth = 64 });
             var root = document.RootElement;
             if (root.ValueKind != JsonValueKind.Object || !root.TryGetProperty("format", out var format) ||
-                format.ValueKind != JsonValueKind.String || format.GetString() is not
-                    ("com.fitnesstracker.archive" or "com.fitsession.archive") ||
+                format.ValueKind != JsonValueKind.String || format.GetString() != "com.fitlife.archive" ||
                 !root.TryGetProperty("version", out var version) || version.ValueKind != JsonValueKind.Number ||
-                !version.TryGetInt32(out var number) || number is < 1 or > 4 ||
+                !version.TryGetInt32(out var number) || number != 4 ||
                 !root.TryGetProperty("exportedAt", out var date) || date.ValueKind != JsonValueKind.Number ||
                 !date.TryGetDouble(out var timestamp) || !double.IsFinite(timestamp) ||
                 !Array(root, "workouts", 10000) || !Array(root, "templates", 1000) ||
-                (number >= 2 && !Array(root, "bodyWeights", 10000)))
+                !Array(root, "bodyWeights", 10000))
                 throw new BackupException(400, "invalid_archive");
             return number;
         }

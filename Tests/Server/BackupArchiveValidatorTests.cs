@@ -5,39 +5,31 @@ using Xunit;
 
 namespace FitLife.Server.Tests;
 
-/// <summary>Проверяет совместимость и границы архива без БД, HTTP и внешних зависимостей.</summary>
+/// <summary>Проверяет текущий формат и границы архива без БД, HTTP и внешних зависимостей.</summary>
 [Trait("Category", "Unit")]
 public sealed class BackupArchiveValidatorTests
 {
-    private const string VALID_ARCHIVE = """{"format":"com.fitnesstracker.archive","version":4,"exportedAt":1700000000,"workouts":[],"templates":[],"bodyWeights":[]}""";
+    private const string VALID_ARCHIVE = """{"format":"com.fitlife.archive","version":4,"exportedAt":1700000000,"workouts":[],"templates":[],"bodyWeights":[]}""";
 
-    /// <summary>Принимает обе совместимые маркировки формата и все версии, поддерживаемые Swift Core.</summary>
-    [Theory]
-    [InlineData("com.fitnesstracker.archive", 1)]
-    [InlineData("com.fitnesstracker.archive", 2)]
-    [InlineData("com.fitnesstracker.archive", 3)]
-    [InlineData("com.fitnesstracker.archive", 4)]
-    [InlineData("com.fitsession.archive", 1)]
-    [InlineData("com.fitsession.archive", 4)]
-    public void AcceptsSupportedVersionsAndLegacyIdentity(string format, int version)
-    {
-        var archive = JsonNode.Parse(VALID_ARCHIVE)!.AsObject();
-        archive["format"] = format;
-        archive["version"] = version;
-        if (version == 1) archive.Remove("bodyWeights");
-
-        Assert.Equal(version, BackupArchiveValidator.Validate(Encoding.UTF8.GetBytes(archive.ToJsonString())));
-    }
+    /// <summary>Принимает только текущую маркировку FitLife и версию 4.</summary>
+    [Fact]
+    public void AcceptsCurrentFitLifeArchive() =>
+        Assert.Equal(4, BackupArchiveValidator.Validate(Encoding.UTF8.GetBytes(VALID_ARCHIVE)));
 
     /// <summary>Отвергает неверные JSON-типы и версии безопасной ошибкой вместо необработанного исключения.</summary>
     [Theory]
     [InlineData("format", "null")]
     [InlineData("format", "42")]
     [InlineData("format", "\"unknown\"")]
+    [InlineData("format", "\"com.fitnesstracker.archive\"")]
+    [InlineData("format", "\"com.fitsession.archive\"")]
     [InlineData("version", "null")]
     [InlineData("version", "\"4\"")]
     [InlineData("version", "true")]
     [InlineData("version", "0")]
+    [InlineData("version", "1")]
+    [InlineData("version", "2")]
+    [InlineData("version", "3")]
     [InlineData("version", "5")]
     [InlineData("version", "1.5")]
     [InlineData("version", "2147483648")]
@@ -54,7 +46,7 @@ public sealed class BackupArchiveValidatorTests
         AssertInvalidArchive(Encoding.UTF8.GetBytes(archive.ToJsonString()));
     }
 
-    /// <summary>Начиная с v2 массив веса обязателен; остальные поля обязательны во всех версиях.</summary>
+    /// <summary>Все коллекции и поля конверта обязательны в текущем формате.</summary>
     [Theory]
     [InlineData("format")]
     [InlineData("version")]

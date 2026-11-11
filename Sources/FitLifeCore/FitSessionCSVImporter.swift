@@ -88,7 +88,7 @@ public enum FitSessionCSVImporter {
       guard (0...3600).contains(rest), rest.rounded() == rest else { throw invalid(.rest) }
       let skipped = try skipped(value(.skipped), line: row.line)
       let sessionID = StableIdentifier.uuid(
-        "com.fitnesstracker.csv/workout/\(parsed.identity)/\(identityName(name))")
+        "com.fitlife.csv/workout/\(parsed.identity)/\(identityName(name))")
       let index: Int
       if let existing = indices[sessionID] {
         index = existing
@@ -104,7 +104,7 @@ public enum FitSessionCSVImporter {
       sessions[index].restSeconds = max(sessions[index].restSeconds, Int(rest))
       let exerciseID =
         lookup[normalized(exerciseName)]?.id
-        ?? StableIdentifier.uuid("com.fitnesstracker.csv/exercise/\(identityName(exerciseName))")
+        ?? StableIdentifier.uuid("com.fitlife.csv/exercise/\(identityName(exerciseName))")
       var exercise =
         lookup[normalized(exerciseName)]
         ?? Exercise(id: exerciseID, name: exerciseName, muscle: .fullBody)

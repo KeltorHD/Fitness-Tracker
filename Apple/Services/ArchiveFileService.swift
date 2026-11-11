@@ -10,7 +10,7 @@ enum ArchiveFileError: Error, LocalizedError {
   case unsupportedFile, unreadable
   var errorDescription: String? {
     switch self {
-    case .unsupportedFile: "Выберите файл .fitnesstracker, .json или .csv."
+    case .unsupportedFile: "Выберите файл .fitlife, .json или .csv."
     case .unreadable: "Не удалось прочитать файл. Проверьте, что он доступен на устройстве."
     }
   }
@@ -21,7 +21,7 @@ actor ArchiveFileService: ArchiveFileHandling {
   func read(_ url: URL) async throws -> WorkoutArchive {
     try Task.checkCancellation()
     guard url.isFileURL,
-      ["json", "csv", WorkoutArchive.fileExtension, WorkoutArchive.legacyFileExtension].contains(
+      ["json", "csv", WorkoutArchive.fileExtension].contains(
         url.pathExtension.lowercased())
     else {
       throw ArchiveFileError.unsupportedFile

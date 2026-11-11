@@ -208,26 +208,19 @@ private func completeDrop(_ index: Int, in workout: inout Workout, seconds: Doub
       with: b.exercises.flatMap(\.sets).flatMap(\.stages).map(\.id)))
 }
 
-@Test func dropArchiveVersionFourRoundTripsAndOlderVersionsMigrate() throws {
+@Test func dropArchiveVersionFourRoundTripsAndRejectsOtherVersions() throws {
   let archive = WorkoutArchive(workouts: [dropWorkout()], templates: [])
   #expect(archive.version == 4)
   #expect(
     try WorkoutArchiveCodec.decode(WorkoutArchiveCodec.encode(archive)).workouts == archive.workouts
   )
-  let plain = WorkoutArchive(workouts: [Workout(name: "Old", startedAt: dropDate)], templates: [])
-  for version in 1...3 {
-    var object = try #require(
-      JSONSerialization.jsonObject(with: WorkoutArchiveCodec.encode(plain)) as? [String: Any])
-    object["version"] = version
-    if version == 1 { object.removeValue(forKey: "bodyWeights") }
-    let migrated = try WorkoutArchiveCodec.decode(JSONSerialization.data(withJSONObject: object))
-    #expect(migrated.version == 4 && migrated.workouts == plain.workouts)
-  }
-  var mislabeled = try #require(
+  var object = try #require(
     JSONSerialization.jsonObject(with: WorkoutArchiveCodec.encode(archive)) as? [String: Any])
-  mislabeled["version"] = 3
-  #expect(throws: WorkoutArchiveError.invalidFile) {
-    try WorkoutArchiveCodec.decode(JSONSerialization.data(withJSONObject: mislabeled))
+  for version in [0, 1, 2, 3, 5] {
+    object["version"] = version
+    #expect(throws: WorkoutArchiveError.unsupportedVersion) {
+      try WorkoutArchiveCodec.decode(JSONSerialization.data(withJSONObject: object))
+    }
   }
 }
 
