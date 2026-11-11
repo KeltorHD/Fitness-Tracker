@@ -1,10 +1,11 @@
 import FitnessTrackerCore
 import Foundation
 import HealthKit
+import OSLog
 
-/// iOS 26 live workout data (including paired AirPods Pro 3). HealthKit chooses the sensor.
+/// Live workout data: wrist sensor on Watch, available external sensors on iPhone.
 /// The temporary builder is discarded; only an explicit journal export saves an HKWorkout.
-@MainActor final class AirPodsHeartRateService: NSObject, LiveHeartRateServing {
+@MainActor final class HealthKitLiveHeartRateService: NSObject, LiveHeartRateServing {
   var onChange: (@MainActor (LiveHeartRateSnapshot) -> Void)?
   private var store: HKHealthStore?
   private var session: HKWorkoutSession?
@@ -27,7 +28,7 @@ import HealthKit
         try check(sessionID)
         guard healthStore.authorizationStatus(for: .workoutType()) == .sharingAuthorized else {
           throw ServiceError.unavailable(
-            "Разрешите доступ к тренировкам в «Здоровье», чтобы получать пульс AirPods.")
+            "Разрешите доступ к тренировкам в «Здоровье», чтобы получать пульс.")
         }
         let configuration = HKWorkoutConfiguration()
         configuration.activityType = .traditionalStrengthTraining
@@ -141,7 +142,7 @@ import HealthKit
   }
 }
 
-extension AirPodsHeartRateService: HKLiveWorkoutBuilderDelegate {
+extension HealthKitLiveHeartRateService: HKLiveWorkoutBuilderDelegate {
   nonisolated func workoutBuilderDidCollectEvent(_ workoutBuilder: HKLiveWorkoutBuilder) {
     // Journal pause/resume dates remain the source of truth; no polling or synthetic samples.
   }
@@ -166,7 +167,7 @@ extension AirPodsHeartRateService: HKLiveWorkoutBuilderDelegate {
   }
 }
 
-extension AirPodsHeartRateService: HKWorkoutSessionDelegate {
+extension HealthKitLiveHeartRateService: HKWorkoutSessionDelegate {
   nonisolated func workoutSession(
     _ workoutSession: HKWorkoutSession, didChangeTo toState: HKWorkoutSessionState,
     from fromState: HKWorkoutSessionState, date: Date
@@ -194,7 +195,10 @@ extension AirPodsHeartRateService: HKWorkoutSessionDelegate {
   nonisolated func workoutSession(
     _ workoutSession: HKWorkoutSession, didFailWithError error: any Error
   ) {
-    AppErrorReporter.record(error, operation: "liveWorkoutHeartRate")
+    let diagnostic = error as NSError
+    Logger(subsystem: "FitnessTracker", category: "Services").error(
+      "Live heart-rate session failed: \(diagnostic.domain, privacy: .public), code \(diagnostic.code)"
+    )
     let identity = ObjectIdentifier(workoutSession)
     Task { @MainActor [weak self] in
       guard let self, self.session.map(ObjectIdentifier.init) == identity,

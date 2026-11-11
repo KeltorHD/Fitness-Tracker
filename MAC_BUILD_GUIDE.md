@@ -12,6 +12,8 @@
 
 ## 1. Инструменты
 
+Для живого пульса Apple Watch (включая SE 1) обновите обе версии приложения и повторите `xcodegen generate`: Watch target использует HealthKit и `workout-processing`. После установки откройте FitnessTracker на часах; на iPhone начните тренировку, выберите Apple Watch в «Трекере» и включите приём пульса. Разрешения запрашиваются на Watch. Сеанс другой программы «Тренировка» нужно завершить перед запуском. Измерения передаются напрямую, а не ждут синхронизации хранилища «Здоровья». [Настройка, подпись Personal Team и ограничения](docs/WATCH_HEART_RATE.md).
+
 Установите **полный Xcode 26 или новее**, совместимый с вашей версией macOS, с iOS 26 и watchOS 26 SDK. Одних Command Line Tools недостаточно. Версию macOS выбирайте по [таблице совместимости Xcode](https://developer.apple.com/support/xcode/). Откройте Xcode, примите лицензию и установите iPhone/watchOS Simulator runtimes через Settings → Components.
 
 При нескольких Xcode выберите нужный:

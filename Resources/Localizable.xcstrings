@@ -4897,6 +4897,23 @@
         }
       }
     },
+    "Для живого пульса откройте FitnessTracker на Apple Watch, начните тренировку на iPhone и включите приём пульса. Разрешите доступ к пульсу и тренировкам на часах. Не запускайте одновременно приложение «Тренировка» Apple: часы поддерживают один сеанс тренировки.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Для живого пульса откройте FitnessTracker на Apple Watch, начните тренировку на iPhone и включите приём пульса. Разрешите доступ к пульсу и тренировкам на часах. Не запускайте одновременно приложение «Тренировка» Apple: часы поддерживают один сеанс тренировки."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For live heart rate, open FitnessTracker on Apple Watch, start a workout on iPhone, and enable heart rate reception. Allow heart rate and workout access on your watch. Do not run Apple Workout at the same time: the watch supports one workout session."
+          }
+        }
+      }
+    },
     "Для завершения отметьте хотя бы один выполненный подход.": {
       "extractionState": "manual",
       "localizations": {
@@ -7311,6 +7328,23 @@
         }
       }
     },
+    "Источник: Apple Watch": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Источник: Apple Watch"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Source: Apple Watch"
+          }
+        }
+      }
+    },
     "Источник: Apple «Здоровье»": {
       "extractionState": "manual",
       "localizations": {
@@ -9096,6 +9130,40 @@
         }
       }
     },
+    "Начните тренировку и выберите Apple Watch или AirPods Pro 3 в режиме Apple «Здоровье».": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Начните тренировку и выберите Apple Watch или AirPods Pro 3 в режиме Apple «Здоровье»."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start a workout and select Apple Watch or AirPods Pro 3 in Apple Health mode."
+          }
+        }
+      }
+    },
+    "Начните тренировку на iPhone, выберите Apple Watch в настройках пульса и включите приём. Оставьте FitnessTracker на часах открытым при запуске.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Начните тренировку на iPhone, выберите Apple Watch в настройках пульса и включите приём. Оставьте FitnessTracker на часах открытым при запуске."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start a workout on iPhone, select Apple Watch in heart rate settings, and enable reception. Keep FitnessTracker open on your watch when starting."
+          }
+        }
+      }
+    },
     "Не выбраны": {
       "extractionState": "manual",
       "localizations": {
@@ -9160,6 +9228,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hide sleep data"
+          }
+        }
+      }
+    },
+    "Не удалось включить пульс. Проверьте разрешения «Здоровья» на часах и повторите с iPhone.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось включить пульс. Проверьте разрешения «Здоровья» на часах и повторите с iPhone."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not enable heart rate. Check Health permissions on your watch and try again from iPhone."
           }
         }
       }
@@ -9347,6 +9432,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Could not start heart rate recording. Check your AirPods and Health permissions."
+          }
+        }
+      }
+    },
+    "Не удалось начать приём пульса. Проверьте устройство и доступ к «Здоровью».": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось начать приём пульса. Проверьте устройство и доступ к «Здоровью»."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not start heart rate reception. Check your device and Health permissions."
           }
         }
       }
@@ -9606,6 +9708,23 @@
         }
       }
     },
+    "Не удалось передать пульс на iPhone. Держите телефон рядом и проверьте подключение.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось передать пульс на iPhone. Держите телефон рядом и проверьте подключение."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not send heart rate to iPhone. Keep your phone nearby and check the connection."
+          }
+        }
+      }
+    },
     "Не удалось повторить тренировку. Попробуйте ещё раз.": {
       "extractionState": "manual",
       "localizations": {
@@ -9687,6 +9806,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Couldn’t show the workout on your Lock Screen. It is saved in the app."
+          }
+        }
+      }
+    },
+    "Не удалось получить пульс. Откройте FitnessTracker на Apple Watch и повторите.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось получить пульс. Откройте FitnessTracker на Apple Watch и повторите."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not receive heart rate. Open FitnessTracker on Apple Watch and try again."
           }
         }
       }
@@ -9840,6 +9976,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Could not read the CSV encoding. Save the file as UTF-8."
+          }
+        }
+      }
+    },
+    "Не удалось прочитать команду приёма пульса.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось прочитать команду приёма пульса."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not read the heart rate command."
           }
         }
       }
@@ -10915,6 +11068,23 @@
         }
       }
     },
+    "Нужна установленная Watch-версия FitnessTracker. Измерения передаются напрямую, без ожидания синхронизации «Здоровья». При потере связи старое значение не показывается как текущий пульс.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нужна установленная Watch-версия FitnessTracker. Измерения передаются напрямую, без ожидания синхронизации «Здоровья». При потере связи старое значение не показывается как текущий пульс."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FitnessTracker must be installed on Apple Watch. Measurements are sent directly without waiting for Health synchronization. If the connection drops, an old reading is not shown as current heart rate."
+          }
+        }
+      }
+    },
     "ОТДЫХ С": {
       "extractionState": "manual",
       "localizations": {
@@ -11595,6 +11765,23 @@
         }
       }
     },
+    "Откройте FitnessTracker на Apple Watch и держите часы рядом с iPhone.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Откройте FitnessTracker на Apple Watch и держите часы рядом с iPhone."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open FitnessTracker on Apple Watch and keep your watch near your iPhone."
+          }
+        }
+      }
+    },
     "Откройте FitnessTracker на Apple Watch, чтобы подтвердить связь.": {
       "extractionState": "manual",
       "localizations": {
@@ -12152,6 +12339,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Before bed, open FitnessTracker on Watch and confirm the smart window. Without confirmation, the fixed alarm still works."
+          }
+        }
+      }
+    },
+    "Передача пульса на iPhone": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Передача пульса на iPhone"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sending heart rate to iPhone"
           }
         }
       }
@@ -12917,6 +13121,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Confirm action"
+          }
+        }
+      }
+    },
+    "Подтвердите доступ к «Здоровью» в FitnessTracker на Apple Watch.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Подтвердите доступ к «Здоровью» в FitnessTracker на Apple Watch."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confirm Health access in FitnessTracker on Apple Watch."
           }
         }
       }
@@ -13873,6 +14094,40 @@
         }
       }
     },
+    "Приём пульса остановлен. Проверьте подключение устройства и начните снова.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Приём пульса остановлен. Проверьте подключение устройства и начните снова."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate reception stopped. Check your device connection and start again."
+          }
+        }
+      }
+    },
+    "Приём пульса с Apple Watch включён.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Приём пульса с Apple Watch включён."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Watch heart rate reception is on."
+          }
+        }
+      }
+    },
     "Пробуждение": {
       "extractionState": "manual",
       "localizations": {
@@ -14468,6 +14723,23 @@
         }
       }
     },
+    "Пульс на iPhone": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пульс на iPhone"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate on iPhone"
+          }
+        }
+      }
+    },
     "Пульс сохраняется только на этом iPhone и не включается в iCloud, виджеты и файлы экспорта.": {
       "extractionState": "manual",
       "localizations": {
@@ -14838,6 +15110,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Allow workout access in Health to receive AirPods heart rate data."
+          }
+        }
+      }
+    },
+    "Разрешите доступ к тренировкам в «Здоровье», чтобы получать пульс.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Разрешите доступ к тренировкам в «Здоровье», чтобы получать пульс."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow workout access in Health to receive heart rate."
           }
         }
       }
@@ -18510,6 +18799,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Successful read: %@"
+          }
+        }
+      }
+    },
+    "Установите FitnessTracker на Apple Watch и откройте приложение на часах.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Установите FitnessTracker на Apple Watch и откройте приложение на часах."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Install FitnessTracker on Apple Watch and open the app on your watch."
           }
         }
       }

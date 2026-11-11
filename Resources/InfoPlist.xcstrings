@@ -75,13 +75,13 @@
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Читать сон, пульс и другие показатели из «Здоровья» для дневника и статистики; по вашему запросу — данные тренировки для приёма измерений AirPods Pro 3."
+            "value": "Читать сон, пульс и другие показатели из «Здоровья» для дневника и статистики; по вашему запросу — данные тренировки для приёма измерений Apple Watch или AirPods Pro 3."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Read sleep, heart rate and other Health metrics for your diary and statistics; when requested, read workout data to receive AirPods Pro 3 measurements."
+            "value": "Read sleep, heart rate and other Health metrics for your diary and statistics; when requested, read workout data to receive Apple Watch or AirPods Pro 3 measurements."
           }
         }
       }
@@ -92,13 +92,13 @@
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Включать системную тренировку для получения пульса AirPods Pro 3 по вашему запросу. Завершённая тренировка сохраняется в «Здоровье» только при отдельном экспорте."
+            "value": "Включать системную тренировку для получения пульса Apple Watch или AirPods Pro 3 по вашему запросу. Завершённая тренировка сохраняется в «Здоровье» только при отдельном экспорте."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Start a system workout to receive AirPods Pro 3 heart rate when you request it. The completed workout is saved to Health only through a separate export."
+            "value": "Start a system workout to receive Apple Watch or AirPods Pro 3 heart rate when you request it. The completed workout is saved to Health only through a separate export."
           }
         }
       }

@@ -80,6 +80,10 @@ app = plists['App-Info.plist']
 assert app['NSSupportsLiveActivities'] is True
 assert 'remote-notification' in app['UIBackgroundModes']
 assert app['NSHealthUpdateUsageDescription']
+watch = plists['Watch-Info.plist']
+assert watch['NSHealthShareUsageDescription'] and watch['NSHealthUpdateUsageDescription']
+assert {'alarm', 'workout-processing'} <= set(watch['WKBackgroundModes'])
+assert plists['Watch.entitlements']['com.apple.developer.healthkit'] is True
 assert app['NSBluetoothAlwaysUsageDescription']
 assert 'bluetooth-central' in app['UIBackgroundModes']
 assert app['FitnessTrackerCloudSyncAvailable'] == '$(FITNESS_TRACKER_CLOUD_SYNC_AVAILABLE)'

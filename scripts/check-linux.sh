@@ -91,6 +91,14 @@ echo 'Portable presentation/data subset: Swift 6 type check passed (no Apple SDK
 "$bin_path/portable-airpods-checks"
 "$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
   -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \
+  "$bin_path"/FitnessTrackerCore.build/*.swift.o \
+  Apple/Services/LocalHeartRateRepository.swift Apple/Services/HeartRateBluetooth.swift Apple/Services/LiveHeartRate.swift \
+  Apple/Services/ServiceError.swift Apple/Features/TrackerViewModel.swift Apple/Features/WatchHeartRateModels.swift \
+  Apple/Features/TrackerDeviceProfile.swift Apple/Shared/AppCompatibility.swift \
+  Tests/PortableWatchHeartRateChecks/main.swift -o "$bin_path/portable-watch-heart-rate-checks"
+"$bin_path/portable-watch-heart-rate-checks"
+"$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
+  -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \
   "$bin_path"/FitnessTrackerCore.build/*.swift.o Apple/Features/HealthChartsViewModel.swift \
   Tests/PortableHealthChartsChecks/main.swift -o "$bin_path/portable-health-charts-checks"
 "$bin_path/portable-health-charts-checks"

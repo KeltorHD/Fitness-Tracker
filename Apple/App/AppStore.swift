@@ -105,11 +105,15 @@ import WidgetKit
     self.archiveFiles = archiveFiles
     self.accountSession = accountSession
     self.now = now
+    let watchPulse = AppleWatchHeartRateService { [weak watch] command in
+      guard let watch else { throw TrainingError.invalidState }
+      try watch.sendHeartRateCommand(command)
+    }
     self.tracker =
       tracker
       ?? TrackerViewModel(
         health: HealthMetricsReader(), sensor: BluetoothHeartRateService(),
-        liveSource: AirPodsHeartRateService(),
+        liveSource: HealthKitLiveHeartRateService(), watchLiveSource: watchPulse,
         recordings: LocalHeartRateRepository(), defaults: defaults,
         errorMessage: { AppErrorReporter.message(for: $0, operation: $1, fallback: $2) })
     self.healthCharts =
@@ -124,6 +128,9 @@ import WidgetKit
         })
     self.tracker.onHeartRateChange = { [weak self] in self?.scheduleHeartRateUpdate() }
     self.healthCharts.onHeartRateChange = { [weak self] in self?.scheduleHeartRateUpdate() }
+    watch.heartRateEvent = { [weak watchPulse] in watchPulse?.receive($0) }
+    watch.heartRateFailure = { [weak watchPulse] in watchPulse?.connectionFailed(sessionID: $0) }
+    watch.heartRateDisconnected = { [weak watchPulse] in watchPulse?.disconnected() }
     sleepAlarms.send = { [weak watch] value in watch?.sendSleepAlarms(value) }
     watch.sleepEvent = { [weak sleepAlarms] event in sleepAlarms?.receive(event) }
     watch.sleepReady = { [weak sleepAlarms] in sleepAlarms?.refresh() }

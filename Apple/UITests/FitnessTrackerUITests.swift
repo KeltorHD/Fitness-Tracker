@@ -1822,6 +1822,32 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertEqual(app.alerts.count, 0)
   }
 
+  @MainActor func testAppleWatchLivePulseSetupRequiresAnExplicitActiveWorkout() {
+    let app = launch()
+    app.buttons["openSettings"].tap()
+    let tracker = app.buttons["openTracker"]
+    reveal(tracker, in: app)
+    tracker.tap()
+    app.buttons["trackerDevicePicker"].tap()
+    app.buttons["Apple Watch"].tap()
+    let start = app.buttons["startLiveHeartRate"]
+    XCTAssertTrue(start.waitForExistence(timeout: 5))
+    XCTAssertFalse(start.isEnabled)
+    XCTAssertTrue(
+      app.staticTexts["trackerAirPodsSetup"].label.contains("FitnessTracker на Apple Watch"))
+    XCTAssertEqual(app.alerts.count, 0)
+    let setup = XCTAttachment(screenshot: app.screenshot())
+    setup.name = "Apple Watch live pulse setup, explicit start and permission guidance"
+    setup.lifetime = .keepAlways
+    add(setup)
+    app.buttons["trackerModePicker"].tap()
+    app.buttons["Bluetooth-пульс"].tap()
+    XCTAssertFalse(app.buttons["scanHeartRate"].exists)
+    app.buttons["Выбрать Apple «Здоровье»"].tap()
+    XCTAssertTrue(start.waitForExistence(timeout: 5))
+    XCTAssertFalse(start.isEnabled)
+  }
+
   @MainActor func testMusclePickerAllowsWholeGroupsAndIndividualMuscles() {
     let app = launch()
     let start = app.buttons["workoutStartAction"]

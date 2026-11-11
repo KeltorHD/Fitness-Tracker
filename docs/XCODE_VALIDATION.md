@@ -2,6 +2,14 @@
 
 Пункты без отметки остаются **непроверенными** до выполнения на macOS/устройстве. Для выполненных проверок указаны устройство, ОС, версия Xcode и результат.
 
+## Живой пульс Apple Watch / SE 1 — 2026-11-11
+
+- [x] Полный Linux-прогон: 293 Core tests, проверки реальных presentation models с заглушкой сенсора (немедленная доставка, порядок, старые сообщения, пауза/продолжение, разрыв, выбор Watch/AirPods и сохранение), ресурсы, локализация, parser и strict lint.
+- [x] Xcode 27.2: Watch SDK build с minimum watchOS 10, `WatchLive-20261111-watch-build.log`, `BUILD SUCCEEDED`. Это компиляция с unsigned device SDK, не установка и не проверка датчика.
+- [x] iPhone 17 Simulator / iOS 27.2: SDK build, 101 Apple unit tests и Watch live setup прошли в `WatchLive-20261111.xcresult`. AirPods UI первого прогона превысил лимит на фоне высокой нагрузки Mac; sample тестового приложения показал ожидающий main runloop, без выполняющегося пользовательского кода. Отдельный повтор AirPods UI прошёл: `WatchLiveAirPodsRetry-20261111.xcresult`. Снимок настройки Watch просмотрен: схема выбора и подсказки отображаются, форма прокручивается.
+- [x] Подписанная сборка Watch PersonalDebug: первоначальный CodeSign по SSH остановился на `errSecInternalComponent`, сборка в интерактивном Terminal Mac прошла (`WatchLive-20261111-interactive-sign.log`). Проверка `codesign --verify --deep --strict` успешна, MinimumOSVersion 10.0. Ключи/сертификаты не экспортировались. Каталог 1185 RU/EN строк компилируется `xcstringstool`. Это подписанный пакет, ещё не установка на устройство.
+- [ ] Физическая пара iPhone + SE 1 / watchOS 10.6.2: подписанная установка Watch с HealthKit, явный старт и согласие/отказ в доступе, реальные измерения, опущенное запястье, блокировка iPhone, пауза/продолжение, разрыв и повтор, остановка на часах, отсутствие лишнего HKWorkout после завершения, сохранение графика при возврате/перезапуске. Часы сейчас не обнаруживаются Mac после удаления developer-связи; установка через приложение Watch на iPhone подтверждённо отклоняется как недопустимый источник free provisioning profile (Code=111). Сборку и tests с заглушкой не считать успешной установкой на SE.
+
 ## watchOS 10+ / SE 1 и три режима сигнала — 2026-11-10
 
 - [x] Полный Linux-прогон: 292 Core tests, portable модели/синхронизация, ресурсы/локализация/синтаксис/strict lint. Новый phone-only план не имеет умного окна, не публикуется в Watch context, не принимает Watch events; all-devices не теряет телефонный резерв после `.armed`. Legacy raw values/настройки сохранены.
@@ -532,7 +540,7 @@ Xcode 27.2 (27B52), iPhone 17 Simulator / iOS 27.2: 101 Apple unit tests и ра
 
 ## AirPods Pro 3 / живой пульс HealthKit
 
-- [ ] После xcodegen generate собрать AirPodsHeartRateService с настоящим iOS 26 SDK и Swift 6 strict concurrency: session/builder/dataSource, statistics timestamp, SDK delegates, cancellation и ownership. Linux parser не проверяет эти API.
+- [ ] После xcodegen generate собрать HealthKitLiveHeartRateService с настоящим iOS 26 SDK и Swift 6 strict concurrency: session/builder/dataSource, statistics timestamp, SDK delegates, cancellation и ownership. Linux parser не проверяет эти API.
 - [ ] На чистой установке выбор AirPods и экраны «Трекер»/тренировки не вызывают запросов разрешений. Без active workout кнопка отключена. Запустить testAirPodsSetupRequiresAnExplicitActiveWorkout; этот тест на Linux не запускался.
 - [ ] iPhone iOS 26+ и AirPods Pro 3: подключение, датчик включён, корректная посадка одного/двух наушников. После явной кнопки запрашиваются только heartRate + workout read и workout write. Steps/sleep/energy permissions не запрашиваются.
 - [ ] Отказ/отмена/частичные read permissions, запрет workout write, отзыв во время записи: понятная ошибка/нет свежего измерения, без вымышленного пульса и без ложного определения отказа read permissions.

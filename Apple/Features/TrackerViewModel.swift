@@ -21,7 +21,8 @@ import Observation
   private(set) var attachedWorkoutStatus: WorkoutStatus?
   var hasLiveSession: Bool { [.starting, .running, .paused].contains(live.state) }
   var canStartLive: Bool {
-    liveSource != nil && mode == .appleHealth && deviceProfile == .airPodsPro3
+    liveSource != nil && mode == .appleHealth
+      && [.airPodsPro3, .appleWatch].contains(deviceProfile)
       && attachedWorkoutStatus == .active && !preparingRecording && !startingLive && !hasLiveSession
   }
   var error: String?
@@ -29,7 +30,11 @@ import Observation
   var canRetryRecordingLoad: Bool { workout != nil && recording == nil && !preparingRecording }
   @ObservationIgnored private let health: any HealthMetricsReading
   @ObservationIgnored private let sensor: any HeartRateBluetooth
-  @ObservationIgnored private let liveSource: (any LiveHeartRateServing)?
+  @ObservationIgnored private let airPodsSource: (any LiveHeartRateServing)?
+  @ObservationIgnored private let watchLiveSource: (any LiveHeartRateServing)?
+  private var liveSource: (any LiveHeartRateServing)? {
+    deviceProfile == .appleWatch ? watchLiveSource : airPodsSource
+  }
   @ObservationIgnored private let recordings: any HeartRateRecordingRepository
   @ObservationIgnored private let defaults: UserDefaults
   @ObservationIgnored private let errorMessage: (any Error, String, String) -> String
@@ -48,13 +53,15 @@ import Observation
   init(
     health: any HealthMetricsReading, sensor: any HeartRateBluetooth,
     liveSource: (any LiveHeartRateServing)? = nil,
+    watchLiveSource: (any LiveHeartRateServing)? = nil,
     recordings: any HeartRateRecordingRepository, defaults: UserDefaults = .standard,
     errorMessage: @escaping (any Error, String, String) -> String,
     now: @escaping () -> Date = Date.init
   ) {
     self.health = health
     self.sensor = sensor
-    self.liveSource = liveSource
+    self.airPodsSource = liveSource
+    self.watchLiveSource = watchLiveSource
     self.recordings = recordings
     self.defaults = defaults
     self.errorMessage = errorMessage
@@ -65,6 +72,7 @@ import Observation
       ?? .xiaomiSmartBand10
     sensor.onChange = { [weak self] snapshot in self?.receive(snapshot) }
     liveSource?.onChange = { [weak self] snapshot in self?.receiveLive(snapshot) }
+    watchLiveSource?.onChange = { [weak self] snapshot in self?.receiveLive(snapshot) }
   }
   func liveActivityHeartRate(healthReading: HeartRateReading?) -> HeartRateReading? {
     guard let workout, workout.status == .active else { return nil }
@@ -96,7 +104,7 @@ import Observation
     error = nil
   }
   func selectDeviceProfile(_ profile: TrackerDeviceProfile) {
-    if profile != .airPodsPro3, liveRequest != nil {
+    if profile != deviceProfile, liveRequest != nil {
       queueSave()
       stopLiveSession()
     }
@@ -204,10 +212,11 @@ import Observation
 
   func startLiveHeartRate() async {
     guard !startingLive, !hasLiveSession else { return }
-    guard mode == .appleHealth, deviceProfile == .airPodsPro3, let workout,
+    guard mode == .appleHealth, [.airPodsPro3, .appleWatch].contains(deviceProfile), let workout,
       workout.status == .active, let liveSource
     else {
-      error = "Начните тренировку и выберите AirPods Pro 3 в режиме Apple «Здоровье»."
+      error =
+        "Начните тренировку и выберите Apple Watch или AirPods Pro 3 в режиме Apple «Здоровье»."
       return
     }
     let request = UUID()
@@ -245,7 +254,7 @@ import Observation
       guard !Task.isCancelled, !(error is CancellationError) else { return }
       report(
         error, operation: "startLiveHeartRate",
-        fallback: "Не удалось начать приём пульса. Проверьте AirPods и доступ к «Здоровью».")
+        fallback: "Не удалось начать приём пульса. Проверьте устройство и доступ к «Здоровью».")
     }
   }
   func stopLiveHeartRate() {
@@ -269,12 +278,13 @@ import Observation
       liveWorkoutID = nil
       startingLive = false
       if snapshot.state == .failed {
-        error = "Приём пульса остановлен. Проверьте подключение AirPods и начните снова."
+        error = "Приём пульса остановлен. Проверьте подключение устройства и начните снова."
         liveSource?.stop()
       }
       return
     }
-    guard snapshot.state == .running, mode == .appleHealth, deviceProfile == .airPodsPro3,
+    guard snapshot.state == .running, mode == .appleHealth,
+      [.airPodsPro3, .appleWatch].contains(deviceProfile),
       let workout, workout.id == liveWorkoutID, let reading = snapshot.reading,
       reading.isFresh(at: now()), !preparingRecording, let recording,
       recording.origin == .liveHealthKit
