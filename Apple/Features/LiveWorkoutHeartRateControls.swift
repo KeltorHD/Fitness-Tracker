@@ -9,7 +9,7 @@ struct LiveWorkoutHeartRateControls: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 10) {
       FreshHeartRateValue(reading: model.live.reading, isActive: model.live.state == .running)
-      Text(L10n.text(model.live.state.message, locale: locale)).font(.caption).foregroundStyle(
+      Text(L10n.text(statusMessage, locale: locale)).font(.caption).foregroundStyle(
         .secondary)
       if model.startingLive { ProgressView() }
       if model.hasLiveSession || model.startingLive {
@@ -30,6 +30,17 @@ struct LiveWorkoutHeartRateControls: View {
       }
     }
     .task(id: request) { if request > 0 { await model.startLiveHeartRate() } }
+  }
+  private var statusMessage: String {
+    guard model.deviceProfile == .appleWatch else { return model.live.state.message }
+    switch model.live.state {
+    case .idle, .stopped: return "Приём пульса выключен."
+    case .starting: return "Подтвердите доступ к «Здоровью» в FitLife на Apple Watch."
+    case .running: return "Приём пульса с Apple Watch включён."
+    case .paused: return "Приём пульса на паузе."
+    case .failed:
+      return "Не удалось получить пульс. Откройте FitLife на Apple Watch и повторите."
+    }
   }
 }
 

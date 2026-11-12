@@ -188,6 +188,40 @@
         }
       }
     },
+    "%@ мл": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ мл"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ ml"
+          }
+        }
+      }
+    },
+    "%@ ночей с данными": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ ночей с данными"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ nights with data"
+          }
+        }
+      }
+    },
     "%@ ожидают передачи на iPhone": {
       "extractionState": "manual",
       "localizations": {
@@ -303,6 +337,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sets: %@/%@"
+          }
+        }
+      }
+    },
+    "%@: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: %@"
+          }
+        }
+      }
+    },
+    "+ %@ мл": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+ %@ мл"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+ %@ ml"
           }
         }
       }
@@ -439,6 +507,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "876 exercises and 1746 photos included in the app."
+          }
+        }
+      }
+    },
+    "Apple Watch на связи": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Watch на связи"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Watch is connected"
+          }
+        }
+      }
+    },
+    "Apple Watch не связаны с этим iPhone": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Watch не связаны с этим iPhone"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Watch is not paired with this iPhone"
           }
         }
       }
@@ -613,6 +715,57 @@
         }
       }
     },
+    "Watch готов · резерв на iPhone": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Watch готов · резерв на iPhone"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Watch ready · iPhone backup"
+          }
+        }
+      }
+    },
+    "Watch ещё не подтвердили умное окно. Резервный будильник остаётся на iPhone.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Watch ещё не подтвердили умное окно. Резервный будильник остаётся на iPhone."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Watch has not confirmed the smart window yet. The iPhone fallback alarm remains set."
+          }
+        }
+      }
+    },
+    "Watch: нужна повторная подготовка": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Watch: нужна повторная подготовка"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Watch needs to be prepared again"
+          }
+        }
+      }
+    },
     "Xiaomi Smart Band 10": {
       "extractionState": "manual",
       "localizations": {
@@ -728,6 +881,57 @@
           "stringUnit": {
             "state": "translated",
             "value": "iCloud is temporarily unavailable. Try again later."
+          }
+        }
+      }
+    },
+    "iPhone включён до подтверждения Watch": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPhone включён до подтверждения Watch"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPhone stays on until Watch confirms"
+          }
+        }
+      }
+    },
+    "iPhone готов · Watch ожидает подготовки": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPhone готов · Watch ожидает подготовки"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPhone ready · prepare Watch"
+          }
+        }
+      }
+    },
+    "iPhone с резервом": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPhone с резервом"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With iPhone backup"
           }
         }
       }
@@ -1208,6 +1412,57 @@
         }
       }
     },
+    "Базовый": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Базовый"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Core"
+          }
+        }
+      }
+    },
+    "Базовый сон": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Базовый сон"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Core sleep"
+          }
+        }
+      }
+    },
+    "Баланс питания": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Баланс питания"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutrition balance"
+          }
+        }
+      }
+    },
     "Без выбора шаблона начнётся свободная тренировка.": {
       "extractionState": "manual",
       "localizations": {
@@ -1276,6 +1531,23 @@
         }
       }
     },
+    "Без пробуждений": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Без пробуждений"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Longest continuous sleep"
+          }
+        }
+      }
+    },
     "Без расписания": {
       "extractionState": "manual",
       "localizations": {
@@ -1289,6 +1561,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Unscheduled"
+          }
+        }
+      }
+    },
+    "Без тренировки": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Без тренировки"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No workout"
+          }
+        }
+      }
+    },
+    "Без умного окна": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Без умного окна"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No smart window"
           }
         }
       }
@@ -1463,6 +1769,23 @@
         }
       }
     },
+    "Бодрствование": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Бодрствование"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Awake"
+          }
+        }
+      }
+    },
     "Большая ягодичная мышца": {
       "extractionState": "manual",
       "localizations": {
@@ -1531,6 +1854,108 @@
         }
       }
     },
+    "Будильник на выбранную дату с сигналом в указанное время.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Будильник на выбранную дату с сигналом в указанное время."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A one-time alarm on the selected date at the specified time."
+          }
+        }
+      }
+    },
+    "Будильник на выбранную дату. Умное окно может разбудить раньше, но не позже указанного времени.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Будильник на выбранную дату. Умное окно может разбудить раньше, но не позже указанного времени."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A one-time alarm on the selected date. The smart window may wake you earlier; the fallback is set for the deadline."
+          }
+        }
+      }
+    },
+    "Будильник на выбранную дату. Часы могут разбудить в пределах окна до этого времени.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Будильник на выбранную дату. Часы могут разбудить в пределах окна до этого времени."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A one-time alarm on the selected date. Watch may wake you within the window before this time."
+          }
+        }
+      }
+    },
+    "Будильники": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Будильники"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alarms"
+          }
+        }
+      }
+    },
+    "Будильников пока нет": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Будильников пока нет"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No alarms yet"
+          }
+        }
+      }
+    },
+    "Быстрый сон (REM)": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Быстрый сон (REM)"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "REM sleep"
+          }
+        }
+      }
+    },
     "В CSV нет тренировок для импорта.": {
       "extractionState": "manual",
       "localizations": {
@@ -1561,6 +1986,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "The CSV is missing required workout log columns."
+          }
+        }
+      }
+    },
+    "В выбранной порции": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "В выбранной порции"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selected portion"
           }
         }
       }
@@ -1646,6 +2088,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "A file can contain up to 10,000 workouts, 1,000 plans and 10,000 weight entries."
+          }
+        }
+      }
+    },
+    "В постели": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "В постели"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Time in bed"
           }
         }
       }
@@ -1888,6 +2347,23 @@
         }
       }
     },
+    "Ваш ритм сна": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ваш ритм сна"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your sleep rhythm"
+          }
+        }
+      }
+    },
     "Ваш следующий подход": {
       "extractionState": "manual",
       "localizations": {
@@ -1986,6 +2462,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Enter food manually"
+          }
+        }
+      }
+    },
+    "Ввести штрихкод вручную": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ввести штрихкод вручную"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter barcode manually"
           }
         }
       }
@@ -2432,6 +2925,23 @@
         }
       }
     },
+    "Включить будильник": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Включить будильник"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enable alarm"
+          }
+        }
+      }
+    },
     "Включить приём пульса": {
       "extractionState": "manual",
       "localizations": {
@@ -2445,6 +2955,74 @@
           "stringUnit": {
             "state": "translated",
             "value": "Enable heart rate recording"
+          }
+        }
+      }
+    },
+    "Включён": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Включён"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enabled"
+          }
+        }
+      }
+    },
+    "Во сне": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Во сне"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Asleep"
+          }
+        }
+      }
+    },
+    "Вода": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вода"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Water"
+          }
+        }
+      }
+    },
+    "Вода: %@ мл": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вода: %@ мл"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Water: %@ ml"
           }
         }
       }
@@ -2602,6 +3180,23 @@
         }
       }
     },
+    "Время засыпания": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Время засыпания"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Time to fall asleep"
+          }
+        }
+      }
+    },
     "Все мышцы": {
       "extractionState": "manual",
       "localizations": {
@@ -2653,6 +3248,40 @@
         }
       }
     },
+    "Все приёмы пищи": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Все приёмы пищи"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All meals"
+          }
+        }
+      }
+    },
+    "Все тренировки": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Все тренировки"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All workouts"
+          }
+        }
+      }
+    },
     "Все упражнения выполнены": {
       "extractionState": "manual",
       "localizations": {
@@ -2666,6 +3295,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "All exercises completed"
+          }
+        }
+      }
+    },
+    "Все фазы": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Все фазы"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All stages"
           }
         }
       }
@@ -2908,6 +3554,23 @@
         }
       }
     },
+    "Выберите будущее время и окно пробуждения до 30 минут.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выберите будущее время и окно пробуждения до 30 минут."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a future time and a wake-up window of up to 30 minutes."
+          }
+        }
+      }
+    },
     "Выберите другой период или завершите тренировку с рабочими подходами этого упражнения.": {
       "extractionState": "manual",
       "localizations": {
@@ -2993,6 +3656,23 @@
         }
       }
     },
+    "Выберите столбик, чтобы посмотреть эту ночь. Пустые дни не участвуют в среднем.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выберите столбик, чтобы посмотреть эту ночь. Пустые дни не участвуют в среднем."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Select a bar to view that night. Days without records are excluded from the average."
+          }
+        }
+      }
+    },
     "Выберите файл .fitlife или .json.": {
       "extractionState": "manual",
       "localizations": {
@@ -3023,6 +3703,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Choose a .fitlife, .json or .csv file."
+          }
+        }
+      }
+    },
+    "Выбранный день": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выбранный день"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selected day"
+          }
+        }
+      }
+    },
+    "Выбранный участок": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выбранный участок"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selected interval"
           }
         }
       }
@@ -3180,6 +3894,40 @@
         }
       }
     },
+    "Выключен": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выключен"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Disabled"
+          }
+        }
+      }
+    },
+    "Выключить": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выключить"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dismiss"
+          }
+        }
+      }
+    },
     "Выполнено %@ из %@ подходов": {
       "extractionState": "manual",
       "localizations": {
@@ -3299,6 +4047,23 @@
         }
       }
     },
+    "Где будить": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Где будить"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alarm delivery"
+          }
+        }
+      }
+    },
     "Гиря": {
       "extractionState": "manual",
       "localizations": {
@@ -3312,6 +4077,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Kettlebell"
+          }
+        }
+      }
+    },
+    "Глубокий": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Глубокий"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deep"
+          }
+        }
+      }
+    },
+    "Глубокий сон": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Глубокий сон"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deep sleep"
           }
         }
       }
@@ -3520,6 +4319,40 @@
         }
       }
     },
+    "Данные и доступ": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Данные и доступ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data and permissions"
+          }
+        }
+      }
+    },
+    "Данные могут ещё не синхронизироваться с часов. Проверьте записи и доступ в приложении «Здоровье».": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Данные могут ещё не синхронизироваться с часов. Проверьте записи и доступ в приложении «Здоровье»."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data may not have synced from your watch yet. Check the records and permissions in Health."
+          }
+        }
+      }
+    },
     "Данные могут поступать с задержкой. Доступны только показатели, переданные в «Здоровье» и разрешённые для FitLife.": {
       "extractionState": "manual",
       "localizations": {
@@ -3554,6 +4387,23 @@
         }
       }
     },
+    "Данные сна недоступны в демо-режиме": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Данные сна недоступны в демо-режиме"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sleep data is unavailable in demo mode"
+          }
+        }
+      }
+    },
     "Данные этого подхода будут удалены из тренировки.": {
       "extractionState": "manual",
       "localizations": {
@@ -3584,6 +4434,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Data: ODbL 1.0"
+          }
+        }
+      }
+    },
+    "Данные: perek.us": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Данные: perek.us"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data: perek.us"
           }
         }
       }
@@ -3635,6 +4502,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Date and time"
+          }
+        }
+      }
+    },
+    "Датчик движения недоступен. Разбудим в конце окна.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Датчик движения недоступен. Разбудим в конце окна."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Motion data is unavailable. The alarm remains set for the end of the window."
           }
         }
       }
@@ -3720,6 +4604,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Drop-set group actions"
+          }
+        }
+      }
+    },
+    "Действия питания": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Действия питания"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Food diary actions"
+          }
+        }
+      }
+    },
+    "Действия с будильником": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Действия с будильником"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alarm actions"
           }
         }
       }
@@ -3962,6 +4880,23 @@
         }
       }
     },
+    "Длительность": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Длительность"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Duration"
+          }
+        }
+      }
+    },
     "Длительность тренировки": {
       "extractionState": "manual",
       "localizations": {
@@ -4013,6 +4948,23 @@
         }
       }
     },
+    "Для живого пульса откройте FitLife на Apple Watch, начните тренировку на iPhone и включите приём пульса. Разрешите доступ к пульсу и тренировкам на часах. Не запускайте одновременно приложение «Тренировка» Apple: часы поддерживают один сеанс тренировки.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Для живого пульса откройте FitLife на Apple Watch, начните тренировку на iPhone и включите приём пульса. Разрешите доступ к пульсу и тренировкам на часах. Не запускайте одновременно приложение «Тренировка» Apple: часы поддерживают один сеанс тренировки."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For live heart rate, open FitLife on Apple Watch, start a workout on iPhone, and enable heart rate reception. Allow heart rate and workout access on your watch. Do not run Apple Workout at the same time: the watch supports one workout session."
+          }
+        }
+      }
+    },
     "Для завершения отметьте хотя бы один выполненный подход.": {
       "extractionState": "manual",
       "localizations": {
@@ -4043,6 +4995,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Use file import and export to transfer your history."
+          }
+        }
+      }
+    },
+    "Для поиска новых продуктов нужен интернет. Недавние, избранные и ручной ввод доступны без сети.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Для поиска новых продуктов нужен интернет. Недавние, избранные и ручной ввод доступны без сети."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Searching for new foods requires internet. Recent foods, favorites and manual entry work offline."
           }
         }
       }
@@ -4183,6 +5152,57 @@
         }
       }
     },
+    "Дневник сна": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Дневник сна"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sleep diary"
+          }
+        }
+      }
+    },
+    "Дней активности: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Дней активности: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active days: %@"
+          }
+        }
+      }
+    },
+    "Дни без записей не означают нулевое потребление. Фото без КБЖУ делают итог неполным.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Дни без записей не означают нулевое потребление. Фото без КБЖУ делают итог неполным."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Days without entries do not mean zero consumption. Photos without nutrition make totals incomplete."
+          }
+        }
+      }
+    },
     "Дни с тренировками в выбранном месяце": {
       "extractionState": "manual",
       "localizations": {
@@ -4251,6 +5271,23 @@
         }
       }
     },
+    "Добавить будильник": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Добавить будильник"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add alarm"
+          }
+        }
+      }
+    },
     "Добавить в блюдо": {
       "extractionState": "manual",
       "localizations": {
@@ -4264,6 +5301,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Add to meal"
+          }
+        }
+      }
+    },
+    "Добавить в избранное": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Добавить в избранное"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add to favorites"
           }
         }
       }
@@ -4659,6 +5713,74 @@
         }
       }
     },
+    "Добавьте цели питания для отслеживания прогресса.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Добавьте цели питания для отслеживания прогресса."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set nutrition goals to track your progress."
+          }
+        }
+      }
+    },
+    "Доли рассчитаны по записанным фазам сна и бодрствования.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Доли рассчитаны по записанным фазам сна и бодрствования."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shares are based on recorded sleep and awake intervals."
+          }
+        }
+      }
+    },
+    "Доли фаз сна": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Доли фаз сна"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sleep stage proportions"
+          }
+        }
+      }
+    },
+    "Доля сна в постели": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Доля сна в постели"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Time in bed spent asleep"
+          }
+        }
+      }
+    },
     "Дополнительно: ": {
       "extractionState": "manual",
       "localizations": {
@@ -4825,6 +5947,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Other equipment"
+          }
+        }
+      }
+    },
+    "Другой объём": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Другой объём"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Other amount"
           }
         }
       }
@@ -5050,6 +6189,40 @@
         }
       }
     },
+    "За 7 дней": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "За 7 дней"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last 7 days"
+          }
+        }
+      }
+    },
+    "За выбранную неделю · только завершённые тренировки": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "За выбранную неделю · только завершённые тренировки"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selected week · completed workouts only"
+          }
+        }
+      }
+    },
     "Завершите текущую тренировку перед открытием демо-профиля.": {
       "extractionState": "manual",
       "localizations": {
@@ -5148,6 +6321,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Breakfast"
+          }
+        }
+      }
+    },
+    "Загружаем записи сна": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Загружаем записи сна"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading sleep records"
           }
         }
       }
@@ -5339,6 +6529,23 @@
         }
       }
     },
+    "Записанное время": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Записанное время"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recorded time"
+          }
+        }
+      }
+    },
     "Записанные подходы этого упражнения тоже будут удалены.": {
       "extractionState": "manual",
       "localizations": {
@@ -5352,6 +6559,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Recorded sets for this exercise will also be deleted."
+          }
+        }
+      }
+    },
+    "Записанные фазы сна": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Записанные фазы сна"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recorded sleep stages"
           }
         }
       }
@@ -5390,6 +6614,23 @@
         }
       }
     },
+    "Записать воду": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Записать воду"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log water"
+          }
+        }
+      }
+    },
     "Записать еду или фото перекуса": {
       "extractionState": "manual",
       "localizations": {
@@ -5403,6 +6644,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Log food or a snack photo"
+          }
+        }
+      }
+    },
+    "Записи питания скопированы.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Записи питания скопированы."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Food entries copied."
           }
         }
       }
@@ -5560,6 +6818,40 @@
         }
       }
     },
+    "Избранное": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Избранное"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Favorites"
+          }
+        }
+      }
+    },
+    "Избранные продукты": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Избранные продукты"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Favorite foods"
+          }
+        }
+      }
+    },
     "Изменение": {
       "extractionState": "manual",
       "localizations": {
@@ -5641,6 +6933,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Edit"
+          }
+        }
+      }
+    },
+    "Изменить будильник": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Изменить будильник"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit alarm"
           }
         }
       }
@@ -6070,6 +7379,40 @@
         }
       }
     },
+    "Источник не передал подробные фазы сна.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Источник не передал подробные фазы сна."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This source did not provide detailed sleep stages."
+          }
+        }
+      }
+    },
+    "Источник передал только время в постели, без длительности и фаз сна.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Источник передал только время в постели, без длительности и фаз сна."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This source provided only time in bed, without sleep duration or stages."
+          }
+        }
+      }
+    },
     "Источник продукта": {
       "extractionState": "manual",
       "localizations": {
@@ -6087,6 +7430,23 @@
         }
       }
     },
+    "Источник продуктов": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Источник продуктов"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Food source"
+          }
+        }
+      }
+    },
     "Источник пульса": {
       "extractionState": "manual",
       "localizations": {
@@ -6100,6 +7460,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Heart rate source"
+          }
+        }
+      }
+    },
+    "Источник: Apple Watch": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Источник: Apple Watch"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Source: Apple Watch"
           }
         }
       }
@@ -6257,6 +7634,23 @@
         }
       }
     },
+    "Каждая ночь — часть восстановления": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Каждая ночь — часть восстановления"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every night helps you recover"
+          }
+        }
+      }
+    },
     "Каждая точка — одна завершённая тренировка. Нажмите на график, чтобы посмотреть значения.": {
       "extractionState": "manual",
       "localizations": {
@@ -6291,6 +7685,40 @@
         }
       }
     },
+    "Как прошла ночь": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Как прошла ночь"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your night"
+          }
+        }
+      }
+    },
+    "Как работает умное окно": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Как работает умное окно"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How the smart window works"
+          }
+        }
+      }
+    },
     "Калории и пульс не рассчитываются из веса снарядов. В «Здоровье» передаются тип, длительность и паузы тренировки.": {
       "extractionState": "manual",
       "localizations": {
@@ -6304,6 +7732,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Calories and heart rate are not inferred from lifting weights. Only workout type, duration and pauses are exported to Health."
+          }
+        }
+      }
+    },
+    "Калории по дням": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Калории по дням"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daily calories"
           }
         }
       }
@@ -6338,6 +7783,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Soleus"
+          }
+        }
+      }
+    },
+    "Камера временно недоступна. Закройте сканер и повторите или введите код вручную.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Камера временно недоступна. Закройте сканер и повторите или введите код вручную."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Camera is temporarily unavailable. Close the scanner and try again, or enter the code manually."
           }
         }
       }
@@ -6393,6 +7855,23 @@
         }
       }
     },
+    "Конец": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Конец"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "End"
+          }
+        }
+      }
+    },
     "Контролируйте движение и сохраняйте устойчивую опору. Используйте комфортную амплитуду.": {
       "extractionState": "manual",
       "localizations": {
@@ -6406,6 +7885,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Control the movement and maintain a stable base. Use a comfortable range of motion."
+          }
+        }
+      }
+    },
+    "Копировать на дату": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Копировать на дату"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy to date"
+          }
+        }
+      }
+    },
+    "Копировать питание": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Копировать питание"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy food entries"
           }
         }
       }
@@ -6440,6 +7953,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "A backup with this identifier already exists. Create a new backup."
+          }
+        }
+      }
+    },
+    "Коснитесь графика или фазы, чтобы рассмотреть сон подробнее.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Коснитесь графика или фазы, чтобы рассмотреть сон подробнее."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touch the chart or a stage to explore your sleep."
           }
         }
       }
@@ -6733,6 +8263,23 @@
         }
       }
     },
+    "Месяц": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Месяц"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Month"
+          }
+        }
+      }
+    },
     "Множитель веса должен быть от 1 до 10.": {
       "extractionState": "manual",
       "localizations": {
@@ -6937,6 +8484,40 @@
         }
       }
     },
+    "На %@ больше прошлой ночи": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "На %@ больше прошлой ночи"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ more than the previous night"
+          }
+        }
+      }
+    },
+    "На %@ меньше прошлой ночи": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "На %@ меньше прошлой ночи"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ less than the previous night"
+          }
+        }
+      }
+    },
     "На 100 г продукта": {
       "extractionState": "manual",
       "localizations": {
@@ -6971,6 +8552,23 @@
         }
       }
     },
+    "На Apple Watch": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "На Apple Watch"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On Apple Watch"
+          }
+        }
+      }
+    },
     "На Mi Band 10 откройте Настройки → Share HR и включите передачу пульса. Держите браслет рядом с iPhone.": {
       "extractionState": "manual",
       "localizations": {
@@ -7001,6 +8599,57 @@
           "stringUnit": {
             "state": "translated",
             "value": "On WATCH GT 6 Pro, open Settings → HR Data Broadcasts and start broadcasting. Keep the watch near your iPhone and tap Find heart rate monitor."
+          }
+        }
+      }
+    },
+    "На iPhone": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "На iPhone"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On iPhone"
+          }
+        }
+      }
+    },
+    "На всех устройствах": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "На всех устройствах"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On all devices"
+          }
+        }
+      }
+    },
+    "На кольце — соотношение БЖУ в граммах.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "На кольце — соотношение БЖУ в граммах."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The ring shows the ratio of macros in grams."
           }
         }
       }
@@ -7069,6 +8718,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "This week"
+          }
+        }
+      }
+    },
+    "На этом устройстве сканирование недоступно. Введите номер штрихкода вручную.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "На этом устройстве сканирование недоступно. Введите номер штрихкода вручную."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scanning is unavailable on this device. Enter the barcode manually."
+          }
+        }
+      }
+    },
+    "Наведите камеру на штрихкод упаковки. Кадры не сохраняются и не отправляются в сеть.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Наведите камеру на штрихкод упаковки. Кадры не сохраняются и не отправляются в сеть."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Point the camera at the barcode on the packaging. Camera frames are not saved or uploaded."
           }
         }
       }
@@ -7396,6 +9079,23 @@
         }
       }
     },
+    "Настроить пробуждение": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Настроить пробуждение"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set up your wake-up"
+          }
+        }
+      }
+    },
     "Настройки": {
       "extractionState": "manual",
       "localizations": {
@@ -7426,6 +9126,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Heart rate settings"
+          }
+        }
+      }
+    },
+    "Начало": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Начало"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start"
+          }
+        }
+      }
+    },
+    "Начало сна": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Начало сна"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sleep started"
           }
         }
       }
@@ -7549,6 +9283,40 @@
         }
       }
     },
+    "Начните тренировку и выберите Apple Watch или AirPods Pro 3 в режиме Apple «Здоровье».": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Начните тренировку и выберите Apple Watch или AirPods Pro 3 в режиме Apple «Здоровье»."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start a workout and select Apple Watch or AirPods Pro 3 in Apple Health mode."
+          }
+        }
+      }
+    },
+    "Начните тренировку на iPhone, выберите Apple Watch в настройках пульса и включите приём. Оставьте FitLife на часах открытым при запуске.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Начните тренировку на iPhone, выберите Apple Watch в настройках пульса и включите приём. Оставьте FitLife на часах открытым при запуске."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start a workout on iPhone, select Apple Watch in heart rate settings, and enable reception. Keep FitLife open on your watch when starting."
+          }
+        }
+      }
+    },
     "Не выбраны": {
       "extractionState": "manual",
       "localizations": {
@@ -7596,6 +9364,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "The exercise library file is missing."
+          }
+        }
+      }
+    },
+    "Не показывать данные сна": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не показывать данные сна"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hide sleep data"
+          }
+        }
+      }
+    },
+    "Не удалось включить пульс. Проверьте разрешения «Здоровья» на часах и повторите с iPhone.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось включить пульс. Проверьте разрешения «Здоровья» на часах и повторите с iPhone."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not enable heart rate. Check Health permissions on your watch and try again from iPhone."
           }
         }
       }
@@ -7702,6 +9504,40 @@
         }
       }
     },
+    "Не удалось записать воду. Проверьте объём и повторите.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось записать воду. Проверьте объём и повторите."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not log water. Check the amount and try again."
+          }
+        }
+      }
+    },
+    "Не удалось изменить избранное. Попробуйте ещё раз.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось изменить избранное. Попробуйте ещё раз."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not update favorites. Try again."
+          }
+        }
+      }
+    },
     "Не удалось изменить тренировку. Откройте FitLife и повторите действие.": {
       "extractionState": "manual",
       "localizations": {
@@ -7719,6 +9555,23 @@
         }
       }
     },
+    "Не удалось настроить будильник. Повторите попытку.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось настроить будильник. Повторите попытку."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not set up the alarm. Try again."
+          }
+        }
+      }
+    },
     "Не удалось начать приём пульса. Проверьте AirPods и доступ к «Здоровью».": {
       "extractionState": "manual",
       "localizations": {
@@ -7732,6 +9585,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Could not start heart rate recording. Check your AirPods and Health permissions."
+          }
+        }
+      }
+    },
+    "Не удалось начать приём пульса. Проверьте устройство и доступ к «Здоровью».": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось начать приём пульса. Проверьте устройство и доступ к «Здоровью»."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not start heart rate reception. Check your device and Health permissions."
           }
         }
       }
@@ -7957,6 +9827,23 @@
         }
       }
     },
+    "Не удалось отправить состояние будильника на iPhone.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось отправить состояние будильника на iPhone."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not send the alarm status to iPhone."
+          }
+        }
+      }
+    },
     "Не удалось отправить тренировку в «Здоровье». Проверьте разрешение на запись и попробуйте ещё раз.": {
       "extractionState": "manual",
       "localizations": {
@@ -7970,6 +9857,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Couldn’t export to Health. Check write permission and try again."
+          }
+        }
+      }
+    },
+    "Не удалось передать пульс на iPhone. Держите телефон рядом и проверьте подключение.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось передать пульс на iPhone. Держите телефон рядом и проверьте подключение."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not send heart rate to iPhone. Keep your phone nearby and check the connection."
           }
         }
       }
@@ -8059,6 +9963,23 @@
         }
       }
     },
+    "Не удалось получить пульс. Откройте FitLife на Apple Watch и повторите.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось получить пульс. Откройте FitLife на Apple Watch и повторите."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not receive heart rate. Open FitLife on Apple Watch and try again."
+          }
+        }
+      }
+    },
     "Не удалось получить пульс. Проверьте AirPods и разрешения, затем повторите.": {
       "extractionState": "manual",
       "localizations": {
@@ -8106,6 +10027,57 @@
           "stringUnit": {
             "state": "translated",
             "value": "Could not verify the server response. Try again."
+          }
+        }
+      }
+    },
+    "Не удалось прочитать будильники на Watch. Данные не удалены.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось прочитать будильники на Watch. Данные не удалены."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not read alarms on Watch. Your data has not been deleted."
+          }
+        }
+      }
+    },
+    "Не удалось прочитать будильники с iPhone.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось прочитать будильники с iPhone."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not read alarms from iPhone."
+          }
+        }
+      }
+    },
+    "Не удалось прочитать данные сна. Проверьте доступ к «Здоровью» и повторите.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось прочитать данные сна. Проверьте доступ к «Здоровью» и повторите."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not read sleep data. Check Health permissions and try again."
           }
         }
       }
@@ -8161,6 +10133,40 @@
         }
       }
     },
+    "Не удалось прочитать команду приёма пульса.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось прочитать команду приёма пульса."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not read the heart rate command."
+          }
+        }
+      }
+    },
+    "Не удалось прочитать настройки будильников. Сохранённые данные не удалены.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось прочитать настройки будильников. Сохранённые данные не удалены."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not read alarm settings. Your saved data has not been deleted."
+          }
+        }
+      }
+    },
     "Не удалось прочитать показатели. Проверьте доступ к «Здоровью» и повторите.": {
       "extractionState": "manual",
       "localizations": {
@@ -8208,6 +10214,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Couldn’t read the file. Make sure it is available on your device."
+          }
+        }
+      }
+    },
+    "Не удалось скопировать питание. Исходные записи сохранены.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось скопировать питание. Исходные записи сохранены."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not copy food entries. The originals are unchanged."
+          }
+        }
+      }
+    },
+    "Не удалось сохранить будильник на Watch.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось сохранить будильник на Watch."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not save the alarm on Watch."
           }
         }
       }
@@ -8416,6 +10456,23 @@
         }
       }
     },
+    "Не удалось удалить запись воды. Попробуйте ещё раз.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось удалить запись воды. Попробуйте ещё раз."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not delete the water entry. Try again."
+          }
+        }
+      }
+    },
     "Не удалось удалить запись питания. Попробуйте ещё раз.": {
       "extractionState": "manual",
       "localizations": {
@@ -8501,6 +10558,40 @@
         }
       }
     },
+    "Не уточнён": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не уточнён"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unspecified"
+          }
+        }
+      }
+    },
+    "Недавние": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Недавние"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recent"
+          }
+        }
+      }
+    },
     "Недавние продукты": {
       "extractionState": "manual",
       "localizations": {
@@ -8518,6 +10609,57 @@
         }
       }
     },
+    "Недельная цель": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Недельная цель"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekly goal"
+          }
+        }
+      }
+    },
+    "Недельная цель тренировок": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Недельная цель тренировок"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekly workout goal"
+          }
+        }
+      }
+    },
+    "Недельная цель: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Недельная цель: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekly goal: %@"
+          }
+        }
+      }
+    },
     "Неделя": {
       "extractionState": "manual",
       "localizations": {
@@ -8531,6 +10673,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Week"
+          }
+        }
+      }
+    },
+    "Недостаточно данных для анализа недели.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Недостаточно данных для анализа недели."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not enough data to analyze this week."
+          }
+        }
+      }
+    },
+    "Недостаточно данных для анализа периода.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Недостаточно данных для анализа периода."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not enough data for this period."
           }
         }
       }
@@ -8671,6 +10847,23 @@
         }
       }
     },
+    "Нет данных": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нет данных"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No data"
+          }
+        }
+      }
+    },
     "Нет данных за выбранный период": {
       "extractionState": "manual",
       "localizations": {
@@ -8684,6 +10877,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "No data for this period"
+          }
+        }
+      }
+    },
+    "Нет данных прошлой недели для сравнения объёма.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нет данных прошлой недели для сравнения объёма."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No previous-week data to compare volume."
+          }
+        }
+      }
+    },
+    "Нет данных прошлой недели для сравнения подходов.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нет данных прошлой недели для сравнения подходов."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No previous-week data to compare sets."
           }
         }
       }
@@ -8769,6 +10996,57 @@
           "stringUnit": {
             "state": "translated",
             "value": "No entries"
+          }
+        }
+      }
+    },
+    "Нет записей для копирования.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нет записей для копирования."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No entries to copy."
+          }
+        }
+      }
+    },
+    "Нет записей питания": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нет записей питания"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No food entries"
+          }
+        }
+      }
+    },
+    "Нет записей сна за эту ночь": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нет записей сна за эту ночь"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No sleep records for this night"
           }
         }
       }
@@ -8875,6 +11153,23 @@
         }
       }
     },
+    "Нет умного будильника на ближайшие 36 часов.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нет умного будильника на ближайшие 36 часов."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No smart alarm is available within the next 36 hours."
+          }
+        }
+      }
+    },
     "Нижняя часть трапеции": {
       "extractionState": "manual",
       "localizations": {
@@ -8922,6 +11217,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "New workout"
+          }
+        }
+      }
+    },
+    "Новый будильник": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Новый будильник"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New alarm"
           }
         }
       }
@@ -8994,6 +11306,40 @@
         }
       }
     },
+    "Ночь учитывается с полудня предыдущего дня до полудня выбранного дня.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ночь учитывается с полудня предыдущего дня до полудня выбранного дня."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Each night runs from noon on the previous day to noon on the selected day."
+          }
+        }
+      }
+    },
+    "Нужна установленная Watch-версия FitLife. Измерения передаются напрямую, без ожидания синхронизации «Здоровья». При потере связи старое значение не показывается как текущий пульс.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нужна установленная Watch-версия FitLife. Измерения передаются напрямую, без ожидания синхронизации «Здоровья». При потере связи старое значение не показывается как текущий пульс."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FitLife must be installed on Apple Watch. Measurements are sent directly without waiting for Health synchronization. If the connection drops, an old reading is not shown as current heart rate."
+          }
+        }
+      }
+    },
     "ОТДЫХ С": {
       "extractionState": "manual",
       "localizations": {
@@ -9045,6 +11391,23 @@
         }
       }
     },
+    "Области: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Области: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Regions: %@"
+          }
+        }
+      }
+    },
     "Обнаружены повторяющиеся идентификаторы.": {
       "extractionState": "manual",
       "localizations": {
@@ -9058,6 +11421,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Duplicate identifiers were found."
+          }
+        }
+      }
+    },
+    "Обновить": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Обновить"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Refresh"
           }
         }
       }
@@ -9232,6 +11612,23 @@
         }
       }
     },
+    "Ожидает подтверждения на Watch": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ожидает подтверждения на Watch"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Awaiting confirmation on Watch"
+          }
+        }
+      }
+    },
     "Океан": {
       "extractionState": "manual",
       "localizations": {
@@ -9245,6 +11642,74 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ocean"
+          }
+        }
+      }
+    },
+    "Окно до будильника": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Окно до будильника"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Window before alarm"
+          }
+        }
+      }
+    },
+    "Окно запрошено на Watch": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Окно запрошено на Watch"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Window requested on Watch"
+          }
+        }
+      }
+    },
+    "Окно уже заканчивается. Резервный будильник остаётся на iPhone.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Окно уже заканчивается. Резервный будильник остаётся на iPhone."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The window is almost over. The iPhone fallback alarm remains set."
+          }
+        }
+      }
+    },
+    "Окно: %@ мин": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Окно: %@ мин"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Window: %@ min"
           }
         }
       }
@@ -9555,6 +12020,91 @@
         }
       }
     },
+    "Откройте FitLife на Apple Watch и держите часы рядом с iPhone.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Откройте FitLife на Apple Watch и держите часы рядом с iPhone."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open FitLife on Apple Watch and keep your watch near your iPhone."
+          }
+        }
+      }
+    },
+    "Откройте FitLife на Apple Watch, чтобы подтвердить связь.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Откройте FitLife на Apple Watch, чтобы подтвердить связь."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open FitLife on Apple Watch to confirm the connection."
+          }
+        }
+      }
+    },
+    "Откройте FitLife на Watch, чтобы подтвердить изменение или выключение сигнала на часах.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Откройте FitLife на Watch, чтобы подтвердить изменение или выключение сигнала на часах."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open FitLife on Watch to confirm changing or disabling the Watch alarm."
+          }
+        }
+      }
+    },
+    "Откройте FitLife на Watch, чтобы подтвердить отмену умного окна.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Откройте FitLife на Watch, чтобы подтвердить отмену умного окна."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open FitLife on Watch to confirm cancellation of the smart window."
+          }
+        }
+      }
+    },
+    "Откройте FitLife на подключённых Apple Watch, чтобы выбрать сигнал только на часах.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Откройте FitLife на подключённых Apple Watch, чтобы выбрать сигнал только на часах."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open FitLife on your connected Apple Watch to select Watch-only alarms."
+          }
+        }
+      }
+    },
     "Откройте FitLife, чтобы обновить сводку.": {
       "extractionState": "manual",
       "localizations": {
@@ -9585,6 +12135,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Open a completed workout in your journal and choose Export to Health. FitLife will request write permission."
+          }
+        }
+      }
+    },
+    "Откройте приложение на Watch для подключения": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Откройте приложение на Watch для подключения"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open the Watch app to connect"
           }
         }
       }
@@ -9827,6 +12394,23 @@
         }
       }
     },
+    "Оцениваем движения, а не фазу сна. Если подходящий момент не найден, будим в конце окна.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Оцениваем движения, а не фазу сна. Если подходящий момент не найден, будим в конце окна."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "We estimate movement, not sleep stages. If no suitable moment is found, the alarm stays set for the end of the window."
+          }
+        }
+      }
+    },
     "Очистить значение": {
       "extractionState": "manual",
       "localizations": {
@@ -9997,6 +12581,40 @@
         }
       }
     },
+    "Перед сном откройте FitLife на Watch и подтвердите умное окно. Без подтверждения работает обычный будильник.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Перед сном откройте FitLife на Watch и подтвердите умное окно. Без подтверждения работает обычный будильник."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Before bed, open FitLife on Watch and confirm the smart window. Without confirmation, the fixed alarm still works."
+          }
+        }
+      }
+    },
+    "Передача пульса на iPhone": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Передача пульса на iPhone"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sending heart rate to iPhone"
+          }
+        }
+      }
+    },
     "Передаются тип, длительность и интервалы пауз. Данные пульса и калорий не генерируются.": {
       "extractionState": "manual",
       "localizations": {
@@ -10099,6 +12717,23 @@
         }
       }
     },
+    "Период анализа сна": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Период анализа сна"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sleep analysis period"
+          }
+        }
+      }
+    },
     "Период графиков": {
       "extractionState": "manual",
       "localizations": {
@@ -10133,6 +12768,23 @@
         }
       }
     },
+    "Периоды бодрствования": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Периоды бодрствования"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Awake periods"
+          }
+        }
+      }
+    },
     "Питание": {
       "extractionState": "manual",
       "localizations": {
@@ -10150,6 +12802,23 @@
         }
       }
     },
+    "Питание за 7 дней": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Питание за 7 дней"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Food diary for 7 days"
+          }
+        }
+      }
+    },
     "Питание и фотографии еды не входят в архив тренировок.": {
       "extractionState": "manual",
       "localizations": {
@@ -10163,6 +12832,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nutrition and meal photos are not included in workout archives."
+          }
+        }
+      }
+    },
+    "Питание недоступно": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Питание недоступно"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Food diary unavailable"
           }
         }
       }
@@ -10473,6 +13159,40 @@
         }
       }
     },
+    "Подготовить будильник": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Подготовить будильник"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prepare alarm"
+          }
+        }
+      }
+    },
+    "Подготовить умное окно": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Подготовить умное окно"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prepare smart window"
+          }
+        }
+      }
+    },
     "Подготовка данных…": {
       "extractionState": "manual",
       "localizations": {
@@ -10486,6 +13206,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Preparing data…"
+          }
+        }
+      }
+    },
+    "Подготовка запрошена на Watch": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Подготовка запрошена на Watch"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preparation requested on Watch"
           }
         }
       }
@@ -10575,6 +13312,40 @@
         }
       }
     },
+    "Подключить данные сна": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Подключить данные сна"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connect sleep data"
+          }
+        }
+      }
+    },
+    "Подробности сна": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Подробности сна"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sleep details"
+          }
+        }
+      }
+    },
     "Подтвердите действие": {
       "extractionState": "manual",
       "localizations": {
@@ -10588,6 +13359,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Confirm action"
+          }
+        }
+      }
+    },
+    "Подтвердите доступ к «Здоровью» в FitLife на Apple Watch.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Подтвердите доступ к «Здоровью» в FitLife на Apple Watch."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confirm Health access in FitLife on Apple Watch."
           }
         }
       }
@@ -10728,6 +13516,23 @@
         }
       }
     },
+    "Поиск": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Поиск"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search"
+          }
+        }
+      }
+    },
     "Поиск недоступен. Проверьте интернет или добавьте продукт вручную.": {
       "extractionState": "manual",
       "localizations": {
@@ -10779,6 +13584,23 @@
         }
       }
     },
+    "Пока нет записей": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пока нет записей"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No entries yet"
+          }
+        }
+      }
+    },
     "Пока нет записей веса": {
       "extractionState": "manual",
       "localizations": {
@@ -10809,6 +13631,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "No food entries yet"
+          }
+        }
+      }
+    },
+    "Пока нет избранных продуктов": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пока нет избранных продуктов"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No favorite foods yet"
+          }
+        }
+      }
+    },
+    "Пока нет недавних продуктов": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пока нет недавних продуктов"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No recent foods yet"
           }
         }
       }
@@ -10847,6 +13703,23 @@
         }
       }
     },
+    "Показатели рассчитаны только по записанным интервалам. Пропуски данных не считаются сном или бодрствованием.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Показатели рассчитаны только по записанным интервалам. Пропуски данных не считаются сном или бодрствованием."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Metrics use recorded intervals only. Missing data is not classified as sleep or wakefulness."
+          }
+        }
+      }
+    },
     "Показать пульс": {
       "extractionState": "manual",
       "localizations": {
@@ -10860,6 +13733,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Show heart rate"
+          }
+        }
+      }
+    },
+    "Показать сводку": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Показать сводку"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show summary"
           }
         }
       }
@@ -11017,6 +13907,23 @@
         }
       }
     },
+    "Пора просыпаться": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пора просыпаться"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Time to wake up"
+          }
+        }
+      }
+    },
     "Порция": {
       "extractionState": "manual",
       "localizations": {
@@ -11051,6 +13958,40 @@
         }
       }
     },
+    "После изменения или удаления будильника на iPhone откройте приложение на часах для синхронизации.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "После изменения или удаления будильника на iPhone откройте приложение на часах для синхронизации."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After changing or deleting an alarm on iPhone, open the Watch app to sync."
+          }
+        }
+      }
+    },
+    "После подтверждения подготовки на Watch сигнал iPhone будет выключен. При разрядке или сбое часов телефон не подстрахует. До подтверждения резерв остаётся включён.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "После подтверждения подготовки на Watch сигнал iPhone будет выключен. При разрядке или сбое часов телефон не подстрахует. До подтверждения резерв остаётся включён."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Once Watch confirms it is ready, the iPhone alarm is turned off. If Watch loses power or fails, iPhone will not provide a backup. Until confirmation, the backup remains on."
+          }
+        }
+      }
+    },
     "Последнее измерение": {
       "extractionState": "manual",
       "localizations": {
@@ -11064,6 +14005,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Last measurement"
+          }
+        }
+      }
+    },
+    "Последние 7 ночей": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Последние 7 ночей"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last 7 nights"
           }
         }
       }
@@ -11102,6 +14060,23 @@
         }
       }
     },
+    "Последний сигнал с Watch": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Последний сигнал с Watch"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last Watch alert"
+          }
+        }
+      }
+    },
     "Предыдущая вариация": {
       "extractionState": "manual",
       "localizations": {
@@ -11115,6 +14090,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Previous variation"
+          }
+        }
+      }
+    },
+    "Предыдущая неделя": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Предыдущая неделя"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Previous week"
           }
         }
       }
@@ -11166,6 +14158,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Previous photo"
+          }
+        }
+      }
+    },
+    "Предыдущий день": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Предыдущий день"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Previous day"
           }
         }
       }
@@ -11357,6 +14366,57 @@
         }
       }
     },
+    "Приём пульса остановлен. Проверьте подключение устройства и начните снова.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Приём пульса остановлен. Проверьте подключение устройства и начните снова."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate reception stopped. Check your device connection and start again."
+          }
+        }
+      }
+    },
+    "Приём пульса с Apple Watch включён.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Приём пульса с Apple Watch включён."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Watch heart rate reception is on."
+          }
+        }
+      }
+    },
+    "Пробуждение": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пробуждение"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wake up"
+          }
+        }
+      }
+    },
     "Проверить учётную запись": {
       "extractionState": "manual",
       "localizations": {
@@ -11442,6 +14502,23 @@
         }
       }
     },
+    "Проверьте подготовку будильника на Watch. В режиме «только часы» резерв на iPhone может быть выключен.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Проверьте подготовку будильника на Watch. В режиме «только часы» резерв на iPhone может быть выключен."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check that your Watch alarm is ready. In Watch-only mode, the iPhone backup may be turned off."
+          }
+        }
+      }
+    },
     "Проверяем доступ и читаем показатели…": {
       "extractionState": "manual",
       "localizations": {
@@ -11455,6 +14532,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Checking access and reading metrics…"
+          }
+        }
+      }
+    },
+    "Проверяем подключение Apple Watch": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Проверяем подключение Apple Watch"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Checking Apple Watch connection"
           }
         }
       }
@@ -11561,6 +14655,23 @@
         }
       }
     },
+    "Продолжительность и записанные фазы сна из «Здоровья», включая данные Apple Watch.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Продолжительность и записанные фазы сна из «Здоровья», включая данные Apple Watch."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sleep duration and recorded stages from Health, including Apple Watch data."
+          }
+        }
+      }
+    },
     "Продолжить": {
       "extractionState": "manual",
       "localizations": {
@@ -11591,6 +14702,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Resume workout"
+          }
+        }
+      }
+    },
+    "Продукт найден в базе, но его название или КБЖУ не заполнены. Введите данные с упаковки вручную.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Продукт найден в базе, но его название или КБЖУ не заполнены. Введите данные с упаковки вручную."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The product was found, but its name or nutrition data is missing. Enter the package information manually."
           }
         }
       }
@@ -11693,6 +14821,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Read measurements"
+          }
+        }
+      }
+    },
+    "Прошлая неделя: %@ · от неё %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Прошлая неделя: %@ · от неё %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Previous week: %@ · %@ of that"
           }
         }
       }
@@ -11867,6 +15012,23 @@
         }
       }
     },
+    "Пульс на iPhone": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пульс на iPhone"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate on iPhone"
+          }
+        }
+      }
+    },
     "Пульс сохраняется только на этом iPhone и не включается в iCloud, виджеты и файлы экспорта.": {
       "extractionState": "manual",
       "localizations": {
@@ -12037,6 +15199,40 @@
         }
       }
     },
+    "Разбудить не позднее": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Разбудить не позднее"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wake me by"
+          }
+        }
+      }
+    },
+    "Развернуть календарь": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Развернуть календарь"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expand calendar"
+          }
+        }
+      }
+    },
     "Развернуть карточку пульса": {
       "extractionState": "manual",
       "localizations": {
@@ -12084,6 +15280,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Lower back"
+          }
+        }
+      }
+    },
+    "Раздел дневника": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Раздел дневника"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diary section"
           }
         }
       }
@@ -12156,6 +15369,40 @@
         }
       }
     },
+    "Разрешите будильники для FitLife в настройках iPhone.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Разрешите будильники для FitLife в настройках iPhone."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow alarms for FitLife in iPhone Settings."
+          }
+        }
+      }
+    },
+    "Разрешите доступ к камере в настройках iOS или введите номер штрихкода вручную.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Разрешите доступ к камере в настройках iOS или введите номер штрихкода вручную."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow camera access in iOS settings or enter the barcode manually."
+          }
+        }
+      }
+    },
     "Разрешите доступ к тренировкам в «Здоровье», чтобы получать пульс AirPods.": {
       "extractionState": "manual",
       "localizations": {
@@ -12169,6 +15416,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Allow workout access in Health to receive AirPods heart rate data."
+          }
+        }
+      }
+    },
+    "Разрешите доступ к тренировкам в «Здоровье», чтобы получать пульс.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Разрешите доступ к тренировкам в «Здоровье», чтобы получать пульс."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow workout access in Health to receive heart rate."
           }
         }
       }
@@ -12479,6 +15743,23 @@
         }
       }
     },
+    "Ритм тренировок": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ритм тренировок"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Training rhythm"
+          }
+        }
+      }
+    },
     "Роза": {
       "extractionState": "manual",
       "localizations": {
@@ -12581,6 +15862,40 @@
         }
       }
     },
+    "Самая длинная ночь": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Самая длинная ночь"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Longest night"
+          }
+        }
+      }
+    },
+    "Самая короткая ночь": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Самая короткая ночь"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shortest night"
+          }
+        }
+      }
+    },
     "Сбросить": {
       "extractionState": "manual",
       "localizations": {
@@ -12662,6 +15977,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Minimize"
+          }
+        }
+      }
+    },
+    "Свернуть календарь": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Свернуть календарь"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Collapse calendar"
           }
         }
       }
@@ -12887,6 +16219,23 @@
         }
       }
     },
+    "Сегодня": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сегодня"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today"
+          }
+        }
+      }
+    },
     "Сервер не смог выполнить запрос. Повторите попытку.": {
       "extractionState": "manual",
       "localizations": {
@@ -12972,6 +16321,40 @@
         }
       }
     },
+    "Сигнал на iPhone": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сигнал на iPhone"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPhone alarm"
+          }
+        }
+      }
+    },
+    "Сигнал срабатывает на iPhone в указанное время. Умное окно отключено. iOS может автоматически дублировать системный будильник на парных Apple Watch.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сигнал срабатывает на iPhone в указанное время. Умное окно отключено. iOS может автоматически дублировать системный будильник на парных Apple Watch."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The alarm sounds on iPhone at the specified time. The smart window is off. iOS may automatically mirror the system alarm to paired Apple Watch."
+          }
+        }
+      }
+    },
     "Сине-фиолетовые акценты": {
       "extractionState": "manual",
       "localizations": {
@@ -13040,6 +16423,125 @@
         }
       }
     },
+    "Системный резерв требует проверки": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Системный резерв требует проверки"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fallback alarm needs verification"
+          }
+        }
+      }
+    },
+    "Системный резерв установлен": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Системный резерв установлен"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fallback alarm is set"
+          }
+        }
+      }
+    },
+    "Сканер недоступен": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сканер недоступен"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scanner unavailable"
+          }
+        }
+      }
+    },
+    "Сканировать штрихкод": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сканировать штрихкод"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scan barcode"
+          }
+        }
+      }
+    },
+    "Скопировать": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Скопировать"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy"
+          }
+        }
+      }
+    },
+    "Скопировать питание за день": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Скопировать питание за день"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy daily food entries"
+          }
+        }
+      }
+    },
+    "Скопировать приём пищи": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Скопировать приём пищи"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy meal"
+          }
+        }
+      }
+    },
     "Скручивания": {
       "extractionState": "manual",
       "localizations": {
@@ -13070,6 +16572,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hide heart rate"
+          }
+        }
+      }
+    },
+    "Скрыть сводку": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Скрыть сводку"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hide summary"
           }
         }
       }
@@ -13125,6 +16644,23 @@
         }
       }
     },
+    "Следующая неделя": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Следующая неделя"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next week"
+          }
+        }
+      }
+    },
     "Следующее поле": {
       "extractionState": "manual",
       "localizations": {
@@ -13176,6 +16712,23 @@
         }
       }
     },
+    "Следующий день": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Следующий день"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next day"
+          }
+        }
+      }
+    },
     "Следующий месяц": {
       "extractionState": "manual",
       "localizations": {
@@ -13206,6 +16759,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Your next set is waiting."
+          }
+        }
+      }
+    },
+    "Слишком много записей сна. Выберите другую дату.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Слишком много записей сна. Выберите другую дату."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Too many sleep records. Choose a different date."
           }
         }
       }
@@ -13380,6 +16950,40 @@
         }
       }
     },
+    "Создадутся новые записи с теми же порциями, составом и заметками. Исходный день не изменится.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Создадутся новые записи с теми же порциями, составом и заметками. Исходный день не изменится."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New entries will use the same portions, ingredients and notes. The original day will remain unchanged."
+          }
+        }
+      }
+    },
+    "Создайте будильник в дневнике сна на iPhone.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Создайте будильник в дневнике сна на iPhone."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create an alarm in the sleep diary on iPhone."
+          }
+        }
+      }
+    },
     "Создайте тренировку": {
       "extractionState": "manual",
       "localizations": {
@@ -13448,6 +17052,40 @@
         }
       }
     },
+    "Сон": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сон"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sleep"
+          }
+        }
+      }
+    },
+    "Сон без уточнения фазы": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сон без уточнения фазы"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sleep with unspecified stage"
+          }
+        }
+      }
+    },
     "Сон за ночь": {
       "extractionState": "manual",
       "localizations": {
@@ -13461,6 +17099,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Night’s sleep"
+          }
+        }
+      }
+    },
+    "Соотношение БЖУ": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Соотношение БЖУ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Macro ratio"
           }
         }
       }
@@ -13580,6 +17235,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Save meal for reuse"
+          }
+        }
+      }
+    },
+    "Сохранить изменения": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сохранить изменения"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save changes"
           }
         }
       }
@@ -13716,6 +17388,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wednesday"
+          }
+        }
+      }
+    },
+    "Среднее": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Среднее"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Average"
+          }
+        }
+      }
+    },
+    "Среднее по ночам с данными": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Среднее по ночам с данными"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Average over recorded nights"
           }
         }
       }
@@ -14162,6 +17868,40 @@
         }
       }
     },
+    "Тест: три предыдущих подхода": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Тест: три предыдущих подхода"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Test: three previous sets"
+          }
+        }
+      }
+    },
+    "Тестовые данные сна": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Тестовые данные сна"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sleep test data"
+          }
+        }
+      }
+    },
     "Техника выполнения": {
       "extractionState": "manual",
       "localizations": {
@@ -14226,6 +17966,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Set type"
+          }
+        }
+      }
+    },
+    "Только Apple Watch": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Только Apple Watch"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Watch only"
           }
         }
       }
@@ -14315,6 +18072,23 @@
         }
       }
     },
+    "Тренировка завершена": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Тренировка завершена"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workout completed"
+          }
+        }
+      }
+    },
     "Тренировка на паузе": {
       "extractionState": "manual",
       "localizations": {
@@ -14396,6 +18170,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Your workouts, plans and weight entries will be saved to your account on the server."
+          }
+        }
+      }
+    },
+    "Три кольца тренировок": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Три кольца тренировок"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Three training rings"
           }
         }
       }
@@ -14587,6 +18378,23 @@
         }
       }
     },
+    "Убрать из избранного": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Убрать из избранного"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove from favorites"
+          }
+        }
+      }
+    },
     "Убрать из сохранённых блюд": {
       "extractionState": "manual",
       "localizations": {
@@ -14600,6 +18408,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Remove from saved meals"
+          }
+        }
+      }
+    },
+    "Убрать последнюю запись воды": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Убрать последнюю запись воды"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove last water entry"
           }
         }
       }
@@ -15114,6 +18939,23 @@
         }
       }
     },
+    "Укажите объём воды больше нуля и не больше 10 000 мл.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Укажите объём воды больше нуля и не больше 10 000 мл."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter a water amount greater than zero and no more than 10,000 ml."
+          }
+        }
+      }
+    },
     "Укажите положительную цель калорий. Необязательные цели БЖУ тоже должны быть больше нуля.": {
       "extractionState": "manual",
       "localizations": {
@@ -15148,6 +18990,23 @@
         }
       }
     },
+    "Укажите собственную дневную цель. Цели БЖУ и воды необязательны. Калории тренировок не вычитаются из съеденного.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Укажите собственную дневную цель. Цели БЖУ и воды необязательны. Калории тренировок не вычитаются из съеденного."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter your own daily goal. Macro and water goals are optional. Workout calories are not subtracted from food intake."
+          }
+        }
+      }
+    },
     "Укажите собственную дневную цель. Цели БЖУ необязательны. Калории тренировок не вычитаются из съеденного.": {
       "extractionState": "manual",
       "localizations": {
@@ -15178,6 +19037,74 @@
           "stringUnit": {
             "state": "translated",
             "value": "Add weight"
+          }
+        }
+      }
+    },
+    "Умное окно на Watch недоступно": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Умное окно на Watch недоступно"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Smart window is unavailable on Watch"
+          }
+        }
+      }
+    },
+    "Умное окно на Watch остановлено. Резервный будильник остаётся на iPhone.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Умное окно на Watch остановлено. Резервный будильник остаётся на iPhone."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The smart window on Watch has stopped. The iPhone fallback alarm remains set."
+          }
+        }
+      }
+    },
+    "Умное окно подготовлено на Watch": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Умное окно подготовлено на Watch"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Smart window is ready on Watch"
+          }
+        }
+      }
+    },
+    "Умные будильники": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Умные будильники"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Smart alarms"
           }
         }
       }
@@ -15301,6 +19228,57 @@
         }
       }
     },
+    "Установите FitLife на Apple Watch и откройте приложение на часах.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Установите FitLife на Apple Watch и откройте приложение на часах."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Install FitLife on Apple Watch and open the app on your watch."
+          }
+        }
+      }
+    },
+    "Установите FitLife на Apple Watch через Xcode или приложение Watch.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Установите FitLife на Apple Watch через Xcode или приложение Watch."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Install FitLife on Apple Watch using Xcode or the Watch app."
+          }
+        }
+      }
+    },
+    "Установить будильник": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Установить будильник"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set alarm"
+          }
+        }
+      }
+    },
     "Устройство Bluetooth": {
       "extractionState": "manual",
       "localizations": {
@@ -15369,6 +19347,40 @@
         }
       }
     },
+    "Фаза": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Фаза"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stage"
+          }
+        }
+      }
+    },
+    "Фазы сна за ночь": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Фазы сна за ночь"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sleep stages for the night"
+          }
+        }
+      }
+    },
     "Файл повреждён или не содержит данные FitLife.": {
       "extractionState": "manual",
       "localizations": {
@@ -15382,6 +19394,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "The file is corrupted or does not contain FitLife data."
+          }
+        }
+      }
+    },
+    "Файл превышает допустимый размер 20 МБ.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Файл превышает допустимый размер 20 МБ."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The file exceeds the 20 MB size limit."
           }
         }
       }
@@ -15675,6 +19704,57 @@
         }
       }
     },
+    "Цель воды, мл": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Цель воды, мл"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Water goal, ml"
+          }
+        }
+      }
+    },
+    "Цель воды: %@ мл": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Цель воды: %@ мл"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Water goal: %@ ml"
+          }
+        }
+      }
+    },
+    "Цель достигнута": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Цель достигнута"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goal reached"
+          }
+        }
+      }
+    },
     "Цель на неделю: %@": {
       "extractionState": "manual",
       "localizations": {
@@ -15722,6 +19802,74 @@
           "stringUnit": {
             "state": "translated",
             "value": "Partially selected"
+          }
+        }
+      }
+    },
+    "Часы": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Часы"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hours"
+          }
+        }
+      }
+    },
+    "Часы могут разбудить раньше. Системный сигнал iPhone остаётся резервом до нажатия «Выключить» на Watch.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Часы могут разбудить раньше. Системный сигнал iPhone остаётся резервом до нажатия «Выключить» на Watch."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Watch may wake you earlier. The iPhone system alarm remains a backup until you dismiss the alarm on Watch."
+          }
+        }
+      }
+    },
+    "Часы оценивают движения в выбранном окне. Перед сном откройте FitLife на Watch и подтвердите подготовку. Это оценка движения, а не измерение текущей фазы сна.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Часы оценивают движения в выбранном окне. Перед сном откройте FitLife на Watch и подтвердите подготовку. Это оценка движения, а не измерение текущей фазы сна."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Watch estimates movement during the selected window. Before bed, open FitLife on Watch and confirm it is ready. This estimates movement rather than measuring your current sleep stage."
+          }
+        }
+      }
+    },
+    "Часы оценивают движения в выбранном окне. Это не точное определение фазы сна. В конце окна сработает системный резервный будильник.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Часы оценивают движения в выбранном окне. Это не точное определение фазы сна. В конце окна сработает системный резервный будильник."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Watch estimates movement during the selected window, not your exact sleep stage. A system fallback alarm is set for the end of the window."
           }
         }
       }
@@ -15926,6 +20074,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Barbell"
+          }
+        }
+      }
+    },
+    "Штрихкод": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Штрихкод"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Barcode"
+          }
+        }
+      }
+    },
+    "Штрихкод (необязательно)": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Штрихкод (необязательно)"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Barcode (optional)"
           }
         }
       }
@@ -16151,6 +20333,23 @@
         }
       }
     },
+    "в среднем": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "в среднем"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "on average"
+          }
+        }
+      }
+    },
     "г": {
       "extractionState": "manual",
       "localizations": {
@@ -16181,6 +20380,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "yes"
+          }
+        }
+      }
+    },
+    "из %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "из %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "of %@"
+          }
+        }
+      }
+    },
+    "из %@ г": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "из %@ г"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "of %@ g"
           }
         }
       }

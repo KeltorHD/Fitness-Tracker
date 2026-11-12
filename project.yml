@@ -146,9 +146,15 @@ targets:
     platform: watchOS
     sources:
       - Apple/Watch
+      - Apple/Services/HealthKitLiveHeartRateService.swift
+      - Apple/Services/LiveHeartRate.swift
+      - Apple/Services/ServiceError.swift
+      - Apple/Features/WatchHeartRateModels.swift
       - Apple/Shared/L10n.swift
       - Apple/Shared/AppIdentifiers.swift
       - path: Resources/Localizable.xcstrings
+        buildPhase: resources
+      - path: Resources/InfoPlist.xcstrings
         buildPhase: resources
       - path: Resources/WatchAssets.xcassets
       - path: Resources/PrivacyInfo.xcprivacy

@@ -3,6 +3,78 @@ import Testing
 
 @testable import FitLifeCore
 
+@Test func pendingInputsPersistIndependentlyWithoutCompletingOrStartingRest() throws {
+  let row = WorkoutExercise(exercise: ExerciseCatalog.all[0], sets: [WorkoutSet(repetitions: 0)])
+  var workout = Workout(name: "Ввод", exercises: [row], restSeconds: 90)
+  try WorkoutEngine.updatePendingValues([row.sets[0].id: .init(weightKG: 42.5)], in: &workout)
+  #expect(workout.exercises[0].sets[0].weightKG == 42.5)
+  #expect(workout.exercises[0].sets[0].repetitions == 0)
+  try WorkoutEngine.pause(&workout)
+  try WorkoutEngine.updatePendingValues([row.sets[0].id: .init(repetitions: 11)], in: &workout)
+  let restored = try JSONDecoder().decode(Workout.self, from: JSONEncoder().encode(workout))
+  #expect(restored.exercises[0].sets[0].repetitions == 11)
+  #expect(restored.exercises[0].sets[0].weightKG == 42.5)
+  #expect(restored.completedSets == 0 && restored.volume == 0 && restored.restEndsAt == nil)
+}
+
+@Test func pendingInputUpdatesRejectRecordedTargetsAndInvalidBatchesAtomically() throws {
+  let row = WorkoutExercise(
+    exercise: ExerciseCatalog.all[0],
+    sets: [WorkoutSet(weightKG: 50, dropStages: [DropSetStage(weightKG: 40)])])
+  var workout = Workout(name: "Дропсет", exercises: [row])
+  let target = row.sets[0].id
+  let drop = try #require(row.sets[0].dropStages?.first?.id)
+  try WorkoutEngine.updatePendingValues(
+    [target: .init(weightKG: 30), drop: .init(weightKG: 20)], in: &workout)
+  let original = workout
+  #expect(throws: TrainingError.invalidDropSet) {
+    try WorkoutEngine.updatePendingValues([target: .init(weightKG: 10)], in: &workout)
+  }
+  #expect(workout == original)
+  #expect(throws: TrainingError.missingSet) {
+    try WorkoutEngine.updatePendingValues(
+      [target: .init(repetitions: 12), UUID(): .init(weightKG: 10)], in: &workout)
+  }
+  #expect(workout == original)
+  try WorkoutEngine.completeSet(
+    in: &workout, exerciseID: row.id, setID: target, repetitions: 8, weightKG: 30)
+  let recorded = workout
+  #expect(throws: TrainingError.invalidState) {
+    try WorkoutEngine.updatePendingValues([target: .init(weightKG: 35)], in: &workout)
+  }
+  #expect(workout == recorded)
+  try WorkoutEngine.finish(&workout)
+  #expect(throws: TrainingError.invalidState) {
+    try WorkoutEngine.updatePendingValues([drop: .init(weightKG: 15)], in: &workout)
+  }
+}
+
+@Test func editableValuesPreserveRecordedDatesRestAndRejectInvalidBatches() throws {
+  var workout = session()
+  let row = workout.exercises[0]
+  try WorkoutEngine.completeSet(
+    in: &workout, exerciseID: row.id, setID: row.sets[0].id,
+    repetitions: 5, weightKG: 100, at: epoch.addingTimeInterval(1))
+  let recorded = workout
+  try WorkoutEngine.updateEditableValues(
+    [row.sets[0].id: .init(repetitions: 8, weightKG: 90)], in: &workout)
+  var expected = recorded
+  expected.exercises[0].sets[0].repetitions = 8
+  expected.exercises[0].sets[0].weightKG = 90
+  #expect(workout == expected)
+  #expect(workout.volume == 720 && workout.completedSets == 1)
+  #expect(throws: TrainingError.invalidWeight) {
+    try WorkoutEngine.updateEditableValues([row.sets[0].id: .init(weightKG: -1)], in: &workout)
+  }
+  #expect(workout == expected)
+  try WorkoutEngine.finish(&workout, at: epoch.addingTimeInterval(2))
+  let finished = workout
+  #expect(throws: TrainingError.invalidState) {
+    try WorkoutEngine.updateEditableValues([row.sets[0].id: .init(weightKG: 50)], in: &workout)
+  }
+  #expect(workout == finished)
+}
+
 private let epoch = Date(timeIntervalSince1970: 1_700_000_000)
 private func session() -> Workout {
   Workout(
@@ -181,7 +253,7 @@ func invalidWeightsAreRejected(_ weight: Double) {
   workout.exercises.append(workout.exercises[0])
   #expect(throws: TrainingError.duplicateID) { try Validation.workout(workout) }
 }
-@Test func addSetStartsBlankAndPreservesLoadMultiplierWithoutChangingRecordedWork() throws {
+@Test func addSetCopiesLastValuesAndPreservesLoadMultiplierWithoutChangingRecordedWork() throws {
   var workout = try finished()
   workout.status = .active
   workout.endedAt = nil
@@ -189,13 +261,35 @@ func invalidWeightsAreRejected(_ weight: Double) {
   let original = workout.exercises[0].sets[0]
   try WorkoutEngine.addSet(exerciseID: workout.exercises[0].id, to: &workout)
   #expect(workout.exercises[0].sets.last?.completedAt == nil)
-  #expect(workout.exercises[0].sets.last?.weightKG == 0)
-  #expect(workout.exercises[0].sets.last?.repetitions == 0)
+  #expect(workout.exercises[0].sets.last?.weightKG == original.weightKG)
+  #expect(workout.exercises[0].sets.last?.repetitions == original.repetitions)
   #expect(workout.exercises[0].sets.last?.loadMultiplier == 2)
   #expect(workout.exercises[0].sets.last?.id != original.id)
   #expect(workout.exercises[0].sets[0] == original)
   try Validation.workout(workout)
 }
+@Test func addingAfterDropCopiesOnlyBaseNumbersAndKeepsEmptyTargetsEmpty() throws {
+  let date = Date(timeIntervalSince1970: 1000)
+  let source = WorkoutSet(
+    repetitions: 10, weightKG: 80, completedAt: date,
+    dropStages: [DropSetStage(repetitions: 8, weightKG: 60, completedAt: date)],
+    note: "Only the original")
+  let row = WorkoutExercise(exercise: ExerciseCatalog.all[0], sets: [source])
+  var workout = Workout(name: "Copy", startedAt: date, exercises: [row])
+  let volume = workout.volume
+  try WorkoutEngine.addSet(exerciseID: row.id, to: &workout)
+  let added = try #require(workout.exercises[0].sets.last)
+  #expect(added.weightKG == 80 && added.repetitions == 10)
+  #expect(added.id != source.id && added.completedAt == nil && added.dropStages == nil)
+  #expect(added.note == nil && !added.isWarmup && workout.volume == volume)
+  let empty = WorkoutExercise(exercise: row.exercise, sets: [WorkoutSet(repetitions: 0)])
+  var blank = Workout(name: "Empty", exercises: [empty])
+  try WorkoutEngine.addSet(exerciseID: empty.id, to: &blank)
+  #expect(blank.exercises[0].sets[1].repetitions == 0 && blank.exercises[0].sets[1].weightKG == 0)
+  try Validation.workout(workout)
+  try Validation.workout(blank)
+}
+
 @Test @MainActor func repositoryUpsertDeleteAndValidation() throws {
   let repo = MemoryWorkoutRepository()
   var workout = try finished()
@@ -400,7 +494,7 @@ func exerciseStructureChangesRejectNonActiveWorkouts(_ status: WorkoutStatus) th
   #expect(template.exercises[0].plannedSets?.first?.note == "Technique updated")
 }
 
-@Test func insertingSetStartsBlankWithAnchorMultiplierWithoutCopyingNoteOrCompletion() throws {
+@Test func insertingSetCopiesAnchorValuesWithoutCopyingNoteOrCompletion() throws {
   var workout = session()
   let row = workout.exercises[0].id
   let anchor = workout.exercises[0].sets[0].id
@@ -408,9 +502,12 @@ func exerciseStructureChangesRejectNonActiveWorkouts(_ status: WorkoutStatus) th
   workout.exercises[0].sets[0].loadMultiplier = 3
   workout.exercises[0].sets.append(WorkoutSet(repetitions: 12, weightKG: 20))
   let last = workout.exercises[0].sets[1].id
+  let source = workout.exercises[0].sets[0]
   try WorkoutEngine.addSet(exerciseID: row, to: &workout, after: anchor)
   let added = workout.exercises[0].sets[1]
-  #expect(added.repetitions == 0 && added.weightKG == 0 && added.loadMultiplier == 3)
+  #expect(
+    added.repetitions == source.repetitions && added.weightKG == source.weightKG
+      && added.loadMultiplier == 3)
   #expect(added.note == nil && added.completedAt == nil && added.id != anchor)
   #expect(workout.exercises[0].sets[2].id == last)
   let snapshot = workout

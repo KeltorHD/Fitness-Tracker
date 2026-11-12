@@ -35,10 +35,12 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSAlarmKitUsageDescription</key>
+	<string>Устанавливать будильники сна с обязательным сигналом к выбранному времени.</string>
 	<key>NSHealthShareUsageDescription</key>
-	<string>Читать показатели из «Здоровья», а по вашему запросу — пульс и данные тренировки для приёма измерений AirPods Pro 3 во время тренировки.</string>
+	<string>Читать сон, пульс и другие показатели из «Здоровья» для дневника и статистики; по вашему запросу — данные тренировки для приёма измерений Apple Watch или AirPods Pro 3.</string>
 	<key>NSHealthUpdateUsageDescription</key>
-	<string>Включать системную тренировку для получения пульса AirPods Pro 3 по вашему запросу. Завершённая тренировка сохраняется в «Здоровье» только при отдельном экспорте.</string>
+	<string>Включать системную тренировку для получения пульса Apple Watch или AirPods Pro 3 по вашему запросу. Завершённая тренировка сохраняется в «Здоровье» только при отдельном экспорте.</string>
 	<key>NSSupportsLiveActivities</key>
 	<true/>
 	<key>UIBackgroundModes</key>
@@ -151,5 +153,7 @@
 	</array>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>Подключать Bluetooth-пульсометр, например Mi Band или HUAWEI WATCH, и записывать пульс во время тренировки.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Сканировать штрихкоды упаковок, чтобы найти продукт и добавить его в дневник питания.</string>
 </dict>
 </plist>

@@ -18,7 +18,6 @@ struct WorkoutExerciseDock: View {
   let add: () -> Void
   let complete: () -> Void
   let pause: () -> Void
-  let close: () -> Void
   @Namespace private var controlsGlass
   private var isOngoing: Bool { [.active, .paused].contains(workout.status) }
 
@@ -45,7 +44,11 @@ struct WorkoutExerciseDock: View {
       )
       .disabled((navigationIndex ?? exerciseIndex) == 0)
       .accessibilityIdentifier("previousWorkoutExercise")
-      actionBlock(height: height, plusWidth: plusWidth)
+      if isOngoing {
+        actionBlock(height: height, plusWidth: plusWidth)
+      } else {
+        Spacer(minLength: 0)
+      }
       navigationButton(
         forward: true, height: height + (height >= 56 ? 12 : 8), width: navigationWidth,
         action: next
@@ -97,12 +100,12 @@ struct WorkoutExerciseDock: View {
   }
 
   private func primaryAction(height: CGFloat) -> some View {
-    Button(action: isOngoing ? complete : close) {
+    Button(action: complete) {
       Group {
         if isOngoing && !reduceMotion {
           Image(systemName: "checkmark").symbolEffect(.bounce, value: completionTrigger)
         } else {
-          Image(systemName: isOngoing ? "checkmark" : "chevron.down")
+          Image(systemName: "checkmark")
         }
       }
       .font(.system(size: isOngoing ? 27 : 22, weight: .bold))

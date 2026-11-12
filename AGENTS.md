@@ -333,7 +333,7 @@ Python-зависимости — в requirements-dev.txt. Полный check sc
 
 ### macOS / Xcode
 
-Используй полный совместимый Xcode с iOS/watchOS 26 SDK. После изменения структуры выполни:
+Используй полный совместимый Xcode с iOS/watchOS 26 SDK или новее. Минимальные версии приложения: iOS 26 и watchOS 26. Сохраняй нативный Liquid Glass. После изменения структуры выполни:
 
 ```bash
 xcodegen generate

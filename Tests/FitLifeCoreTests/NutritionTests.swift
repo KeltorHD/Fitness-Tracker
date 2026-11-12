@@ -128,3 +128,86 @@ private func food() -> FoodProduct {
     .product()
   #expect(product?.unit == .grams)
 }
+
+@Test func nutritionWaterGoalIsAnAdditivePayloadAndWaterValidatesBeforeSaving() throws {
+  let legacy = Data(#"{"calories":2200,"protein":100}"#.utf8)
+  let goal = try JSONDecoder().decode(NutritionGoal.self, from: legacy)
+  #expect(goal.waterMilliliters == nil)
+  let updated = NutritionGoal(calories: 2200, waterMilliliters: 1800)
+  #expect(
+    try JSONDecoder().decode(NutritionGoal.self, from: JSONEncoder().encode(updated)) == updated)
+  for amount in [0, -1, Double.nan, Double.infinity, 10_001] {
+    #expect(throws: NutritionError.self) { try WaterEntry(milliliters: amount).validate() }
+    #expect(throws: NutritionError.self) {
+      try NutritionGoal(calories: 2200, waterMilliliters: amount).validate()
+    }
+  }
+}
+
+@Test @MainActor func nutritionBatchCopyRejectsWholeBatchWithoutPartialData() throws {
+  let repository = MemoryNutritionRepository()
+  let original = FoodEntry(title: "Original", portions: [FoodPortion(product: food())])
+  try repository.saveFoodEntry(original)
+  let first = original.repeated(on: original.date)
+  var invalid = first.repeated(on: original.date)
+  invalid.portions[0].amount = -1
+  #expect(throws: NutritionError.self) { try repository.saveFoodEntries([first, invalid]) }
+  #expect(try repository.foodEntries() == [original])
+  #expect(throws: NutritionError.self) { try repository.saveFoodEntries([first, first]) }
+  #expect(try repository.foodEntries() == [original])
+  let second = original.repeated(on: original.date)
+  try repository.saveFoodEntries([first, second])
+  #expect(Set(try repository.foodEntries().map(\.id)) == [original.id, first.id, second.id])
+}
+
+@Test @MainActor func nutritionFavoritesAreIndependentFromEntriesAndDoNotMutateProductSnapshots()
+  throws
+{
+  let repository = MemoryNutritionRepository()
+  let product = food()
+  let entry = FoodEntry(title: "Food", portions: [FoodPortion(product: product)])
+  try repository.saveFoodEntry(entry)
+  try repository.setFavoriteFoodProduct(product, isFavorite: true)
+  var updated = product
+  updated.name = "Updated food"
+  try repository.setFavoriteFoodProduct(updated, isFavorite: true)
+  #expect(try repository.favoriteFoodProducts() == [updated])
+  #expect(try repository.foodEntries().first?.portions.first?.product == product)
+  try repository.deleteFoodEntry(id: entry.id)
+  #expect(try repository.favoriteFoodProducts() == [updated])
+  try repository.setFavoriteFoodProduct(updated, isFavorite: false)
+  #expect(try repository.favoriteFoodProducts().isEmpty)
+}
+
+@Test func nutritionWeekKeepsMissingDaysAndPhotoOnlyDaysDistinctAcrossDST() throws {
+  var calendar = Calendar(identifier: .gregorian)
+  calendar.timeZone = try #require(TimeZone(identifier: "America/New_York"))
+  let end = try #require(ISO8601DateFormatter().date(from: "2026-03-10T16:00:00Z"))
+  let source = try #require(calendar.date(byAdding: .day, value: -2, to: end))
+  let entries = [
+    FoodEntry(date: source, title: "Photo", photo: Data([0xFF, 0xD8, 0xFF])),
+    FoodEntry(date: end, title: "Food", portions: [FoodPortion(product: food())]),
+  ]
+  let water = [WaterEntry(date: source, milliliters: 250)]
+  let week = NutritionDaySummary.week(
+    ending: end, entries: entries, water: water, calendar: calendar)
+  #expect(week.count == 7)
+  #expect(Set(week.map { calendar.startOfDay(for: $0.date) }).count == 7)
+  #expect(week.map(\.entryCount) == [0, 0, 0, 0, 1, 0, 1])
+  #expect(week[4].incompleteCount == 1 && week[4].waterMilliliters == 250)
+  #expect(week[6].total.calories == 200)
+  let copied = NutritionCalendar.date(
+    on: end, timeOf: source.addingTimeInterval(0.75), calendar: calendar)
+  #expect(calendar.isDate(copied, inSameDayAs: end))
+  #expect(calendar.component(.hour, from: copied) == calendar.component(.hour, from: source))
+  #expect(abs(copied.timeIntervalSince1970 - floor(copied.timeIntervalSince1970) - 0.75) < 0.0001)
+}
+
+@Test func foodBarcodesKeepLeadingZeroAndRejectURLsAndOtherPayloads() {
+  #expect(FoodBarcode.normalized(" 0123456789012\n") == "0123456789012")
+  for code in [
+    "", "123", "123456789012345", "１２３４５６７８", "https://example.com", "1234 5678", "1234567x",
+  ] {
+    #expect(FoodBarcode.normalized(code) == nil)
+  }
+}

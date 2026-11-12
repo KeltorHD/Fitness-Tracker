@@ -17,6 +17,7 @@ struct WorkoutSetDraft {
       repetitionsWereEdited = true
     }
   }
+  private var completedAt: Date?
   private var weightText = ""
   private var repetitionText = ""
   private var weightWasEdited = false
@@ -33,6 +34,11 @@ struct WorkoutSetDraft {
   mutating func refresh(
     set: WorkoutSet, previous: DropSetStage?, unit: WeightUnit, locale: Locale
   ) {
+    if completedAt != set.completedAt {
+      weightWasEdited = false
+      repetitionsWereEdited = false
+      completedAt = set.completedAt
+    }
     if !weightWasEdited {
       let isEmpty = set.completedAt == nil && set.repetitions == 0 && set.weightKG == 0
       let kilograms = isEmpty ? previous?.weightKG : set.weightKG
@@ -88,6 +94,26 @@ struct WorkoutSetDraft {
         loadMultiplier: result.loadMultiplier))
     return result
   }
+
+  /// Persist complete valid pairs; an absent weight must never turn into an implicit zero load.
+  func pendingValues(unit: WeightUnit) -> WorkoutSetInputValues? {
+    guard weightWasEdited || repetitionsWereEdited,
+      let weight = try? weightInKG(unit: unit), let repetitions = try? repetitionCount()
+    else { return nil }
+    return WorkoutSetInputValues(repetitions: repetitions, weightKG: weight)
+  }
+}
+
+/// Session-owned text survives dismissal, including explicit clears and unfinished decimals.
+@MainActor @Observable final class WorkoutExerciseDraftStore {
+  let workoutID: UUID
+  let unit: WeightUnit
+  var values: [UUID: WorkoutSetDraft] = [:]
+
+  init(workoutID: UUID, unit: WeightUnit) {
+    self.workoutID = workoutID
+    self.unit = unit
+  }
 }
 
 struct WorkoutSetCompletion {
@@ -106,7 +132,11 @@ enum WorkoutExerciseAdvance { case stay, moved, finished }
   private(set) var selectedStageID: UUID?
   var selectedTargetID: UUID? { selectedStageID ?? selectedSetID }
   private(set) var selectedSetID: UUID?
-  private(set) var drafts: [UUID: WorkoutSetDraft] = [:]
+  private let draftStore: WorkoutExerciseDraftStore
+  private(set) var drafts: [UUID: WorkoutSetDraft] {
+    get { draftStore.values }
+    set { draftStore.values = newValue }
+  }
   private(set) var previousValues: PreviousWorkoutValues?
   @ObservationIgnored private var history: [Workout] = []
   @ObservationIgnored private var pendingCompletionID: UUID?
@@ -115,13 +145,19 @@ enum WorkoutExerciseAdvance { case stay, moved, finished }
   private let workoutID: UUID
 
   init(
-    workout: Workout, exerciseID: UUID, unit: WeightUnit, locale: Locale, history: [Workout] = []
+    workout: Workout, exerciseID: UUID, unit: WeightUnit, locale: Locale, history: [Workout] = [],
+    draftStore: WorkoutExerciseDraftStore? = nil
   ) {
     self.exerciseID = exerciseID
     self.unit = unit
     self.locale = locale
     self.history = history
     workoutID = workout.id
+    if let draftStore, draftStore.workoutID == workout.id, draftStore.unit == unit {
+      self.draftStore = draftStore
+    } else {
+      self.draftStore = WorkoutExerciseDraftStore(workoutID: workout.id, unit: unit)
+    }
     refresh(workout)
     focusPendingSuperset(in: workout)
   }
@@ -173,6 +209,28 @@ enum WorkoutExerciseAdvance { case stay, moved, finished }
   }
   func editWeight(_ text: String, setID: UUID) { drafts[setID]?.weight = text }
   func editRepetitions(_ text: String, setID: UUID) { drafts[setID]?.repetitions = text }
+  func inheritInput(from sourceID: UUID, for targetID: UUID, in workout: Workout) {
+    guard workout.id == workoutID else { return }
+    let source = drafts[sourceID]
+    refresh(workout)
+    guard let source, drafts[targetID] != nil else { return }
+    drafts[targetID] = source
+  }
+  func pendingValues(in workout: Workout, includingCompleted: Bool = false) -> [UUID:
+    WorkoutSetInputValues]
+  {
+    guard workout.id == workoutID else { return [:] }
+    var values: [UUID: WorkoutSetInputValues] = [:]
+    for stage in workout.exercises.flatMap(\.sets).flatMap(\.stages)
+    where includingCompleted || stage.completedAt == nil {
+      guard let input = drafts[stage.id]?.pendingValues(unit: unit),
+        input.weightKG.map({ $0 != stage.weightKG }) == true
+          || input.repetitions.map({ $0 != stage.repetitions }) == true
+      else { continue }
+      values[stage.id] = input
+    }
+    return values
+  }
   func updateHistory(_ history: [Workout], for workout: Workout) {
     guard workout.id == workoutID else { return }
     self.history = history
@@ -210,15 +268,15 @@ enum WorkoutExerciseAdvance { case stay, moved, finished }
       selectedStageID = nil
     }
     previousValues = PreviousWorkoutValues(exerciseRowID: exerciseID, in: workout, history: history)
-    let pending = workout.exercises.flatMap(\.sets).flatMap(\.stages).filter {
-      $0.completedAt == nil
-    }
+    let pending = workout.exercises.flatMap(\.sets).flatMap(\.stages)
     let ids = Set(pending.map(\.id))
     drafts = drafts.filter { ids.contains($0.key) }
     for row in workout.exercises {
       let previous = PreviousWorkoutValues(exerciseRowID: row.id, in: workout, history: history)
-      for stage in row.sets.flatMap(\.stages) where stage.completedAt == nil {
-        let set = WorkoutSet(id: stage.id, repetitions: stage.repetitions, weightKG: stage.weightKG)
+      for stage in row.sets.flatMap(\.stages) {
+        let set = WorkoutSet(
+          id: stage.id, repetitions: stage.repetitions, weightKG: stage.weightKG,
+          completedAt: stage.completedAt)
         if drafts[stage.id] == nil {
           drafts[stage.id] = WorkoutSetDraft(
             set: set, unit: unit, locale: locale, previous: previous?.stages[stage.id])
@@ -251,7 +309,9 @@ enum WorkoutExerciseAdvance { case stay, moved, finished }
       prepared.dropStages = try stages.map { stage in
         guard stage.completedAt == nil, let draft = drafts[stage.id] else { return stage }
         let value = try draft.validatedSet(
-          from: WorkoutSet(id: stage.id, repetitions: stage.repetitions, weightKG: stage.weightKG),
+          from: WorkoutSet(
+            id: stage.id, repetitions: stage.repetitions, weightKG: stage.weightKG,
+            completedAt: stage.completedAt),
           unit: unit)
         return DropSetStage(id: stage.id, repetitions: value.repetitions, weightKG: value.weightKG)
       }

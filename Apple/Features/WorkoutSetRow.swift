@@ -58,7 +58,6 @@ struct WorkoutSetRow<ContextActions: View>: View {
   let edit: (WorkoutSetField) -> Void
   let select: () -> Void
   let advance: () -> Void
-  let editCompleted: () -> Void
   var openNote: (() -> Void)? = nil
   @ViewBuilder let contextActions: () -> ContextActions
 
@@ -195,16 +194,6 @@ struct WorkoutSetRow<ContextActions: View>: View {
           .accessibilityIdentifier("setWeight_\(set.id)")
           .accessibilityLabel(
             L10n.format("Вес в %@", L10n.text(unit.rawValue, locale: locale), locale: locale))
-      } else if canCorrectCompleted && set.completedAt != nil {
-        Button(action: editCompleted) {
-          Text(formattedWeight).frame(maxWidth: .infinity, minHeight: 44).contentShape(.rect)
-        }
-        .buttonStyle(.plain).accessibilityLabel(
-          L10n.format("Вес в %@", L10n.text(unit.rawValue, locale: locale), locale: locale)
-        )
-        .accessibilityHint(L10n.text("Изменить выполненный подход", locale: locale))
-        .accessibilityValue(formattedWeight)
-        .accessibilityIdentifier("correctSetWeight_\(set.id)")
       } else {
         Text(formattedWeight).frame(maxWidth: .infinity, minHeight: 44)
           .accessibilityLabel(
@@ -230,15 +219,6 @@ struct WorkoutSetRow<ContextActions: View>: View {
         valueButton(repetitions, field: .repetitions(set.id))
           .accessibilityIdentifier("setRepetitions_\(set.id)")
           .accessibilityLabel(L10n.text("Повторения", locale: locale))
-      } else if canCorrectCompleted && set.completedAt != nil {
-        Button(action: editCompleted) {
-          Text(String(set.repetitions)).frame(maxWidth: .infinity, minHeight: 44).contentShape(
-            .rect)
-        }
-        .buttonStyle(.plain).accessibilityLabel(L10n.text("Повторения", locale: locale))
-        .accessibilityHint(L10n.text("Изменить выполненный подход", locale: locale))
-        .accessibilityValue(String(set.repetitions))
-        .accessibilityIdentifier("correctSetRepetitions_\(set.id)")
       } else {
         Text(formattedRepetitions)
           .frame(maxWidth: .infinity, minHeight: 44)

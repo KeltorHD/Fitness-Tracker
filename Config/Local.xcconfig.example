@@ -2,7 +2,7 @@
 DEVELOPMENT_TEAM = YOURTEAMID
 FITLIFE_BUNDLE_ID = com.yourcompany.fitlife
 // Register the derived App Group and CloudKit container in the Developer portal.
-// Optional self-hosted account/backups; leave empty to keep local-only operation.
+// Optional self-hosted account/backups and Russian food search; leave empty for local data + Open Food Facts.
 // $() preserves the second slash: // alone starts an xcconfig comment.
 // FITLIFE_AUTH_URL = https:/$()/auth.example.com/
 // FITLIFE_BACKEND_URL = https:/$()/api.example.com/

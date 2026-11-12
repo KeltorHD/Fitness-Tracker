@@ -31,7 +31,7 @@ import Observation
   func validatedEntry() throws -> FoodEntry {
     var result = entry
     if result.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-      result.title = result.portions.first?.product.name ?? result.meal.title
+      result.title = result.portions.first?.product.name ?? L10n.text(result.meal.title)
     }
     try result.validate()
     return result

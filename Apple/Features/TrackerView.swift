@@ -34,13 +34,15 @@ struct TrackerView: View {
         }.pickerStyle(.menu).accessibilityIdentifier("trackerModePicker")
       }
       if model.mode == .appleHealth {
-        if model.deviceProfile == .airPodsPro3 {
+        if [.airPodsPro3, .appleWatch].contains(model.deviceProfile) {
           Section {
             Text(L10n.text(model.deviceProfile.healthSetupKey, locale: locale))
               .accessibilityIdentifier("trackerAirPodsSetup")
             Text(
               L10n.text(
-                "Этот режим предназначен для AirPods Pro 3 с датчиком пульса. iOS выбирает доступный источник; вместе с AirPods может использоваться Apple Watch.",
+                model.deviceProfile == .appleWatch
+                  ? "Нужна установленная Watch-версия FitLife. Измерения передаются напрямую, без ожидания синхронизации «Здоровья». При потере связи старое значение не показывается как текущий пульс."
+                  : "Этот режим предназначен для AirPods Pro 3 с датчиком пульса. iOS выбирает доступный источник; вместе с AirPods может использоваться Apple Watch.",
                 locale: locale)
             )
             .font(.footnote).foregroundStyle(.secondary)
@@ -104,7 +106,7 @@ struct TrackerView: View {
     Group {
       Section {
         NavigationLink(L10n.text("Пульс и шаги", locale: locale)) { HealthChartsView() }
-        if model.deviceProfile != .airPodsPro3 {
+        if ![.airPodsPro3, .appleWatch].contains(model.deviceProfile) {
           Text(L10n.text(model.deviceProfile.healthSetupKey, locale: locale))
             .accessibilityIdentifier("trackerHealthSetup")
         }

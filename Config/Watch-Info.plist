@@ -20,6 +20,14 @@
 	<string>FitLife</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+	<key>WKBackgroundModes</key>
+	<array><string>alarm</string><string>workout-processing</string></array>
+	<key>NSHealthShareUsageDescription</key>
+	<string>Получать пульс с Apple Watch во время тренировки и передавать измерения на ваш iPhone.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>Включать системный сеанс тренировки для измерения пульса. Сохранение тренировки в «Здоровье» выполняется отдельно на iPhone.</string>
+	<key>NSMotionUsageDescription</key>
+	<string>Оценивать движения запястья в выбранном окне умного будильника.</string>
 	<key>WKApplication</key>
 	<true/>
 	<key>WKCompanionAppBundleIdentifier</key>

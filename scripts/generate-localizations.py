@@ -20,8 +20,11 @@ def generate():
     pairs={key:(russian.get(key,key),en) for key,en in values.items()}
     write(ROOT/'Resources/Localizable.xcstrings',catalog(pairs))
     info={
-      'NSHealthShareUsageDescription':('Читать показатели из «Здоровья», а по вашему запросу — пульс и данные тренировки для приёма измерений AirPods Pro 3 во время тренировки.','Read metrics from Health and, when you request it, heart rate and workout data to receive AirPods Pro 3 measurements during your workout.'),
-      'NSHealthUpdateUsageDescription':('Включать системную тренировку для получения пульса AirPods Pro 3 по вашему запросу. Завершённая тренировка сохраняется в «Здоровье» только при отдельном экспорте.','Start a system workout to receive AirPods Pro 3 heart rate when you request it. The completed workout is saved to Health only through a separate export.'),
+      'NSAlarmKitUsageDescription':('Устанавливать будильники сна с обязательным сигналом к выбранному времени.','Schedule sleep alarms with a fallback alert at the selected time.'),
+      'NSMotionUsageDescription':('Оценивать движения запястья в выбранном окне умного будильника.','Estimate wrist movement during your chosen smart alarm window.'),
+      'NSCameraUsageDescription':('Сканировать штрихкоды упаковок, чтобы найти продукт и добавить его в дневник питания.','Scan barcodes on food packaging to find products and add them to your food diary.'),
+      'NSHealthShareUsageDescription':('Читать сон, пульс и другие показатели из «Здоровья» для дневника и статистики; по вашему запросу — данные тренировки для приёма измерений Apple Watch или AirPods Pro 3.','Read sleep, heart rate and other Health metrics for your diary and statistics; when requested, read workout data to receive Apple Watch or AirPods Pro 3 measurements.'),
+      'NSHealthUpdateUsageDescription':('Включать системную тренировку для получения пульса Apple Watch или AirPods Pro 3 по вашему запросу. Завершённая тренировка сохраняется в «Здоровье» только при отдельном экспорте.','Start a system workout to receive Apple Watch or AirPods Pro 3 heart rate when you request it. The completed workout is saved to Health only through a separate export.'),
       'NSBluetoothAlwaysUsageDescription':('Подключать Bluetooth-пульсометр, например Mi Band или HUAWEI WATCH, и записывать пульс во время тренировки.','Connect a Bluetooth heart rate monitor, such as a Mi Band or HUAWEI WATCH, and record heart rate during your workout.'),
       'CFBundleDisplayName':('FitLife','FitLife')
     }

@@ -23,6 +23,7 @@ assert spec['name'] == 'FitLife'
 assert spec['packages']['FitLifeCore']['path'] == '.'
 assert set(spec['targets']) == {'FitLife', 'FitLifeWatch', 'FitLifeWidgets', 'FitLifeTests', 'FitLifeUITests'}
 assert spec['options']['deploymentTarget'] == {'iOS': '26.0', 'watchOS': '26.0'}
+assert '.watchOS("26.0")' in (root / 'Package.swift').read_text(), 'Core must support the Watch target'
 assert {'path': 'Resources/ExerciseMedia', 'type': 'folder', 'buildPhase': 'resources'} in spec['targets']['FitLife']['sources']
 assert 'FITLIFE_APP' in spec['targets']['FitLife']['settings']['base']['SWIFT_ACTIVE_COMPILATION_CONDITIONS']
 assert 'FITLIFE_APP' not in spec['targets']['FitLifeWidgets']['settings']['base'].get('SWIFT_ACTIVE_COMPILATION_CONDITIONS', '')
@@ -79,6 +80,10 @@ app = plists['App-Info.plist']
 assert app['NSSupportsLiveActivities'] is True
 assert 'remote-notification' in app['UIBackgroundModes']
 assert app['NSHealthUpdateUsageDescription']
+watch = plists['Watch-Info.plist']
+assert watch['NSHealthShareUsageDescription'] and watch['NSHealthUpdateUsageDescription']
+assert {'alarm', 'workout-processing'} <= set(watch['WKBackgroundModes'])
+assert plists['Watch.entitlements']['com.apple.developer.healthkit'] is True
 assert app['NSBluetoothAlwaysUsageDescription']
 assert 'bluetooth-central' in app['UIBackgroundModes']
 assert app['FitLifeCloudSyncAvailable'] == '$(FITLIFE_CLOUD_SYNC_AVAILABLE)'

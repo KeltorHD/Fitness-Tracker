@@ -173,15 +173,18 @@ enum WorkoutSetField: Hashable, Sendable {
     } catch { self.error = error.localizedDescription }
   }
   private func fields(in workout: Workout) -> [WorkoutSetField] {
-    guard workout.status == .active, editor.exercise(in: workout) != nil else { return [] }
+    guard [.active, .paused].contains(workout.status), editor.exercise(in: workout) != nil else {
+      return []
+    }
     let rows = workout.supersetRows(for: editor.exerciseID)
     let rounds = rows.map { $0.sets.count }.max() ?? 0
     let sets = (0..<rounds).flatMap { index in
       rows.compactMap { $0.sets.indices.contains(index) ? $0.sets[index] : nil }
     }
-    return sets.flatMap(\.stages).filter { $0.completedAt == nil }.flatMap {
-      [WorkoutSetField.weight($0.id), .repetitions($0.id)]
-    }
+    return sets.flatMap(\.stages).filter { workout.status == .active || $0.completedAt != nil }
+      .flatMap {
+        [WorkoutSetField.weight($0.id), .repetitions($0.id)]
+      }
   }
   private func recipients(in workout: Workout) -> [WorkoutSetField] {
     guard let field else { return [] }
@@ -195,8 +198,9 @@ enum WorkoutSetField: Hashable, Sendable {
     else { return [] }
     let ownerTargets = Set(owner.sets.flatMap(\.stages).map(\.id))
     let normalSets = Set(owner.sets.filter { !$0.isDropSet }.map(\.id))
+    let pending = Set(owner.sets.flatMap(\.stages).filter { $0.completedAt == nil }.map(\.id))
     return ordered.dropFirst(index + 1).filter {
-      ownerTargets.contains($0.setID) && $0.isWeight == field.isWeight
+      pending.contains($0.setID) && ownerTargets.contains($0.setID) && $0.isWeight == field.isWeight
         && (!field.isWeight || normalSets.contains($0.setID))
     }
   }

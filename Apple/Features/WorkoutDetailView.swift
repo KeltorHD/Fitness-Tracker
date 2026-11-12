@@ -70,11 +70,6 @@ struct WorkoutDetailView: View {
         Text(session.startedAt, format: .dateTime.weekday(.wide).hour().minute())
           .font(.subheadline).foregroundStyle(.secondary)
       }
-      ToolbarItem(placement: .topBarLeading) {
-        Button(L10n.text("Закрыть", locale: locale), systemImage: "chevron.down") { dismiss() }
-          .foregroundStyle(.primary)
-          .accessibilityIdentifier("closeWorkoutDetail")
-      }
       ToolbarItem(placement: .topBarTrailing) {
         Menu {
           Button(L10n.text("Изменить тренировку", locale: locale), systemImage: "pencil") {

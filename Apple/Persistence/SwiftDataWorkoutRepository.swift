@@ -182,6 +182,74 @@ extension SwiftDataWorkoutRepository: NutritionRepository {
     try entry.validate()
     try upsert(id: entry.id, kind: "foodEntry", data: JSONEncoder().encode(entry))
   }
+  func saveFoodEntries(_ entries: [FoodEntry]) throws {
+    guard Set(entries.map(\.id)).count == entries.count else { throw NutritionError.invalidEntry }
+    let encoded = try entries.map { entry in
+      try entry.validate()
+      return (entry.id, try JSONEncoder().encode(entry))
+    }
+    do {
+      let existing = try allRecords(kind: "foodEntry")
+      for (id, data) in encoded {
+        let matches = existing.filter { $0.recordID == id }
+        if let record = matches.first {
+          record.payload = data
+          record.modifiedAt = .now
+          for duplicate in matches.dropFirst() { context.delete(duplicate) }
+        } else {
+          context.insert(StoredRecord(id: id, kind: "foodEntry", payload: data))
+        }
+      }
+      try context.save()
+    } catch {
+      context.rollback()
+      throw error
+    }
+  }
+  func waterEntries() throws -> [WaterEntry] {
+    try records(kind: "waterEntry").map {
+      let entry = try JSONDecoder().decode(WaterEntry.self, from: $0.payload)
+      try entry.validate()
+      return entry
+    }
+  }
+  func saveWaterEntry(_ entry: WaterEntry) throws {
+    try entry.validate()
+    try upsert(id: entry.id, kind: "waterEntry", data: JSONEncoder().encode(entry))
+  }
+  func deleteWaterEntry(id: UUID) throws { try remove(id: id, kind: "waterEntry") }
+  func favoriteFoodProducts() throws -> [FoodProduct] {
+    var seen = Set<String>()
+    return try records(kind: "favoriteFoodProduct").map {
+      let product = try JSONDecoder().decode(FoodProduct.self, from: $0.payload)
+      try product.validate()
+      return product
+    }.filter { seen.insert($0.id).inserted }
+  }
+  func setFavoriteFoodProduct(_ product: FoodProduct, isFavorite: Bool) throws {
+    try product.validate()
+    let data = try JSONEncoder().encode(product)
+    do {
+      let matches = try allRecords(kind: "favoriteFoodProduct").filter {
+        try JSONDecoder().decode(FoodProduct.self, from: $0.payload).id == product.id
+      }
+      if isFavorite {
+        if let record = matches.first {
+          record.payload = data
+          record.modifiedAt = .now
+          for duplicate in matches.dropFirst() { context.delete(duplicate) }
+        } else {
+          context.insert(StoredRecord(id: UUID(), kind: "favoriteFoodProduct", payload: data))
+        }
+      } else {
+        for record in matches { context.delete(record) }
+      }
+      try context.save()
+    } catch {
+      context.rollback()
+      throw error
+    }
+  }
   func deleteFoodEntry(id: UUID) throws { try remove(id: id, kind: "foodEntry") }
   func nutritionGoal() throws -> NutritionGoal? {
     guard let record = try records(kind: "nutritionGoal").first else { return nil }
