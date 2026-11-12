@@ -18,7 +18,6 @@ struct HistoryView: View {
   var isSelected: Bool
   var body: some View {
     List {
-      weekStrip.cardListRow()
       if let active = store.active {
         Button {
           store.presentWorkoutStart()
@@ -152,7 +151,7 @@ struct HistoryView: View {
       TemplateEditor(template: draft).onAppear { store.showingTemplateEditor = true }
     }
     .onChange(of: calendar) { refresh() }
-    .onChange(of: date) {
+    .onChange(of: date, initial: true) {
       model.filterDate = date
       refresh()
     }
@@ -182,36 +181,6 @@ struct HistoryView: View {
     }
   }
 
-  private var weekStrip: some View {
-    HStack(spacing: 0) {
-      ForEach(model.days) { item in
-        let day = item.date
-        let trained = item.hasWorkout
-        let highlighted = calendar.isDate(day, inSameDayAs: date)
-        Button {
-          date = day
-          model.filterDate = day
-        } label: {
-          VStack(spacing: 8) {
-            Text(day, format: .dateTime.weekday(.narrow)).font(.caption).textCase(.uppercase)
-            ZStack {
-              Circle().stroke(trained ? .clear : Color.gray.opacity(0.2), lineWidth: 1.5)
-              if trained {
-                Circle().fill(colorTheme.accent)
-                Image(systemName: "checkmark").font(.headline).foregroundStyle(
-                  FitTheme.accentForeground)
-              } else {
-                Text(day, format: .dateTime.day()).font(.subheadline)
-              }
-            }.frame(width: 34, height: 34)
-          }.foregroundStyle(highlighted ? colorTheme.accent : FitTheme.muted)
-            .frame(maxWidth: .infinity).padding(.vertical, 10)
-            .background(highlighted ? colorTheme.accent.opacity(0.12) : .clear, in: .capsule)
-        }.buttonStyle(.plain).accessibilityLabel(
-          day.formatted(.dateTime.locale(locale).weekday(.wide).day().month(.wide).year()))
-      }
-    }
-  }
   private func weekTitle(_ start: Date) -> String {
     if calendar.isDate(start, equalTo: .now, toGranularity: .weekOfYear) {
       return L10n.text("На этой неделе", locale: locale)

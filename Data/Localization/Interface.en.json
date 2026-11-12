@@ -1201,5 +1201,15 @@
   "из %@ г": "of %@ g",
   "Тренировка завершена": "Workout completed",
   "из %@": "of %@",
-  "Нет данных": "No data"
+  "Нет данных": "No data",
+  "Предыдущая неделя": "Previous week",
+  "Следующая неделя": "Next week",
+  "Свернуть календарь": "Collapse calendar",
+  "Развернуть календарь": "Expand calendar",
+  "Дней активности: %@": "Active days: %@",
+  "Три кольца тренировок": "Three training rings",
+  "Недельная цель: %@": "Weekly goal: %@",
+  "Нет данных прошлой недели для сравнения подходов.": "No previous-week data to compare sets.",
+  "Нет данных прошлой недели для сравнения объёма.": "No previous-week data to compare volume.",
+  "Прошлая неделя: %@ · от неё %@": "Previous week: %@ · %@ of that"
 }

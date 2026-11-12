@@ -9,6 +9,8 @@ public struct DiaryTrainingSummary: Equatable, Sendable {
   public let volumeKG: Double
   public let duration: TimeInterval?
   public let trainedDays: Set<Date>
+  public let previousWorkingSets: Int?
+  public let previousVolumeKG: Double?
 
   public init(workouts: [Workout], day: Date, now: Date, calendar: Calendar) {
     let week = calendar.dateInterval(of: .weekOfYear, for: day)
@@ -30,11 +32,31 @@ public struct DiaryTrainingSummary: Equatable, Sendable {
       .map { $0.duration(at: now) }
     duration = durations.isEmpty ? nil : durations.reduce(0, +)
     trainedDays = Set(sessions.map { calendar.startOfDay(for: $0.startedAt) })
+    let previousStart = calendar.date(byAdding: .weekOfYear, value: -1, to: start) ?? start
+    let previous = workouts.filter {
+      $0.status == .completed && $0.startedAt >= previousStart && $0.startedAt < start
+        && $0.startedAt <= now
+    }
+    previousWorkingSets =
+      previous.isEmpty
+      ? nil
+      : previous.flatMap(\.exercises).flatMap(\.sets)
+        .filter { $0.completedAt != nil && !$0.isWarmup }.count
+    previousVolumeKG = previous.isEmpty ? nil : previous.reduce(0) { $0 + $1.volume }
   }
 
   public func progress(goal: Int) -> Double {
     guard goal > 0 else { return 0 }
     return min(1, Double(workouts) / Double(goal))
+  }
+
+  public var setComparison: Double? {
+    guard let previousWorkingSets, previousWorkingSets > 0 else { return nil }
+    return Double(workingSets) / Double(previousWorkingSets)
+  }
+  public var volumeComparison: Double? {
+    guard let previousVolumeKG, previousVolumeKG > 0 else { return nil }
+    return volumeKG / previousVolumeKG
   }
 }
 

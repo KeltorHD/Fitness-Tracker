@@ -5152,6 +5152,23 @@
         }
       }
     },
+    "Дней активности: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Дней активности: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active days: %@"
+          }
+        }
+      }
+    },
     "Дни без записей не означают нулевое потребление. Фото без КБЖУ делают итог неполным.": {
       "extractionState": "manual",
       "localizations": {
@@ -10609,6 +10626,23 @@
         }
       }
     },
+    "Недельная цель: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Недельная цель: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekly goal: %@"
+          }
+        }
+      }
+    },
     "Неделя": {
       "extractionState": "manual",
       "localizations": {
@@ -10826,6 +10860,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "No data for this period"
+          }
+        }
+      }
+    },
+    "Нет данных прошлой недели для сравнения объёма.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нет данных прошлой недели для сравнения объёма."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No previous-week data to compare volume."
+          }
+        }
+      }
+    },
+    "Нет данных прошлой недели для сравнения подходов.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нет данных прошлой недели для сравнения подходов."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No previous-week data to compare sets."
           }
         }
       }
@@ -14026,6 +14094,23 @@
         }
       }
     },
+    "Предыдущая неделя": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Предыдущая неделя"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Previous week"
+          }
+        }
+      }
+    },
     "Предыдущая тренировка: %@": {
       "extractionState": "manual",
       "localizations": {
@@ -14740,6 +14825,23 @@
         }
       }
     },
+    "Прошлая неделя: %@ · от неё %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Прошлая неделя: %@ · от неё %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Previous week: %@ · %@ of that"
+          }
+        }
+      }
+    },
     "Прямая мышца бедра": {
       "extractionState": "manual",
       "localizations": {
@@ -15110,6 +15212,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wake me by"
+          }
+        }
+      }
+    },
+    "Развернуть календарь": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Развернуть календарь"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expand calendar"
           }
         }
       }
@@ -15862,6 +15981,23 @@
         }
       }
     },
+    "Свернуть календарь": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Свернуть календарь"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Collapse calendar"
+          }
+        }
+      }
+    },
     "Свернуть карточку пульса": {
       "extractionState": "manual",
       "localizations": {
@@ -16504,6 +16640,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Next variation"
+          }
+        }
+      }
+    },
+    "Следующая неделя": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Следующая неделя"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next week"
           }
         }
       }
@@ -18017,6 +18170,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Your workouts, plans and weight entries will be saved to your account on the server."
+          }
+        }
+      }
+    },
+    "Три кольца тренировок": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Три кольца тренировок"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Three training rings"
           }
         }
       }

@@ -1,6 +1,113 @@
 import XCTest
 
 final class FitnessTrackerUITests: XCTestCase {
+  @MainActor func testDiaryHeaderHasRoomForFullTitleWithWeekAndMonthCalendar() {
+    let app = launch(additionalArguments: ["--ui-testing-diary-insights", "-appearance", "light"])
+    let header = app.staticTexts["diaryHeaderTitle"]
+    XCTAssertTrue(header.waitForExistence(timeout: 10))
+    XCTAssertEqual(header.label, "Дневник")
+    XCTAssertGreaterThan(header.frame.width, 75)
+    XCTAssertLessThan(header.frame.maxX, app.buttons["openSettings"].frame.minX)
+    let week = XCTAttachment(screenshot: app.screenshot())
+    week.name = "Full diary title above shared week calendar and triple rings"
+    week.lifetime = .keepAlways
+    add(week)
+    let toggle = app.buttons["expandDiaryCalendar"]
+    toggle.tap()
+    XCTAssertEqual(toggle.value as? String, "Месяц")
+    XCTAssertGreaterThan(header.frame.width, 75)
+    let month = XCTAttachment(screenshot: app.screenshot())
+    month.name = "Full diary title and expanded calendar"
+    month.lifetime = .keepAlways
+    add(month)
+  }
+
+  @MainActor func testSharedDiaryCalendarSwipesWeeksWithoutSwitchingDiaryTabs() {
+    let app = launch(additionalArguments: ["--ui-testing-diary-insights"])
+    let section = app.segmentedControls["diarySection"]
+    XCTAssertTrue(section.waitForExistence(timeout: 10))
+    let grid = app.descendants(matching: .any).matching(identifier: "diaryCalendarGrid").firstMatch
+    XCTAssertTrue(grid.waitForExistence(timeout: 5))
+    XCTAssertLessThan(grid.frame.maxY, section.frame.minY)
+    let header = app.staticTexts["diaryHeaderTitle"]
+    XCTAssertLessThan(header.frame.minX, app.buttons["openSettings"].frame.minX)
+    let selected = app.buttons["selectedDiaryCalendarDay"]
+    let original = selected.label
+    let start = grid.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+    start.press(forDuration: 0.05, thenDragTo: start.withOffset(CGVector(dx: 30, dy: 0)))
+    XCTAssertEqual(selected.label, original)
+    grid.swipeLeft()
+    XCTAssertNotEqual(selected.label, original)
+    XCTAssertTrue(section.buttons["Тренировки"].isSelected)
+    grid.swipeRight()
+    XCTAssertEqual(selected.label, original)
+    section.buttons["Питание"].tap()
+    XCTAssertEqual(app.staticTexts["nutritionDailyCalories"].label, "720 ккал")
+    grid.swipeLeft()
+    XCTAssertTrue(section.buttons["Питание"].isSelected)
+    XCTAssertEqual(app.staticTexts["nutritionDailyCalories"].label, "0 ккал")
+    app.buttons["diaryToday"].tap()
+    XCTAssertEqual(app.staticTexts["nutritionDailyCalories"].label, "720 ккал")
+    XCTAssertEqual(selected.label, original)
+    let image = XCTAttachment(screenshot: app.screenshot())
+    image.name = "Shared week calendar above nutrition tabs, synthetic UI data"
+    image.lifetime = .keepAlways
+    add(image)
+  }
+
+  @MainActor func testSharedDiaryMonthExpandsSwipesAndSelectsDatesIndependentlyOfSleepTab() {
+    let app = launch(additionalArguments: ["--ui-testing-sleep", "-sleepDiaryEnabled", "YES"])
+    let section = app.segmentedControls["diarySection"]
+    XCTAssertTrue(section.waitForExistence(timeout: 10))
+    section.buttons["Сон"].tap()
+    let toggle = app.buttons["expandDiaryCalendar"]
+    toggle.tap()
+    XCTAssertEqual(toggle.value as? String, "Месяц")
+    let original = toggle.label
+    let grid = app.descendants(matching: .any).matching(identifier: "diaryCalendarGrid").firstMatch
+    XCTAssertGreaterThan(grid.frame.height, 240)
+    grid.swipeLeft()
+    XCTAssertNotEqual(toggle.label, original)
+    XCTAssertTrue(section.buttons["Сон"].isSelected)
+    grid.swipeRight()
+    XCTAssertEqual(toggle.label, original)
+    let day = grid.buttons.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "diaryCalendarDay_")
+    ).element(boundBy: 10)
+    let dateLabel = day.label
+    day.tap()
+    XCTAssertEqual(app.buttons["selectedDiaryCalendarDay"].label, dateLabel)
+    XCTAssertTrue(section.buttons["Сон"].isSelected)
+    let image = XCTAttachment(screenshot: app.screenshot())
+    image.name = "Shared expanded month above sleep diary"
+    image.lifetime = .keepAlways
+    add(image)
+    toggle.tap()
+    XCTAssertEqual(toggle.value as? String, "Неделя")
+    XCTAssertLessThan(grid.frame.height, 60)
+  }
+
+  @MainActor func testTrainingTripleRingsUseRecordedPreviousWeekAndAllowSelectingMetrics() {
+    let app = launch(additionalArguments: [
+      "--ui-testing-diary-insights", "-weeklyGoal", "3", "-appearance", "dark",
+    ])
+    let sets = app.buttons["trainingRing_sets"]
+    XCTAssertTrue(sets.waitForExistence(timeout: 10))
+    sets.tap()
+    XCTAssertTrue(sets.isSelected)
+    let comparison = app.staticTexts["trainingRingComparison"]
+    XCTAssertTrue(comparison.label.contains("100"))
+    let volume = app.buttons["trainingRing_volume"]
+    volume.tap()
+    XCTAssertTrue(volume.isSelected)
+    XCTAssertTrue(comparison.label.contains("800"))
+    XCTAssertTrue(comparison.label.contains("50"))
+    let image = XCTAttachment(screenshot: app.screenshot())
+    image.name = "Three concentric training rings, synthetic current and previous week"
+    image.lifetime = .keepAlways
+    add(image)
+  }
+
   @MainActor func testDiaryRingSummariesStartExpandedAndCanBeHiddenIndependently() {
     let app = launch(additionalArguments: [
       "--ui-testing-training-groups", "-weeklyGoal", "3", "-appearance", "dark",
@@ -57,7 +164,7 @@ final class FitnessTrackerUITests: XCTestCase {
     image.name = "Nutrition ratios and calorie goal, synthetic UI fixture"
     image.lifetime = .keepAlways
     add(image)
-    app.buttons["previousDiaryDay"].tap()
+    app.buttons["previousDiaryPeriod"].tap()
     XCTAssertEqual(calories.label, "0 ккал")
     app.buttons["diaryToday"].tap()
     XCTAssertEqual(calories.label, "720 ккал")
@@ -2063,7 +2170,7 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(water.waitForExistence(timeout: 5))
     water.tap()
     XCTAssertTrue(app.staticTexts["waterTotal"].label.contains("250"))
-    app.buttons["previousDiaryDay"].tap()
+    app.buttons["previousDiaryPeriod"].tap()
     XCTAssertFalse(app.buttons["undoWater"].exists)
     app.buttons["diaryToday"].tap()
     XCTAssertTrue(app.buttons["undoWater"].waitForExistence(timeout: 5))

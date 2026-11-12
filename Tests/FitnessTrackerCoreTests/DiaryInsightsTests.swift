@@ -92,3 +92,31 @@ private func diaryWorkout(at date: Date) throws -> Workout {
   #expect(DiaryRingSelection.index(at: 1, weights: [.infinity]) == nil)
   #expect(DiaryRingSelection.index(at: 1, weights: [-1, 2]) == nil)
 }
+
+@Test func diaryComparisonUsesThePreviousCalendarWeekAndPreservesRatiosAboveOne() throws {
+  let date = try diaryDate(29)
+  let previous = try diaryWorkout(at: diaryDate(22))
+  var current = try diaryWorkout(at: date)
+  current.exercises[0].sets.append(WorkoutSet(repetitions: 10, weightKG: 40, completedAt: date))
+  let summary = DiaryTrainingSummary(
+    workouts: [current, previous], day: date, now: date.addingTimeInterval(600),
+    calendar: diaryCalendar())
+  #expect(summary.previousWorkingSets == 1)
+  #expect(summary.previousVolumeKG == 200)
+  #expect(summary.setComparison == 2)
+  #expect(summary.volumeComparison == 3)
+  let missing = DiaryTrainingSummary(
+    workouts: [current], day: date, now: date.addingTimeInterval(600), calendar: diaryCalendar())
+  #expect(missing.previousWorkingSets == nil)
+  #expect(missing.previousVolumeKG == nil)
+  #expect(missing.setComparison == nil)
+  #expect(missing.volumeComparison == nil)
+  var bodyweight = previous
+  bodyweight.exercises[0].sets[0].weightKG = 0
+  let zeroBaseline = DiaryTrainingSummary(
+    workouts: [current, bodyweight], day: date, now: date.addingTimeInterval(600),
+    calendar: diaryCalendar())
+  #expect(zeroBaseline.previousVolumeKG == 0)
+  #expect(zeroBaseline.volumeComparison == nil)
+  #expect(zeroBaseline.setComparison == 2)
+}

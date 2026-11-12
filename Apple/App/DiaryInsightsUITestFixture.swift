@@ -17,6 +17,22 @@ import Foundation
           portions: [FoodPortion(product: product, amount: 300)]))
       try nutrition.saveNutritionGoal(
         NutritionGoal(calories: 2000, protein: 100, fat: 70, carbohydrates: 250))
+      let now = Date()
+      for (offset, weight) in [(-1, 40.0), (0, 20.0)] {
+        guard let date = Calendar.current.date(byAdding: .weekOfYear, value: offset, to: now) else {
+          throw TrainingError.invalidState
+        }
+        let row = WorkoutExercise(
+          exercise: ExerciseCatalog.all[0], sets: [WorkoutSet(), WorkoutSet()])
+        var workout = Workout(name: "UI fixture: rings", startedAt: date, exercises: [row])
+        for set in row.sets {
+          try WorkoutEngine.completeSet(
+            in: &workout, exerciseID: row.id, setID: set.id, repetitions: 10, weightKG: weight,
+            at: date)
+        }
+        try WorkoutEngine.finish(&workout, at: date)
+        try repository.save(workout)
+      }
     }
   #endif
 }
