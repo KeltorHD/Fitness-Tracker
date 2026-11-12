@@ -8,6 +8,11 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertEqual(header.label, "Дневник")
     XCTAssertGreaterThan(header.frame.width, 75)
     XCTAssertLessThan(header.frame.maxX, app.buttons["openSettings"].frame.minX)
+    let calendar = app.descendants(matching: .any).matching(identifier: "diaryCalendar").firstMatch
+    XCTAssertLessThanOrEqual(calendar.frame.height, 120)
+    let selected = app.buttons["selectedDiaryCalendarDay"]
+    XCTAssertGreaterThanOrEqual(selected.frame.height, 44)
+    XCTAssertGreaterThanOrEqual(selected.frame.width, 44)
     let week = XCTAttachment(screenshot: app.screenshot())
     week.name = "Full diary title above shared week calendar and triple rings"
     week.lifetime = .keepAlways

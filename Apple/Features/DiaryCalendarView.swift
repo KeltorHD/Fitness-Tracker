@@ -2,6 +2,11 @@ import FitnessTrackerCore
 import SwiftUI
 
 struct DiaryCalendarView: View {
+  private struct PeriodID: Hashable {
+    let mode: DiaryCalendarMode
+    let start: Date?
+  }
+
   @Environment(\.locale) private var locale
   @Environment(\.calendar) private var calendar
   @Environment(\.fitnessColorTheme) private var theme
@@ -11,36 +16,56 @@ struct DiaryCalendarView: View {
   let workouts: [Workout]
   @State private var expanded = false
   @State private var page: DiaryCalendarPage?
+  @State private var direction = 1
   @GestureState private var translation: CGSize = .zero
+  @ScaledMetric(relativeTo: .subheadline) private var dayDiameter: CGFloat = 32
+  @ScaledMetric(relativeTo: .caption2) private var weekdayHeight: CGFloat = 14
   private var mode: DiaryCalendarMode { expanded ? .month : .week }
+  private var dateDiameter: CGFloat { expanded ? dayDiameter : dayDiameter * 0.875 }
+  private var rowHeight: CGFloat {
+    max(44, dateDiameter + (expanded ? 8 : weekdayHeight + 10))
+  }
+  private var gridHeight: CGFloat { expanded ? rowHeight * 6 + 10 : rowHeight }
+  private var pageTransition: AnyTransition {
+    guard !reduceMotion else { return .opacity }
+    return .asymmetric(
+      insertion: .move(edge: direction > 0 ? .trailing : .leading).combined(with: .opacity),
+      removal: .move(edge: direction > 0 ? .leading : .trailing).combined(with: .opacity))
+  }
 
   var body: some View {
-    VStack(spacing: 8) {
+    VStack(spacing: expanded ? 8 : 4) {
       header
       if let current = page {
-        HStack(spacing: 2) {
-          ForEach(Array(current.days.prefix(7)), id: \.date) { item in
-            Text(item.date, format: .dateTime.weekday(.narrow))
-              .font(.caption2.weight(.medium)).foregroundStyle(.secondary)
-              .frame(maxWidth: .infinity)
-          }
-        }.accessibilityHidden(true)
-        dayGrid(current)
-          .offset(x: reduceMotion ? 0 : horizontalOffset(translation) * 0.12)
-          .frame(height: expanded ? 274 : 44, alignment: .top)
-          .clipped().contentShape(.rect)
-          .highPriorityGesture(
-            DragGesture(minimumDistance: 20)
-              .updating($translation) { value, state, transaction in
-                transaction.animation = nil
-                state = value.translation
-              }
-              .onEnded { settle($0.translation) }
-          )
-          .accessibilityElement(children: .contain).accessibilityIdentifier("diaryCalendarGrid")
+        if expanded {
+          HStack(spacing: 2) {
+            ForEach(Array(current.days.prefix(7)), id: \.date) { item in
+              weekday(item.date).frame(maxWidth: .infinity)
+            }
+          }.accessibilityHidden(true)
+        }
+        ZStack(alignment: .top) {
+          dayGrid(current)
+            .id(PeriodID(mode: mode, start: current.days.first?.date))
+            .transition(pageTransition)
+        }
+        .offset(x: reduceMotion ? 0 : horizontalOffset(translation) * 0.35)
+        .animation(reduceMotion ? nil : .snappy(duration: 0.25), value: translation == .zero)
+        .frame(height: gridHeight, alignment: .top)
+        .clipped().contentShape(.rect)
+        .highPriorityGesture(
+          DragGesture(minimumDistance: 20)
+            .updating($translation) { value, state, transaction in
+              transaction.animation = nil
+              state = value.translation
+            }
+            .onEnded { settle($0.translation) }
+        )
+        .accessibilityElement(children: .contain).accessibilityIdentifier("diaryCalendarGrid")
       }
     }
-    .padding(12).background(FitTheme.card, in: .rect(cornerRadius: FitTheme.radius))
+    .padding(.horizontal, expanded ? 12 : 10).padding(.vertical, expanded ? 12 : 6)
+    .background(FitTheme.card, in: .rect(cornerRadius: FitTheme.radius))
     .themeGlow(in: RoundedRectangle(cornerRadius: FitTheme.radius))
     .accessibilityElement(children: .contain).accessibilityIdentifier("diaryCalendar")
     .onChange(of: workouts, initial: true) { refresh() }
@@ -70,8 +95,10 @@ struct DiaryCalendarView: View {
           VStack(alignment: .leading, spacing: 2) {
             Text(date, format: .dateTime.month(.wide).year()).font(.headline)
               .accessibilityIdentifier("diaryCalendarMonth")
-            Text(date, format: .dateTime.weekday(.wide).day()).font(.caption)
-              .foregroundStyle(.secondary).accessibilityIdentifier("diarySelectedDate")
+            if expanded {
+              Text(date, format: .dateTime.weekday(.wide).day()).font(.caption)
+                .foregroundStyle(.secondary).accessibilityIdentifier("diarySelectedDate")
+            }
           }
           Image(systemName: "chevron.down").font(.caption.weight(.semibold))
             .rotationEffect(.degrees(expanded ? 180 : 0))
@@ -108,10 +135,12 @@ struct DiaryCalendarView: View {
           date = item.date
         } label: {
           VStack(spacing: 2) {
+            if !expanded { weekday(item.date).accessibilityHidden(true) }
             Text(item.date, format: .dateTime.day()).contentTransition(.numericText()).font(
               .subheadline.weight(selected ? .bold : .medium)
             )
-            .lineLimit(1).minimumScaleFactor(0.6).frame(width: 32, height: 32)
+            .lineLimit(1).minimumScaleFactor(0.6)
+            .frame(width: dateDiameter, height: dateDiameter)
             .foregroundStyle(selected ? FitTheme.accentForeground : .primary)
             .background(selected ? theme.accent : .clear, in: .circle)
             .overlay {
@@ -121,7 +150,7 @@ struct DiaryCalendarView: View {
             }
             Circle().fill(item.hasWorkout ? theme.accent : .clear).frame(width: 4, height: 4)
           }.opacity(expanded && !item.isInMonth ? 0.4 : 1)
-            .frame(maxWidth: .infinity, minHeight: 44).contentShape(.rect)
+            .frame(maxWidth: .infinity, minHeight: rowHeight).contentShape(.rect)
         }.buttonStyle(.plain)
           .accessibilityLabel(
             item.date.formatted(.dateTime.locale(locale).weekday(.wide).day().month(.wide).year())
@@ -135,6 +164,12 @@ struct DiaryCalendarView: View {
     }
   }
 
+  private func weekday(_ date: Date) -> some View {
+    Text(date, format: .dateTime.weekday(.narrow))
+      .font(.caption2.weight(.medium)).foregroundStyle(.secondary)
+      .lineLimit(1).minimumScaleFactor(0.8).frame(height: weekdayHeight)
+  }
+
   private func refresh(for selected: Date? = nil) {
     page = DiaryCalendar.page(
       containing: selected ?? date, mode: mode, workouts: workouts, now: .now, calendar: calendar)
@@ -142,7 +177,8 @@ struct DiaryCalendarView: View {
   private func move(_ direction: Int) {
     guard let next = DiaryCalendar.shifted(date, by: direction, mode: mode, calendar: calendar)
     else { return }
-    withAnimation(reduceMotion ? nil : .snappy(duration: 0.22)) {
+    self.direction = direction
+    withAnimation(reduceMotion ? nil : .snappy(duration: 0.28)) {
       date = next
       refresh(for: next)
     }
