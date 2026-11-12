@@ -52,8 +52,9 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(section.waitForExistence(timeout: 10))
     let title = app.staticTexts["diaryHeaderTitle"]
     XCTAssertEqual(title.label, "Дневник")
-    XCTAssertGreaterThan(title.frame.width, 75)
-    XCTAssertLessThan(title.frame.maxX, section.frame.minX)
+    XCTAssertGreaterThan(title.frame.width, 65)
+    XCTAssertEqual(title.frame.midX, app.frame.midX, accuracy: 2)
+    XCTAssertLessThan(section.frame.maxX, title.frame.minX)
     XCTAssertLessThanOrEqual(section.frame.width, 200)
     XCTAssertLessThan(section.frame.maxX, app.buttons["openSettings"].frame.minX)
     XCTAssertFalse(app.navigationBars.buttons["Начать тренировку"].exists)
@@ -74,14 +75,18 @@ final class FitnessTrackerUITests: XCTestCase {
     let toggle = app.buttons["expandDiaryCalendar"]
     toggle.tap()
     XCTAssertEqual(toggle.value as? String, "Месяц")
+    XCTAssertEqual(title.frame.midX, app.frame.midX, accuracy: 2)
     XCTAssertLessThan(section.frame.maxY, calendar.frame.minY)
     XCTAssertLessThan(section.frame.maxX, app.buttons["openSettings"].frame.minX)
     let month = XCTAttachment(screenshot: app.screenshot())
     month.name = "Compact diary header tabs above expanded month calendar"
     month.lifetime = .keepAlways
     add(month)
+    section.buttons["Питание"].tap()
+    XCTAssertEqual(title.frame.midX, app.frame.midX, accuracy: 2)
     section.buttons["Сон"].tap()
-    XCTAssertGreaterThan(title.frame.width, 75)
+    XCTAssertGreaterThan(title.frame.width, 65)
+    XCTAssertEqual(title.frame.midX, app.frame.midX, accuracy: 2)
     XCTAssertLessThan(section.frame.maxX, app.buttons["openSettings"].frame.minX)
     app.buttons["workoutStartAction"].tap()
     XCTAssertTrue(app.buttons["startSelectedTemplates"].waitForExistence(timeout: 5))
@@ -95,7 +100,8 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertEqual(app.staticTexts["nutritionDailyCalories"].label, "720 ккал")
     XCTAssertFalse(app.navigationBars.buttons["Действия питания"].exists)
     XCTAssertEqual(app.staticTexts["diaryHeaderTitle"].label, "Дневник")
-    XCTAssertGreaterThan(app.staticTexts["diaryHeaderTitle"].frame.width, 75)
+    XCTAssertGreaterThan(app.staticTexts["diaryHeaderTitle"].frame.width, 65)
+    XCTAssertEqual(app.staticTexts["diaryHeaderTitle"].frame.midX, app.frame.midX, accuracy: 2)
     let copy = app.buttons["copyNutritionDay"]
     reveal(copy, in: app)
     XCTAssertTrue(copy.isEnabled)

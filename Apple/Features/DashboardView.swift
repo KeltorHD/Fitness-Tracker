@@ -67,22 +67,23 @@ struct DashboardView: View {
       .background(FitTheme.paper).navigationBarTitleDisplayMode(.inline)
       .toolbar {
         ToolbarItem(placement: .topBarLeading) {
-          HStack(spacing: 8) {
-            Text(L10n.text("Дневник", locale: locale)).font(.title2.bold())
-              .lineLimit(1).fixedSize(horizontal: true, vertical: false)
-              .accessibilityAddTraits(.isHeader).accessibilityIdentifier("diaryHeaderTitle")
-            Picker(L10n.text("Раздел дневника", locale: locale), selection: $section) {
-              Label(
-                L10n.text("Тренировки", locale: locale),
-                systemImage: "figure.strengthtraining.traditional"
-              ).tag(DiarySection.workouts)
-              Label(L10n.text("Питание", locale: locale), systemImage: "fork.knife")
-                .tag(DiarySection.nutrition)
-              Label(L10n.text("Сон", locale: locale), systemImage: "moon.zzz.fill")
-                .tag(DiarySection.sleep)
-            }.labelStyle(.iconOnly).pickerStyle(.segmented).frame(width: 156)
-              .accessibilityIdentifier("diarySection")
-          }
+          Picker(L10n.text("Раздел дневника", locale: locale), selection: $section) {
+            Label(
+              L10n.text("Тренировки", locale: locale),
+              systemImage: "figure.strengthtraining.traditional"
+            ).tag(DiarySection.workouts)
+            Label(L10n.text("Питание", locale: locale), systemImage: "fork.knife")
+              .tag(DiarySection.nutrition)
+            Label(L10n.text("Сон", locale: locale), systemImage: "moon.zzz.fill")
+              .tag(DiarySection.sleep)
+          }.labelStyle(.iconOnly).pickerStyle(.segmented).frame(width: 132)
+            .accessibilityIdentifier("diarySection")
+        }
+        .sharedBackgroundVisibility(.hidden)
+        ToolbarItem(placement: .principal) {
+          Text(L10n.text("Дневник", locale: locale)).font(.headline)
+            .lineLimit(1).fixedSize(horizontal: true, vertical: false)
+            .accessibilityAddTraits(.isHeader).accessibilityIdentifier("diaryHeaderTitle")
         }
         .sharedBackgroundVisibility(.hidden)
         SettingsToolbar()
