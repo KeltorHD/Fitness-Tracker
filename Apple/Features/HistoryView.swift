@@ -40,6 +40,9 @@ struct HistoryView: View {
             .themeGlow(in: RoundedRectangle(cornerRadius: FitTheme.radius), emphasized: true)
         }.buttonStyle(.plain).accessibilityIdentifier("resumeWorkout").cardListRow()
       }
+      if let summary = model.diarySummary {
+        TrainingDiaryInsightsView(summary: summary).cardListRow()
+      }
       if let date = model.filterDate {
         HStack {
           Text(date, format: .dateTime.day().month(.wide)).font(.headline)
@@ -149,7 +152,10 @@ struct HistoryView: View {
       TemplateEditor(template: draft).onAppear { store.showingTemplateEditor = true }
     }
     .onChange(of: calendar) { refresh() }
-    .onChange(of: date) { model.filterDate = date }
+    .onChange(of: date) {
+      model.filterDate = date
+      refresh()
+    }
     .onChange(of: phase) { if phase == .active { refresh() } }
     .confirmationDialog(
       L10n.text("Удалить тренировку?", locale: locale),
@@ -166,7 +172,7 @@ struct HistoryView: View {
     }
   }
 
-  private func refresh() { model.refresh(workouts: store.workouts, calendar: calendar) }
+  private func refresh() { model.refresh(workouts: store.workouts, calendar: calendar, day: date) }
 
   private func createTemplate(from workout: Workout) {
     do {
@@ -181,7 +187,7 @@ struct HistoryView: View {
       ForEach(model.days) { item in
         let day = item.date
         let trained = item.hasWorkout
-        let highlighted = calendar.isDate(day, inSameDayAs: model.filterDate ?? .now)
+        let highlighted = calendar.isDate(day, inSameDayAs: date)
         Button {
           date = day
           model.filterDate = day

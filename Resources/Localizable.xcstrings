@@ -1446,6 +1446,23 @@
         }
       }
     },
+    "Баланс питания": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Баланс питания"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutrition balance"
+          }
+        }
+      }
+    },
     "Без выбора шаблона начнётся свободная тренировка.": {
       "extractionState": "manual",
       "localizations": {
@@ -1544,6 +1561,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Unscheduled"
+          }
+        }
+      }
+    },
+    "Без тренировки": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Без тренировки"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No workout"
           }
         }
       }
@@ -5645,6 +5679,40 @@
         }
       }
     },
+    "Добавьте цели питания для отслеживания прогресса.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Добавьте цели питания для отслеживания прогресса."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set nutrition goals to track your progress."
+          }
+        }
+      }
+    },
+    "Доли рассчитаны по записанным фазам сна и бодрствования.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Доли рассчитаны по записанным фазам сна и бодрствования."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shares are based on recorded sleep and awake intervals."
+          }
+        }
+      }
+    },
     "Доли фаз сна": {
       "extractionState": "manual",
       "localizations": {
@@ -6104,6 +6172,23 @@
         }
       }
     },
+    "За выбранную неделю · только завершённые тренировки": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "За выбранную неделю · только завершённые тренировки"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selected week · completed workouts only"
+          }
+        }
+      }
+    },
     "Завершите текущую тренировку перед открытием демо-профиля.": {
       "extractionState": "manual",
       "localizations": {
@@ -6406,6 +6491,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Workout notes"
+          }
+        }
+      }
+    },
+    "Записанное время": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Записанное время"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recorded time"
           }
         }
       }
@@ -8501,6 +8603,23 @@
         }
       }
     },
+    "На кольце — соотношение БЖУ в граммах.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "На кольце — соотношение БЖУ в граммах."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The ring shows the ratio of macros in grams."
+          }
+        }
+      }
+    },
     "На паузе": {
       "extractionState": "manual",
       "localizations": {
@@ -10456,6 +10575,40 @@
         }
       }
     },
+    "Недельная цель": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Недельная цель"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekly goal"
+          }
+        }
+      }
+    },
+    "Недельная цель тренировок": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Недельная цель тренировок"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekly workout goal"
+          }
+        }
+      }
+    },
     "Неделя": {
       "extractionState": "manual",
       "localizations": {
@@ -10639,6 +10792,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "No completed sets"
+          }
+        }
+      }
+    },
+    "Нет данных": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нет данных"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No data"
           }
         }
       }
@@ -13499,6 +13669,23 @@
         }
       }
     },
+    "Показать сводку": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Показать сводку"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show summary"
+          }
+        }
+      }
+    },
     "Показать упражнения": {
       "extractionState": "manual",
       "localizations": {
@@ -15437,6 +15624,23 @@
         }
       }
     },
+    "Ритм тренировок": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ритм тренировок"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Training rhythm"
+          }
+        }
+      }
+    },
     "Роза": {
       "extractionState": "manual",
       "localizations": {
@@ -16236,6 +16440,23 @@
         }
       }
     },
+    "Скрыть сводку": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Скрыть сводку"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hide summary"
+          }
+        }
+      }
+    },
     "Скрыть упражнения": {
       "extractionState": "manual",
       "localizations": {
@@ -16725,6 +16946,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Night’s sleep"
+          }
+        }
+      }
+    },
+    "Соотношение БЖУ": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Соотношение БЖУ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Macro ratio"
           }
         }
       }
@@ -17677,6 +17915,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Workout"
+          }
+        }
+      }
+    },
+    "Тренировка завершена": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Тренировка завершена"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workout completed"
           }
         }
       }
@@ -19313,6 +19568,23 @@
         }
       }
     },
+    "Цель достигнута": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Цель достигнута"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goal reached"
+          }
+        }
+      }
+    },
     "Цель на неделю: %@": {
       "extractionState": "manual",
       "localizations": {
@@ -19938,6 +20210,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "yes"
+          }
+        }
+      }
+    },
+    "из %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "из %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "of %@"
+          }
+        }
+      }
+    },
+    "из %@ г": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "из %@ г"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "of %@ g"
           }
         }
       }

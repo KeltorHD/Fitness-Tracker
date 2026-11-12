@@ -10,6 +10,31 @@ private func sleepCalendar() -> Calendar {
 }
 private let sleepDay = Date(timeIntervalSince1970: 1_700_006_400)
 
+@Test func recordedSleepSharesIncludeAwakeAndExcludeBedAndUnknownGaps() throws {
+  let calendar = sleepCalendar()
+  let window = try #require(SleepNight.window(endingOn: sleepDay, calendar: calendar))
+  let start = window.start.addingTimeInterval(10 * 3600)
+  func sample(_ offset: Double, _ length: Double, _ stage: SleepStage) -> SleepSample {
+    SleepSample(
+      interval: DateInterval(start: start.addingTimeInterval(offset), duration: length),
+      stage: stage,
+      sourceID: "fixture", sourceName: "fixture")
+  }
+  let night = SleepNight(
+    day: sleepDay, calendar: calendar,
+    samples: [
+      sample(0, 14_400, .inBed), sample(0, 3600, .core),
+      sample(5400, 1800, .awake), sample(7200, 3600, .rem),
+    ])
+  #expect(night.recordedStageFraction(.awake) == 0.2)
+  #expect(night.recordedStageFraction(.core) == 0.4)
+  #expect(night.recordedStageFraction(.rem) == 0.4)
+  #expect(night.recordedStageFraction(.inBed) == nil)
+  #expect(night.fraction(.core) == 0.5)
+  let empty = SleepNight(day: sleepDay, calendar: calendar, samples: [])
+  #expect(empty.recordedStageFraction(.awake) == nil)
+}
+
 @Test func sleepNightUsesOneSourceAndUnionsOverlappingStages() throws {
   let calendar = sleepCalendar()
   let window = try #require(SleepNight.window(endingOn: sleepDay, calendar: calendar))

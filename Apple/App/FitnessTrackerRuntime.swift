@@ -11,6 +11,8 @@ import Foundation
     let repository: any WorkoutRepository
     if testing {
       UserDefaults.standard.removeObject(forKey: "appLanguage")
+      UserDefaults.standard.removeObject(forKey: "trainingDiaryInsightsExpanded")
+      UserDefaults.standard.removeObject(forKey: "nutritionDiaryInsightsExpanded")
       repository = MemoryWorkoutRepository()
     } else {
       repository = try SwiftDataWorkoutRepository(
@@ -33,6 +35,11 @@ import Foundation
     if testing, ProcessInfo.processInfo.arguments.contains("--ui-testing-previous-sets") {
       try TrainingGroupsUITestFixture.seedPreviousSets(into: repository)
     }
+    #if DEBUG
+      if testing, ProcessInfo.processInfo.arguments.contains("--ui-testing-diary-insights") {
+        try DiaryInsightsUITestFixture.seed(into: repository)
+      }
+    #endif
     defaults.register(defaults: ["weeklyGoal": 3, "liveActivities": !testing])
     let accountSession: AccountSession?
     do {

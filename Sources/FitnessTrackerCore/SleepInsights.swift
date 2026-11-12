@@ -32,6 +32,12 @@ extension SleepNight {
     guard stage.isAsleep, let asleep else { return nil }
     return duration(stage) / asleep
   }
+  /// Shares of recorded sleep and awake intervals; unknown gaps and in-bed time are excluded.
+  public func recordedStageFraction(_ stage: SleepStage) -> Double? {
+    guard stage != .inBed else { return nil }
+    let total = periods.filter { $0.stage != .inBed }.reduce(0) { $0 + $1.interval.duration }
+    return total > 0 ? duration(stage) / total : nil
+  }
   public func period(at date: Date) -> SleepPeriod? {
     guard date.timeIntervalSince1970.isFinite else { return nil }
     return periods.first { $0.interval.start <= date && date < $0.interval.end }

@@ -384,4 +384,26 @@ import XCTest
     XCTAssertNil(model.exerciseProgress.history)
     XCTAssertTrue(model.exerciseProgress.points.isEmpty)
   }
+
+  func testTrainingDiarySummaryKeepsChosenWeekWhenShowingAllHistoryAndRefreshesDeletion() throws {
+    var calendar = Calendar(identifier: .iso8601)
+    calendar.timeZone = .gmt
+    let now = Date(timeIntervalSince1970: 1_794_480_000)
+    let chosen = try XCTUnwrap(calendar.date(byAdding: .weekOfYear, value: -2, to: now))
+    var workout = try ExerciseCatalog.starterTemplates[0].start(at: chosen)
+    try WorkoutEngine.completeSet(
+      in: &workout, exerciseID: workout.exercises[0].id, setID: workout.exercises[0].sets[0].id,
+      repetitions: 8, weightKG: 40, at: chosen)
+    try WorkoutEngine.finish(&workout, at: chosen.addingTimeInterval(60))
+    let model = HistoryViewModel(calendar: calendar, now: { now })
+    model.refresh(workouts: [workout], calendar: calendar, day: chosen)
+    model.filterDate = chosen
+    model.filterDate = nil
+    XCTAssertEqual(model.diarySummary?.workouts, 1)
+    XCTAssertEqual(
+      model.days.first?.date, calendar.dateInterval(of: .weekOfYear, for: chosen)?.start)
+    model.refresh(workouts: [], calendar: calendar, day: chosen)
+    XCTAssertEqual(model.diarySummary?.workouts, 0)
+    XCTAssertNil(model.diarySummary?.duration)
+  }
 }

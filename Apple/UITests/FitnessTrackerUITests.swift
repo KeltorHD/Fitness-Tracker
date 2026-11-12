@@ -1,6 +1,68 @@
 import XCTest
 
 final class FitnessTrackerUITests: XCTestCase {
+  @MainActor func testDiaryRingSummariesStartExpandedAndCanBeHiddenIndependently() {
+    let app = launch(additionalArguments: [
+      "--ui-testing-training-groups", "-weeklyGoal", "3", "-appearance", "dark",
+    ])
+    let training = app.buttons["expandTrainingInsights"]
+    XCTAssertTrue(training.waitForExistence(timeout: 10))
+    XCTAssertEqual(training.value as? String, "Развёрнуто")
+    XCTAssertTrue(
+      app.descendants(matching: .any).matching(identifier: "trainingGoalRing").firstMatch.exists)
+    let trainingImage = XCTAttachment(screenshot: app.screenshot())
+    trainingImage.name = "Training diary weekly activity ring"
+    trainingImage.lifetime = .keepAlways
+    add(trainingImage)
+    training.tap()
+    XCTAssertEqual(training.value as? String, "Свёрнуто")
+    let section = app.segmentedControls["diarySection"]
+    section.buttons["Питание"].tap()
+    let nutrition = app.buttons["expandNutritionInsights"]
+    XCTAssertTrue(nutrition.waitForExistence(timeout: 5))
+    XCTAssertEqual(nutrition.value as? String, "Развёрнуто")
+    nutrition.tap()
+    XCTAssertEqual(nutrition.value as? String, "Свёрнуто")
+    section.buttons["Тренировки"].tap()
+    XCTAssertEqual(training.value as? String, "Свёрнуто")
+    training.tap()
+    XCTAssertEqual(training.value as? String, "Развёрнуто")
+    section.buttons["Питание"].tap()
+    XCTAssertEqual(nutrition.value as? String, "Свёрнуто")
+    nutrition.tap()
+    XCTAssertEqual(nutrition.value as? String, "Развёрнуто")
+  }
+
+  @MainActor func testNutritionRingSelectionAndSharedDateUseRecordedTotals() {
+    let app = launch(additionalArguments: [
+      "--ui-testing-diary-insights", "-appearance", "light",
+    ])
+    let section = app.segmentedControls["diarySection"]
+    XCTAssertTrue(section.waitForExistence(timeout: 10))
+    section.buttons["Питание"].tap()
+    let calories = app.staticTexts["nutritionDailyCalories"]
+    XCTAssertTrue(calories.waitForExistence(timeout: 5))
+    XCTAssertEqual(calories.label, "720 ккал")
+    let protein = app.buttons["nutritionMacro_protein"]
+    protein.tap()
+    XCTAssertTrue(protein.isSelected)
+    let ring = app.descendants(matching: .any).matching(identifier: "nutritionMacroRing").firstMatch
+    XCTAssertTrue(ring.exists)
+    ring.coordinate(withNormalizedOffset: CGVector(dx: 0.35, dy: 0.35)).tap()
+    XCTAssertTrue(app.buttons["nutritionMacro_carbohydrates"].isSelected)
+    protein.tap()
+    ring.coordinate(withNormalizedOffset: CGVector(dx: 0.35, dy: 0.35)).tap()
+    XCTAssertTrue(app.buttons["nutritionMacro_carbohydrates"].isSelected)
+    let image = XCTAttachment(screenshot: app.screenshot())
+    image.name = "Nutrition ratios and calorie goal, synthetic UI fixture"
+    image.lifetime = .keepAlways
+    add(image)
+    app.buttons["previousDiaryDay"].tap()
+    XCTAssertEqual(calories.label, "0 ккал")
+    app.buttons["diaryToday"].tap()
+    XCTAssertEqual(calories.label, "720 ккал")
+  }
+
   @MainActor func testSleepAlarmOffersThreeDestinationsAndPhoneNeedsNoWatch() {
     let app = launch(additionalArguments: ["--ui-testing-sleep", "-sleepDiaryEnabled", "NO"])
     let section = app.segmentedControls["diarySection"]
@@ -70,12 +132,21 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(section.waitForExistence(timeout: 10))
     section.buttons["Сон"].tap()
     XCTAssertTrue(app.staticTexts["selectedSleepDuration"].waitForExistence(timeout: 10))
+    let ring = app.descendants(matching: .any).matching(identifier: "sleepPhaseRing").firstMatch
+    XCTAssertTrue(ring.waitForExistence(timeout: 5))
+    ring.coordinate(withNormalizedOffset: CGVector(dx: 0.35, dy: 0.35)).tap()
     let header = XCTAttachment(screenshot: app.screenshot())
     header.name = "Interactive sleep overview with labeled UI fixture data"
     header.lifetime = .keepAlways
     add(header)
     let deep = app.buttons["sleepStage_deep"]
     reveal(deep, in: app)
+    XCTAssertTrue(
+      deep.isSelected, "A tap inside the ring's hole should select the nearby deep-sleep sector")
+    let awake = app.buttons["sleepStage_awake"]
+    reveal(awake, in: app)
+    awake.tap()
+    XCTAssertTrue(awake.isSelected)
     deep.tap()
     let detail = app.descendants(matching: .any).matching(identifier: "selectedSleepPhase")
       .firstMatch

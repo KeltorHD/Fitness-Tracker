@@ -14,7 +14,6 @@ struct SleepInsightsView: View {
   @State private var selectedTime: Date?
   @State private var focusedPeriod: SleepPeriod?
   @State private var selectedStage: SleepStage?
-  @State private var selectedAngle: Double?
   private var trend: SleepTrend {
     SleepTrend(nights: nights, endingOn: day, days: days, calendar: calendar)
   }
@@ -84,7 +83,7 @@ struct SleepInsightsView: View {
           Text(L10n.text("Во сне", locale: locale)).font(.subheadline).foregroundStyle(.secondary)
         }
         Spacer(minLength: 8)
-        phaseRing(night).frame(width: 104, height: 104)
+        phaseRing(night).frame(width: 136, height: 136)
       }
       if let delta = trend.differenceFromPrevious(night, calendar: calendar) {
         Label {
@@ -110,37 +109,29 @@ struct SleepInsightsView: View {
     }
   }
   private func phaseRing(_ night: SleepNight) -> some View {
-    let stages = SleepDisplay.asleepStages.filter { night.duration($0) > 0 }
-    return Chart(stages, id: \.self) { stage in
-      SectorMark(
-        angle: .value(L10n.text("Длительность", locale: locale), night.duration(stage)),
-        innerRadius: .ratio(0.76), angularInset: 2
-      )
-      .cornerRadius(4).foregroundStyle(SleepDisplay.color(stage))
-      .opacity(selectedStage == nil || selectedStage == stage ? 1 : 0.3)
-    }
-    .chartAngleSelection(value: $selectedAngle)
-    .onChange(of: selectedAngle) { _, angle in
-      guard let angle else { return }
-      var accumulated = 0.0
-      for stage in stages {
-        accumulated += night.duration(stage)
-        if angle < accumulated {
-          focus(stage, in: night)
-          break
-        }
+    let stages = SleepDisplay.recordedStages.filter { night.duration($0) > 0 }
+    return DiaryRingChart(
+      segments: stages.map {
+        DiaryRingSegment(id: $0.rawValue, value: night.duration($0), color: SleepDisplay.color($0))
+      }, selectedID: selectedStage?.rawValue,
+      onSelect: { id in
+        if let stage = SleepStage(rawValue: id) { focus(stage, in: night) }
       }
-    }
-    .overlay {
-      if let selectedStage, let share = night.fraction(selectedStage) {
-        Text(share, format: .percent.precision(.fractionLength(0))).font(.headline)
-          .monospacedDigit().allowsHitTesting(false)
+    ) {
+      if let selectedStage, let share = night.recordedStageFraction(selectedStage) {
+        VStack(spacing: 2) {
+          Text(share, format: .percent.precision(.fractionLength(0))).font(.headline)
+            .monospacedDigit()
+          Text(SleepDisplay.chartTitle(selectedStage, locale: locale)).font(.caption2)
+            .foregroundStyle(.secondary).lineLimit(2).multilineTextAlignment(.center)
+        }.padding(22)
       } else {
         Image(systemName: "moon.stars.fill").font(.title2).foregroundStyle(theme.accent)
-          .allowsHitTesting(false)
       }
     }
     .accessibilityLabel(L10n.text("Доли фаз сна", locale: locale))
+    .accessibilityValue(selectedStage.map { SleepDisplay.title($0, locale: locale) } ?? "")
+    .accessibilityIdentifier("sleepPhaseRing")
   }
   private func phases(_ night: SleepNight) -> some View {
     VStack(alignment: .leading, spacing: 16) {
@@ -210,7 +201,9 @@ struct SleepInsightsView: View {
           L10n.text("Коснитесь графика или фазы, чтобы рассмотреть сон подробнее.", locale: locale)
         ).font(.caption).foregroundStyle(.secondary)
       }
-      ForEach(SleepDisplay.asleepStages.filter { night.duration($0) > 0 }, id: \.self) { stage in
+      ForEach(
+        SleepDisplay.recordedStages.filter { $0 == .awake || night.duration($0) > 0 }, id: \.self
+      ) { stage in
         Button {
           if selectedStage == stage { resetPhase() } else { focus(stage, in: night) }
         } label: {
@@ -219,19 +212,29 @@ struct SleepInsightsView: View {
               Circle().fill(SleepDisplay.color(stage)).frame(width: 8, height: 8)
               Text(SleepDisplay.title(stage, locale: locale)).font(.subheadline)
               Spacer()
-              Text(SleepDisplay.duration(night.duration(stage), locale: locale)).font(
+              Text(
+                night.duration(stage) > 0
+                  ? SleepDisplay.duration(night.duration(stage), locale: locale)
+                  : L10n.text("Нет данных", locale: locale)
+              ).font(
                 .subheadline.weight(.semibold)
               ).monospacedDigit()
-              if let share = night.fraction(stage) {
+              if night.duration(stage) > 0, let share = night.recordedStageFraction(stage) {
                 Text(share, format: .percent.precision(.fractionLength(0))).font(.caption)
                   .foregroundStyle(.secondary).frame(minWidth: 36, alignment: .trailing)
               }
             }
-            ProgressView(value: night.fraction(stage) ?? 0).tint(SleepDisplay.color(stage))
-          }.padding(.vertical, 5).contentShape(.rect)
-        }.buttonStyle(.plain).accessibilityIdentifier("sleepStage_\(stage.rawValue)")
+            if night.duration(stage) > 0 {
+              ProgressView(value: night.recordedStageFraction(stage) ?? 0)
+                .tint(SleepDisplay.color(stage))
+            }
+          }.frame(minHeight: 44).padding(.vertical, 5).contentShape(.rect)
+        }.buttonStyle(.plain).disabled(night.duration(stage) == 0)
+          .accessibilityIdentifier("sleepStage_\(stage.rawValue)")
           .accessibilityAddTraits(selectedStage == stage ? [.isSelected] : [])
       }
+      Text(L10n.text("Доли рассчитаны по записанным фазам сна и бодрствования.", locale: locale))
+        .font(.caption).foregroundStyle(.secondary)
       if !night.hasStages {
         Text(L10n.text("Источник не передал подробные фазы сна.", locale: locale)).font(.caption)
           .foregroundStyle(.secondary)
@@ -248,10 +251,6 @@ struct SleepInsightsView: View {
           metric(
             "Без пробуждений", value: SleepDisplay.duration(longest, locale: locale),
             symbol: "moon.zzz.fill")
-        }
-        if let awake = night.awakeDuration {
-          metric(
-            "Бодрствование", value: SleepDisplay.duration(awake, locale: locale), symbol: "eye")
         }
         if night.hasStages {
           metric(
@@ -366,12 +365,11 @@ struct SleepInsightsView: View {
     selectedTime = nil
     focusedPeriod = nil
     selectedStage = nil
-    selectedAngle = nil
   }
 }
 
 private enum SleepDisplay {
-  static let asleepStages: [SleepStage] = [.rem, .core, .deep, .unspecified]
+  static let recordedStages: [SleepStage] = [.rem, .core, .deep, .unspecified, .awake]
   static func duration(_ value: TimeInterval, locale: Locale) -> String {
     Duration.seconds(value).formatted(
       .units(allowed: [.hours, .minutes], width: .abbreviated).locale(locale))

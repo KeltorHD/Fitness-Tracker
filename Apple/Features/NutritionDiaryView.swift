@@ -2,47 +2,6 @@ import FitnessTrackerCore
 import SwiftUI
 import UIKit
 
-struct NutritionSummary: View {
-  @Environment(\.locale) private var locale
-  let day: NutritionDay
-  let goal: NutritionGoal?
-  var body: some View {
-    VStack(alignment: .leading, spacing: 10) {
-      if day.entries.isEmpty || day.entries.count > day.incompleteCount {
-        Text(
-          L10n.format(
-            "%@ ккал", day.total.calories.formatted(.number.precision(.fractionLength(0))),
-            locale: locale)
-        )
-        .font(.title.bold()).monospacedDigit()
-        if let goal {
-          ProgressView(value: min(day.total.calories / goal.calories, 1))
-            .accessibilityLabel(L10n.text("Дневная цель калорий", locale: locale))
-          Text(L10n.format("Цель: %@ ккал", goal.calories.formatted(), locale: locale)).font(
-            .subheadline)
-          Text(
-            L10n.format(
-              day.total.calories > goal.calories ? "Сверх цели: %@ ккал" : "Осталось: %@ ккал",
-              abs(goal.calories - day.total.calories).formatted(
-                .number.precision(.fractionLength(0))), locale: locale)
-          )
-          .font(.subheadline).foregroundStyle(.secondary)
-        }
-        NutrientValues(value: day.total, goal: goal)
-      } else {
-        Text(L10n.text("КБЖУ не заполнены", locale: locale)).font(.headline)
-      }
-      if day.incompleteCount > 0 {
-        Label(
-          L10n.text("Есть фото без КБЖУ — итог неполный", locale: locale),
-          systemImage: "info.circle"
-        )
-        .font(.caption).foregroundStyle(.secondary)
-      }
-    }
-  }
-}
-
 struct NutrientValues: View {
   @Environment(\.locale) private var locale
   let value: Nutrients
@@ -106,7 +65,7 @@ struct NutritionDiaryView: View {
         }.font(.subheadline).cardListRow()
       }
       if model.loaded {
-        NutritionSummary(day: model.day, goal: model.goal).fitCard().cardListRow()
+        NutritionDiaryInsightsView(day: model.day, date: date, goal: model.goal).cardListRow()
         HStack {
           NavigationLink {
             NutritionGoalEditor(model: model)
