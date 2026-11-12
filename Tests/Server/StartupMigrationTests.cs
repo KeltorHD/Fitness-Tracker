@@ -187,6 +187,7 @@ public sealed class StartupMigrationTests
         var id = Guid.NewGuid();
         var owner = Guid.NewGuid().ToString();
         using var protectionFiles = new ProtectionFiles();
+        var payload = TrainingFixture.Archive([]);
         string protectedValue;
         var errors = new StartupCommandErrors();
         using (var factory = new StartupFactory<Backend.Program>(fixture.ConnectionString,
@@ -207,7 +208,15 @@ public sealed class StartupMigrationTests
                 Assert.DoesNotContain(document.Descendants(), element => element.Name.LocalName == "masterKey");
             }
             await using var database = new BackupDbContext(options);
-            database.Backups.Add(new BackupRecord { Id = id, OwnerId = owner, Payload = [1, 2, 3], Size = 3, Sha256 = "preserved" });
+            database.Backups.Add(new BackupRecord
+            {
+                Id = id,
+                OwnerId = owner,
+                Payload = payload,
+                Size = payload.Length,
+                ArchiveVersion = 4,
+                Sha256 = Convert.ToHexStringLower(SHA256.HashData(payload))
+            });
             database.DeletedAccounts.Add(new DeletedAccount { Id = Guid.NewGuid().ToString() });
             await database.SaveChangesAsync(cancellationToken);
         }
@@ -223,9 +232,9 @@ public sealed class StartupMigrationTests
         var backup = await verification.Backups.SingleAsync(cancellationToken);
         Assert.Equal(id, backup.Id);
         Assert.Equal(owner, backup.OwnerId);
-        Assert.Equal(new byte[] { 1, 2, 3 }, backup.Payload);
+        Assert.Equal(payload, backup.Payload);
         Assert.Single(await verification.DeletedAccounts.ToListAsync(cancellationToken));
-        Assert.Equal(2, (await verification.Database.GetAppliedMigrationsAsync(cancellationToken)).Count());
+        Assert.Equal(3, (await verification.Database.GetAppliedMigrationsAsync(cancellationToken)).Count());
     }
 
     /// <summary>Ошибка миграции обоих сервисов прерывает запуск до доступности HTTP.</summary>

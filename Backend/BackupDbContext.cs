@@ -22,6 +22,13 @@ public sealed class BackupDbContext(DbContextOptions<BackupDbContext> options) :
 {
     public DbSet<BackupRecord> Backups => Set<BackupRecord>();
     public DbSet<DeletedAccount> DeletedAccounts => Set<DeletedAccount>();
+    public DbSet<TrainingOwner> TrainingOwners => Set<TrainingOwner>();
+    public DbSet<TrainingRecordMetadata> TrainingRecords => Set<TrainingRecordMetadata>();
+    public DbSet<TrainingWorkout> Workouts => Set<TrainingWorkout>();
+    public DbSet<TrainingTemplate> Templates => Set<TrainingTemplate>();
+    public DbSet<TrainingExercise> Exercises => Set<TrainingExercise>();
+    public DbSet<TrainingBodyWeight> BodyWeights => Set<TrainingBodyWeight>();
+    public DbSet<TrainingHeartRate> HeartRateRecordings => Set<TrainingHeartRate>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -30,5 +37,6 @@ public sealed class BackupDbContext(DbContextOptions<BackupDbContext> options) :
         builder.Entity<BackupRecord>().Property(backup => backup.Sha256).HasMaxLength(64);
         builder.Entity<BackupRecord>().HasIndex(backup => new { backup.OwnerId, backup.CreatedAtMilliseconds });
         builder.Entity<DeletedAccount>().Property(account => account.Id).HasMaxLength(36);
+        TrainingModel.Configure(builder);
     }
 }
