@@ -97,9 +97,13 @@ struct AccountBackupView: View {
       Text(ByteCountFormatter.string(fromByteCount: Int64(backup.size), countStyle: .file))
         .font(.caption).foregroundStyle(.secondary)
       Button(L10n.text("Восстановить…", locale: locale)) { action = .restore(backup) }
+        .buttonStyle(.borderless)
+        .accessibilityIdentifier("restoreServerBackup_\(backup.id)")
       Button(L10n.text("Удалить копию", locale: locale), role: .destructive) {
         confirmation = .delete(backup)
       }
+      .buttonStyle(.borderless)
+      .accessibilityIdentifier("deleteServerBackup_\(backup.id)")
     }.padding(.vertical, 4)
   }
 
