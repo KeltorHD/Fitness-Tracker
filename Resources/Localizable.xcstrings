@@ -1650,19 +1650,19 @@
         }
       }
     },
-    "Библиотека FitnessTracker": {
+    "Библиотека FitLife": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Библиотека FitnessTracker"
+            "value": "Библиотека FitLife"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "FitnessTracker Library"
+            "value": "FitLife Library"
           }
         }
       }
@@ -2109,19 +2109,19 @@
         }
       }
     },
-    "В приложении вашего трекера включите передачу данных в Apple «Здоровье» и разрешите запись нужных показателей. Затем разрешите FitnessTracker их чтение.": {
+    "В приложении вашего трекера включите передачу данных в Apple «Здоровье» и разрешите запись нужных показателей. Затем разрешите FitLife их чтение.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "В приложении вашего трекера включите передачу данных в Apple «Здоровье» и разрешите запись нужных показателей. Затем разрешите FitnessTracker их чтение."
+            "value": "В приложении вашего трекера включите передачу данных в Apple «Здоровье» и разрешите запись нужных показателей. Затем разрешите FitLife их чтение."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enable sharing with Apple Health in your tracker’s app and allow writing the measurements you want to share. Then allow FitnessTracker to read them."
+            "value": "Enable sharing with Apple Health in your tracker’s app and allow writing the measurements you want to share. Then allow FitLife to read them."
           }
         }
       }
@@ -2517,19 +2517,19 @@
         }
       }
     },
-    "Версия формата файла не поддерживается. Попробуйте обновить FitnessTracker.": {
+    "Версия формата файла не поддерживается. Попробуйте обновить FitLife.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Версия формата файла не поддерживается. Попробуйте обновить FitnessTracker."
+            "value": "Версия формата файла не поддерживается. Попробуйте обновить FitLife."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "This file format version is unsupported. Try updating FitnessTracker."
+            "value": "This file format version is unsupported. Try updating FitLife."
           }
         }
       }
@@ -2908,19 +2908,19 @@
         }
       }
     },
-    "Включите сводку виджета в настройках FitnessTracker.": {
+    "Включите сводку виджета в настройках FitLife.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Включите сводку виджета в настройках FitnessTracker."
+            "value": "Включите сводку виджета в настройках FitLife."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enable the widget summary in FitnessTracker settings."
+            "value": "Enable the widget summary in FitLife settings."
           }
         }
       }
@@ -3316,19 +3316,19 @@
         }
       }
     },
-    "Все функции FitnessTracker доступны бесплатно.": {
+    "Все функции FitLife доступны бесплатно.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Все функции FitnessTracker доступны бесплатно."
+            "value": "Все функции FitLife доступны бесплатно."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "All FitnessTracker features are free."
+            "value": "All FitLife features are free."
           }
         }
       }
@@ -3673,36 +3673,36 @@
         }
       }
     },
-    "Выберите файл .fitnesstracker или .json.": {
+    "Выберите файл .fitlife или .json.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Выберите файл .fitnesstracker или .json."
+            "value": "Выберите файл .fitlife или .json."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Choose a .fitnesstracker or .json file."
+            "value": "Choose a .fitlife or .json file."
           }
         }
       }
     },
-    "Выберите файл .fitnesstracker, .json или .csv.": {
+    "Выберите файл .fitlife, .json или .csv.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Выберите файл .fitnesstracker, .json или .csv."
+            "value": "Выберите файл .fitlife, .json или .csv."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Choose a .fitnesstracker, .json or .csv file."
+            "value": "Choose a .fitlife, .json or .csv file."
           }
         }
       }
@@ -4353,19 +4353,19 @@
         }
       }
     },
-    "Данные могут поступать с задержкой. Доступны только показатели, переданные в «Здоровье» и разрешённые для FitnessTracker.": {
+    "Данные могут поступать с задержкой. Доступны только показатели, переданные в «Здоровье» и разрешённые для FitLife.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Данные могут поступать с задержкой. Доступны только показатели, переданные в «Здоровье» и разрешённые для FitnessTracker."
+            "value": "Данные могут поступать с задержкой. Доступны только показатели, переданные в «Здоровье» и разрешённые для FitLife."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Data may arrive with a delay. Only measurements shared with Health and authorized for FitnessTracker are available."
+            "value": "Data may arrive with a delay. Only measurements shared with Health and authorized for FitLife are available."
           }
         }
       }
@@ -4557,19 +4557,19 @@
         }
       }
     },
-    "Действие должно выполняться в приложении FitnessTracker.": {
+    "Действие должно выполняться в приложении FitLife.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Действие должно выполняться в приложении FitnessTracker."
+            "value": "Действие должно выполняться в приложении FitLife."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "This action must run in the FitnessTracker app."
+            "value": "This action must run in the FitLife app."
           }
         }
       }
@@ -4948,19 +4948,19 @@
         }
       }
     },
-    "Для живого пульса откройте FitnessTracker на Apple Watch, начните тренировку на iPhone и включите приём пульса. Разрешите доступ к пульсу и тренировкам на часах. Не запускайте одновременно приложение «Тренировка» Apple: часы поддерживают один сеанс тренировки.": {
+    "Для живого пульса откройте FitLife на Apple Watch, начните тренировку на iPhone и включите приём пульса. Разрешите доступ к пульсу и тренировкам на часах. Не запускайте одновременно приложение «Тренировка» Apple: часы поддерживают один сеанс тренировки.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Для живого пульса откройте FitnessTracker на Apple Watch, начните тренировку на iPhone и включите приём пульса. Разрешите доступ к пульсу и тренировкам на часах. Не запускайте одновременно приложение «Тренировка» Apple: часы поддерживают один сеанс тренировки."
+            "value": "Для живого пульса откройте FitLife на Apple Watch, начните тренировку на iPhone и включите приём пульса. Разрешите доступ к пульсу и тренировкам на часах. Не запускайте одновременно приложение «Тренировка» Apple: часы поддерживают один сеанс тренировки."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "For live heart rate, open FitnessTracker on Apple Watch, start a workout on iPhone, and enable heart rate reception. Allow heart rate and workout access on your watch. Do not run Apple Workout at the same time: the watch supports one workout session."
+            "value": "For live heart rate, open FitLife on Apple Watch, start a workout on iPhone, and enable heart rate reception. Allow heart rate and workout access on your watch. Do not run Apple Workout at the same time: the watch supports one workout session."
           }
         }
       }
@@ -5101,19 +5101,19 @@
         }
       }
     },
-    "Для частых измерений запустите приложение «Тренировка» на Apple Watch. FitnessTracker показывает измерения, поступившие в Apple «Здоровье»; передача может происходить с задержкой.": {
+    "Для частых измерений запустите приложение «Тренировка» на Apple Watch. FitLife показывает измерения, поступившие в Apple «Здоровье»; передача может происходить с задержкой.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Для частых измерений запустите приложение «Тренировка» на Apple Watch. FitnessTracker показывает измерения, поступившие в Apple «Здоровье»; передача может происходить с задержкой."
+            "value": "Для частых измерений запустите приложение «Тренировка» на Apple Watch. FitLife показывает измерения, поступившие в Apple «Здоровье»; передача может происходить с задержкой."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "For frequent measurements, start the Workout app on Apple Watch. FitnessTracker displays readings received by Apple Health; transfer may be delayed."
+            "value": "For frequent measurements, start the Workout app on Apple Watch. FitLife displays readings received by Apple Health; transfer may be delayed."
           }
         }
       }
@@ -5679,19 +5679,19 @@
         }
       }
     },
-    "Добавьте упражнения в FitnessTracker": {
+    "Добавьте упражнения в FitLife": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Добавьте упражнения в FitnessTracker"
+            "value": "Добавьте упражнения в FitLife"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Add exercises in FitnessTracker"
+            "value": "Add exercises in FitLife"
           }
         }
       }
@@ -7923,19 +7923,19 @@
         }
       }
     },
-    "Копия пульса в FitnessTracker хранится на этом iPhone и не включается в iCloud, виджеты и файлы экспорта. Данные Apple «Здоровье» и их синхронизацию контролирует iOS.": {
+    "Копия пульса в FitLife хранится на этом iPhone и не включается в iCloud, виджеты и файлы экспорта. Данные Apple «Здоровье» и их синхронизацию контролирует iOS.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Копия пульса в FitnessTracker хранится на этом iPhone и не включается в iCloud, виджеты и файлы экспорта. Данные Apple «Здоровье» и их синхронизацию контролирует iOS."
+            "value": "Копия пульса в FitLife хранится на этом iPhone и не включается в iCloud, виджеты и файлы экспорта. Данные Apple «Здоровье» и их синхронизацию контролирует iOS."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The heart rate copy in FitnessTracker stays on this iPhone and is excluded from iCloud, widgets and export files. iOS manages Apple Health data and its synchronization."
+            "value": "The heart rate copy in FitLife stays on this iPhone and is excluded from iCloud, widgets and export files. iOS manages Apple Health data and its synchronization."
           }
         }
       }
@@ -8756,19 +8756,19 @@
         }
       }
     },
-    "Наденьте AirPods Pro 3 и подключите их к iPhone. В настройках iOS → AirPods → Пульс включите измерение. Затем начните тренировку в FitnessTracker и включите приём пульса.": {
+    "Наденьте AirPods Pro 3 и подключите их к iPhone. В настройках iOS → AirPods → Пульс включите измерение. Затем начните тренировку в FitLife и включите приём пульса.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Наденьте AirPods Pro 3 и подключите их к iPhone. В настройках iOS → AirPods → Пульс включите измерение. Затем начните тренировку в FitnessTracker и включите приём пульса."
+            "value": "Наденьте AirPods Pro 3 и подключите их к iPhone. В настройках iOS → AirPods → Пульс включите измерение. Затем начните тренировку в FitLife и включите приём пульса."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wear your AirPods Pro 3 and connect them to your iPhone. Enable heart rate sensing in iOS Settings → AirPods → Heart Rate. Then start a workout in FitnessTracker and enable heart rate recording."
+            "value": "Wear your AirPods Pro 3 and connect them to your iPhone. Enable heart rate sensing in iOS Settings → AirPods → Heart Rate. Then start a workout in FitLife and enable heart rate recording."
           }
         }
       }
@@ -9011,19 +9011,19 @@
         }
       }
     },
-    "Названия, мышцы, оборудование и сокращённые пошаговые инструкции переведены и адаптированы на русский язык для FitnessTracker.": {
+    "Названия, мышцы, оборудование и сокращённые пошаговые инструкции переведены и адаптированы на русский язык для FitLife.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Названия, мышцы, оборудование и сокращённые пошаговые инструкции переведены и адаптированы на русский язык для FitnessTracker."
+            "value": "Названия, мышцы, оборудование и сокращённые пошаговые инструкции переведены и адаптированы на русский язык для FitLife."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Russian names, muscles, equipment and concise instructions are adapted for FitnessTracker. English instructions come from the original exercise database."
+            "value": "Russian names, muscles, equipment and concise instructions are adapted for FitLife. English instructions come from the original exercise database."
           }
         }
       }
@@ -9300,19 +9300,19 @@
         }
       }
     },
-    "Начните тренировку на iPhone, выберите Apple Watch в настройках пульса и включите приём. Оставьте FitnessTracker на часах открытым при запуске.": {
+    "Начните тренировку на iPhone, выберите Apple Watch в настройках пульса и включите приём. Оставьте FitLife на часах открытым при запуске.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Начните тренировку на iPhone, выберите Apple Watch в настройках пульса и включите приём. Оставьте FitnessTracker на часах открытым при запуске."
+            "value": "Начните тренировку на iPhone, выберите Apple Watch в настройках пульса и включите приём. Оставьте FitLife на часах открытым при запуске."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Start a workout on iPhone, select Apple Watch in heart rate settings, and enable reception. Keep FitnessTracker open on your watch when starting."
+            "value": "Start a workout on iPhone, select Apple Watch in heart rate settings, and enable reception. Keep FitLife open on your watch when starting."
           }
         }
       }
@@ -9538,19 +9538,19 @@
         }
       }
     },
-    "Не удалось изменить тренировку. Откройте FitnessTracker и повторите действие.": {
+    "Не удалось изменить тренировку. Откройте FitLife и повторите действие.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Не удалось изменить тренировку. Откройте FitnessTracker и повторите действие."
+            "value": "Не удалось изменить тренировку. Откройте FitLife и повторите действие."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Couldn’t change the workout. Open FitnessTracker and try again."
+            "value": "Couldn’t change the workout. Open FitLife and try again."
           }
         }
       }
@@ -9963,19 +9963,19 @@
         }
       }
     },
-    "Не удалось получить пульс. Откройте FitnessTracker на Apple Watch и повторите.": {
+    "Не удалось получить пульс. Откройте FitLife на Apple Watch и повторите.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Не удалось получить пульс. Откройте FitnessTracker на Apple Watch и повторите."
+            "value": "Не удалось получить пульс. Откройте FitLife на Apple Watch и повторите."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Could not receive heart rate. Open FitnessTracker on Apple Watch and try again."
+            "value": "Could not receive heart rate. Open FitLife on Apple Watch and try again."
           }
         }
       }
@@ -10932,19 +10932,19 @@
         }
       }
     },
-    "Нет доступных данных. Проверьте синхронизацию приложения трекера и разрешения FitnessTracker в «Здоровье».": {
+    "Нет доступных данных. Проверьте синхронизацию приложения трекера и разрешения FitLife в «Здоровье».": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Нет доступных данных. Проверьте синхронизацию приложения трекера и разрешения FitnessTracker в «Здоровье»."
+            "value": "Нет доступных данных. Проверьте синхронизацию приложения трекера и разрешения FitLife в «Здоровье»."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "No data is available. Check your tracker app’s sync and FitnessTracker permissions in Health."
+            "value": "No data is available. Check your tracker app’s sync and FitLife permissions in Health."
           }
         }
       }
@@ -11323,19 +11323,19 @@
         }
       }
     },
-    "Нужна установленная Watch-версия FitnessTracker. Измерения передаются напрямую, без ожидания синхронизации «Здоровья». При потере связи старое значение не показывается как текущий пульс.": {
+    "Нужна установленная Watch-версия FitLife. Измерения передаются напрямую, без ожидания синхронизации «Здоровья». При потере связи старое значение не показывается как текущий пульс.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Нужна установленная Watch-версия FitnessTracker. Измерения передаются напрямую, без ожидания синхронизации «Здоровья». При потере связи старое значение не показывается как текущий пульс."
+            "value": "Нужна установленная Watch-версия FitLife. Измерения передаются напрямую, без ожидания синхронизации «Здоровья». При потере связи старое значение не показывается как текущий пульс."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "FitnessTracker must be installed on Apple Watch. Measurements are sent directly without waiting for Health synchronization. If the connection drops, an old reading is not shown as current heart rate."
+            "value": "FitLife must be installed on Apple Watch. Measurements are sent directly without waiting for Health synchronization. If the connection drops, an old reading is not shown as current heart rate."
           }
         }
       }
@@ -12020,121 +12020,121 @@
         }
       }
     },
-    "Откройте FitnessTracker на Apple Watch и держите часы рядом с iPhone.": {
+    "Откройте FitLife на Apple Watch и держите часы рядом с iPhone.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Откройте FitnessTracker на Apple Watch и держите часы рядом с iPhone."
+            "value": "Откройте FitLife на Apple Watch и держите часы рядом с iPhone."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Open FitnessTracker on Apple Watch and keep your watch near your iPhone."
+            "value": "Open FitLife on Apple Watch and keep your watch near your iPhone."
           }
         }
       }
     },
-    "Откройте FitnessTracker на Apple Watch, чтобы подтвердить связь.": {
+    "Откройте FitLife на Apple Watch, чтобы подтвердить связь.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Откройте FitnessTracker на Apple Watch, чтобы подтвердить связь."
+            "value": "Откройте FitLife на Apple Watch, чтобы подтвердить связь."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Open FitnessTracker on Apple Watch to confirm the connection."
+            "value": "Open FitLife on Apple Watch to confirm the connection."
           }
         }
       }
     },
-    "Откройте FitnessTracker на Watch, чтобы подтвердить изменение или выключение сигнала на часах.": {
+    "Откройте FitLife на Watch, чтобы подтвердить изменение или выключение сигнала на часах.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Откройте FitnessTracker на Watch, чтобы подтвердить изменение или выключение сигнала на часах."
+            "value": "Откройте FitLife на Watch, чтобы подтвердить изменение или выключение сигнала на часах."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Open FitnessTracker on Watch to confirm changing or disabling the Watch alarm."
+            "value": "Open FitLife on Watch to confirm changing or disabling the Watch alarm."
           }
         }
       }
     },
-    "Откройте FitnessTracker на Watch, чтобы подтвердить отмену умного окна.": {
+    "Откройте FitLife на Watch, чтобы подтвердить отмену умного окна.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Откройте FitnessTracker на Watch, чтобы подтвердить отмену умного окна."
+            "value": "Откройте FitLife на Watch, чтобы подтвердить отмену умного окна."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Open FitnessTracker on Watch to confirm cancellation of the smart window."
+            "value": "Open FitLife on Watch to confirm cancellation of the smart window."
           }
         }
       }
     },
-    "Откройте FitnessTracker на подключённых Apple Watch, чтобы выбрать сигнал только на часах.": {
+    "Откройте FitLife на подключённых Apple Watch, чтобы выбрать сигнал только на часах.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Откройте FitnessTracker на подключённых Apple Watch, чтобы выбрать сигнал только на часах."
+            "value": "Откройте FitLife на подключённых Apple Watch, чтобы выбрать сигнал только на часах."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Open FitnessTracker on your connected Apple Watch to select Watch-only alarms."
+            "value": "Open FitLife on your connected Apple Watch to select Watch-only alarms."
           }
         }
       }
     },
-    "Откройте FitnessTracker, чтобы обновить сводку.": {
+    "Откройте FitLife, чтобы обновить сводку.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Откройте FitnessTracker, чтобы обновить сводку."
+            "value": "Откройте FitLife, чтобы обновить сводку."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Open FitnessTracker to update the summary."
+            "value": "Open FitLife to update the summary."
           }
         }
       }
     },
-    "Откройте завершённую тренировку в дневнике и выберите «Экспорт в Здоровье». FitnessTracker запросит разрешение на запись.": {
+    "Откройте завершённую тренировку в дневнике и выберите «Экспорт в Здоровье». FitLife запросит разрешение на запись.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Откройте завершённую тренировку в дневнике и выберите «Экспорт в Здоровье». FitnessTracker запросит разрешение на запись."
+            "value": "Откройте завершённую тренировку в дневнике и выберите «Экспорт в Здоровье». FitLife запросит разрешение на запись."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Open a completed workout in your journal and choose Export to Health. FitnessTracker will request write permission."
+            "value": "Open a completed workout in your journal and choose Export to Health. FitLife will request write permission."
           }
         }
       }
@@ -12581,19 +12581,19 @@
         }
       }
     },
-    "Перед сном откройте FitnessTracker на Watch и подтвердите умное окно. Без подтверждения работает обычный будильник.": {
+    "Перед сном откройте FitLife на Watch и подтвердите умное окно. Без подтверждения работает обычный будильник.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Перед сном откройте FitnessTracker на Watch и подтвердите умное окно. Без подтверждения работает обычный будильник."
+            "value": "Перед сном откройте FitLife на Watch и подтвердите умное окно. Без подтверждения работает обычный будильник."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Before bed, open FitnessTracker on Watch and confirm the smart window. Without confirmation, the fixed alarm still works."
+            "value": "Before bed, open FitLife on Watch and confirm the smart window. Without confirmation, the fixed alarm still works."
           }
         }
       }
@@ -13244,36 +13244,19 @@
         }
       }
     },
-    "Поддерживаются .fitnesstracker и .json. Можно выбрать архив или прежний JSON одной тренировки.": {
+    "Поддерживаются .fitlife, .json и CSV-журнал тренировок. Можно выбрать файл из другого приложения.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Поддерживаются .fitnesstracker и .json. Можно выбрать архив или прежний JSON одной тренировки."
+            "value": "Поддерживаются .fitlife, .json и CSV-журнал тренировок. Можно выбрать файл из другого приложения."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Supports .fitnesstracker and .json, including the original single-workout JSON export."
-          }
-        }
-      }
-    },
-    "Поддерживаются .fitnesstracker, .json и CSV-журнал тренировок. Можно выбрать файл из другого приложения.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Поддерживаются .fitnesstracker, .json и CSV-журнал тренировок. Можно выбрать файл из другого приложения."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Supports .fitnesstracker, .json and workout log CSV files. You can choose a file exported by another app."
+            "value": "Supports .fitlife, .json and workout log CSV files. You can choose a file exported by another app."
           }
         }
       }
@@ -13380,19 +13363,19 @@
         }
       }
     },
-    "Подтвердите доступ к «Здоровью» в FitnessTracker на Apple Watch.": {
+    "Подтвердите доступ к «Здоровью» в FitLife на Apple Watch.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Подтвердите доступ к «Здоровью» в FitnessTracker на Apple Watch."
+            "value": "Подтвердите доступ к «Здоровью» в FitLife на Apple Watch."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Confirm Health access in FitnessTracker on Apple Watch."
+            "value": "Confirm Health access in FitLife on Apple Watch."
           }
         }
       }
@@ -15369,36 +15352,36 @@
         }
       }
     },
-    "Разрешите FitnessTracker доступ к Bluetooth в настройках iOS.": {
+    "Разрешите FitLife доступ к Bluetooth в настройках iOS.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Разрешите FitnessTracker доступ к Bluetooth в настройках iOS."
+            "value": "Разрешите FitLife доступ к Bluetooth в настройках iOS."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Allow FitnessTracker to use Bluetooth in iOS settings."
+            "value": "Allow FitLife to use Bluetooth in iOS settings."
           }
         }
       }
     },
-    "Разрешите будильники для FitnessTracker в настройках iPhone.": {
+    "Разрешите будильники для FitLife в настройках iPhone.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Разрешите будильники для FitnessTracker в настройках iPhone."
+            "value": "Разрешите будильники для FitLife в настройках iPhone."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Allow alarms for FitnessTracker in iPhone Settings."
+            "value": "Allow alarms for FitLife in iPhone Settings."
           }
         }
       }
@@ -15466,24 +15449,24 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Allow FitnessTracker to write workouts in the Health app."
+            "value": "Allow FitLife to write workouts in the Health app."
           }
         }
       }
     },
-    "Разрешите уведомления FitnessTracker в настройках устройства.": {
+    "Разрешите уведомления FitLife в настройках устройства.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Разрешите уведомления FitnessTracker в настройках устройства."
+            "value": "Разрешите уведомления FitLife в настройках устройства."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Allow FitnessTracker notifications in device settings."
+            "value": "Allow FitLife notifications in device settings."
           }
         }
       }
@@ -16865,19 +16848,19 @@
         }
       }
     },
-    "Сначала начните тренировку в FitnessTracker.": {
+    "Сначала начните тренировку в FitLife.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Сначала начните тренировку в FitnessTracker."
+            "value": "Сначала начните тренировку в FitLife."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Start a workout in FitnessTracker first."
+            "value": "Start a workout in FitLife first."
           }
         }
       }
@@ -19245,36 +19228,36 @@
         }
       }
     },
-    "Установите FitnessTracker на Apple Watch и откройте приложение на часах.": {
+    "Установите FitLife на Apple Watch и откройте приложение на часах.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Установите FitnessTracker на Apple Watch и откройте приложение на часах."
+            "value": "Установите FitLife на Apple Watch и откройте приложение на часах."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Install FitnessTracker on Apple Watch and open the app on your watch."
+            "value": "Install FitLife on Apple Watch and open the app on your watch."
           }
         }
       }
     },
-    "Установите FitnessTracker на Apple Watch через Xcode или приложение Watch.": {
+    "Установите FitLife на Apple Watch через Xcode или приложение Watch.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Установите FitnessTracker на Apple Watch через Xcode или приложение Watch."
+            "value": "Установите FitLife на Apple Watch через Xcode или приложение Watch."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Install FitnessTracker on Apple Watch using Xcode or the Watch app."
+            "value": "Install FitLife on Apple Watch using Xcode or the Watch app."
           }
         }
       }
@@ -19398,19 +19381,19 @@
         }
       }
     },
-    "Файл повреждён или не содержит данные FitnessTracker.": {
+    "Файл повреждён или не содержит данные FitLife.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Файл повреждён или не содержит данные FitnessTracker."
+            "value": "Файл повреждён или не содержит данные FitLife."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The file is corrupted or does not contain FitnessTracker data."
+            "value": "The file is corrupted or does not contain FitLife data."
           }
         }
       }
@@ -19857,19 +19840,19 @@
         }
       }
     },
-    "Часы оценивают движения в выбранном окне. Перед сном откройте FitnessTracker на Watch и подтвердите подготовку. Это оценка движения, а не измерение текущей фазы сна.": {
+    "Часы оценивают движения в выбранном окне. Перед сном откройте FitLife на Watch и подтвердите подготовку. Это оценка движения, а не измерение текущей фазы сна.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Часы оценивают движения в выбранном окне. Перед сном откройте FitnessTracker на Watch и подтвердите подготовку. Это оценка движения, а не измерение текущей фазы сна."
+            "value": "Часы оценивают движения в выбранном окне. Перед сном откройте FitLife на Watch и подтвердите подготовку. Это оценка движения, а не измерение текущей фазы сна."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Watch estimates movement during the selected window. Before bed, open FitnessTracker on Watch and confirm it is ready. This estimates movement rather than measuring your current sleep stage."
+            "value": "Watch estimates movement during the selected window. Before bed, open FitLife on Watch and confirm it is ready. This estimates movement rather than measuring your current sleep stage."
           }
         }
       }
@@ -20214,19 +20197,19 @@
         }
       }
     },
-    "Эта тренировка больше недоступна. Откройте FitnessTracker.": {
+    "Эта тренировка больше недоступна. Откройте FitLife.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Эта тренировка больше недоступна. Откройте FitnessTracker."
+            "value": "Эта тренировка больше недоступна. Откройте FitLife."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "This workout is no longer available. Open FitnessTracker."
+            "value": "This workout is no longer available. Open FitLife."
           }
         }
       }

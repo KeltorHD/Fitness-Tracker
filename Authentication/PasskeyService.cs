@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using OpenIddict.Abstractions;
 
-namespace FitnessTracker.Authentication;
+namespace FitLife.Authentication;
 
 /// <summary>Проверяет WebAuthn и атомарно изменяет credentials через штатные компоненты Identity.</summary>
 public sealed class PasskeyService(UserManager<ApplicationUser> users, SignInManager<ApplicationUser> signIn,

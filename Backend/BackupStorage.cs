@@ -2,7 +2,7 @@ using System.Data;
 using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
 
-namespace FitnessTracker.Backend;
+namespace FitLife.Backend;
 
 /// <summary>Описывает копию без передачи её содержимого в списке метаданных.</summary>
 public sealed record BackupInfo(Guid Id, DateTimeOffset CreatedAt, int ArchiveVersion, int Size, string Sha256);

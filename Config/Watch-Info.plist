@@ -17,7 +17,7 @@
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>CFBundleDisplayName</key>
-	<string>FitnessTracker</string>
+	<string>FitLife</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>WKBackgroundModes</key>
@@ -31,7 +31,7 @@
 	<key>WKApplication</key>
 	<true/>
 	<key>WKCompanionAppBundleIdentifier</key>
-	<string>$(FITNESS_TRACKER_BUNDLE_ID)</string>
+	<string>$(FITLIFE_BUNDLE_ID)</string>
 	<key>WKRunsIndependentlyOfCompanionApp</key>
 	<true/>
 	<key>CFBundleLocalizations</key>

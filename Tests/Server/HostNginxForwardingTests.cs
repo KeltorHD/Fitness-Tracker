@@ -1,11 +1,11 @@
 using System.Net;
 using System.Security.Cryptography;
-using FitnessTracker.Authentication;
+using FitLife.Authentication;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.IdentityModel.Tokens;
 using Xunit;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Проверяет HTTPS OAuth при завершении TLS на хостовом Nginx и защиту от поддельных forwarded headers.</summary>
 [Trait("Category", "HTTP")]

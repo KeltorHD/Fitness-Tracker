@@ -1,5 +1,5 @@
 import ActivityKit
-import FitnessTrackerCore
+import FitLifeCore
 import Foundation
 import UIKit
 

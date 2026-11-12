@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using OpenIddict.Abstractions;
 using OpenIddict.Client.AspNetCore;
 
-namespace FitnessTracker.Authentication;
+namespace FitLife.Authentication;
 
 /// <summary>Координирует внешние входы и явные привязки после протокольной проверки OpenIddict.</summary>
 public sealed class ExternalLoginService(IConfiguration config, UserManager<ApplicationUser> users,

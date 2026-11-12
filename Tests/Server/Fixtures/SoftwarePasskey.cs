@@ -4,7 +4,7 @@ using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.WebUtilities;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Тестовый WebAuthn-аутентификатор: создаёт реальные ES256 attestation/assertion для проверки Identity.</summary>
 internal sealed class SoftwarePasskey : IDisposable

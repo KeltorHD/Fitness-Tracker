@@ -1,6 +1,6 @@
 using System.Net;
 using System.Text.Json;
-using FitnessTracker.ServerLogging;
+using FitLife.ServerLogging;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Xunit;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Проверяет реальное подключение sink к обоим независимым HTTP host без внешнего ntfy.</summary>
 [Trait("Category", "HTTP")]
@@ -44,22 +44,22 @@ public sealed class NtfyHostTests
                 ["Ntfy:MinimumLevel"] = "Error",
                 ["Ntfy:Token"] = "tk_synthetic_private_host_token"
             }));
-            builder.ConfigureServices(services => services.AddHttpClient("FitnessTracker.Ntfy")
+            builder.ConfigureServices(services => services.AddHttpClient("FitLife.Ntfy")
                 .ConfigurePrimaryHttpMessageHandler(() => handler));
         });
         using var client = host.CreateClient(new WebApplicationFactoryClientOptions { BaseAddress = new("https://localhost") });
         using var health = await client.GetAsync("/health");
         Assert.Equal(HttpStatusCode.OK, health.StatusCode);
 
-        var logger = host.Services.GetRequiredService<ILoggerFactory>().CreateLogger("FitnessTracker.DeliveryTest");
+        var logger = host.Services.GetRequiredService<ILoggerFactory>().CreateLogger("FitLife.DeliveryTest");
         logger.LogInformation("filtered-host-info");
         logger.LogError("host-delivery-error");
-        host.Services.GetRequiredService<ILoggerFactory>().CreateLogger("FitnessTracker.ServerLogging.Ntfy")
+        host.Services.GetRequiredService<ILoggerFactory>().CreateLogger("FitLife.ServerLogging.Ntfy")
             .LogCritical("must-not-recurse");
         await host.Services.GetRequiredService<NtfyLoggerProvider>().DisposeAsync();
 
         using var body = JsonDocument.Parse(Assert.Single(handler.Bodies));
-        Assert.Equal($"FitnessTracker {name}: Error", body.RootElement.GetProperty("title").GetString());
+        Assert.Equal($"FitLife {name}: Error", body.RootElement.GetProperty("title").GetString());
         Assert.Contains("host-delivery-error", body.RootElement.GetProperty("message").GetString());
         Assert.DoesNotContain("tk_synthetic_private_host_token", body.RootElement.GetProperty("message").GetString());
     }

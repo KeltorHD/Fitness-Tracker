@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace FitnessTracker.Backend.Migrations
+namespace FitLife.Backend.Migrations
 {
     /// <inheritdoc />
     public partial class InitialBackups : Migration

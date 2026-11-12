@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import Foundation
 
 /// Isolated UI fixtures require both explicit launch flags and a Debug build.

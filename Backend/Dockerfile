@@ -3,8 +3,8 @@ WORKDIR /src
 COPY global.json Directory.Build.props ./
 COPY ServerLogging/ ServerLogging/
 COPY Backend/ Backend/
-RUN dotnet restore Backend/FitnessTracker.Backend.csproj --locked-mode
-RUN dotnet publish Backend/FitnessTracker.Backend.csproj -c Release --no-restore -o /out
+RUN dotnet restore Backend/FitLife.Backend.csproj --locked-mode
+RUN dotnet publish Backend/FitLife.Backend.csproj -c Release --no-restore -o /out
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0
 WORKDIR /app
@@ -16,4 +16,4 @@ RUN apt-get update \
 USER $APP_UID
 ENV ASPNETCORE_HTTP_PORTS=8080
 EXPOSE 8080
-ENTRYPOINT ["dotnet", "FitnessTracker.Backend.dll"]
+ENTRYPOINT ["dotnet", "FitLife.Backend.dll"]

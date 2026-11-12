@@ -1,12 +1,12 @@
 using System.Net;
 using System.Net.Http.Json;
-using FitnessTracker.Backend;
+using FitLife.Backend;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Проверяет HTTP-прокси каталога без реальной сети и без зависимости от наличия продукта у поставщика.</summary>
 [Trait("Category", "HTTP")]

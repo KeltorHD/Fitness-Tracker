@@ -2,7 +2,7 @@ using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 
-namespace FitnessTracker.Authentication.Controllers;
+namespace FitLife.Authentication.Controllers;
 
 /// <summary>Маппит формы почты; выдача токенов, SMTP и проверки принадлежат сервису.</summary>
 [EnableRateLimiting("credentials")]

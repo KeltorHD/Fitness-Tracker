@@ -1,0 +1,246 @@
+import Foundation
+
+public enum MuscleGroup: String, Codable, CaseIterable, Sendable {
+  case chest, back, legs, shoulders, arms, core, fullBody
+}
+
+public enum WeightUnit: String, Codable, CaseIterable, Sendable {
+  case kilograms = "kg"
+  case pounds = "lb"
+  public func kilograms(from value: Double) -> Double {
+    self == .kilograms ? value : value * 0.45359237
+  }
+  public func display(_ kilograms: Double) -> Double {
+    self == .kilograms ? kilograms : kilograms / 0.45359237
+  }
+}
+
+public struct Exercise: Identifiable, Codable, Hashable, Sendable {
+  public var id: UUID
+  public var name: String
+  public var muscle: MuscleGroup
+  public var instructions: String
+  public init(id: UUID = UUID(), name: String, muscle: MuscleGroup, instructions: String = "") {
+    self.id = id
+    self.name = name
+    self.muscle = muscle
+    self.instructions = instructions
+  }
+}
+
+public struct WorkoutSet: Identifiable, Codable, Equatable, Sendable {
+  public var id: UUID
+  public var repetitions: Int
+  /// Always stored in kilograms. Zero represents bodyweight without added load.
+  public var weightKG: Double
+  public var isWarmup: Bool
+  /// Completion of the base stage. Additional stages keep their own timestamps.
+  public var completedAt: Date?
+  public var loadMultiplier: Int?
+  public var dropStages: [DropSetStage]?
+  /// An optional note attached to this set.
+  public var note: String?
+  public init(
+    id: UUID = UUID(), repetitions: Int = 8, weightKG: Double = 0,
+    isWarmup: Bool = false, completedAt: Date? = nil, loadMultiplier: Int? = nil,
+    dropStages: [DropSetStage]? = nil, note: String? = nil
+  ) {
+    self.id = id
+    self.repetitions = repetitions
+    self.weightKG = weightKG
+    self.isWarmup = isWarmup
+    self.completedAt = completedAt
+    self.loadMultiplier = loadMultiplier
+    self.dropStages = dropStages
+    self.note = note
+  }
+  public var isDropSet: Bool { !(dropStages ?? []).isEmpty }
+  public var isFullyCompleted: Bool {
+    completedAt != nil && (dropStages ?? []).allSatisfy { $0.completedAt != nil }
+  }
+  public var stages: [DropSetStage] {
+    [DropSetStage(id: id, repetitions: repetitions, weightKG: weightKG, completedAt: completedAt)]
+      + (dropStages ?? [])
+  }
+  public var performedStages: [DropSetStage] { stages.filter { $0.completedAt != nil } }
+  public var performedRepetitions: Int { performedStages.reduce(0) { $0 + $1.repetitions } }
+  public var volume: Double {
+    isWarmup
+      ? 0
+      : performedStages.reduce(0) {
+        $0 + $1.weightKG * Double($1.repetitions) * Double(loadMultiplier ?? 1)
+      }
+  }
+}
+
+public struct WorkoutExercise: Identifiable, Codable, Equatable, Sendable {
+  public var id: UUID
+  public var exercise: Exercise
+  public var sets: [WorkoutSet]
+  /// Adjacent rows sharing this identifier alternate their sets as one superset.
+  public var supersetID: UUID?
+  public init(
+    id: UUID = UUID(), exercise: Exercise, sets: [WorkoutSet] = [WorkoutSet()],
+    supersetID: UUID? = nil
+  ) {
+    self.id = id
+    self.exercise = exercise
+    self.sets = sets
+    self.supersetID = supersetID
+  }
+}
+
+public struct TemplateExercise: Identifiable, Codable, Equatable, Sendable {
+  public var id: UUID
+  public var exercise: Exercise
+  public var setCount: Int
+  public var repetitions: Int
+  public var weightKG: Double
+  public var loadMultiplier: Int?
+  /// Individual set targets; nil uses the uniform targets of this exercise.
+  public var plannedSets: [WorkoutSet]?
+  public var supersetID: UUID?
+  public init(
+    id: UUID = UUID(), exercise: Exercise, setCount: Int = 3,
+    repetitions: Int = 8, weightKG: Double = 0, loadMultiplier: Int? = nil,
+    plannedSets: [WorkoutSet]? = nil, supersetID: UUID? = nil
+  ) {
+    self.id = id
+    self.exercise = exercise
+    self.setCount = setCount
+    self.repetitions = repetitions
+    self.weightKG = weightKG
+    self.loadMultiplier = loadMultiplier
+    self.plannedSets = plannedSets
+    self.supersetID = supersetID
+  }
+}
+
+public struct WorkoutTemplate: Identifiable, Codable, Equatable, Sendable {
+  public var id: UUID
+  public var name: String
+  public var exercises: [TemplateExercise]
+  public var restSeconds: Int
+  public var muscleGroups: Set<MuscleGroup>
+  public var muscles: Set<ExerciseMuscle>
+  public var muscleRegions: Set<ExerciseMuscleRegion>
+  public var preferredWeekdays: Set<WorkoutWeekday>
+  /// The exercises property defines the first variation.
+  public var variations: [WorkoutTemplateVariation]
+  public var baseVariationName: String?
+  public init(
+    id: UUID = UUID(), name: String, exercises: [TemplateExercise], restSeconds: Int = 0,
+    muscleGroups: Set<MuscleGroup> = [], muscles: Set<ExerciseMuscle> = [],
+    preferredWeekdays: Set<WorkoutWeekday> = [], variations: [WorkoutTemplateVariation] = [],
+    baseVariationName: String? = nil, muscleRegions: Set<ExerciseMuscleRegion> = []
+  ) {
+    self.id = id
+    self.name = name
+    self.exercises = exercises
+    self.restSeconds = restSeconds
+    self.muscleGroups = muscleGroups
+    self.muscles = muscles
+    self.muscleRegions = muscleRegions
+    self.preferredWeekdays = preferredWeekdays
+    self.variations = variations
+    self.baseVariationName = baseVariationName
+  }
+
+  public var muscleSelection: ExerciseMuscleSelection {
+    get { ExerciseMuscleSelection(groups: muscleGroups, muscles: muscles, regions: muscleRegions) }
+    set {
+      muscleGroups = newValue.groups
+      muscles = newValue.muscles
+      muscleRegions = newValue.regions
+    }
+  }
+
+  /// Interactive logging can start without numeric targets.
+  public func start(at date: Date = Date(), prefillTargets: Bool = true) throws -> Workout {
+    try Validation.template(self)
+    var groupIDs: [UUID: UUID] = [:]
+    return Workout(
+      name: name, startedAt: date,
+      exercises: exercises.map { item in
+        WorkoutExercise(
+          exercise: item.exercise,
+          sets: !prefillTargets
+            ? (0..<item.setCount).map { index in
+              if let plan = item.plannedSets?[index] {
+                return WorkoutSet(
+                  repetitions: 0, isWarmup: plan.isWarmup,
+                  loadMultiplier: plan.loadMultiplier, note: plan.note)
+              }
+              return WorkoutSet(repetitions: 0, loadMultiplier: item.loadMultiplier)
+            }
+            : item.plannedSets.map { $0.map { $0.freshCopy() } }
+              ?? (0..<item.setCount).map { _ in
+                WorkoutSet(
+                  repetitions: item.repetitions, weightKG: item.weightKG,
+                  loadMultiplier: item.loadMultiplier)
+              },
+          supersetID: item.supersetID.map { id in
+            if let mapped = groupIDs[id] { return mapped }
+            let mapped = UUID()
+            groupIDs[id] = mapped
+            return mapped
+          })
+      }, restSeconds: restSeconds)
+  }
+}
+
+public enum WorkoutStatus: String, Codable, Sendable { case active, paused, completed, cancelled }
+
+public struct WorkoutPause: Codable, Equatable, Sendable {
+  public var startedAt: Date
+  public var endedAt: Date
+  public init(startedAt: Date, endedAt: Date) {
+    self.startedAt = startedAt
+    self.endedAt = endedAt
+  }
+  public var duration: TimeInterval { endedAt.timeIntervalSince(startedAt) }
+}
+
+public struct Workout: Identifiable, Codable, Equatable, Sendable {
+  public var id: UUID
+  public var name: String
+  public var startedAt: Date
+  public var endedAt: Date?
+  public var status: WorkoutStatus
+  public var exercises: [WorkoutExercise]
+  public var restSeconds: Int
+  public var restEndsAt: Date?
+  public var pausedAt: Date?
+  public var pauses: [WorkoutPause]
+  public var pausedSeconds: TimeInterval
+  public var notes: String
+  /// Explicitly recorded body weight for this session; never inferred.
+  public var bodyWeightKG: Double?
+  /// False for imports without an end time. Nil means recorded duration for native sessions.
+  public var durationIsKnown: Bool?
+  public init(
+    id: UUID = UUID(), name: String, startedAt: Date = Date(),
+    exercises: [WorkoutExercise] = [], restSeconds: Int = 90, bodyWeightKG: Double? = nil
+  ) {
+    self.id = id
+    self.name = name
+    self.startedAt = startedAt
+    self.exercises = exercises
+    self.restSeconds = restSeconds
+    self.status = .active
+    self.pausedSeconds = 0
+    self.pauses = []
+    self.notes = ""
+    self.bodyWeightKG = bodyWeightKG
+  }
+  public var completedSets: Int { exercises.flatMap(\.sets).filter { $0.completedAt != nil }.count }
+  public var fullyCompletedSets: Int { exercises.flatMap(\.sets).filter(\.isFullyCompleted).count }
+  public var totalSets: Int { exercises.reduce(0) { $0 + $1.sets.count } }
+  public var volume: Double { exercises.flatMap(\.sets).reduce(0) { $0 + $1.volume } }
+  public func duration(at date: Date = Date()) -> TimeInterval {
+    max(0, (endedAt ?? pausedAt ?? date).timeIntervalSince(startedAt) - pausedSeconds)
+  }
+  public func remainingRest(at date: Date = Date()) -> TimeInterval {
+    max(0, restEndsAt?.timeIntervalSince(date) ?? 0)
+  }
+}

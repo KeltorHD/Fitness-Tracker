@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import PhotosUI
 import SwiftUI
 import UIKit

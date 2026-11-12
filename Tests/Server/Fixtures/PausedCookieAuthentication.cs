@@ -1,7 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Детерминированно приостанавливает первый запрос после проверки Identity cookie.</summary>
 internal sealed class PausedCookieAuthentication(CancellationToken cancellationToken) : IClaimsTransformation

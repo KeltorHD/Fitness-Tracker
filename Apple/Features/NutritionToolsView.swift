@@ -1,5 +1,5 @@
 import Charts
-import FitnessTrackerCore
+import FitLifeCore
 import SwiftUI
 
 struct NutritionWaterCard: View {

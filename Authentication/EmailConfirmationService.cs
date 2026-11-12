@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 
-namespace FitnessTracker.Authentication;
+namespace FitLife.Authentication;
 
 /// <summary>Применяет подтверждение только к новым локальным аккаунтам, сохраняя прежний доступ.</summary>
 public sealed class EmailAccountConfirmation : IUserConfirmation<ApplicationUser>

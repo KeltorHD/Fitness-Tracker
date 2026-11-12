@@ -1,6 +1,6 @@
 using Npgsql;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Создаёт отдельную БД на явно выбранном тестовом PostgreSQL и гарантирует её удаление.</summary>
 internal sealed class PostgresDatabase : IAsyncDisposable
@@ -22,11 +22,11 @@ internal sealed class PostgresDatabase : IAsyncDisposable
     /// <summary>Без явной тестовой конфигурации завершается ошибкой; создаёт только БД с генерируемым именем.</summary>
     internal static async Task<PostgresDatabase> CreateAsync(CancellationToken cancellationToken = default)
     {
-        var configured = Environment.GetEnvironmentVariable("FITNESS_TRACKER_TEST_POSTGRES");
+        var configured = Environment.GetEnvironmentVariable("FITLIFE_TEST_POSTGRES");
         if (string.IsNullOrWhiteSpace(configured))
-            throw new InvalidOperationException("Set FITNESS_TRACKER_TEST_POSTGRES to a disposable PostgreSQL instance.");
+            throw new InvalidOperationException("Set FITLIFE_TEST_POSTGRES to a disposable PostgreSQL instance.");
         var adminSettings = new NpgsqlConnectionStringBuilder(configured) { Pooling = false, Timeout = 10, CommandTimeout = 15 };
-        var name = "fitnesstracker_tests_" + Guid.NewGuid().ToString("N");
+        var name = "server_tests_" + Guid.NewGuid().ToString("N");
         var isolated = new NpgsqlConnectionStringBuilder(adminSettings.ConnectionString) { Database = name }.ConnectionString;
         await using var admin = new NpgsqlConnection(adminSettings.ConnectionString);
         await admin.OpenAsync(cancellationToken);

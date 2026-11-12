@@ -1,8 +1,8 @@
-@model FitnessTracker.Authentication.Controllers.EmailConfirmPage
+@model FitLife.Authentication.Controllers.EmailConfirmPage
 <div class="card-heading"><h1 id="page-title" data-localize>Подтвердите электронную почту</h1></div>
 @if (Model.CanConfirm)
 {
-  <p class="privacy-note" data-localize>Нажмите кнопку, если вы создавали аккаунт FitnessTracker с этим адресом.</p>
+  <p class="privacy-note" data-localize>Нажмите кнопку, если вы создавали аккаунт FitLife с этим адресом.</p>
   <form class="credential-form" method="post" action="/email/confirm" asp-antiforgery="true">
     <input type="hidden" name="userId" value="@Model.UserId" />
     <input type="hidden" name="code" value="@Model.Code" />

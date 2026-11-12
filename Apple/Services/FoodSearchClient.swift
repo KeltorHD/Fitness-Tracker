@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import Foundation
 
 #if canImport(FoundationNetworking)
@@ -16,7 +16,7 @@ struct FoodSearchClient: FoodSearching {
   }
 
   static func configured(info: [String: Any] = Bundle.main.infoDictionary ?? [:]) -> Self {
-    let address = info["FitnessTrackerBackendURL"] as? String ?? ""
+    let address = info["FitLifeBackendURL"] as? String ?? ""
     let url = URL(string: address)
     let valid =
       url.map {

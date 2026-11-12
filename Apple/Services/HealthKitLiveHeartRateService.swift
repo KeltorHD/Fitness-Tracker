@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import Foundation
 import HealthKit
 import OSLog
@@ -196,7 +196,7 @@ extension HealthKitLiveHeartRateService: HKWorkoutSessionDelegate {
     _ workoutSession: HKWorkoutSession, didFailWithError error: any Error
   ) {
     let diagnostic = error as NSError
-    Logger(subsystem: "FitnessTracker", category: "Services").error(
+    Logger(subsystem: "FitLife", category: "Services").error(
       "Live heart-rate session failed: \(diagnostic.domain, privacy: .public), code \(diagnostic.code)"
     )
     let identity = ObjectIdentifier(workoutSession)

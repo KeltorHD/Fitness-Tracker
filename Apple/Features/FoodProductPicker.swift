@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import SwiftUI
 
 private enum FoodPickerSource: Hashable { case search, recent, favorites }

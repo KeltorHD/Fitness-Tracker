@@ -1,7 +1,7 @@
 using System.Collections.Concurrent;
-using FitnessTracker.Authentication;
+using FitLife.Authentication;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Хранит только синтетические письма изолированных тестов, не обращается к SMTP.</summary>
 internal sealed class TestEmailSender : IAccountEmailSender

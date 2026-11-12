@@ -1,5 +1,5 @@
 import CoreTransferable
-import FitnessTrackerCore
+import FitLifeCore
 import Foundation
 import UniformTypeIdentifiers
 
@@ -9,6 +9,6 @@ struct WorkoutDocument: Transferable {
     DataRepresentation(exportedContentType: .json) { document in
       try WorkoutArchiveCodec.encode(WorkoutArchive(workouts: [document.workout], templates: []))
     }
-    .suggestedFileName("FitnessTracker-workout.json")
+    .suggestedFileName("FitLife-workout.json")
   }
 }

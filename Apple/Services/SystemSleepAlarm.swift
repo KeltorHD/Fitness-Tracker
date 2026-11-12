@@ -1,5 +1,5 @@
 import AlarmKit
-import FitnessTrackerCore
+import FitLifeCore
 import Foundation
 import SwiftUI
 

@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import Foundation
 import Observation
 
@@ -26,7 +26,7 @@ struct ArchiveImportPreview {
   var isPresented = false
   var showingImporter = false
   var showingExporter = false
-  var format = ArchiveExportFormat.fitnessTracker
+  var format = ArchiveExportFormat.fitLife
   private(set) var workout: Workout?
   private(set) var request: ArchiveReadRequest?
   private(set) var commitRequestID: UUID?
@@ -65,7 +65,7 @@ struct ArchiveImportPreview {
     self.commit = commit
   }
 
-  func present(workout: Workout? = nil, format: ArchiveExportFormat = .fitnessTracker) {
+  func present(workout: Workout? = nil, format: ArchiveExportFormat = .fitLife) {
     guard !isSaving else { return }
     cancelReading()
     self.workout = workout
@@ -92,7 +92,7 @@ struct ArchiveImportPreview {
     let summary = try plan(archive)
     present()
     preview = ArchiveImportPreview(
-      archive: archive, fileName: "FitnessTracker-Backup.fitnesstracker", summary: summary)
+      archive: archive, fileName: "FitLife-Backup.fitlife", summary: summary)
   }
 
   func selectFile(_ url: URL) {

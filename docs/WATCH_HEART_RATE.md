@@ -1,13 +1,13 @@
 # Живой пульс Apple Watch
 
-Нужны iPhone с iOS 26+ и парные Apple Watch с watchOS 10+ (включая SE 1). На часах должна быть установлена Watch-версия FitnessTracker из той же сборки, что на iPhone. Простой импорт из Apple «Здоровье» не заменяет этот режим: время синхронизации между хранилищами HealthKit не гарантирует живой поток.
+Нужны iPhone с iOS 26+ и парные Apple Watch с watchOS 26+. На часах должна быть установлена Watch-версия FitLife из той же сборки, что на iPhone. Простой импорт из Apple «Здоровье» не заменяет этот режим: время синхронизации между хранилищами HealthKit не гарантирует живой поток.
 
 ## Как включить
 
-1. После обновления выполните `xcodegen generate`: Watch target получил HealthKit entitlement, usage descriptions и `workout-processing`. Используйте прежние Bundle ID и Signing Team.
-2. Установите iPhone-версию своей обычной схемой. Для Personal Team устанавливайте Watch-версию напрямую схемой FitnessTrackerWatch на часы. Установка бесплатной development-подписи из приложения Watch на iPhone может отклоняться с `MIInstallerErrorDomain Code=111` — это подтверждено журналом установщика. Работа приложения из сборки не означает, что Xcode сумел подготовить физические часы для отладки.
-3. Откройте FitnessTracker на часах. Завершите другую тренировку Apple перед началом приёма: Watch поддерживают одну HealthKit workout session одновременно.
-4. На iPhone начните тренировку FitnessTracker, откройте настройки пульса/«Трекер», выберите Apple Watch и режим Apple «Здоровье», нажмите «Включить приём пульса».
+1. После обновления выполните `xcodegen generate`: Watch target получил HealthKit entitlement, usage descriptions и `workout-processing`. Используйте текущие Bundle ID FitLife и свою Signing Team; настройка после переименования описана в [RENAME.md](RENAME.md).
+2. Установите iPhone-версию своей обычной схемой. Для Personal Team устанавливайте Watch-версию напрямую схемой FitLifeWatch на часы. Установка бесплатной development-подписи из приложения Watch на iPhone может отклоняться с `MIInstallerErrorDomain Code=111` — это подтверждено журналом установщика. Работа приложения из сборки не означает, что Xcode сумел подготовить физические часы для отладки.
+3. Откройте FitLife на часах. Завершите другую тренировку Apple перед началом приёма: Watch поддерживают одну HealthKit workout session одновременно.
+4. На iPhone начните тренировку FitLife, откройте настройки пульса/«Трекер», выберите Apple Watch и режим Apple «Здоровье», нажмите «Включить приём пульса».
 5. На часах разрешите доступ к пульсу и тренировкам. Watch-приложение должно быть открыто при запуске; после начала HealthKit session режим `workout-processing` поддерживает её работу с опущенным запястьем. Появится страница «Пульс на iPhone».
 6. При паузе/продолжении журнала управление передаётся на Watch. Завершение/отмена тренировки, смена источника и кнопка остановки заканчивают приём. Остановить датчик можно также на самих часах.
 
@@ -23,6 +23,6 @@
 
 ## Проверки и ограничения
 
-Переносимые проверки с заглушкой датчика подтверждают передачу, порядок, устаревшие события, паузу/продолжение, разрыв связи, выбор источника и сохранение. Они не проверяют частоту датчика, фоновую доставку или установку на реальные SE. Результаты Apple SDK и оставшиеся физические сценарии — в [XCODE_VALIDATION.md](XCODE_VALIDATION.md).
+Переносимые проверки с заглушкой датчика подтверждают передачу, порядок, устаревшие события, паузу/продолжение, разрыв связи, выбор источника и сохранение. Они не проверяют частоту датчика, фоновую доставку или установку на реальные часы. Результаты Apple SDK и оставшиеся физические сценарии — в [XCODE_VALIDATION.md](XCODE_VALIDATION.md).
 
 Источники: [HealthKit workout builder](https://developer.apple.com/documentation/healthkit/hkliveworkoutbuilder), [WatchConnectivity immediate messages](https://developer.apple.com/documentation/watchconnectivity/wcsession/sendmessage(_:replyhandler:errorhandler:)), [фоновые режимы Watch](https://developer.apple.com/documentation/bundleresources/information-property-list/wkbackgroundmodes).

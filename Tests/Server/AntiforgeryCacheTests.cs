@@ -3,9 +3,9 @@ using System.Net.Http.Headers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Xunit;
-using static FitnessTracker.Server.Tests.CredentialsTests;
+using static FitLife.Server.Tests.CredentialsTests;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Проверяет запрет кеширования форм без предупреждения о перезаписи заголовков antiforgery.</summary>
 [Trait("Category", "HTTP")]

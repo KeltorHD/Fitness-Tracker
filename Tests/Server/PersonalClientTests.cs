@@ -4,7 +4,7 @@ using System.Net.Http.Json;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
-using FitnessTracker.Authentication;
+using FitLife.Authentication;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,13 +12,13 @@ using Microsoft.IdentityModel.Tokens;
 using OpenIddict.Abstractions;
 using Xunit;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Проверяет отдельный Personal Team client, точный callback, PKCE и изоляцию от HTTPS client.</summary>
 [Trait("Category", "HTTP")]
 public sealed class PersonalClientTests
 {
-    private const string PERSONAL_SCHEME = "com.example.fitnesstracker";
+    private const string PERSONAL_SCHEME = "com.example.fitlife";
     private const string PERSONAL_CALLBACK = PERSONAL_SCHEME + ":/ios/oauth/callback";
 
     /// <summary>Полный code/refresh/revoke flow работает без Apple App ID и сохраняет прежний HTTPS client.</summary>
@@ -98,8 +98,8 @@ public sealed class PersonalClientTests
     [InlineData(AuthConfiguration.ClientId, PERSONAL_CALLBACK)]
     [InlineData(AuthConfiguration.PersonalClientId, AuthConfiguration.Callback)]
     [InlineData(AuthConfiguration.PersonalClientId, "com.example.other:/ios/oauth/callback")]
-    [InlineData(AuthConfiguration.PersonalClientId, "com.example.fitnesstracker://host/ios/oauth/callback")]
-    [InlineData(AuthConfiguration.PersonalClientId, "com.example.fitnesstracker:/other")]
+    [InlineData(AuthConfiguration.PersonalClientId, "com.example.fitlife://host/ios/oauth/callback")]
+    [InlineData(AuthConfiguration.PersonalClientId, "com.example.fitlife:/other")]
     public async Task RejectsUnregisteredRedirectAsync(string clientId, string redirect)
     {
         using var factory = new AuthFactory(personalCallbackScheme: PERSONAL_SCHEME);
@@ -161,11 +161,11 @@ public sealed class PersonalClientTests
 
     /// <summary>Не принимает произвольный URI, короткую generic-схему или символы конфигурационной инъекции.</summary>
     [Theory]
-    [InlineData("fitnesstracker")]
+    [InlineData("fitlife")]
     [InlineData("https")]
-    [InlineData("com.example.fitnesstracker:/callback")]
-    [InlineData("com.example.fitnesstracker\n")]
-    [InlineData("Com.example.fitnesstracker")]
+    [InlineData("com.example.fitlife:/callback")]
+    [InlineData("com.example.fitlife\n")]
+    [InlineData("Com.example.fitlife")]
     [InlineData("com..example")]
     [InlineData("com.-example")]
     [InlineData("com.example-")]

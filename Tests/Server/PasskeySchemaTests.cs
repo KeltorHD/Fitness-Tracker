@@ -1,5 +1,5 @@
-using FitnessTracker.Authentication;
-using FitnessTracker.Authentication.Migrations;
+using FitLife.Authentication;
+using FitLife.Authentication.Migrations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using Xunit;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Проверяет миграцию PostgreSQL-модели без обращения к рабочей БД.</summary>
 [Trait("Category", "Unit")]

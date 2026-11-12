@@ -1,5 +1,5 @@
 import CoreMotion
-import FitnessTrackerCore
+import FitLifeCore
 import Foundation
 import Observation
 import WatchKit

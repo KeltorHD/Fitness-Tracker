@@ -2,7 +2,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace FitnessTracker.Authentication;
+namespace FitLife.Authentication;
 
 /// <summary>Ограничивает срок и одноразовое использование WebAuthn challenges сверх защищённой cookie Identity.</summary>
 public sealed class PasskeyChallenges : IDisposable

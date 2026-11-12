@@ -1081,10 +1081,10 @@
           "xunit.extensibility.core": "[2.9.3]"
         }
       },
-      "fitnesstracker.authentication": {
+      "fitlife.authentication": {
         "type": "Project",
         "dependencies": {
-          "FitnessTracker.ServerLogging": "[1.0.0, )",
+          "FitLife.ServerLogging": "[1.0.0, )",
           "MailKit": "[4.18.2, )",
           "Mapster": "[10.0.14, )",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "[10.0.14, )",
@@ -1095,16 +1095,16 @@
           "OpenIddict.EntityFrameworkCore": "[7.7.2, )"
         }
       },
-      "fitnesstracker.backend": {
+      "fitlife.backend": {
         "type": "Project",
         "dependencies": {
-          "FitnessTracker.ServerLogging": "[1.0.0, )",
+          "FitLife.ServerLogging": "[1.0.0, )",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "[10.0.14, )",
           "Microsoft.AspNetCore.OpenApi": "[10.0.14, )",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "[10.0.3, )"
         }
       },
-      "fitnesstracker.serverlogging": {
+      "fitlife.serverlogging": {
         "type": "Project"
       }
     }

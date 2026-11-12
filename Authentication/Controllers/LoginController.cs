@@ -2,7 +2,7 @@ using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using OpenIddict.Client.AspNetCore;
 
-namespace FitnessTracker.Authentication.Controllers;
+namespace FitLife.Authentication.Controllers;
 
 /// <summary>Маппит browser login HTTP-контракты и делегирует внешние входы сервису.</summary>
 public sealed class LoginController(ExternalLoginService service, IMapper mapper) : Controller

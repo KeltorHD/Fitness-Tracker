@@ -1,12 +1,12 @@
 // Copy to Local.xcconfig, then use your registered identifier and Team ID.
 DEVELOPMENT_TEAM = YOURTEAMID
-FITNESS_TRACKER_BUNDLE_ID = com.yourcompany.fitnesstracker
+FITLIFE_BUNDLE_ID = com.yourcompany.fitlife
 // Register the derived App Group and CloudKit container in the Developer portal.
 // Optional self-hosted account/backups and Russian food search; leave empty for local data + Open Food Facts.
 // $() preserves the second slash: // alone starts an xcconfig comment.
-// FITNESS_TRACKER_AUTH_URL = https:/$()/auth.example.com/
-// FITNESS_TRACKER_BACKEND_URL = https:/$()/api.example.com/
-// FITNESS_TRACKER_AUTH_DOMAIN = auth.example.com
+// FITLIFE_AUTH_URL = https:/$()/auth.example.com/
+// FITLIFE_BACKEND_URL = https:/$()/api.example.com/
+// FITLIFE_AUTH_DOMAIN = auth.example.com
 // Personal Team uses this scheme; match IOS_PERSONAL_CALLBACK_SCHEME on the server.
-// Defaults to FITNESS_TRACKER_BUNDLE_ID; use a reverse-DNS scheme you control.
-// FITNESS_TRACKER_AUTH_CALLBACK_SCHEME = com.example.fitnesstracker
+// Defaults to FITLIFE_BUNDLE_ID; use a reverse-DNS scheme you control.
+// FITLIFE_AUTH_CALLBACK_SCHEME = com.example.fitlife

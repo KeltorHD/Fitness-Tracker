@@ -2,13 +2,13 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Security.Claims;
-using FitnessTracker.Backend;
+using FitLife.Backend;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Xunit;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Проверяет запрет ослабленных и некорректных JWT на настоящем middleware Backend.</summary>
 [Trait("Category", "HTTP")]
@@ -33,7 +33,7 @@ public sealed class BackendSecurityTests
                 SecurityAlgorithms.HmacSha256),
             _ => new SigningCredentials(factory.Key, SecurityAlgorithms.RsaSha256)
         };
-        var token = new JwtSecurityToken("https://auth.test/", "fitnesstracker-api",
+        var token = new JwtSecurityToken("https://auth.test/", "fitlife-api",
             [new Claim("sub", Guid.NewGuid().ToString()), new Claim("scope", "backups")],
             notBefore: invalid == "not-yet-valid" ? DateTime.UtcNow.AddMinutes(5) : null,
             expires: invalid == "missing-expiration" ? null : DateTime.UtcNow.AddMinutes(10),

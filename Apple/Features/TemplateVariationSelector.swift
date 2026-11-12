@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import SwiftUI
 
 /// One template keeps its place in the list while its exercise variation changes.

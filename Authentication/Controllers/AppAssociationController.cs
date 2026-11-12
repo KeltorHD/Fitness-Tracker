@@ -1,7 +1,7 @@
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FitnessTracker.Authentication.Controllers;
+namespace FitLife.Authentication.Controllers;
 
 /// <summary>Маппит проверенную конфигурацию Apple в публичные HTTP-документы.</summary>
 public sealed class AppAssociationController(AppAssociationService service, IMapper mapper) : ControllerBase

@@ -28,13 +28,13 @@ services:
       Smtp__Username: ${SMTP_USERNAME:-}
       Smtp__Password: ${SMTP_PASSWORD:-}
       Smtp__FromAddress: ${SMTP_FROM_ADDRESS:-}
-      Smtp__FromName: ${SMTP_FROM_NAME:-FitnessTracker}
+      Smtp__FromName: ${SMTP_FROM_NAME:-FitLife}
       Smtp__TimeoutSeconds: ${SMTP_TIMEOUT_SECONDS:-10}
       Auth__RedirectUri: https://${AUTH_DOMAIN}/ios/oauth/callback
       Auth__AppleAppIdentifier: ${IOS_APP_IDENTIFIER:-}
       Auth__PersonalCallbackScheme: ${IOS_PERSONAL_CALLBACK_SCHEME:-}
       Auth__IntrospectionClientSecret: ${BACKEND_INTROSPECTION_SECRET:?Set BACKEND_INTROSPECTION_SECRET in .env}
-      ConnectionStrings__Database: Host=auth-db;Database=fitnesstracker_auth;Username=fitnesstracker_auth;Password=${AUTH_DB_PASSWORD:?Run scripts/setup-server.sh}
+      ConnectionStrings__Database: Host=auth-db;Database=${AUTH_DB_NAME:-authentication};Username=${AUTH_DB_USER:-authentication};Password=${AUTH_DB_PASSWORD:?Run scripts/setup-server.sh}
       ReverseProxy__Address: ${SERVER_NETWORK_GATEWAY:?Run python3 scripts/setup-server-network.py}
       DataProtection__Path: /app/keys
       Certificates__Signing__Path: /run/certificates/signing.pfx
@@ -115,7 +115,7 @@ services:
       Ntfy__TimeoutSeconds: ${NTFY_TIMEOUT_SECONDS:-5}
       Auth__Issuer: https://${AUTH_DOMAIN}/
       Auth__IntrospectionClientSecret: ${BACKEND_INTROSPECTION_SECRET:?Set BACKEND_INTROSPECTION_SECRET in .env}
-      ConnectionStrings__Database: Host=backend-db;Database=${BACKEND_DB_NAME:-fitnesstracker_backend};Username=${BACKEND_DB_USER:-fitnesstracker_backend};Password=${BACKEND_DB_PASSWORD:?Set BACKEND_DB_PASSWORD in .env (keep the existing database password)}
+      ConnectionStrings__Database: Host=backend-db;Database=${BACKEND_DB_NAME:-backend};Username=${BACKEND_DB_USER:-backend};Password=${BACKEND_DB_PASSWORD:?Set BACKEND_DB_PASSWORD in .env}
       DataProtection__Path: /app/keys
       Certificates__Encryption__Path: /run/certificates/encryption.pfx
       Certificates__Encryption__Password: ${CERTIFICATE_PASSWORD}
@@ -150,15 +150,15 @@ services:
     image: postgres:18-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_DB: fitnesstracker_auth
-      POSTGRES_USER: fitnesstracker_auth
+      POSTGRES_DB: ${AUTH_DB_NAME:-authentication}
+      POSTGRES_USER: ${AUTH_DB_USER:-authentication}
       POSTGRES_PASSWORD: ${AUTH_DB_PASSWORD}
     volumes:
       - type: bind
         source: ${AUTH_DB_DATA_PATH:-./.local/auth-db}
         target: /var/lib/postgresql
     healthcheck:
-      test: [CMD-SHELL, pg_isready -U fitnesstracker_auth -d fitnesstracker_auth]
+      test: [CMD-SHELL, 'pg_isready -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}"']
       interval: 5s
       timeout: 5s
       retries: 12
@@ -167,8 +167,8 @@ services:
     image: postgres:18-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_DB: ${BACKEND_DB_NAME:-fitnesstracker_backend}
-      POSTGRES_USER: ${BACKEND_DB_USER:-fitnesstracker_backend}
+      POSTGRES_DB: ${BACKEND_DB_NAME:-backend}
+      POSTGRES_USER: ${BACKEND_DB_USER:-backend}
       POSTGRES_PASSWORD: ${BACKEND_DB_PASSWORD}
     volumes:
       - type: bind
@@ -183,4 +183,4 @@ services:
 networks:
   default:
     external: true
-    name: ${SERVER_NETWORK_NAME:-fitness-tracker-server}
+    name: ${SERVER_NETWORK_NAME:-fitlife-server}

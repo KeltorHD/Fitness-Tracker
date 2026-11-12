@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import Foundation
 import Observation
 
@@ -15,8 +15,8 @@ enum SleepWatchConnection: Equatable, Sendable {
     case .checking: "Проверяем подключение Apple Watch"
     case .notPaired: "Apple Watch не связаны с этим iPhone"
     case .appNotInstalled:
-      "Установите FitnessTracker на Apple Watch через Xcode или приложение Watch."
-    case .unreachable: "Откройте FitnessTracker на Apple Watch, чтобы подтвердить связь."
+      "Установите FitLife на Apple Watch через Xcode или приложение Watch."
+    case .unreachable: "Откройте FitLife на Apple Watch, чтобы подтвердить связь."
     case .reachable: "Apple Watch на связи"
     }
   }
@@ -27,11 +27,11 @@ enum SleepAlarmError: Error, LocalizedError {
   var errorDescription: String? {
     switch self {
     case .invalid: "Выберите будущее время и окно пробуждения до 30 минут."
-    case .permission: "Разрешите будильники для FitnessTracker в настройках iPhone."
+    case .permission: "Разрешите будильники для FitLife в настройках iPhone."
     case .unreadable: "Не удалось прочитать настройки будильников. Сохранённые данные не удалены."
     case .unavailable: "Не удалось настроить будильник. Повторите попытку."
     case .watchUnavailable:
-      "Откройте FitnessTracker на подключённых Apple Watch, чтобы выбрать сигнал только на часах."
+      "Откройте FitLife на подключённых Apple Watch, чтобы выбрать сигнал только на часах."
     }
   }
 }
@@ -184,7 +184,7 @@ private struct SleepAlarmArchive: Codable {
       if let old { clearStatus(old.id) }
       if let old, old.canArmWatch(at: now()) {
         notice =
-          "Откройте FitnessTracker на Watch, чтобы подтвердить изменение или выключение сигнала на часах."
+          "Откройте FitLife на Watch, чтобы подтвердить изменение или выключение сигнала на часах."
       }
       if enabled { systemConfirmed.insert(plan.id) }
       publish()
@@ -217,7 +217,7 @@ private struct SleepAlarmArchive: Codable {
       clearStatus(plan.id)
       notice =
         plan.canArmWatch(at: now())
-        ? "Откройте FitnessTracker на Watch, чтобы подтвердить отмену умного окна." : nil
+        ? "Откройте FitLife на Watch, чтобы подтвердить отмену умного окна." : nil
       error = nil
       publish()
     } catch { report(error) }

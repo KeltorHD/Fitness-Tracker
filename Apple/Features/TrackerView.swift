@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import SwiftUI
 import UIKit
 
@@ -41,7 +41,7 @@ struct TrackerView: View {
             Text(
               L10n.text(
                 model.deviceProfile == .appleWatch
-                  ? "Нужна установленная Watch-версия FitnessTracker. Измерения передаются напрямую, без ожидания синхронизации «Здоровья». При потере связи старое значение не показывается как текущий пульс."
+                  ? "Нужна установленная Watch-версия FitLife. Измерения передаются напрямую, без ожидания синхронизации «Здоровья». При потере связи старое значение не показывается как текущий пульс."
                   : "Этот режим предназначен для AirPods Pro 3 с датчиком пульса. iOS выбирает доступный источник; вместе с AirPods может использоваться Apple Watch.",
                 locale: locale)
             )
@@ -86,7 +86,7 @@ struct TrackerView: View {
       Section {
         Text(
           L10n.text(
-            "Копия пульса в FitnessTracker хранится на этом iPhone и не включается в iCloud, виджеты и файлы экспорта. Данные Apple «Здоровье» и их синхронизацию контролирует iOS.",
+            "Копия пульса в FitLife хранится на этом iPhone и не включается в iCloud, виджеты и файлы экспорта. Данные Apple «Здоровье» и их синхронизацию контролирует iOS.",
             locale: locale)
         )
         .font(.footnote).foregroundStyle(.secondary)
@@ -134,7 +134,7 @@ struct TrackerView: View {
       } footer: {
         Text(
           L10n.text(
-            "Данные могут поступать с задержкой. Доступны только показатели, переданные в «Здоровье» и разрешённые для FitnessTracker.",
+            "Данные могут поступать с задержкой. Доступны только показатели, переданные в «Здоровье» и разрешённые для FitLife.",
             locale: locale))
       }
       if let summary = model.summary {
@@ -166,7 +166,7 @@ struct TrackerView: View {
           if summary.isEmpty {
             Text(
               L10n.text(
-                "Нет доступных данных. Проверьте синхронизацию приложения трекера и разрешения FitnessTracker в «Здоровье».",
+                "Нет доступных данных. Проверьте синхронизацию приложения трекера и разрешения FitLife в «Здоровье».",
                 locale: locale))
           }
         } header: {
@@ -282,7 +282,7 @@ struct HealthReadFeedback: View {
         if !hasData {
           Text(
             L10n.text(
-              "Нет доступных данных. Проверьте синхронизацию приложения трекера и разрешения FitnessTracker в «Здоровье».",
+              "Нет доступных данных. Проверьте синхронизацию приложения трекера и разрешения FitLife в «Здоровье».",
               locale: locale)
           )
           .font(.footnote).foregroundStyle(.secondary)
@@ -303,7 +303,7 @@ extension HeartRateConnection {
     case .connected: "Пульсометр подключён"
     case .disconnected: "Связь с пульсометром потеряна. Повторите подключение."
     case .poweredOff: "Включите Bluetooth на iPhone."
-    case .unauthorized: "Разрешите FitnessTracker доступ к Bluetooth в настройках iOS."
+    case .unauthorized: "Разрешите FitLife доступ к Bluetooth в настройках iOS."
     case .unsupported: "Bluetooth-пульсометр не поддерживается на этом устройстве."
     case .failed:
       "Не удалось подключить пульсометр. Проверьте трансляцию пульса на устройстве и повторите поиск."

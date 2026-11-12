@@ -613,7 +613,7 @@
         "resolved": "10.0.13",
         "contentHash": "a+EovgC1fBnwdlQ6cn3j4JFBfKqiFaFvoAhjisOoSvazLAcIznaBzPQP0oYnvccmeXfqUH1KebVZOxSeH6rMaw=="
       },
-      "fitnesstracker.serverlogging": {
+      "fitlife.serverlogging": {
         "type": "Project"
       }
     }

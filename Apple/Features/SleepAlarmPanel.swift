@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import SwiftUI
 
 private struct SleepAlarmEditorTarget: Identifiable {
@@ -115,7 +115,7 @@ struct SleepAlarmPanel: View {
         DisclosureGroup(L10n.text("Как работает умное окно", locale: locale)) {
           Text(
             L10n.text(
-              "Часы оценивают движения в выбранном окне. Перед сном откройте FitnessTracker на Watch и подтвердите подготовку. Это оценка движения, а не измерение текущей фазы сна.",
+              "Часы оценивают движения в выбранном окне. Перед сном откройте FitLife на Watch и подтвердите подготовку. Это оценка движения, а не измерение текущей фазы сна.",
               locale: locale)
           ).font(.footnote).foregroundStyle(.secondary).padding(.top, 6)
         }.font(.subheadline)

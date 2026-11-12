@@ -10,7 +10,7 @@ if ! xcodebuild -version >/dev/null 2>&1; then
   exit 1
 fi
 xcode_major="$(xcodebuild -version | awk '/^Xcode / {split($2, v, "."); print v[1]}')"
-echo 'Минимальные ОС приложения: iOS 26+, watchOS 10+; для сборки нужен SDK 26 или новее.'
+echo 'Минимальные ОС приложения: iOS 26+, watchOS 26+; для сборки нужен SDK 26 или новее.'
 if [[ "$xcode_major" -lt 26 ]]; then echo 'Нужен Xcode 26 или новее с iOS/watchOS 26 SDK.' >&2; exit 1; fi
 if ! command -v xcodegen >/dev/null 2>&1; then
   if ! command -v brew >/dev/null 2>&1; then
@@ -28,5 +28,5 @@ swift build
 swift test
 # XcodeGen validates the real spec on the platform where generation is supported.
 xcodegen generate
-printf '\nГотово: откройте FitnessTracker.xcodeproj. Следуйте MAC_BUILD_GUIDE.md для signing, сборки и интеграций.\n'
-printf 'Для бесплатной Personal Team выберите схему «FitnessTracker Personal». Схема «FitnessTracker» включает iCloud и Push для Apple Developer Program.\n'
+printf '\nГотово: откройте FitLife.xcodeproj. Следуйте MAC_BUILD_GUIDE.md для signing, сборки и интеграций.\n'
+printf 'Для бесплатной Personal Team выберите схему «FitLife Personal». Схема «FitLife» включает iCloud и Push для Apple Developer Program.\n'

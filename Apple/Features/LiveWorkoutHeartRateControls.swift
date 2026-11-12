@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import SwiftUI
 
 struct LiveWorkoutHeartRateControls: View {
@@ -20,7 +20,7 @@ struct LiveWorkoutHeartRateControls: View {
           .disabled(!model.canStartLive).accessibilityIdentifier("startLiveHeartRate")
       }
       if model.attachedWorkoutStatus == nil {
-        Text(L10n.text("Сначала начните тренировку в FitnessTracker.", locale: locale)).font(
+        Text(L10n.text("Сначала начните тренировку в FitLife.", locale: locale)).font(
           .footnote
         ).foregroundStyle(.secondary)
       } else if model.attachedWorkoutStatus == .paused {
@@ -35,11 +35,11 @@ struct LiveWorkoutHeartRateControls: View {
     guard model.deviceProfile == .appleWatch else { return model.live.state.message }
     switch model.live.state {
     case .idle, .stopped: return "Приём пульса выключен."
-    case .starting: return "Подтвердите доступ к «Здоровью» в FitnessTracker на Apple Watch."
+    case .starting: return "Подтвердите доступ к «Здоровью» в FitLife на Apple Watch."
     case .running: return "Приём пульса с Apple Watch включён."
     case .paused: return "Приём пульса на паузе."
     case .failed:
-      return "Не удалось получить пульс. Откройте FitnessTracker на Apple Watch и повторите."
+      return "Не удалось получить пульс. Откройте FitLife на Apple Watch и повторите."
     }
   }
 }

@@ -94,7 +94,7 @@ struct RootView: View {
         && store.nutrition?.isPresenting != true
     )
     .alert(
-      "FitnessTracker",
+      "FitLife",
       isPresented: Binding(
         get: {
           store.error != nil && !store.showSession && !store.showingWorkoutStart
@@ -126,8 +126,8 @@ struct RootView: View {
       Text(L10n.text(store.notice ?? "", locale: locale))
     }
     .onOpenURL { url in
-      if AppCompatibility.acceptsURL(url), url.host == "today" { tab = 0 }
-      if AppCompatibility.acceptsURL(url), url.host == "workout" {
+      if AppIdentifiers.acceptsURL(url), url.host == "today" { tab = 0 }
+      if AppIdentifiers.acceptsURL(url), url.host == "workout" {
         tab = 0
         let value = URLComponents(url: url, resolvingAgainstBaseURL: false)?
           .queryItems?.first { $0.name == "id" }?.value

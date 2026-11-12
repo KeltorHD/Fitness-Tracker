@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import Foundation
 
 private struct CheckFailure: Error { let message: String }
@@ -99,7 +99,7 @@ private actor RecordingStub: HeartRateRecordingRepository {
 
 @main private struct PortableAirPodsChecks {
   @MainActor static func main() async throws {
-    let suite = "FitnessTracker.AirPodsChecks.\(UUID())"
+    let suite = "FitLife.AirPodsChecks.\(UUID())"
     guard let defaults = UserDefaults(suiteName: suite) else {
       throw CheckFailure(message: "Defaults")
     }

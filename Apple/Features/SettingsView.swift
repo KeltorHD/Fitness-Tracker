@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import SwiftUI
 
 struct SettingsView: View {
@@ -113,7 +113,7 @@ struct SettingsView: View {
           List {
             Text(
               L10n.text(
-                "Откройте завершённую тренировку в дневнике и выберите «Экспорт в Здоровье». FitnessTracker запросит разрешение на запись.",
+                "Откройте завершённую тренировку в дневнике и выберите «Экспорт в Здоровье». FitLife запросит разрешение на запись.",
                 locale: locale)
             )
             Text(
@@ -215,7 +215,7 @@ struct SettingsView: View {
           SettingsLabel(title: L10n.text("Версия", locale: locale), symbol: "app")
         }
       } footer: {
-        Text(L10n.text("Все функции FitnessTracker доступны бесплатно.", locale: locale))
+        Text(L10n.text("Все функции FitLife доступны бесплатно.", locale: locale))
       }
     }
     .scrollContentBackground(.hidden).background(FitTheme.grouped).navigationTitle(

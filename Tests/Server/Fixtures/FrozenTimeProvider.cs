@@ -1,4 +1,4 @@
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Предоставляет постоянное время для проверки серверных метаданных без ожиданий.</summary>
 internal sealed class FrozenTimeProvider(DateTimeOffset now) : TimeProvider

@@ -1,9 +1,9 @@
 using System.Net;
-using FitnessTracker.Authentication;
+using FitLife.Authentication;
 using Microsoft.Extensions.Configuration;
 using Xunit;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Проверяет внутренний HTTP-контракт очистки без сети, БД и секретов окружения.</summary>
 [Trait("Category", "Unit")]

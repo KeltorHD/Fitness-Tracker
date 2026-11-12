@@ -1,4 +1,4 @@
-namespace FitnessTracker.Authentication.Controllers;
+namespace FitLife.Authentication.Controllers;
 
 /// <summary>HTTP-параметр продолжения; сервер самостоятельно проверяет локальность URL.</summary>
 public sealed record NavigationRequest(string? ReturnUrl = "/account");

@@ -1,11 +1,11 @@
 using System.Net;
 using System.Net.Http.Json;
-using FitnessTracker.Backend;
+using FitLife.Backend;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
 using Xunit;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Проверяет RFC 7662 HTTP-клиент без сети, реальных credentials и ожидания тайм-аутов.</summary>
 [Trait("Category", "Unit")]

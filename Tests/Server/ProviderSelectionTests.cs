@@ -1,11 +1,11 @@
 using System.Net;
 using System.Text.RegularExpressions;
-using FitnessTracker.Authentication;
+using FitLife.Authentication;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Xunit;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Проверяет полноту конфигурации внешних способов входа без обращения к провайдерам.</summary>
 [Trait("Category", "Unit")]

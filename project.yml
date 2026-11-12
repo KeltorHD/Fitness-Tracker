@@ -1,4 +1,4 @@
-name: FitnessTracker
+name: FitLife
 options:
   minimumXcodeGenVersion: 2.44.0
   xcodeVersion: '26.0'
@@ -6,22 +6,22 @@ options:
   developmentLanguage: ru
   deploymentTarget:
     iOS: '26.0'
-    watchOS: '10.0'
+    watchOS: '26.0'
 settings:
   base:
-    FITNESS_TRACKER_CLOUD_SYNC_AVAILABLE: 'YES'
-    FITNESS_TRACKER_AUTH_CALLBACK_MODE: https
+    FITLIFE_CLOUD_SYNC_AVAILABLE: 'YES'
+    FITLIFE_AUTH_CALLBACK_MODE: https
   configs:
     Debug:
-      FITNESS_TRACKER_APS_ENVIRONMENT: development
+      FITLIFE_APS_ENVIRONMENT: development
     Release:
-      FITNESS_TRACKER_APS_ENVIRONMENT: production
+      FITLIFE_APS_ENVIRONMENT: production
     PersonalDebug:
-      FITNESS_TRACKER_CLOUD_SYNC_AVAILABLE: 'NO'
-      FITNESS_TRACKER_AUTH_CALLBACK_MODE: customScheme
+      FITLIFE_CLOUD_SYNC_AVAILABLE: 'NO'
+      FITLIFE_AUTH_CALLBACK_MODE: customScheme
     PersonalRelease:
-      FITNESS_TRACKER_CLOUD_SYNC_AVAILABLE: 'NO'
-      FITNESS_TRACKER_AUTH_CALLBACK_MODE: customScheme
+      FITLIFE_CLOUD_SYNC_AVAILABLE: 'NO'
+      FITLIFE_AUTH_CALLBACK_MODE: customScheme
 configs:
   Debug: debug
   Release: release
@@ -33,7 +33,7 @@ configFiles:
   PersonalDebug: Config/Base.xcconfig
   PersonalRelease: Config/Base.xcconfig
 packages:
-  FitnessTrackerCore:
+  FitLifeCore:
     path: .
 fileGroups:
   - README.md
@@ -41,44 +41,44 @@ fileGroups:
   - docs
   - Config
 schemes:
-  FitnessTracker Personal:
+  FitLife Personal:
     build:
       targets:
-        FitnessTracker: all
+        FitLife: all
     run:
       config: PersonalDebug
     test:
       config: PersonalDebug
       targets:
-        - FitnessTrackerTests
-        - FitnessTrackerUITests
+        - FitLifeTests
+        - FitLifeUITests
     profile:
       config: PersonalRelease
     archive:
       config: PersonalRelease
-  FitnessTracker:
+  FitLife:
     build:
       targets:
-        FitnessTracker: all
+        FitLife: all
     run:
       config: Debug
     test:
       config: Debug
       targets:
-        - FitnessTrackerTests
-        - FitnessTrackerUITests
-  FitnessTrackerWatch:
+        - FitLifeTests
+        - FitLifeUITests
+  FitLifeWatch:
     build:
       targets:
-        FitnessTrackerWatch: all
+        FitLifeWatch: all
     run:
       config: Debug
-  FitnessTrackerWidgets:
+  FitLifeWidgets:
     build:
       targets:
-        FitnessTrackerWidgets: all
+        FitLifeWidgets: all
 targets:
-  FitnessTracker:
+  FitLife:
     type: application
     platform: iOS
     sources:
@@ -100,8 +100,8 @@ targets:
         buildPhase: resources
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: $(FITNESS_TRACKER_BUNDLE_ID)
-        SWIFT_ACTIVE_COMPILATION_CONDITIONS: $(inherited) FITNESS_TRACKER_APP
+        PRODUCT_BUNDLE_IDENTIFIER: $(FITLIFE_BUNDLE_ID)
+        SWIFT_ACTIVE_COMPILATION_CONDITIONS: $(inherited) FITLIFE_APP
         INFOPLIST_FILE: Config/App-Info.plist
         CODE_SIGN_ENTITLEMENTS: Config/App.entitlements
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
@@ -113,13 +113,13 @@ targets:
         PersonalRelease:
           CODE_SIGN_ENTITLEMENTS: Config/PersonalTeam.entitlements
     dependencies:
-      - package: FitnessTrackerCore
-      - target: FitnessTrackerWidgets
+      - package: FitLifeCore
+      - target: FitLifeWidgets
         embed: true
-      - target: FitnessTrackerWatch
+      - target: FitLifeWatch
         embed: true
     # Capabilities are declared in real entitlements, not invented XcodeGen keys.
-  FitnessTrackerWidgets:
+  FitLifeWidgets:
     type: app-extension
     platform: iOS
     sources:
@@ -133,15 +133,15 @@ targets:
         buildPhase: resources
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: $(FITNESS_TRACKER_BUNDLE_ID).widgets
+        PRODUCT_BUNDLE_IDENTIFIER: $(FITLIFE_BUNDLE_ID).widgets
         INFOPLIST_FILE: Config/Widgets-Info.plist
         CODE_SIGN_ENTITLEMENTS: Config/Widgets.entitlements
         APPLICATION_EXTENSION_API_ONLY: YES
         SKIP_INSTALL: YES
         ASSETCATALOG_COMPILER_APPICON_NAME: ''
     dependencies:
-      - package: FitnessTrackerCore
-  FitnessTrackerWatch:
+      - package: FitLifeCore
+  FitLifeWatch:
     type: application
     platform: watchOS
     sources:
@@ -151,7 +151,7 @@ targets:
       - Apple/Services/ServiceError.swift
       - Apple/Features/WatchHeartRateModels.swift
       - Apple/Shared/L10n.swift
-      - Apple/Shared/AppCompatibility.swift
+      - Apple/Shared/AppIdentifiers.swift
       - path: Resources/Localizable.xcstrings
         buildPhase: resources
       - path: Resources/InfoPlist.xcstrings
@@ -161,32 +161,32 @@ targets:
         buildPhase: resources
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: $(FITNESS_TRACKER_BUNDLE_ID).watchkitapp
+        PRODUCT_BUNDLE_IDENTIFIER: $(FITLIFE_BUNDLE_ID).watchkitapp
         INFOPLIST_FILE: Config/Watch-Info.plist
         CODE_SIGN_ENTITLEMENTS: Config/Watch.entitlements
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         SDKROOT: watchos
         SKIP_INSTALL: YES
     dependencies:
-      - package: FitnessTrackerCore
-  FitnessTrackerTests:
+      - package: FitLifeCore
+  FitLifeTests:
     type: bundle.unit-test
     platform: iOS
     sources: [Apple/Tests]
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: $(FITNESS_TRACKER_BUNDLE_ID).tests
+        PRODUCT_BUNDLE_IDENTIFIER: $(FITLIFE_BUNDLE_ID).tests
         GENERATE_INFOPLIST_FILE: YES
     dependencies:
-      - target: FitnessTracker
-      - package: FitnessTrackerCore
-  FitnessTrackerUITests:
+      - target: FitLife
+      - package: FitLifeCore
+  FitLifeUITests:
     type: bundle.ui-testing
     platform: iOS
     sources: [Apple/UITests]
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: $(FITNESS_TRACKER_BUNDLE_ID).uitests
+        PRODUCT_BUNDLE_IDENTIFIER: $(FITLIFE_BUNDLE_ID).uitests
         GENERATE_INFOPLIST_FILE: YES
     dependencies:
-      - target: FitnessTracker
+      - target: FitLife

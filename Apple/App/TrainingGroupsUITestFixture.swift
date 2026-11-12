@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import Foundation
 
 /// Used only by the isolated in-memory UI test runtime, never by the personal workspace.

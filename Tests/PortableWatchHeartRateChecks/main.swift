@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import Foundation
 
 private struct Failure: Error { let message: String }
@@ -133,7 +133,7 @@ private actor Records: HeartRateRecordingRepository {
       try JSONDecoder().decode(WatchHeartRateEvent.self, from: encoded) == validEvent,
       "Event wire roundtrip")
 
-    let suite = "FitnessTracker.WatchHeartRateChecks.\(UUID())"
+    let suite = "FitLife.WatchHeartRateChecks.\(UUID())"
     guard let defaults = UserDefaults(suiteName: suite) else { throw Failure(message: "Defaults") }
     defer { defaults.removePersistentDomain(forName: suite) }
     let airPods = Sensor()

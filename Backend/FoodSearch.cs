@@ -4,7 +4,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace FitnessTracker.Backend;
+namespace FitLife.Backend;
 
 /// <summary>Проксирует публичный каталог perek.us, хранит ключ только на сервере и ограничивает общий бюджет.</summary>
 internal sealed class FoodSearch(IHttpClientFactory clients, IConfiguration config, TimeProvider time) : IDisposable

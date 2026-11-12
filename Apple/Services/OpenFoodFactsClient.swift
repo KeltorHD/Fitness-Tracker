@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import Foundation
 
 #if canImport(FoundationNetworking)
@@ -55,7 +55,7 @@ actor OpenFoodFactsClient: FoodSearching {
     }
     guard let url = components.url else { throw FoodSearchError.invalidQuery }
     var request = URLRequest(url: url, timeoutInterval: 20)
-    request.setValue("FitnessTracker/1.0 (iOS; nutrition diary)", forHTTPHeaderField: "User-Agent")
+    request.setValue("FitLife/1.0 (iOS; nutrition diary)", forHTTPHeaderField: "User-Agent")
     request.setValue("application/json", forHTTPHeaderField: "Accept")
     let data: Data
     let response: URLResponse

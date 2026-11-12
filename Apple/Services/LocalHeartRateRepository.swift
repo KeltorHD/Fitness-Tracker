@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import Foundation
 
 /// Device-local sensor data. Never stored in the SwiftData/CloudKit aggregate or App Group.
@@ -12,7 +12,7 @@ actor LocalHeartRateRepository: HeartRateRecordingRepository {
         ?? FileManager.default.urls(
           for: .applicationSupportDirectory, in: .userDomainMask
         ).first?
-        .appendingPathComponent(AppCompatibility.heartRateDirectory, isDirectory: true)
+        .appendingPathComponent(AppIdentifiers.heartRateDirectory, isDirectory: true)
     else { throw TrackerDataError.invalidRecording }
     return base
   }

@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import Foundation
 import WatchConnectivity
 
@@ -29,7 +29,7 @@ import WatchConnectivity
     guard session.activationState == .activated, session.isPaired, session.isWatchAppInstalled
     else {
       throw ServiceError.unavailable(
-        "Установите FitnessTracker на Apple Watch и откройте приложение на часах.")
+        "Установите FitLife на Apple Watch и откройте приложение на часах.")
     }
     let data = try JSONEncoder().encode(command)
     if command.action == .stop || command.action == .pause {
@@ -40,7 +40,7 @@ import WatchConnectivity
     guard session.isReachable else {
       if command.action == .stop { return }
       throw ServiceError.unavailable(
-        "Откройте FitnessTracker на Apple Watch и держите часы рядом с iPhone.")
+        "Откройте FitLife на Apple Watch и держите часы рядом с iPhone.")
     }
     session.sendMessage(["heartRateCommand": data], replyHandler: nil) { [weak self] _ in
       Task { @MainActor in self?.heartRateFailure?(command.sessionID) }

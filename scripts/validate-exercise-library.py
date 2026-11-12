@@ -11,8 +11,8 @@ from PIL import Image
 root = Path(__file__).resolve().parent.parent
 vendor = root / 'ThirdParty/free-exercise-db'
 manifest = json.loads((vendor / 'manifest.json').read_text())
-document = json.loads((root / 'Sources/FitnessTrackerCore/Resources/ExerciseLibrary.ru.json').read_text())
-english_resource = root / 'Sources/FitnessTrackerCore/Resources/ExerciseLibrary.en.json'
+document = json.loads((root / 'Sources/FitLifeCore/Resources/ExerciseLibrary.ru.json').read_text())
+english_resource = root / 'Sources/FitLifeCore/Resources/ExerciseLibrary.en.json'
 english = json.loads(english_resource.read_text())
 source = {item['id']: item for item in json.loads((vendor / 'exercises.selected.json').read_text())}
 assert hashlib.sha256((vendor / 'exercises.selected.json').read_bytes()).hexdigest() == manifest['selectedDataSHA256']
@@ -69,7 +69,7 @@ for index, entry in enumerate(document['entries']):
     assert entry['generatedMedia'] == generated.get(entry['sourceID'])
     assert all(re.search('[А-Яа-яЁё]', step) for step in entry['steps'])
     if index < 8: assert entry['id'] == f'10000000-0000-0000-0000-{index + 1:012d}'
-resource = root / 'Sources/FitnessTrackerCore/Resources/ExerciseLibrary.ru.json'
+resource = root / 'Sources/FitLifeCore/Resources/ExerciseLibrary.ru.json'
 original = resource.read_bytes()
 original_english = english_resource.read_bytes()
 subprocess.run([sys.executable, str(root / 'scripts/import-exercise-library.py')], check=True, stdout=subprocess.DEVNULL)

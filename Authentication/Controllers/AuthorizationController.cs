@@ -1,7 +1,7 @@
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FitnessTracker.Authentication.Controllers;
+namespace FitLife.Authentication.Controllers;
 
 /// <summary>Маппит решения OAuth-сервиса в штатные MVC/OpenIddict результаты.</summary>
 public sealed class AuthorizationController(AuthorizationService service, IMapper mapper) : Controller

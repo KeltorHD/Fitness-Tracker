@@ -1,5 +1,5 @@
 import AVFoundation
-import FitnessTrackerCore
+import FitLifeCore
 import SwiftUI
 import UIKit
 import Vision

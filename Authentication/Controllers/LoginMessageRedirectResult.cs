@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
-namespace FitnessTracker.Authentication.Controllers;
+namespace FitLife.Authentication.Controllers;
 
 /// <summary>Сохраняет сообщение PRG-перехода в TempData на HTTP-границе, вне парольного сервиса.</summary>
 public sealed class LoginMessageRedirectResult(string url, string? message) : LocalRedirectResult(url)

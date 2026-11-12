@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import Foundation
 
 /// Synthetic nutrition is confined to the explicitly requested, in-memory Debug UI runtime.

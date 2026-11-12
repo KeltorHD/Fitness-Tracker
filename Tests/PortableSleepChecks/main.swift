@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import Foundation
 
 private struct CheckFailure: Error { let message: String }
@@ -56,7 +56,7 @@ private func expect(_ condition: Bool, _ message: String) throws {
 
 @main private struct PortableSleepChecks {
   @MainActor private static func checkWatchHandoffAndEditing() async throws {
-    let suite = "FitnessTracker.SleepHandoffChecks.\(UUID())"
+    let suite = "FitLife.SleepHandoffChecks.\(UUID())"
     guard let defaults = UserDefaults(suiteName: suite) else {
       throw CheckFailure(message: "Defaults")
     }
@@ -143,7 +143,7 @@ private func expect(_ condition: Bool, _ message: String) throws {
       "Legacy array migration preserves phone backup preference")
   }
   @MainActor private static func checkThreeDeliveryModes() async throws {
-    let suite = "FitnessTracker.DeliveryChecks.\(UUID())"
+    let suite = "FitLife.DeliveryChecks.\(UUID())"
     guard let defaults = UserDefaults(suiteName: suite) else {
       throw CheckFailure(message: "Defaults")
     }
@@ -211,7 +211,7 @@ private func expect(_ condition: Bool, _ message: String) throws {
       "Handoff silences only Watch-only reserve")
   }
   @MainActor static func main() async throws {
-    let suite = "FitnessTracker.SleepChecks.\(UUID())"
+    let suite = "FitLife.SleepChecks.\(UUID())"
     guard let defaults = UserDefaults(suiteName: suite) else {
       throw CheckFailure(message: "Defaults")
     }

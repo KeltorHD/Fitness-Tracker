@@ -5,14 +5,14 @@ using Microsoft.IdentityModel.Tokens;
 using OpenIddict.Abstractions;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
-namespace FitnessTracker.Authentication;
+namespace FitLife.Authentication;
 
 public static class AuthConfiguration
 {
-    public const string ClientId = "fitnesstracker-ios";
+    public const string ClientId = "fitlife-ios";
     /// <summary>Отдельный public client для Personal Team без Associated Domains.</summary>
-    public const string PersonalClientId = "fitnesstracker-ios-personal";
-    public const string Audience = "fitnesstracker-api";
+    public const string PersonalClientId = "fitlife-ios-personal";
+    public const string Audience = "fitlife-api";
     public const string Callback = "https://auth.example.com/ios/oauth/callback";
 
     public static X509Certificate2 Certificate(IConfiguration config, string name) =>
@@ -76,7 +76,7 @@ public static class AuthConfiguration
             !string.IsNullOrEmpty(redirect.Query) || !string.IsNullOrEmpty(redirect.Fragment) ||
             redirect.AbsolutePath != "/ios/oauth/callback")
             throw new InvalidOperationException("The iOS callback must use HTTPS and /ios/oauth/callback.");
-        await RegisterPublicClientAsync(manager, ClientId, redirect, "FitnessTracker для iOS", cancellationToken);
+        await RegisterPublicClientAsync(manager, ClientId, redirect, "FitLife для iOS", cancellationToken);
         await RegisterPersonalClientAsync(manager, config, cancellationToken);
         await RegisterIntrospectionClientAsync(manager, config, cancellationToken);
     }
@@ -96,7 +96,7 @@ public static class AuthConfiguration
             scheme.Split('.').Any(label => !Regex.IsMatch(label, @"\A[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\z")))
             throw new InvalidOperationException("Auth:PersonalCallbackScheme must be a lowercase reverse-DNS URI scheme.");
         await RegisterPublicClientAsync(manager, PersonalClientId, new Uri(scheme + ":/ios/oauth/callback"),
-            "FitnessTracker Personal для iOS", cancellationToken);
+            "FitLife Personal для iOS", cancellationToken);
     }
 
     /// <summary>Создаёт либо обновляет public client с единственным callback и обязательным PKCE.</summary>
@@ -135,7 +135,7 @@ public static class AuthConfiguration
             ClientId = Audience,
             ClientSecret = secret,
             ClientType = ClientTypes.Confidential,
-            DisplayName = "FitnessTracker Backend",
+            DisplayName = "FitLife Backend",
             Permissions = { Permissions.Endpoints.Introspection }
         };
         var existing = await manager.FindByClientIdAsync(Audience, cancellationToken);

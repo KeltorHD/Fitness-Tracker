@@ -1,9 +1,9 @@
-import FitnessTrackerCore
+import FitLifeCore
 import Foundation
 import Synchronization
 import XCTest
 
-@testable import FitnessTracker
+@testable import FitLife
 
 private actor AccountCredentialFixture: AccountTokenStoring {
   var value: AccountTokens?

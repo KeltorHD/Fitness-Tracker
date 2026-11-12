@@ -1,10 +1,10 @@
-# AGENTS.md — FitnessTracker
+# AGENTS.md — FitLife
 
 Эти правила действуют для всего репозитория. Выполняй конкретные инструкции пользователя и сохраняй ранее согласованные требования проекта. Не меняй стек, архитектуру или продуктовые решения без причины, связанной с текущей задачей.
 
 ## 1. Роль и ответственность
 
-Ты — senior iOS/.NET engineer, разрабатывающий нативный журнал силовых тренировок FitnessTracker и его серверные приложения Authentication и Backend.
+Ты — senior iOS/.NET engineer, разрабатывающий нативный журнал силовых тренировок FitLife и его серверные приложения Authentication и Backend.
 
 - Пиши понятный, поддерживаемый и тестируемый Swift- и C#-код.
 - Следуй Apple Human Interface Guidelines и используй нативные Apple API.
@@ -17,8 +17,8 @@
 ## 2. Стек и продуктовые ограничения
 
 - Swift 6, строгая проверка concurrency.
-- SwiftUI, **iOS 26+**, **watchOS 10+** (по запросу пользователя: Apple Watch SE первого поколения).
-- Нативный Apple Liquid Glass на iOS/watchOS 26+; на watchOS 10–11 — совместимые нативные стили с проверкой availability.
+- SwiftUI, **iOS 26+**, **watchOS 26+**.
+- Нативный Apple Liquid Glass.
 - SwiftData, UserDefaults для настроек, Keychain для секретов при необходимости.
 - HealthKit, CloudKit, ActivityKit, WidgetKit, App Intents, WatchConnectivity и UserNotifications.
 - Swift Package Manager для независимого Core; XcodeGen для структуры Xcode-проекта.
@@ -31,7 +31,7 @@
 
 Все функции приложения бесплатны. Не возвращай Pro, paywall, покупки, подписки или StoreKit без нового явного требования пользователя. Основной интерфейс — на русском языке.
 
-Название продукта — FitnessTracker. Прежние storage/wire identifiers в AppCompatibility, legacy archive IDs и aliases Config/Base.xcconfig сохраняются только для совместимости установленных данных; не переименовывай их без явной миграции. Правила — в docs/RENAME.md.
+Название продукта — FitLife. По явному требованию пользователя поддержка прежних продуктовых идентификаторов, ссылок, архивов и конфигурационных aliases удалена. Используй только текущие идентификаторы FitLife, настройки FITLIFE_* и архив com.fitlife.archive версии 4. Имена рабочих БД и пользователей нейтральные: authentication и backend. Правила — в docs/RENAME.md.
 
 ## 3. Окружение: Linux сначала, macOS позже
 
@@ -42,7 +42,7 @@
 - Продолжай писать полноценные SwiftUI `.swift`-файлы.
 - Не пытайся запускать Xcode или iOS Simulator.
 - Не заменяй интерфейс на Flutter, React Native, WebView или другой UI-фреймворк.
-- Собирай и тестируй FitnessTrackerCore через SPM.
+- Собирай и тестируй FitLifeCore через SPM.
 - Проверяй структуру, ресурсы, форматирование и синтаксис Apple-файлов.
 - Не называй эти проверки успешной iOS/watchOS-компиляцией или проверкой интерфейса.
 - Серверы Authentication и Backend собирай и тестируй через .NET SDK из `global.json`; их проверки доступны на Linux независимо от Apple SDK.
@@ -55,7 +55,7 @@
 
 ```text
 Package.swift
-FitnessTracker.Server.sln             # Независимые серверы Authentication/Backend и их тесты
+FitLife.Server.sln             # Независимые серверы Authentication/Backend и их тесты
 Directory.Build.props                # Общие .NET settings, nullable и warnings as errors
 global.json                          # Версия .NET SDK и допустимый roll-forward
 Authentication/                      # Identity/OpenIddict, внешние входы, аккаунты и сессии
@@ -64,9 +64,9 @@ Backend/                             # JWT-защищённый API резерв
 Backend/Migrations/                  # EF Core migrations BackupDbContext
 ServerLogging/                       # Общая инфраструктура ILogger → ntfy, без доменных моделей и БД
 Tests/Server/                        # xUnit: HTTP/Identity/SQLite и отдельная категория PostgreSQL
-Sources/FitnessTrackerCore/             # Domain, правила, расчёты, repository protocols
-Sources/FitnessTrackerCore/Resources/   # Небольшие SPM resources библиотеки упражнений
-Tests/FitnessTrackerCoreTests/          # Swift Testing на Linux/macOS
+Sources/FitLifeCore/             # Domain, правила, расчёты, repository protocols
+Sources/FitLifeCore/Resources/   # Небольшие SPM resources библиотеки упражнений
+Tests/FitLifeCoreTests/          # Swift Testing на Linux/macOS
 Apple/App/                         # App entry, DI, AppStore, runtime
 Apple/Design/                      # FitTheme, общие компоненты, Liquid Glass
 Apple/Features/                    # SwiftUI-экраны и presentation logic
@@ -121,7 +121,7 @@ Authentication и Backend — самостоятельные исполняем�
 - Предпочитай initializer-based DI.
 - Вводи протоколы ради тестирования, замены реализации или отделения внешнего сервиса, а не для каждого класса.
 - Не добавляй глобальные изменяемые singleton-объекты.
-- Существующий FitnessTrackerRuntime обеспечивает один AppStore/ModelContext в app process, включая холодный запуск LiveActivityIntent. Сохраняй это поведение; не создавай конкурирующий context из intent или View.
+- Существующий FitLifeRuntime обеспечивает один AppStore/ModelContext в app process, включая холодный запуск LiveActivityIntent. Сохраняй это поведение; не создавай конкурирующий context из intent или View.
 
 ## 8. Swift coding standards
 
@@ -161,7 +161,7 @@ Authentication и Backend — самостоятельные исполняем�
 - Keychain — для credentials и секретов, если они появятся.
 - FileManager — для файлов, экспорта и Watch archive.
 - Persistence logic остаётся вне SwiftUI Views.
-- Сохраняй совместимость Codable payloads и стабильность UUID упражнений/тренировок.
+- Используй текущий Codable-формат и стабильные UUID упражнений/тренировок. Не возвращай поддержку прежних архивов или отсутствующих обязательных полей шаблона без нового требования пользователя.
 - При изменении формата данных предусматривай явную миграцию; не удаляй store как способ исправить ошибку.
 - Для CloudKit-compatible StoredRecord сохраняй defaults полей и учитывай ограничения CloudKit. Не добавляй unique constraints без проверки совместимости.
 - Не запускай собственную дублирующую синхронизацию поверх SwiftData/CloudKit без обоснования.
@@ -186,7 +186,7 @@ Authentication и Backend — самостоятельные исполняем�
 - BackgroundTaskLease предоставляет ограниченное время завершения обновлений; expiration handler должен отменить работу и освободить task.
 - Не создавай Live Activity произвольно из background; сохраняй ограничения ActivityKit и настройки пользователя.
 - LiveActivityIntent сохраняет изменения и ожидает необходимые updates до возврата из perform().
-- FITNESS_TRACKER_APP определён только для главного app target; shared intents не должны открывать SwiftData из widget extension.
+- FITLIFE_APP определён только для главного app target; shared intents не должны открывать SwiftData из widget extension.
 - Повторные и устаревшие действия должны быть безопасны: pause/resume идемпотентны, старый skip-rest не сбрасывает новый отдых.
 - Watch outbox удаляет запись только после подтверждения успешного сохранения на iPhone. Повторная доставка не создаёт дубликаты.
 
@@ -293,20 +293,20 @@ Authentication и Backend — самостоятельные исполняем�
 bash scripts/check-server.sh
 ```
 
-Скрипт последовательно выполняет locked restore, сборку, тесты и проверку форматирования. Он задаёт локальные кэши, исключает категорию PostgreSQL по умолчанию и включает её при наличии `FITNESS_TRACKER_TEST_POSTGRES`. Не запускай сборку, тесты и formatter одновременно, если они используют общие `bin`/`obj`.
+Скрипт последовательно выполняет locked restore, сборку, тесты и проверку форматирования. Он задаёт локальные кэши, исключает категорию PostgreSQL по умолчанию и включает её при наличии `FITLIFE_TEST_POSTGRES`. Не запускай сборку, тесты и formatter одновременно, если они используют общие `bin`/`obj`.
 
 Отдельные проверки:
 
 ```bash
-dotnet restore FitnessTracker.Server.sln --locked-mode
-dotnet build FitnessTracker.Server.sln --no-restore --disable-build-servers -m:1
-dotnet test FitnessTracker.Server.sln --no-build --no-restore -m:1 --filter 'Category!=PostgreSQL'
-dotnet format FitnessTracker.Server.sln --verify-no-changes --no-restore
+dotnet restore FitLife.Server.sln --locked-mode
+dotnet build FitLife.Server.sln --no-restore --disable-build-servers -m:1
+dotnet test FitLife.Server.sln --no-build --no-restore -m:1 --filter 'Category!=PostgreSQL'
+dotnet format FitLife.Server.sln --verify-no-changes --no-restore
 ```
 
-Для запуска только интеграционной категории задай `FITNESS_TRACKER_TEST_POSTGRES` connection string к одноразовому PostgreSQL и используй `--filter 'Category=PostgreSQL'` в команде `dotnet test`. Это xUnit Trait `Category`, не NUnit `TestCategory`. Окружение и зависимости описаны в `docs/SERVER.md` и `.github/workflows/server.yml`.
+Для запуска только интеграционной категории задай `FITLIFE_TEST_POSTGRES` connection string к одноразовому PostgreSQL и используй `--filter 'Category=PostgreSQL'` в команде `dotnet test`. Это xUnit Trait `Category`, не NUnit `TestCategory`. Окружение и зависимости описаны в `docs/SERVER.md` и `.github/workflows/server.yml`.
 
-Форматируй изменённые C#-файлы через `dotnet format FitnessTracker.Server.sln --no-restore --include` со списком их путей. Сохраняй исходные окончания строк существующих файлов и не форматируй посторонние исходники. Автоматический ReSharper/Husky pre-commit hook в этом проекте не настроен.
+Форматируй изменённые C#-файлы через `dotnet format FitLife.Server.sln --no-restore --include` со списком их путей. Сохраняй исходные окончания строк существующих файлов и не форматируй посторонние исходники. Автоматический ReSharper/Husky pre-commit hook в этом проекте не настроен.
 
 ### Linux: Swift
 
@@ -333,24 +333,24 @@ Python-зависимости — в requirements-dev.txt. Полный check sc
 
 ### macOS / Xcode
 
-Используй полный совместимый Xcode с iOS/watchOS 26 SDK или новее. Минимальные версии приложения: iOS 26 и watchOS 10; на Watch младше 26 используй нативные совместимые стили, сохраняя Liquid Glass через availability на новых ОС. После изменения структуры выполни:
+Используй полный совместимый Xcode с iOS/watchOS 26 SDK или новее. Минимальные версии приложения: iOS 26 и watchOS 26. Сохраняй нативный Liquid Glass. После изменения структуры выполни:
 
 ```bash
 xcodegen generate
-xcodebuild -list -project FitnessTracker.xcodeproj
-xcodebuild -showdestinations -project FitnessTracker.xcodeproj -scheme FitnessTracker
+xcodebuild -list -project FitLife.xcodeproj
+xcodebuild -showdestinations -project FitLife.xcodeproj -scheme FitLife
 ```
 
 Затем собери и протестируй реальную схему на доступном Simulator. Подставь найденный UDID вместо примера:
 
 ```bash
-xcodebuild -project FitnessTracker.xcodeproj -scheme FitnessTracker \
+xcodebuild -project FitLife.xcodeproj -scheme FitLife \
   -destination 'platform=iOS Simulator,id=AVAILABLE-SIMULATOR-UDID' build
-xcodebuild -project FitnessTracker.xcodeproj -scheme FitnessTracker \
+xcodebuild -project FitLife.xcodeproj -scheme FitLife \
   -destination 'platform=iOS Simulator,id=AVAILABLE-SIMULATOR-UDID' test
 ```
 
-Существующие Apple test targets — FitnessTrackerTests и FitnessTrackerUITests; отдельные схемы — FitnessTrackerWatch и FitnessTrackerWidgets. Для capabilities следуй MAC_BUILD_GUIDE.md. При отсутствии SDK/Simulator честно укажи, что соответствующая проверка не выполнена.
+Существующие Apple test targets — FitLifeTests и FitLifeUITests; отдельные схемы — FitLifeWatch и FitLifeWidgets. Для capabilities следуй MAC_BUILD_GUIDE.md. При отсутствии SDK/Simulator честно укажи, что соответствующая проверка не выполнена.
 
 Для правок только документации достаточно проверить содержание, пути и git diff --check; не запускай несвязанные сборки без причины. После успешных релевантных проверок не повторяй их без новых изменений или выявленного риска.
 
@@ -423,7 +423,7 @@ PNG/SVG в docs/previews — явно подписанные иллюстрат�
 - OAuth/OIDC, проверка внешних провайдеров, PKCE S256, ротация и отзыв остаются в Identity/OpenIddict. Не вводи собственный параллельный протокол токенов. Пользователи с одинаковым email не объединяются автоматически; привязка требует явного подтверждённого действия пользователя.
 - Только новые локальные email/пароль и email/passkey регистрации требуют подтверждения адреса. Сохраняй `EmailConfirmationRequired=false` у прежних аккаунтов, не подделывай `EmailConfirmed`. До подтверждения не выдавай сессию; GET ссылки не меняет аккаунт, подтверждение выполняется явным antiforgery POST без автоматического входа. Отправка — стандартный SMTP через заменяемый сервис, без привязки к Stalwart; настройки `SMTP_*`/`Smtp__*`. При выключенном SMTP новая локальная регистрация недоступна, прежний вход сохраняется.
 - Неподтверждённые локальные регистрации с `EmailConfirmationRequired=true` удаляются через 2 часа от `CreatedAt`, освобождая email. Повторное письмо не продлевает срок; просроченная ссылка не подтверждает аккаунт до фоновой очистки. Сохраняй подтверждённые, legacy и внешние аккаунты, атомарный SQL-предикат удаления и новый user ID при повторной регистрации. Очистка выполняется после startup migrations и в фоне; часы передаются через `TimeProvider`.
-- Полная iOS-сборка использует HTTPS callback и Associated Domains. По требованию пользователя бесплатная Personal Team использует отдельную reverse-DNS URL-схему с PKCE и public client `fitnesstracker-ios-personal`, явно включаемый через `IOS_PERSONAL_CALLBACK_SCHEME`. Не добавляй его callback к HTTPS client и не делай автоматический downgrade; сохраняй точную проверку callback/state/issuer, HTTPS транспорта и отдельные Keychain items по client ID.
+- Полная iOS-сборка использует HTTPS callback и Associated Domains. По требованию пользователя бесплатная Personal Team использует отдельную reverse-DNS URL-схему с PKCE и public client `fitlife-ios-personal`, явно включаемый через `IOS_PERSONAL_CALLBACK_SCHEME`. Не добавляй его callback к HTTPS client и не делай автоматический downgrade; сохраняй точную проверку callback/state/issuer, HTTPS транспорта и отдельные Keychain items по client ID.
 - Auth подтверждает личность и управляет сессиями; разрешения функций Backend определяет сам Backend, без прикладных OAuth scopes. Сохраняй только стандартные scopes протокола входа (`openid`, `profile`, `offline_access`). Backend проверяет подпись JWT, issuer, audience, срок, тип и допустимый `sub`, затем применяет собственные правила доступа и лимиты. Доступ к каждой копии ограничивается `sub`, а не owner ID из тела/URL клиента; scopes в старых токенах не дают дополнительных прав. Внутренний service endpoint не публикуется через внешний proxy.
 - Перед каждым доступом к копиям Backend проверяет отзыв через стандартную introspection OpenIddict с отдельным confidential secret, после локальной проверки JWT/прав/rate limit. Не кешируй положительный статус и не продолжай доступ при отказе Auth: revoked даёт 401, недоступный Auth — 503. Выход отзывает всю текущую authorization family, сохраняя другие сессии; Backend не читает Auth-БД напрямую.
 - Сохраняй лимиты размера/числа копий, проверку envelope/SHA-256, неизменяемость и идемпотентность PUT. Проверка квоты и удаление аккаунта должны оставаться безопасными при конкурентных запросах. Архив и UUID сохраняют совместимость со Swift Core.
@@ -440,11 +440,11 @@ PNG/SVG в docs/previews — явно подписанные иллюстрат�
 
 ### Серверные тесты
 
-- Используй существующий xUnit-проект `Tests/Server/FitnessTracker.Server.Tests.csproj`. Не создавай по отдельному тестовому проекту на каждый класс и не меняй framework ради соглашений другого репозитория.
+- Используй существующий xUnit-проект `Tests/Server/FitLife.Server.Tests.csproj`. Не создавай по отдельному тестовому проекту на каждый класс и не меняй framework ради соглашений другого репозитория.
 - Для нового значимого поведения добавляй содержательные тесты; при исправлении ошибки — регрессионный сценарий. Проверяй happy path, ошибки и границы, отмену, валидацию, сериализацию и значимые defaults. Не ограничивайся проверками присваивания свойств.
 - Unit-тесты изолируй через DI и fakes: без реальной сети, внешних секретов, фиксированных задержек и зависимости от порядка запуска. Не добавляй mock-библиотеку, если достаточно простой подмены.
 - HTTP/Identity-тесты используют `WebApplicationFactory` и SQLite fixtures; они проверяют статусы, тела и побочные эффекты через реальные компоненты. Не выдавай их за проверку настоящего PostgreSQL, DNS/TLS или входа в Google/Apple/Яндекс.
-- PostgreSQL-сценарии помечай `[Trait("Category", "PostgreSQL")]`. Текущий контракт запуска — явный `FITNESS_TRACKER_TEST_POSTGRES` к одноразовому экземпляру и отдельная случайная БД теста; CI поднимает контейнер. Не используй рабочие БД и не скрывай недоступную инфраструктуру успешным результатом или молчаливым пропуском.
+- PostgreSQL-сценарии помечай `[Trait("Category", "PostgreSQL")]`. Текущий контракт запуска — явный `FITLIFE_TEST_POSTGRES` к одноразовому экземпляру и отдельная случайная БД теста; CI поднимает контейнер. Не используй рабочие БД и не скрывай недоступную инфраструктуру успешным результатом или молчаливым пропуском.
 - При добавлении контейнерной фикстуры используй закреплённый образ, свободный порт и проверку готовности с тайм-аутом. Не вводи обязательный Testcontainers-пакет и не переписывай действующий способ запуска без конкретной пользы.
 - Проверяй реальные контракты: OAuth/PKCE/refresh/revoke, запрет доступа к чужой копии, HTTP/JSON-ошибки, сохранение данных при отказе, повтор PUT, конкурентную квоту и удаление аккаунта. SQLite не заменяет PostgreSQL для миграций и блокировок.
 - В многошаговых интеграционных тестах явно разделяй Arrange/Act/Assert и кратко поясняй этапы по-русски. Для коротких очевидных сценариев комментарии необязательны. Описания и условия запуска обновляй в `docs/SERVER.md`.
@@ -456,7 +456,7 @@ PNG/SVG в docs/previews — явно подписанные иллюстрат�
 - Внешний HTTPS обслуживает существующий Nginx на хосте, сертификаты TLS настраивает пользователь. Compose публикует HTTP-порты сервисов только на `127.0.0.1`; не добавляй контейнерный reverse proxy или автоматическую выдачу TLS-сертификатов. PFX для Identity/OpenIddict и Data Protection — отдельные серверные ключи, не сертификаты Nginx.
 - Используй стандартную ASP.NET Core configuration: `appsettings.json`, настройки среды, переменные окружения и явно переданные параметры запуска. Вложенные env keys задавай через `__`; не добавляй конфигурационный слой в БД без отдельного требования.
 - `.env.example` и безопасные defaults — в репозитории; `.env`, `.local/`, пароли БД, OAuth secrets, PFX/P8 и приватные ключи — вне git. Не отключай в production HTTPS, проверку JWT или antiforgery ради удобства локальной разработки.
-- В документации, тестах, примерах и tracked defaults используй домены `example.com` и его поддомены. Реальные адреса развёртывания задавай через игнорируемые `.env` и `Config/Local.xcconfig`; не включай их в коммиты. Для iOS Associated Domains используй локально переопределяемый `FITNESS_TRACKER_AUTH_DOMAIN`.
+- В документации, тестах, примерах и tracked defaults используй домены `example.com` и его поддомены. Реальные адреса развёртывания задавай через игнорируемые `.env` и `Config/Local.xcconfig`; не включай их в коммиты. Для iOS Associated Domains используй локально переопределяемый `FITLIFE_AUTH_DOMAIN`.
 - Production использует постоянные сертификаты подписи/шифрования и защищённые Data Protection keys; ephemeral credentials допустимы только в тестах, development certificates — в Development. Сохраняй рабочие БД/volumes/ключи и учитывай ротацию при изменении конфигурации.
 - Backend хранит собственный постоянный Data Protection key ring, зашифрованный отдельным PFX; ключи Auth в него не монтируются. Не заменяй защиту временным provider и не отключай поддержку шифрования при ошибке зависимости: исправляй runtime-образ или конфигурацию. Подготовка отдельного Backend PFX через `scripts/setup-backend-keys.py` сохраняет существующие ключи и пароли.
 - При новом развёртывании постоянные данные серверов хранятся bind mounts в `.local/` рядом с проектом; пути БД, Data Protection keys и token certificates переопределяются в `.env`. Инфраструктуру Backend называй `backend` (БД, пользователь, сервис, настройки, папки); `backups` остаётся названием функции/архивов и её API. При переходе со старых volumes/имён не запускай сервисы на пустом хранилище вместо переноса данных и ключей.

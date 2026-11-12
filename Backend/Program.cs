@@ -12,9 +12,9 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.IdentityModel.Tokens;
 using Npgsql;
-using FitnessTracker.ServerLogging;
+using FitLife.ServerLogging;
 
-namespace FitnessTracker.Backend;
+namespace FitLife.Backend;
 
 public partial class Program
 {
@@ -29,7 +29,7 @@ public partial class Program
         builder.Services.AddProblemDetails();
         builder.Services.AddOpenApi();
         builder.Services.AddDbContext<BackupDbContext>(options => options.UseNpgsql(
-            config.GetConnectionString("Database") ?? "Host=localhost;Database=fitnesstracker_backend;Username=fitnesstracker_backend"));
+            config.GetConnectionString("Database") ?? "Host=localhost;Database=backend;Username=backend"));
         builder.Services.AddSingleton(TimeProvider.System);
         builder.Services.AddSingleton<FoodSearch>();
         builder.Services.AddHttpClient("perek", client => client.Timeout = TimeSpan.FromSeconds(8))
@@ -64,7 +64,7 @@ public partial class Program
             options.IncludeErrorDetails = false;
             options.BackchannelTimeout = TimeSpan.FromSeconds(5);
             options.Authority = config["Auth:Issuer"] ?? "https://localhost:5001/";
-            options.Audience = "fitnesstracker-api";
+            options.Audience = "fitlife-api";
             options.RequireHttpsMetadata = true;
             options.MapInboundClaims = false;
             options.TokenValidationParameters = new TokenValidationParameters
@@ -98,7 +98,7 @@ public partial class Program
                 context.User.FindFirst("sub")?.Value ?? context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
                 _ => new FixedWindowRateLimiterOptions { PermitLimit = 30, Window = TimeSpan.FromMinutes(1) }));
         });
-        var protection = builder.Services.AddDataProtection().SetApplicationName("FitnessTracker.Backend");
+        var protection = builder.Services.AddDataProtection().SetApplicationName("FitLife.Backend");
         if (config["DataProtection:Path"] is { Length: > 0 } keyPath)
             protection.PersistKeysToFileSystem(new DirectoryInfo(keyPath));
         else if (builder.Environment.IsProduction())
@@ -136,7 +136,7 @@ public partial class Program
                 item => item.OwnerId == Owner(context) && item.Id == id, ct);
             if (backup is null) return Results.NotFound();
             context.Response.Headers.ETag = $"\"{backup.Sha256}\"";
-            return Results.File(backup.Payload, "application/vnd.fitnesstracker+json", $"{backup.Id}.fitnesstracker");
+            return Results.File(backup.Payload, "application/vnd.fitlife+json", $"{backup.Id}.fitlife");
         });
         backups.MapDelete("/{id:guid}", async (Guid id, HttpContext context, BackupDbContext database, CancellationToken ct) =>
         {
@@ -174,7 +174,7 @@ public partial class Program
                 var startupSettings = new NpgsqlConnectionStringBuilder(database.Database.GetConnectionString())
                 {
                     Pooling = false,
-                    ApplicationName = "FitnessTracker startup"
+                    ApplicationName = "FitLife startup"
                 };
                 await using var startupConnection = new NpgsqlConnection(startupSettings.ConnectionString);
                 await startupConnection.OpenAsync(cancellationToken);
@@ -199,7 +199,7 @@ public partial class Program
     {
         if (id == Guid.Empty) return Results.BadRequest(new { code = "invalid_id" });
         if (!MediaTypeHeaderValue.TryParse(context.Request.ContentType, out var contentType) ||
-            (!string.Equals(contentType.MediaType, "application/vnd.fitnesstracker+json", StringComparison.OrdinalIgnoreCase) &&
+            (!string.Equals(contentType.MediaType, "application/vnd.fitlife+json", StringComparison.OrdinalIgnoreCase) &&
              !string.Equals(contentType.MediaType, "application/json", StringComparison.OrdinalIgnoreCase)))
             return Results.StatusCode(415);
         if (context.Request.ContentLength > BackupStorage.MaximumBytes) return Results.StatusCode(413);

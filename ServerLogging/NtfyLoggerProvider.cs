@@ -6,7 +6,7 @@ using System.Threading.Channels;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace FitnessTracker.ServerLogging;
+namespace FitLife.ServerLogging;
 
 /// <summary>Не блокирует запросы: маскирует логи и доставляет ограниченную очередь одним HTTP worker.</summary>
 [ProviderAlias("Ntfy")]
@@ -75,7 +75,7 @@ public sealed class NtfyLoggerProvider : ILoggerProvider, IHostedService, IAsync
     /// <summary>Фильтрует до formatter, включая собственные диагностические сообщения.</summary>
     private bool IsEnabled(string category, LogLevel level) => _options.Enabled &&
         _completed == 0 && level >= _options.MinimumLevel && level < LogLevel.None &&
-        !category.StartsWith("FitnessTracker.ServerLogging", StringComparison.Ordinal);
+        !category.StartsWith("FitLife.ServerLogging", StringComparison.Ordinal);
 
     /// <summary>Маскирует до очереди; TryWrite никогда не ожидает свободного места или сеть.</summary>
     private void Write<TState>(string category, LogLevel level, EventId id, TState state, Exception? exception,
@@ -119,7 +119,7 @@ public sealed class NtfyLoggerProvider : ILoggerProvider, IHostedService, IAsync
                     var body = JsonSerializer.Serialize(new
                     {
                         topic = _options.Topic,
-                        title = $"FitnessTracker {_serviceName}: {entry.Level}",
+                        title = $"FitLife {_serviceName}: {entry.Level}",
                         message = entry.Message,
                         priority = entry.Level switch { LogLevel.Critical => 5, LogLevel.Error => 4, LogLevel.Warning => 3, _ => 2 }
                     }, _json);

@@ -2,7 +2,7 @@ using MapsterMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FitnessTracker.Authentication.Controllers;
+namespace FitLife.Authentication.Controllers;
 
 /// <summary>Маппит HTTP-контракты аккаунта и делегирует операции сервису.</summary>
 public sealed class AccountController(AccountService service, IMapper mapper) : Controller

@@ -4,7 +4,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Configuration;
 
-namespace FitnessTracker.ServerLogging;
+namespace FitLife.ServerLogging;
 
 /// <summary>Маскирует известные секреты и приватные поля перед помещением уведомления в очередь.</summary>
 internal sealed class NtfyLogRedactor

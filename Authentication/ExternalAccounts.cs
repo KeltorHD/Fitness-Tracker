@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OpenIddict.Abstractions;
 
-namespace FitnessTracker.Authentication;
+namespace FitLife.Authentication;
 
 public sealed class ExternalAccounts(AuthDbContext database, UserManager<ApplicationUser> users,
     IOpenIddictAuthorizationManager authorizations, IOpenIddictTokenManager tokens)

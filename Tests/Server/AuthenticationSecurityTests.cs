@@ -1,7 +1,7 @@
 using System.Net;
 using Xunit;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Проверяет границы защиты до обработки анонимных OAuth-запросов.</summary>
 [Trait("Category", "HTTP")]

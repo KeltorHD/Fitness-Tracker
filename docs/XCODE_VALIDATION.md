@@ -2,6 +2,16 @@
 
 Пункты без отметки остаются **непроверенными** до выполнения на macOS/устройстве. Для выполненных проверок указаны устройство, ОС, версия Xcode и результат.
 
+## FitLife без обратной совместимости — 2026-11-11
+
+- [ ] Обновить Config/Local.xcconfig на текущие FITLIFE_*, зарегистрировать текущие Apple identifiers и выполнить `xcodegen generate`. Собрать FitLife Personal / FitLife, FitLifeWatch и FitLifeWidgets; запустить FitLifeTests и FitLifeUITests. Прежние aliases не применяются.
+- [ ] Проверить отдельное хранилище Workouts, папку пульса FitLife/HeartRate и Watch archive FitLife-watch.json. Ошибка открытия/сохранения остаётся ошибкой, без удаления store или перехода на пустую in-memory БД. Прежние хранилища автоматически не переносятся.
+- [ ] Экспортировать `.fitlife` / `.json` с com.fitlife.archive версии 4. Проверить отказ для предыдущих продуктовых форматов, версий 1–3, JSON без оболочки и отсутствующих обязательных коллекций.
+- [ ] Проверить ссылки fitlife:// из виджета и Live Activity, включая холодный запуск. Предыдущие продуктовые URL-схемы не должны открывать маршруты. Отдельно проверить текущий HTTPS/reverse-DNS OAuth callback и новый вход.
+- [ ] Добавить виджет FitLife.Weekly, проверить разрешения/текущий HealthKit sync prefix и все экраны на RU/EN, Dynamic Type, VoiceOver и обеих темах. Предыдущие Apple-проверки выполнены до смены этих контрактов.
+
+Следующие записи перенесены из `main` и относятся к сборкам до переименования. Проверки watchOS 10 описывают прежнюю конфигурацию; текущий минимум FitLife — watchOS 26. Повторная SDK/signing/runtime-проверка FitLife остаётся открытой.
+
 ## Живой пульс Apple Watch / SE 1 — 2026-11-11
 
 - [x] Полный Linux-прогон: 293 Core tests, проверки реальных presentation models с заглушкой сенсора (немедленная доставка, порядок, старые сообщения, пауза/продолжение, разрыв, выбор Watch/AirPods и сохранение), ресурсы, локализация, parser и strict lint.
@@ -13,7 +23,7 @@
 ## watchOS 10+ / SE 1 и три режима сигнала — 2026-11-10
 
 - [x] Полный Linux-прогон: 292 Core tests, portable модели/синхронизация, ресурсы/локализация/синтаксис/strict lint. Новый phone-only план не имеет умного окна, не публикуется в Watch context, не принимает Watch events; all-devices не теряет телефонный резерв после `.armed`. Legacy raw values/настройки сохранены.
-- [x] XcodeGen и **device SDK build** схемы FitnessTrackerWatch с Xcode 27.2: `Watch10Delivery-20261111-device-build.log`, `BUILD SUCCEEDED`; реальные compiler targets `arm64_32-apple-watchos10.0` и `arm64-apple-watchos10.0`. Все Glass-вызовы Watch находятся в availability-ветви 26+; fallback нативный, без blur/AnyView. `Watch10Delivery-20261111-destinations.log` содержит физические Apple Watch SE в доступных destinations. Это не установка на устройство и не runtime-проверка watchOS 10.
+- [x] XcodeGen и **device SDK build** схемы FitLifeWatch с Xcode 27.2: `Watch10Delivery-20261111-device-build.log`, `BUILD SUCCEEDED`; реальные compiler targets `arm64_32-apple-watchos10.0` и `arm64-apple-watchos10.0`. Все Glass-вызовы Watch находятся в availability-ветви 26+; fallback нативный, без blur/AnyView. `Watch10Delivery-20261111-destinations.log` содержит физические Apple Watch SE в доступных destinations. Это не установка на устройство и не runtime-проверка watchOS 10.
 - [x] iPhone 17 Simulator / iOS 27.2: 101 Apple unit tests прошли в `Watch10DeliveryUI-20261111.xcresult`.
 - [x] Три UI-сценария выбора направлений, phone-only без Watch-приложения, Watch-only с сохранением резерва до подтверждения, редактирования/выключения прошли в `Watch10DeliveryUIComplete-20261111.xcresult`. Первый прогон выявил недоступный пункт Picker и слишком узкую область нажатия меню после смены режима; исправлено нативным Menu с кнопками и областью нажатия всей строки. Каталог 1167 RU/EN строк компилируется `xcstringstool`; снимок phone-only формы сохранён в attachments и просмотрен: подписи и пояснение помещаются, перекрытий нет.
 - [ ] Физические SE 1 / watchOS 10: signed установка с той же Team/companion ID, совместимые кнопки, журнал подходов/outbox, подготовка и холодный запуск умного окна, датчик движения/вибрация, выключение и повторная доставка events. На watchOS 26+ отдельно проверить Glass и тот же сценарий.
@@ -24,13 +34,13 @@
 - [x] Полный Linux-прогон: 291 Core tests и portable/static/resource checks; миграция старых настроек, расчёты по пропускам, 7/30 дней, свежесть Watch-подтверждения, отказ передачи, редактирование/выключение и очистка незавершённого системного сигнала после рестарта.
 - [x] XcodeGen, SDK-компиляция главного приложения/widgets/Watch и 101 Apple unit tests: Xcode 27.2, iPhone 17 Simulator / iOS 27.2. Первый артефакт `SleepInteractive-20261110.xcresult`.
 - [x] `SleepInteractiveFinal-20261110.xcresult`: 101 Apple unit tests и все три UI-сценария прошли — экран без разрешений, редактирование/выключение будильника с fake scheduler, выбор фазы и переключение на месяц с подписанными UI fixture данными. Первый прогон нашёл наследование accessibility identifier плашки её кнопками; явные группы `.contain` исправили проблему. Каталог 1156 RU/EN строк скомпилирован `xcstringstool`. Скриншоты просмотрены; длинная подпись показателя поправлена для переноса. Целевой сценарий на финальной сборке дополнительно прошёл в `SleepInteractiveLayoutRetry-20261110`: перед повтором удалены только собственные пересоздаваемые кэши и тестовая установка в выделенном симуляторе после ошибки `No space left on device` при delta-install. Повтор завершил UI-сценарий со статусом passed в журнале; его `.xcresult` не финализирован (`Info.plist` отсутствует), поэтому полным артефактом всех трёх сценариев остаётся `SleepInteractiveFinal-20261110.xcresult`. На диске Mac после повторной установки осталось около 100 МиБ; перед следующей сборкой требуется освободить место.
-- [ ] В успешном артефакте есть отдельный crash при старте `FitnessTrackerWidgets` (`D96C70D4-F732-44D8-9739-3FA990225FBA.ips`, `_EXRunningExtension._start`, без кадров кода сна). Этот прогон с `CODE_SIGNING_ALLOWED=NO` не подтверждает runtime виджетов; причина старта расширения отдельно не установлена.
+- [ ] В успешном артефакте есть отдельный crash при старте `FitLifeWidgets` (`D96C70D4-F732-44D8-9739-3FA990225FBA.ips`, `_EXRunningExtension._start`, без кадров кода сна). Этот прогон с `CODE_SIGNING_ALLOWED=NO` не подтверждает runtime виджетов; причина старта расширения отдельно не установлена.
 - [ ] Физические iPhone/Watch: «Только Apple Watch» недоступен без текущей связи; после подготовки на Watch резерв iPhone действительно отменён, часы вибрируют сами. Проверить пропадание связи, разрядку/снятие/блокировку Watch, остановку, повторную подготовку и смену устройства доставки. В этом режиме нет обещания автоматического возврата резерва при отказе часов.
 - [ ] Реальные записи HealthKit: выбор промежутка/фазы, 7/30 ночей и пустые дни; поля засыпания/эффективности скрыты при недостаточном покрытии. Проверить ночь через DST, разные источники, RU/EN, Dark, Dynamic Type и VoiceOver. Синтетические записи из изолированного UI-прогона не считаются проверкой HealthKit или ночных датчиков.
 
 ## Дневник сна и умное окно — 2026-11-10
 
-- [x] XcodeGen и SDK-сборка схемы FitnessTracker с главным приложением, widgets и Watch: Xcode 27.2 (27B52), iOS/watchOS Simulator SDK. Финальный артефакт `SleepDiaryFinal-20261110-build.log` после уточнения scheduled-запуска и системной остановки Watch; каталог 1097 RU/EN строк скомпилирован `xcstringstool` (`SleepDiaryFinal-20261110-localizations.log`).
+- [x] XcodeGen и SDK-сборка схемы FitLife с главным приложением, widgets и Watch: Xcode 27.2 (27B52), iOS/watchOS Simulator SDK. Финальный артефакт `SleepDiaryFinal-20261110-build.log` после уточнения scheduled-запуска и системной остановки Watch; каталог 1097 RU/EN строк скомпилирован `xcstringstool` (`SleepDiaryFinal-20261110-localizations.log`).
 - [x] 101 Apple unit tests на iPhone 17 Simulator / iOS 27.2 прошли в `SleepDiaryUI-20261110.xcresult`.
 - [x] Целевой UI-тест `testSleepDiaryOpensAlarmEditorWithoutHealthPermission` прошёл: вкладка и редактор открываются без выдачи HealthKit/AlarmKit-разрешений и установки настоящего будильника. Оба скриншота извлечены из `SleepDiaryUI-20261110.xcresult` и просмотрены: кнопки доступны, нижнее меню не перекрывает контент.
 - [ ] На физических iPhone/Watch: разрешить чтение сна, синхронизировать настоящие записи, сравнить длительность/фазы и источник с «Здоровьем». Проверить отсутствие данных и отказ в доступе, запись только времени в постели, выбранную дату, RU/EN, Dark, Dynamic Type и VoiceOver.
@@ -107,20 +117,20 @@ Xcode 27.2 (27B52), iPhone 17 Simulator / iOS 27.2: 101 Apple unit tests и ра
 
 Анатомическая классификация, ограничения региональной разметки и ссылки на источники: [MUSCLE_REGIONS.md](../Data/ExerciseLibrary/MUSCLE_REGIONS.md). Исходные UUID/primary muscle IDs и vendor hashes сохранены; файлы каталога воспроизводятся импортёром offline.
 
-В выборочных прогонах прошли все 12 затронутых UI-сценариев: 9 `TemplateVariationUITests`, 2 `SupersetUITests` и `testMusclePickerAllowsWholeGroupsAndIndividualMuscles`. Финальная изолированная копия находится на Mac в `/Users/isakov/.fitness-codex/validation/FitnessTracker`; результаты — в соседней папке `logs`: `Refinements-09.xcresult` содержит успешные 96 unit tests, `Refinements-14.xcresult` — проверку замены и свайпов, `Refinements-18.xcresult` — перенос с проверкой нумерации, свайпов и повторного открытия. Симулятор — iPhone 16 Pro / iOS 27.2, `FC23A5D7-A1CD-431C-9A97-4442FBF8D590`.
+В выборочных прогонах прошли все 12 затронутых UI-сценариев: 9 `TemplateVariationUITests`, 2 `SupersetUITests` и `testMusclePickerAllowsWholeGroupsAndIndividualMuscles`. Финальная изолированная копия находится на Mac в `/Users/isakov/.fitness-codex/validation/FitLife`; результаты — в соседней папке `logs`: `Refinements-09.xcresult` содержит успешные 96 unit tests, `Refinements-14.xcresult` — проверку замены и свайпов, `Refinements-18.xcresult` — перенос с проверкой нумерации, свайпов и повторного открытия. Симулятор — iPhone 16 Pro / iOS 27.2, `FC23A5D7-A1CD-431C-9A97-4442FBF8D590`.
 
 Чистая сборка также показала существующие предупреждения вне изменённых файлов: неиспользуемый результат `withAnimation` в `Components.swift` и чтение `locale` из Sendable-замыкания в `FoodEntryEditor.swift`. Новые изменения предупреждений не добавили; эти два участка отдельно не исправлялись.
 
 ## Вариации шаблонов, шаблон из истории и суперсеты — 2026-11-07
 
-- [x] `xcodegen generate` и `build-for-testing`: Xcode 27.2 (27B52), iOS Simulator SDK 27.2, отдельная копия проекта и симулятор FitnessTracker-Codex (iPhone 16 Pro). Сборка включает Apple unit/UI test targets.
+- [x] `xcodegen generate` и `build-for-testing`: Xcode 27.2 (27B52), iOS Simulator SDK 27.2, отдельная копия проекта и симулятор FitLife-Codex (iPhone 16 Pro). Сборка включает Apple unit/UI test targets.
 - [x] Все 3 `TemplateVariationUITests` прошли: выбор второго варианта перед стартом, независимое редактирование/сохранение/повторное открытие нового варианта, создание редактируемого шаблона из истории с добавлением/удалением упражнений без изменения прошлого выполнения. Клавиатура названия закрывается штатной кнопкой «Готово»; тесты обращаются к текущему редактору, учитывая элементы нижележащего экрана.
 - [x] Оба `SupersetUITests` прошли: выбор минимум двух упражнений, общая группа в обзоре, отдельные значения членов в кругах, A1→B1→A2→B2, отсутствие отдыха внутри круга и отдых после полного круга; кнопка «+» добавляет полный круг всем участникам. Проверены явное сохранение полностью выполненной тренировки и повторное открытие сохранённой группы из истории.
-- [x] Все 96 Apple unit tests прошли: SwiftData round-trip/архив групп и вариантов, отказ записи без частичного изменения тренировки/шаблона, предыдущие значения и черновики отдельно у каждого члена группы, переходы после внешнего выполнения и добавления круга, явный выбор участника группы. Прогон `FitnessTracker-Groups-Validation-06.xcresult` в отдельной копии проекта.
+- [x] Все 96 Apple unit tests прошли: SwiftData round-trip/архив групп и вариантов, отказ записи без частичного изменения тренировки/шаблона, предыдущие значения и черновики отдельно у каждого члена группы, переходы после внешнего выполнения и добавления круга, явный выбор участника группы. Прогон `FitLife-Groups-Validation-06.xcresult` в отдельной копии проекта.
 - [x] Реальные скриншоты UI tests просмотрены: выбор варианта, редактор варианта, новый шаблон из истории, группа в обзоре, отдельные поля участников, отдых после круга и сохранённая группа. Редактор/выбор проверены в Light, суперсеты — в Dark / Forest; размер симулятора iPhone 16 Pro 402×874 pt.
 - [ ] Физический iPhone, большие размеры Dynamic Type, VoiceOver, узкие экраны и ручные жесты. Отдельно остаются paired Watch и Live Activity runtime; сборка Watch/widgets с Apple SDK входит в app build, но не заменяет эти проверки.
 
-Итоговый прогон `FitnessTracker-Groups-Validation-06.xcresult`: 96 Apple unit tests и 5 UI tests, все успешны. Дополнительный прогон `FitnessTracker-Groups-Validation-07.xcresult` повторил завершение/сохранение/открытие суперсета и проверил геометрию readonly-колонок: центры веса и повторений у обоих участников совпадают с точностью 2 pt; тест прошёл. Тестовые данные загружаются только при совместных аргументах `--ui-testing` и `--ui-testing-training-groups`, используют MemoryWorkoutRepository и отдельные defaults. Рабочая копия пользователя и её данные не менялись.
+Итоговый прогон `FitLife-Groups-Validation-06.xcresult`: 96 Apple unit tests и 5 UI tests, все успешны. Дополнительный прогон `FitLife-Groups-Validation-07.xcresult` повторил завершение/сохранение/открытие суперсета и проверил геометрию readonly-колонок: центры веса и повторений у обоих участников совпадают с точностью 2 pt; тест прошёл. Тестовые данные загружаются только при совместных аргументах `--ui-testing` и `--ui-testing-training-groups`, используют MemoryWorkoutRepository и отдельные defaults. Рабочая копия пользователя и её данные не менялись.
 
 ## Объединённый дневник, питание и сканер упаковок
 
@@ -142,7 +152,7 @@ Xcode 27.2 (27B52), iPhone 17 Simulator / iOS 27.2: 101 Apple unit tests и ра
 
 ## Тема и оформление Live Activity / Dynamic Island
 
-- [ ] Выполнить `xcodegen generate`: FitnessTrackerWidgets теперь включает Apple/Design/FitnessColorTheme.swift. Собрать приложение и extension с iOS 26 SDK. Проверить четыре новых AccentOnDark assets и существующий индиго; Watch targets не менялись.
+- [ ] Выполнить `xcodegen generate`: FitLifeWidgets теперь включает Apple/Design/FitnessColorTheme.swift. Собрать приложение и extension с iOS 26 SDK. Проверить четыре новых AccentOnDark assets и существующий индиго; Watch targets не менялись.
 - [ ] Запустить тренировку с каждой из пяти тем и переключать тему во время сессии. Lock Screen, compact/minimal/expanded Island и недельный виджет получают новый акцент. На чёрной поверхности Island используется светлый вариант темы даже при Light appearance; отсутствующий/неизвестный идентификатор даёт тему «Лес». Системное тонирование виджетов проверить отдельно.
 - [ ] Lock Screen: адаптивная поверхность с мягким тонированием и контуром по системному скруглению; заголовок и статус сверху, время/следующий подход в центре, прогресс и действия снизу. Контур не перекрывает кнопки. Проверить узкий экран, длинные названия, RU/EN, Dynamic Type, Light/Dark, Increase Contrast, Reduce Transparency, Reduce Motion и Always-On. Проверить, что система не обрезает содержимое (обычная Lock Screen presentation ограничена 160 pt).
 - [ ] Таймер времени и линия обратного отсчёта отдыха продолжаются после блокировки без polling приложения; на нуле не идут вверх. Пауза замораживает время, resume/skip-rest сохраняют прежнюю идемпотентность. При отсутствии пульса лишняя пустая строка не показывается, устаревшие показания не выглядят свежими. Изменение названия тренировки обновляет заголовок активности.
@@ -160,7 +170,7 @@ Xcode 27.2 (27B52), iPhone 17 Simulator / iOS 27.2: 101 Apple unit tests и ра
 
 ## Питание и фото в общем дневнике
 
-- [ ] Выполнить `xcodegen generate`: добавлены Nutrition/Food Swift-файлы, URLSession-клиент, ImageIO processor и Apple NutritionTests. Собрать FitnessTracker, тестовые targets и существующие Watch/widgets схемы с iOS/watchOS 26 SDK. Linux parser не проверяет Apple API types.
+- [ ] Выполнить `xcodegen generate`: добавлены Nutrition/Food Swift-файлы, URLSession-клиент, ImageIO processor и Apple NutritionTests. Собрать FitLife, тестовые targets и существующие Watch/widgets схемы с iOS/watchOS 26 SDK. Linux parser не проверяет Apple API types.
 - [ ] В дневнике открыть «Питание», добавить вручную продукт с 200 ккал / Б10 / Ж8 / У22 на 100 г, порция 150 г: результат 300 ккал / Б15 / Ж12 / У33. Проверить граммы и миллилитры отдельно, десятичную запятую, пустой/неверный ввод и запрет сохранения некорректной порции. Все значения ноль на упаковке разрешены; отсутствующие КБЖУ не подменяются нулём.
 - [ ] Проверить поиск Open Food Facts по названию RU/EN и номеру штрихкода (ручной ввод номера или отдельный VisionKit-сканер), HTTPS images, источники и лицензии. Поиск запускается явно, без запроса на каждый символ; 429/timeout/отсутствие сети дают ошибку и ручной ввод, битый продукт не скрывает остальные результаты, отменённая/старая выдача не заменяет новую. Нет гарантии полноты базы или наличия фото. В продуктах с неоднозначными единицами сверить выбор с упаковкой.
 - [ ] Завтрак/обед/ужин/перекусы, несколько ингредиентов в блюде, заметка, сохранение блюда и повтор на другую дату. Сохранённое блюдо остаётся исторической записью и может использоваться для повтора; редактирование копии не меняет оригинал. Проверить календарный день, часовой пояс/DST, смену даты и возврат в foreground; цель не назначается автоматически и не вычитает калории тренировок.
@@ -206,7 +216,7 @@ Xcode 27.2 (27B52), iPhone 17 Simulator / iOS 27.2: 101 Apple unit tests и ра
 - [ ] При фокусе поле сохраняет показанное число; первая цифра, десятичный разделитель или вставка заменяют его целиком. Следующие символы дописываются. Повторное открытие снова включает замену, а ручное перемещение курсора/выделение сохраняют обычное редактирование. Проверить C/backspace, аппаратную клавиатуру, фунты и сохранение точности неизменённого веса.
 - [ ] Запустить testNewWorkoutTargetsAreEmptyAndRequireManualInput, testPreviousWorkoutValuesPrefillTargetsAndFirstDigitReplacesFocusedValue, testNumberPadClearsValuesAndCopiesFollowingRepetitions и AppStore testOrdinaryTemplateStartPersistsEmptyTargetsAndRetainsTheSavedTemplate. Apple SDK и UI runtime на Linux не проверяются.
 
-Проверка 2026-11-06: полный `scripts/check-linux.sh` прошёл (231 Core-тест и portable checks). На Mac в `FitnessTracker Personal` / `PersonalDebug`, iPhone 16 Pro Simulator с iOS 27.2 прошли 7 `PresentationModelTests` и три UI-сценария: предыдущие значения с заменой первого ввода и повторным фокусом, курсор/очистка/копирование цифровой панели, заметка через свайп/контекстное меню с вставкой и удалением подхода. Отдельный прогон подтвердил свайп, начинающийся непосредственно на поле ввода, без открытия цифровой панели. Снимки компактной таблицы и отступа заметки просмотрены. VoiceOver, большие размеры Dynamic Type и другие устройства остаются отдельными ручными проверками.
+Проверка 2026-11-06: полный `scripts/check-linux.sh` прошёл (231 Core-тест и portable checks). На Mac в `FitLife Personal` / `PersonalDebug`, iPhone 16 Pro Simulator с iOS 27.2 прошли 7 `PresentationModelTests` и три UI-сценария: предыдущие значения с заменой первого ввода и повторным фокусом, курсор/очистка/копирование цифровой панели, заметка через свайп/контекстное меню с вставкой и удалением подхода. Отдельный прогон подтвердил свайп, начинающийся непосредственно на поле ввода, без открытия цифровой панели. Снимки компактной таблицы и отступа заметки просмотрены. VoiceOver, большие размеры Dynamic Type и другие устройства остаются отдельными ручными проверками.
 
 ## Группы мышц шаблона
 
@@ -328,7 +338,7 @@ Xcode 27.2 (27B52), iPhone 17 Simulator / iOS 27.2: 101 Apple unit tests и ра
 - [ ] В Bluetooth показывается имя реально выбранного устройства, а не название профиля; GT 6 Pro и Mi Band остаются доступны без whitelist по имени.
 - [ ] После `xcodegen generate` собираются HealthMetricsReader, BluetoothHeartRateService, TrackerView и график истории; проверить Swift 6 SDK actor annotations у delegate/queries.
 - [ ] При первом открытии «Трекер» permissions не запрашиваются. Read permissions появляются по кнопке; Bluetooth — по поиску. Выбор режима сохраняется, обе локали RU/EN проверены.
-- [ ] Health: Mi Fitness → «Здоровье» → FitnessTracker, шаги/энергия/сон/пульс, реальные source names, дата/часовой пояс/DST, частичные права и пустые данные без ложного диагноза «доступ запрещён».
+- [ ] Health: Mi Fitness → «Здоровье» → FitLife, шаги/энергия/сон/пульс, реальные source names, дата/часовой пояс/DST, частичные права и пустые данные без ложного диагноза «доступ запрещён».
 - [ ] Импорт пульса завершённой тренировки: только heart-rate permission, временные границы/паузы, empty/retry/cancellation; существующая Bluetooth-запись не заменяется.
 - [ ] Mi Band 10 с включённым Share HR обнаруживается как Heart Rate Service, подключается и присылает notifications 2A37. Проверить другую Bluetooth HR модель при наличии.
 - [ ] Bluetooth denied/off/unsupported, timeout поиска/подключения, contact loss, отключение и явное повторное подключение; старые callbacks от прошлого peripheral не изменяют текущее подключение.
@@ -336,33 +346,25 @@ Xcode 27.2 (27B52), iPhone 17 Simulator / iOS 27.2: 101 Apple unit tests и ра
 - [ ] Заблокировать iPhone, проверить уведомления BLE и запись в фоне. Force quit/reboot не обещают продолжение; после открытия checkpoints доступны, подключение восстанавливается вручную.
 - [ ] Checkpoint/finish/background expiration: ограниченная работа, отмена pending tasks; ошибка сохранения видна, повтор сохраняет последние точки.
 - [ ] История: график со средним/максимумом и разрывами, длительная запись, Dynamic Type, VoiceOver и смена темы. Пройденный UI-тест не заменяет проверку радио.
-- [ ] Локальные файлы исключены из backup/CloudKit/App Group и защищены на iOS; JSON/.fitnesstracker, widgets/Live Activity/Watch не содержат новых sensor payloads.
+- [ ] Локальные файлы исключены из backup/CloudKit/App Group и защищены на iOS; JSON/.fitlife, widgets/Live Activity/Watch не содержат новых sensor payloads.
 - [ ] Отмена/удаление тренировки удаляет локальный sidecar; повреждённая запись сохраняется с ошибкой, отказ сохранения/чтения не создаёт пустую базу.
 - [ ] Запустить `testTrackerOffersBothModesWithoutRequestingPermissionsOnOpen` и весь существующий UI suite. На Linux UI-тест не запускался.
 
 Инструкция и точные ограничения: [MI_BAND.md](MI_BAND.md).
 
-## Переименование в FitnessTracker
+## Текущие идентификаторы FitLife
 
-- [ ] `xcodegen generate` создаёт FitnessTracker.xcodeproj со схемами FitnessTracker Personal / FitnessTracker / FitnessTrackerWatch / FitnessTrackerWidgets; package FitnessTrackerCore и все test targets разрешаются.
-- [ ] Обновление поверх прежней установки с теми же Team/Bundle ID/App Group/CloudKit сохраняет историю, настройки, активную сессию, локальный пульс и Watch outbox; store не удаляется и не создаётся пустым при ошибке.
-- [ ] Имя FitnessTracker видно на iPhone/Watch, в widgets, permissions, меню и обоих языках.
-- [ ] Установленный виджет обновляется с прежним kind; проверить Live Activity до/после обновления и legacy deep links.
-- [ ] `.fitnesstracker` / `.json` экспортируют новый brand и metadata, старые `.fitsession` и JSON version 1 открываются через Files/AirDrop без изменения данных и новых дубликатов.
-- [ ] Health export существующей тренировки не создаёт дубликат после переименования.
-- [ ] Старые и новые переменные Local.xcconfig дают те же реальные signing identifiers; новых профилей из-за имени продукта не требуется.
-
-Порядок обновления: [RENAME.md](RENAME.md).
+Актуальные проверки смены идентификаторов находятся в начале документа. Контракты, требования к новой конфигурации и отсутствие автоматического переноса описаны в [RENAME.md](RENAME.md).
 
 ## Сборка и тесты (общие сценарии)
 
 - [ ] `xcodegen generate`: spec, local SPM dependency, пять targets и schemes.
-- [ ] FitnessTracker Debug/Release compilation: SwiftUI overloads, SwiftData macros, Swift 6 concurrency.
+- [ ] FitLife Debug/Release compilation: SwiftUI overloads, SwiftData macros, Swift 6 concurrency.
 - [ ] ActiveWorkoutView: Section/TimelineView компилируются с @AppStorage weightUnit; смена кг/фунтов обновляет сводку, skip-rest вызывает Core action с expectedEnd и не сбрасывает новый отдых.
-- [ ] FitnessTracker Personal: PersonalDebug/PersonalRelease используют PersonalTeam.entitlements без CloudKit/APNs; установлены и запускаются с Personal Team, включая widgets/watch.
+- [ ] FitLife Personal: PersonalDebug/PersonalRelease используют PersonalTeam.entitlements без CloudKit/APNs; установлены и запускаются с Personal Team, включая widgets/watch.
 - [ ] Personal build с сохранённым cloudSync=true всё равно открывает локальный store и не регистрирует APNs; предпочтение не стирается. Полная схема возвращает iCloud controls.
-- [ ] FitnessTrackerWidgets: extension-safe API, shared attributes, assets и Info.plist.
-- [ ] FitnessTrackerWatch: single-target application, icon, deployment, companion ID, embedding.
+- [ ] FitLifeWidgets: extension-safe API, shared attributes, assets и Info.plist.
+- [ ] FitLifeWatch: single-target application, icon, deployment, companion ID, embedding.
 - [ ] iOS unit tests: SwiftData upsert/delete/validation и AppStore DI/export behavior.
 - [ ] UI tests: свободная тренировка → упражнение → подход → завершение → история; сворачивание и продолжение.
 - [ ] Archive, entitlements и privacy report проверены перед распространением.
@@ -403,7 +405,7 @@ Xcode 27.2 (27B52), iPhone 17 Simulator / iOS 27.2: 101 Apple unit tests и ра
 
 ## Дополнительно: фон и интерактивная Dynamic Island
 
-- [ ] Перегенерировать проект: FitnessTrackerCore связан с widget extension, FITNESS_TRACKER_APP определён только для main app.
+- [ ] Перегенерировать проект: FitLifeCore связан с widget extension, FITLIFE_APP определён только для main app.
 - [ ] Проверить App Intents metadata extraction обоих targets и dispatch LiveActivityIntent в main app.
 - [ ] Начать тренировку и немедленно свернуть: Activity.request не откладывается за async notification work.
 - [ ] На настоящем iPhone: секундомер и countdown продолжаются при suspension, countdown останавливается на нуле.
@@ -449,12 +451,12 @@ Xcode 27.2 (27B52), iPhone 17 Simulator / iOS 27.2: 101 Apple unit tests и ра
 
 Показатели калорий, веса и замеров из скриншотов не подставляются как данные пользователя. Фото/GIF оригинального приложения не извлекаются. Полная карта: [REFERENCE_DESIGN.md](REFERENCE_DESIGN.md).
 
-## JSON и .fitnesstracker
+## JSON и .fitlife
 
-- [ ] После генерации проверить Info.plist: exported UTI com.fitnesstracker.archive → public.json, extension fitnesstracker, Viewer/Owner; public.json → Alternate; open-in-place enabled.
-- [ ] Сохранить полный архив и отдельную тренировку в обоих форматах. Фактические расширения `.json` и `.fitnesstracker` соответствуют выбору; UTF-8, русский текст, дробные даты и IDs сохраняются.
+- [ ] После генерации проверить Info.plist: exported UTI com.fitlife.archive → public.json, extension fitlife, Viewer/Owner; public.json → Alternate; open-in-place enabled.
+- [ ] Сохранить полный архив и отдельную тренировку в обоих форматах. Фактические расширения `.json` и `.fitlife` соответствуют выбору; UTF-8, русский текст, дробные даты и IDs сохраняются.
 - [ ] Импорт из локальных «Файлов», iCloud Drive и стороннего file provider; старый JSON одной тренировки также читается.
-- [ ] Open in FitnessTracker/AirDrop: foreground, background и cold launch; startup store failure → retry не теряет URL.
+- [ ] Open in FitLife/AirDrop: foreground, background и cold launch; startup store failure → retry не теряет URL.
 - [ ] Внешний файл во время active session, detail, создания/редактирования плана, editor/picker: один preview без потери черновиков и активной тренировки.
 - [ ] До подтверждения база не меняется. Отмена picker/read/preview не импортирует данные; отказ save оставляет preview для явного retry.
 - [ ] Повторный импорт, совпадающий UUID с другими данными, новая активная сессия при существующей: сводка и фактически пропущенные записи совпадают с правилами.
@@ -476,7 +478,7 @@ Xcode 27.2 (27B52), iPhone 17 Simulator / iOS 27.2: 101 Apple unit tests и ра
 - [ ] Ошибка чтения личного repository при выходе оставляет демо доступным и показывает ошибку; успешный retry возвращает личную историю. Запустить новые AppStoreTests.
 - [ ] В демо нет запросов HealthKit/Bluetooth, Live Activity, уведомлений отдыха и публикации виджета. Ранее опубликованная личная сводка не заменяется демо. Проверить завершение предыдущих updates перед входом.
 - [ ] При доставке Watch outbox в демо подтверждение не отправляется; после возврата и повторной доставки запись сохраняется в личном профиле один раз.
-- [ ] JSON/`.fitnesstracker` экспорт демо содержит явные имена и заметки; импорт в демо не затрагивает SwiftData/CloudKit. На втором устройстве демо не появляется.
+- [ ] JSON/`.fitlife` экспорт демо содержит явные имена и заметки; импорт в демо не затрагивает SwiftData/CloudKit. На втором устройстве демо не появляется.
 - [ ] Запустить UI-тест открытия/выхода; проверить переходы по вкладкам после сброса навигации и повторное открытие/закрытие профиля.
 
 [Состав и ограничения демо](DEMO_DATA.md).
@@ -518,7 +520,7 @@ Xcode 27.2 (27B52), iPhone 17 Simulator / iOS 27.2: 101 Apple unit tests и ра
 - [ ] Active/paused workout: указать/изменить/убрать вес; после завершения он виден в общей истории. Завершённую тренировку можно исправить. Повтор не копирует старый вес; active/cancelled данные не показываются как завершённые измерения.
 - [ ] Перезапуск личного store сохраняет записи и поля веса; ошибка save/read не меняет UI snapshot и не показывает успех. Новые записи используют прежний ModelContext/CloudKit store без очистки данных.
 - [ ] В демо изменения веса не затрагивают личные источники; выход/сброс/перезапуск возвращают личный профиль. При открытом редакторе смена профиля и второе archive sheet не конфликтуют. Alert не показывается за sheet.
-- [ ] Архив v2 round-trip: только вес, смешанные данные и одна тренировка; v1/legacy Workout мигрируют с пустыми полями веса. Missing/corrupt v2 collection, дубликаты, неверный вес/дата отклоняются атомарно. Повторный импорт не заменяет данные.
+- [ ] Архив FitLife v4 round-trip: только вес, смешанные данные и одна тренировка. Другие версии, JSON без оболочки, missing/corrupt коллекции, дубликаты и неверный вес/дата отклоняются атомарно. Повторный импорт не заменяет данные.
 - [ ] CloudKit на двух устройствах и повторная доставка Watch: правки веса на телефоне не стираются. Вес не передаётся автоматически в HealthKit, виджет или Watch.
 - [ ] Запустить новые PersistenceTests/AppStoreTests и UI tests: testBodyWeightCanBeRecordedFromResults, testBodyWeightIsSavedOnAnActiveWorkout, testHistoryMonthMenuPreservesCalendarNavigation. На Linux эти Apple-тесты не запускались.
 
@@ -526,14 +528,14 @@ Xcode 27.2 (27B52), iPhone 17 Simulator / iOS 27.2: 101 Apple unit tests и ра
 
 ## Импорт CSV
 
-- [ ] Обновить проект; picker разрешает CSV, Files/Open in FitnessTracker и iCloud Drive открывают оба варианта экспорта с ПРОПУЩЕН/ПРОПУЩЕННЫЙ. Нет дополнительных capabilities.
+- [ ] Обновить проект; picker разрешает CSV, Files/Open in FitLife и iCloud Drive открывают оба варианта экспорта с ПРОПУЩЕН/ПРОПУЩЕННЫЙ. Нет дополнительных capabilities.
 - [ ] До подтверждения repository не меняется. Импортировать оба файла по очереди; повторный импорт пропускает прежние UUID. Разная пунктуация не объединяет разные названия. Проверить существующие личные записи и demo isolation.
 - [ ] Предпросмотр показывает число записей, текущий timezone и неизвестную длительность. Даты на границе суток/года/DST корректны. Если source TZ отличается, установить нужный timezone устройства до импорта.
 - [ ] Множитель ×2 сохраняет вес одного снаряда и удваивает только объём; display/repeat/template/JSON round-trip сохраняют множитель. Ноль повторений остаётся невыполненным; completeSet не разрешает завершить нулевой подход.
 - [ ] Нет общей длительности: дневник/detail показывают «—», HealthKit button disabled и authorization не запрашивается. Repeat запускает новый обычный таймер. Не генерируются body weight, калории или паузы.
 - [ ] Кавычки, UTF-8 BOM, CRLF, многострочные заметки, десятичная запятая, повторяющиеся одинаковые подходы и группы более 30 подходов сохраняются. Некорректная строка отклоняет весь импорт с номером строки/полем без приватных значений.
 - [ ] Ошибка чтения/security-scoped URL, cancellation и отказ SwiftData save оставляют исходные данные/preview для повтора. Применение идёт одним save/rollback.
-- [ ] Новый экспорт v4 переносит multiplier/unknown-duration/zero reps и drops; v1/v2/v3 и прежний одиночный JSON читаются с прежней семантикой. Старое приложение отклоняет v4 вместо неверного расчёта объёма.
+- [ ] Текущий архив FitLife v4 переносит multiplier/unknown-duration/zero reps и drops; другие версии и одиночный JSON без оболочки отклоняются до записи в хранилище.
 - [ ] RU/EN errors и подсказки, VoiceOver, длинные имена, sheet/alert routing; запустить новые ArchiveTransferTests и AppStoreTests. На Linux эти Apple-тесты не выполнялись.
 
 [Документация CSV](CSV_IMPORT.md).
@@ -551,7 +553,7 @@ Xcode 27.2 (27B52), iPhone 17 Simulator / iOS 27.2: 101 Apple unit tests и ра
 - [ ] Builder отбрасывается без finishWorkout. После stop/finish/cancel нет автоматически сохранённого HKWorkout; сами системные HR samples могут сохраняться HealthKit. Явный экспорт из истории сохраняет одну тренировку и остаётся идемпотентным.
 - [ ] При AirPods + Apple Watch iOS выбирает источник: интерфейс не обещает эксклюзивный AirPods source. Старые AirPods без HR sensors не показывают фиктивных данных.
 - [ ] График истории сохраняет origin; кнопка позднего импорта скрыта для live records. Новый запуск не заменяет существующую запись Bluetooth/исторического Health. Старые sidecars без origin читаются.
-- [ ] RU/EN, VoiceOver, Dynamic Type, реальные Health permission purpose strings; демо-профиль не запускает HealthKit. Пульс не попадает в CloudKit/JSON/widgets FitnessTracker; синхронизация Health управляется iOS отдельно.
+- [ ] RU/EN, VoiceOver, Dynamic Type, реальные Health permission purpose strings; демо-профиль не запускает HealthKit. Пульс не попадает в CloudKit/JSON/widgets FitLife; синхронизация Health управляется iOS отдельно.
 
 Статусы и официальные источники: [AIRPODS.md](AIRPODS.md).
 
@@ -577,7 +579,7 @@ Xcode 27.2 (27B52), iPhone 17 Simulator / iOS 27.2: 101 Apple unit tests и ра
 - [ ] При выполнении каждого этапа сохраняются реальные вес/повторы/дата. Промежуточного отдыха нет, после последнего — один отдых. Пауза, пропуск отдыха, внешние Live Activity actions, сворачивание/восстановление и быстрый двойной tap безопасны.
 - [ ] Ошибка SwiftData save сохраняет draft/selection для повтора и не показывает невыполненный этап как выполненный. Запустить testDropStagesAndMixedTemplateTargetsRoundTrip и testWarmupAndDropStagesCanBeConfiguredBeforeCompletion; эти тесты на Linux не запускались.
 - [ ] Завершить посреди группы: история различает выполненное и «Не выполнено», объём/повторы считают только факт. Группа — один подход; active/Live Activity progress ждёт её завершения. Разминка не входит в рабочий объём и рекорды.
-- [ ] Повтор, mixed template, JSON/.fitnesstracker v4, старые v1–v3, legacy .fitsession: данные и IDs сохраняются при переносе; новые IDs/пустые completion timestamps при новом запуске. В шаблонах mixed targets отображаются и не перезаписываются uniform controls.
+- [ ] Повтор, mixed template и текущий JSON/.fitlife v4: данные и IDs сохраняются при переносе; новые IDs/пустые completion timestamps при новом запуске. В шаблонах mixed targets отображаются и не перезаписываются uniform controls.
 - [ ] Watch logger следует очередному этапу, Live Activity/Dynamic Island показывают этап и не переходят к другому упражнению раньше времени. Проверить старый snapshot без optional stage fields, доставку Watch и CloudKit на двух актуальных клиентах.
 - [ ] RU/EN, кг/фунты, десятичный разделитель, Dynamic Type/VoiceOver, narrow screen, Dark/Increase Contrast/Reduce Transparency, много этапов и длинные ошибки.
 
@@ -680,7 +682,7 @@ Requires Xcode validation. Новых файлов и изменений project
 - [ ] Нижняя панель тренировки повторяет геометрию панели упражнения с пользовательского второго скриншота: общий компонент WorkoutActionSurface, подъём 16 pt, одинаковые отступы и диаметр центра 72/64 pt. Боковые кнопки без индивидуальных обводок, значки прежнего размера, четыре равные области шириной не менее 60 pt. Нижние края совпадают с краем центральной кнопки, поэтому центр приподнят на 8/6 pt относительно боковых значков. Внешние поля 8 pt, нижний отступ у экрана как у упражнения; на 320 pt ряд помещается за счёт внутренних горизонтальных отступов, без второго ряда. Кольцо анимирует долю выполненных этапов, а готовность меняет центральную иконку. В конце списка кнопок добавления и отмены нет, вес тела и заметка сохранены. Запустить testFreeWorkoutCanAddTemplatesWithoutRestarting и обновлённый testLogSetAndFindWorkoutInHistory: он сравнивает высоту двух панелей и диаметры кругов и сохраняет оба скриншота в test result. Фактическая геометрия и эти XCTest assertions требуют запуска в Xcode; Linux parser/lint их не проверяют.
 - [ ] Отмена рядом с паузой и в верхнем троеточии открывает один диалог. «Отмена» в диалоге сохраняет сессию, упражнения и паузу; подтверждение отменяет сессию. Проверить active/paused, отказ сохранения и отсутствие конфликтов с другими sheets. Запустить testWorkoutControlCancellationPreservesPausedSessionUntilConfirmation; на Linux UI tests не запускались.
 - [ ] В toolbar под названием закреплён HH:mm:ss вместо дня недели/времени начала; секунды обновляются, часы дополнены нулём. Пауза останавливает отсчёт, продолжение и восстановление учитывают сохранённые интервалы. Сводка активной тренировки показывает объём/подходы без дублирования времени; история сохраняет время.
-- [x] 2026-11-06: testLogSetAndFindWorkoutInHistory выполнен через SSH на Mac, Xcode 27.2, схема FitnessTracker Personal / PersonalDebug, iPhone 16 Pro / iOS 27.2 Simulator, 402×874, dark/forest. Результат: 1 passed, 0 failed; проверены равные боковые области, нижнее выравнивание, высота панелей и диаметр кругов, затем ввод подхода, пауза, завершение и история. Два PNG из успешного xcresult просмотрены и сопоставлены с пользовательским референсом. Это не проверка VoiceOver, остальных размеров/Dynamic Type и всех UI-тестов.
+- [x] 2026-11-06: testLogSetAndFindWorkoutInHistory выполнен через SSH на Mac, Xcode 27.2, схема FitLife Personal / PersonalDebug, iPhone 16 Pro / iOS 27.2 Simulator, 402×874, dark/forest. Результат: 1 passed, 0 failed; проверены равные боковые области, нижнее выравнивание, высота панелей и диаметр кругов, затем ввод подхода, пауза, завершение и история. Два PNG из успешного xcresult просмотрены и сопоставлены с пользовательским референсом. Это не проверка VoiceOver, остальных размеров/Dynamic Type и всех UI-тестов.
 
 ## Панель конкретного упражнения: три зоны
 
@@ -772,7 +774,7 @@ Requires Xcode validation. Новых файлов и изменений project
 ## Аккаунт и серверные резервные копии
 
 - [ ] В iOS WebAuthenticationSession и Safari проверить новый дизайн Auth: светлая/тёмная тема, RU/EN, 320–430 pt, большой системный текст, VoiceOver и клавиатура/autofill. Тема и язык сохраняются между login/register/account; пароли не попадают в localStorage. Кнопки показа пароля, подсказки 12–128/4 разных символа, ошибки/повтор, passkey, серые ненастроенные провайдеры и возврат в приложение доступны. Linux Chromium с виртуальным authenticator не заменяет проверку Apple runtime.
-- [ ] После `xcodegen generate` проверить обе схемы: `FitnessTracker Personal` получает `customScheme`, полная `FitnessTracker` — `https`. Согласовать reverse-DNS схему с серверным `IOS_PERSONAL_CALLBACK_SCHEME`; проверить открытие браузера, пароль/passkey, возврат, повтор входа, управление аккаунтом и создание копии на физическом iPhone с бесплатной Personal Team. URL сервера и token endpoint всегда HTTPS; client IDs/Keychain items различаются. Отмена показывает нейтральное сообщение, повторное нажатие снова открывает браузер. Открытие callback-ссылки вне активной WebAuthenticationSession не запускает импорт и не создаёт сессию.
+- [ ] После `xcodegen generate` проверить обе схемы: `FitLife Personal` получает `customScheme`, полная `FitLife` — `https`. Согласовать reverse-DNS схему с серверным `IOS_PERSONAL_CALLBACK_SCHEME`; проверить открытие браузера, пароль/passkey, возврат, повтор входа, управление аккаунтом и создание копии на физическом iPhone с бесплатной Personal Team. URL сервера и token endpoint всегда HTTPS; client IDs/Keychain items различаются. Отмена показывает нейтральное сообщение, повторное нажатие снова открывает браузер. Открытие callback-ссылки вне активной WebAuthenticationSession не запускает импорт и не создаёт сессию.
 - [ ] Собрать `AccountBackupView` без `unable to type-check this expression in reasonable time`: форма, секции, строки копий, диалог и обработчик действий теперь проверяются как отдельные выражения. Проверить экран до/после входа, пустой/заполненный список, загрузку, ошибку/retry, отмену входа и подтверждения upload/delete/delete account. На Linux выполнены swift-format strict lint и проверки структуры/локализации; Apple SDK type checking и UI требуют Xcode.
 - [ ] Проверить `AccountBackupTests.testAuthorizationRequestsProtocolScopesWithoutBackendPermissions`: вход и управление аккаунтом запрашивают только `profile offline_access`. На обновлённом сервере загрузить/скачать/удалить свою копию без scope `backups`; чужая копия недоступна, выход немедленно отзывает доступ. Права на операции определяет Backend. Новый XCTest на Linux не запускался.
 
@@ -788,7 +790,7 @@ Requires Xcode validation. Новых файлов и изменений project
 
 ## HTTPS callback, email и passkey
 
-- [ ] Настроить настоящий App ID и Associated Domains; проверить `webcredentials.apps` в AASA и provisioning полной схемы FitnessTracker.
+- [ ] Настроить настоящий App ID и Associated Domains; проверить `webcredentials.apps` в AASA и provisioning полной схемы FitLife.
 - [ ] На iPhone iOS 26 проверить `.https(host:path:)`, точный callback origin/path, state/issuer, отмену и повтор; старый custom scheme не завершает OAuth. Вызов `WebAuthenticationSession.authenticate` передаёт обязательный `additionalHeaderFields: [:]` согласно [сигнатуре Apple](https://developer.apple.com/documentation/authenticationservices/webauthenticationsession/authenticate%28using%3Acallback%3Apreferredbrowsersession%3Aadditionalheaderfields%3A%29); проверить компиляцию с настоящим SDK.
 - [ ] В системном браузере зарегистрироваться с паролем и отдельно с passkey без пароля; до подтверждения email вход запрещён. Открыть письмо, явно подтвердить адрес, вернуться в окно приложения, продолжить вход и проверить relaunch. Прежний аккаунт входит без подтверждения; при SMTP off новая регистрация серая, старый вход работает.
 - [ ] Добавить passkey к существующему аккаунту, отменить Face ID/PIN, повторить операцию, удалить ключ и проверить отзыв на другом устройстве; последний способ входа защищён.

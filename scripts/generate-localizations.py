@@ -26,7 +26,7 @@ def generate():
       'NSHealthShareUsageDescription':('Читать сон, пульс и другие показатели из «Здоровья» для дневника и статистики; по вашему запросу — данные тренировки для приёма измерений Apple Watch или AirPods Pro 3.','Read sleep, heart rate and other Health metrics for your diary and statistics; when requested, read workout data to receive Apple Watch or AirPods Pro 3 measurements.'),
       'NSHealthUpdateUsageDescription':('Включать системную тренировку для получения пульса Apple Watch или AirPods Pro 3 по вашему запросу. Завершённая тренировка сохраняется в «Здоровье» только при отдельном экспорте.','Start a system workout to receive Apple Watch or AirPods Pro 3 heart rate when you request it. The completed workout is saved to Health only through a separate export.'),
       'NSBluetoothAlwaysUsageDescription':('Подключать Bluetooth-пульсометр, например Mi Band или HUAWEI WATCH, и записывать пульс во время тренировки.','Connect a Bluetooth heart rate monitor, such as a Mi Band or HUAWEI WATCH, and record heart rate during your workout.'),
-      'CFBundleDisplayName':('FitnessTracker','FitnessTracker')
+      'CFBundleDisplayName':('FitLife','FitLife')
     }
     write(ROOT/'Resources/InfoPlist.xcstrings',catalog(info))
     print(f'Generated {len(pairs)} RU/EN UI strings and {len(info)} Info.plist strings.')

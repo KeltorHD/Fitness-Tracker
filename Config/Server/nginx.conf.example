@@ -1,4 +1,4 @@
-# Include inside the existing Nginx http context (for example, conf.d/fitnesstracker.conf).
+# Include inside the existing Nginx http context (for example, conf.d/fitlife.conf).
 # Example hosts may share a certificate covering both names (for example, *.example.com).
 # Set both TLS paths to its actual location on your host; the paths below are examples.
 # If AUTH_HTTP_PORT/API_HTTP_PORT change, update the corresponding proxy_pass ports below.

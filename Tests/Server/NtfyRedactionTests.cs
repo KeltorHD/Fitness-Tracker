@@ -1,9 +1,9 @@
 using System.Text.Json;
-using FitnessTracker.ServerLogging;
+using FitLife.ServerLogging;
 using Microsoft.Extensions.Configuration;
 using Xunit;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Проверяет реальные варианты секретов в текстовых, JSON и callback логах.</summary>
 [Trait("Category", "Unit")]
@@ -12,7 +12,7 @@ public sealed class NtfyRedactionTests
     /// <summary>Динамические секреты скрываются даже без наличия соответствующего значения в IConfiguration.</summary>
     [Theory]
     [InlineData("Authorization: Bearer private-marker")]
-    [InlineData("Cookie: __Host-FitnessTrackerAuth=private-marker")]
+    [InlineData("Cookie: __Host-FitLifeAuth=private-marker")]
     [InlineData("Set-Cookie: session=private-marker; Secure; HttpOnly")]
     [InlineData("{\"refresh_token\":\"private-marker\"}")]
     [InlineData("{\"accessToken\":\"private-marker\"}")]

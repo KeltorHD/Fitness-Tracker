@@ -4,8 +4,8 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Xml.Linq;
-using FitnessTracker.Authentication;
-using FitnessTracker.Backend;
+using FitLife.Authentication;
+using FitLife.Backend;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -19,7 +19,7 @@ using Npgsql;
 using OpenIddict.Abstractions;
 using Xunit;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Проверяет обычный Production startup на отдельных PostgreSQL-БД без ручного --migrate.</summary>
 [Trait("Category", "PostgreSQL")]
@@ -126,6 +126,55 @@ public sealed class StartupMigrationTests
         }
     }
 
+    /// <summary>Обычный startup обновляет прежний идентификатор архива до первого успешного HTTP-ответа.</summary>
+    [Fact]
+    public async Task BackendStartupMigratesPreviousArchiveIdentifierAsync()
+    {
+        // Arrange: существующая БД прежней схемы и резервная копия с корректными контрольными метаданными.
+        using var deadline = new CancellationTokenSource(TimeSpan.FromMinutes(2));
+        var cancellationToken = deadline.Token;
+        await using var fixture = await PostgresDatabase.CreateAsync(cancellationToken);
+        var options = new DbContextOptionsBuilder<BackupDbContext>().UseNpgsql(fixture.ConnectionString).Options;
+        var id = Guid.NewGuid();
+        var owner = Guid.NewGuid().ToString();
+        var payload = """{"format":"com.fitnesstracker.archive","version":4,"exportedAt":1700000000,"workouts":[],"templates":[],"bodyWeights":[]}"""u8.ToArray();
+        await using (var database = new BackupDbContext(options))
+        {
+            await database.GetService<IMigrator>().MigrateAsync("20261103183121_InitialBackups", cancellationToken);
+            database.Backups.Add(new BackupRecord
+            {
+                Id = id,
+                OwnerId = owner,
+                ArchiveVersion = 4,
+                CreatedAtMilliseconds = 1700000000123,
+                Payload = payload,
+                Size = payload.Length,
+                Sha256 = Convert.ToHexStringLower(SHA256.HashData(payload))
+            });
+            await database.SaveChangesAsync(cancellationToken);
+        }
+
+        // Act: запуск Production Backend без ручного --migrate.
+        var errors = new StartupCommandErrors();
+        using var factory = new StartupFactory<Backend.Program>(fixture.ConnectionString, commandErrors: errors);
+        using var client = factory.CreateClient();
+        using var health = await client.GetAsync("/health", cancellationToken);
+
+        // Assert: listener открыт после миграции, содержимое и метаданные уже согласованы.
+        Assert.Equal(HttpStatusCode.OK, health.StatusCode);
+        Assert.Empty(errors.Errors);
+        await using var verification = new BackupDbContext(options);
+        var backup = await verification.Backups.SingleAsync(cancellationToken);
+        Assert.Equal(id, backup.Id);
+        Assert.Equal(owner, backup.OwnerId);
+        Assert.Equal(1700000000123, backup.CreatedAtMilliseconds);
+        Assert.Equal(4, backup.ArchiveVersion);
+        Assert.Equal(4, BackupArchiveValidator.Validate(backup.Payload));
+        Assert.Equal(backup.Payload.Length, backup.Size);
+        Assert.Equal(Convert.ToHexStringLower(SHA256.HashData(backup.Payload)), backup.Sha256);
+        Assert.Empty(await verification.Database.GetPendingMigrationsAsync(cancellationToken));
+    }
+
     /// <summary>Backend создаёт схему перед HTTP и при повторном запуске сохраняет архив и запрет удалённого аккаунта.</summary>
     [Fact]
     public async Task BackendStartupMigratesAndPreservesBackupsOnRestartAsync()
@@ -176,7 +225,7 @@ public sealed class StartupMigrationTests
         Assert.Equal(owner, backup.OwnerId);
         Assert.Equal(new byte[] { 1, 2, 3 }, backup.Payload);
         Assert.Single(await verification.DeletedAccounts.ToListAsync(cancellationToken));
-        Assert.Single(await verification.Database.GetAppliedMigrationsAsync(cancellationToken));
+        Assert.Equal(2, (await verification.Database.GetAppliedMigrationsAsync(cancellationToken)).Count());
     }
 
     /// <summary>Ошибка миграции обоих сервисов прерывает запуск до доступности HTTP.</summary>
@@ -232,7 +281,7 @@ public sealed class StartupMigrationTests
         var secondStart = Task.Run(() => second.CreateClient(), cancellationToken);
         await using (var waiting = new NpgsqlCommand("""
             SELECT count(*) FROM pg_stat_activity
-            WHERE datname = current_database() AND application_name = 'FitnessTracker startup'
+            WHERE datname = current_database() AND application_name = 'FitLife startup'
                 AND wait_event_type = 'Lock'
             """, gate))
         {
@@ -306,7 +355,7 @@ public sealed class StartupMigrationTests
             if (!File.Exists(pfx))
             {
                 using var rsa = RSA.Create(2048);
-                var request = new CertificateRequest("CN=FitnessTracker isolated startup", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+                var request = new CertificateRequest("CN=FitLife isolated startup", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
                 using var certificate = request.CreateSelfSigned(DateTimeOffset.UtcNow.AddMinutes(-5), DateTimeOffset.UtcNow.AddDays(1));
                 File.WriteAllBytes(pfx, certificate.Export(X509ContentType.Pfx, "test-only-password"));
             }

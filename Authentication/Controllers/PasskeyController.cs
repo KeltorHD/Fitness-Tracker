@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 
-namespace FitnessTracker.Authentication.Controllers;
+namespace FitLife.Authentication.Controllers;
 
 /// <summary>Маппит формы passkey и делегирует WebAuthn/Identity проверки сервису.</summary>
 [EnableRateLimiting("credentials"), RequestSizeLimit(65_536)]

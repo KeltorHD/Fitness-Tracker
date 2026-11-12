@@ -1,6 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
-using FitnessTracker.Backend;
+using FitLife.Backend;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 using Xunit;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Проверяет fail-closed поведение настоящего Backend до чтения и изменения копий.</summary>
 [Trait("Category", "HTTP")]

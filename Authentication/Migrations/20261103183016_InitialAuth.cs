@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace FitnessTracker.Authentication.Migrations
+namespace FitLife.Authentication.Migrations
 {
     /// <inheritdoc />
     public partial class InitialAuth : Migration

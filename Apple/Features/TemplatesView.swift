@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import SwiftUI
 
 struct TemplatesView: View {
@@ -458,7 +458,7 @@ struct TemplateEditor: View {
         Button(L10n.text("Отмена", locale: locale), role: .cancel) {}
       }
       .alert(
-        "FitnessTracker",
+        "FitLife",
         isPresented: Binding(
           get: { validationMessage != nil && !picking && replacement == nil && !deletingVariation },
           set: { if !$0 { dismissValidationMessage() } })

@@ -1,9 +1,9 @@
-# FitnessTracker
+# FitLife
 
-Нативный журнал силовых тренировок: **Swift 6, SwiftUI, iOS 26+, watchOS 10+, Apple Liquid Glass на поддерживаемых ОС**.
+Нативный журнал силовых тренировок: **Swift 6, SwiftUI, iOS 26+, watchOS 26+, Apple Liquid Glass на поддерживаемых ОС**.
 Разработка ведётся на Linux. Сборка, запуск и проверка Apple-интеграций выполняются на Mac в Xcode.
 
-После обновления переименованного проекта выполните `xcodegen generate`, откройте **FitnessTracker.xcodeproj** и выберите **FitnessTracker Personal**. Существующий `Config/Local.xcconfig` и зарегистрированные идентификаторы сохраняйте. [Переименование и совместимость](docs/RENAME.md).
+Для FitLife выполните `xcodegen generate`, откройте **FitLife.xcodeproj** и выберите **FitLife Personal**. Настройки используют только `FITLIFE_*`; прежние identifiers, архивы и aliases не поддерживаются. [Текущие идентификаторы и развёртывание](docs/RENAME.md).
 
 ## Что реализовано
 
@@ -13,7 +13,7 @@
 - Цифровая панель по нажатию на вес/повторы: замена значения, переход к следующему полю, копирование вниз и скрытие. [Превью](docs/previews/number-entry-overview.png), [поведение](docs/NUMBER_ENTRY.md).
 - Разминка и дропсеты с 1–5 снижениями веса: последовательная запись, отдых после последнего этапа, точный объём, повтор и архив v4. [Правила](docs/DROP_SETS.md), [демо-макет](docs/previews/workout-set-types.png).
 - Сохранение выполненных подходов и изменений, восстановление активной тренировки, недельный дневник, повтор завершённой тренировки.
-- Импорт и экспорт JSON / `.fitnesstracker`: отдельная тренировка или вся история с планами, открытие из «Файлов», сводка перед импортом и защита от повторных записей.
+- Импорт и экспорт JSON / `.fitlife`: отдельная тренировка или вся история с планами, открытие из «Файлов», сводка перед импортом и защита от повторных записей.
 - Недельный объём, серия тренировочных недель, личные рекорды, оценка 1ПМ.
 - Пять графиков по упражнению: рабочий вес, объём, 1ПМ, повторения и подходы; выбор периода и точки. Переход **Прогресс упражнения** из активной тренировки и её истории. [Расчёты и сценарии](docs/EXERCISE_PROGRESS.md).
 - **Вес тела**: текущий вес в настройках и верхней сводке активной тренировки, автоподстановка в новые сессии; взвешивания и история в результатах. Кг/фунты, JSON-архивы и изоляция демо. [Правила хранения](docs/BODY_WEIGHT.md).
@@ -21,7 +21,7 @@
 - SwiftData, опциональная системная синхронизация через личный CloudKit container.
 - Экспорт завершённой тренировки в HealthKit по запросу, уведомления отдыха.
 - Live Activity и Dynamic Island с системными таймерами, следующим подходом и кнопками паузы/продолжения/пропуска отдыха, недельный виджет с добровольной передачей сводки.
-- Приложение watchOS 10+ (включая SE 1): запись подходов, локальное восстановление, надёжная очередь передачи на iPhone с подтверждением сохранения; отдельный режим живого пульса через HealthKit и WatchConnectivity. Установка и проверка датчика на физических часах описаны в [инструкции](docs/WATCH_HEART_RATE.md).
+- Приложение watchOS 26+: запись подходов, локальное восстановление, надёжная очередь передачи на iPhone с подтверждением сохранения; отдельный режим живого пульса через HealthKit и WatchConnectivity. Установка и проверка датчика на физических часах описаны в [инструкции](docs/WATCH_HEART_RATE.md).
 - Все функции бесплатны, включая график прогресса за 26 недель.
 - Два режима фитнес-трекера: показатели из Apple «Здоровье» (Mi Fitness → Health) и Bluetooth-пульс во время тренировки, локальная запись и график в истории.
 - Пульс AirPods Pro 3 через системную сессию HealthKit: явное включение в тренировке, пауза/продолжение, локальная запись и график. [Подключение и границы проверки](docs/AIRPODS.md).
@@ -75,19 +75,19 @@ swift format lint --strict --recursive Sources Tests Apple Package.swift
 
 ```bash
 bash scripts/setup-macos.sh
-open FitnessTracker.xcodeproj
+open FitLife.xcodeproj
 ```
 
-Понадобятся полный Xcode 26+ с iOS/watchOS 26 SDK или новее и XcodeGen 2.44+. Минимальная ОС Watch-приложения — watchOS 10, минимальная iOS — 26. Скрипт устанавливает XcodeGen через имеющийся Homebrew, создаёт локальную конфигурацию, проверяет пакет и выполняет `xcodegen generate`. Signing, Apple Developer resources и первая сборка описаны в [MAC_BUILD_GUIDE.md](MAC_BUILD_GUIDE.md).
+Понадобятся полный Xcode 26+ с iOS/watchOS 26 SDK или новее и XcodeGen 2.44+. Минимальная ОС Watch-приложения — watchOS 26, минимальная iOS — 26. Скрипт устанавливает XcodeGen через имеющийся Homebrew, создаёт локальную конфигурацию, проверяет пакет и выполняет `xcodegen generate`. Signing, Apple Developer resources и первая сборка описаны в [MAC_BUILD_GUIDE.md](MAC_BUILD_GUIDE.md).
 
-Для бесплатной **Personal Team** выберите схему **FitnessTracker Personal**: iCloud/Push отключены, история хранится локально. Полная схема **FitnessTracker** сохраняет эти capabilities для Apple Developer Program. Укажите свою Team во вложенных targets и уникальный Bundle ID в Config/Local.xcconfig; не оставляйте `com.yourcompany.fitnesstracker`.
+Для бесплатной **Personal Team** выберите схему **FitLife Personal**: iCloud/Push отключены, история хранится локально. Полная схема **FitLife** сохраняет эти capabilities для Apple Developer Program. Укажите свою Team во вложенных targets и уникальный Bundle ID в Config/Local.xcconfig; не оставляйте `com.yourcompany.fitlife`.
 
 ## Структура
 
 ```text
 Package.swift                      # Только Foundation/Core, Swift 6
-Sources/FitnessTrackerCore/             # Модели, state machine, расчёты, протоколы
-Tests/FitnessTrackerCoreTests/          # Linux/macOS Swift Testing
+Sources/FitLifeCore/             # Модели, state machine, расчёты, протоколы
+Tests/FitLifeCoreTests/          # Linux/macOS Swift Testing
 Tests/PortableTrackerChecks/        # Исполняемые проверки Foundation/Observation с fakes
 Apple/App/                         # DI, точка входа, состояние приложения
 Apple/Design/                      # Liquid Glass и общие компоненты

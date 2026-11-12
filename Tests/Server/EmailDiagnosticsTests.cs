@@ -1,12 +1,12 @@
-using FitnessTracker.Authentication;
+using FitLife.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Xunit;
-using static FitnessTracker.Server.Tests.CredentialsTests;
+using static FitLife.Server.Tests.CredentialsTests;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Проверяет видимость результата отправки и причин пропуска без утечки email/токенов в console logs.</summary>
 [Trait("Category", "HTTP")]

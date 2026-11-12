@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import SwiftUI
 
 struct WorkoutDetailView: View {
@@ -151,7 +151,7 @@ struct WorkoutDetailView: View {
       }
     }
     .alert(
-      "FitnessTracker",
+      "FitLife",
       isPresented: Binding(
         get: {
           selectedExercise == nil && !editing && templateDraft == nil

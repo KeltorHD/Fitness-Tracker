@@ -1,18 +1,18 @@
-# FitnessTracker: первая сборка на macOS
+# FitLife: первая сборка на macOS
 
-Для проверки новой аутентификации и копий выполните `xcodegen generate`, добавьте HTTPS-адреса серверов в существующий `Config/Local.xcconfig` по [SERVER.md](docs/SERVER.md) и запустите `AccountBackupTests`. Для бесплатной `FitnessTracker Personal` согласуйте `FITNESS_TRACKER_AUTH_CALLBACK_SCHEME` на Mac и `IOS_PERSONAL_CALLBACK_SCHEME` на сервере по [инструкции Personal Team](docs/SERVER.md#вход-для-бесплатной-personal-team): эта сборка использует отдельный URL-scheme callback с PKCE, без Associated Domains. Полная схема сохраняет HTTPS callback. Реальные provider flows требуют настройки Auth Server и кабинетов Google/Apple/Яндекс; наличие исходников не означает проверки входа на устройстве. Без серверных адресов приложение продолжает работать локально.
+Для проверки новой аутентификации и копий выполните `xcodegen generate`, добавьте HTTPS-адреса серверов в существующий `Config/Local.xcconfig` по [SERVER.md](docs/SERVER.md) и запустите `AccountBackupTests`. Для бесплатной `FitLife Personal` согласуйте `FITLIFE_AUTH_CALLBACK_SCHEME` на Mac и `IOS_PERSONAL_CALLBACK_SCHEME` на сервере по [инструкции Personal Team](docs/SERVER.md#вход-для-бесплатной-personal-team): эта сборка использует отдельный URL-scheme callback с PKCE, без Associated Domains. Полная схема сохраняет HTTPS callback. Реальные provider flows требуют настройки Auth Server и кабинетов Google/Apple/Яндекс; наличие исходников не означает проверки входа на устройстве. Без серверных адресов приложение продолжает работать локально.
 
-После переименования закройте прежний проект, выполните `git pull --ff-only` и `xcodegen generate`, затем откройте **FitnessTracker.xcodeproj**. Выберите **FitnessTracker Personal**. Сохраняйте значения Team, Bundle ID, App Group и CloudKit из существующего `Config/Local.xcconfig`: прежние переменные поддержаны aliases. Не удаляйте приложение/store. [Правила обновления](docs/RENAME.md).
+Для FitLife выполните `git pull --ff-only`, обновите Config/Local.xcconfig по текущему примеру с FITLIFE_* и запустите `xcodegen generate`. Откройте **FitLife.xcodeproj**, выберите **FitLife Personal** и настройте Team/зарегистрированные identifiers. Прежние aliases, хранилища и архивы автоматически не переносятся. [Текущие контракты](docs/RENAME.md).
 
 После добавления питания повторите `xcodegen generate`: новые файлы входят только в основной iOS target. Запустите `NutritionTests` и `testDiaryCanLogManualFoodWithoutNetwork`, затем проверьте PhotosPicker и запись с фото в SwiftData/CloudKit по [чек-листу](docs/XCODE_VALIDATION.md). На Linux эти Apple-сценарии не выполнялись. Дополнительные ключи API и разрешения медиатеки для системного выбора фото не требуются.
 
 После объединения дневников снова выполните `xcodegen generate`: добавлены `FoodBarcodeScanner.swift` и `NutritionToolsView.swift`. В «Дневнике» проверьте свайп между тренировками и питанием, общую дату, ручное добавление/избранное, воду и копирование дня. Для сканера нужен поддерживаемый физический iPhone/iPad: VisionKit + разрешение камеры `NSCameraUsageDescription` (локализовано RU/EN). На Simulator/при отказе доступен ручной ввод кода; дополнительная capability камеры не требуется. Кадры сканера не сохраняются/не отправляются. Сканирование EAN-8/EAN-13, camera lifecycle и SwiftData/CloudKit round-trip новых kinds требуют Xcode/устройства.
 
-После добавления дневника сна выполните `xcodegen generate`: добавлены AlarmKit для системного резервного сигнала и режим `alarm` для WatchKit. На iPhone откройте «Дневник → Сон», разрешите чтение сна и установите будильник; перед сном подтвердите ближайшее умное окно в FitnessTracker на Watch. Требуются iOS 26+ и watchOS 10+ (включая Apple Watch SE первого поколения). На часах с watchOS 26+ сохраняется Liquid Glass, на watchOS 10–11 используются нативные bordered-кнопки. Верхняя плашка раскрывает редактирование/выключение будильников и три режима: «На iPhone», «На Apple Watch», «На всех устройствах». «На iPhone» ставит фиксированный системный сигнал без нашей Watch session; автоматическое системное дублирование на часы контролирует iOS. «Только Apple Watch» отключает телефон после подтверждения подготовки часами; после этого резерв на iPhone отсутствует. Графики поддерживают выбор фаз и ночей за неделю/месяц. Оценка движения не определяет фазу сна. Настройка, ограничения синхронизации и сценарий проверки на физических устройствах — в [SLEEP.md](docs/SLEEP.md).
+После добавления дневника сна выполните `xcodegen generate`: добавлены AlarmKit для системного резервного сигнала и режим `alarm` для WatchKit. На iPhone откройте «Дневник → Сон», разрешите чтение сна и установите будильник; перед сном подтвердите ближайшее умное окно в FitLife на Watch. Требуются iOS 26+ и watchOS 26+ с нативным Liquid Glass. Верхняя плашка раскрывает редактирование/выключение будильников и три режима: «На iPhone», «На Apple Watch», «На всех устройствах». «На iPhone» ставит фиксированный системный сигнал без нашей Watch session; автоматическое системное дублирование на часы контролирует iOS. «Только Apple Watch» отключает телефон после подтверждения подготовки часами; после этого резерв на iPhone отсутствует. Графики поддерживают выбор фаз и ночей за неделю/месяц. Оценка движения не определяет фазу сна. Настройка, ограничения синхронизации и сценарий проверки на физических устройствах — в [SLEEP.md](docs/SLEEP.md).
 
 ## 1. Инструменты
 
-Для живого пульса Apple Watch (включая SE 1) обновите обе версии приложения и повторите `xcodegen generate`: Watch target использует HealthKit и `workout-processing`. После установки откройте FitnessTracker на часах; на iPhone начните тренировку, выберите Apple Watch в «Трекере» и включите приём пульса. Разрешения запрашиваются на Watch. Сеанс другой программы «Тренировка» нужно завершить перед запуском. Измерения передаются напрямую, а не ждут синхронизации хранилища «Здоровья». [Настройка, подпись Personal Team и ограничения](docs/WATCH_HEART_RATE.md).
+Для живого пульса Apple Watch с watchOS 26+ обновите обе версии приложения и повторите `xcodegen generate`: Watch target использует HealthKit и `workout-processing`. После установки откройте FitLife на часах; на iPhone начните тренировку, выберите Apple Watch в «Трекере» и включите приём пульса. Разрешения запрашиваются на Watch. Сеанс другой программы «Тренировка» нужно завершить перед запуском. Измерения передаются напрямую, а не ждут синхронизации хранилища «Здоровья». [Настройка, подпись Personal Team и ограничения](docs/WATCH_HEART_RATE.md).
 
 Установите **полный Xcode 26 или новее**, совместимый с вашей версией macOS, с iOS 26 и watchOS 26 SDK. Одних Command Line Tools недостаточно. Версию macOS выбирайте по [таблице совместимости Xcode](https://developer.apple.com/support/xcode/). Откройте Xcode, примите лицензию и установите iPhone/watchOS Simulator runtimes через Settings → Components.
 
@@ -40,39 +40,39 @@ cp Config/Local.xcconfig.example Config/Local.xcconfig  # только если 
 swift build
 swift test
 xcodegen generate
-open FitnessTracker.xcodeproj
+open FitLife.xcodeproj
 ```
 
 ## 2. Идентификаторы и Signing
 
-Для **бесплатной Personal Team** используйте схему **FitnessTracker Personal**. Она выбирает PersonalDebug/PersonalRelease и Config/PersonalTeam.entitlements без iCloud и Push Notifications. История сохраняется в локальной SwiftData; JSON/.fitnesstracker, Liquid Glass, HealthKit, локальные уведомления, Live Activity/Dynamic Island, WidgetKit/App Groups и Watch сохраняются. Доступность HealthKit и App Groups для бесплатного Apple Developer account указана в [таблице Apple](https://developer.apple.com/help/account/reference/supported-capabilities-ios); фактический provisioning следует проверить на устройстве.
+Для **бесплатной Personal Team** используйте схему **FitLife Personal**. Она выбирает PersonalDebug/PersonalRelease и Config/PersonalTeam.entitlements без iCloud и Push Notifications. История сохраняется в локальной SwiftData; JSON/.fitlife, Liquid Glass, HealthKit, локальные уведомления, Live Activity/Dynamic Island, WidgetKit/App Groups и Watch сохраняются. Доступность HealthKit и App Groups для бесплатного Apple Developer account указана в [таблице Apple](https://developer.apple.com/help/account/reference/supported-capabilities-ios); фактический provisioning следует проверить на устройстве.
 
-Схема **FitnessTracker** сохраняет полный набор capabilities и требует подходящей команды Apple Developer Program для iCloud/Push. Это различие конфигураций сборки, платных функций внутри приложения нет.
+Схема **FitLife** сохраняет полный набор capabilities и требует подходящей команды Apple Developer Program для iCloud/Push. Это различие конфигураций сборки, платных функций внутри приложения нет.
 
 Если Xcode сообщает `Personal development teams ... do not support Push Notifications and iCloud`:
 
-1. Обновите репозиторий и выполните `xcodegen generate` в его корне, затем `open FitnessTracker.xcodeproj`.
-2. Выберите **FitnessTracker Personal → ваш iPhone**.
-3. Укажите Personal Team для FitnessTracker, FitnessTrackerWidgets и FitnessTrackerWatch в Signing & Capabilities с Automatically manage signing.
-4. Замените `com.yourcompany.fitnesstracker` в Config/Local.xcconfig на свой уникальный FITNESS_TRACKER_BUNDLE_ID, например `com.alexanderproshchenkov.fitnesstracker`. App Group и IDs вложенных targets выводятся из него автоматически. Для сохранения Team после следующей генерации внесите реальный Team ID в DEVELOPMENT_TEAM локального файла.
+1. Обновите репозиторий и выполните `xcodegen generate` в его корне, затем `open FitLife.xcodeproj`.
+2. Выберите **FitLife Personal → ваш iPhone**.
+3. Укажите Personal Team для FitLife, FitLifeWidgets и FitLifeWatch в Signing & Capabilities с Automatically manage signing.
+4. Замените `com.yourcompany.fitlife` в Config/Local.xcconfig на свой уникальный FITLIFE_BUNDLE_ID, например `com.alexanderproshchenkov.fitlife`. App Group и IDs вложенных targets выводятся из него автоматически. Для сохранения Team после следующей генерации внесите реальный Team ID в DEVELOPMENT_TEAM локального файла.
 5. Нажмите ⌘R. Не удаляйте capabilities из Config/App.entitlements: они используются полной схемой.
 
 Заполните `Config/Local.xcconfig`:
 
 ```xcconfig
 DEVELOPMENT_TEAM = YOURTEAMID
-FITNESS_TRACKER_BUNDLE_ID = com.yourcompany.fitnesstracker
+FITLIFE_BUNDLE_ID = com.yourcompany.fitlife
 ```
 
 App Group и CloudKit ID автоматически выводятся из Bundle ID:
 
 | Назначение | Значение |
 | --- | --- |
-| iPhone | `com.yourcompany.fitnesstracker` |
-| Widget extension | `com.yourcompany.fitnesstracker.widgets` |
-| Watch | `com.yourcompany.fitnesstracker.watchkitapp` |
-| App Group | `group.com.yourcompany.fitnesstracker` |
-| CloudKit container | `iCloud.com.yourcompany.fitnesstracker` |
+| iPhone | `com.yourcompany.fitlife` |
+| Widget extension | `com.yourcompany.fitlife.widgets` |
+| Watch | `com.yourcompany.fitlife.watchkitapp` |
+| App Group | `group.com.yourcompany.fitlife` |
+| CloudKit container | `iCloud.com.yourcompany.fitlife` |
 
 Укажите свою Team во всех targets, включая unit/UI tests. Оставьте Automatically manage signing. Локальная конфигурация исключена из git; секреты и provisioning profiles не коммитьте.
 
@@ -80,13 +80,13 @@ App Group и CloudKit ID автоматически выводятся из Bund
 
 | Target | Capability / настройка |
 | --- | --- |
-| FitnessTracker | HealthKit; iCloud → CloudKit с вашим container; App Groups с вашей группой; Push Notifications; Background Modes → Remote notifications |
-| FitnessTrackerWidgets | Та же App Group |
-| FitnessTrackerWatch | Обычный signing, companion Bundle ID совпадает с iPhone. HealthKit и workout-processing здесь не нужны: это журнал подходов без фонового сбора датчиков |
+| FitLife | HealthKit; iCloud → CloudKit с вашим container; App Groups с вашей группой; Push Notifications; Background Modes → Remote notifications |
+| FitLifeWidgets | Та же App Group |
+| FitLifeWatch | Обычный signing, companion Bundle ID совпадает с iPhone. HealthKit и workout-processing здесь не нужны: это журнал подходов без фонового сбора датчиков |
 
 Платные сервисы требуют соответствующего членства Apple Developer и ресурсов в портале. Simulator signing обычно не нужен, но включённые entitlements могут потребовать настроить Team или отдельные profiles перед запуском на устройстве. Не удаляйте реальные capability-файлы, чтобы скрыть ошибки provisioning.
 
-`aps-environment` задаётся через `FITNESS_TRACKER_APS_ENVIRONMENT`: Debug → development, Release → production; финальные значения проверьте в подписанном архиве. Live Activities обновляются локально, не требуют ActivityKit push token. Push capability используется для системной синхронизации CloudKit.
+`aps-environment` задаётся через `FITLIFE_APS_ENVIRONMENT`: Debug → development, Release → production; финальные значения проверьте в подписанном архиве. Live Activities обновляются локально, не требуют ActivityKit push token. Push capability используется для системной синхронизации CloudKit.
 
 ## 3. Генерация, Simulator и первая сборка
 
@@ -94,20 +94,20 @@ App Group и CloudKit ID автоматически выводятся из Bund
 
 ```bash
 xcodegen generate
-open FitnessTracker.xcodeproj
+open FitLife.xcodeproj
 ```
 
-Выберите схему **FitnessTracker Personal** для Personal Team либо **FitnessTracker** для полной конфигурации, затем iPhone Simulator с iOS 26+ или свой iPhone. Выполните Product → Build (`⌘B`), затем Run (`⌘R`). Схемы **FitnessTrackerWatch** и **FitnessTrackerWidgets** предусмотрены отдельно. Для SE 1 после обновления обязательно выполните `xcodegen generate`: Watch target и Core package теперь имеют минимум watchOS 10. На Watch 10–11 используется нативный совместимый стиль, на Watch 26+ — Glass. Выберите FitnessTrackerWatch → свои физические часы → ⌘R; Developer Mode должен быть включён на iPhone и Watch, Signing Team/companion Bundle ID должны соответствовать iPhone-приложению.
+Выберите схему **FitLife Personal** для Personal Team либо **FitLife** для полной конфигурации, затем iPhone Simulator с iOS 26+ или свой iPhone. Выполните Product → Build (`⌘B`), затем Run (`⌘R`). Схемы **FitLifeWatch** и **FitLifeWidgets** предусмотрены отдельно.
 
 CLI после установки Simulator runtimes:
 
 ```bash
-xcodebuild -list -project FitnessTracker.xcodeproj
-xcodebuild -showdestinations -project FitnessTracker.xcodeproj -scheme FitnessTracker
+xcodebuild -list -project FitLife.xcodeproj
+xcodebuild -showdestinations -project FitLife.xcodeproj -scheme FitLife
 # Подставьте существующий Simulator UDID из предыдущего вывода:
-xcodebuild -project FitnessTracker.xcodeproj -scheme FitnessTracker \
+xcodebuild -project FitLife.xcodeproj -scheme FitLife \
   -destination 'platform=iOS Simulator,id=YOUR-SIMULATOR-UDID' build
-xcodebuild -project FitnessTracker.xcodeproj -scheme FitnessTracker \
+xcodebuild -project FitLife.xcodeproj -scheme FitLife \
   -destination 'platform=iOS Simulator,id=YOUR-SIMULATOR-UDID' test
 ```
 
@@ -115,13 +115,13 @@ xcodebuild -project FitnessTracker.xcodeproj -scheme FitnessTracker \
 
 Разбор частых ошибок:
 
-- **`Build input files cannot be found` после переключения ветки и `Cannot find type ... in scope`:** проверьте, что открыт проект из нужного checkout, закройте его и выполните `xcodegen generate`, затем `open FitnessTracker.xcodeproj`. Каталог `*.xcodeproj` исключён из Git, поэтому переключение ветки не обновляет его список исходников. Например, старый проект может ссылаться на отсутствующие в выбранной ветке `NutritionToolsView.swift` / `FoodBarcodeScanner.swift` и одновременно не включать существующие `AccountSession.swift`, `AccountBackupViewModel.swift`, `RemoteBackupClient.swift`, `AppleServerCryptography.swift`. Генерация из актуального `project.yml` согласует состав файлов. Если Xcode продолжает показывать прежние ошибки, выполните Product → Clean Build Folder и соберите заново. Не создавайте заглушки отсутствующих файлов и не добавляйте исходники вручную в старый проект; сохраните существующий `Config/Local.xcconfig` и пользовательское хранилище.
+- **`Build input files cannot be found` после переключения ветки и `Cannot find type ... in scope`:** проверьте, что открыт проект из нужного checkout, закройте его и выполните `xcodegen generate`, затем `open FitLife.xcodeproj`. Каталог `*.xcodeproj` исключён из Git, поэтому переключение ветки не обновляет его список исходников. Например, старый проект может ссылаться на отсутствующие в выбранной ветке `NutritionToolsView.swift` / `FoodBarcodeScanner.swift` и одновременно не включать существующие `AccountSession.swift`, `AccountBackupViewModel.swift`, `RemoteBackupClient.swift`, `AppleServerCryptography.swift`. Генерация из актуального `project.yml` согласует состав файлов. Если Xcode продолжает показывать прежние ошибки, выполните Product → Clean Build Folder и соберите заново. Не создавайте заглушки отсутствующих файлов и не добавляйте исходники вручную в старый проект; сохраните существующий `Config/Local.xcconfig` и пользовательское хранилище.
 - **`unable to type-check this expression in reasonable time` в ExerciseProgressTests:** обновите исходники через `git pull --ff-only` и повторите `swift test`. Извлечение optional, расчёт ожидаемого 1ПМ и проверка разницы теперь разделены на типизированные `Double`-выражения; допуск теста не изменён. В ExerciseLibraryTests вложенный `#require` также вынесен перед JSON encoding. Если ошибка возникла в `setup-macos.sh`, после успешных тестов повторите скрипт: при сбое `swift test` он останавливается до генерации проекта.
-- **Нет GlassEffectContainer / glass styles:** проверьте выбранный Xcode, SDK и iOS deployment target 26.0; на watchOS 10–11 совместимые нативные кнопки предусмотрены намеренно. Не заменяйте эффект blur-реализацией.
+- **Нет GlassEffectContainer / glass styles:** проверьте выбранный Xcode, SDK и iOS/watchOS deployment target 26.0. Не заменяйте эффект blur-реализацией.
 - **Swift 6 isolation / Sendable:** проверьте границы `@MainActor` и `nonisolated` в делегатах. Передавайте `Data`, строки и Core value types через `Task`, а не `ModelContext`.
 - **SwiftData macro / CloudKit schema:** проверьте defaults всех полей `StoredRecord`, отсутствие unique constraints, container ID и signed entitlements. Не стирайте хранилище как первый способ исправления.
 - **Watch embedding/install:** проверьте companion ID и тип watchOS application. В XcodeGen зарегистрирована [проблема embedding для некоторых Xcode 26.x](https://github.com/yonaskolb/XcodeGen/issues/1613). Сначала обновите XcodeGen и сравните с watchOS target, созданным вашим Xcode; не применяйте слепую замену путей в pbxproj.
-- **Personal Team: шкала установки в приложении Watch на iPhone проходит, затем снова появляется «Установить»:** проверьте журнал установщика на iPhone. `MIInstallerErrorDomain Code=111` с текстом `authorized by a free provisioning profile ... not allowed to be installed from this source` означает отказ в установке бесплатной development-подписи через этот источник. Наличие часов в профиле и корректный deployment target этот отказ не устраняют. Для такой сборки используйте прямую установку схемы FitnessTrackerWatch из Xcode на часы; перенос через приложение Watch не является рабочим обходом ошибки подготовки Xcode.
+- **Personal Team: шкала установки в приложении Watch на iPhone проходит, затем снова появляется «Установить»:** проверьте журнал установщика на iPhone. `MIInstallerErrorDomain Code=111` с текстом `authorized by a free provisioning profile ... not allowed to be installed from this source` означает отказ в установке бесплатной development-подписи через этот источник. Наличие часов в профиле и корректный deployment target этот отказ не устраняют. Для такой сборки используйте прямую установку схемы FitLifeWatch из Xcode на часы; перенос через приложение Watch не является рабочим обходом ошибки подготовки Xcode.
 - **`Unable to copy dyld shared cache files` / Symbols for watchOS:** это подготовка системных символов для отладки, отдельно от компиляции приложения. Смотрите вложенную причину и журнал Xcode: HTTP 400 при загрузке символов и `Broken pipe`/RemotePairingError 1007 при копировании с устройства — разные ошибки. Apple описывает [подготовку символов через xcodebuild](https://developer.apple.com/documentation/xcode/acquiring-operating-system-symbol-information); для watchOS 10 при загрузке по версии требуется также реальная модель `-modelCode`. При ошибке developer-связи восстановите сопряжение часов с Mac через [Device Hub](https://developer.apple.com/documentation/xcode/pairing-your-devices-with-your-mac). Не разрывайте пару Watch–iPhone и не удаляйте данные приложения ради очистки ошибки Xcode. Перегенерация проекта не исправляет отказ сервера загрузки или разрыв канала отладки.
 - **App Icon:** откройте оба catalogs, проверьте universal 1024×1024 для iOS/watchOS. При требованиях конкретной версии `actool` обновите Contents.json через редактор Asset Catalog и сохраните изменения.
 
@@ -137,7 +137,7 @@ xcodebuild -project FitnessTracker.xcodeproj -scheme FitnessTracker \
 2. **HealthKit:** откройте завершённую тренировку → Экспорт в «Здоровье». Проверьте разрешение/отказ, длительность и паузы, повторный экспорт с тем же sync identifier. Калории и пульс не выдумываются и не экспортируются. Удаление из истории не удаляет запись HealthKit.
 3. **CloudKit:** сначала соберите с подписанными ресурсами. Включите синхронизацию в настройках, полностью перезапустите приложение. На двух устройствах с одним Apple ID проверьте создание, изменение и удаление записей, offline → online. Система выполняет eventual sync, проверка учётной записи не является индикатором завершения. Перед распространением инициализируйте development schema при необходимости через CloudKit Console и разверните её в production; debug-only schema initialization не включено в обычный запуск.
 4. **Notifications:** включите уведомления, подтвердите разрешение, выполните подход и заблокируйте iPhone. Проверьте отмену уведомления при паузе, пропуске отдыха и завершении тренировки.
-5. **Live Activity / Dynamic Island:** проверьте старт, подход, активное время и отдых после блокировки, pause/resume/skip-rest кнопки, cold-launch intent, переход по UUID, восстановление после перезапуска и завершение на поддерживающем устройстве. После изменений обязательно перегенерируйте project: shared intents собираются в main app с FITNESS_TRACKER_APP и в widget extension без этого флага. Поведение при выключенных Live Activities должно сохранять обычную тренировку.
+5. **Live Activity / Dynamic Island:** проверьте старт, подход, активное время и отдых после блокировки, pause/resume/skip-rest кнопки, cold-launch intent, переход по UUID, восстановление после перезапуска и завершение на поддерживающем устройстве. После изменений обязательно перегенерируйте project: shared intents собираются в main app с FITLIFE_APP и в widget extension без этого флага. Поведение при выключенных Live Activities должно сохранять обычную тренировку.
 6. **Widget:** включите передачу сводки, добавьте виджет, завершите тренировку. Проверьте недельную цель, смену недели, отключение передачи и скрытие чувствительных данных.
 7. **Watch:** установите приложение на paired Watch. Запишите несколько подходов офлайн, перезапустите Watch app, завершите. После соединения проверьте запись на iPhone и уменьшение очереди Watch только после подтверждения сохранения. Повторная передача не создаёт дубликат. Watch не зеркалирует текущую iPhone-сессию и не собирает пульс; он ведёт отдельную тренировку «Всё тело A».
 
@@ -149,7 +149,7 @@ xcodebuild -project FitnessTracker.xcodeproj -scheme FitnessTracker \
 
 Описание фонового поведения: [BACKGROUND_AND_DYNAMIC_ISLAND.md](docs/BACKGROUND_AND_DYNAMIC_ISLAND.md).
 
-После обновления темы Live Activity выполните `xcodegen generate`: в sources FitnessTrackerWidgets добавлен Apple/Design/FitnessColorTheme.swift, а в Assets — светлые варианты четырёх акцентов для чёрной поверхности Island. Соберите app и extension; проверьте смену пяти тем в текущей активности, контур/размер Lock Screen, compact/minimal/expanded, Always-On и обновление недельного виджета. [Сценарии проверки](docs/XCODE_VALIDATION.md#тема-и-оформление-live-activity--dynamic-island).
+После обновления темы Live Activity выполните `xcodegen generate`: в sources FitLifeWidgets добавлен Apple/Design/FitnessColorTheme.swift, а в Assets — светлые варианты четырёх акцентов для чёрной поверхности Island. Соберите app и extension; проверьте смену пяти тем в текущей активности, контур/размер Lock Screen, compact/minimal/expanded, Always-On и обновление недельного виджета. [Сценарии проверки](docs/XCODE_VALIDATION.md#тема-и-оформление-live-activity--dynamic-island).
 
 ## Локальная библиотека и фотографии
 
@@ -164,7 +164,7 @@ xcodebuild -project FitnessTracker.xcodeproj -scheme FitnessTracker \
 Выполняйте команды отдельно из корня репозитория:
 
 ```bash
-cp -n Resources/Localizable.xcstrings /tmp/FitnessTracker-catalog-conflict
+cp -n Resources/Localizable.xcstrings /tmp/FitLife-catalog-conflict
 python3 scripts/generate-localizations.py
 git add Resources/Localizable.xcstrings
 git status --short
@@ -176,19 +176,19 @@ git status --short
 
 ## Импорт и экспорт файлов
 
-После установки приложения проверьте **Настройки → Данные → Импорт и экспорт**: сохранить архив в `.json` и `.fitnesstracker`, открыть его из «Файлов», подтвердить preview и повторить импорт без дублей. Проверьте export одной тренировки из меню карточки, iCloud Drive, cold launch и передачу через Share/AirDrop. Регистрация UTI находится в App-Info.plist; дополнительных entitlements для этих диалогов не требуется. Код рассчитан на iOS 26, без document APIs iOS 27. Правила формата и ограничения: [IMPORT_EXPORT.md](docs/IMPORT_EXPORT.md), сценарии: [XCODE_VALIDATION.md](docs/XCODE_VALIDATION.md).
+После установки приложения проверьте **Настройки → Данные → Импорт и экспорт**: сохранить архив в `.json` и `.fitlife`, открыть его из «Файлов», подтвердить preview и повторить импорт без дублей. Проверьте export одной тренировки из меню карточки, iCloud Drive, cold launch и передачу через Share/AirDrop. Регистрация UTI находится в App-Info.plist; дополнительных entitlements для этих диалогов не требуется. Код рассчитан на iOS 26, без document APIs iOS 27. Правила формата и ограничения: [IMPORT_EXPORT.md](docs/IMPORT_EXPORT.md), сценарии: [XCODE_VALIDATION.md](docs/XCODE_VALIDATION.md).
 
 ## Mi Band / два режима трекера
 
-После `git pull --ff-only` снова выполните `xcodegen generate`: добавлены Swift-файлы сервисов, экранов и Bluetooth purpose string. Запустите схему **FitnessTracker Personal** на физическом iPhone. В «Настройки → Основные → Трекер» проверьте Apple «Здоровье» после синхронизации Mi Fitness; для Bluetooth сначала начните тренировку и включите **Share HR** на браслете, затем найдите пульсометр в FitnessTracker. Права HealthKit и Bluetooth выдаются отдельно по действию пользователя. Проверьте блокировку, паузу, потерю связи и график после завершения. Сборка и соединение с Mi Band на Linux не проверялись. Полная инструкция: [MI_BAND.md](docs/MI_BAND.md), checklist: [XCODE_VALIDATION.md](docs/XCODE_VALIDATION.md).
+После `git pull --ff-only` снова выполните `xcodegen generate`: добавлены Swift-файлы сервисов, экранов и Bluetooth purpose string. Запустите схему **FitLife Personal** на физическом iPhone. В «Настройки → Основные → Трекер» проверьте Apple «Здоровье» после синхронизации Mi Fitness; для Bluetooth сначала начните тренировку и включите **Share HR** на браслете, затем найдите пульсометр в FitLife. Права HealthKit и Bluetooth выдаются отдельно по действию пользователя. Проверьте блокировку, паузу, потерю связи и график после завершения. Сборка и соединение с Mi Band на Linux не проверялись. Полная инструкция: [MI_BAND.md](docs/MI_BAND.md), checklist: [XCODE_VALIDATION.md](docs/XCODE_VALIDATION.md).
 
-Для **HUAWEI WATCH GT 6 Pro** в этом же разделе выберите **Модель трекера → HUAWEI WATCH GT 6 Pro**. Для истории сначала проверьте HUAWEI Health → Apple «Здоровье»; для пульса включите **HR Data Broadcasts** на часах и запустите поиск в FitnessTracker. Отсутствие этого пункта и набор передаваемых показателей зависят от прошивки/региона. Реальное соединение с GT 6 Pro не проверялось на Linux. Полные шаги и ссылки производителя — в [MI_BAND.md](docs/MI_BAND.md).
+Для **HUAWEI WATCH GT 6 Pro** в этом же разделе выберите **Модель трекера → HUAWEI WATCH GT 6 Pro**. Для истории сначала проверьте HUAWEI Health → Apple «Здоровье»; для пульса включите **HR Data Broadcasts** на часах и запустите поиск в FitLife. Отсутствие этого пункта и набор передаваемых показателей зависят от прошивки/региона. Реальное соединение с GT 6 Pro не проверялось на Linux. Полные шаги и ссылки производителя — в [MI_BAND.md](docs/MI_BAND.md).
 
 ## Демонстрационные тренировки
 
 После обновления выполните `xcodegen generate`, чтобы включить новый `DemoDataSection.swift` в главный target. Запустите приложение и откройте **Настройки → Демонстрационные данные → Открыть демо-профиль**. Подтвердите загрузку: в дневнике должны появиться 24 тренировки, в каталоге — три демо-плана, на экранах — баннер вымышленных данных. Проверьте перезагрузку набора и **Вернуться к моим данным**; личные записи должны оставаться прежними. При активной личной тренировке вход недоступен.
 
-Запустите новые сценарии в `AppStoreTests` и `FitnessTrackerUITests`. Проверьте, что демо не экспортируется в «Здоровье», не пишет пульс и не заменяет сводку виджета. Эти Apple-тесты и реальный интерфейс на Linux не проверены. [Поведение демо-профиля](docs/DEMO_DATA.md), [полный checklist](docs/XCODE_VALIDATION.md).
+Запустите новые сценарии в `AppStoreTests` и `FitLifeUITests`. Проверьте, что демо не экспортируется в «Здоровье», не пишет пульс и не заменяет сводку виджета. Эти Apple-тесты и реальный интерфейс на Linux не проверены. [Поведение демо-профиля](docs/DEMO_DATA.md), [полный checklist](docs/XCODE_VALIDATION.md).
 
 ## Графики по упражнениям
 
@@ -200,21 +200,21 @@ git status --short
 
 Обновите репозиторий и выполните `xcodegen generate`: добавлены BodyWeightCard/Editor/HistoryView/ViewModel и адаптивный asset ResultsSurface. На «Результатах» проверьте крупные круглые даты календаря без многоточий, меню «История → …», нейтральные карточки и контурные tabs. Сравните с предоставленным образцом на том же iPhone; Linux не проверяет фактическую геометрию SwiftUI.
 
-В **Результаты → Весы → Записать** сохраните вес и проверьте историю/изменение, затем укажите вес в активной и завершённой тренировке. После завершения её значение должно появиться в общей истории, повтор тренировки начинается без веса. Проверьте точку/запятую, кг/фунты, исправление, удаление, ошибки сохранения, demo reset/exit и рестарт с личным SwiftData store. Архивы v1 должны читаться, новый экспорт v2 включает взвешивания; старому приложению для чтения v2 нужно обновление. Новых capabilities нет.
+В **Результаты → Весы → Записать** сохраните вес и проверьте историю/изменение, затем укажите вес в активной и завершённой тренировке. После завершения её значение должно появиться в общей истории, повтор тренировки начинается без веса. Проверьте точку/запятую, кг/фунты, исправление, удаление, ошибки сохранения, demo reset/exit и рестарт с личным SwiftData store. Текущий архив FitLife v4 включает взвешивания; прежние версии и JSON без оболочки отклоняются. Новых capabilities нет.
 
 Запустите новые AppStoreTests/PersistenceTests и три UI-сценария веса/меню месяца. Проверьте CloudKit на двух устройствах при включённой синхронизации и повторный Watch outbox без потери веса, изменённого на iPhone. [Правила](docs/BODY_WEIGHT.md), [полный checklist](docs/XCODE_VALIDATION.md).
 
 ## CSV из FitSession
 
-После обновления выполните `xcodegen generate`: в Info.plist добавлена регистрация системного CSV document type. На iPhone откройте **Настройки → Данные → Импорт и экспорт → Выбрать файл**, выберите первый CSV, проверьте часовой пояс/сводку и подтвердите импорт; затем повторите со вторым файлом. Те же CSV можно открыть из «Файлов» через FitnessTracker. До подтверждения данные не должны меняться, повторный импорт не создаёт копии.
+После обновления выполните `xcodegen generate`: в Info.plist добавлена регистрация системного CSV document type. На iPhone откройте **Настройки → Данные → Импорт и экспорт → Выбрать файл**, выберите первый CSV, проверьте часовой пояс/сводку и подтвердите импорт; затем повторите со вторым файлом. Те же CSV можно открыть из «Файлов» через FitLife. До подтверждения данные не должны меняться, повторный импорт не создаёт копии.
 
-Проверьте множители веса, нулевые/пропущенные подходы, заметки и прочерк вместо неизвестной длительности. HealthKit export без длительности недоступен. Новый JSON-экспорт использует v3 и переносит эти поля; v1/v2 по-прежнему читаются. Запустите новый ArchiveTransferTests CSV flow и AppStoreTests для HealthKit guard. Linux проверил оба пользовательских CSV целиком и Core; picker, file providers, signing и Apple UI требуют Xcode. [Правила и границы](docs/CSV_IMPORT.md).
+Проверьте множители веса, нулевые/пропущенные подходы, заметки и прочерк вместо неизвестной длительности. HealthKit export без длительности недоступен. JSON-экспорт использует только текущий архив FitLife v4 и переносит эти поля. Запустите новый ArchiveTransferTests CSV flow и AppStoreTests для HealthKit guard. Linux проверил оба пользовательских CSV целиком и Core; picker, file providers, signing и Apple UI требуют Xcode. [Правила и границы](docs/CSV_IMPORT.md).
 
 ## AirPods Pro 3: первая проверка на iPhone
 
 После обновления выполните `xcodegen generate`: новые services/views включаются через существующие source directories. Дополнительных background modes или entitlements не добавлено. Проверьте HealthKit и signing в выбранной Personal/full конфигурации, компиляцию AirPodsHeartRateService с Swift 6 и обновлённые RU/EN usage strings. Simulator подходит для интерфейса, но не подтверждает приём с датчика.
 
-На iPhone с iOS 26+ подключите AirPods Pro 3, наденьте их и включите измерение пульса в настройках iOS. FitnessTracker → Настройки → Трекер → AirPods Pro 3 → Apple «Здоровье». Начните тренировку и нажмите «Включить приём пульса». Разрешите чтение пульса/тренировок и запись тренировок. Запись HKWorkout остаётся отдельным экспортом, временный builder отбрасывается. Самими HR samples в Health управляет iOS.
+На iPhone с iOS 26+ подключите AirPods Pro 3, наденьте их и включите измерение пульса в настройках iOS. FitLife → Настройки → Трекер → AirPods Pro 3 → Apple «Здоровье». Начните тренировку и нажмите «Включить приём пульса». Разрешите чтение пульса/тренировок и запись тренировок. Запись HKWorkout остаётся отдельным экспортом, временный builder отбрасывается. Самими HR samples в Health управляет iOS.
 
 Проверьте реальное измерение, паузу/продолжение, блокировку, снятие наушников, выключение разрешений, смену профиля, завершение и повторное включение. После остановки не должно появляться автоматически сохранённой HKWorkout; явный экспорт завершённого журнала создаёт её один раз. При подключённых Watch система выбирает источник, поэтому пульс не помечается как доказанно полученный только с AirPods. Полный список: [AirPods checklist](docs/XCODE_VALIDATION.md#airpods-pro-3--живой-пульс-healthkit).
 
@@ -260,4 +260,4 @@ git status --short
 
 В этом обновлении изменены только существующие исходники: если Xcode-проект был сгенерирован после предыдущих добавлений файлов, повторять `xcodegen generate` не нужно. Достаточно pull и сборки ⌘B/запуска ⌘R. Кнопки общего старта теперь открывают полноразмерный выбор шаблонов с поиском и фильтрами; «Без шаблона» закреплено компактно сверху. Тема по умолчанию — зелёный «Лес», явно выбранная тема сохраняется. [Сценарии проверки](docs/XCODE_VALIDATION.md#старт-с-приоритетом-шаблонов-поиск-и-фильтры).
 
-Для HTTPS callback используйте полную схему `FitnessTracker` с Associated Domains `webcredentials:$(FITNESS_TRACKER_AUTH_DOMAIN)`, настоящим App ID Prefix.Bundle ID и соответствующим provisioning. Пример host — `auth.example.com`; реальный `FITNESS_TRACKER_AUTH_DOMAIN` и HTTPS URL задайте в игнорируемом `Config/Local.xcconfig`. Задайте `IOS_APP_IDENTIFIER` на Auth Server и проверьте AASA по [SERVER.md](docs/SERVER.md#привязка-https-callback-к-ios). Пока Apple ID не зарегистрирован, возврат на iPhone не считается настроенным. Personal Team схема сохраняет прежние entitlements и использует отдельный private-use callback с PKCE по инструкции в SERVER.md.
+Для HTTPS callback используйте полную схему `FitLife` с Associated Domains `webcredentials:$(FITLIFE_AUTH_DOMAIN)`, настоящим App ID Prefix.Bundle ID и соответствующим provisioning. Пример host — `auth.example.com`; реальный `FITLIFE_AUTH_DOMAIN` и HTTPS URL задайте в игнорируемом `Config/Local.xcconfig`. Задайте `IOS_APP_IDENTIFIER` на Auth Server и проверьте AASA по [SERVER.md](docs/SERVER.md#привязка-https-callback-к-ios). Пока Apple ID не зарегистрирован, возврат на iPhone не считается настроенным. Personal Team схема сохраняет прежние entitlements и использует отдельный private-use callback с PKCE по инструкции в SERVER.md.

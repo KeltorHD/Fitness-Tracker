@@ -2,13 +2,13 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
 
-namespace FitnessTracker.Backend;
+namespace FitLife.Backend;
 
 /// <summary>Конфигурация стандартной introspection; секрет принадлежит только серверным сервисам.</summary>
 internal sealed class IntrospectionOptions
 {
     /// <summary>Client ID совпадает с audience API, разрешая OpenIddict раскрыть статус его access token.</summary>
-    internal const string ClientId = "fitnesstracker-api";
+    internal const string ClientId = "fitlife-api";
     /// <summary>Корневой HTTPS issuer Authentication.</summary>
     public string Issuer { get; set; } = "";
     /// <summary>Отдельный секрет confidential client, не связанный с ключом удаления копий.</summary>

@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace FitnessTracker.Authentication;
+namespace FitLife.Authentication;
 
 /// <summary>Удаляет только локальные неподтверждённые регистрации старше двух часов, освобождая имя/email.</summary>
 public sealed class PendingRegistrationCleanup(AuthDbContext database, TimeProvider clock,

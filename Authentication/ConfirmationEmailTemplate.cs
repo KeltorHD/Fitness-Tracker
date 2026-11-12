@@ -1,7 +1,7 @@
 using System.Net;
 using MimeKit;
 
-namespace FitnessTracker.Authentication;
+namespace FitLife.Authentication;
 
 /// <summary>Собирает HTML и plain text подтверждения из одного проверенного HTTPS-адреса без внешних ресурсов.</summary>
 internal static class ConfirmationEmailTemplate
@@ -19,11 +19,11 @@ internal static class ConfirmationEmailTemplate
         return new BodyBuilder
         {
             TextBody = $"""
-                FitnessTracker
+                FitLife
 
                 Подтвердите электронную почту
 
-                Вы создали аккаунт FitnessTracker. Чтобы завершить регистрацию, откройте ссылку:
+                Вы создали аккаунт FitLife. Чтобы завершить регистрацию, откройте ссылку:
 
                 {link}
 
@@ -42,7 +42,7 @@ internal static class ConfirmationEmailTemplate
     private static string LoadHtml()
     {
         using var stream = typeof(ConfirmationEmailTemplate).Assembly.GetManifestResourceStream(
-            "FitnessTracker.Authentication.EmailTemplates.Confirmation.html")
+            "FitLife.Authentication.EmailTemplates.Confirmation.html")
             ?? throw new InvalidOperationException("The confirmation email template is missing.");
         using var reader = new StreamReader(stream);
         return reader.ReadToEnd();

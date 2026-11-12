@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import SwiftUI
 
 /// A schematic map of the catalog's muscle groups, rather than an anatomical atlas.

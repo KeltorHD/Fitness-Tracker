@@ -13,7 +13,7 @@ jobs:
           --health-cmd pg_isready --health-interval 5s
           --health-timeout 5s --health-retries 12
     env:
-      FITNESS_TRACKER_TEST_POSTGRES: Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=disposable-test-password
+      FITLIFE_TEST_POSTGRES: Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=disposable-test-password
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4

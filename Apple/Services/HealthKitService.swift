@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import Foundation
 import HealthKit
 
@@ -8,7 +8,7 @@ import HealthKit
     guard HKHealthStore.isHealthDataAvailable() else {
       throw ServiceError.unavailable("HealthKit недоступен на этом устройстве.")
     }
-    // Read permission is unnecessary: FitnessTracker only exports workouts on explicit request.
+    // Read permission is unnecessary: FitLife only exports workouts on explicit request.
     try await store.requestAuthorization(toShare: [HKObjectType.workoutType()], read: [])
   }
   func export(_ workout: Workout) async throws {
@@ -29,9 +29,9 @@ import HealthKit
     let builder = HKWorkoutBuilder(healthStore: store, configuration: config, device: nil)
     try await builder.beginCollection(at: workout.startedAt)
     try await builder.addMetadata([
-      HKMetadataKeySyncIdentifier: AppCompatibility.healthSyncPrefix + workout.id.uuidString,
+      HKMetadataKeySyncIdentifier: AppIdentifiers.healthSyncPrefix + workout.id.uuidString,
       HKMetadataKeySyncVersion: 1,
-      HKMetadataKeyWorkoutBrandName: "FitnessTracker",
+      HKMetadataKeyWorkoutBrandName: "FitLife",
     ])
     var events: [HKWorkoutEvent] = []
     for pause in workout.pauses {

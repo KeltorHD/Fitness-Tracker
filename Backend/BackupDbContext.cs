@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace FitnessTracker.Backend;
+namespace FitLife.Backend;
 
 public sealed class BackupRecord
 {

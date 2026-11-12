@@ -5,7 +5,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
-using FitnessTracker.Authentication;
+using FitLife.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Xunit;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Проверяет собственный OAuth/Identity-сервер через HTTP без внешних провайдеров.</summary>
 [Trait("Category", "HTTP")]
@@ -166,13 +166,13 @@ public sealed class AuthenticationTests
         Assert.Equal("RS256", jwt.Header.Alg);
         Assert.Equal("https://localhost/", jwt.Issuer);
         Assert.Contains(AuthConfiguration.Audience, jwt.Audiences);
-        Assert.DoesNotContain(jwt.Claims, claim => claim.Type == "fitnesstracker:security_stamp");
+        Assert.DoesNotContain(jwt.Claims, claim => claim.Type == "fitlife:security_stamp");
         Assert.Equal(HttpStatusCode.BadRequest, (await ExchangeAsync(client, fresh.Code, fresh.Verifier)).StatusCode);
-        var rejected = await client.GetAsync("/connect/authorize?client_id=fitnesstracker-ios&redirect_uri=https://attacker.test/&response_type=code&scope=profile");
+        var rejected = await client.GetAsync("/connect/authorize?client_id=fitlife-ios&redirect_uri=https://attacker.test/&response_type=code&scope=profile");
         Assert.Equal(HttpStatusCode.BadRequest, rejected.StatusCode);
-        var missingPkce = await client.GetAsync("/connect/authorize?client_id=fitnesstracker-ios&redirect_uri=https%3A%2F%2Fauth.example.com%2Fios%2Foauth%2Fcallback&response_type=code&scope=profile");
+        var missingPkce = await client.GetAsync("/connect/authorize?client_id=fitlife-ios&redirect_uri=https%3A%2F%2Fauth.example.com%2Fios%2Foauth%2Fcallback&response_type=code&scope=profile");
         Assert.Contains("invalid_request", missingPkce.Headers.Location?.ToString() ?? await missingPkce.Content.ReadAsStringAsync());
-        var plainPkce = await client.GetAsync("/connect/authorize?client_id=fitnesstracker-ios&redirect_uri=https%3A%2F%2Fauth.example.com%2Fios%2Foauth%2Fcallback&response_type=code&scope=profile&code_challenge=abcdefghijklmnopqrstuvwxyz1234567890abcdefghijk&code_challenge_method=plain");
+        var plainPkce = await client.GetAsync("/connect/authorize?client_id=fitlife-ios&redirect_uri=https%3A%2F%2Fauth.example.com%2Fios%2Foauth%2Fcallback&response_type=code&scope=profile&code_challenge=abcdefghijklmnopqrstuvwxyz1234567890abcdefghijk&code_challenge_method=plain");
         Assert.Contains("invalid_request", plainPkce.Headers.Location?.ToString() ?? await plainPkce.Content.ReadAsStringAsync());
     }
 

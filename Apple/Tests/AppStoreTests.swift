@@ -1,7 +1,7 @@
-import FitnessTrackerCore
+import FitLifeCore
 import XCTest
 
-@testable import FitnessTracker
+@testable import FitLife
 
 @MainActor private final class RecordingHealthExporter: HealthWorkoutExporting {
   var authorized = false
@@ -1021,8 +1021,8 @@ import XCTest
   func testCompletedWorkoutIsPersistedAndExportRequiresExplicitAction() async throws {
     let repository = MemoryWorkoutRepository()
     let health = RecordingHealthExporter()
-    let defaults = try XCTUnwrap(UserDefaults(suiteName: "FitnessTracker.UnitTests"))
-    defer { defaults.removePersistentDomain(forName: "FitnessTracker.UnitTests") }
+    let defaults = try XCTUnwrap(UserDefaults(suiteName: "FitLife.UnitTests"))
+    defer { defaults.removePersistentDomain(forName: "FitLife.UnitTests") }
     let store = AppStore(
       repository: repository, health: health, defaults: defaults, platformServicesEnabled: false)
     store.start(template: ExerciseCatalog.starterTemplates[0])

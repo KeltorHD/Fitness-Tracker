@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Npgsql;
-using FitnessTracker.ServerLogging;
+using FitLife.ServerLogging;
 using OpenIddict.Abstractions;
 using OpenIddict.Validation.AspNetCore;
 
-namespace FitnessTracker.Authentication;
+namespace FitLife.Authentication;
 
 public partial class Program
 {
@@ -56,7 +56,7 @@ public partial class Program
         builder.Services.AddDbContext<AuthDbContext>(options =>
         {
             options.UseNpgsql(config.GetConnectionString("Database") ??
-                "Host=localhost;Database=fitnesstracker_auth;Username=fitnesstracker_auth");
+                "Host=localhost;Database=authentication;Username=authentication");
             options.UseOpenIddict();
         });
         builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
@@ -95,7 +95,7 @@ public partial class Program
         builder.Services.Configure<Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationOptions>(
             IdentityConstants.TwoFactorUserIdScheme, options =>
             {
-                options.Cookie.Name = "__Host-FitnessTrackerPasskey";
+                options.Cookie.Name = "__Host-FitLifePasskey";
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.Cookie.HttpOnly = true;
                 options.Cookie.SameSite = SameSiteMode.Strict;
@@ -105,7 +105,7 @@ public partial class Program
         builder.Services.AddAntiforgery(options => options.Cookie.SecurePolicy = CookieSecurePolicy.Always);
         builder.Services.ConfigureApplicationCookie(options =>
         {
-            options.Cookie.Name = "__Host-FitnessTrackerAuth";
+            options.Cookie.Name = "__Host-FitLifeAuth";
             options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             options.Cookie.HttpOnly = true;
             options.Cookie.SameSite = SameSiteMode.Lax;
@@ -115,7 +115,7 @@ public partial class Program
         });
         builder.Services.Configure<SecurityStampValidatorOptions>(options =>
             options.ValidationInterval = TimeSpan.Zero);
-        var protection = builder.Services.AddDataProtection().SetApplicationName("FitnessTracker.Authentication");
+        var protection = builder.Services.AddDataProtection().SetApplicationName("FitLife.Authentication");
         if (config["DataProtection:Path"] is { Length: > 0 } keyPath)
             protection.PersistKeysToFileSystem(new DirectoryInfo(keyPath));
         if (builder.Environment.IsProduction())
@@ -236,7 +236,7 @@ public partial class Program
                 var startupSettings = new NpgsqlConnectionStringBuilder(database.Database.GetConnectionString())
                 {
                     Pooling = false,
-                    ApplicationName = "FitnessTracker startup"
+                    ApplicationName = "FitLife startup"
                 };
                 await using var startupConnection = new NpgsqlConnection(startupSettings.ConnectionString);
                 await startupConnection.OpenAsync(cancellationToken);

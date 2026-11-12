@@ -1,8 +1,8 @@
-using FitnessTracker.Backend;
+using FitLife.Backend;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-namespace FitnessTracker.Server.Tests;
+namespace FitLife.Server.Tests;
 
 /// <summary>Имитирует отказ или отмену записи после начала транзакции, не заменяя само хранилище.</summary>
 internal sealed class BackupSaveInterceptor : SaveChangesInterceptor

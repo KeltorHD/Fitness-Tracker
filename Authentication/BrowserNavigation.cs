@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Routing;
 
-namespace FitnessTracker.Authentication;
+namespace FitLife.Authentication;
 
 /// <summary>Проверяет браузерные продолжения штатным URL validator MVC.</summary>
 public sealed class BrowserNavigation(IUrlHelperFactory urls, IHttpContextAccessor contexts)

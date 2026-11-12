@@ -1,4 +1,4 @@
-import FitnessTrackerCore
+import FitLifeCore
 import SwiftUI
 
 /// Shared by template preferences and the exercise catalog so both use the same selection rules.
