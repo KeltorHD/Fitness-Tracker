@@ -13,12 +13,6 @@ struct DashboardView: View {
       VStack(spacing: 0) {
         DiaryCalendarView(date: $date, workouts: store.workouts)
           .padding(.horizontal, 16).padding(.top, 4).padding(.bottom, 10)
-        Picker(L10n.text("Раздел дневника", locale: locale), selection: $section) {
-          Text(L10n.text("Тренировки", locale: locale)).tag(DiarySection.workouts)
-          Text(L10n.text("Питание", locale: locale)).tag(DiarySection.nutrition)
-          Text(L10n.text("Сон", locale: locale)).tag(DiarySection.sleep)
-        }.pickerStyle(.segmented).accessibilityIdentifier("diarySection")
-          .padding(.horizontal, 16).padding(.bottom, 8)
         TabView(selection: $section) {
           HistoryView(date: $date, isSelected: section == .workouts).tag(DiarySection.workouts)
           Group {
@@ -46,9 +40,17 @@ struct DashboardView: View {
       .background(FitTheme.paper).navigationBarTitleDisplayMode(.inline)
       .toolbar {
         ToolbarItem(placement: .topBarLeading) {
-          Text(L10n.text("Дневник", locale: locale)).font(.title2.bold())
-            .lineLimit(1).fixedSize(horizontal: true, vertical: false)
-            .accessibilityAddTraits(.isHeader).accessibilityIdentifier("diaryHeaderTitle")
+          Picker(L10n.text("Раздел дневника", locale: locale), selection: $section) {
+            Label(
+              L10n.text("Тренировки", locale: locale),
+              systemImage: "figure.strengthtraining.traditional"
+            ).tag(DiarySection.workouts)
+            Label(L10n.text("Питание", locale: locale), systemImage: "fork.knife")
+              .tag(DiarySection.nutrition)
+            Label(L10n.text("Сон", locale: locale), systemImage: "moon.zzz.fill")
+              .tag(DiarySection.sleep)
+          }.labelStyle(.iconOnly).pickerStyle(.segmented).frame(width: 168)
+            .accessibilityIdentifier("diarySection")
         }
         .sharedBackgroundVisibility(.hidden)
         SettingsToolbar()

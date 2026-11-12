@@ -1,28 +1,33 @@
 import XCTest
 
 final class FitnessTrackerUITests: XCTestCase {
-  @MainActor func testDiaryHeaderHasRoomForFullTitleWithWeekAndMonthCalendar() {
+  @MainActor func testDiaryHeaderTabsFitAboveWeekAndMonthCalendar() {
     let app = launch(additionalArguments: ["--ui-testing-diary-insights", "-appearance", "light"])
-    let header = app.staticTexts["diaryHeaderTitle"]
-    XCTAssertTrue(header.waitForExistence(timeout: 10))
-    XCTAssertEqual(header.label, "Дневник")
-    XCTAssertGreaterThan(header.frame.width, 75)
-    XCTAssertLessThan(header.frame.maxX, app.buttons["openSettings"].frame.minX)
+    let section = app.segmentedControls["diarySection"]
+    XCTAssertTrue(section.waitForExistence(timeout: 10))
+    XCTAssertLessThanOrEqual(section.frame.width, 200)
+    XCTAssertLessThan(section.frame.maxX, app.buttons["openSettings"].frame.minX)
+    for title in ["Тренировки", "Питание", "Сон"] {
+      XCTAssertTrue(section.buttons[title].isHittable)
+      XCTAssertGreaterThanOrEqual(section.buttons[title].frame.width, 44)
+    }
     let calendar = app.descendants(matching: .any).matching(identifier: "diaryCalendar").firstMatch
+    XCTAssertLessThan(section.frame.maxY, calendar.frame.minY)
     XCTAssertLessThanOrEqual(calendar.frame.height, 120)
     let selected = app.buttons["selectedDiaryCalendarDay"]
     XCTAssertGreaterThanOrEqual(selected.frame.height, 44)
     XCTAssertGreaterThanOrEqual(selected.frame.width, 44)
     let week = XCTAttachment(screenshot: app.screenshot())
-    week.name = "Full diary title above shared week calendar and triple rings"
+    week.name = "Compact diary header tabs above shared week calendar"
     week.lifetime = .keepAlways
     add(week)
     let toggle = app.buttons["expandDiaryCalendar"]
     toggle.tap()
     XCTAssertEqual(toggle.value as? String, "Месяц")
-    XCTAssertGreaterThan(header.frame.width, 75)
+    XCTAssertLessThan(section.frame.maxY, calendar.frame.minY)
+    XCTAssertLessThan(section.frame.maxX, app.buttons["openSettings"].frame.minX)
     let month = XCTAttachment(screenshot: app.screenshot())
-    month.name = "Full diary title and expanded calendar"
+    month.name = "Compact diary header tabs above expanded month calendar"
     month.lifetime = .keepAlways
     add(month)
   }
@@ -33,9 +38,8 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(section.waitForExistence(timeout: 10))
     let grid = app.descendants(matching: .any).matching(identifier: "diaryCalendarGrid").firstMatch
     XCTAssertTrue(grid.waitForExistence(timeout: 5))
-    XCTAssertLessThan(grid.frame.maxY, section.frame.minY)
-    let header = app.staticTexts["diaryHeaderTitle"]
-    XCTAssertLessThan(header.frame.minX, app.buttons["openSettings"].frame.minX)
+    XCTAssertLessThan(section.frame.maxY, grid.frame.minY)
+    XCTAssertLessThan(section.frame.maxX, app.buttons["openSettings"].frame.minX)
     let selected = app.buttons["selectedDiaryCalendarDay"]
     let original = selected.label
     let start = grid.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
