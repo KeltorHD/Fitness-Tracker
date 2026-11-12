@@ -1,6 +1,6 @@
 # Аутентификация и серверные резервные копии
 
-Основа — [согласованная переписка](https://chatgpt.com/share/6aea2280-e498-83eb-be07-a822dfac1c8d): два самостоятельных .NET-приложения, ASP.NET Core Identity + OpenIddict, Google/Apple/Яндекс, PostgreSQL, Docker Compose и Authorization Code + PKCE. Добавлены регистрация/вход по email и паролю без подтверждения почты и passkey как альтернатива паролю; восстановление по почте пока не реализовано.
+Основа — [согласованная переписка](https://chatgpt.com/share/6aea2280-e498-83eb-be07-a822dfac1c8d): два самостоятельных .NET-приложения, ASP.NET Core Identity + OpenIddict, Google/Apple/Яндекс, PostgreSQL, Docker Compose и Authorization Code + PKCE. Добавлены регистрация/вход по email и паролю с подтверждением новых адресов через SMTP и passkey как альтернатива паролю; восстановление по почте пока не реализовано.
 
 ## Проекты
 
@@ -9,9 +9,10 @@
 | Существующий `project.yml`, `Apple/`, `Sources/` | Нативное iOS/watchOS-приложение и независимый Swift Core; пути сохранены |
 | `Authentication/FitnessTracker.Authentication.csproj` | Пользователи Identity, внешние входы, OAuth/OIDC, сессии, привязки, удаление аккаунта |
 | `Backend/FitnessTracker.Backend.csproj` | Backend приложения; текущая функция — резервные копии. Собственные правила доступа, JWT через discovery/JWKS и проверка отзыва через introspection Auth Server |
+| `ServerLogging/FitnessTracker.ServerLogging.csproj` | Общий необязательный ILogger provider для ntfy: маскирование, очередь и HTTP transport; не владеет пользователями, архивами или БД |
 | `FitnessTracker.Server.sln` | Оба серверных проекта и отдельный тестовый проект `Tests/Server` |
 
-Требуется .NET 10 SDK. Версии пакетов и lock-файлы закреплены. Внутренних ссылок между серверными проектами нет: обмен идёт по HTTP и общему документированному контракту. В production сервисы используют раздельные PostgreSQL-базы и учётные данные. SwiftData остаётся основным локальным хранилищем приложения; сервер не синхронизирует записи и не заменяет CloudKit.
+Требуется .NET 10 SDK. Версии пакетов и lock-файлы закреплены. Authentication и Backend не ссылаются друг на друга: обмен идёт по HTTP и документированному контракту. Общая ServerLogging нужна только для одинаковой инфраструктуры уведомлений в двух процессах. В production сервисы используют раздельные PostgreSQL-базы и учётные данные. SwiftData остаётся основным локальным хранилищем приложения; сервер не синхронизирует записи и не заменяет CloudKit.
 
 ```mermaid
 flowchart LR
@@ -71,7 +72,10 @@ Keychain item изолирован по bundle ID и issuer, не синхрон
 | Auth POST | `/connect/introspect` | RFC 7662, только confidential Backend client; внешний доступ закрыт Nginx |
 | Auth GET | `/login` | Выбор включённых провайдеров |
 | Auth POST | `/login/{provider}` | Начало внешнего входа / явной привязки; antiforgery |
-| Auth GET/POST | `/register` | Регистрация email/пароль без подтверждения почты |
+| Auth GET/POST | `/register` | Регистрация email/пароль с обязательным подтверждением новых аккаунтов |
+| Auth GET | `/email/verify` | Ожидание подтверждения и форма повтора письма |
+| Auth POST | `/email/resend` | Повторная отправка; одинаковый ответ для всех email, throttle и antiforgery |
+| Auth GET/POST | `/email/confirm` | GET показывает форму, POST проверяет Identity token; автоматического входа нет |
 | Auth POST | `/login/password` | Парольный вход с lockout и antiforgery |
 | Auth POST | `/passkeys/register/options`, `/passkeys/register` | Создание аккаунта без пароля |
 | Auth POST | `/passkeys/login/options`, `/passkeys/login` | Вход по discoverable passkey |
@@ -242,6 +246,32 @@ docker compose logs --tail=100 authentication backend
 
 Официальные источники: [Nginx reverse proxy](https://nginx.org/en/docs/http/ngx_http_proxy_module.html), [ASP.NET Core forwarded headers](https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/proxy-load-balancer?view=aspnetcore-10.0), [Docker port publishing](https://docs.docker.com/engine/network/port-publishing/), [автоматический IPAM Docker](https://docs.docker.com/reference/cli/docker/network/create/#specify-advanced-options), [external-сети Compose](https://docs.docker.com/reference/compose-file/networks/#external), [применение EF-миграций](https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/applying), [PostgreSQL advisory locks](https://www.postgresql.org/docs/current/functions-admin.html#FUNCTIONS-ADVISORY-LOCKS).
 
+## Логи в ntfy
+
+Оба сервиса могут дополнительно отправлять сообщения стандартного ILogger в ntfy. Интеграция выключена по умолчанию; обычные console/Docker logs сохраняются. Задайте в `.env`:
+
+```dotenv
+NTFY_ENABLED=true
+NTFY_SERVER_URL=https://ntfy.example.com/
+NTFY_TOKEN=your-ntfy-access-token
+AUTH_NTFY_TOPIC=your-private-auth-topic
+BACKEND_NTFY_TOPIC=your-private-backend-topic
+AUTH_NTFY_MIN_LEVEL=Warning
+BACKEND_NTFY_MIN_LEVEL=Error
+NTFY_QUEUE_CAPACITY=128
+NTFY_TIMEOUT_SECONDS=5
+```
+
+Server URL — корень ntfy, без topic/credentials/query/fragment. Токен необязателен для серверов, допускающих anonymous publish; для логов используйте закрытые topics с контролем доступа. Поддержаны `Trace`, `Debug`, `Information`, `Warning`, `Error`, `Critical`, `None`; порог включителен и независим от console/category filters. `None` отключает отправку конкретного сервиса. Приоритет уведомления: Critical → 5, Error → 4, Warning → 3, остальные → 2. [Формат JSON publish и bearer authentication](https://docs.ntfy.sh/publish/) соответствует стандартному API ntfy.
+
+Без Compose те же настройки задаются стандартными environment keys `Ntfy__Enabled`, `Ntfy__ServerUrl`, `Ntfy__Topic`, `Ntfy__Token`, `Ntfy__MinimumLevel`, `Ntfy__QueueCapacity`, `Ntfy__TimeoutSeconds`. Конфигурация считывается при старте; после изменения `.env` пересоздайте сервисы: `docker compose up -d --build authentication backend`. Включённая интеграция проверяет URL, topic, уровень и ограничения до открытия HTTP listener. Отключённая не создаёт HTTP transport.
+
+По выбранному режиму отправляются текст сообщения и исключения с маскированием. До очереди скрываются известные секретные настройки (также пароль внутри connection string и JSON/URL encoding), чувствительные structured fields, bearer/basic headers, cookies, JWT/JWE, email и OAuth query-параметры. Полные archive/credential/claims payloads подавляются, scopes не отправляются; длинные записи пропускаются либо обрезаются уже после маскирования по границе UTF-8. Trace/Debug/Information OpenIddict, MVC ModelBinding и HttpLogging отправляются только как события без содержимого protocol/form payload и текста exception; подробности остаются в локальных логах. Это защита известных форматов, а не распознавание произвольных медицинских/личных данных: не добавляйте такие данные в исходные ILogger-сообщения.
+
+Доставка асинхронная, очередь ограничена 128 записями (настройка 1–1024). При переполнении запись отбрасывается без ожидания сети. HTTP timeout — 5 секунд (настройка 1–30), redirect/cookies отключены, bearer не включается в URL. Отказ HTTP/transport не ломает запросы: неудачная запись не повторяется, следующие 30 секунд публикации подавляются, затем новые записи снова доставляются. Счётчик потерь и безопасная диагностика идут только в локальные логи. Исходящие HTTP logs самого transport отключены, чтобы не создавать рекурсивные уведомления. Это best-effort уведомления, не долговечное хранилище/аудит всех событий.
+
+Worker запускается до миграций; ошибка инициализации БД логируется как Critical. Shutdown даёт очереди до пяти секунд, затем отменяет собственный transport. Ошибки конфигурации до создания host могут быть доступны только в локальном stderr. Код интеграции проверяется fake HTTP-тестами без публикаций в реальные topics.
+
 ## Провайдеры
 
 Apple, Google и Яндекс всегда видны на странице входа и среди доступных привязок аккаунта. Выключенные или не полностью настроенные провайдеры показываются серыми с подсказкой «В разработке» при наведении/фокусе; на touch-устройствах пояснение видно сразу. У них нет формы отправки; прямой запрос входа также отклоняется сервером. Активной кнопка становится только при `Enabled=true` и заполненных обязательных credentials; для Apple также нужен существующий файл private key. Невалидный формат уже заданного Apple-ключа остаётся ошибкой конфигурации. Email/пароль и passkey доступны независимо от внешних провайдеров.
@@ -270,7 +300,93 @@ FITNESS_TRACKER_AUTH_DOMAIN = auth.example.com
 
 ## Email, пароль и passkey
 
-Регистрация `/register` создаёт локальный аккаунт с email и паролем от 12 до 128 символов (не менее четырёх разных символов), либо с email и passkey без пароля. Письма и коды не отправляются; `EmailConfirmed` остаётся `false`. Адрес служит логином, но владение им не проверяется. Восстановление доступа по неподтверждённой почте не реализовано. Локальный email нормализуется Identity и получает уникальный username; совпадение email с Google/Apple/Яндекс не объединяет аккаунты. Внешние способы добавляются явным действием из аккаунта.
+Регистрация `/register` создаёт локальный аккаунт с email и паролем от 12 до 128 символов (не менее четырёх разных символов), либо с email и passkey без пароля. **Новые регистрации требуют подтверждения почты**: адрес нужно подтвердить в течение двух часов с создания аккаунта, иначе неподтверждённая регистрация удаляется. Повторное письмо не продлевает срок. До подтверждения не выдаются browser cookie и OAuth-токены. Сам GET ссылки ничего не меняет: пользователь явно подтверждает адрес кнопкой (antiforgery POST), после чего входит с паролем или passkey. Письмо не содержит OAuth state/PKCE/callback, вход по ссылке не выполняется.
+
+**Прежние аккаунты продолжают работать без проверки email.** Миграция `RequireConfirmationForNewEmailAccounts` добавляет `EmailConfirmationRequired=false` существующим строкам; только новая локальная регистрация устанавливает `true`. Значение `EmailConfirmed` прежних пользователей не подделывается, пароли/passkey/сессии и копии сохраняются. Внешние провайдеры сохраняют свой прежний сценарий. Совпадение email с Google/Apple/Яндекс не объединяет аккаунты. Восстановление пароля по почте в эту функцию не входит.
+
+### SMTP и Stalwart
+
+Отправка использует MailKit и обычный SMTP submission. API Stalwart или другого провайдера не требуется. В `.env` Authentication задайте, например:
+
+```dotenv
+SMTP_ENABLED=true
+SMTP_HOST=mail.example.com
+SMTP_PORT=587
+SMTP_SECURITY=StartTls
+SMTP_USERNAME=fitness@example.com
+SMTP_PASSWORD=replace-with-smtp-password
+SMTP_FROM_ADDRESS=fitness@example.com
+SMTP_FROM_NAME=FitnessTracker
+SMTP_TIMEOUT_SECONDS=10
+```
+
+`StartTls` требует STARTTLS без автоматического перехода на plaintext. Для TLS с первого байта используйте `SslOnConnect` и обычно порт `465`. Проверка сертификата остаётся включённой; SMTP host должен соответствовать сертификату и быть доступен из контейнера. `localhost` внутри Authentication указывает на сам контейнер, поэтому для Stalwart на хосте задайте доступный DNS/IP хоста; для отдельного контейнера — имя в общей Docker-сети. `None` разрешён только как явный выбор для доверенной внутренней сети. Username/password можно оставить пустыми, если настроен ограниченный внутренний SMTP relay. На почтовом сервере разрешите выбранного отправителя; DNS SPF/DKIM/DMARC и доставку на внешние ящики настраивает владелец сервера.
+
+По умолчанию `SMTP_ENABLED=false`: новая email/пароль и email/passkey регистрация недоступна (серая кнопка), старые аккаунты продолжают входить. Для обычного запуска без Compose используйте ключи `Smtp__Enabled`, `Smtp__Host`, `Smtp__Port`, `Smtp__Security`, `Smtp__Username`, `Smtp__Password`, `Smtp__FromAddress`, `Smtp__FromName`, `Smtp__TimeoutSeconds`. Они требуются только Authentication. Не коммитьте `.env`.
+
+Повторная отправка — `/email/verify`; POST `/email/resend` защищён antiforgery и credential rate limit. Ответ одинаков для неизвестного, подтверждённого и ожидающего аккаунта. Письмо отправляется не чаще раза в минуту на нормализованный адрес, в ограниченном in-memory cache (на экземпляр Auth; при рестарте cache очищается). SMTP ошибки не удаляют созданный аккаунт, в лог попадает только безопасный код доставки без получателя/ссылки/SMTP ответа. Автоматических повторов и постоянной почтовой очереди нет: при сбое пользователь запрашивает письмо снова. Успешный SMTP submission не гарантирует доставку в папку «Входящие».
+
+Для обновления сохраните имеющиеся `.env`, каталоги БД/keys и сертификаты, добавьте SMTP-настройки и выполните `docker compose up -d --build authentication backend`. Новая миграция применяется автоматически до HTTP; удалять БД или повторно запускать setup не нужно. Проверка через новый тестовый аккаунт: регистрация → письмо → явное подтверждение → вход. В мобильной сессии после подтверждения в почтовом браузере вернитесь в окно входа приложения и нажмите «Продолжить вход после подтверждения».
+
+Токены генерирует/проверяет штатный [Identity DataProtectionTokenProvider](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/accconfirm?view=aspnetcore-10.0); сохраняйте прежний Data Protection key ring. Письма собираются как text/plain + text/html через [MailKit](https://www.nuget.org/packages/MailKit).
+
+### Срок неподтверждённой регистрации
+
+Срок — **2 часа от `CreatedAt`**, для email/пароль и email/passkey. После границы подтверждение отклоняется даже по свежему повторному письму. Повторная отправка просроченному аккаунту пропускается с причиной `registration_expired`, сохраняя общий публичный ответ. Если срок истёк, создайте аккаунт заново.
+
+Authentication запускает очистку после startup migrations и затем примерно раз в минуту, удаляя просроченные записи порциями по 200 до опустошения очереди. Перед новой регистрацией отдельно очищается просроченная запись этого нормализованного имени, поэтому освобождения email не нужно ждать до следующего прохода. Удаляются только строки `EmailConfirmationRequired=true`, `EmailConfirmed=false` и `CreatedAt <= now - 2h`; SQL повторно проверяет условия при удалении, сохраняя конкурентно подтверждённый профиль. Связанные passkey и служебные Identity-записи удаляются каскадно. Повторная регистрация получает новый ID; прежняя ссылка не подтверждает новый профиль.
+
+**Подтверждённые, прежние и внешние аккаунты сохраняются.** На первом запуске после обновления также очищаются уже имеющиеся просроченные регистрации, требующие подтверждения. Миграция `AddPendingRegistrationExpiryIndex` добавляет только частичный индекс по существующему `CreatedAt`; она применяется автоматически. Удалять каталоги БД, запускать setup заново или задавать новые env не нужно.
+
+Категория `FitnessTracker.Authentication.PendingRegistrationCleanup` пишет `Information`: событие `4400`, количество удалённых записей и операция `scheduled`/`registration`, без email и ID пользователей. Ошибка фоновой очистки — `4401` с безопасным типом исключения; следующая попытка выполняется через минуту. Несколько экземпляров Auth могут выполнять очистку параллельно: повторный условный DELETE не затрагивает новый или уже подтверждённый профиль.
+
+### Оформление письма и ссылки
+
+HTML-шаблон — `Authentication/EmailTemplates/Confirmation.html`, встроенный ресурс сборки Authentication. Он повторяет оформление страницы входа: сиреневый фон, светлая карточка, логотип FitnessTracker и оранжево-пурпурная кнопка; тёмная тема включается в поддерживающих её почтовых клиентах. Таблицы и основные inline-стили сохраняют читаемость при ограниченной поддержке CSS; внешних изображений, шрифтов, скриптов и трекинга нет.
+
+Кнопка «Подтвердить почту» и видимый полный адрес под ней — обычные HTTPS-ссылки на одну страницу подтверждения. Адрес можно целиком скопировать; тот же URL включён в текстовую MIME-часть. Renderer экранирует HTML, не добавляя переносы или сокращения внутрь URL; MIME-тесты проверяют сохранность параметров после сериализации. GET по-прежнему только открывает страницу: подтверждение требует явной кнопки на сайте. Новое оформление появится в письмах, отправленных после обновления Authentication:
+
+```bash
+docker compose up -d --build authentication
+```
+
+Если письмо оказалось в «Спаме», ограничения почтового сервиса могут мешать переходу. Для собственного запрошенного письма в Яндекс Почте отметьте «Не спам» и снова откройте его во «Входящих» ([справка Яндекса](https://yandex.ru/support/yandex-360/customers/mail/ru/web/spam.html)). Новый HTML не гарантирует доставку во «Входящие»: репутацию отправляющего IP и настройки SPF/DKIM/DMARC проверяют отдельно. Истёкшую ссылку замените повторной отправкой на `/email/verify`.
+
+Иллюстративные HTML-превью с демонстрационным, недействительным токеном: [светлое](previews/auth-email-light.png), [тёмное](previews/auth-email-dark.png), [мобильная ширина](previews/auth-email-mobile.png). Они получены в Chromium; отображение внутри Яндекс Почты, Outlook и других почтовых клиентов требует отдельной проверки.
+
+### Диагностика SMTP в консоли
+
+События отправки видны в обычных Docker logs:
+
+```bash
+docker compose logs --since=10m -f authentication
+```
+
+Для категорий `FitnessTracker.Authentication.EmailConfirmationService` и `FitnessTracker.Authentication.SmtpEmailSender` в `appsettings.json` включён `Information`; общий порог приложения остаётся `Warning`. Отправка в ntfy дополнительная и использует собственный настроенный порог.
+
+Одна попытка имеет случайный `AttemptId`, общий для сервиса и SMTP-транспорта. Последовательно записываются запрос, подготовка MIME, подключение/согласование TLS (host, порт, режим, фактический TLS protocol), аутентификация, передача письма и закрытие соединения. Завершение этапов содержит длительность в миллисекундах. `SMTP submit: accepted_by_smtp` и `Email confirmation accepted by SMTP server` означают принятие письма SMTP-сервером; доставку получателю проверяйте в очереди/логах почтового сервера. Ошибка QUIT после принятия отмечается отдельно и не запускает повторную отправку.
+
+Пропуски имеют событие `Email confirmation skipped` с причиной `smtp_disabled`, `invalid_address`, `throttled`, `account_not_found`, `confirmation_not_required` или `already_confirmed` или `registration_expired`. Браузер по-прежнему получает одинаковый ответ, без раскрытия наличия аккаунта. Отсутствие вообще всех почтовых событий означает, что запрос не дошёл до этого сценария, фильтры логирования были переопределены или запущена прежняя сборка.
+
+При сбое видны этап (`prepare`, `connect`, `authenticate`, `submit`), безопасный код (`smtp_timeout`, `smtp_tls_failed`, `smtp_auth_failed`, `smtp_rejected`, `smtp_unavailable`, `smtp_not_supported`, `smtp_not_ready`, `smtp_invalid_message`) и ID попытки. Для отказа SMTP также выводится числовой status code. При отмене запроса пишется отдельное событие отмены. Адреса отправителя/получателя, логин/пароль, тело письма, ссылка/токен и полный текст ответа SMTP не логируются; MailKit ProtocolLogger не включается.
+
+Compose преобразует имена из `.env` в `Smtp__*` внутри контейнера; регистр имеет значение. Проверка без вывода пароля:
+
+```bash
+docker compose exec -T authentication printenv Smtp__Enabled Smtp__Host Smtp__Port Smtp__Security
+```
+
+Для SMTPS на порту `465` ожидается `SslOnConnect`; для обязательного STARTTLS, обычно на `587`, — `StartTls`.
+
+### Ошибки регистрации
+
+Категория `FitnessTracker.Authentication.PasswordService` также имеет порог `Information`. Событие `4300` отмечает начало регистрации с паролем, `4301` — отказ с причиной и разрешёнными кодами Identity, `4302` — создание аккаунта перед отправкой подтверждения. Начало и результат связывает случайный `AttemptId`. Причины: `smtp_disabled`, `invalid_email`, `password_length`, `password_mismatch`, `password_policy`, `account_conflict` и `identity_rejected`. Например, повторная регистрация нормализованного адреса даёт `account_conflict` / `DuplicateUserName`; конкурентный конфликт PostgreSQL имеет отдельное поле `DatabaseCode=23505`. Ввод пользователя, ID/имя аккаунта, пароль, исходные описания Identity и исключения в эти события не попадают. Неизвестные коды заменяются на `unknown_identity_error`.
+
+Форма отдельно объясняет неверный email, длину пароля, недостаточное разнообразие символов и несовпадение паролей. При отказе создания она предлагает войти или запросить новое письмо, с рабочими ссылками и сохранением локального продолжения. Публичный ответ не подтверждает существование конкретного аккаунта. Сообщения доступны на русском и английском.
+
+Если email уже использовался, аккаунт мог сохраниться после первой попытки даже при сбое SMTP. Войдите с первоначальным паролем: ожидающий аккаунт перейдёт на `/email/verify`, где можно запросить письмо ещё раз (с учётом минутного лимита). Пока срок регистрации не истёк, повторная попытка не меняет прежний пароль и не отправляет новое письмо. После истечения срока можно создать аккаунт заново. Сами сообщения диагностики не требуют дополнительных переменных.
+
+### Пароль и passkey
 
 Пароли хеширует Identity V3 (PBKDF2-HMAC-SHA512, 210 000 итераций), пять неудачных попыток включают блокировку на 15 минут. Credential endpoints дополнительно ограничены 20 запросами в минуту на IP и защищены antiforgery. Ошибка входа не раскрывает наличие email. HTTPS cookies имеют HttpOnly, Secure и ограниченный срок; в HTML пароль не возвращается.
 
@@ -289,6 +405,8 @@ Challenge живёт не более пяти минут и расходуетс
 Шапка переключает светлую/тёмную тему и русский/английский интерфейс. Первый выбор темы следует системной настройке; явный выбор темы и языка сохраняется только в localStorage (`fitness-auth-theme`, `fitness-auth-language`). Пароли, email и OAuth credentials туда не записываются. Переключение языка не меняет URL и OAuth returnUrl. При отключённом JavaScript русские парольные формы работают, а переключатели оформления и показа пароля скрыты. Passkey требует JavaScript и прежних WebAuthn JSON API. Подсказки пароля соответствуют Identity: 12–128 символов и минимум четыре разных символа; сервер остаётся окончательным валидатором.
 
 Скрипты и CSS загружаются с собственного origin, SVG-иконки встроены в HTML; внешних шрифтов/CDN нет. Строгая CSP сохранена. Пустая сводка ошибок Razor не рендерится, чтобы штатный скрытый `li` не добавлял запрещённый inline style. Сообщения и переводы вставляются через textContent. Локально Chromium проверил обе темы/RU/EN на 320, 393, 768 и 1440 px, отсутствие горизонтального переполнения, сохранение настроек, password toggle/confirmation, passwordless register/logout/login через настоящий WebAuthn с виртуальным authenticator и одноразовой PostgreSQL, отсутствие пароля в passkey requests и регистрацию без JavaScript. Ошибок JavaScript/CSP нет. Safari, VoiceOver и iOS WebAuthenticationSession требуют проверки на устройстве.
+
+Authentication заранее выставляет `Cache-Control: no-cache, no-store` и `Pragma: no-cache`, согласованные с antiforgery. Это запрещает хранение ответов с токенами форм. Прежнее предупреждение `DefaultAntiforgery[8]` означало, что ASP.NET добавлял недостающий `no-cache` к заранее заданному `no-store` ([реализация ASP.NET Core](https://github.com/dotnet/aspnetcore/blob/v10.0.0/src/Antiforgery/src/Internal/DefaultAntiforgery.cs#L331)). После исправления перезапись не нужна; фильтры логирования и проверка CSRF остаются включены. Настройки Nginx менять не требуется.
 
 [Реальные браузерные скриншоты](previews/README.md#работающие-страницы-2026-11-07) сохранены в репозитории. Для обновления оформления получите изменения и пересоберите сервис:
 
@@ -416,11 +534,19 @@ dotnet ef migrations has-pending-model-changes --project Backend
 | `Unit` / `HTTP` | `Tests/Server/ProviderSelectionTests.cs` | Полнота credentials, серые кнопки и доступные tooltip для ненастроенных способов, запрет прямого POST, сохранение активного входа и привязки настроенного провайдера |
 | `HTTP` | `Tests/Server/AuthenticationMappingHttpTests.cs` | Защита от overposting, точный публичный профиль после настоящего OAuth exchange, безопасное сообщение PRG/TempData без credentials в HTML |
 | `Unit` | `Tests/Server/PasskeySchemaTests.cs` | Согласованность snapshot и модели, AddPasskeys добавляет только таблицу/индекс, прежние колонки не сужаются |
-| `HTTP` | `Tests/Server/CredentialsTests.cs` | Email/password без подтверждения, нормализация/уникальность, CSRF, lockout, отсутствие email merge, реальные WebAuthn attestation/assertion, origin/RP/UV/signature/replay, управление ключами и отзыв |
+| `HTTP` | `Tests/Server/CredentialsTests.cs` | Email/password с подтверждением новых адресов, нормализация/уникальность, CSRF, lockout, отсутствие email merge, реальные WebAuthn attestation/assertion, origin/RP/UV/signature/replay, управление ключами и отзыв |
+| `HTTP` | `Tests/Server/EmailConfirmationTests.cs` | Новый password/passkey аккаунт без сессии до проверки почты, явный POST, неправильный/просроченный/stamp-bound токен, resend/throttle, SMTP failure и сохранность прежнего входа |
+| `HTTP` | `Tests/Server/RegistrationDiagnosticsTests.cs` | Повторная регистрация подтверждённого/ожидающего аккаунта, сохранность пароля и продолжение входа, понятные ошибки данных, shipped logging filters и отсутствие приватных полей Identity/DB в логах |
+| `Unit` | `Tests/Server/SmtpEmailTests.cs` | Независимый SMTP transport, обязательный режим TLS, MIME text/HTML, безопасные ошибки, отмена и валидация конфигурации; без реального сервера |
+| `HTTP` | `Tests/Server/PendingRegistrationTests.cs` | Граница 119/120/121 минут, resend без продления, повтор с новым ID после пароля/passkey, защита legacy/внешних/подтверждённых, batch/отмена и запуск/остановка фоновой службы |
+| `PostgreSQL` | `Tests/Server/PendingRegistrationPostgresTests.cs` | Обновление прежней схемы с данными, каскад Identity/passkey и гонка DELETE с подтверждением на отдельных соединениях |
+| `Unit` | `Tests/Server/PendingRegistrationSchemaTests.cs` | Миграция добавляет только неуникальный частичный индекс, без изменения колонок и данных |
+| `Unit` | `Tests/Server/ConfirmationEmailTests.cs` | Кнопка и полный URL после MIME round-trip, точные параметры токена, plain text, ссылки после удаления CSS и отказ небезопасным URI без утечки значений |
 | `HTTP` | `Tests/Server/AppAssociationTests.cs` | AASA только с настроенным App ID, безопасный HTTPS fallback без отражения code/state |
 | `HTTP` | `Tests/Server/BackendTests.cs` | JWT/subject и изоляция пользователей без scopes, отсутствие дополнительных прав от scopes в токене, MIME type, SHA-256/headers/фиксированное время, квота, идемпотентность, откат при отказе/отмене записи |
 | `HTTP` | `Tests/Server/AuthenticationTests.cs` | PKCE, code/refresh/revoke, блокировка аккаунта, scopes, prompt=none, antiforgery, внешние привязки, отзыв сессий/гонка отвязки и удаление данных |
 | `HTTP` | `Tests/Server/AuthenticationSecurityTests.cs` | IP-лимит OAuth errors/discovery применяется до обработки запросов OpenIddict |
+| `HTTP` | `Tests/Server/AntiforgeryCacheTests.cs` | Антикеширование пяти форм и ответа с ошибкой валидации, наличие antiforgery token и отсутствие предупреждения о перезаписи заголовков при штатных logging filters |
 | `HTTP` | `Tests/Server/BackendSecurityTests.cs` | Запрет unsigned/HS256 JWT, обязательный exp и запрет преждевременного использования токена |
 | `HTTP` | `Tests/Server/HostNginxForwardingTests.cs` | Исходный HTTPS за доверенным proxy, отказ поддельному `X-Forwarded-Proto` от чужого peer, IPv4 и IPv4-mapped IPv6 |
 | `HTTP` | `Tests/Server/BackendIntrospectionTests.cs` | Отсутствие positive cache, 401/503 и сохранность данных, recovery с прежним JWT, rate limit до обращения к Auth, startup validation |

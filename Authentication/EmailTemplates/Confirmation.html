@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="supported-color-schemes" content="light dark" />
+  <title>Подтвердите электронную почту — FitnessTracker</title>
+  <style>
+    @media only screen and (max-width: 600px) {
+      .email-shell { padding: 24px 12px !important; }
+      .email-card { padding: 32px 22px !important; }
+      .email-heading { font-size: 29px !important; line-height: 36px !important; }
+      .email-brand { padding: 0 8px 24px !important; }
+    }
+    @media (prefers-color-scheme: dark) {
+      .email-background { background-color: #151121 !important; }
+      .email-card { background-color: #1d182d !important; border-color: #6d5b82 !important; }
+      .email-text { color: #f5f1ff !important; }
+      .email-muted { color: #bfb5ce !important; }
+      .email-accent { color: #dbafed !important; }
+      .email-note { background-color: #30233e !important; border-color: #6d5b82 !important; }
+      .email-link-box { background-color: #251e36 !important; border-color: #6d5b82 !important; }
+    }
+  </style>
+</head>
+<body class="email-background" bgcolor="#f5effb" style="margin:0;padding:0;background-color:#f5effb;color:#201d30;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;-webkit-text-size-adjust:100%;">
+  <div style="display:none;font-size:1px;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;mso-hide:all;" aria-hidden="true">Подтвердите адрес, чтобы завершить регистрацию в FitnessTracker. Подтвердите почту в течение 2 часов после регистрации.</div>
+  <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0" class="email-background" bgcolor="#f5effb" style="width:100%;background-color:#f5effb;">
+    <tr>
+      <td align="center" class="email-shell" style="padding:40px 20px;">
+        <table role="presentation" width="560" border="0" cellpadding="0" cellspacing="0" style="width:100%;max-width:560px;">
+          <tr>
+            <td class="email-brand" style="padding:0 16px 30px;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="42" valign="middle" aria-hidden="true" style="width:42px;padding-right:12px;">
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" height="28">
+                      <tr>
+                        <td valign="middle" style="padding-right:3px;"><div style="width:5px;height:13px;border-radius:4px;background-color:#ff8c2e;"></div></td>
+                        <td valign="middle" style="padding-right:3px;"><div style="width:5px;height:26px;border-radius:4px;background-color:#ff8c2e;"></div></td>
+                        <td valign="middle" style="padding-right:3px;"><div style="width:6px;height:5px;border-radius:3px;background-color:#ff8c2e;"></div></td>
+                        <td valign="middle" style="padding-right:3px;"><div style="width:5px;height:26px;border-radius:4px;background-color:#ff8c2e;"></div></td>
+                        <td valign="middle"><div style="width:5px;height:13px;border-radius:4px;background-color:#ff8c2e;"></div></td>
+                      </tr>
+                    </table>
+                  </td>
+                  <td class="email-text" style="font-size:24px;line-height:30px;font-weight:800;font-style:italic;letter-spacing:-1px;color:#201d30;">FitnessTracker</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td class="email-card" bgcolor="#ffffff" style="padding:42px 40px;background-color:#ffffff;border:1px solid #ddd0e8;border-radius:24px;box-shadow:0 12px 36px #79618a14;">
+              <p class="email-accent" style="margin:0 0 14px;color:#824193;font-size:12px;line-height:18px;font-weight:700;letter-spacing:1px;">АККАУНТ FITNESSTRACKER</p>
+              <h1 class="email-heading email-text" style="margin:0 0 18px;color:#201d30;font-size:34px;line-height:41px;font-weight:750;letter-spacing:-1px;">Один шаг —<br />и можно начинать</h1>
+              <p class="email-muted" style="margin:0 0 26px;color:#625b72;font-size:16px;line-height:25px;">Подтвердите электронную почту, чтобы завершить регистрацию. Ваши тренировки и прогресс — в одном месте.</p>
+              <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td align="center" bgcolor="#b65b00" style="border-radius:14px;background-color:#b65b00;background-image:linear-gradient(105deg,#b65b00,#bb4260 52%,#852093);mso-padding-alt:16px 20px;">
+                    <a href="{{CONFIRMATION_URL}}" target="_blank" rel="noopener noreferrer" style="display:block;padding:16px 20px;border-radius:14px;color:#ffffff;font-family:Arial,sans-serif;font-size:16px;line-height:24px;font-weight:700;text-decoration:none;text-align:center;">Подтвердить почту</a>
+                  </td>
+                </tr>
+              </table>
+              <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0" style="margin-top:24px;">
+                <tr>
+                  <td class="email-note" bgcolor="#f6f0fa" style="padding:16px 18px;background-color:#f6f0fa;border:1px solid #e8ddef;border-radius:12px;">
+                    <p class="email-text" style="margin:0 0 4px;color:#201d30;font-size:14px;line-height:21px;font-weight:700;">На подтверждение — 2 часа с регистрации</p>
+                    <p class="email-muted" style="margin:0;color:#625b72;font-size:13px;line-height:20px;">Повторное письмо не продлевает срок. На открывшейся странице нажмите «Подтвердить адрес», затем вернитесь в приложение и продолжите вход.</p>
+                  </td>
+                </tr>
+              </table>
+              <p class="email-muted" style="margin:24px 0 10px;color:#625b72;font-size:13px;line-height:20px;">Кнопка не открывается? Скопируйте адрес целиком и вставьте его в адресную строку браузера:</p>
+              <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed;width:100%;">
+                <tr>
+                  <td class="email-link-box" bgcolor="#faf7fd" style="padding:14px;background-color:#faf7fd;border:1px solid #e8ddef;border-radius:10px;word-break:break-all;overflow-wrap:anywhere;">
+                    <a href="{{CONFIRMATION_URL}}" target="_blank" rel="noopener noreferrer" class="email-accent" style="display:block;color:#824193;font-size:12px;line-height:19px;text-decoration:underline;word-break:break-all;overflow-wrap:anywhere;">{{CONFIRMATION_URL}}</a>
+                  </td>
+                </tr>
+              </table>
+              <p class="email-muted" style="margin:24px 0 0;color:#625b72;font-size:12px;line-height:19px;">Если вы не создавали аккаунт FitnessTracker, просто проигнорируйте письмо.</p>
+            </td>
+          </tr>
+          <tr>
+            <td align="center" class="email-muted" style="padding:24px 16px 0;color:#625b72;font-size:12px;line-height:19px;">Твой ритм. Твой прогресс.</td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

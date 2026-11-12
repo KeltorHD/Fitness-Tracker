@@ -46,6 +46,9 @@ namespace FitnessTracker.Authentication.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
+                    b.Property<bool>("EmailConfirmationRequired")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
 
@@ -83,6 +86,10 @@ namespace FitnessTracker.Authentication.Migrations
                         .HasColumnType("character varying(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt")
+                        .HasDatabaseName("IX_AspNetUsers_PendingConfirmationCreatedAt")
+                        .HasFilter("\"EmailConfirmationRequired\" AND NOT \"EmailConfirmed\"");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");

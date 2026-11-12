@@ -5,6 +5,8 @@
 !Authentication/**
 !Backend/
 !Backend/**
+!ServerLogging/
+!ServerLogging/**
 **/bin
 **/obj
 **/*.pfx

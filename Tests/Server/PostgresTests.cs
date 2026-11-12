@@ -37,18 +37,37 @@ public sealed class PostgresTests
             var users = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             var user = new ApplicationUser
             { UserName = Guid.NewGuid().ToString("N"), PhoneNumber = new string('1', 300), Email = "legacy@fitness.test" };
-            Assert.True((await users.CreateAsync(user, "Legacy-password-123!")).Succeeded);
-            Assert.True((await users.AddLoginAsync(user, new UserLoginInfo("Google", new string('s', 180), "Google"))).Succeeded);
             owner = user.Id;
-            passwordHash = user.PasswordHash!;
+            passwordHash = users.PasswordHasher.HashPassword(user, "Legacy-password-123!");
+            var normalizedName = users.NormalizeName(user.UserName);
+            var oldStamp = Guid.NewGuid().ToString();
+            var providerKey = new string('s', 180);
+            // Текущая EF-модель содержит новый столбец: старую строку создаём только полями прежней схемы.
+            await database.Database.ExecuteSqlInterpolatedAsync($"""
+                INSERT INTO "AspNetUsers" ("Id", "UserName", "NormalizedUserName", "DisplayName", "CreatedAt",
+                    "Email", "EmailConfirmed", "PasswordHash", "SecurityStamp", "PhoneNumber", "PhoneNumberConfirmed",
+                    "TwoFactorEnabled", "LockoutEnabled", "AccessFailedCount")
+                VALUES ({owner}, {user.UserName}, {normalizedName}, 'Legacy', now(), {user.Email}, false,
+                    {passwordHash}, {oldStamp}, {user.PhoneNumber}, false, false, true, 0)
+                """, cancellationToken);
+            await database.Database.ExecuteSqlInterpolatedAsync($"""
+                INSERT INTO "AspNetUserLogins" ("LoginProvider", "ProviderKey", "ProviderDisplayName", "UserId")
+                VALUES ('Google', {providerKey}, 'Google', {owner})
+                """, cancellationToken);
 
             // Act: применение новой additive migration к базе с данными, затем сохранение passkey через настоящий UserManager.
             await database.Database.MigrateAsync(cancellationToken);
             Assert.False(database.Database.HasPendingModelChanges());
+            user = Assert.IsType<ApplicationUser>(await users.FindByIdAsync(owner));
+            Assert.False(user.EmailConfirmationRequired);
+            Assert.False(user.EmailConfirmed);
             var passkey = new UserPasskeyInfo(credentialId, publicKey, DateTimeOffset.UtcNow, 0,
                 ["internal"], true, true, true, [5, 6], [7, 8])
             { Name = "Мой iPhone" };
             Assert.True((await users.AddOrUpdatePasskeyAsync(user, passkey)).Succeeded);
+            // Одноразовая БД: воспроизводим upgrade последней прежней схемы с уже сохранённым passkey.
+            await database.GetService<IMigrator>().MigrateAsync("20261104110640_AddPasskeys", cancellationToken);
+            await database.Database.MigrateAsync(cancellationToken);
         }
 
         // Assert: новый scope читает JSONB с байтами и флагами; legacy password/login не изменились.
@@ -57,6 +76,8 @@ public sealed class PostgresTests
             var users = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             var user = Assert.IsType<ApplicationUser>(await users.FindByIdAsync(owner));
             Assert.Equal(passwordHash, user.PasswordHash);
+            Assert.False(user.EmailConfirmationRequired);
+            Assert.False(user.EmailConfirmed);
             Assert.Equal(300, user.PhoneNumber?.Length);
             Assert.Equal(180, Assert.Single(await users.GetLoginsAsync(user)).ProviderKey.Length);
             Assert.True(await users.CheckPasswordAsync(user, "Legacy-password-123!"));

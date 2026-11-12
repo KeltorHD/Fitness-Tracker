@@ -1,6 +1,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 COPY global.json Directory.Build.props ./
+COPY ServerLogging/ ServerLogging/
 COPY Authentication/ Authentication/
 RUN dotnet restore Authentication/FitnessTracker.Authentication.csproj --locked-mode
 RUN dotnet publish Authentication/FitnessTracker.Authentication.csproj -c Release --no-restore -o /out

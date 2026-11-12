@@ -11,16 +11,18 @@ namespace FitnessTracker.Authentication;
 /// <summary>Проверяет WebAuthn и атомарно изменяет credentials через штатные компоненты Identity.</summary>
 public sealed class PasskeyService(UserManager<ApplicationUser> users, SignInManager<ApplicationUser> signIn,
     EmailAccounts accounts, PasskeyChallenges challenges, AuthDbContext database, BrowserNavigation navigation,
-    IOpenIddictAuthorizationManager authorizations, IOpenIddictTokenManager tokens, IHttpContextAccessor contexts)
+    IOpenIddictAuthorizationManager authorizations, IOpenIddictTokenManager tokens, IHttpContextAccessor contexts,
+    EmailConfirmationService emailConfirmation, PendingRegistrationCleanup pendingRegistrations)
 {
     /// <summary>Связывает email и новый ID с защищённым attestation state без создания пользователя.</summary>
     public async Task<string> StartRegistrationAsync(ClaimsPrincipal principal, PasskeyRegistrationInput input,
         CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
+        if (!emailConfirmation.IsAvailable) throw new AuthenticationOperationException(AuthenticationFailure.Unavailable, "Регистрация по email временно недоступна.");
         if (principal.Identity?.IsAuthenticated == true)
             throw new AuthenticationOperationException(AuthenticationFailure.Conflict);
-        var address = EmailAccounts.ValidateEmail(input.Email);
+        var address = EmailAccounts.ValidateRegistrationEmail(input.Email);
         if (address is null) throw Failure("Укажите корректный email.");
         var options = await signIn.MakePasskeyCreationOptionsAsync(new PasskeyUserEntity
         { Id = Guid.NewGuid().ToString(), Name = address, DisplayName = address });
@@ -32,12 +34,14 @@ public sealed class PasskeyService(UserManager<ApplicationUser> users, SignInMan
     public async Task<PasskeyDestination> RegisterAsync(ClaimsPrincipal principal, PasskeySubmission input,
         CancellationToken cancellationToken)
     {
+        if (!emailConfirmation.IsAvailable) throw new AuthenticationOperationException(AuthenticationFailure.Unavailable, "Регистрация по email временно недоступна.");
         if (principal.Identity?.IsAuthenticated == true)
             throw new AuthenticationOperationException(AuthenticationFailure.Conflict);
         if (!await ConsumeAsync(input.CredentialJson, "register", "Attestation", cancellationToken)) throw Failure();
         var result = await signIn.PerformPasskeyAttestationAsync(input.CredentialJson!);
-        if (!result.Succeeded || EmailAccounts.ValidateEmail(result.UserEntity.Name) is not { } address ||
+        if (!result.Succeeded || EmailAccounts.ValidateRegistrationEmail(result.UserEntity.Name) is not { } address ||
             !Guid.TryParse(result.UserEntity.Id, out _)) throw Failure();
+        await pendingRegistrations.DeleteForRegistrationAsync(users.NormalizeName(accounts.UserName(address)), cancellationToken);
         await using var transaction = await database.Database.BeginTransactionAsync(IsolationLevel.Serializable, cancellationToken);
         var user = accounts.NewUser(address, result.UserEntity.Id);
         if (await users.FindByPasskeyIdAsync(result.Passkey.CredentialId) is not null) throw Failure();
@@ -51,8 +55,8 @@ public sealed class PasskeyService(UserManager<ApplicationUser> users, SignInMan
         result.Passkey.Name = "Passkey";
         if (!(await users.AddOrUpdatePasskeyAsync(user, result.Passkey)).Succeeded) throw Failure();
         await transaction.CommitAsync(cancellationToken);
-        await signIn.SignInAsync(user, isPersistent: false);
-        return new(navigation.LocalReturn(input.ReturnUrl));
+        await emailConfirmation.SendForNewUserAsync(user, cancellationToken);
+        return new(emailConfirmation.PendingUrl(input.ReturnUrl));
     }
 
     /// <summary>Начинает discoverable passkey вход без поиска по неподтверждённому email.</summary>
@@ -68,7 +72,9 @@ public sealed class PasskeyService(UserManager<ApplicationUser> users, SignInMan
     public async Task<PasskeyDestination> LoginAsync(PasskeySubmission input, CancellationToken cancellationToken)
     {
         if (!await ConsumeAsync(input.CredentialJson, "login", "Assertion", cancellationToken)) throw Failure();
-        if (!(await signIn.PasskeySignInAsync(input.CredentialJson!)).Succeeded) throw Failure();
+        var result = await signIn.PasskeySignInAsync(input.CredentialJson!);
+        if (result.IsNotAllowed) return new(emailConfirmation.PendingUrl(input.ReturnUrl));
+        if (!result.Succeeded) throw Failure();
         return new(navigation.LocalReturn(input.ReturnUrl));
     }
 

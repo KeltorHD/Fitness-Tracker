@@ -41,8 +41,12 @@ public sealed class StartupMigrationTests
         {
             await using var database = new AuthDbContext(options);
             await database.GetService<IMigrator>().MigrateAsync("20261103183016_InitialAuth", cancellationToken);
-            database.Users.Add(new ApplicationUser { Id = owner, UserName = owner, DisplayName = "Существующий аккаунт" });
-            await database.SaveChangesAsync(cancellationToken);
+            // В прежней схеме нового столбца ещё нет: вставляем реальные старые поля, не текущую EF-модель.
+            await database.Database.ExecuteSqlInterpolatedAsync($"""
+                INSERT INTO "AspNetUsers" ("Id", "UserName", "DisplayName", "CreatedAt", "EmailConfirmed",
+                    "PhoneNumberConfirmed", "TwoFactorEnabled", "LockoutEnabled", "AccessFailedCount")
+                VALUES ({owner}, {owner}, 'Существующий аккаунт', now(), false, false, false, true, 0)
+                """, cancellationToken);
         }
 
         // Act: обычный Production Main без CLI-флагов применяет миграции и регистрирует clients.
@@ -56,7 +60,7 @@ public sealed class StartupMigrationTests
         }
         await using (var database = new AuthDbContext(options))
         {
-            Assert.Equal(2, (await database.Database.GetAppliedMigrationsAsync(cancellationToken)).Count());
+            Assert.Equal(4, (await database.Database.GetAppliedMigrationsAsync(cancellationToken)).Count());
             Assert.Empty(await database.Database.GetPendingMigrationsAsync(cancellationToken));
             Assert.Empty(await database.UserPasskeys.ToListAsync(cancellationToken));
             if (!previousSchema)
@@ -75,6 +79,8 @@ public sealed class StartupMigrationTests
         await using var scope = restarted.Services.CreateAsyncScope();
         var verification = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
         Assert.Equal("Существующий аккаунт", (await verification.Users.SingleAsync(cancellationToken)).DisplayName);
+        Assert.False((await verification.Users.SingleAsync(cancellationToken)).EmailConfirmationRequired);
+        Assert.False((await verification.Users.SingleAsync(cancellationToken)).EmailConfirmed);
         Assert.Equal(2, await verification.Set<OpenIddict.EntityFrameworkCore.Models.OpenIddictEntityFrameworkCoreApplication>().CountAsync(cancellationToken));
         var applications = scope.ServiceProvider.GetRequiredService<IOpenIddictApplicationManager>();
         var ios = await applications.FindByClientIdAsync(AuthConfiguration.ClientId, cancellationToken);

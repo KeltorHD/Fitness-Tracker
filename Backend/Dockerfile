@@ -1,6 +1,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 COPY global.json Directory.Build.props ./
+COPY ServerLogging/ ServerLogging/
 COPY Backend/ Backend/
 RUN dotnet restore Backend/FitnessTracker.Backend.csproj --locked-mode
 RUN dotnet publish Backend/FitnessTracker.Backend.csproj -c Release --no-restore -o /out

@@ -18,6 +18,11 @@ public static class AuthenticationMapping
         config.NewConfig<ExternalLoginRequest, ExternalLoginInput>().MapToConstructor(true);
         config.NewConfig<PasswordRegistrationRequest, PasswordRegistrationInput>().MapToConstructor(true);
         config.NewConfig<PasswordLoginRequest, PasswordLoginInput>().MapToConstructor(true);
+        config.NewConfig<EmailResendRequest, EmailResendInput>().MapToConstructor(true);
+        config.NewConfig<EmailConfirmationRequest, EmailConfirmationInput>().MapToConstructor(true);
+        config.NewConfig<EmailPendingPageData, EmailPendingPage>().MapToConstructor(true);
+        config.NewConfig<EmailConfirmPageData, EmailConfirmPage>().MapToConstructor(true);
+        config.NewConfig<EmailConfirmationOutcome, EmailCompletePage>().MapToConstructor(true);
         config.NewConfig<PasskeyRegistrationRequest, PasskeyRegistrationInput>().MapToConstructor(true);
         config.NewConfig<PasskeyRequest, PasskeySubmission>()
             .Map(destination => destination.CredentialJson, source => source.Credential)

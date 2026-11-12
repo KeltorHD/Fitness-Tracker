@@ -24,9 +24,11 @@ namespace FitnessTracker.Server.Tests;
 /// <param name="appleAppIdentifier">Синтетическая привязка приложения для тестирования AASA без настоящего Apple аккаунта.</param>
 /// <param name="providerSettings">Синтетические настройки провайдеров для проверки доступности кнопок без внешних запросов.</param>
 /// <param name="personalCallbackScheme">Необязательная URL-схема отдельного Personal Team client.</param>
+/// <param name="clock">Управляемое время для ограничений повторной отправки.</param>
 public sealed class AuthFactory(IPAddress? peerAddress = null, string? trustedProxy = null,
     IClaimsTransformation? claimsTransformation = null, string? appleAppIdentifier = null,
-    IReadOnlyDictionary<string, string?>? providerSettings = null, string? personalCallbackScheme = null) : WebApplicationFactory<Authentication.Program>
+    IReadOnlyDictionary<string, string?>? providerSettings = null, string? personalCallbackScheme = null,
+    TimeProvider? clock = null) : WebApplicationFactory<Authentication.Program>
 {
     /// <summary>Синтетический секрет отдельного confidential client в изолированной Auth-БД.</summary>
     internal const string IntrospectionSecret = "test-introspection-secret-with-at-least-32-characters";
@@ -35,6 +37,8 @@ public sealed class AuthFactory(IPAddress? peerAddress = null, string? trustedPr
     internal int CleanupCalls;
     /// <summary>Включает отказ внешней очистки без изменения состояния Identity.</summary>
     internal bool CleanupFails;
+    /// <summary>Изолированный outbox вместо реальной отправки писем.</summary>
+    internal TestEmailSender EmailSender { get; } = new();
 
     /// <summary>Отключает пользовательские настройки, реальные provider registrations и рабочую БД.</summary>
     protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -54,6 +58,9 @@ public sealed class AuthFactory(IPAddress? peerAddress = null, string? trustedPr
             config.AddInMemoryCollection(new Dictionary<string, string?>
             {
                 ["Auth:Issuer"] = "https://localhost/",
+                ["Smtp:Enabled"] = "true",
+                ["Smtp:Host"] = "smtp.example.com",
+                ["Smtp:FromAddress"] = "fitness@example.com",
                 ["Auth:IntrospectionClientSecret"] = IntrospectionSecret,
                 ["Auth:AppleAppIdentifier"] = appleAppIdentifier,
                 ["Auth:PersonalCallbackScheme"] = personalCallbackScheme,
@@ -67,15 +74,35 @@ public sealed class AuthFactory(IPAddress? peerAddress = null, string? trustedPr
         });
         builder.ConfigureServices(services =>
         {
+            if (clock is not null) services.AddSingleton(clock);
             if (peerAddress is not null)
                 services.AddSingleton<IStartupFilter>(new PeerAddressStartupFilter(peerAddress));
             if (claimsTransformation is not null)
                 services.AddSingleton(claimsTransformation);
             services.RemoveAll<DbContextOptions<AuthDbContext>>();
+            services.RemoveAll<IAccountEmailSender>();
+            services.AddSingleton<IAccountEmailSender>(EmailSender);
             services.RemoveAll<IDbContextOptionsConfiguration<AuthDbContext>>();
-            services.AddDbContext<AuthDbContext>(options => options.UseSqlite(_connection).UseOpenIddict());
+            services.AddDbContext<AuthDbContext>(options => options
+                .UseSqlite(_connection)
+                .UseOpenIddict()
+                .ReplaceService<IModelCustomizer, AuthSqliteModelCustomizer>());
             services.AddHttpClient<BackupCleanup>().ConfigurePrimaryHttpMessageHandler(() => new CleanupHandler(this));
         });
+    }
+
+    /// <summary>Только SQLite fixture хранит CreatedAt как UTC DateTime для сравнения сроков; PostgreSQL проверяется отдельно.</summary>
+    private sealed class AuthSqliteModelCustomizer(ModelCustomizerDependencies dependencies) : RelationalModelCustomizer(dependencies)
+    {
+        /// <summary>Обходит отсутствие SQL-сравнения DateTimeOffset у SQLite без изменения production-модели.</summary>
+        public override void Customize(ModelBuilder modelBuilder, DbContext context)
+        {
+            base.Customize(modelBuilder, context);
+            modelBuilder.UseOpenIddict();
+            modelBuilder.Entity<ApplicationUser>().Property(user => user.CreatedAt).HasConversion(
+                value => value.UtcDateTime,
+                value => new DateTimeOffset(DateTime.SpecifyKind(value, DateTimeKind.Utc)));
+        }
     }
 
     /// <summary>Подставляет реальный TCP peer до production middleware обработки forwarded headers.</summary>
