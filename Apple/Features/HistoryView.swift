@@ -13,9 +13,9 @@ struct HistoryView: View {
   @State private var model = HistoryViewModel()
   @State private var pendingDelete: Workout?
   @State private var templateDraft: WorkoutTemplate?
-  @State private var showWeekStats = true
   @Binding var date: Date
-  var isSelected: Bool
+  @Binding var showAllHistory: Bool
+  @Binding var showWeekStats: Bool
   var body: some View {
     List {
       if let active = store.active {
@@ -45,14 +45,16 @@ struct HistoryView: View {
       if let date = model.filterDate {
         HStack {
           Text(date, format: .dateTime.day().month(.wide)).font(.headline)
+            .accessibilityIdentifier("historyScope")
           Spacer()
-          Button(L10n.text("Вся история", locale: locale)) { model.filterDate = nil }
+          Button(L10n.text("Вся история", locale: locale)) { showAllHistory = true }
         }.cardListRow()
       } else {
         HStack {
           Text(L10n.text("Все тренировки", locale: locale)).font(.headline)
+            .accessibilityIdentifier("historyScope")
           Spacer()
-          Button(L10n.text("Выбранный день", locale: locale)) { model.filterDate = date }
+          Button(L10n.text("Выбранный день", locale: locale)) { showAllHistory = false }
         }.cardListRow()
       }
       if model.weeks.isEmpty {
@@ -75,7 +77,8 @@ struct HistoryView: View {
                 text: L10n.countText(week.personalRecords, kind: "record", locale: locale),
                 symbol: "trophy")
               SummaryChip(text: workoutCount(week.workouts.count))
-            }
+            }.accessibilityElement(children: .contain)
+              .accessibilityIdentifier("historyWeekStatistics_\(week.start.timeIntervalSince1970)")
           }
         }.padding(.top, 12).cardListRow()
         ForEach(week.workouts) { workout in
@@ -107,22 +110,6 @@ struct HistoryView: View {
     .listStyle(.plain).scrollContentBackground(.hidden)
     .refreshable { store.reload() }
     .background(FitTheme.paper)
-    .toolbar {
-      if isSelected {
-        ToolbarItemGroup(placement: .topBarTrailing) {
-          Menu {
-            Toggle(L10n.text("Статистика за неделю", locale: locale), isOn: $showWeekStats)
-            Button(L10n.text("Вся история", locale: locale)) { model.filterDate = nil }
-          } label: {
-            Image(systemName: "ellipsis").foregroundStyle(.primary)
-          }
-          Button(L10n.text("Начать тренировку", locale: locale), systemImage: "plus") {
-            store.presentWorkoutStart()
-          }
-          .foregroundStyle(.primary).accessibilityIdentifier("startWorkout")
-        }
-      }
-    }
     .sheet(
       item: $selected,
       onDismiss: {
@@ -152,9 +139,10 @@ struct HistoryView: View {
     }
     .onChange(of: calendar) { refresh() }
     .onChange(of: date, initial: true) {
-      model.filterDate = date
+      model.filterDate = showAllHistory ? nil : date
       refresh()
     }
+    .onChange(of: showAllHistory) { model.filterDate = showAllHistory ? nil : date }
     .onChange(of: phase) { if phase == .active { refresh() } }
     .confirmationDialog(
       L10n.text("Удалить тренировку?", locale: locale),

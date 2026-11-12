@@ -1,7 +1,7 @@
 import FitnessTrackerCore
 import SwiftUI
 
-struct DiaryCalendarView: View {
+struct DiaryCalendarView<Actions: View>: View {
   private struct PeriodID: Hashable {
     let mode: DiaryCalendarMode
     let start: Date?
@@ -14,6 +14,7 @@ struct DiaryCalendarView: View {
   @Environment(\.scenePhase) private var phase
   @Binding var date: Date
   let workouts: [Workout]
+  @ViewBuilder let actions: () -> Actions
   @State private var expanded = false
   @State private var page: DiaryCalendarPage?
   @State private var direction = 1
@@ -94,9 +95,11 @@ struct DiaryCalendarView: View {
         HStack(spacing: 6) {
           VStack(alignment: .leading, spacing: 2) {
             Text(date, format: .dateTime.month(.wide).year()).font(.headline)
+              .lineLimit(1).minimumScaleFactor(0.75)
               .accessibilityIdentifier("diaryCalendarMonth")
             if expanded {
               Text(date, format: .dateTime.weekday(.wide).day()).font(.caption)
+                .lineLimit(1).minimumScaleFactor(0.8)
                 .foregroundStyle(.secondary).accessibilityIdentifier("diarySelectedDate")
             }
           }
@@ -122,6 +125,7 @@ struct DiaryCalendarView: View {
         L10n.text(expanded ? "Следующий месяц" : "Следующая неделя", locale: locale)
       )
       .accessibilityIdentifier("nextDiaryPeriod")
+      actions()
     }.buttonStyle(.plain).foregroundStyle(theme.accent)
   }
 

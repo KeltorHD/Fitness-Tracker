@@ -157,6 +157,11 @@ struct NutritionDiaryView: View {
             }.textCase(nil)
           }
         }
+        Button(
+          L10n.text("Скопировать питание за день", locale: locale), systemImage: "doc.on.doc"
+        ) { sheet = .copy(nil) }
+        .disabled(model.day.entries.isEmpty).accessibilityIdentifier("copyNutritionDay")
+        .cardListRow()
         if !model.savedMeals.isEmpty {
           DisclosureGroup(L10n.text("Сохранённые блюда", locale: locale)) {
             ForEach(model.savedMeals) { entry in
@@ -181,24 +186,6 @@ struct NutritionDiaryView: View {
     .listStyle(.plain).scrollContentBackground(.hidden).background(FitTheme.paper)
     .scrollDismissesKeyboard(.interactively)
     .refreshable { model.reload() }
-    .toolbar {
-      if isSelected {
-        ToolbarItem(placement: .topBarTrailing) {
-          Menu {
-            Button(
-              L10n.text("Скопировать питание за день", locale: locale), systemImage: "doc.on.doc"
-            ) { sheet = .copy(nil) }
-            .disabled(model.day.entries.isEmpty)
-            Button(L10n.text("Обновить", locale: locale), systemImage: "arrow.clockwise") {
-              model.reload()
-            }
-          } label: {
-            Image(systemName: "ellipsis")
-          }
-          .accessibilityLabel(L10n.text("Действия питания", locale: locale))
-        }
-      }
-    }
     .onAppear {
       model.selectDay(date, calendar: calendar)
       model.reload()

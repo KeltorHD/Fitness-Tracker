@@ -1,12 +1,62 @@
 import XCTest
 
 final class FitnessTrackerUITests: XCTestCase {
+  @MainActor func testCalendarWorkoutFiltersKeepHistoryScopeUntilSelectingADay() {
+    let app = launch(additionalArguments: ["--ui-testing-diary-insights", "-appearance", "light"])
+    let filters = app.buttons["diaryWorkoutFilters"]
+    XCTAssertTrue(filters.waitForExistence(timeout: 10))
+    let calendar = app.descendants(matching: .any).matching(identifier: "diaryCalendar").firstMatch
+    XCTAssertGreaterThanOrEqual(filters.frame.minY, calendar.frame.minY)
+    XCTAssertLessThanOrEqual(filters.frame.maxY, calendar.frame.maxY)
+    app.buttons["expandTrainingInsights"].tap()
+    let scope = app.staticTexts["historyScope"]
+    XCTAssertTrue(scope.waitForExistence(timeout: 5))
+    XCTAssertNotEqual(scope.label, "Все тренировки")
+    filters.tap()
+    let allHistory = app.descendants(matching: .any).matching(identifier: "calendarAllHistory")
+      .firstMatch
+    XCTAssertTrue(allHistory.waitForExistence(timeout: 5))
+    allHistory.tap()
+    XCTAssertEqual(scope.label, "Все тренировки")
+    let statistics = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "historyWeekStatistics_")
+    ).firstMatch
+    XCTAssertTrue(statistics.waitForExistence(timeout: 5))
+    filters.tap()
+    let weeklyStats = app.descendants(matching: .any).matching(identifier: "calendarWeekStatistics")
+      .firstMatch
+    XCTAssertTrue(weeklyStats.waitForExistence(timeout: 5))
+    weeklyStats.tap()
+    XCTAssertFalse(statistics.exists)
+    let section = app.segmentedControls["diarySection"]
+    section.buttons["Питание"].tap()
+    XCTAssertFalse(filters.exists)
+    section.buttons["Тренировки"].tap()
+    XCTAssertTrue(filters.waitForExistence(timeout: 5))
+    XCTAssertEqual(scope.label, "Все тренировки")
+    XCTAssertFalse(statistics.exists)
+    filters.tap()
+    let image = XCTAttachment(screenshot: app.screenshot())
+    image.name = "Workout filters inside the shared calendar"
+    image.lifetime = .keepAlways
+    add(image)
+    weeklyStats.tap()
+    XCTAssertTrue(statistics.waitForExistence(timeout: 5))
+    app.buttons["selectedDiaryCalendarDay"].tap()
+    XCTAssertNotEqual(scope.label, "Все тренировки")
+  }
+
   @MainActor func testDiaryHeaderTabsFitAboveWeekAndMonthCalendar() {
     let app = launch(additionalArguments: ["--ui-testing-diary-insights", "-appearance", "light"])
     let section = app.segmentedControls["diarySection"]
     XCTAssertTrue(section.waitForExistence(timeout: 10))
+    let title = app.staticTexts["diaryHeaderTitle"]
+    XCTAssertEqual(title.label, "Дневник")
+    XCTAssertGreaterThan(title.frame.width, 75)
+    XCTAssertLessThan(title.frame.maxX, section.frame.minX)
     XCTAssertLessThanOrEqual(section.frame.width, 200)
     XCTAssertLessThan(section.frame.maxX, app.buttons["openSettings"].frame.minX)
+    XCTAssertFalse(app.navigationBars.buttons["Начать тренировку"].exists)
     for title in ["Тренировки", "Питание", "Сон"] {
       XCTAssertTrue(section.buttons[title].isHittable)
       XCTAssertGreaterThanOrEqual(section.buttons[title].frame.width, 44)
@@ -30,6 +80,28 @@ final class FitnessTrackerUITests: XCTestCase {
     month.name = "Compact diary header tabs above expanded month calendar"
     month.lifetime = .keepAlways
     add(month)
+    section.buttons["Сон"].tap()
+    XCTAssertGreaterThan(title.frame.width, 75)
+    XCTAssertLessThan(section.frame.maxX, app.buttons["openSettings"].frame.minX)
+    app.buttons["workoutStartAction"].tap()
+    XCTAssertTrue(app.buttons["startSelectedTemplates"].waitForExistence(timeout: 5))
+  }
+
+  @MainActor func testNutritionDayCopyIsAvailableWithoutHeaderMenu() {
+    let app = launch(additionalArguments: ["--ui-testing-diary-insights"])
+    let section = app.segmentedControls["diarySection"]
+    XCTAssertTrue(section.waitForExistence(timeout: 10))
+    section.buttons["Питание"].tap()
+    XCTAssertEqual(app.staticTexts["nutritionDailyCalories"].label, "720 ккал")
+    XCTAssertFalse(app.navigationBars.buttons["Действия питания"].exists)
+    XCTAssertEqual(app.staticTexts["diaryHeaderTitle"].label, "Дневник")
+    XCTAssertGreaterThan(app.staticTexts["diaryHeaderTitle"].frame.width, 75)
+    let copy = app.buttons["copyNutritionDay"]
+    reveal(copy, in: app)
+    XCTAssertTrue(copy.isEnabled)
+    copy.tap()
+    XCTAssertTrue(app.buttons["confirmCopyNutrition"].waitForExistence(timeout: 5))
+    XCTAssertTrue(app.staticTexts["Все приёмы пищи"].exists)
   }
 
   @MainActor func testSharedDiaryCalendarSwipesWeeksWithoutSwitchingDiaryTabs() {
@@ -820,7 +892,7 @@ final class FitnessTrackerUITests: XCTestCase {
 
   @MainActor func testDiaryStartOpensTemplatePickerAndSearchKeepsSelection() {
     let app = launch()
-    let start = app.buttons["startWorkout"]
+    let start = app.buttons["workoutStartAction"]
     XCTAssertTrue(start.waitForExistence(timeout: 10))
     start.tap()
     let first = app.buttons["startWorkoutTemplate_20000000-0000-0000-0000-000000000001"]
@@ -1055,8 +1127,8 @@ final class FitnessTrackerUITests: XCTestCase {
 
   @MainActor func testWarmupAndDropStagesCanBeConfiguredBeforeCompletion() {
     let app = launch()
-    XCTAssertTrue(app.buttons["startWorkout"].waitForExistence(timeout: 10))
-    app.buttons["startWorkout"].tap()
+    XCTAssertTrue(app.buttons["workoutStartAction"].waitForExistence(timeout: 10))
+    app.buttons["workoutStartAction"].tap()
     chooseFreeWorkout(in: app)
     app.buttons["addExercise"].tap()
     app.searchFields.firstMatch.tap()
@@ -1783,8 +1855,8 @@ final class FitnessTrackerUITests: XCTestCase {
 
   @MainActor func testActiveExerciseCanOpenAnEmptyProgressHistory() {
     let app = launch()
-    XCTAssertTrue(app.buttons["startWorkout"].waitForExistence(timeout: 10))
-    app.buttons["startWorkout"].tap()
+    XCTAssertTrue(app.buttons["workoutStartAction"].waitForExistence(timeout: 10))
+    app.buttons["workoutStartAction"].tap()
     chooseFreeWorkout(in: app)
     app.buttons["addExercise"].tap()
     app.searchFields.firstMatch.tap()
@@ -2224,7 +2296,7 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertFalse(app.buttons["undoWater"].exists)
     app.swipeRight()
     XCTAssertTrue(section.buttons["Тренировки"].isSelected)
-    XCTAssertTrue(app.buttons["startWorkout"].exists)
+    XCTAssertTrue(app.buttons["workoutStartAction"].exists)
     app.swipeLeft()
     XCTAssertTrue(section.buttons["Питание"].isSelected)
     let add = app.buttons["addFood_breakfast"]
@@ -2245,7 +2317,7 @@ final class FitnessTrackerUITests: XCTestCase {
   }
   @MainActor func testLogSetAndFindWorkoutInHistory() {
     let app = launch(additionalArguments: ["-appearance", "dark", "-colorTheme", "forest"])
-    let start = app.buttons["startWorkout"]
+    let start = app.buttons["workoutStartAction"]
     XCTAssertTrue(start.waitForExistence(timeout: 10))
     start.tap()
     chooseFreeWorkout(in: app)
@@ -2339,11 +2411,11 @@ final class FitnessTrackerUITests: XCTestCase {
   }
   @MainActor func testMinimizedSessionCanBeResumed() {
     let app = launch()
-    XCTAssertTrue(app.buttons["startWorkout"].waitForExistence(timeout: 10))
-    app.buttons["startWorkout"].tap()
+    XCTAssertTrue(app.buttons["workoutStartAction"].waitForExistence(timeout: 10))
+    app.buttons["workoutStartAction"].tap()
     chooseFreeWorkout(in: app)
     dismissWorkoutSheet(in: app)
-    app.buttons["startWorkout"].tap()
+    app.buttons["workoutStartAction"].tap()
     XCTAssertTrue(app.buttons["addExercise"].waitForExistence(timeout: 5))
     let finish = app.buttons["finishWorkout"]
     XCTAssertTrue(finish.exists)
@@ -2353,8 +2425,8 @@ final class FitnessTrackerUITests: XCTestCase {
 
   @MainActor func testPullDownClosesExerciseThenMinimizesWorkoutWithoutLosingSets() {
     let app = launch()
-    XCTAssertTrue(app.buttons["startWorkout"].waitForExistence(timeout: 10))
-    app.buttons["startWorkout"].tap()
+    XCTAssertTrue(app.buttons["workoutStartAction"].waitForExistence(timeout: 10))
+    app.buttons["workoutStartAction"].tap()
     chooseFreeWorkout(in: app)
     app.buttons["addExercise"].tap()
     app.searchFields.firstMatch.tap()
@@ -2386,10 +2458,10 @@ final class FitnessTrackerUITests: XCTestCase {
       .press(
         forDuration: 0.05,
         thenDragTo: workoutScroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.95)))
-    XCTAssertTrue(app.buttons["startWorkout"].waitForExistence(timeout: 5))
+    XCTAssertTrue(app.buttons["workoutStartAction"].waitForExistence(timeout: 5))
     XCTAssertTrue(workoutScroll.waitForNonExistence(timeout: 5))
-    XCTAssertTrue(app.buttons["startWorkout"].isHittable)
-    app.buttons["startWorkout"].tap()
+    XCTAssertTrue(app.buttons["workoutStartAction"].isHittable)
+    app.buttons["workoutStartAction"].tap()
     XCTAssertTrue(workoutScroll.waitForExistence(timeout: 5))
     XCTAssertTrue(app.buttons["openWorkoutExercise"].firstMatch.exists)
     XCTAssertTrue(app.buttons["finishWorkout"].isEnabled)
@@ -2422,7 +2494,7 @@ final class FitnessTrackerUITests: XCTestCase {
       .press(
         forDuration: 0.05,
         thenDragTo: workoutScroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.95)))
-    XCTAssertTrue(app.buttons["startWorkout"].waitForExistence(timeout: 5))
+    XCTAssertTrue(app.buttons["workoutStartAction"].waitForExistence(timeout: 5))
     XCTAssertTrue(workoutScroll.waitForNonExistence(timeout: 5))
     XCTAssertFalse(exercise.exists)
     XCTAssertTrue(workout.exists)
