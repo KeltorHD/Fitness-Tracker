@@ -13,6 +13,13 @@ struct TrainingDiaryInsightsView: View {
   @State private var selected: Metric?
   let summary: DiaryTrainingSummary
   private var displayedMetric: Metric { selected ?? .workouts }
+  private var outerToInnerMetrics: [Metric] {
+    Metric.allCases.enumerated().sorted { left, right in
+      let leftRange = range(left.element)
+      let rightRange = range(right.element)
+      return leftRange == rightRange ? left.offset > right.offset : leftRange > rightRange
+    }.map(\.element)
+  }
 
   var body: some View {
     DiaryDisclosureCard(
@@ -51,16 +58,12 @@ struct TrainingDiaryInsightsView: View {
   }
 
   private var rings: some View {
-    ZStack {
-      DiaryProgressRing(
-        progress: summary.progress(goal: max(1, goal)), color: theme.accent, lineWidth: 10
-      )
-      .opacity(ringOpacity(.workouts))
-      DiaryProgressRing(progress: summary.setComparison ?? 0, color: color(.sets), lineWidth: 10)
-        .padding(15).opacity(ringOpacity(.sets))
-      DiaryProgressRing(
-        progress: summary.volumeComparison ?? 0, color: color(.volume), lineWidth: 10
-      ).padding(30).opacity(ringOpacity(.volume))
+    let metrics = outerToInnerMetrics
+    return ZStack {
+      ForEach(Array(metrics.enumerated()), id: \.element) { index, metric in
+        DiaryProgressRing(progress: progress(metric), color: color(metric), lineWidth: 10)
+          .padding(CGFloat(index) * 15).opacity(ringOpacity(metric))
+      }
       VStack(spacing: 3) {
         Text(centerValue).font(.system(.title3, design: .rounded).bold()).monospacedDigit()
           .contentTransition(.numericText()).lineLimit(1).minimumScaleFactor(0.65)
@@ -74,6 +77,7 @@ struct TrainingDiaryInsightsView: View {
       }.padding(40)
     }.frame(width: 156, height: 156)
       .animation(reduceMotion ? nil : .easeInOut(duration: 0.18), value: selected)
+      .animation(reduceMotion ? nil : .smooth(duration: 0.35), value: metrics)
       .accessibilityElement(children: .ignore)
       .accessibilityLabel(L10n.text("Три кольца тренировок", locale: locale))
       .accessibilityValue(value(displayedMetric) + ". " + comparison)
@@ -139,6 +143,21 @@ struct TrainingDiaryInsightsView: View {
   }
   private func ringOpacity(_ metric: Metric) -> Double {
     selected == nil || selected == metric ? 1 : 0.25
+  }
+  /// Compare the full recorded/target range, rather than the percentage filling each ring.
+  private func range(_ metric: Metric) -> Double {
+    switch metric {
+    case .workouts: Double(max(summary.workouts, max(1, goal)))
+    case .sets: Double(max(summary.workingSets, summary.previousWorkingSets ?? 0))
+    case .volume: max(summary.volumeKG, summary.previousVolumeKG ?? 0)
+    }
+  }
+  private func progress(_ metric: Metric) -> Double {
+    switch metric {
+    case .workouts: summary.progress(goal: max(1, goal))
+    case .sets: summary.setComparison ?? 0
+    case .volume: summary.volumeComparison ?? 0
+    }
   }
   private var comparison: String {
     switch displayedMetric {
