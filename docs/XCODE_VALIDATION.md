@@ -2,6 +2,13 @@
 
 Пункты без отметки остаются **непроверенными** до выполнения на macOS/устройстве. Для выполненных проверок указаны устройство, ОС, версия Xcode и результат.
 
+## Кнопки серверных резервных копий — 2026-11-12
+
+- [ ] После `xcodegen generate` запустить `FitLifeUITests/AccountBackupUITests` на iOS Simulator. Тесты используют отдельный Debug-флаг `--ui-testing-backups`, in-memory repository/credentials и URLProtocol с синтетическим архивом; обращения к рабочим серверам и Keychain не выполняются.
+- [ ] `testRestoreOpensImportPreviewWithoutConfirmingOrDeletingBackup`: «Восстановить…» открывает предпросмотр, импорт добавляет одну тренировку после явного подтверждения, серверная копия остаётся в списке.
+- [ ] `testDeleteRequiresItsOwnConfirmationAndDoesNotOpenImport`: удаление открывает только свой диалог; отмена сохраняет копию, подтверждение удаляет её из списка, предпросмотр импорта не появляется.
+- [ ] На устройстве проверить обе кнопки и VoiceOver в RU/EN, Light/Dark и с увеличенным Dynamic Type. Проверки синтаксиса на Linux не подтверждают работу SwiftUI или SDK-компиляцию этих сценариев.
+
 ## FitLife без обратной совместимости — 2026-11-11
 
 - [ ] Обновить Config/Local.xcconfig на текущие FITLIFE_*, зарегистрировать текущие Apple identifiers и выполнить `xcodegen generate`. Собрать FitLife Personal / FitLife, FitLifeWatch и FitLifeWidgets; запустить FitLifeTests и FitLifeUITests. Прежние aliases не применяются.

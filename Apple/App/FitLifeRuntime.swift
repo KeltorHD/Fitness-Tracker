@@ -50,7 +50,7 @@ import Foundation
             service: (Bundle.main.bundleIdentifier ?? "FitLife") + ".authentication",
             account: configuration.authenticationURL.absoluteString + configuration.oauthClientID))
       } else {
-        accountSession = nil
+        accountSession = try AccountBackupUITestFixture.session()
       }
     } catch {
       AppErrorReporter.record(error, operation: "configureAccountServer")
