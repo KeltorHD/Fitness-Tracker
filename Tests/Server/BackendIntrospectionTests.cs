@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Protocols;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Logging;
 using Xunit;
 
 namespace FitnessTracker.Server.Tests;
@@ -115,13 +116,55 @@ public sealed class BackendIntrospectionTests
     public void RejectsUnsafeConfigurationAtStartup(string key, string value)
     {
         using var factory = new BackendFactory();
-        using var configured = factory.WithWebHostBuilder(builder => builder.ConfigureAppConfiguration((_, config) =>
-            config.AddInMemoryCollection(new Dictionary<string, string?> { [key] = value })));
+        using var startupLog = new StartupValidationLog();
+        using var configured = factory.WithWebHostBuilder(builder =>
+        {
+            builder.ConfigureAppConfiguration((_, config) =>
+                config.AddInMemoryCollection(new Dictionary<string, string?> { [key] = value }));
+            builder.ConfigureLogging(logging => logging
+                .AddProvider(startupLog)
+                .AddFilter<StartupValidationLog>(null, LogLevel.Error));
+        });
 
-        var error = Assert.Throws<OptionsValidationException>(() => configured.CreateClient());
+        var failure = Record.Exception(() => configured.CreateClient());
+        // RunAsync освобождает host при ошибке; DeferredHost иногда замечает disposal раньше исходного исключения.
+        var error = Assert.IsType<OptionsValidationException>(
+            failure is ObjectDisposedException ? startupLog.Error : failure);
 
+        Assert.Same(startupLog.Error, error);
+        Assert.Equal(typeof(IntrospectionOptions), error.OptionsType);
+        Assert.Contains(error.Failures, message => message.StartsWith(key + " ", StringComparison.Ordinal));
         Assert.DoesNotContain("super-secret-marker", error.ToString());
         Assert.Equal(0, factory.Introspection.Calls);
+    }
+
+    /// <summary>Сохраняет исходную ошибку startup, когда тестовая фабрика видит уже освобождённый host.</summary>
+    private sealed class StartupValidationLog : ILoggerProvider, ILogger
+    {
+        private OptionsValidationException? _error;
+
+        /// <summary>Возвращает первую ошибку валидации, опубликованную потоком запуска приложения.</summary>
+        internal OptionsValidationException? Error => Volatile.Read(ref _error);
+
+        /// <summary>Принимает startup-ошибки без вывода конфигурации или сообщений в журнал тестов.</summary>
+        public ILogger CreateLogger(string categoryName) => this;
+
+        /// <summary>Для сохранения исключения дополнительные logging scopes не требуются.</summary>
+        public IDisposable? BeginScope<TState>(TState state) where TState : notnull => null;
+
+        /// <summary>Слушает только сообщения уровня ошибки и выше.</summary>
+        public bool IsEnabled(LogLevel logLevel) => logLevel >= LogLevel.Error;
+
+        /// <summary>Атомарно сохраняет исходный тип ошибки, не форматируя потенциально приватное сообщение.</summary>
+        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception,
+            Func<TState, Exception?, string> formatter)
+        {
+            if (exception is OptionsValidationException error)
+                Interlocked.CompareExchange(ref _error, error, null);
+        }
+
+        /// <summary>Провайдер хранит только ссылку на исключение и не владеет внешними ресурсами.</summary>
+        public void Dispose() { }
     }
 
     /// <summary>Недоступная metadata-зависимость без сетевого запроса.</summary>

@@ -3,6 +3,32 @@ import Foundation
 
 /// Used only by the isolated in-memory UI test runtime, never by the personal workspace.
 @MainActor enum TrainingGroupsUITestFixture {
+  static func seedPreviousSets(into repository: any WorkoutRepository) throws {
+    guard
+      let exercise = ExerciseLibrary.entries.first(where: { $0.sourceID == "Goblet_Squat" })?
+        .exercise
+    else {
+      throw TrainingError.missingExercise
+    }
+    let date = Date().addingTimeInterval(-3600)
+    let values = [(30.0, 12), (35.0, 10), (40.0, 8)]
+    let notes: [String?] = ["Рабочий подход", nil, "Заметка"]
+    let row = WorkoutExercise(
+      exercise: exercise,
+      sets: values.enumerated().map { index, value in
+        WorkoutSet(repetitions: value.1, weightKG: value.0, note: notes[index])
+      })
+    var workout = Workout(name: "Тест: три предыдущих подхода", startedAt: date, exercises: [row])
+    for (index, set) in row.sets.enumerated() {
+      try WorkoutEngine.completeSet(
+        in: &workout, exerciseID: row.id, setID: set.id,
+        repetitions: set.repetitions, weightKG: set.weightKG,
+        at: date.addingTimeInterval(Double(index + 1) * 30))
+    }
+    try WorkoutEngine.finish(&workout, at: date.addingTimeInterval(300))
+    try repository.save(workout)
+  }
+
   static func seed(into repository: any WorkoutRepository) throws {
     guard let templateID = UUID(uuidString: "90000000-0000-0000-0000-000000000001"),
       let variationID = UUID(uuidString: "90000000-0000-0000-0000-000000000002"),

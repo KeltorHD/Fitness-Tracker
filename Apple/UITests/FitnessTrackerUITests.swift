@@ -1,6 +1,591 @@
 import XCTest
 
 final class FitnessTrackerUITests: XCTestCase {
+  @MainActor func testCalendarWorkoutFiltersKeepHistoryScopeUntilSelectingADay() {
+    let app = launch(additionalArguments: ["--ui-testing-diary-insights", "-appearance", "light"])
+    let filters = app.buttons["diaryWorkoutFilters"]
+    XCTAssertTrue(filters.waitForExistence(timeout: 10))
+    let calendar = app.descendants(matching: .any).matching(identifier: "diaryCalendar").firstMatch
+    XCTAssertGreaterThanOrEqual(filters.frame.minY, calendar.frame.minY)
+    XCTAssertLessThanOrEqual(filters.frame.maxY, calendar.frame.maxY)
+    app.buttons["expandTrainingInsights"].tap()
+    let scope = app.staticTexts["historyScope"]
+    XCTAssertTrue(scope.waitForExistence(timeout: 5))
+    XCTAssertNotEqual(scope.label, "Все тренировки")
+    filters.tap()
+    let allHistory = app.descendants(matching: .any).matching(identifier: "calendarAllHistory")
+      .firstMatch
+    XCTAssertTrue(allHistory.waitForExistence(timeout: 5))
+    allHistory.tap()
+    XCTAssertEqual(scope.label, "Все тренировки")
+    let statistics = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "historyWeekStatistics_")
+    ).firstMatch
+    XCTAssertTrue(statistics.waitForExistence(timeout: 5))
+    filters.tap()
+    let weeklyStats = app.descendants(matching: .any).matching(identifier: "calendarWeekStatistics")
+      .firstMatch
+    XCTAssertTrue(weeklyStats.waitForExistence(timeout: 5))
+    weeklyStats.tap()
+    XCTAssertFalse(statistics.exists)
+    let section = app.segmentedControls["diarySection"]
+    section.buttons["Питание"].tap()
+    XCTAssertFalse(filters.exists)
+    section.buttons["Тренировки"].tap()
+    XCTAssertTrue(filters.waitForExistence(timeout: 5))
+    XCTAssertEqual(scope.label, "Все тренировки")
+    XCTAssertFalse(statistics.exists)
+    filters.tap()
+    let image = XCTAttachment(screenshot: app.screenshot())
+    image.name = "Workout filters inside the shared calendar"
+    image.lifetime = .keepAlways
+    add(image)
+    weeklyStats.tap()
+    XCTAssertTrue(statistics.waitForExistence(timeout: 5))
+    app.buttons["selectedDiaryCalendarDay"].tap()
+    XCTAssertNotEqual(scope.label, "Все тренировки")
+  }
+
+  @MainActor func testDiaryHeaderTabsFitAboveWeekAndMonthCalendar() {
+    let app = launch(additionalArguments: ["--ui-testing-diary-insights", "-appearance", "light"])
+    let section = app.segmentedControls["diarySection"]
+    XCTAssertTrue(section.waitForExistence(timeout: 10))
+    let title = app.staticTexts["diaryHeaderTitle"]
+    XCTAssertEqual(title.label, "Дневник")
+    XCTAssertGreaterThan(title.frame.width, 65)
+    XCTAssertEqual(title.frame.midX, app.frame.midX, accuracy: 2)
+    XCTAssertLessThan(section.frame.maxX, title.frame.minX)
+    XCTAssertLessThanOrEqual(section.frame.width, 200)
+    XCTAssertLessThan(section.frame.maxX, app.buttons["openSettings"].frame.minX)
+    XCTAssertFalse(app.navigationBars.buttons["Начать тренировку"].exists)
+    for title in ["Тренировки", "Питание", "Сон"] {
+      XCTAssertTrue(section.buttons[title].isHittable)
+      XCTAssertGreaterThanOrEqual(section.buttons[title].frame.width, 44)
+    }
+    let calendar = app.descendants(matching: .any).matching(identifier: "diaryCalendar").firstMatch
+    XCTAssertLessThan(section.frame.maxY, calendar.frame.minY)
+    XCTAssertLessThanOrEqual(calendar.frame.height, 120)
+    let selected = app.buttons["selectedDiaryCalendarDay"]
+    XCTAssertGreaterThanOrEqual(selected.frame.height, 44)
+    XCTAssertGreaterThanOrEqual(selected.frame.width, 44)
+    let week = XCTAttachment(screenshot: app.screenshot())
+    week.name = "Compact diary header tabs above shared week calendar"
+    week.lifetime = .keepAlways
+    add(week)
+    let toggle = app.buttons["expandDiaryCalendar"]
+    toggle.tap()
+    XCTAssertEqual(toggle.value as? String, "Месяц")
+    XCTAssertEqual(title.frame.midX, app.frame.midX, accuracy: 2)
+    XCTAssertLessThan(section.frame.maxY, calendar.frame.minY)
+    XCTAssertLessThan(section.frame.maxX, app.buttons["openSettings"].frame.minX)
+    let month = XCTAttachment(screenshot: app.screenshot())
+    month.name = "Compact diary header tabs above expanded month calendar"
+    month.lifetime = .keepAlways
+    add(month)
+    section.buttons["Питание"].tap()
+    XCTAssertEqual(title.frame.midX, app.frame.midX, accuracy: 2)
+    section.buttons["Сон"].tap()
+    XCTAssertGreaterThan(title.frame.width, 65)
+    XCTAssertEqual(title.frame.midX, app.frame.midX, accuracy: 2)
+    XCTAssertLessThan(section.frame.maxX, app.buttons["openSettings"].frame.minX)
+    app.buttons["workoutStartAction"].tap()
+    XCTAssertTrue(app.buttons["startSelectedTemplates"].waitForExistence(timeout: 5))
+  }
+
+  @MainActor func testNutritionDayCopyIsAvailableWithoutHeaderMenu() {
+    let app = launch(additionalArguments: ["--ui-testing-diary-insights"])
+    let section = app.segmentedControls["diarySection"]
+    XCTAssertTrue(section.waitForExistence(timeout: 10))
+    section.buttons["Питание"].tap()
+    XCTAssertEqual(app.staticTexts["nutritionDailyCalories"].label, "720 ккал")
+    XCTAssertFalse(app.navigationBars.buttons["Действия питания"].exists)
+    XCTAssertEqual(app.staticTexts["diaryHeaderTitle"].label, "Дневник")
+    XCTAssertGreaterThan(app.staticTexts["diaryHeaderTitle"].frame.width, 65)
+    XCTAssertEqual(app.staticTexts["diaryHeaderTitle"].frame.midX, app.frame.midX, accuracy: 2)
+    let copy = app.buttons["copyNutritionDay"]
+    reveal(copy, in: app)
+    XCTAssertTrue(copy.isEnabled)
+    copy.tap()
+    XCTAssertTrue(app.buttons["confirmCopyNutrition"].waitForExistence(timeout: 5))
+    XCTAssertTrue(app.staticTexts["Все приёмы пищи"].exists)
+  }
+
+  @MainActor func testSharedDiaryCalendarSwipesWeeksWithoutSwitchingDiaryTabs() {
+    let app = launch(additionalArguments: ["--ui-testing-diary-insights"])
+    let section = app.segmentedControls["diarySection"]
+    XCTAssertTrue(section.waitForExistence(timeout: 10))
+    let grid = app.descendants(matching: .any).matching(identifier: "diaryCalendarGrid").firstMatch
+    XCTAssertTrue(grid.waitForExistence(timeout: 5))
+    XCTAssertLessThan(section.frame.maxY, grid.frame.minY)
+    XCTAssertLessThan(section.frame.maxX, app.buttons["openSettings"].frame.minX)
+    let selected = app.buttons["selectedDiaryCalendarDay"]
+    let original = selected.label
+    let start = grid.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+    start.press(forDuration: 0.05, thenDragTo: start.withOffset(CGVector(dx: 30, dy: 0)))
+    XCTAssertEqual(selected.label, original)
+    grid.swipeLeft()
+    XCTAssertNotEqual(selected.label, original)
+    XCTAssertTrue(section.buttons["Тренировки"].isSelected)
+    grid.swipeRight()
+    XCTAssertEqual(selected.label, original)
+    section.buttons["Питание"].tap()
+    XCTAssertEqual(app.staticTexts["nutritionDailyCalories"].label, "720 ккал")
+    grid.swipeLeft()
+    XCTAssertTrue(section.buttons["Питание"].isSelected)
+    XCTAssertEqual(app.staticTexts["nutritionDailyCalories"].label, "0 ккал")
+    app.buttons["diaryToday"].tap()
+    XCTAssertEqual(app.staticTexts["nutritionDailyCalories"].label, "720 ккал")
+    XCTAssertEqual(selected.label, original)
+    let image = XCTAttachment(screenshot: app.screenshot())
+    image.name = "Shared week calendar above nutrition tabs, synthetic UI data"
+    image.lifetime = .keepAlways
+    add(image)
+  }
+
+  @MainActor func testSharedDiaryMonthExpandsSwipesAndSelectsDatesIndependentlyOfSleepTab() {
+    let app = launch(additionalArguments: ["--ui-testing-sleep", "-sleepDiaryEnabled", "YES"])
+    let section = app.segmentedControls["diarySection"]
+    XCTAssertTrue(section.waitForExistence(timeout: 10))
+    section.buttons["Сон"].tap()
+    let toggle = app.buttons["expandDiaryCalendar"]
+    toggle.tap()
+    XCTAssertEqual(toggle.value as? String, "Месяц")
+    let original = toggle.label
+    let grid = app.descendants(matching: .any).matching(identifier: "diaryCalendarGrid").firstMatch
+    XCTAssertGreaterThan(grid.frame.height, 240)
+    grid.swipeLeft()
+    XCTAssertNotEqual(toggle.label, original)
+    XCTAssertTrue(section.buttons["Сон"].isSelected)
+    grid.swipeRight()
+    XCTAssertEqual(toggle.label, original)
+    let day = grid.buttons.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "diaryCalendarDay_")
+    ).element(boundBy: 10)
+    let dateLabel = day.label
+    day.tap()
+    XCTAssertEqual(app.buttons["selectedDiaryCalendarDay"].label, dateLabel)
+    XCTAssertTrue(section.buttons["Сон"].isSelected)
+    let image = XCTAttachment(screenshot: app.screenshot())
+    image.name = "Shared expanded month above sleep diary"
+    image.lifetime = .keepAlways
+    add(image)
+    toggle.tap()
+    XCTAssertEqual(toggle.value as? String, "Неделя")
+    XCTAssertLessThan(grid.frame.height, 60)
+  }
+
+  @MainActor func testTrainingTripleRingsUseRecordedPreviousWeekAndAllowSelectingMetrics() {
+    let app = launch(additionalArguments: [
+      "--ui-testing-diary-insights", "-weeklyGoal", "3", "-appearance", "dark",
+    ])
+    let sets = app.buttons["trainingRing_sets"]
+    XCTAssertTrue(sets.waitForExistence(timeout: 10))
+    sets.tap()
+    XCTAssertTrue(sets.isSelected)
+    let comparison = app.staticTexts["trainingRingComparison"]
+    XCTAssertTrue(comparison.label.contains("100"))
+    let volume = app.buttons["trainingRing_volume"]
+    volume.tap()
+    XCTAssertTrue(volume.isSelected)
+    XCTAssertTrue(comparison.label.contains("800"))
+    XCTAssertTrue(comparison.label.contains("50"))
+    let image = XCTAttachment(screenshot: app.screenshot())
+    image.name = "Three concentric training rings, synthetic current and previous week"
+    image.lifetime = .keepAlways
+    add(image)
+    volume.tap()
+    XCTAssertFalse(volume.isSelected)
+    XCTAssertFalse(sets.isSelected)
+    let reset = XCTAttachment(screenshot: app.screenshot())
+    reset.name = "Training rings restored to full brightness"
+    reset.lifetime = .keepAlways
+    add(reset)
+  }
+
+  @MainActor func testDiaryRingSummariesStartExpandedAndCanBeHiddenIndependently() {
+    let app = launch(additionalArguments: [
+      "--ui-testing-training-groups", "-weeklyGoal", "3", "-appearance", "dark",
+    ])
+    let training = app.buttons["expandTrainingInsights"]
+    XCTAssertTrue(training.waitForExistence(timeout: 10))
+    XCTAssertEqual(training.value as? String, "Развёрнуто")
+    XCTAssertTrue(
+      app.descendants(matching: .any).matching(identifier: "trainingGoalRing").firstMatch.exists)
+    let trainingImage = XCTAttachment(screenshot: app.screenshot())
+    trainingImage.name = "Training diary weekly activity ring"
+    trainingImage.lifetime = .keepAlways
+    add(trainingImage)
+    training.tap()
+    XCTAssertEqual(training.value as? String, "Свёрнуто")
+    let section = app.segmentedControls["diarySection"]
+    section.buttons["Питание"].tap()
+    let nutrition = app.buttons["expandNutritionInsights"]
+    XCTAssertTrue(nutrition.waitForExistence(timeout: 5))
+    XCTAssertEqual(nutrition.value as? String, "Развёрнуто")
+    nutrition.tap()
+    XCTAssertEqual(nutrition.value as? String, "Свёрнуто")
+    section.buttons["Тренировки"].tap()
+    XCTAssertEqual(training.value as? String, "Свёрнуто")
+    training.tap()
+    XCTAssertEqual(training.value as? String, "Развёрнуто")
+    section.buttons["Питание"].tap()
+    XCTAssertEqual(nutrition.value as? String, "Свёрнуто")
+    nutrition.tap()
+    XCTAssertEqual(nutrition.value as? String, "Развёрнуто")
+  }
+
+  @MainActor func testNutritionRingSelectionAndSharedDateUseRecordedTotals() {
+    let app = launch(additionalArguments: [
+      "--ui-testing-diary-insights", "-appearance", "light",
+    ])
+    let section = app.segmentedControls["diarySection"]
+    XCTAssertTrue(section.waitForExistence(timeout: 10))
+    section.buttons["Питание"].tap()
+    let calories = app.staticTexts["nutritionDailyCalories"]
+    XCTAssertTrue(calories.waitForExistence(timeout: 5))
+    XCTAssertEqual(calories.label, "720 ккал")
+    let protein = app.buttons["nutritionMacro_protein"]
+    protein.tap()
+    XCTAssertTrue(protein.isSelected)
+    let ring = app.descendants(matching: .any).matching(identifier: "nutritionMacroRing").firstMatch
+    XCTAssertTrue(ring.exists)
+    XCTAssertEqual(ring.frame.width, ring.frame.height, accuracy: 2)
+    XCTAssertGreaterThan(ring.frame.width, 120)
+    ring.coordinate(withNormalizedOffset: CGVector(dx: 0.35, dy: 0.35)).tap()
+    XCTAssertTrue(app.buttons["nutritionMacro_carbohydrates"].isSelected)
+    protein.tap()
+    ring.coordinate(withNormalizedOffset: CGVector(dx: 0.35, dy: 0.35)).tap()
+    XCTAssertTrue(app.buttons["nutritionMacro_carbohydrates"].isSelected)
+    let image = XCTAttachment(screenshot: app.screenshot())
+    image.name = "Nutrition ratios and calorie goal, synthetic UI fixture"
+    image.lifetime = .keepAlways
+    add(image)
+    app.buttons["previousDiaryPeriod"].tap()
+    XCTAssertEqual(calories.label, "0 ккал")
+    app.buttons["diaryToday"].tap()
+    XCTAssertEqual(calories.label, "720 ккал")
+  }
+
+  @MainActor func testSleepAlarmOffersThreeDestinationsAndPhoneNeedsNoWatch() {
+    let app = launch(additionalArguments: ["--ui-testing-sleep", "-sleepDiaryEnabled", "NO"])
+    let section = app.segmentedControls["diarySection"]
+    XCTAssertTrue(section.waitForExistence(timeout: 10))
+    section.buttons["Сон"].tap()
+    app.buttons["addSleepAlarm"].tap()
+    let delivery = app.descendants(matching: .any).matching(identifier: "sleepAlarmDelivery")
+      .firstMatch
+    XCTAssertTrue(delivery.waitForExistence(timeout: 5))
+    delivery.tap()
+    XCTAssertTrue(app.buttons["На всех устройствах"].exists)
+    XCTAssertTrue(app.buttons["На Apple Watch"].exists)
+    XCTAssertFalse(app.buttons["На Apple Watch"].isEnabled)
+    app.buttons["На iPhone"].tap()
+    XCTAssertFalse(
+      app.descendants(matching: .any).matching(identifier: "sleepAlarmWindow").firstMatch.exists)
+    XCTAssertFalse(
+      app.descendants(matching: .any).matching(identifier: "sleepWatchConnection").firstMatch.exists
+    )
+    let editor = XCTAttachment(screenshot: app.screenshot())
+    editor.name = "Phone delivery needs no Watch app, system mirroring explained"
+    editor.lifetime = .keepAlways
+    add(editor)
+    app.buttons["saveSleepAlarm"].tap()
+    XCTAssertTrue(app.buttons["expandSleepAlarms"].waitForExistence(timeout: 5))
+    app.buttons["expandSleepAlarms"].tap()
+    let edit = app.buttons.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "editSleepAlarm_")
+    ).firstMatch
+    XCTAssertTrue(edit.waitForExistence(timeout: 5))
+    edit.tap()
+    XCTAssertTrue(app.navigationBars["Изменить будильник"].waitForExistence(timeout: 5))
+    delivery.tap()
+    let allDevices = app.buttons["На всех устройствах"]
+    XCTAssertTrue(allDevices.waitForExistence(timeout: 5))
+    allDevices.tap()
+    XCTAssertTrue(
+      app.descendants(matching: .any).matching(identifier: "sleepAlarmWindow").firstMatch.exists)
+    app.buttons["saveSleepAlarm"].tap()
+    XCTAssertTrue(
+      app.staticTexts["iPhone готов · Watch ожидает подготовки"].waitForExistence(timeout: 5))
+  }
+
+  @MainActor func testWatchOnlyDestinationKeepsPhoneReserveUntilConfirmation() {
+    let app = launch(additionalArguments: [
+      "--ui-testing-sleep", "--ui-testing-sleep-watch", "-sleepDiaryEnabled", "NO",
+    ])
+    let section = app.segmentedControls["diarySection"]
+    XCTAssertTrue(section.waitForExistence(timeout: 10))
+    section.buttons["Сон"].tap()
+    app.buttons["addSleepAlarm"].tap()
+    let delivery = app.descendants(matching: .any).matching(identifier: "sleepAlarmDelivery")
+      .firstMatch
+    XCTAssertTrue(delivery.waitForExistence(timeout: 5))
+    delivery.tap()
+    let watch = app.buttons["На Apple Watch"]
+    XCTAssertTrue(watch.isEnabled)
+    watch.tap()
+    app.buttons["saveSleepAlarm"].tap()
+    XCTAssertTrue(
+      app.staticTexts["iPhone включён до подтверждения Watch"].waitForExistence(timeout: 5))
+  }
+
+  @MainActor func testSleepRingCanToggleSelectionAndDragWithoutClearingIt() {
+    let app = launch(additionalArguments: ["--ui-testing-sleep", "-sleepDiaryEnabled", "YES"])
+    let section = app.segmentedControls["diarySection"]
+    XCTAssertTrue(section.waitForExistence(timeout: 10))
+    section.buttons["Сон"].tap()
+    let ring = app.descendants(matching: .any).matching(identifier: "sleepPhaseRing").firstMatch
+    XCTAssertTrue(ring.waitForExistence(timeout: 10))
+    let deep = ring.coordinate(withNormalizedOffset: CGVector(dx: 0.35, dy: 0.35))
+    deep.tap()
+    XCTAssertTrue((ring.value as? String ?? "").contains("Глубокий"))
+    let selected = XCTAttachment(screenshot: app.screenshot())
+    selected.name = "Sleep phase selected by one tap"
+    selected.lifetime = .keepAlways
+    add(selected)
+    deep.tap()
+    XCTAssertEqual(ring.value as? String, "Все фазы")
+    let cleared = XCTAttachment(screenshot: app.screenshot())
+    cleared.name = "Sleep phases restored after tapping the selected sector"
+    cleared.lifetime = .keepAlways
+    add(cleared)
+    let core = ring.coordinate(withNormalizedOffset: CGVector(dx: 0.75, dy: 0.75))
+    ring.coordinate(withNormalizedOffset: CGVector(dx: 0.75, dy: 0.25))
+      .press(forDuration: 0.6, thenDragTo: core)
+    XCTAssertTrue((ring.value as? String ?? "").contains("Базовый"))
+    core.tap()
+    XCTAssertEqual(ring.value as? String, "Все фазы")
+  }
+
+  @MainActor func testSleepInsightsSelectStageAndMonth() {
+    let app = launch(additionalArguments: ["--ui-testing-sleep", "-sleepDiaryEnabled", "YES"])
+    let section = app.segmentedControls["diarySection"]
+    XCTAssertTrue(section.waitForExistence(timeout: 10))
+    section.buttons["Сон"].tap()
+    XCTAssertTrue(app.staticTexts["selectedSleepDuration"].waitForExistence(timeout: 10))
+    let ring = app.descendants(matching: .any).matching(identifier: "sleepPhaseRing").firstMatch
+    XCTAssertTrue(ring.waitForExistence(timeout: 5))
+    ring.coordinate(withNormalizedOffset: CGVector(dx: 0.35, dy: 0.35)).tap()
+    let header = XCTAttachment(screenshot: app.screenshot())
+    header.name = "Interactive sleep overview with labeled UI fixture data"
+    header.lifetime = .keepAlways
+    add(header)
+    let deep = app.buttons["sleepStage_deep"]
+    reveal(deep, in: app)
+    XCTAssertTrue(
+      deep.isSelected, "A tap inside the ring's hole should select the nearby deep-sleep sector")
+    let awake = app.buttons["sleepStage_awake"]
+    reveal(awake, in: app)
+    awake.tap()
+    XCTAssertTrue(awake.isSelected)
+    deep.tap()
+    let detail = app.descendants(matching: .any).matching(identifier: "selectedSleepPhase")
+      .firstMatch
+    XCTAssertTrue(detail.waitForExistence(timeout: 5))
+    XCTAssertTrue(deep.isSelected)
+    let phase = XCTAttachment(screenshot: app.screenshot())
+    phase.name = "Selected deep sleep interval with UI fixture data"
+    phase.lifetime = .keepAlways
+    add(phase)
+    let period = app.segmentedControls["sleepTrendPeriod"]
+    reveal(period, in: app)
+    period.buttons["Месяц"].tap()
+    XCTAssertTrue(period.buttons["Месяц"].isSelected)
+    XCTAssertTrue(app.staticTexts["29 ночей с данными"].exists)
+    let month = XCTAttachment(screenshot: app.screenshot())
+    month.name = "Sleep month chart excluding one missing night, UI fixture data"
+    month.lifetime = .keepAlways
+    add(month)
+  }
+
+  @MainActor func testSleepAlarmCanBeCreatedDisabledAndEditedWithoutSystemAlarm() {
+    let app = launch(additionalArguments: ["--ui-testing-sleep", "-sleepDiaryEnabled", "NO"])
+    let section = app.segmentedControls["diarySection"]
+    XCTAssertTrue(section.waitForExistence(timeout: 10))
+    section.buttons["Сон"].tap()
+    let addAlarm = app.buttons["addSleepAlarm"]
+    XCTAssertTrue(addAlarm.waitForExistence(timeout: 10))
+    addAlarm.tap()
+    app.buttons["saveSleepAlarm"].tap()
+    XCTAssertTrue(addAlarm.waitForExistence(timeout: 5))
+    app.buttons["expandSleepAlarms"].tap()
+    let enabled = app.switches.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "enableSleepAlarm_")
+    ).firstMatch
+    XCTAssertTrue(enabled.waitForExistence(timeout: 5))
+    enabled.tap()
+    XCTAssertTrue(app.staticTexts["Выключен"].waitForExistence(timeout: 5))
+    let edit = app.buttons.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "editSleepAlarm_")
+    ).firstMatch
+    edit.tap()
+    XCTAssertTrue(app.navigationBars["Изменить будильник"].waitForExistence(timeout: 5))
+    app.buttons["saveSleepAlarm"].tap()
+    XCTAssertTrue(app.staticTexts["Выключен"].waitForExistence(timeout: 5))
+    enabled.tap()
+    XCTAssertTrue(
+      app.staticTexts["iPhone готов · Watch ожидает подготовки"].waitForExistence(timeout: 5))
+  }
+
+  @MainActor func testSleepDiaryOpensAlarmEditorWithoutHealthPermission() {
+    let app = launch(additionalArguments: ["-sleepDiaryEnabled", "NO"])
+    let section = app.segmentedControls["diarySection"]
+    XCTAssertTrue(section.waitForExistence(timeout: 10))
+    section.buttons["Сон"].tap()
+    XCTAssertTrue(app.buttons["enableSleepDiary"].waitForExistence(timeout: 10))
+    let addAlarm = app.buttons["addSleepAlarm"]
+    reveal(addAlarm, in: app)
+    XCTAssertTrue(addAlarm.isHittable)
+    let diary = XCTAttachment(screenshot: app.screenshot())
+    diary.name = "Sleep diary before Health opt-in"
+    diary.lifetime = .keepAlways
+    add(diary)
+    addAlarm.tap()
+    XCTAssertTrue(app.buttons["saveSleepAlarm"].waitForExistence(timeout: 5))
+    XCTAssertTrue(app.navigationBars["Новый будильник"].exists)
+    XCTAssertTrue(
+      app.descendants(matching: .any).matching(identifier: "sleepAlarmWindow").firstMatch.exists)
+    let editor = XCTAttachment(screenshot: app.screenshot())
+    editor.name = "Sleep alarm deadline and smart window editor"
+    editor.lifetime = .keepAlways
+    add(editor)
+  }
+
+  @MainActor func testNewExerciseRestoresAllThreeHistoricalSetsWithoutCompletionMarks() {
+    let app = launch(additionalArguments: ["--ui-testing-previous-sets"])
+    let start = app.buttons["workoutStartAction"]
+    XCTAssertTrue(start.waitForExistence(timeout: 10))
+    start.tap()
+    chooseFreeWorkout(in: app)
+    addGobletExercise(in: app)
+    let exercise = app.buttons["openWorkoutExercise"].firstMatch
+    exercise.tap()
+    let weights = app.textFields.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "setWeight_"))
+    let repetitions = app.textFields.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "setRepetitions_"))
+    XCTAssertTrue(weights.firstMatch.waitForExistence(timeout: 5))
+    XCTAssertEqual(weights.count, 3)
+    XCTAssertEqual(repetitions.count, 3)
+    let firstSetID = String(weights.firstMatch.identifier.dropFirst("setWeight_".count))
+    let note = app.buttons["setNote_\(firstSetID)"]
+    XCTAssertTrue(note.exists)
+    XCTAssertEqual(note.value as? String, "Рабочий подход")
+    let thirdSetID = String(weights.element(boundBy: 2).identifier.dropFirst("setWeight_".count))
+    XCTAssertEqual(app.buttons["setNote_\(thirdSetID)"].value as? String, "Заметка")
+    for (index, pair) in [(30, 12), (35, 10), (40, 8)].enumerated() {
+      XCTAssertEqual(weights.element(boundBy: index).value as? String, String(pair.0))
+      XCTAssertEqual(repetitions.element(boundBy: index).value as? String, String(pair.1))
+    }
+    XCTAssertFalse(
+      app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "correctSetWeight_"))
+        .firstMatch.exists)
+    let screen = XCTAttachment(screenshot: app.screenshot())
+    screen.name = "Three historical targets restored as pending sets"
+    screen.lifetime = .keepAlways
+    add(screen)
+    dismissWorkoutSheet(in: app)
+    XCTAssertTrue(exercise.waitForExistence(timeout: 5))
+    exercise.tap()
+    XCTAssertTrue(note.waitForExistence(timeout: 5))
+    XCTAssertEqual(note.value as? String, "Рабочий подход")
+  }
+
+  @MainActor func testUncompletedInputsSurviveClosingAndReopeningExercise() {
+    let app = launch()
+    XCTAssertTrue(app.buttons["workoutStartAction"].waitForExistence(timeout: 10))
+    app.buttons["workoutStartAction"].tap()
+    chooseFreeWorkout(in: app)
+    addGobletExercise(in: app)
+    let exercise = app.buttons["openWorkoutExercise"].firstMatch
+    XCTAssertTrue(exercise.waitForExistence(timeout: 5))
+    exercise.tap()
+    let pendingRepetitions = app.textFields.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "setRepetitions_")
+    )
+    .firstMatch
+    XCTAssertTrue(pendingRepetitions.waitForExistence(timeout: 5))
+    pendingRepetitions.tap()
+    app.buttons["numberPadDigit_1"].tap()
+    app.buttons["numberPadDigit_1"].tap()
+    app.buttons["numberPadHide"].tap()
+    dismissWorkoutSheet(in: app)
+    XCTAssertTrue(exercise.waitForExistence(timeout: 5))
+    exercise.tap()
+    let pendingWeight = app.textFields.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "setWeight_")
+    )
+    .firstMatch
+    XCTAssertTrue(pendingWeight.waitForExistence(timeout: 5))
+    assertEmptyWorkoutField(pendingWeight)
+    XCTAssertEqual(pendingRepetitions.value as? String, "11")
+    fillWorkoutSet(in: app, weight: 45, repetitions: 11)
+    dismissWorkoutSheet(in: app)
+    XCTAssertTrue(exercise.waitForExistence(timeout: 5))
+    exercise.tap()
+    let weight = app.textFields.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "setWeight_")
+    ).firstMatch
+    let repetitions = app.textFields.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "setRepetitions_")
+    ).firstMatch
+    XCTAssertTrue(weight.waitForExistence(timeout: 5))
+    XCTAssertEqual(weight.value as? String, "45")
+    XCTAssertEqual(repetitions.value as? String, "11")
+    XCTAssertTrue(app.buttons["completeSet"].isEnabled)
+    app.buttons["addWorkoutSet"].tap()
+    let copiedWeights = app.textFields.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "setWeight_"))
+    let copiedRepetitions = app.textFields.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "setRepetitions_"))
+    XCTAssertTrue(copiedWeights.element(boundBy: 1).waitForExistence(timeout: 5))
+    XCTAssertEqual(copiedWeights.count, 2)
+    XCTAssertEqual(copiedWeights.element(boundBy: 1).value as? String, "45")
+    XCTAssertEqual(copiedRepetitions.element(boundBy: 1).value as? String, "11")
+    dismissWorkoutSheet(in: app)
+    XCTAssertTrue(exercise.waitForExistence(timeout: 5))
+    let screen = XCTAttachment(screenshot: app.screenshot())
+    screen.name = "Pending values retained in workout overview"
+    screen.lifetime = .keepAlways
+    add(screen)
+  }
+
+  @MainActor private func dismissWorkoutSheet(in app: XCUIApplication) {
+    app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.12))
+      .press(
+        forDuration: 0.1,
+        thenDragTo:
+          app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.95)))
+  }
+
+  @MainActor func testMuscleRegionsStayWithTheirNamedParent() {
+    let app = launch()
+    XCTAssertTrue(app.buttons["workoutStartAction"].waitForExistence(timeout: 10))
+    app.buttons["workoutStartAction"].tap()
+    chooseFreeWorkout(in: app)
+    app.buttons["addExercise"].tap()
+    app.buttons["chooseExerciseMuscles"].tap()
+    let arms = app.buttons["expandMuscleGroup_arms"]
+    reveal(arms, in: app)
+    arms.tap()
+    let regions = app.buttons["expandMuscle_biceps"]
+    XCTAssertTrue(regions.waitForExistence(timeout: 5))
+    XCTAssertEqual(regions.label, "Области: Бицепс")
+    regions.tap()
+    let longHead = app.switches["muscleRegion_bicepsLong"]
+    let shortHead = app.switches["muscleRegion_bicepsShort"]
+    XCTAssertTrue(longHead.waitForExistence(timeout: 5))
+    XCTAssertTrue(longHead.label.hasPrefix("Бицепс:"))
+    reveal(shortHead, in: app)
+    shortHead.tap()
+    let triceps = app.switches["muscle_triceps"]
+    reveal(triceps, in: app)
+    XCTAssertEqual(triceps.value as? String, "0")
+    let screen = XCTAttachment(screenshot: app.screenshot())
+    screen.name = "Muscle region hierarchy"
+    screen.lifetime = .keepAlways
+    add(screen)
+  }
   @MainActor func testSettingsFromWorkoutMenusKeepTheSessionAndExerciseDraft() {
     let app = launch()
     XCTAssertTrue(app.buttons["workoutStartAction"].waitForExistence(timeout: 10))
@@ -210,9 +795,8 @@ final class FitnessTrackerUITests: XCTestCase {
     let clock = app.staticTexts["activeExerciseDuration"]
     XCTAssertTrue(clock.exists)
     XCTAssertEqual(clock.frame.midX, app.frame.midX, accuracy: 1)
-    XCTAssertLessThan(
-      app.buttons["closeWorkoutExercise"].frame.minX,
-      app.staticTexts["activeExercisePosition"].frame.minX)
+    XCTAssertFalse(app.buttons["closeWorkoutExercise"].exists)
+    XCTAssertTrue(app.staticTexts["activeExercisePosition"].exists)
     actions.tap()
     app.buttons["replaceCurrentExercise"].tap()
     let custom = app.buttons["Своё упражнение"]
@@ -314,7 +898,7 @@ final class FitnessTrackerUITests: XCTestCase {
 
   @MainActor func testDiaryStartOpensTemplatePickerAndSearchKeepsSelection() {
     let app = launch()
-    let start = app.buttons["startWorkout"]
+    let start = app.buttons["workoutStartAction"]
     XCTAssertTrue(start.waitForExistence(timeout: 10))
     start.tap()
     let first = app.buttons["startWorkoutTemplate_20000000-0000-0000-0000-000000000001"]
@@ -480,7 +1064,7 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(app.buttons["addExercise"].waitForExistence(timeout: 5))
     XCTAssertFalse(app.buttons["finishWorkout"].isEnabled)
     XCTAssertFalse(app.buttons["openWorkoutExercise"].exists)
-    app.buttons["Свернуть"].tap()
+    dismissWorkoutSheet(in: app)
     XCTAssertTrue(start.waitForExistence(timeout: 5))
     XCTAssertEqual(start.label, "Продолжить тренировку")
     app.buttons["navigationTab_1"].tap()
@@ -549,8 +1133,8 @@ final class FitnessTrackerUITests: XCTestCase {
 
   @MainActor func testWarmupAndDropStagesCanBeConfiguredBeforeCompletion() {
     let app = launch()
-    XCTAssertTrue(app.buttons["startWorkout"].waitForExistence(timeout: 10))
-    app.buttons["startWorkout"].tap()
+    XCTAssertTrue(app.buttons["workoutStartAction"].waitForExistence(timeout: 10))
+    app.buttons["workoutStartAction"].tap()
     chooseFreeWorkout(in: app)
     app.buttons["addExercise"].tap()
     app.searchFields.firstMatch.tap()
@@ -635,13 +1219,13 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(append.waitForExistence(timeout: 5))
     append.tap()
     XCTAssertTrue(app.staticTexts["Дропсет · этапов: 3"].waitForExistence(timeout: 5))
-    let correction = app.buttons.matching(
-      NSPredicate(format: "identifier BEGINSWITH %@", "correctSetWeight_")
+    let correction = app.textFields.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "setWeight_")
     ).firstMatch
     XCTAssertTrue(correction.waitForExistence(timeout: 5))
     correction.tap()
-    XCTAssertTrue(app.textFields["correctCompletedWeight"].waitForExistence(timeout: 5))
-    app.buttons["saveCompletedSetCorrection"].tap()
+    XCTAssertTrue(app.buttons["numberPadHide"].waitForExistence(timeout: 5))
+    app.buttons["numberPadHide"].tap()
     let child = app.cells.containing(.any, identifier: "dropStage").firstMatch
     XCTAssertTrue(child.waitForExistence(timeout: 5))
     child.swipeLeft()
@@ -731,7 +1315,7 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(app.textFields[firstWeightID].waitForNonExistence(timeout: 5))
     assertEmptyWorkoutField(weights.firstMatch)
     assertEmptyWorkoutField(repetitions.firstMatch)
-    app.buttons["closeWorkoutExercise"].tap()
+    dismissWorkoutSheet(in: app)
     XCTAssertTrue(app.buttons["finishWorkout"].waitForExistence(timeout: 5))
     XCTAssertTrue(app.buttons["finishWorkout"].isEnabled)
   }
@@ -811,13 +1395,13 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(finish.waitForExistence(timeout: 5))
     XCTAssertTrue(exercise.waitForExistence(timeout: 5))
     exercise.tap()
-    let savedWeight = app.buttons["correctSetWeight_\(setID)"]
+    let savedWeight = app.textFields["setWeight_\(setID)"]
     XCTAssertTrue(savedWeight.waitForExistence(timeout: 5))
     XCTAssertEqual(savedWeight.value as? String, "3")
-    XCTAssertEqual(app.buttons["correctSetRepetitions_\(setID)"].value as? String, "7")
+    XCTAssertEqual(app.textFields["setRepetitions_\(setID)"].value as? String, "7")
   }
 
-  @MainActor func testWorkoutTableKeepsEditingAndCompletedRowsReadOnly() {
+  @MainActor func testWorkoutTableEditsCompletedRowsWithTheSameNumericPanel() {
     let app = launch()
     let start = app.buttons["workoutStartAction"]
     XCTAssertTrue(start.waitForExistence(timeout: 10))
@@ -844,11 +1428,24 @@ final class FitnessTrackerUITests: XCTestCase {
     app.buttons["numberPadHide"].tap()
     app.buttons["completeSet"].tap()
     XCTAssertTrue(weights.firstMatch.waitForExistence(timeout: 5))
-    XCTAssertNotEqual(weights.firstMatch.identifier, firstWeightID)
-    XCTAssertFalse(app.textFields[firstWeightID].exists)
+    XCTAssertEqual(weights.firstMatch.identifier, firstWeightID)
+    XCTAssertEqual(app.textFields[firstWeightID].value as? String, "50")
     weights.firstMatch.tap()
     app.buttons["numberPadClear"].tap()
     XCTAssertTrue(app.buttons["numberPadDigit_5"].waitForExistence(timeout: 5))
+    app.buttons["numberPadDigit_6"].tap()
+    app.buttons["numberPadDigit_0"].tap()
+    app.buttons["numberPadNext"].tap()
+    app.buttons["numberPadClear"].tap()
+    app.buttons["numberPadDigit_1"].tap()
+    app.buttons["numberPadDigit_2"].tap()
+    app.buttons["numberPadHide"].tap()
+    XCTAssertEqual(app.textFields[firstWeightID].value as? String, "60")
+    dismissWorkoutSheet(in: app)
+    XCTAssertTrue(exercise.waitForExistence(timeout: 5))
+    exercise.tap()
+    XCTAssertEqual(app.textFields[firstWeightID].value as? String, "60")
+    XCTAssertFalse(app.buttons["saveCompletedSetCorrection"].exists)
     XCTAssertEqual(app.alerts.count, 0)
   }
 
@@ -900,7 +1497,7 @@ final class FitnessTrackerUITests: XCTestCase {
     rows.element(boundBy: 1).tap()
     XCTAssertTrue(app.buttons["addWorkoutSet"].waitForExistence(timeout: 5))
     app.buttons["addWorkoutSet"].tap()
-    app.buttons["closeWorkoutExercise"].tap()
+    dismissWorkoutSheet(in: app)
     XCTAssertTrue(finish.waitForExistence(timeout: 5))
     XCTAssertEqual(finish.value as? String, "Выполнено этапов: 2 из 3")
     XCTAssertTrue(finish.isEnabled)
@@ -946,8 +1543,8 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(app.staticTexts["Дропсет · этапов: 2"].waitForExistence(timeout: 5))
     let complete = app.buttons["completeSet"]
     complete.tap()
-    let correction = app.buttons.matching(
-      NSPredicate(format: "identifier BEGINSWITH %@", "correctSetWeight_")
+    let correction = app.textFields.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "setWeight_")
     ).firstMatch
     XCTAssertTrue(correction.waitForExistence(timeout: 5))
     XCTAssertEqual(app.staticTexts["activeExerciseTitle"].label, name)
@@ -1007,7 +1604,7 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertEqual(input.value as? String, "74,1")
     app.navigationBars["Записать вес"].buttons["Отмена"].tap()
     XCTAssertTrue(input.waitForNonExistence(timeout: 5))
-    app.buttons["Свернуть"].tap()
+    dismissWorkoutSheet(in: app)
     XCTAssertTrue(app.buttons["navigationTab_2"].waitForExistence(timeout: 5))
     app.buttons["navigationTab_2"].tap()
     let history = app.buttons["openBodyWeightHistory"]
@@ -1043,7 +1640,7 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertEqual(input.value as? String, "73,2")
     app.navigationBars["Записать вес"].buttons["Отмена"].tap()
     XCTAssertTrue(input.waitForNonExistence(timeout: 5))
-    app.buttons["Свернуть"].tap()
+    dismissWorkoutSheet(in: app)
     let start = app.buttons["workoutStartAction"]
     XCTAssertTrue(start.waitForExistence(timeout: 5))
     let settings = app.buttons["openSettings"]
@@ -1264,8 +1861,8 @@ final class FitnessTrackerUITests: XCTestCase {
 
   @MainActor func testActiveExerciseCanOpenAnEmptyProgressHistory() {
     let app = launch()
-    XCTAssertTrue(app.buttons["startWorkout"].waitForExistence(timeout: 10))
-    app.buttons["startWorkout"].tap()
+    XCTAssertTrue(app.buttons["workoutStartAction"].waitForExistence(timeout: 10))
+    app.buttons["workoutStartAction"].tap()
     chooseFreeWorkout(in: app)
     app.buttons["addExercise"].tap()
     app.searchFields.firstMatch.tap()
@@ -1310,7 +1907,7 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(app.buttons["openWorkoutExercise"].firstMatch.waitForExistence(timeout: 5))
     XCTAssertTrue(app.staticTexts["activeWorkoutTitle"].label.contains("Свободная тренировка"))
     XCTAssertFalse(app.buttons["finishWorkout"].isEnabled)
-    app.buttons["Свернуть"].tap()
+    dismissWorkoutSheet(in: app)
     app.buttons["workoutStartAction"].tap()
     XCTAssertTrue(app.buttons["openWorkoutExercise"].firstMatch.waitForExistence(timeout: 5))
   }
@@ -1382,6 +1979,9 @@ final class FitnessTrackerUITests: XCTestCase {
     let search = app.searchFields.firstMatch
     XCTAssertTrue(search.waitForExistence(timeout: 5))
     search.tap()
+    if !app.keyboards.firstMatch.waitForExistence(timeout: 2) {
+      search.tap()
+    }
     search.typeText("Goblet")
     let goblet = app.buttons.containing(.staticText, identifier: "Гоблет-приседания").firstMatch
     XCTAssertTrue(goblet.waitForExistence(timeout: 5))
@@ -1403,9 +2003,16 @@ final class FitnessTrackerUITests: XCTestCase {
   @MainActor private func fillWorkoutSet(
     in app: XCUIApplication, weight: Int = 0, repetitions: Int = 8
   ) {
-    let field = app.textFields.matching(
-      NSPredicate(format: "identifier BEGINSWITH %@", "setWeight_")
+    let selected = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier BEGINSWITH %@ AND selected == true", "setIndex_")
     ).firstMatch
+    let selectedID =
+      selected.exists ? String(selected.identifier.dropFirst("setIndex_".count)) : nil
+    let field =
+      selectedID.map { app.textFields["setWeight_\($0)"] }
+      ?? app.textFields.matching(
+        NSPredicate(format: "identifier BEGINSWITH %@", "setWeight_")
+      ).firstMatch
     XCTAssertTrue(field.waitForExistence(timeout: 5))
     field.tap()
     app.buttons["numberPadClear"].tap()
@@ -1517,6 +2124,32 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertEqual(app.alerts.count, 0)
   }
 
+  @MainActor func testAppleWatchLivePulseSetupRequiresAnExplicitActiveWorkout() {
+    let app = launch()
+    app.buttons["openSettings"].tap()
+    let tracker = app.buttons["openTracker"]
+    reveal(tracker, in: app)
+    tracker.tap()
+    app.buttons["trackerDevicePicker"].tap()
+    app.buttons["Apple Watch"].tap()
+    let start = app.buttons["startLiveHeartRate"]
+    XCTAssertTrue(start.waitForExistence(timeout: 5))
+    XCTAssertFalse(start.isEnabled)
+    XCTAssertTrue(
+      app.staticTexts["trackerAirPodsSetup"].label.contains("FitnessTracker на Apple Watch"))
+    XCTAssertEqual(app.alerts.count, 0)
+    let setup = XCTAttachment(screenshot: app.screenshot())
+    setup.name = "Apple Watch live pulse setup, explicit start and permission guidance"
+    setup.lifetime = .keepAlways
+    add(setup)
+    app.buttons["trackerModePicker"].tap()
+    app.buttons["Bluetooth-пульс"].tap()
+    XCTAssertFalse(app.buttons["scanHeartRate"].exists)
+    app.buttons["Выбрать Apple «Здоровье»"].tap()
+    XCTAssertTrue(start.waitForExistence(timeout: 5))
+    XCTAssertFalse(start.isEnabled)
+  }
+
   @MainActor func testMusclePickerAllowsWholeGroupsAndIndividualMuscles() {
     let app = launch()
     let start = app.buttons["workoutStartAction"]
@@ -1563,7 +2196,7 @@ final class FitnessTrackerUITests: XCTestCase {
     start.tap()
     app.buttons["startSelectedTemplates"].tap()
     XCTAssertTrue(app.buttons["addExercise"].waitForExistence(timeout: 5))
-    app.buttons["Свернуть"].tap()
+    dismissWorkoutSheet(in: app)
     app.buttons["openSettings"].tap()
     let themes = app.buttons["openColorThemePicker"]
     reveal(themes, in: app)
@@ -1579,7 +2212,7 @@ final class FitnessTrackerUITests: XCTestCase {
     start.tap()
     XCTAssertTrue(app.buttons["addExercise"].waitForExistence(timeout: 5))
     XCTAssertFalse(app.buttons["startSelectedTemplates"].exists)
-    app.buttons["Свернуть"].tap()
+    dismissWorkoutSheet(in: app)
     app.terminate()
     app.launch()
     XCTAssertTrue(app.buttons["openSettings"].waitForExistence(timeout: 10))
@@ -1624,7 +2257,7 @@ final class FitnessTrackerUITests: XCTestCase {
   }
   @MainActor func testDiaryCanLogManualFoodWithoutNetwork() {
     let app = launch()
-    let nutrition = app.buttons["nutritionDiary"]
+    let nutrition = app.segmentedControls["diarySection"].buttons["Питание"]
     XCTAssertTrue(nutrition.waitForExistence(timeout: 10))
     nutrition.tap()
     let snack = app.buttons["addFood_snack"]
@@ -1652,6 +2285,35 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(app.staticTexts["200 ккал"].firstMatch.exists)
   }
 
+  @MainActor func testDiaryPagesShareDateAndWaterUndoDoesNotChangeWorkouts() {
+    let app = launch()
+    let section = app.segmentedControls["diarySection"]
+    XCTAssertTrue(section.waitForExistence(timeout: 10))
+    section.buttons["Питание"].tap()
+    let water = app.buttons["addWater_250"]
+    XCTAssertTrue(water.waitForExistence(timeout: 5))
+    water.tap()
+    XCTAssertTrue(app.staticTexts["waterTotal"].label.contains("250"))
+    app.buttons["previousDiaryPeriod"].tap()
+    XCTAssertFalse(app.buttons["undoWater"].exists)
+    app.buttons["diaryToday"].tap()
+    XCTAssertTrue(app.buttons["undoWater"].waitForExistence(timeout: 5))
+    app.buttons["undoWater"].tap()
+    XCTAssertFalse(app.buttons["undoWater"].exists)
+    app.swipeRight()
+    XCTAssertTrue(section.buttons["Тренировки"].isSelected)
+    XCTAssertTrue(app.buttons["workoutStartAction"].exists)
+    app.swipeLeft()
+    XCTAssertTrue(section.buttons["Питание"].isSelected)
+    let add = app.buttons["addFood_breakfast"]
+    reveal(add, in: app)
+    add.tap()
+    app.buttons["addProduct"].tap()
+    XCTAssertTrue(app.buttons["scanFoodBarcode"].waitForExistence(timeout: 5))
+    app.segmentedControls["foodPickerSource"].buttons["Избранное"].tap()
+    XCTAssertTrue(app.staticTexts["Пока нет избранных продуктов"].waitForExistence(timeout: 5))
+  }
+
   @MainActor private func launch(additionalArguments: [String] = []) -> XCUIApplication {
     let app = XCUIApplication()
     app.launchArguments =
@@ -1661,7 +2323,7 @@ final class FitnessTrackerUITests: XCTestCase {
   }
   @MainActor func testLogSetAndFindWorkoutInHistory() {
     let app = launch(additionalArguments: ["-appearance", "dark", "-colorTheme", "forest"])
-    let start = app.buttons["startWorkout"]
+    let start = app.buttons["workoutStartAction"]
     XCTAssertTrue(start.waitForExistence(timeout: 10))
     start.tap()
     chooseFreeWorkout(in: app)
@@ -1740,7 +2402,7 @@ final class FitnessTrackerUITests: XCTestCase {
     self.add(exerciseScreenshot)
     fillWorkoutSet(in: app)
     complete.tap()
-    app.buttons["closeWorkoutExercise"].tap()
+    dismissWorkoutSheet(in: app)
     XCTAssertTrue(finish.waitForExistence(timeout: 5))
     XCTAssertTrue(finish.isEnabled)
     XCTAssertTrue(finish.isHittable)
@@ -1755,11 +2417,11 @@ final class FitnessTrackerUITests: XCTestCase {
   }
   @MainActor func testMinimizedSessionCanBeResumed() {
     let app = launch()
-    XCTAssertTrue(app.buttons["startWorkout"].waitForExistence(timeout: 10))
-    app.buttons["startWorkout"].tap()
+    XCTAssertTrue(app.buttons["workoutStartAction"].waitForExistence(timeout: 10))
+    app.buttons["workoutStartAction"].tap()
     chooseFreeWorkout(in: app)
-    app.buttons["Свернуть"].tap()
-    app.buttons["startWorkout"].tap()
+    dismissWorkoutSheet(in: app)
+    app.buttons["workoutStartAction"].tap()
     XCTAssertTrue(app.buttons["addExercise"].waitForExistence(timeout: 5))
     let finish = app.buttons["finishWorkout"]
     XCTAssertTrue(finish.exists)
@@ -1769,8 +2431,8 @@ final class FitnessTrackerUITests: XCTestCase {
 
   @MainActor func testPullDownClosesExerciseThenMinimizesWorkoutWithoutLosingSets() {
     let app = launch()
-    XCTAssertTrue(app.buttons["startWorkout"].waitForExistence(timeout: 10))
-    app.buttons["startWorkout"].tap()
+    XCTAssertTrue(app.buttons["workoutStartAction"].waitForExistence(timeout: 10))
+    app.buttons["workoutStartAction"].tap()
     chooseFreeWorkout(in: app)
     app.buttons["addExercise"].tap()
     app.searchFields.firstMatch.tap()
@@ -1802,10 +2464,10 @@ final class FitnessTrackerUITests: XCTestCase {
       .press(
         forDuration: 0.05,
         thenDragTo: workoutScroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.95)))
-    XCTAssertTrue(app.buttons["startWorkout"].waitForExistence(timeout: 5))
+    XCTAssertTrue(app.buttons["workoutStartAction"].waitForExistence(timeout: 5))
     XCTAssertTrue(workoutScroll.waitForNonExistence(timeout: 5))
-    XCTAssertTrue(app.buttons["startWorkout"].isHittable)
-    app.buttons["startWorkout"].tap()
+    XCTAssertTrue(app.buttons["workoutStartAction"].isHittable)
+    app.buttons["workoutStartAction"].tap()
     XCTAssertTrue(workoutScroll.waitForExistence(timeout: 5))
     XCTAssertTrue(app.buttons["openWorkoutExercise"].firstMatch.exists)
     XCTAssertTrue(app.buttons["finishWorkout"].isEnabled)
@@ -1838,7 +2500,7 @@ final class FitnessTrackerUITests: XCTestCase {
       .press(
         forDuration: 0.05,
         thenDragTo: workoutScroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.95)))
-    XCTAssertTrue(app.buttons["startWorkout"].waitForExistence(timeout: 5))
+    XCTAssertTrue(app.buttons["workoutStartAction"].waitForExistence(timeout: 5))
     XCTAssertTrue(workoutScroll.waitForNonExistence(timeout: 5))
     XCTAssertFalse(exercise.exists)
     XCTAssertTrue(workout.exists)

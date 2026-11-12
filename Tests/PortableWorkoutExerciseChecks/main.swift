@@ -47,8 +47,8 @@ private func rejects(_ action: () throws -> Void) throws {
       at: date.addingTimeInterval(1))
     model.refresh(workout)
     try expect(
-      model.selectedSetID == first.sets[1].id && model.drafts[first.sets[0].id] == nil,
-      "Saved completion advances selection and clears its draft")
+      model.selectedSetID == first.sets[1].id && model.drafts[first.sets[0].id]?.weight != nil,
+      "Saved completion advances selection while keeping editable recorded values")
     try expect(workout.volume == 935, "Completion uses the Core multiplier semantics")
     model.select(first.sets[0].id, in: workout)
     try expect(
@@ -126,9 +126,106 @@ private func rejects(_ action: () throws -> Void) throws {
     try checkAutomaticExerciseAdvance(at: date)
     try checkAdvanceGuards(at: date)
     try checkAdvanceWrapsToEarlierPendingExercise(at: date)
+    try checkReopenedInputs(at: date)
+    try checkInheritedInputs(at: date)
     print(
       "Portable workout exercise presentation: localized/strict input, pounds precision, draft retention, repeated exercise identity, paging/reordering/removal, completion, pause/history guards and summaries passed (no Apple SDK)."
     )
+  }
+
+  @MainActor private static func checkInheritedInputs(at date: Date) throws {
+    let row = WorkoutExercise(exercise: ExerciseCatalog.all[0], sets: [WorkoutSet(repetitions: 0)])
+    var workout = Workout(name: "Add draft", startedAt: date, exercises: [row])
+    let model = WorkoutExercisePresentation(
+      workout: workout, exerciseID: row.id, unit: .kilograms, locale: Locale(identifier: "ru_RU"))
+    model.editWeight("42,", setID: row.sets[0].id)
+    try WorkoutEngine.addSet(exerciseID: row.id, to: &workout)
+    let added = workout.exercises[0].sets[1].id
+    model.inheritInput(from: row.sets[0].id, for: added, in: workout)
+    try expect(
+      model.drafts[added]?.weight == "42," && model.drafts[added]?.repetitions == "",
+      "Adding preserves displayed partial input without inventing repetitions")
+    model.editWeight("42,5", setID: added)
+    model.editRepetitions("11", setID: added)
+    try WorkoutEngine.addSet(exerciseID: row.id, to: &workout)
+    let last = workout.exercises[0].sets[2].id
+    model.inheritInput(from: added, for: last, in: workout)
+    model.select(last, in: workout)
+    let request = try model.completion(in: workout)
+    try expect(
+      request.set.weightKG == 42.5 && request.set.repetitions == 11,
+      "The added target uses the last displayed values, including unsaved drafts")
+    try expect(
+      workout.completedSets == 0 && workout.volume == 0,
+      "Copying input never completes a set")
+    let precise = WorkoutSet(repetitions: 12, weightKG: 45.123456)
+    let preciseRow = WorkoutExercise(exercise: row.exercise, sets: [precise])
+    var poundsWorkout = Workout(name: "Pounds", exercises: [preciseRow])
+    let poundsModel = WorkoutExercisePresentation(
+      workout: poundsWorkout, exerciseID: preciseRow.id, unit: .pounds,
+      locale: Locale(identifier: "en_US"))
+    try WorkoutEngine.addSet(exerciseID: preciseRow.id, to: &poundsWorkout)
+    let copied = poundsWorkout.exercises[0].sets[1].id
+    poundsModel.inheritInput(from: precise.id, for: copied, in: poundsWorkout)
+    poundsModel.select(copied, in: poundsWorkout)
+    try expect(
+      try poundsModel.completion(in: poundsWorkout).set.weightKG == precise.weightKG,
+      "Copied unedited pounds preserve exact stored kilograms behind rounded display")
+  }
+
+  @MainActor private static func checkReopenedInputs(at date: Date) throws {
+    let row = WorkoutExercise(
+      exercise: Exercise(name: "Drafts", muscle: .chest),
+      sets: [WorkoutSet(repetitions: 0), WorkoutSet(repetitions: 0), WorkoutSet(repetitions: 0)])
+    var workout = Workout(name: "Shared drafts", startedAt: date, exercises: [row])
+    let shared = WorkoutExerciseDraftStore(workoutID: workout.id, unit: .kilograms)
+    let model = WorkoutExercisePresentation(
+      workout: workout, exerciseID: row.id, unit: .kilograms, locale: Locale(identifier: "ru_RU"),
+      draftStore: shared)
+    model.editWeight("42,5", setID: row.sets[0].id)
+    model.editRepetitions("11", setID: row.sets[0].id)
+    model.editWeight("", setID: row.sets[1].id)
+    model.editRepetitions("8", setID: row.sets[1].id)
+    model.editRepetitions("12", setID: row.sets[2].id)
+    try WorkoutEngine.updatePendingValues(model.pendingValues(in: workout), in: &workout)
+    let reopened = WorkoutExercisePresentation(
+      workout: workout, exerciseID: row.id, unit: .kilograms, locale: Locale(identifier: "ru_RU"),
+      draftStore: shared)
+    try expect(
+      reopened.drafts[row.sets[0].id]?.weight == "42,5"
+        && reopened.drafts[row.sets[0].id]?.repetitions == "11"
+        && reopened.drafts[row.sets[1].id]?.weight == ""
+        && reopened.drafts[row.sets[2].id]?.weight == ""
+        && reopened.drafts[row.sets[2].id]?.repetitions == "12"
+        && workout.exercises[0].sets[2].repetitions == 0,
+      "Recreating the screen preserves entered text and explicit clears")
+    try expect(reopened.pendingValues(in: workout).isEmpty, "Unchanged input does not write again")
+    let restored = try JSONDecoder().decode(Workout.self, from: JSONEncoder().encode(workout))
+    let relaunched = WorkoutExercisePresentation(
+      workout: restored, exerciseID: row.id, unit: .kilograms, locale: Locale(identifier: "en_US"))
+    try expect(
+      relaunched.drafts[row.sets[0].id]?.weight == "42.5"
+        && relaunched.drafts[row.sets[0].id]?.repetitions == "11"
+        && restored.completedSets == 0 && restored.restEndsAt == nil,
+      "Saved valid input survives restoring a session without completing a set")
+    var unrelated = workout
+    unrelated.id = UUID()
+    let isolated = WorkoutExercisePresentation(
+      workout: unrelated, exerciseID: row.id, unit: .kilograms, locale: Locale(identifier: "en_US"),
+      draftStore: shared)
+    try expect(
+      isolated.drafts[row.sets[0].id]?.weight == "42.5",
+      "A different session never reuses another workout's raw drafts")
+    let original = workout
+    model.editWeight("invalid", setID: row.sets[0].id)
+    try expect(
+      model.pendingValues(in: workout).isEmpty, "Invalid text does not corrupt numeric data")
+    let invalidReopened = WorkoutExercisePresentation(
+      workout: workout, exerciseID: row.id, unit: .kilograms, locale: Locale(identifier: "ru_RU"),
+      draftStore: shared)
+    try expect(
+      invalidReopened.drafts[row.sets[0].id]?.weight == "invalid" && workout == original,
+      "Invalid input remains editable after reopening")
   }
 
   @MainActor private static func checkAutomaticExerciseAdvance(at date: Date) throws {
@@ -421,7 +518,8 @@ private func rejects(_ action: () throws -> Void) throws {
     history.exercises[0].sets[0].weightKG = 30
     model.updateHistory([history], for: workout)
     try expect(
-      model.drafts[warmup.set.id] == nil && workout.exercises[0].sets[0].weightKG == 20,
+      try model.drafts[warmup.set.id]?.weightInKG(unit: .pounds) == 20
+        && workout.exercises[0].sets[0].weightKG == 20,
       "Completed fields remain frozen even when their history source changes")
     let existing = WorkoutExercise(
       exercise: exercise, sets: [WorkoutSet(repetitions: 6, weightKG: 0)])
@@ -480,7 +578,8 @@ private func rejects(_ action: () throws -> Void) throws {
     let child = try model.completion(in: workout)
     try expect(
       child.stageID == stage.id && child.set.completedAt != nil
-        && child.set.dropStages?.first?.repetitions == 7 && model.drafts[base.set.id] == nil,
+        && child.set.dropStages?.first?.repetitions == 7
+        && model.drafts[base.set.id]?.weight != nil,
       "Completed drop base is frozen and edited pending stage survives a history refresh")
   }
 
@@ -613,7 +712,7 @@ private func rejects(_ action: () throws -> Void) throws {
       model.advance(afterSaving: first, in: workout) == .stay,
       "An intermediate drop cannot advance the exercise")
     try expect(
-      model.selectedStageID == stages[1].id && model.drafts[stages[0].id] == nil
+      model.selectedStageID == stages[1].id && model.drafts[stages[0].id]?.weight != nil
         && workout.restEndsAt == nil,
       "Completed drop fields freeze; future draft remains ready without rest")
     let last = try model.completion(in: workout)

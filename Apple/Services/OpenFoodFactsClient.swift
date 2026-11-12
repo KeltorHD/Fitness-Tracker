@@ -9,13 +9,15 @@ protocol FoodSearching: Sendable {
   func search(_ query: String, preferRussian: Bool) async throws -> [FoodProduct]
 }
 
-enum FoodSearchError: Error, LocalizedError {
-  case unavailable, rateLimited, invalidResponse, invalidQuery
+enum FoodSearchError: Error, LocalizedError, Equatable {
+  case unavailable, rateLimited, invalidResponse, invalidQuery, incompleteProduct
   var errorDescription: String? {
     switch self {
     case .unavailable: "Поиск недоступен. Проверьте интернет или добавьте продукт вручную."
     case .rateLimited: "Слишком много запросов. Подождите минуту и повторите поиск."
     case .invalidResponse: "База продуктов вернула некорректный ответ. Повторите позже."
+    case .incompleteProduct:
+      "Продукт найден в базе, но его название или КБЖУ не заполнены. Введите данные с упаковки вручную."
     case .invalidQuery: "Введите название от 2 символов или штрихкод из 8–14 цифр."
     }
   }
@@ -76,11 +78,19 @@ actor OpenFoodFactsClient: FoodSearching {
     do { decoded = try JSONDecoder().decode(Result.self, from: data) } catch {
       throw FoodSearchError.invalidResponse
     }
+    if barcode {
+      if decoded.status == 0 { return [] }
+      guard decoded.status == 1, decoded.product != nil else {
+        throw FoodSearchError.invalidResponse
+      }
+    }
     let products =
       barcode ? decoded.product.map { [$0] } ?? [] : (decoded.products ?? []).compactMap(\.value)
     var seen = Set<String>()
-    return products.compactMap { $0.product(preferRussian: preferRussian) }
+    let result = products.compactMap { $0.product(preferRussian: preferRussian) }
       .filter { seen.insert($0.id).inserted }
+    if barcode, result.isEmpty { throw FoodSearchError.incompleteProduct }
+    return result
   }
 }
 

@@ -75,11 +75,12 @@ struct FoodEntryEditor: View {
         }
         if let error = model.error { Text(L10n.text(error, locale: locale)).foregroundStyle(.red) }
       }
+      .scrollDismissesKeyboard(.interactively)
       .navigationTitle(L10n.text("Запись питания", locale: locale)).navigationBarTitleDisplayMode(
         .inline
       )
       .navigationDestination(isPresented: $addingFood) {
-        FoodProductPicker(recent: diary.recentProducts, client: diary.foodSearch) {
+        FoodProductPicker(diary: diary) {
           product, amount in
           try model.add(product, amount: amount)
         }
@@ -150,6 +151,16 @@ private struct FoodPortionEditor: View {
         Text(L10n.text("Укажите размер порции больше нуля и не больше 10 000.", locale: locale))
           .font(.caption).foregroundStyle(.red)
       }
+      if portion.amount.isFinite, portion.amount > 0, portion.amount <= 10_000 {
+        Text(
+          L10n.format(
+            "%@ ккал",
+            portion.nutrients.calories.formatted(.number.precision(.fractionLength(0...1))),
+            locale: locale)
+        )
+        .font(.subheadline).foregroundStyle(.secondary)
+      }
+      FoodProductSource(product: portion.product)
       Button(L10n.text("Убрать продукт", locale: locale), role: .destructive, action: remove).font(
         .caption)
     }.onChange(of: text) { portion.amount = (try? NutritionInput.number(text)) ?? .nan }

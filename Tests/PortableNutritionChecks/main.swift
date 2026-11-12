@@ -18,6 +18,24 @@ private enum Failure: Error { case expected }
     if fail { throw Failure.expected }
     try memory.saveFoodEntry(entry)
   }
+  func saveFoodEntries(_ entries: [FoodEntry]) throws {
+    if fail { throw Failure.expected }
+    try memory.saveFoodEntries(entries)
+  }
+  func waterEntries() throws -> [WaterEntry] { try memory.waterEntries() }
+  func saveWaterEntry(_ entry: WaterEntry) throws {
+    if fail { throw Failure.expected }
+    try memory.saveWaterEntry(entry)
+  }
+  func deleteWaterEntry(id: UUID) throws {
+    if fail { throw Failure.expected }
+    try memory.deleteWaterEntry(id: id)
+  }
+  func favoriteFoodProducts() throws -> [FoodProduct] { try memory.favoriteFoodProducts() }
+  func setFavoriteFoodProduct(_ product: FoodProduct, isFavorite: Bool) throws {
+    if fail { throw Failure.expected }
+    try memory.setFavoriteFoodProduct(product, isFavorite: isFavorite)
+  }
   func deleteFoodEntry(id: UUID) throws {
     if fail { throw Failure.expected }
     try memory.deleteFoodEntry(id: id)
@@ -26,6 +44,28 @@ private enum Failure: Error { case expected }
   func saveNutritionGoal(_ goal: NutritionGoal?) throws {
     if fail { throw Failure.expected }
     try memory.saveNutritionGoal(goal)
+  }
+}
+
+private actor CatalogStub: FoodSearching {
+  let products: [FoodProduct]
+  let failure: FoodSearchError?
+  private(set) var calls = 0
+  init(_ products: [FoodProduct] = [], failure: FoodSearchError? = nil) {
+    self.products = products
+    self.failure = failure
+  }
+  func search(_ query: String, preferRussian: Bool) async throws -> [FoodProduct] {
+    calls += 1
+    try Task.checkCancellation()
+    if let failure { throw failure }
+    return products
+  }
+}
+
+private struct CancelledCatalog: FoodSearching {
+  func search(_ query: String, preferRussian: Bool) async throws -> [FoodProduct] {
+    throw CancellationError()
   }
 }
 
@@ -47,6 +87,20 @@ private final class FoodURLProtocol: URLProtocol {
   override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
   override func startLoading() {
     guard let url = request.url else { preconditionFailure("Missing URL") }
+    if url.host == "api.test" {
+      precondition(request.value(forHTTPHeaderField: "X-Api-Key") == nil)
+      let product = FoodProduct(
+        id: "perek:sample", name: "Oreo", brand: "Oreo",
+        per100Units: Nutrients(calories: 480, protein: 5, fat: 20, carbohydrates: 70),
+        sourceURL: URL(string: "https://perek.us/food/test/oreo"), barcode: "7622210769459")
+      let body = try! JSONEncoder().encode(["products": [product]])
+      let response = HTTPURLResponse(
+        url: url, statusCode: 200, httpVersion: nil, headerFields: nil)!
+      client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+      client?.urlProtocol(self, didLoad: body)
+      client?.urlProtocolDidFinishLoading(self)
+      return
+    }
     let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
     let query = components?.queryItems?.first { $0.name == "search_terms" }?.value ?? ""
     let status = query == "limit" ? 429 : query == "server" ? 503 : 200
@@ -56,7 +110,14 @@ private final class FoodURLProtocol: URLProtocol {
     let product =
       #"{"code":"12345678","product_name":"Food","nutriments":{"energy-kcal_100g":100,"proteins_100g":10,"fat_100g":2,"carbohydrates_100g":10}}"#
     let body: String
-    if url.path.contains("/product/") {
+    if url.path.contains("/product/7622210769459") {
+      // OFF returned this minimal successful response for the reported Oreo barcode.
+      body = #"{"status":1,"product":{"code":"7622210769459","ecoscore_tags":["unknown"]}}"#
+    } else if url.path.contains("/product/00000000") {
+      body = #"{"status":0,"status_verbose":"product not found"}"#
+    } else if url.path.contains("/product/11111111") {
+      body = #"{"status":1}"#
+    } else if url.path.contains("/product/") {
       body = "{\"status\":1,\"product\":\(product)}"
     } else if query == "invalid" {
       body = "<html>Invalid</html>"
@@ -104,6 +165,37 @@ private final class FoodURLProtocol: URLProtocol {
     model.switchWorkspace(isDemo: false)
     precondition(model.entries == [entry] && model.goal == goal)
     precondition(model.recentProducts.count == 1)
+    var calendar = Calendar(identifier: .gregorian)
+    calendar.timeZone = TimeZone(identifier: "UTC") ?? .current
+    model.selectDay(entry.date, calendar: calendar)
+    var favorite = entry.portions[0].product
+    favorite = FoodProduct(id: "12345678", name: favorite.name, per100Units: favorite.per100Units)
+    precondition(model.toggleFavorite(favorite))
+    precondition(model.localProduct(barcode: " 12345678 ") == favorite)
+    precondition(model.addWater(250, on: entry.date, calendar: calendar))
+    precondition(model.waterToday.reduce(0) { $0 + $1.milliliters } == 250)
+    let initialWater = model.water
+    repository.fail = true
+    precondition(!model.addWater(500, on: entry.date, calendar: calendar))
+    precondition(!model.toggleFavorite(favorite) && model.favorites == [favorite])
+    precondition(model.water == initialWater)
+    let target = calendar.date(byAdding: .day, value: 1, to: entry.date) ?? entry.date
+    precondition(!model.copyMeals(from: entry.date, meal: nil, to: target, calendar: calendar))
+    precondition(model.entries == [entry])
+    repository.fail = false
+    precondition(model.copyMeals(from: entry.date, meal: .snack, to: target, calendar: calendar))
+    precondition(model.entries.count == 2)
+    let copy = model.entries.first { $0.id != entry.id }
+    precondition(
+      copy?.portions.first?.id != entry.portions.first?.id && copy?.nutrients == entry.nutrients)
+    precondition(copy.map { calendar.isDate($0.date, inSameDayAs: target) } == true)
+    model.selectDay(target, calendar: calendar)
+    precondition(model.day.entries.count == 1 && model.waterToday.isEmpty)
+    model.switchWorkspace(isDemo: true)
+    precondition(model.water.isEmpty && model.favorites.isEmpty && model.entries.isEmpty)
+    model.switchWorkspace(isDemo: false)
+    precondition(model.water == initialWater && model.favorites == [favorite])
+    precondition(model.deleteWater(initialWater[0]) && model.water.isEmpty)
     let decimal = try NutritionInput.number("12,5")
     precondition(decimal == 12.5)
     for invalid in ["NaN", "Infinity", "1e3", "-1", "1.2.3", ""] {
@@ -138,6 +230,23 @@ private final class FoodURLProtocol: URLProtocol {
     precondition(products.count == 1 && products.first?.per100Units.calories == 100)
     let barcode = try await client.search("12345678", preferRussian: false)
     precondition(barcode.count == 1)
+    let barcodeClient = OpenFoodFactsClient(session: session)
+    do {
+      _ = try await barcodeClient.search("7622210769459", preferRussian: true)
+      preconditionFailure("An existing empty card was reported as an absent product")
+    } catch FoodSearchError.incompleteProduct {}
+    let absent = try await barcodeClient.search("00000000", preferRussian: true)
+    precondition(absent.isEmpty)
+    do {
+      _ = try await barcodeClient.search("11111111", preferRussian: true)
+      preconditionFailure("Accepted a successful status without a product")
+    } catch FoodSearchError.invalidResponse {}
+    let errorModel = FoodSearchModel(client: barcodeClient)
+    errorModel.query = "7622210769459"
+    await errorModel.search(preferRussian: true)
+    precondition(
+      errorModel.error == FoodSearchError.incompleteProduct.errorDescription
+        && !errorModel.searched && !errorModel.isLoading)
     for query in ["limit", "server", "invalid"] {
       do {
         _ = try await client.search(query, preferRussian: false)
@@ -154,8 +263,50 @@ private final class FoodURLProtocol: URLProtocol {
       _ = try await client.search("food", preferRussian: false)
       preconditionFailure("Missing rate limit")
     } catch FoodSearchError.rateLimited {}  // Expected local request budget exhaustion.
+    try await checkCatalogRouting(session: session)
     print(
       "Nutrition: persistence failures, demo isolation, input, stale/cancelled search, HTTP fixtures and rate limit passed (no network)."
     )
   }
+  @MainActor private static func checkCatalogRouting(session: URLSession) async throws {
+    let backend = BackendFoodSearchClient(
+      baseURL: URL(string: "https://api.test")!, session: session)
+    let primary = try await backend.search("7622210769459", preferRussian: true)
+    precondition(primary.first?.barcode == "7622210769459" && primary.first?.unit == .grams)
+    let skipped = CatalogStub([], failure: .unavailable)
+    let routed = try await FoodSearchClient(primary: backend, fallback: skipped).search(
+      "7622210769459", preferRussian: true)
+    let skippedCalls = await skipped.calls
+    precondition(routed == primary && skippedCalls == 0)
+    for failure in [nil, FoodSearchError.unavailable, .rateLimited, .invalidResponse] {
+      let fallback = CatalogStub(primary)
+      let combined = FoodSearchClient(
+        primary: CatalogStub([], failure: failure), fallback: fallback)
+      let results = try await combined.search("oreo", preferRussian: true)
+      let calls = await fallback.calls
+      precondition(results == primary && calls == 1)
+    }
+    let cancelledFallback = CatalogStub(primary)
+    do {
+      _ = try await FoodSearchClient(primary: CancelledCatalog(), fallback: cancelledFallback)
+        .search("oreo", preferRussian: true)
+      preconditionFailure("Cancellation started a fallback request")
+    } catch is CancellationError {}
+    let calls = await cancelledFallback.calls
+    precondition(calls == 0)
+    let product = primary[0]
+    let data = try JSONEncoder().encode(product)
+    let restored = try JSONDecoder().decode(FoodProduct.self, from: data)
+    precondition(restored == product)
+    let memory = MemoryNutritionRepository()
+    let diary = NutritionDiaryModel(repository: memory)
+    diary.toggleFavorite(product)
+    precondition(diary.localProduct(barcode: "7622210769459") == product)
+    var legacy = try JSONSerialization.jsonObject(with: data) as! [String: Any]
+    legacy.removeValue(forKey: "barcode")
+    let decoded = try JSONDecoder().decode(
+      FoodProduct.self, from: JSONSerialization.data(withJSONObject: legacy))
+    precondition(decoded.barcode == nil && decoded.name == product.name)
+  }
+
 }

@@ -5,7 +5,6 @@ struct ActiveWorkoutView: View {
   @Environment(\.locale) private var locale
   @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(AppStore.self) private var store
-  @Environment(\.dismiss) private var dismiss
   @AppStorage("weightUnit") private var unit: WeightUnit = .kilograms
   @State private var heartRateExpanded = false
   @State private var showingHeartRateSettings = false
@@ -66,11 +65,6 @@ struct ActiveWorkoutView: View {
             .padding(.bottom, 8)
           }
           .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-              Button(L10n.text("Свернуть", locale: locale), systemImage: "chevron.down") {
-                dismiss()
-              }.labelStyle(.iconOnly)
-            }
             ToolbarItem(placement: .principal) {
               VStack(spacing: 1) {
                 Text(workout.name)

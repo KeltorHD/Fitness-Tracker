@@ -1,7 +1,7 @@
 import FitnessTrackerCore
 import Foundation
 
-enum LiveHeartRateState: Equatable, Sendable {
+enum LiveHeartRateState: String, Equatable, Sendable {
   case idle, starting, running, paused, stopped, failed
 }
 

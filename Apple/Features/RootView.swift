@@ -91,6 +91,7 @@ struct RootView: View {
       when: !store.showSession && !store.showingWorkoutStart
         && !store.showingWorkoutDetail && !store.showingTemplateEditor
         && !store.showingBodyWeightEditor
+        && store.nutrition?.isPresenting != true
     )
     .alert(
       "FitnessTracker",
@@ -99,6 +100,7 @@ struct RootView: View {
           store.error != nil && !store.showSession && !store.showingWorkoutStart
             && !store.showingWorkoutDetail
             && !store.showingTemplateEditor && !store.showingBodyWeightEditor
+            && store.nutrition?.isPresenting != true
             && !store.archiveTransfer.isPresented
         },
         set: { if !$0 { store.error = nil } })
@@ -115,6 +117,7 @@ struct RootView: View {
             && !store.showingWorkoutStart
             && !store.showingWorkoutDetail && !store.showingTemplateEditor
             && !store.showingBodyWeightEditor
+            && store.nutrition?.isPresenting != true
             && !store.archiveTransfer.isPresented
         }, set: { if !$0 { store.notice = nil } })
     ) {
@@ -157,6 +160,7 @@ struct RootView: View {
     .task(id: phase) {
       if phase == .active {
         store.reload()
+        store.sleepAlarms.refresh()
         store.refreshIntegrations()
       } else if phase == .background {
         await store.prepareForBackground()

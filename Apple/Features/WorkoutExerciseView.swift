@@ -6,12 +6,12 @@ struct WorkoutExerciseView: View {
   @Environment(\.locale) private var locale
   @Environment(AppStore.self) private var store
   @Environment(\.dismiss) private var dismiss
+  @Environment(\.scenePhase) private var scenePhase
   @State private var model: WorkoutExercisePresentation
   @State private var error: String?
   @State private var noteRequest: SetNoteRequest?
   @State private var mediaExercise: Exercise?
   @State private var removal: DropGroupRemovalRequest?
-  @State private var correction: CompletedSetRequest?
   @State private var exerciseAction: ExerciseActionRequest?
   @State private var heartRateExpanded = false
   @State private var showingHeartRateSettings = false
@@ -27,10 +27,8 @@ struct WorkoutExerciseView: View {
     if store.active?.id == workoutID { return store.active }
     return store.workouts.first { $0.id == workoutID }
   }
-  init(workout: Workout, exerciseID: UUID, unit: WeightUnit) {
+  init(workout: Workout, presentation: WorkoutExercisePresentation) {
     workoutID = workout.id
-    let presentation = WorkoutExercisePresentation(
-      workout: workout, exerciseID: exerciseID, unit: unit, locale: L10n.numberLocale)
     _model = State(initialValue: presentation)
     _numberPad = State(
       initialValue: WorkoutNumberPadModel(editor: presentation, locale: L10n.numberLocale))
@@ -64,7 +62,7 @@ struct WorkoutExerciseView: View {
                 == true, completionTrigger: lastCompletion,
               previous: { move(-1, in: workout) }, next: { move(1, in: workout) },
               add: { addSet(in: workout) }, complete: { complete(in: workout) },
-              pause: { pause(workout) }, close: { dismiss() })
+              pause: { pause(workout) })
           }
         }.padding(.horizontal, 8).padding(.bottom, 8)
       } else {
@@ -98,7 +96,16 @@ struct WorkoutExerciseView: View {
     .onChange(of: store.workouts, initial: true) { _, history in
       if let workout { model.updateHistory(history, for: workout) }
     }
-    .onDisappear { numberPad.dismiss() }
+    .onDisappear {
+      numberPad.dismiss()
+      store.saveExerciseInputs(model, workoutID: workoutID)
+    }
+    .onChange(of: numberPad.field) { _, _ in
+      store.saveExerciseInputs(model, workoutID: workoutID)
+    }
+    .onChange(of: scenePhase) { _, phase in
+      if phase != .active { store.saveExerciseInputs(model, workoutID: workoutID) }
+    }
     .onChange(of: store.tracker.recording?.workoutID) { heartRateExpanded = false }
     .onChange(of: store.tracker.deviceProfile) { heartRateExpanded = false }
     .fullScreenCover(item: $mediaExercise) { ExerciseMediaViewer(exercise: $0) }
@@ -133,25 +140,6 @@ struct WorkoutExerciseView: View {
           try WorkoutEngine.setNote(
             text, exerciseID: request.exerciseID, setID: request.id, in: &$0)
         }
-      }
-    }
-    .sheet(item: $correction) { request in
-      CompletedSetEditor(request: request, unit: model.unit) { repetitions, weight in
-        guard let workout else { return TrainingError.invalidState.localizedDescription }
-        do {
-          // Show domain validation in the editor before attempting persistence.
-          var checked = workout
-          try WorkoutEngine.correctCompletedTarget(
-            in: &checked, exerciseID: request.exerciseID, targetID: request.set.id,
-            repetitions: repetitions, weightKG: weight)
-          let saved = mutate(workout) {
-            try WorkoutEngine.correctCompletedTarget(
-              in: &$0, exerciseID: request.exerciseID, targetID: request.set.id,
-              repetitions: repetitions, weightKG: weight)
-          }
-          return saved
-            ? nil : store.error ?? "Не удалось сохранить изменения тренировки. Попробуйте ещё раз."
-        } catch { return error.localizedDescription }
       }
     }
     .confirmationDialog(
@@ -191,28 +179,19 @@ struct WorkoutExerciseView: View {
       } else {
         // Equal side slots keep the clock centered independently of the counter width.
         HStack(spacing: 0) {
-          headerLeading(workout).frame(width: 96)
+          headerLeading(workout).frame(width: 52)
           workoutClock(workout).frame(maxWidth: .infinity)
-          exerciseMenu(workout).frame(width: 96, alignment: .trailing)
+          exerciseMenu(workout).frame(width: 52, alignment: .trailing)
         }
       }
     }.buttonStyle(.plain).foregroundStyle(.primary).padding(.horizontal, 4).padding(.top, 8)
   }
 
   private func headerLeading(_ workout: Workout) -> some View {
-    HStack(spacing: 4) {
-      Button {
-        numberPad.dismiss()
-        dismiss()
-      } label: {
-        Image(systemName: "chevron.down").frame(width: 44, height: 44).contentShape(.rect)
-      }.accessibilityLabel(L10n.text("К списку упражнений", locale: locale))
-        .accessibilityIdentifier("closeWorkoutExercise")
-      Text("\(navigationIndex(in: workout) + 1)/\(workout.exerciseGroups.count)")
-        .font(.subheadline).foregroundStyle(.secondary).lineLimit(1).minimumScaleFactor(0.6)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .accessibilityIdentifier("activeExercisePosition")
-    }
+    Text("\(navigationIndex(in: workout) + 1)/\(workout.exerciseGroups.count)")
+      .font(.subheadline).foregroundStyle(.secondary).lineLimit(1).minimumScaleFactor(0.6)
+      .frame(maxWidth: .infinity, alignment: .leading)
+      .accessibilityIdentifier("activeExercisePosition")
   }
 
   private func workoutClock(_ workout: Workout) -> some View {
@@ -434,9 +413,7 @@ struct WorkoutExerciseView: View {
       configureDrop: { configureDrop(workout, setID: set.id, adding: $0, exerciseID: row.id) },
       addAfter: {
         numberPad.dismiss()
-        mutate(workout) {
-          try WorkoutEngine.addSet(exerciseID: row.id, to: &$0, after: set.id)
-        }
+        addSet(in: workout, exerciseID: row.id, after: set.id)
       },
       remove: {
         numberPad.dismiss()
@@ -454,10 +431,6 @@ struct WorkoutExerciseView: View {
           try WorkoutEngine.removeDropStage(
             in: &$0, exerciseID: row.id, setID: set.id, stageID: stageID)
         }
-      },
-      editCompleted: { target in
-        numberPad.dismiss()
-        correction = CompletedSetRequest(id: target.id, exerciseID: row.id, set: target)
       },
       openNote: {
         numberPad.dismiss()
@@ -599,14 +572,34 @@ struct WorkoutExerciseView: View {
       try action(&value)
     }
   }
-  private func addSet(in workout: Workout) {
-    mutate(workout) { current in
-      if let group = current.groupContaining(exerciseID: model.exerciseID), group.isSuperset,
+  private func addSet(in workout: Workout, exerciseID: UUID? = nil, after setID: UUID? = nil) {
+    let exerciseID = exerciseID ?? model.exerciseID
+    let group = workout.groupContaining(exerciseID: exerciseID)
+    let rows =
+      setID == nil && group?.isSuperset == true
+      ? group?.exercises ?? [] : workout.exercises.filter { $0.id == exerciseID }
+    let sources = Dictionary(
+      uniqueKeysWithValues: rows.compactMap { row in
+        (setID ?? row.sets.last?.id).map { (row.id, $0) }
+      })
+    let originalIDs = Set(workout.exercises.flatMap(\.sets).map(\.id))
+    let saved = mutate(workout) { current in
+      let inputs = model.pendingValues(in: current)
+      if !inputs.isEmpty { try WorkoutEngine.updatePendingValues(inputs, in: &current) }
+      if setID == nil, let group = current.groupContaining(exerciseID: exerciseID),
+        group.isSuperset,
         let supersetID = group.supersetID
       {
         try WorkoutEngine.addSupersetRound(supersetID: supersetID, to: &current)
       } else {
-        try WorkoutEngine.addSet(exerciseID: model.exerciseID, to: &current)
+        try WorkoutEngine.addSet(exerciseID: exerciseID, to: &current, after: setID)
+      }
+    }
+    guard saved, let current = store.active, current.id == workout.id else { return }
+    for row in current.exercises {
+      guard let sourceID = sources[row.id] else { continue }
+      for set in row.sets where !originalIDs.contains(set.id) {
+        model.inheritInput(from: sourceID, for: set.id, in: current)
       }
     }
   }
@@ -693,10 +686,22 @@ struct WorkoutExerciseSheet: View {
   let workout: Workout
   let exerciseID: UUID
   let unit: WeightUnit
+  @State private var presentation: WorkoutExercisePresentation?
 
   var body: some View {
     NavigationStack {
-      WorkoutExerciseView(workout: workout, exerciseID: exerciseID, unit: unit)
+      if let presentation {
+        WorkoutExerciseView(workout: workout, presentation: presentation)
+      } else {
+        ProgressView()
+      }
+    }
+    .task {
+      guard presentation == nil else { return }
+      let current = store.workouts.first { $0.id == workout.id } ?? workout
+      presentation = WorkoutExercisePresentation(
+        workout: current, exerciseID: exerciseID, unit: unit, locale: L10n.numberLocale,
+        history: store.workouts, draftStore: store.exerciseDrafts(for: current, unit: unit))
     }
     .tint(colorTheme.accent)
     .presentationDetents([.large])
@@ -767,60 +772,6 @@ private struct SetNoteSheet: View {
 private struct DropGroupRemovalRequest {
   let exerciseID: UUID
   let setID: UUID
-}
-
-private struct CompletedSetRequest: Identifiable {
-  let id: UUID
-  let exerciseID: UUID
-  let set: WorkoutSet
-}
-
-private struct CompletedSetEditor: View {
-  @Environment(\.dismiss) private var dismiss
-  @Environment(\.locale) private var locale
-  let request: CompletedSetRequest
-  let unit: WeightUnit
-  let save: (Int, Double) -> String?
-  @State private var draft: WorkoutSetDraft
-  @State private var error: String?
-
-  init(request: CompletedSetRequest, unit: WeightUnit, save: @escaping (Int, Double) -> String?) {
-    self.request = request
-    self.unit = unit
-    self.save = save
-    _draft = State(
-      initialValue: WorkoutSetDraft(set: request.set, unit: unit, locale: L10n.numberLocale))
-  }
-  var body: some View {
-    NavigationStack {
-      Form {
-        TextField(
-          L10n.format("Вес, %@", L10n.text(unit.rawValue, locale: locale), locale: locale),
-          text: $draft.weight
-        )
-        .keyboardType(.decimalPad).accessibilityIdentifier("correctCompletedWeight")
-        TextField(L10n.text("Повторения", locale: locale), text: $draft.repetitions)
-          .keyboardType(.numberPad).accessibilityIdentifier("correctCompletedRepetitions")
-        if let error { Text(L10n.text(error, locale: locale)).foregroundStyle(.red) }
-      }
-      .navigationTitle(L10n.text("Изменить выполненный подход", locale: locale))
-      .navigationBarTitleDisplayMode(.inline)
-      .toolbar {
-        ToolbarItem(placement: .cancellationAction) {
-          Button(L10n.text("Отмена", locale: locale)) { dismiss() }
-        }
-        ToolbarItem(placement: .confirmationAction) {
-          Button(L10n.text("Сохранить", locale: locale)) {
-            do {
-              let repetitions = try draft.repetitionCount()
-              let weight = try draft.weightInKG(unit: unit)
-              if let message = save(repetitions, weight) { error = message } else { dismiss() }
-            } catch { self.error = error.localizedDescription }
-          }.accessibilityIdentifier("saveCompletedSetCorrection")
-        }
-      }
-    }.presentationDetents([.medium, .large])
-  }
 }
 
 private struct ExerciseActionRequest: Identifiable {

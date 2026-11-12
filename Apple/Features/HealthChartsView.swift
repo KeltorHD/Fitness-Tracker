@@ -223,7 +223,9 @@ struct CurrentHeartRateView: View {
       return tracker.bluetooth.deviceName ?? L10n.text("Bluetooth-пульсометр", locale: locale)
     }
     if tracker.live.state == .running {
-      return L10n.text("Пульс во время тренировки", locale: locale)
+      return L10n.text(
+        tracker.deviceProfile == .appleWatch
+          ? "Источник: Apple Watch" : "Пульс во время тренировки", locale: locale)
     }
     return health.snapshot?.heartRateSource
   }

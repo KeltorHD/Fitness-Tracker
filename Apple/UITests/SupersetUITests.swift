@@ -27,7 +27,11 @@ final class SupersetUITests: XCTestCase {
     addRound.tap()
     let screen = app.descendants(matching: .any)
       .matching(identifier: "workoutExerciseScreen").firstMatch
-    app.buttons["closeWorkoutExercise"].tap()
+    app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.12))
+      .press(
+        forDuration: 0.1,
+        thenDragTo:
+          app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.95)))
     XCTAssertTrue(screen.waitForNonExistence(timeout: 5))
     XCTAssertTrue(group.waitForExistence(timeout: 5))
     XCTAssertEqual(group.value as? String, "0 из 3")

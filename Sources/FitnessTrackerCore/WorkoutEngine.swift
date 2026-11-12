@@ -7,8 +7,70 @@ public enum WorkoutExerciseInsertion: Equatable, Sendable {
   case after(UUID)
 }
 
+/// Independently entered numeric values; nil leaves the corresponding target unchanged.
+public struct WorkoutSetInputValues: Equatable, Sendable {
+  public let repetitions: Int?
+  public let weightKG: Double?
+
+  public init(repetitions: Int? = nil, weightKG: Double? = nil) {
+    self.repetitions = repetitions
+    self.weightKG = weightKG
+  }
+}
+
 /// Value-based state machine. Callers persist a new value only after a successful mutation.
 public enum WorkoutEngine {
+  /// Saves pending input without marking targets complete or changing rest and selection.
+  public static func updatePendingValues(
+    _ values: [UUID: WorkoutSetInputValues], in workout: inout Workout
+  ) throws {
+    try updateValues(values, in: &workout, includingCompleted: false)
+  }
+
+  /// Edits numeric cells in an ongoing session, preserving completion dates and rest.
+  public static func updateEditableValues(
+    _ values: [UUID: WorkoutSetInputValues], in workout: inout Workout
+  ) throws {
+    try updateValues(values, in: &workout, includingCompleted: true)
+  }
+
+  private static func updateValues(
+    _ values: [UUID: WorkoutSetInputValues], in workout: inout Workout,
+    includingCompleted: Bool
+  ) throws {
+    guard [.active, .paused].contains(workout.status) else { throw TrainingError.invalidState }
+    var candidate = workout
+    var remaining = Set(values.keys)
+    for row in candidate.exercises.indices {
+      for index in candidate.exercises[row].sets.indices {
+        var set = candidate.exercises[row].sets[index]
+        if let input = values[set.id] {
+          guard includingCompleted || set.completedAt == nil else {
+            throw TrainingError.invalidState
+          }
+          if let weight = input.weightKG { set.weightKG = weight }
+          if let repetitions = input.repetitions { set.repetitions = repetitions }
+          remaining.remove(set.id)
+        }
+        if var stages = set.dropStages {
+          for stage in stages.indices {
+            guard let input = values[stages[stage].id] else { continue }
+            guard includingCompleted || stages[stage].completedAt == nil else {
+              throw TrainingError.invalidState
+            }
+            if let weight = input.weightKG { stages[stage].weightKG = weight }
+            if let repetitions = input.repetitions { stages[stage].repetitions = repetitions }
+            remaining.remove(stages[stage].id)
+          }
+          set.dropStages = stages
+        }
+        candidate.exercises[row].sets[index] = set
+      }
+    }
+    guard remaining.isEmpty else { throw TrainingError.missingSet }
+    try Validation.workout(candidate)
+    workout = candidate
+  }
   public static func setBodyWeight(_ weightKG: Double?, in workout: inout Workout) throws {
     guard [.active, .paused].contains(workout.status) else { throw TrainingError.invalidState }
     if let weightKG { try Validation.bodyWeight(weightKG) }
@@ -133,8 +195,7 @@ public enum WorkoutEngine {
       return TemplateExercise(
         exercise: item.exercise, setCount: completed.count, repetitions: first.repetitions,
         weightKG: first.weightKG, loadMultiplier: first.loadMultiplier,
-        plannedSets: completed.contains(where: { $0.isWarmup || $0.isDropSet || $0.note != nil })
-          ? completed.map { $0.freshCopy(performedOnly: true) } : nil,
+        plannedSets: completed.map { $0.freshCopy(performedOnly: true) },
         supersetID: item.supersetID.map { id in
           if let existing = groupIDs[id] { return existing }
           let new = UUID()
@@ -273,9 +334,11 @@ public enum WorkoutEngine {
     } else {
       index = workout.exercises[i].sets.endIndex
     }
-    let multiplier = index > 0 ? workout.exercises[i].sets[index - 1].loadMultiplier : nil
+    let previous = index > 0 ? workout.exercises[i].sets[index - 1] : nil
     workout.exercises[i].sets.insert(
-      WorkoutSet(repetitions: 0, loadMultiplier: multiplier), at: index)
+      WorkoutSet(
+        repetitions: previous?.repetitions ?? 0, weightKG: previous?.weightKG ?? 0,
+        loadMultiplier: previous?.loadMultiplier), at: index)
     if workout.exercises[i].supersetID != nil { reconcileRest(in: &workout) }
   }
 

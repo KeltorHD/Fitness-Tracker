@@ -87,3 +87,19 @@ private func logged(_ date: Date, weight: Double = 40) throws -> Workout {
     try WorkoutEngine.repeatWorkout(Workout(name: "A"))
   }
 }
+
+@Test func templateFromHistoryPreservesEveryIndividualSetValueAndCount() throws {
+  var source = try logged(journalDate(2026, 10, 20))
+  source.exercises[0].sets += [
+    WorkoutSet(repetitions: 10, weightKG: 45, completedAt: source.startedAt),
+    WorkoutSet(repetitions: 6, weightKG: 50, completedAt: source.startedAt),
+  ]
+  let template = try WorkoutEngine.makeTemplate(from: source)
+  let restored = try JSONDecoder().decode(
+    WorkoutTemplate.self, from: JSONEncoder().encode(template))
+  let workout = try restored.start(at: journalDate(2026, 10, 29))
+  #expect(workout.exercises[0].sets.map(\.weightKG) == [40, 45, 50])
+  #expect(workout.exercises[0].sets.map(\.repetitions) == [8, 10, 6])
+  #expect(workout.totalSets == 3 && workout.completedSets == 0)
+  #expect(source.exercises[0].sets.allSatisfy { $0.completedAt != nil })
+}

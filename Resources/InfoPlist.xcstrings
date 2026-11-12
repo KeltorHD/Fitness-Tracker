@@ -18,6 +18,23 @@
         }
       }
     },
+    "NSAlarmKitUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Устанавливать будильники сна с обязательным сигналом к выбранному времени."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schedule sleep alarms with a fallback alert at the selected time."
+          }
+        }
+      }
+    },
     "NSBluetoothAlwaysUsageDescription": {
       "extractionState": "manual",
       "localizations": {
@@ -35,19 +52,36 @@
         }
       }
     },
+    "NSCameraUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сканировать штрихкоды упаковок, чтобы найти продукт и добавить его в дневник питания."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scan barcodes on food packaging to find products and add them to your food diary."
+          }
+        }
+      }
+    },
     "NSHealthShareUsageDescription": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Читать показатели из «Здоровья», а по вашему запросу — пульс и данные тренировки для приёма измерений AirPods Pro 3 во время тренировки."
+            "value": "Читать сон, пульс и другие показатели из «Здоровья» для дневника и статистики; по вашему запросу — данные тренировки для приёма измерений Apple Watch или AirPods Pro 3."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Read metrics from Health and, when you request it, heart rate and workout data to receive AirPods Pro 3 measurements during your workout."
+            "value": "Read sleep, heart rate and other Health metrics for your diary and statistics; when requested, read workout data to receive Apple Watch or AirPods Pro 3 measurements."
           }
         }
       }
@@ -58,13 +92,30 @@
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Включать системную тренировку для получения пульса AirPods Pro 3 по вашему запросу. Завершённая тренировка сохраняется в «Здоровье» только при отдельном экспорте."
+            "value": "Включать системную тренировку для получения пульса Apple Watch или AirPods Pro 3 по вашему запросу. Завершённая тренировка сохраняется в «Здоровье» только при отдельном экспорте."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Start a system workout to receive AirPods Pro 3 heart rate when you request it. The completed workout is saved to Health only through a separate export."
+            "value": "Start a system workout to receive Apple Watch or AirPods Pro 3 heart rate when you request it. The completed workout is saved to Health only through a separate export."
+          }
+        }
+      }
+    },
+    "NSMotionUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Оценивать движения запястья в выбранном окне умного будильника."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estimate wrist movement during your chosen smart alarm window."
           }
         }
       }

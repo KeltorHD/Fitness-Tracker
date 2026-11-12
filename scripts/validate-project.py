@@ -22,7 +22,8 @@ spec = yaml.safe_load((root / 'project.yml').read_text())
 assert spec['name'] == 'FitnessTracker'
 assert spec['packages']['FitnessTrackerCore']['path'] == '.'
 assert set(spec['targets']) == {'FitnessTracker', 'FitnessTrackerWatch', 'FitnessTrackerWidgets', 'FitnessTrackerTests', 'FitnessTrackerUITests'}
-assert spec['options']['deploymentTarget'] == {'iOS': '26.0', 'watchOS': '26.0'}
+assert spec['options']['deploymentTarget'] == {'iOS': '26.0', 'watchOS': '10.0'}
+assert '.watchOS(.v10)' in (root / 'Package.swift').read_text(), 'Core must support the Watch target'
 assert {'path': 'Resources/ExerciseMedia', 'type': 'folder', 'buildPhase': 'resources'} in spec['targets']['FitnessTracker']['sources']
 assert 'FITNESS_TRACKER_APP' in spec['targets']['FitnessTracker']['settings']['base']['SWIFT_ACTIVE_COMPILATION_CONDITIONS']
 assert 'FITNESS_TRACKER_APP' not in spec['targets']['FitnessTrackerWidgets']['settings']['base'].get('SWIFT_ACTIVE_COMPILATION_CONDITIONS', '')
@@ -79,6 +80,10 @@ app = plists['App-Info.plist']
 assert app['NSSupportsLiveActivities'] is True
 assert 'remote-notification' in app['UIBackgroundModes']
 assert app['NSHealthUpdateUsageDescription']
+watch = plists['Watch-Info.plist']
+assert watch['NSHealthShareUsageDescription'] and watch['NSHealthUpdateUsageDescription']
+assert {'alarm', 'workout-processing'} <= set(watch['WKBackgroundModes'])
+assert plists['Watch.entitlements']['com.apple.developer.healthkit'] is True
 assert app['NSBluetoothAlwaysUsageDescription']
 assert 'bluetooth-central' in app['UIBackgroundModes']
 assert app['FitnessTrackerCloudSyncAvailable'] == '$(FITNESS_TRACKER_CLOUD_SYNC_AVAILABLE)'

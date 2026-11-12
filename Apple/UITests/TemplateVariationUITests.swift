@@ -324,7 +324,11 @@ final class TemplateVariationUITests: XCTestCase {
     XCTAssertEqual(originalRows.count, 2)
     XCTAssertTrue(originalRows.element(boundBy: 0).label.contains("Тест: жим штанги"))
     XCTAssertTrue(originalRows.element(boundBy: 1).label.contains("Тест: жим в наклоне"))
-    app.buttons["closeWorkoutDetail"].tap()
+    app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.12))
+      .press(
+        forDuration: 0.1,
+        thenDragTo:
+          app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.95)))
     app.buttons["navigationTab_1"].tap()
     let saved = app.buttons.matching(
       NSPredicate(

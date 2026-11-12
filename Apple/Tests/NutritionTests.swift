@@ -6,6 +6,31 @@ import XCTest
 @testable import FitnessTracker
 
 @MainActor final class NutritionTests: XCTestCase {
+  func testNewNutritionRecordsAndBatchValidationPreserveStoredHistory() throws {
+    let repository = try SwiftDataWorkoutRepository(inMemory: true)
+    let product = FoodProduct(id: "12345678", name: "Food", per100Units: Nutrients(calories: 200))
+    let entry = FoodEntry(title: "Food", portions: [FoodPortion(product: product)])
+    try repository.saveFoodEntry(entry)
+    try repository.setFavoriteFoodProduct(product, isFavorite: true)
+    let water = WaterEntry(milliliters: 250)
+    try repository.saveWaterEntry(water)
+    XCTAssertEqual(try repository.waterEntries(), [water])
+    XCTAssertEqual(try repository.favoriteFoodProducts(), [product])
+    let copy = entry.repeated(on: entry.date)
+    var invalid = copy.repeated(on: entry.date)
+    invalid.portions[0].amount = -1
+    XCTAssertThrowsError(try repository.saveFoodEntries([copy, invalid]))
+    XCTAssertEqual(try repository.foodEntries(), [entry])
+    try repository.saveFoodEntries([copy])
+    XCTAssertEqual(try repository.foodEntries().count, 2)
+    try repository.deleteWaterEntry(id: water.id)
+    XCTAssertTrue(try repository.waterEntries().isEmpty)
+    try repository.deleteFoodEntry(id: entry.id)
+    XCTAssertEqual(try repository.favoriteFoodProducts(), [product])
+    try repository.setFavoriteFoodProduct(product, isFavorite: false)
+    XCTAssertTrue(try repository.favoriteFoodProducts().isEmpty)
+  }
+
   func testSwiftDataFoodAndGoalRoundTripWithoutChangingWorkoutRecords() throws {
     let repository = try SwiftDataWorkoutRepository(inMemory: true)
     let workout = Workout(name: "Workout")

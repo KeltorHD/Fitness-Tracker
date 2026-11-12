@@ -64,6 +64,96 @@ import XCTest
 }
 
 @MainActor final class AppStoreTests: XCTestCase {
+  func testExerciseInputSurvivesReopeningAndRepositoryReloadWithoutCompleting() throws {
+    let repository = MemoryWorkoutRepository()
+    let row = WorkoutExercise(
+      exercise: ExerciseCatalog.all[0], sets: [WorkoutSet(repetitions: 0)])
+    let workout = Workout(name: "Черновики", exercises: [row])
+    try repository.save(workout)
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    let drafts = store.exerciseDrafts(for: workout, unit: .kilograms)
+    let model = WorkoutExercisePresentation(
+      workout: workout, exerciseID: row.id, unit: .kilograms, locale: Locale(identifier: "ru_RU"),
+      draftStore: drafts)
+    model.editWeight("42,5", setID: row.sets[0].id)
+    model.editRepetitions("11", setID: row.sets[0].id)
+    store.saveExerciseInputs(model, workoutID: workout.id)
+    store.reload()
+    XCTAssertTrue(store.exerciseDrafts(for: workout, unit: .kilograms) === drafts)
+    let saved = try XCTUnwrap(repository.workouts().first)
+    XCTAssertEqual(saved.exercises[0].sets[0].weightKG, 42.5)
+    XCTAssertEqual(saved.exercises[0].sets[0].repetitions, 11)
+    XCTAssertEqual(saved.completedSets, 0)
+    XCTAssertNil(saved.restEndsAt)
+    let reopened = WorkoutExercisePresentation(
+      workout: saved, exerciseID: row.id, unit: .kilograms, locale: Locale(identifier: "ru_RU"),
+      draftStore: store.exerciseDrafts(for: saved, unit: .kilograms))
+    XCTAssertEqual(reopened.drafts[row.sets[0].id]?.weight, "42,5")
+    XCTAssertEqual(reopened.drafts[row.sets[0].id]?.repetitions, "11")
+  }
+
+  func testFailedInputSaveKeepsDraftForReopeningAndRetry() throws {
+    let repository = FailingWorkoutRepository()
+    let row = WorkoutExercise(
+      exercise: ExerciseCatalog.all[0], sets: [WorkoutSet(repetitions: 8, weightKG: 40)])
+    let workout = Workout(name: "Повтор записи", exercises: [row])
+    try repository.save(workout)
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    let drafts = store.exerciseDrafts(for: workout, unit: .kilograms)
+    let model = WorkoutExercisePresentation(
+      workout: workout, exerciseID: row.id, unit: .kilograms, locale: Locale(identifier: "en_US"),
+      draftStore: drafts)
+    model.editWeight("55", setID: row.sets[0].id)
+    repository.failSaves = true
+    store.saveExerciseInputs(model, workoutID: workout.id)
+    XCTAssertNotNil(store.error)
+    XCTAssertEqual(store.active, workout)
+    XCTAssertEqual(drafts.values[row.sets[0].id]?.weight, "55")
+    repository.failSaves = false
+    store.saveExerciseInputs(model, workoutID: workout.id)
+    XCTAssertEqual(try repository.workouts().first?.exercises[0].sets[0].weightKG, 55)
+    XCTAssertEqual(store.active?.completedSets, 0)
+  }
+
+  func testStartingAndAddingExercisesCopiesHistoricalValuesAndSetCount() throws {
+    let repository = MemoryWorkoutRepository()
+    let date = Date().addingTimeInterval(-3600)
+    let exercise = ExerciseCatalog.all[0]
+    let row = WorkoutExercise(
+      exercise: exercise,
+      sets: [
+        WorkoutSet(repetitions: 12, weightKG: 40, completedAt: date),
+        WorkoutSet(repetitions: 10, weightKG: 45, completedAt: date),
+        WorkoutSet(repetitions: 8, weightKG: 50, completedAt: date),
+      ])
+    var history = Workout(name: "История", startedAt: date, exercises: [row])
+    try WorkoutEngine.finish(&history, at: date.addingTimeInterval(60))
+    try repository.save(history)
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    store.start(
+      template: WorkoutTemplate(
+        name: "План", exercises: [TemplateExercise(exercise: exercise, setCount: 1)]))
+    let current = try XCTUnwrap(store.active)
+    XCTAssertEqual(current.exercises[0].sets.map(\.weightKG), [40, 45, 50])
+    XCTAssertEqual(current.exercises[0].sets.map(\.repetitions), [12, 10, 8])
+    XCTAssertEqual(current.completedSets, 0)
+    let set = current.exercises[0].sets[2].id
+    XCTAssertTrue(
+      store.mutate {
+        try WorkoutEngine.removeSet(exerciseID: current.exercises[0].id, setID: set, from: &$0)
+      })
+    XCTAssertEqual(store.active?.exercises[0].sets.count, 2)
+    store.reload()
+    XCTAssertEqual(store.active?.exercises[0].sets.count, 2)
+    XCTAssertTrue(
+      store.mutate { try WorkoutEngine.removeExercise(id: current.exercises[0].id, from: &$0) })
+    XCTAssertTrue(store.mutate { try WorkoutEngine.addExercise(exercise, to: &$0) })
+    XCTAssertEqual(store.active?.exercises[0].sets.map(\.weightKG), [40, 45, 50])
+    XCTAssertEqual(store.completed, [history])
+  }
   func testSelectedVariationStartsWithItsSupersetWithoutChangingSavedTemplate() throws {
     let repository = MemoryWorkoutRepository()
     let groupID = UUID()

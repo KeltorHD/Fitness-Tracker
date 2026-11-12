@@ -3,7 +3,7 @@ import PackageDescription
 
 let package = Package(
   name: "FitnessTrackerCore",
-  platforms: [.iOS("26.0"), .watchOS("26.0"), .macOS(.v14)],
+  platforms: [.iOS("26.0"), .watchOS(.v10), .macOS(.v14)],
   products: [.library(name: "FitnessTrackerCore", targets: ["FitnessTrackerCore"])],
   targets: [
     .target(

@@ -1,10 +1,68 @@
 import FitnessTrackerCore
 import SwiftUI
+import WatchKit
 
 @main struct FitnessTrackerWatchApp: App {
-  @State private var store = WatchStore()
+  @State private var page = 0
+  @WKApplicationDelegateAdaptor(WatchApplicationDelegate.self) private var delegate
   var body: some Scene {
-    WindowGroup { WatchWorkoutView().environment(store).environment(\.locale, L10n.locale) }
+    WindowGroup {
+      TabView(selection: $page) {
+        WatchWorkoutView().tag(0)
+        WatchSleepView().tag(1)
+        WatchHeartRateView().tag(2)
+      }.onChange(of: delegate.store.sleepAlarm.ringing) { _, value in if value { page = 1 } }
+        .onChange(of: delegate.store.heartRate.snapshot.state) { _, value in
+          if value == .starting || value == .running { page = 2 }
+        }
+        .environment(delegate.store).environment(\.locale, L10n.locale)
+    }
+  }
+}
+
+private struct WatchHeartRateView: View {
+  @Environment(WatchStore.self) private var store
+  @Environment(\.locale) private var locale
+  var body: some View {
+    ScrollView {
+      VStack(spacing: 12) {
+        Label(L10n.text("Пульс на iPhone", locale: locale), systemImage: "heart.fill")
+          .font(.headline)
+        TimelineView(.periodic(from: .now, by: 1)) { timeline in
+          if store.heartRate.snapshot.state == .running,
+            let reading = store.heartRate.snapshot.reading,
+            reading.isFreshForDisplay(at: timeline.date)
+          {
+            Text(reading.beatsPerMinute, format: .number.precision(.fractionLength(0)))
+              .font(.largeTitle.bold()).monospacedDigit()
+          } else {
+            Text("—").font(.largeTitle).accessibilityLabel(
+              L10n.text("Нет свежего измерения", locale: locale))
+          }
+        }
+        Text(L10n.text("уд/мин", locale: locale)).foregroundStyle(.secondary)
+        if [.starting, .running, .paused].contains(store.heartRate.snapshot.state) {
+          Text(
+            L10n.text(
+              store.heartRate.snapshot.state == .paused ? "На паузе" : "Передача пульса на iPhone",
+              locale: locale)
+          )
+          .font(.caption)
+          Button(L10n.text("Остановить приём пульса", locale: locale)) { store.heartRate.stop() }
+            .watchButtonStyle(prominent: false)
+        } else {
+          Text(
+            L10n.text(
+              "Начните тренировку на iPhone, выберите Apple Watch в настройках пульса и включите приём. Оставьте FitnessTracker на часах открытым при запуске.",
+              locale: locale)
+          )
+          .font(.footnote).foregroundStyle(.secondary)
+        }
+        if let error = store.heartRate.error {
+          Text(L10n.text(error, locale: locale)).font(.footnote).foregroundStyle(.red)
+        }
+      }.padding(.horizontal, 8)
+    }
   }
 }
 
@@ -75,7 +133,7 @@ struct WatchWorkoutView: View {
                       repetitions: reps, weightKG: weight)
                   }
                 }
-              }.buttonStyle(.glassProminent).disabled(workout.status != .active)
+              }.watchButtonStyle().disabled(workout.status != .active)
                 .onChange(of: target.id, initial: true) {
                   reps = target.repetitions
                   weight = target.weightKG
@@ -96,15 +154,15 @@ struct WatchWorkoutView: View {
                   try WorkoutEngine.pause(&value)
                 }
               }
-            }.buttonStyle(.glass)
+            }.watchButtonStyle(prominent: false)
             Button(L10n.text("Завершить", locale: locale)) { store.finish() }.disabled(
               workout.completedSets == 0)
             Button(L10n.text("Отменить", locale: locale), role: .destructive) { cancel = true }
           } else {
             Image(systemName: "dumbbell.fill").font(.largeTitle).foregroundStyle(Color.accentColor)
             Text(L10n.text("Ваш следующий подход", locale: locale)).font(.headline)
-            Button(L10n.text("Начать · Всё тело A", locale: locale)) { store.start() }.buttonStyle(
-              .glassProminent)
+            Button(L10n.text("Начать · Всё тело A", locale: locale)) { store.start() }
+              .watchButtonStyle()
             Text(
               L10n.format(
                 "%@ ожидают передачи на iPhone", String(store.pending.count),

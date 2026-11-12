@@ -10,6 +10,7 @@ if ! xcodebuild -version >/dev/null 2>&1; then
   exit 1
 fi
 xcode_major="$(xcodebuild -version | awk '/^Xcode / {split($2, v, "."); print v[1]}')"
+echo 'Минимальные ОС приложения: iOS 26+, watchOS 10+; для сборки нужен SDK 26 или новее.'
 if [[ "$xcode_major" -lt 26 ]]; then echo 'Нужен Xcode 26 или новее с iOS/watchOS 26 SDK.' >&2; exit 1; fi
 if ! command -v xcodegen >/dev/null 2>&1; then
   if ! command -v brew >/dev/null 2>&1; then

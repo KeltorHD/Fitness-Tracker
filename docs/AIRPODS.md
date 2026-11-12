@@ -16,7 +16,7 @@ iOS выбирает источник измерений автоматичес�
 
 ## Данные и жизненный цикл
 
-`AirPodsHeartRateService` владеет HKWorkoutSession, HKLiveWorkoutBuilder и HKLiveWorkoutDataSource. Он собирает только heartRate через delegate callbacks. На остановке builder вызывает `discardWorkout()`, session завершается. `finishWorkout()` не вызывается: отдельная HKWorkout не сохраняется автоматически. **Сохранить в «Здоровье»** по-прежнему является отдельным действием для завершённой тренировки журнала.
+`HealthKitLiveHeartRateService` владеет HKWorkoutSession, HKLiveWorkoutBuilder и HKLiveWorkoutDataSource. Он собирает только heartRate через delegate callbacks. На остановке builder вызывает `discardWorkout()`, session завершается. `finishWorkout()` не вызывается: отдельная HKWorkout не сохраняется автоматически. **Сохранить в «Здоровье»** по-прежнему является отдельным действием для завершённой тренировки журнала.
 
 HealthKit может сохранять сами измерения пульса в системном хранилище независимо от сохранения HKWorkout. Их доступность и синхронизацией управляют настройки iOS/«Здоровья». Копия FitnessTracker хранится в прежнем локальном sidecar, вне SwiftData/CloudKit, архивов JSON/.fitnesstracker и виджетов. Не следует трактовать это как запрет системной синхронизации Health.
 

@@ -101,9 +101,21 @@ extension WorkoutRepository {
 extension MemoryWorkoutRepository: NutritionRepository {
   public func foodEntries() throws -> [FoodEntry] { try nutrition.foodEntries() }
   public func saveFoodEntry(_ entry: FoodEntry) throws { try nutrition.saveFoodEntry(entry) }
+  public func saveFoodEntries(_ entries: [FoodEntry]) throws {
+    try nutrition.saveFoodEntries(entries)
+  }
   public func deleteFoodEntry(id: UUID) throws { try nutrition.deleteFoodEntry(id: id) }
   public func nutritionGoal() throws -> NutritionGoal? { try nutrition.nutritionGoal() }
   public func saveNutritionGoal(_ goal: NutritionGoal?) throws {
     try nutrition.saveNutritionGoal(goal)
+  }
+  public func waterEntries() throws -> [WaterEntry] { try nutrition.waterEntries() }
+  public func saveWaterEntry(_ entry: WaterEntry) throws { try nutrition.saveWaterEntry(entry) }
+  public func deleteWaterEntry(id: UUID) throws { try nutrition.deleteWaterEntry(id: id) }
+  public func favoriteFoodProducts() throws -> [FoodProduct] {
+    try nutrition.favoriteFoodProducts()
+  }
+  public func setFavoriteFoodProduct(_ product: FoodProduct, isFavorite: Bool) throws {
+    try nutrition.setFavoriteFoodProduct(product, isFavorite: isFavorite)
   }
 }

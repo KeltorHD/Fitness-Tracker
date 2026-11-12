@@ -22,6 +22,7 @@ import WidgetKit
   private(set) var switchingDemo = false
   private(set) var workspaceID = UUID()
   let nutrition: NutritionDiaryModel?
+  let sleepAlarms: SleepAlarmStore
   let settings: SettingsViewModel
   let tracker: TrackerViewModel
   let healthCharts: HealthChartsViewModel
@@ -39,6 +40,7 @@ import WidgetKit
   @ObservationIgnored private let archiveFiles: any ArchiveFileHandling
   @ObservationIgnored private let accountSession: AccountSession?
   @ObservationIgnored private let now: () -> Date
+  @ObservationIgnored private var exerciseDraftStore: WorkoutExerciseDraftStore?
   @ObservationIgnored lazy var accountBackups: AccountBackupViewModel? = {
     guard let accountSession else { return nil }
     return AccountBackupViewModel(
@@ -85,8 +87,11 @@ import WidgetKit
     archiveFiles: any ArchiveFileHandling = ArchiveFileService(),
     tracker: TrackerViewModel? = nil,
     healthCharts: HealthChartsViewModel? = nil,
-    accountSession: AccountSession? = nil, now: @escaping () -> Date = Date.init
+    accountSession: AccountSession? = nil, sleepAlarmScheduler: (any SleepAlarmScheduling)? = nil,
+    now: @escaping () -> Date = Date.init
   ) {
+    self.sleepAlarms = SleepAlarmStore(
+      scheduler: sleepAlarmScheduler ?? SystemSleepAlarm(), defaults: defaults, now: now)
     self.repository = WorkoutWorkspaceRepository(personal: repository)
     self.nutrition = (repository as? any NutritionRepository).map {
       NutritionDiaryModel(repository: $0)
@@ -100,11 +105,15 @@ import WidgetKit
     self.archiveFiles = archiveFiles
     self.accountSession = accountSession
     self.now = now
+    let watchPulse = AppleWatchHeartRateService { [weak watch] command in
+      guard let watch else { throw TrainingError.invalidState }
+      try watch.sendHeartRateCommand(command)
+    }
     self.tracker =
       tracker
       ?? TrackerViewModel(
         health: HealthMetricsReader(), sensor: BluetoothHeartRateService(),
-        liveSource: AirPodsHeartRateService(),
+        liveSource: HealthKitLiveHeartRateService(), watchLiveSource: watchPulse,
         recordings: LocalHeartRateRepository(), defaults: defaults,
         errorMessage: { AppErrorReporter.message(for: $0, operation: $1, fallback: $2) })
     self.healthCharts =
@@ -119,6 +128,15 @@ import WidgetKit
         })
     self.tracker.onHeartRateChange = { [weak self] in self?.scheduleHeartRateUpdate() }
     self.healthCharts.onHeartRateChange = { [weak self] in self?.scheduleHeartRateUpdate() }
+    watch.heartRateEvent = { [weak watchPulse] in watchPulse?.receive($0) }
+    watch.heartRateFailure = { [weak watchPulse] in watchPulse?.connectionFailed(sessionID: $0) }
+    watch.heartRateDisconnected = { [weak watchPulse] in watchPulse?.disconnected() }
+    sleepAlarms.send = { [weak watch] value in watch?.sendSleepAlarms(value) }
+    watch.sleepEvent = { [weak sleepAlarms] event in sleepAlarms?.receive(event) }
+    watch.sleepReady = { [weak sleepAlarms] in sleepAlarms?.refresh() }
+    watch.sleepConnection = { [weak sleepAlarms] connection in
+      sleepAlarms?.setWatchConnection(connection)
+    }
     watch.receive = { [weak self] workout in self?.importWatch(workout) ?? false }
     watch.failure = { [weak self] error in
       self?.report(
@@ -130,6 +148,7 @@ import WidgetKit
   func startServices() {
     guard platformServicesEnabled, !servicesStarted else { return }
     servicesStarted = true
+    sleepAlarms.refresh()
     watch.activate()
     refreshIntegrations()
   }
@@ -198,6 +217,7 @@ import WidgetKit
     }
   }
   private func resetWorkspacePresentation() {
+    exerciseDraftStore = nil
     error = nil
     notice = nil
     showSession = false
@@ -226,6 +246,7 @@ import WidgetKit
     bodyWeights = measurements
     let unfinished = loaded.filter { [.active, .paused].contains($0.status) }
     active = unfinished.first { $0.id == active?.id } ?? unfinished.first
+    if exerciseDraftStore?.workoutID != active?.id { exerciseDraftStore = nil }
     currentBodyWeightKG =
       BodyWeightSummary(entries: measurements, workouts: loaded, now: now()).latest?.weightKG
       ?? active?.bodyWeightKG
@@ -415,6 +436,8 @@ import WidgetKit
   }
   private func activate(_ workout: Workout) throws {
     var workout = workout
+    try WorkoutEngine.applyPreviousTargets(
+      to: Set(workout.exercises.map(\.id)), in: &workout, history: workouts)
     try WorkoutEngine.setBodyWeight(currentBodyWeightKG, in: &workout)
     try repository.save(workout)
     try loadRepository()
@@ -469,8 +492,16 @@ import WidgetKit
   }
   @discardableResult func mutate(_ action: (inout Workout) throws -> Void) -> Bool {
     guard var workout = active else { return false }
+    let original = workout
     do {
       try action(&workout)
+      if workout.status == .active {
+        let added = workout.exercises.filter { row in
+          !original.exercises.contains { $0.id == row.id && $0.exercise.id == row.exercise.id }
+        }
+        try WorkoutEngine.applyPreviousTargets(
+          to: Set(added.map(\.id)), in: &workout, history: workouts)
+      }
       try repository.save(workout)
       try loadRepository()
       refreshIntegrations()
@@ -481,6 +512,26 @@ import WidgetKit
         message: "Не удалось сохранить изменения тренировки. Попробуйте ещё раз.")
       return false
     }
+  }
+  func exerciseDrafts(for workout: Workout, unit: WeightUnit) -> WorkoutExerciseDraftStore {
+    guard active?.id == workout.id else {
+      return WorkoutExerciseDraftStore(workoutID: workout.id, unit: unit)
+    }
+    if let exerciseDraftStore,
+      exerciseDraftStore.workoutID == workout.id, exerciseDraftStore.unit == unit
+    {
+      return exerciseDraftStore
+    }
+    let drafts = WorkoutExerciseDraftStore(workoutID: workout.id, unit: unit)
+    exerciseDraftStore = drafts
+    return drafts
+  }
+
+  func saveExerciseInputs(_ model: WorkoutExercisePresentation, workoutID: UUID) {
+    guard let active, active.id == workoutID else { return }
+    let values = model.pendingValues(in: active, includingCompleted: true)
+    guard !values.isEmpty else { return }
+    mutate { try WorkoutEngine.updateEditableValues(values, in: &$0) }
   }
   func finish() {
     guard mutate({ try WorkoutEngine.finish(&$0) }) else { return }

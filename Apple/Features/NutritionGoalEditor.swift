@@ -10,6 +10,7 @@ struct NutritionGoalEditor: View {
   @State private var protein: String
   @State private var fat: String
   @State private var carbs: String
+  @State private var water: String
   @State private var error: String?
   init(model: NutritionDiaryModel) {
     self.model = model
@@ -18,6 +19,7 @@ struct NutritionGoalEditor: View {
     _protein = State(initialValue: model.goal?.protein.map(String.init(describing:)) ?? "")
     _fat = State(initialValue: model.goal?.fat.map(String.init(describing:)) ?? "")
     _carbs = State(initialValue: model.goal?.carbohydrates.map(String.init(describing:)) ?? "")
+    _water = State(initialValue: model.goal?.waterMilliliters.map(String.init(describing:)) ?? "")
   }
   var body: some View {
     Form {
@@ -26,10 +28,11 @@ struct NutritionGoalEditor: View {
         field("Белки, г", $protein)
         field("Жиры, г", $fat)
         field("Углеводы, г", $carbs)
+        field("Цель воды, мл", $water)
       } footer: {
         Text(
           L10n.text(
-            "Укажите собственную дневную цель. Цели БЖУ необязательны. Калории тренировок не вычитаются из съеденного.",
+            "Укажите собственную дневную цель. Цели БЖУ и воды необязательны. Калории тренировок не вычитаются из съеденного.",
             locale: locale))
       }
       Button(L10n.text("Сохранить", locale: locale)) { save() }
@@ -44,6 +47,8 @@ struct NutritionGoalEditor: View {
       }
       if let error { Text(L10n.text(error, locale: locale)).foregroundStyle(.red) }
     }.navigationTitle(L10n.text("Цели питания", locale: locale))
+      .onAppear { model.isPresenting = true }
+      .onDisappear { model.isPresenting = false }
   }
   private func field(_ title: String, _ binding: Binding<String>) -> some View {
     HStack {
@@ -64,7 +69,7 @@ struct NutritionGoalEditor: View {
       }
       let goal = try NutritionGoal(
         calories: NutritionInput.number(calories), protein: optional(protein),
-        fat: optional(fat), carbohydrates: optional(carbs))
+        fat: optional(fat), carbohydrates: optional(carbs), waterMilliliters: optional(water))
       try goal.validate()
       if model.saveGoal(goal) { dismiss() } else { error = model.error }
     } catch { self.error = error.localizedDescription }
