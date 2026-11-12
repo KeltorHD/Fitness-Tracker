@@ -3299,6 +3299,23 @@
         }
       }
     },
+    "Все фазы": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Все фазы"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All stages"
+          }
+        }
+      }
+    },
     "Все функции FitnessTracker доступны бесплатно.": {
       "extractionState": "manual",
       "localizations": {

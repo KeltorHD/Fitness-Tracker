@@ -106,6 +106,13 @@ final class FitnessTrackerUITests: XCTestCase {
     image.name = "Three concentric training rings, synthetic current and previous week"
     image.lifetime = .keepAlways
     add(image)
+    volume.tap()
+    XCTAssertFalse(volume.isSelected)
+    XCTAssertFalse(sets.isSelected)
+    let reset = XCTAttachment(screenshot: app.screenshot())
+    reset.name = "Training rings restored to full brightness"
+    reset.lifetime = .keepAlways
+    add(reset)
   }
 
   @MainActor func testDiaryRingSummariesStartExpandedAndCanBeHiddenIndependently() {
@@ -155,6 +162,8 @@ final class FitnessTrackerUITests: XCTestCase {
     XCTAssertTrue(protein.isSelected)
     let ring = app.descendants(matching: .any).matching(identifier: "nutritionMacroRing").firstMatch
     XCTAssertTrue(ring.exists)
+    XCTAssertEqual(ring.frame.width, ring.frame.height, accuracy: 2)
+    XCTAssertGreaterThan(ring.frame.width, 120)
     ring.coordinate(withNormalizedOffset: CGVector(dx: 0.35, dy: 0.35)).tap()
     XCTAssertTrue(app.buttons["nutritionMacro_carbohydrates"].isSelected)
     protein.tap()
@@ -231,6 +240,34 @@ final class FitnessTrackerUITests: XCTestCase {
     app.buttons["saveSleepAlarm"].tap()
     XCTAssertTrue(
       app.staticTexts["iPhone включён до подтверждения Watch"].waitForExistence(timeout: 5))
+  }
+
+  @MainActor func testSleepRingCanToggleSelectionAndDragWithoutClearingIt() {
+    let app = launch(additionalArguments: ["--ui-testing-sleep", "-sleepDiaryEnabled", "YES"])
+    let section = app.segmentedControls["diarySection"]
+    XCTAssertTrue(section.waitForExistence(timeout: 10))
+    section.buttons["Сон"].tap()
+    let ring = app.descendants(matching: .any).matching(identifier: "sleepPhaseRing").firstMatch
+    XCTAssertTrue(ring.waitForExistence(timeout: 10))
+    let deep = ring.coordinate(withNormalizedOffset: CGVector(dx: 0.35, dy: 0.35))
+    deep.tap()
+    XCTAssertTrue((ring.value as? String ?? "").contains("Глубокий"))
+    let selected = XCTAttachment(screenshot: app.screenshot())
+    selected.name = "Sleep phase selected by one tap"
+    selected.lifetime = .keepAlways
+    add(selected)
+    deep.tap()
+    XCTAssertEqual(ring.value as? String, "Все фазы")
+    let cleared = XCTAttachment(screenshot: app.screenshot())
+    cleared.name = "Sleep phases restored after tapping the selected sector"
+    cleared.lifetime = .keepAlways
+    add(cleared)
+    let core = ring.coordinate(withNormalizedOffset: CGVector(dx: 0.75, dy: 0.75))
+    ring.coordinate(withNormalizedOffset: CGVector(dx: 0.75, dy: 0.25))
+      .press(forDuration: 0.6, thenDragTo: core)
+    XCTAssertTrue((ring.value as? String ?? "").contains("Базовый"))
+    core.tap()
+    XCTAssertEqual(ring.value as? String, "Все фазы")
   }
 
   @MainActor func testSleepInsightsSelectStageAndMonth() {

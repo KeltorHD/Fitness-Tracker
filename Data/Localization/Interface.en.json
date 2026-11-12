@@ -1211,5 +1211,6 @@
   "Недельная цель: %@": "Weekly goal: %@",
   "Нет данных прошлой недели для сравнения подходов.": "No previous-week data to compare sets.",
   "Нет данных прошлой недели для сравнения объёма.": "No previous-week data to compare volume.",
-  "Прошлая неделя: %@ · от неё %@": "Previous week: %@ · %@ of that"
+  "Прошлая неделя: %@ · от неё %@": "Previous week: %@ · %@ of that",
+  "Все фазы": "All stages"
 }

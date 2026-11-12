@@ -116,6 +116,10 @@ struct SleepInsightsView: View {
       }, selectedID: selectedStage?.rawValue,
       onSelect: { id in
         if let stage = SleepStage(rawValue: id) { focus(stage, in: night) }
+      },
+      onTap: { id in
+        guard let stage = SleepStage(rawValue: id) else { return }
+        if selectedStage == stage { resetPhase() } else { focus(stage, in: night) }
       }
     ) {
       if let selectedStage, let share = night.recordedStageFraction(selectedStage) {
@@ -130,7 +134,10 @@ struct SleepInsightsView: View {
       }
     }
     .accessibilityLabel(L10n.text("Доли фаз сна", locale: locale))
-    .accessibilityValue(selectedStage.map { SleepDisplay.title($0, locale: locale) } ?? "")
+    .accessibilityValue(
+      selectedStage.map { SleepDisplay.title($0, locale: locale) }
+        ?? L10n.text("Все фазы", locale: locale)
+    )
     .accessibilityIdentifier("sleepPhaseRing")
   }
   private func phases(_ night: SleepNight) -> some View {

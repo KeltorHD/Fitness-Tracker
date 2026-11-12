@@ -845,3 +845,14 @@ Linux: 302 Core tests, включая DST, високосный февраль, 
 Остаётся ручная проверка VoiceOver, Reduce Motion, максимального Dynamic Type и взаимодействия на физическом устройстве.
 
 Финальное оформление заголовка: `Text.fixedSize` и штатный `ToolbarContent.sharedBackgroundVisibility(.hidden)` дают полную надпись слева, сохраняя Glass у управляющих кнопок. SDK-сборка и `testDiaryHeaderHasRoomForFullTitleWithWeekAndMonthCalendar` прошли в `SharedCalendarHeader-20261112.xcresult`. Скриншоты недели/месяца и тройных колец просмотрены; дополнительных новых permissions или форматов хранения нет.
+
+
+## Выделение колец и повторное касание фаз — 2026-11-12
+
+- Три кольца тренировок сначала одинаково яркие. Выбор показателя оставляет его кольцо ярким, остальные получают opacity 0.25; повторный выбор возвращает яркость всем кольцам. Центральное значение и сравнение без активного выбора показывают недельную цель, сами данные не меняются.
+- Во сне повторное касание того же сектора вызывает общий resetPhase: снимается выделение кольца, графика и интервала. Для VoiceOver доступно состояние «Все фазы».
+- Shared donut обрабатывает обычное касание отдельно от движения после удержания 0,5 секунды: один tap не дублируется через angle binding, движение только выбирает фазу. Обычная прокрутка не меняет выбор. Выбор по углу и весам секторов сохраняет область нажатия внутри кольца. Приём tap отделён от onSelect, поэтому диаграмма питания не получает незапрошенный toggle.
+- Linux: 302 Core tests и прежние переносимые проверки прошли. Новые данные и permissions не добавлялись, изменились существующие файлы.
+- Целевые UI-проверки: `testTrainingTripleRingsUseRecordedPreviousWeekAndAllowSelectingMetrics`, `testSleepRingCanToggleSelectionAndDragWithoutClearingIt`, `testSleepInsightsSelectStageAndMonth`, `testNutritionRingSelectionAndSharedDateUseRecordedTotals`.
+
+SDK-сборка и четыре целевых UI-сценария прошли в `RingSelectionTouch-20261112.xcresult` (0 failures). 102 Apple unit tests прошли в первом прогоне `RingSelection-20261112.xcresult`; его UI-часть выявила конфликт прокрутки с немедленным drag и сбой первого касания. Следующая попытка с exclusive sequenced gesture также подавляла tap; финальная версия использует отдельное обычное касание и движение после удержания, все исходные assertions сохранены. `xcstringstool compile --dry-run` прошёл. Снимки выбранных/восстановленных колец тренировок (Dark) и фаз сна (Light) просмотрены: выделение и возврат яркости соответствуют выбору. Отдельно остаются ручные проверки VoiceOver/Reduce Motion на устройстве.

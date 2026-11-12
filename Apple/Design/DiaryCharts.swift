@@ -49,8 +49,8 @@ struct DiaryRingChart<Center: View>: View {
   let segments: [DiaryRingSegment]
   let selectedID: String?
   let onSelect: (String) -> Void
+  var onTap: ((String) -> Void)? = nil
   @ViewBuilder let center: () -> Center
-  @State private var angle: Double?
 
   var body: some View {
     Chart(segments) { segment in
@@ -60,29 +60,23 @@ struct DiaryRingChart<Center: View>: View {
       .cornerRadius(4).foregroundStyle(segment.color.gradient)
       .opacity(selectedID == nil || selectedID == segment.id ? 1 : 0.28)
     }
-    .chartAngleSelection(value: $angle)
-    .chartOverlay { proxy in
+    .chartLegend(.hidden)
+    .chartOverlay { _ in
       GeometryReader { geometry in
+        let frame = CGRect(origin: .zero, size: geometry.size)
         Circle().fill(.clear).contentShape(.circle)
           .onTapGesture { location in
-            guard let plot = proxy.plotFrame else { return }
-            let frame = geometry[plot]
-            let dx = location.x - frame.midX
-            let dy = location.y - frame.midY
-            guard hypot(dx, dy) > 6 else { return }
-            let radians = atan2(dx, -dy)
-            let angle = Angle.radians(radians < 0 ? radians + 2 * .pi : radians)
-            // A repeated tap must still select the slice after selection changed via its row.
-            if let value = proxy.value(atAngle: angle, as: Double.self) { select(value) }
-            proxy.selectAngleValue(at: angle)
+            select(at: location, in: frame, tapping: true)
           }
+          .simultaneousGesture(
+            LongPressGesture(minimumDuration: 0.5)
+              .sequenced(before: DragGesture(minimumDistance: 0))
+              .onChanged { event in
+                guard case .second(true, let drag?) = event else { return }
+                select(at: drag.location, in: frame, tapping: false)
+              }
+          )
       }
-    }
-    .onChange(of: angle) { _, value in
-      if let value { select(value) }
-    }
-    .onChange(of: selectedID) { _, value in
-      if value == nil { angle = nil }
     }
     .overlay {
       if segments.allSatisfy({ $0.value == 0 }) {
@@ -93,6 +87,7 @@ struct DiaryRingChart<Center: View>: View {
     }
     .animation(reduceMotion ? nil : .easeInOut(duration: 0.18), value: selectedID)
     .animation(reduceMotion ? nil : .smooth(duration: 0.6), value: segments.map(\.value))
+    .contentShape(.circle)
     .accessibilityElement(children: .ignore)
     .accessibilityAdjustableAction { direction in
       let visible = segments.filter { $0.value > 0 }
@@ -108,11 +103,18 @@ struct DiaryRingChart<Center: View>: View {
     }
   }
 
-  private func select(_ value: Double) {
-    guard let index = DiaryRingSelection.index(at: value, weights: segments.map(\.value)) else {
-      return
-    }
-    onSelect(segments[index].id)
+  private func select(at location: CGPoint, in frame: CGRect, tapping: Bool) {
+    let dx = location.x - frame.midX
+    let dy = location.y - frame.midY
+    guard hypot(dx, dy) > 6 else { return }
+    let radians = atan2(dx, -dy)
+    let fraction = (radians < 0 ? radians + 2 * .pi : radians) / (2 * .pi)
+    let weights = segments.map(\.value)
+    guard
+      let index = DiaryRingSelection.index(at: fraction * weights.reduce(0, +), weights: weights)
+    else { return }
+    // Only a deliberate press-and-drag inspects phases, leaving normal scrolling available.
+    (tapping ? onTap ?? onSelect : onSelect)(segments[index].id)
   }
 }
 
