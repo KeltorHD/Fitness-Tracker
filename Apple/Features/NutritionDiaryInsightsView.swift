@@ -42,7 +42,9 @@ struct NutritionDiaryInsightsView: View {
   let date: Date
   let goal: NutritionGoal?
   @State private var selected: Macro?
-  private var hasTotals: Bool { day.entries.isEmpty || day.entries.count > day.incompleteCount }
+  private var hasTotals: Bool {
+    day.nutritionEntryCount == 0 || day.nutritionEntryCount > day.incompleteCount
+  }
   private var calories: String {
     L10n.format("%@ ккал", number(day.total.calories), locale: locale)
   }
@@ -77,7 +79,7 @@ struct NutritionDiaryInsightsView: View {
       }
       if day.incompleteCount > 0 {
         Label(
-          L10n.text("Есть фото без КБЖУ — итог неполный", locale: locale),
+          L10n.text("Есть записи без КБЖУ — итог неполный", locale: locale),
           systemImage: "info.circle"
         ).font(.caption).foregroundStyle(.secondary)
       }

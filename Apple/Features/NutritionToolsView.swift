@@ -161,7 +161,7 @@ struct NutritionWeekView: View {
           }.frame(height: 180)
           Text(
             L10n.text(
-              "Дни без записей не означают нулевое потребление. Фото без КБЖУ делают итог неполным.",
+              "Дни без записей не означают нулевое потребление. Записи без КБЖУ делают итог неполным.",
               locale: locale)
           ).font(.caption).foregroundStyle(.secondary)
         }.fitCard()

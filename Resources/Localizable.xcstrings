@@ -1565,6 +1565,23 @@
         }
       }
     },
+    "БАДы и спортивное питание": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "БАДы и спортивное питание"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supplements and sports nutrition"
+          }
+        }
+      }
+    },
     "База заполняется сообществом. Проверяйте КБЖУ на упаковке; не все продукты имеют фото и полные данные.": {
       "extractionState": "manual",
       "localizations": {
@@ -2602,6 +2619,23 @@
         }
       }
     },
+    "Введите все значения КБЖУ с упаковки или оставьте все поля пустыми. Проверьте единицы и значения.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Введите все значения КБЖУ с упаковки или оставьте все поля пустыми. Проверьте единицы и значения."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter all nutrition values from the label or leave every field empty. Check the units and values."
+          }
+        }
+      }
+    },
     "Введите название (1–80 символов).": {
       "extractionState": "manual",
       "localizations": {
@@ -2632,6 +2666,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Enter a name with at least 2 characters or an 8–14 digit barcode."
+          }
+        }
+      }
+    },
+    "Введите состав с упаковки целиком или оставьте все поля пустыми. Неизвестный состав не заменяется нулями. При смене единиц КБЖУ нужно заполнить заново.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Введите состав с упаковки целиком или оставьте все поля пустыми. Неизвестный состав не заменяется нулями. При смене единиц КБЖУ нужно заполнить заново."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter all label values or leave every field empty. Unknown nutrition is not replaced with zeros. Re-enter nutrition when changing units."
           }
         }
       }
@@ -3023,6 +3074,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Weigh-in"
+          }
+        }
+      }
+    },
+    "Вид добавки": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вид добавки"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supplement type"
           }
         }
       }
@@ -4336,6 +4404,23 @@
         }
       }
     },
+    "Гейнер": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Гейнер"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mass gainer"
+          }
+        }
+      }
+    },
     "Гиря": {
       "extractionState": "manual",
       "localizations": {
@@ -5288,6 +5373,23 @@
         }
       }
     },
+    "Для другой добавки обязательно укажите название.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Для другой добавки обязательно укажите название."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A name is required for other supplements."
+          }
+        }
+      }
+    },
     "Для живого пульса откройте FitLife на Apple Watch, начните тренировку на iPhone и включите приём пульса. Разрешите доступ к пульсу и тренировкам на часах. Не запускайте одновременно приложение «Тренировка» Apple: часы поддерживают один сеанс тренировки.": {
       "extractionState": "manual",
       "localizations": {
@@ -5539,6 +5641,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Active days: %@"
+          }
+        }
+      }
+    },
+    "Дни без записей не означают нулевое потребление. Записи без КБЖУ делают итог неполным.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Дни без записей не означают нулевое потребление. Записи без КБЖУ делают итог неполным."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Days without entries do not mean zero consumption. Entries without nutrition values make totals incomplete."
           }
         }
       }
@@ -6376,6 +6495,23 @@
         }
       }
     },
+    "Другая добавка": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Другая добавка"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Other supplement"
+          }
+        }
+      }
+    },
     "Другие шаблоны": {
       "extractionState": "manual",
       "localizations": {
@@ -6461,6 +6597,23 @@
         }
       }
     },
+    "Единицы количества": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Единицы количества"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amount units"
+          }
+        }
+      }
+    },
     "Единицы на упаковке": {
       "extractionState": "manual",
       "localizations": {
@@ -6525,6 +6678,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "If HR Data Broadcasts is unavailable, use Apple Health mode. Broadcasting may temporarily interrupt the connection to HUAWEI Health."
+          }
+        }
+      }
+    },
+    "Есть записи без КБЖУ — итог неполный": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Есть записи без КБЖУ — итог неполный"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Some entries have no nutrition values — totals are incomplete"
           }
         }
       }
@@ -7226,6 +7396,23 @@
         }
       }
     },
+    "Записать приём добавки": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Записать приём добавки"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log supplement intake"
+          }
+        }
+      }
+    },
     "Записи питания скопированы.": {
       "extractionState": "manual",
       "localizations": {
@@ -7239,6 +7426,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Food entries copied."
+          }
+        }
+      }
+    },
+    "Записывайте фактически принятое количество. КБЖУ учитываются только при включённом учёте и заполненном составе с упаковки.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Записывайте фактически принятое количество. КБЖУ учитываются только при включённом учёте и заполненном составе с упаковки."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log the amount you actually took. Nutrition is counted only when tracking is enabled and label values are provided."
           }
         }
       }
@@ -8399,6 +8603,108 @@
         }
       }
     },
+    "КБЖУ на 1 капсулу": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "КБЖУ на 1 капсулу"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutrition per capsule"
+          }
+        }
+      }
+    },
+    "КБЖУ на 1 порцию": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "КБЖУ на 1 порцию"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutrition per serving"
+          }
+        }
+      }
+    },
+    "КБЖУ на 1 таблетку": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "КБЖУ на 1 таблетку"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutrition per tablet"
+          }
+        }
+      }
+    },
+    "КБЖУ на 100 г": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "КБЖУ на 100 г"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutrition per 100 g"
+          }
+        }
+      }
+    },
+    "КБЖУ на 100 мл": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "КБЖУ на 100 мл"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutrition per 100 ml"
+          }
+        }
+      }
+    },
+    "КБЖУ на 1000 мг": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "КБЖУ на 1000 мг"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutrition per 1,000 mg"
+          }
+        }
+      }
+    },
     "КБЖУ не заполнены": {
       "extractionState": "manual",
       "localizations": {
@@ -8803,6 +9109,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "External and internal obliques"
+          }
+        }
+      }
+    },
+    "Креатин": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Креатин"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Creatine"
           }
         }
       }
@@ -9772,6 +10095,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Name and notes"
+          }
+        }
+      }
+    },
+    "Название или бренд добавки": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Название или бренд добавки"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supplement name or brand"
           }
         }
       }
@@ -11442,6 +11782,23 @@
         }
       }
     },
+    "Не удалось сохранить приём добавки. Попробуйте ещё раз.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось сохранить приём добавки. Попробуйте ещё раз."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not save the supplement intake. Try again."
+          }
+        }
+      }
+    },
     "Не удалось сохранить пульс. Повторите сохранение в разделе «Трекер».": {
       "extractionState": "manual",
       "localizations": {
@@ -11612,6 +11969,23 @@
         }
       }
     },
+    "Не удалось удалить приём добавки. Попробуйте ещё раз.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось удалить приём добавки. Попробуйте ещё раз."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not delete the supplement intake. Try again."
+          }
+        }
+      }
+    },
     "Не удалось удалить тренировку. Попробуйте ещё раз.": {
       "extractionState": "manual",
       "localizations": {
@@ -11659,6 +12033,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Unspecified"
+          }
+        }
+      }
+    },
+    "Не учитывается в КБЖУ": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не учитывается в КБЖУ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Excluded from nutrition totals"
           }
         }
       }
@@ -14434,6 +14825,23 @@
         }
       }
     },
+    "Повторить приём": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Повторить приём"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repeat intake"
+          }
+        }
+      }
+    },
     "Повторить сохранение": {
       "extractionState": "manual",
       "localizations": {
@@ -15811,6 +16219,23 @@
         }
       }
     },
+    "Принятое количество": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Принятое количество"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amount taken"
+          }
+        }
+      }
+    },
     "Принять серверную версию": {
       "extractionState": "manual",
       "localizations": {
@@ -15841,6 +16266,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Squats"
+          }
+        }
+      }
+    },
+    "Приём добавки": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Приём добавки"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supplement intake"
+          }
+        }
+      }
+    },
+    "Приём добавок пока не записан": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Приём добавок пока не записан"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No supplement intakes recorded yet"
           }
         }
       }
@@ -16062,6 +16521,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Check nutrition: enter finite, nonnegative values per 100 g or 100 ml."
+          }
+        }
+      }
+    },
+    "Проверьте название добавки, дату и положительное количество в выбранных единицах.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Проверьте название добавки, дату и положительное количество в выбранных единицах."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check the supplement name, date and positive amount in the selected units."
           }
         }
       }
@@ -16385,6 +16861,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Skip rest"
+          }
+        }
+      }
+    },
+    "Протеин": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Протеин"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Protein powder"
           }
         }
       }
@@ -20894,6 +21387,23 @@
         }
       }
     },
+    "Удалить приём добавки?": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Удалить приём добавки?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete supplement intake?"
+          }
+        }
+      }
+    },
     "Удалить тренировку?": {
       "extractionState": "manual",
       "localizations": {
@@ -21468,6 +21978,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Refine regions"
+          }
+        }
+      }
+    },
+    "Учитывать в КБЖУ": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Учитывать в КБЖУ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Include in nutrition totals"
           }
         }
       }
@@ -22628,6 +23155,23 @@
         }
       }
     },
+    "капс.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "капс."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "caps."
+          }
+        }
+      }
+    },
     "кг": {
       "extractionState": "manual",
       "localizations": {
@@ -22696,6 +23240,23 @@
         }
       }
     },
+    "мг": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "мг"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "mg"
+          }
+        }
+      }
+    },
     "мл": {
       "extractionState": "manual",
       "localizations": {
@@ -22726,6 +23287,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "no"
+          }
+        }
+      }
+    },
+    "порц.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "порц."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "serv."
+          }
+        }
+      }
+    },
+    "табл.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "табл."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tabs."
           }
         }
       }
