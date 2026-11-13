@@ -162,6 +162,7 @@ internal static class TrainingMapping
     internal static async Task<JsonElement> ReadAsync(BackupDbContext database, string owner, string kind,
         Guid id, CancellationToken cancellationToken)
     {
+        if (TrainingKinds.IsNutrition(kind)) return await NutritionStorage.ReadAsync(database, owner, kind, id, cancellationToken);
         if (kind == TrainingKinds.BodyWeight)
         {
             var value = await database.BodyWeights.AsNoTracking().SingleAsync(x => x.OwnerId == owner && x.Id == id, cancellationToken);

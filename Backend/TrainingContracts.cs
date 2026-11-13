@@ -15,8 +15,20 @@ public static class TrainingKinds
     public const string BodyWeight = "bodyWeight";
     /// <summary>Тип записи пульса.</summary>
     public const string HeartRate = "heartRate";
+    /// <summary>Тип записи питания: foodEntry.</summary>
+    public const string FoodEntry = "foodEntry";
+    /// <summary>Тип записи питания: waterEntry.</summary>
+    public const string WaterEntry = "waterEntry";
+    /// <summary>Тип записи питания: supplementEntry.</summary>
+    public const string SupplementEntry = "supplementEntry";
+    /// <summary>Тип записи питания: supplementPlan.</summary>
+    public const string SupplementPlan = "supplementPlan";
+    /// <summary>Тип записи питания: nutritionProfile.</summary>
+    public const string NutritionProfile = "nutritionProfile";
     /// <summary>Возвращает true только для действующих типов журнала.</summary>
-    public static bool Contains(string kind) => kind is Workout or Template or BodyWeight or HeartRate;
+    public static bool Contains(string kind) => kind is Workout or Template or BodyWeight or HeartRate || IsNutrition(kind);
+    /// <summary>Определяет агрегаты дневника питания.</summary>
+    public static bool IsNutrition(string kind) => kind is FoodEntry or WaterEntry or SupplementEntry or SupplementPlan or NutritionProfile;
 }
 
 /// <summary>Одна мутация с известной клиенту версией; владелец определяется только JWT.</summary>

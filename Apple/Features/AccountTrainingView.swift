@@ -110,6 +110,11 @@ struct AccountTrainingView: View {
     case .template: kind = "Шаблоны"
     case .bodyWeight: kind = "Вес тела"
     case .heartRate: kind = "Пульс"
+    case .foodEntry: kind = "Питание"
+    case .waterEntry: kind = "Вода"
+    case .supplementEntry: kind = "Приём добавки"
+    case .supplementPlan: kind = "Расписание добавки"
+    case .nutritionProfile: kind = "Цели и избранные продукты"
     }
     return L10n.text(kind, locale: locale)
   }
@@ -130,7 +135,7 @@ struct AccountTrainingView: View {
       } else if model.loaded {
         Text(
           L10n.text(
-            "Войдите для автоматической синхронизации тренировок между устройствами.",
+            "Войдите для автоматической синхронизации тренировок и питания между устройствами.",
             locale: locale))
         Button(L10n.text("Войти в аккаунт", locale: locale)) { action = .signIn }
           .accessibilityIdentifier("signInAccount")
@@ -176,7 +181,7 @@ struct AccountTrainingView: View {
     } footer: {
       Text(
         L10n.text(
-          "Тренировки со всеми подходами и паузами, планы, записи веса и сохранённый пульс автоматически передаются в ваш аккаунт. Изменения офлайн отправятся при подключении. Питание и фотографии остаются на устройстве. Источники здоровья подключаются отдельно.",
+          "Тренировки, планы, вес, сохранённый пульс, питание с фотографиями, вода, цели, избранные продукты, добавки и расписания автоматически передаются в ваш аккаунт. Изменения офлайн отправятся при подключении. Источники здоровья подключаются отдельно.",
           locale: locale))
     }
   }

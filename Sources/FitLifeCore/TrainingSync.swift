@@ -1,7 +1,14 @@
 import Foundation
 
 public enum TrainingKind: String, Codable, CaseIterable, Sendable {
-  case workout, template, bodyWeight, heartRate
+  case workout, template, bodyWeight, heartRate, foodEntry, waterEntry, supplementEntry,
+    supplementPlan, nutritionProfile
+  public var isNutrition: Bool {
+    switch self {
+    case .foodEntry, .waterEntry, .supplementEntry, .supplementPlan, .nutritionProfile: true
+    default: false
+    }
+  }
 }
 
 public struct TrainingRecordKey: Codable, Hashable, Sendable {
@@ -19,12 +26,22 @@ public enum TrainingValue: Codable, Equatable, Sendable {
   case template(WorkoutTemplate)
   case bodyWeight(BodyWeightEntry)
   case heartRate(HeartRateRecording)
+  case foodEntry(FoodEntry)
+  case waterEntry(WaterEntry)
+  case supplementEntry(SupplementEntry)
+  case supplementPlan(SupplementPlan)
+  case nutritionProfile(NutritionProfile)
 
   public var key: TrainingRecordKey {
     switch self {
     case .workout(let value): TrainingRecordKey(kind: .workout, id: value.id)
     case .template(let value): TrainingRecordKey(kind: .template, id: value.id)
     case .bodyWeight(let value): TrainingRecordKey(kind: .bodyWeight, id: value.id)
+    case .foodEntry(let value): TrainingRecordKey(kind: .foodEntry, id: value.id)
+    case .waterEntry(let value): TrainingRecordKey(kind: .waterEntry, id: value.id)
+    case .supplementEntry(let value): TrainingRecordKey(kind: .supplementEntry, id: value.id)
+    case .supplementPlan(let value): TrainingRecordKey(kind: .supplementPlan, id: value.id)
+    case .nutritionProfile(let value): TrainingRecordKey(kind: .nutritionProfile, id: value.id)
     case .heartRate(let value): TrainingRecordKey(kind: .heartRate, id: value.workoutID)
     }
   }
@@ -33,6 +50,11 @@ public enum TrainingValue: Codable, Equatable, Sendable {
     switch self {
     case .workout(let value): value.name
     case .template(let value): value.name
+    case .foodEntry: nil
+    case .waterEntry: nil
+    case .supplementEntry: nil
+    case .supplementPlan: nil
+    case .nutritionProfile: nil
     case .bodyWeight, .heartRate: nil
     }
   }
@@ -42,6 +64,11 @@ public enum TrainingValue: Codable, Equatable, Sendable {
     case .workout(let value): try Validation.workout(value)
     case .template(let value): try Validation.template(value)
     case .bodyWeight(let value): try Validation.bodyWeightEntry(value)
+    case .foodEntry(let value): try value.validate()
+    case .waterEntry(let value): try value.validate()
+    case .supplementEntry(let value): try value.validate()
+    case .supplementPlan(let value): try value.validate()
+    case .nutritionProfile(let value): try value.validate()
     case .heartRate(let value): try value.validate()
     }
   }
@@ -68,6 +95,11 @@ public enum TrainingValue: Codable, Equatable, Sendable {
     case .workout: .workout(try Workout(from: decoder))
     case .template: .template(try WorkoutTemplate(from: decoder))
     case .bodyWeight: .bodyWeight(try BodyWeightEntry(from: decoder))
+    case .foodEntry: .foodEntry(try FoodEntry(from: decoder))
+    case .waterEntry: .waterEntry(try WaterEntry(from: decoder))
+    case .supplementEntry: .supplementEntry(try SupplementEntry(from: decoder))
+    case .supplementPlan: .supplementPlan(try SupplementPlan(from: decoder))
+    case .nutritionProfile: .nutritionProfile(try NutritionProfile(from: decoder))
     case .heartRate: .heartRate(try HeartRateRecording(from: decoder))
     }
   }
@@ -76,6 +108,11 @@ public enum TrainingValue: Codable, Equatable, Sendable {
     switch self {
     case .workout(let value): try value.encode(to: encoder)
     case .bodyWeight(let value): try value.encode(to: encoder)
+    case .foodEntry(let value): try value.encode(to: encoder)
+    case .waterEntry(let value): try value.encode(to: encoder)
+    case .supplementEntry(let value): try value.encode(to: encoder)
+    case .supplementPlan(let value): try value.encode(to: encoder)
+    case .nutritionProfile(let value): try value.encode(to: encoder)
     case .heartRate(let value): try value.encode(to: encoder)
     case .template(let value):
       var container = encoder.container(keyedBy: TemplateKeys.self)
@@ -106,7 +143,9 @@ public struct TrainingChange: Codable, Equatable, Sendable {
   public let value: TrainingValue?
   public var deleted: Bool { value == nil }
   public init(key: TrainingRecordKey, revision: Int64, value: TrainingValue?) throws {
-    guard revision > 0, value == nil || value?.key == key else {
+    guard revision > 0, value == nil || value?.key == key,
+      key.kind != .nutritionProfile || key.id == NutritionProfile.recordID
+    else {
       throw TrainingSyncError.invalidData
     }
     try value?.validate()
@@ -150,7 +189,9 @@ public struct TrainingMutation: Encodable, Equatable, Sendable {
   public let baseRevision: Int64
   public let value: TrainingValue?
   public init(key: TrainingRecordKey, baseRevision: Int64, value: TrainingValue?) throws {
-    guard baseRevision >= 0, value == nil || value?.key == key else {
+    guard baseRevision >= 0, value == nil || value?.key == key,
+      key.kind != .nutritionProfile || key.id == NutritionProfile.recordID
+    else {
       throw TrainingSyncError.invalidData
     }
     try value?.validate()
@@ -200,11 +241,12 @@ public struct TrainingSnapshot: Sendable {
   public let values: [TrainingValue]
   public init(
     workouts: [Workout], templates: [WorkoutTemplate], bodyWeights: [BodyWeightEntry],
-    heartRate: [HeartRateRecording]
+    heartRate: [HeartRateRecording], nutrition: NutritionSnapshot = NutritionSnapshot()
   ) throws {
     values =
       workouts.map(TrainingValue.workout) + templates.map(TrainingValue.template)
       + bodyWeights.map(TrainingValue.bodyWeight) + heartRate.map(TrainingValue.heartRate)
+      + nutrition.values
     guard Set(values.map(\.key)).count == values.count,
       Set(heartRate.map(\.workoutID)).isSubset(of: Set(workouts.map(\.id)))
     else { throw TrainingSyncError.invalidData }
@@ -269,6 +311,9 @@ public struct TrainingJournalSnapshot: Equatable, Sendable {
       case (.workout, nil): workouts[change.key.id] = nil
       case (.template, nil): templates[change.key.id] = nil
       case (.bodyWeight, nil): weights[change.key.id] = nil
+      case (.foodEntry, _), (.waterEntry, _), (.supplementEntry, _),
+        (.supplementPlan, _), (.nutritionProfile, _):
+        break
       default: throw TrainingSyncError.invalidData
       }
     }

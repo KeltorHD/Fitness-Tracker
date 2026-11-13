@@ -45,6 +45,7 @@ import SwiftData
       else { throw TrainingSyncError.invalidData }
       try trainingAccountSelection.validate()
     }
+    try migrateNutrition()
   }
   func workouts() throws -> [Workout] {
     try records(kind: "workout").map {
@@ -186,7 +187,7 @@ import SwiftData
   }
 
   private func storageKind(_ kind: String, account: String? = nil) -> String {
-    guard ["workout", "template", "bodyWeight"].contains(kind),
+    guard (["workout", "template", "bodyWeight"] + Self.nutritionKinds).contains(kind),
       let account = account ?? trainingAccountSelection.currentAccountID
     else { return kind }
     return kind + "@" + account
@@ -202,6 +203,7 @@ import SwiftData
     }
     var selection = trainingAccountSelection
     do {
+      try migrateNutrition(adopting: namespace, commit: false)
       if selection.firstAccountID == nil {
         for kind in ["workout", "template", "bodyWeight"] {
           for record in try rawRecords(kind: kind) {
@@ -221,6 +223,7 @@ import SwiftData
         try Validation.bodyWeightEntry(
           JSONDecoder().decode(BodyWeightEntry.self, from: record.payload))
       }
+      try validateNutrition(account: namespace)
       selection.currentAccountID = namespace
       try stageUpsert(
         id: Self.scopeRecordID, kind: "trainingScope", data: JSONEncoder().encode(selection))
@@ -245,6 +248,16 @@ import SwiftData
           try stageUpsert(id: value.id, kind: "template", data: JSONEncoder().encode(value))
         case .bodyWeight(let value):
           try stageUpsert(id: value.id, kind: "bodyWeight", data: JSONEncoder().encode(value))
+        case .foodEntry(let value):
+          try stageUpsert(id: value.id, kind: "foodEntry", data: JSONEncoder().encode(value))
+        case .waterEntry(let value):
+          try stageUpsert(id: value.id, kind: "waterEntry", data: JSONEncoder().encode(value))
+        case .supplementEntry(let value):
+          try stageUpsert(id: value.id, kind: "supplementEntry", data: JSONEncoder().encode(value))
+        case .supplementPlan(let value):
+          try stageUpsert(id: value.id, kind: "supplementPlan", data: JSONEncoder().encode(value))
+        case .nutritionProfile(let value):
+          try stageUpsert(id: value.id, kind: "nutritionProfile", data: JSONEncoder().encode(value))
         case .heartRate: throw TrainingSyncError.invalidData
         case nil:
           for record in try allRecords(kind: change.key.kind.rawValue)
@@ -278,6 +291,7 @@ extension SwiftDataWorkoutRepository: NutritionRepository {
   func foodEntries() throws -> [FoodEntry] {
     try records(kind: "foodEntry").map {
       let entry = try JSONDecoder().decode(FoodEntry.self, from: $0.payload)
+      guard entry.id == $0.recordID else { throw NutritionError.invalidEntry }
       try entry.validate()
       return entry
     }
@@ -301,7 +315,7 @@ extension SwiftDataWorkoutRepository: NutritionRepository {
           record.modifiedAt = .now
           for duplicate in matches.dropFirst() { context.delete(duplicate) }
         } else {
-          context.insert(StoredRecord(id: id, kind: "foodEntry", payload: data))
+          context.insert(StoredRecord(id: id, kind: storageKind("foodEntry"), payload: data))
         }
       }
       try context.save()
@@ -313,6 +327,7 @@ extension SwiftDataWorkoutRepository: NutritionRepository {
   func waterEntries() throws -> [WaterEntry] {
     try records(kind: "waterEntry").map {
       let entry = try JSONDecoder().decode(WaterEntry.self, from: $0.payload)
+      guard entry.id == $0.recordID else { throw NutritionError.invalidWater }
       try entry.validate()
       return entry
     }
@@ -322,55 +337,140 @@ extension SwiftDataWorkoutRepository: NutritionRepository {
     try upsert(id: entry.id, kind: "waterEntry", data: JSONEncoder().encode(entry))
   }
   func deleteWaterEntry(id: UUID) throws { try remove(id: id, kind: "waterEntry") }
-  func favoriteFoodProducts() throws -> [FoodProduct] {
-    var seen = Set<String>()
-    return try records(kind: "favoriteFoodProduct").map {
-      let product = try JSONDecoder().decode(FoodProduct.self, from: $0.payload)
-      try product.validate()
-      return product
-    }.filter { seen.insert($0.id).inserted }
+  func supplementPlans() throws -> [SupplementPlan] {
+    try records(kind: "supplementPlan").map {
+      let value = try JSONDecoder().decode(SupplementPlan.self, from: $0.payload)
+      guard value.id == $0.recordID else { throw NutritionError.invalidSupplementPlan }
+      try value.validate()
+      return value
+    }
   }
+  func saveSupplementPlan(_ plan: SupplementPlan) throws {
+    try plan.validate()
+    try upsert(id: plan.id, kind: "supplementPlan", data: JSONEncoder().encode(plan))
+  }
+  func deleteSupplementPlan(id: UUID) throws { try remove(id: id, kind: "supplementPlan") }
+  private func nutritionProfile() throws -> NutritionProfile? {
+    let values = try records(kind: "nutritionProfile")
+    guard values.count <= 1 else { throw NutritionError.invalidEntry }
+    guard let record = values.first else { return nil }
+    let value = try JSONDecoder().decode(NutritionProfile.self, from: record.payload)
+    guard value.id == record.recordID else { throw NutritionError.invalidEntry }
+    try value.validate()
+    return value
+  }
+  private func saveProfile(_ profile: NutritionProfile) throws {
+    try profile.validate()
+    if profile.goal == nil && profile.favorites.isEmpty {
+      try remove(id: profile.id, kind: "nutritionProfile")
+    } else {
+      try upsert(id: profile.id, kind: "nutritionProfile", data: JSONEncoder().encode(profile))
+    }
+  }
+  func favoriteFoodProducts() throws -> [FoodProduct] { try nutritionProfile()?.favorites ?? [] }
   func setFavoriteFoodProduct(_ product: FoodProduct, isFavorite: Bool) throws {
     try product.validate()
-    let data = try JSONEncoder().encode(product)
+    let profile = try nutritionProfile()
+    var favorites = profile?.favorites.filter { $0.id != product.id } ?? []
+    if isFavorite { favorites.append(product) }
+    try saveProfile(NutritionProfile(goal: profile?.goal, favorites: favorites))
+  }
+  func deleteFoodEntry(id: UUID) throws { try remove(id: id, kind: "foodEntry") }
+  func nutritionGoal() throws -> NutritionGoal? { try nutritionProfile()?.goal }
+  func saveNutritionGoal(_ goal: NutritionGoal?) throws {
+    try saveProfile(NutritionProfile(goal: goal, favorites: favoriteFoodProducts()))
+  }
+
+  private static let nutritionKinds = [
+    "foodEntry", "waterEntry", "supplementEntry", "supplementPlan", "nutritionProfile",
+  ]
+
+  /// Adopts pre-sync nutrition once into the first account, including stores already signed in.
+  /// Legacy goal/favorite rows are consolidated and removed only in the same successful save.
+  private func migrateNutrition(adopting namespace: String? = nil, commit: Bool = true) throws {
+    let first = trainingAccountSelection.firstAccountID ?? namespace
+    func target(_ kind: String) -> String { first.map { kind + "@" + $0 } ?? kind }
     do {
-      let matches = try allRecords(kind: "favoriteFoodProduct").filter {
-        try JSONDecoder().decode(FoodProduct.self, from: $0.payload).id == product.id
-      }
-      if isFavorite {
-        if let record = matches.first {
-          record.payload = data
-          record.modifiedAt = .now
-          for duplicate in matches.dropFirst() { context.delete(duplicate) }
-        } else {
-          context.insert(StoredRecord(id: UUID(), kind: "favoriteFoodProduct", payload: data))
+      let goals = try rawRecords(kind: "nutritionGoal")
+      let favorites = try rawRecords(kind: "favoriteFoodProduct")
+      if !goals.isEmpty || !favorites.isEmpty {
+        guard Set(goals.map(\.recordID)).count <= 1 else { throw NutritionError.invalidGoal }
+        let profiles = try rawRecords(kind: target("nutritionProfile"))
+        guard profiles.allSatisfy({ $0.recordID == NutritionProfile.recordID }) else {
+          throw NutritionError.invalidEntry
         }
-      } else {
-        for record in matches { context.delete(record) }
+        let existing = try profiles.first.map {
+          try JSONDecoder().decode(NutritionProfile.self, from: $0.payload)
+        }
+        try existing?.validate()
+        let oldGoal = try goals.first.map {
+          try JSONDecoder().decode(NutritionGoal.self, from: $0.payload)
+        }
+        try oldGoal?.validate()
+        guard oldGoal == nil || existing?.goal == nil || oldGoal == existing?.goal else {
+          throw NutritionError.invalidGoal
+        }
+        var products = Dictionary(
+          uniqueKeysWithValues: (existing?.favorites ?? []).map { ($0.id, $0) })
+        for record in favorites.reversed() {
+          let product = try JSONDecoder().decode(FoodProduct.self, from: record.payload)
+          try product.validate()
+          products[product.id] = product
+        }
+        let profile = NutritionProfile(
+          goal: oldGoal ?? existing?.goal, favorites: Array(products.values))
+        try profile.validate()
+        let payload = try JSONEncoder().encode(profile)
+        if let row = profiles.first {
+          row.payload = payload
+        } else {
+          context.insert(
+            StoredRecord(id: profile.id, kind: target("nutritionProfile"), payload: payload))
+        }
+        for record in goals + favorites + Array(profiles.dropFirst()) { context.delete(record) }
       }
-      try context.save()
+      if first != nil {
+        for kind in Self.nutritionKinds {
+          let destination = try rawRecords(kind: target(kind))
+          for record in try rawRecords(kind: kind) {
+            if let match = destination.first(where: { $0.recordID == record.recordID }) {
+              guard match.payload == record.payload else { throw NutritionError.invalidEntry }
+              context.delete(record)
+            } else {
+              record.kind = target(kind)
+            }
+          }
+        }
+      }
+      try validateNutrition(account: first)
+      if commit { try context.save() }
     } catch {
       context.rollback()
       throw error
     }
   }
-  func deleteFoodEntry(id: UUID) throws { try remove(id: id, kind: "foodEntry") }
-  func nutritionGoal() throws -> NutritionGoal? {
-    guard let record = try records(kind: "nutritionGoal").first else { return nil }
-    let goal = try JSONDecoder().decode(NutritionGoal.self, from: record.payload)
-    try goal.validate()
-    return goal
-  }
-  func saveNutritionGoal(_ goal: NutritionGoal?) throws {
-    // A stable aggregate ID keeps the same goal across launches and CloudKit devices.
-    guard let id = UUID(uuidString: "345B105D-8EFC-4EA2-99D3-770805C86F71") else {
-      throw NutritionError.invalidValues
+  private func validateNutrition(account: String?) throws {
+    for kind in Self.nutritionKinds {
+      for record in try rawRecords(kind: account.map { kind + "@" + $0 } ?? kind) {
+        let decoder = JSONDecoder()
+        let value: TrainingValue
+        switch kind {
+        case "foodEntry":
+          value = .foodEntry(try decoder.decode(FoodEntry.self, from: record.payload))
+        case "waterEntry":
+          value = .waterEntry(try decoder.decode(WaterEntry.self, from: record.payload))
+        case "supplementEntry":
+          value = .supplementEntry(try decoder.decode(SupplementEntry.self, from: record.payload))
+        case "supplementPlan":
+          value = .supplementPlan(try decoder.decode(SupplementPlan.self, from: record.payload))
+        default:
+          value = .nutritionProfile(
+            try decoder.decode(NutritionProfile.self, from: record.payload))
+        }
+        guard value.key.id == record.recordID else { throw NutritionError.invalidEntry }
+        try value.validate()
+      }
     }
-    if let goal {
-      try goal.validate()
-      try upsert(id: id, kind: "nutritionGoal", data: JSONEncoder().encode(goal))
-    } else {
-      try remove(id: id, kind: "nutritionGoal")
-    }
   }
+
 }

@@ -105,7 +105,7 @@ struct ServerTrainingError: Error, LocalizedError, Sendable {
     case "cursor_reset_required": "Серверный журнал изменился. Проверьте расхождения данных."
     case "training_limit": "Достигнут предел записей серверного журнала."
     case "account_deleted": "Аккаунт удалён. Войдите в аккаунт заново."
-    case "server_update_required": "Для синхронизации тренировок требуется обновить сервер."
+    case "server_update_required": "Для синхронизации данных требуется обновить сервер."
     case "record_too_large":
       "Одна из записей слишком велика для синхронизации. Локальные данные сохранены."
     case "local_changed": "Запись изменилась на устройстве. Обновите предпросмотр."

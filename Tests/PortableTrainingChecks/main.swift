@@ -83,7 +83,7 @@ private actor RemoteJournal: TrainingRemoteServing {
   func snapshot() throws -> TrainingSnapshot {
     try TrainingSnapshot(
       workouts: roots.workouts(), templates: roots.templates(), bodyWeights: roots.bodyWeights(),
-      heartRate: Array(pulse.values))
+      heartRate: Array(pulse.values), nutrition: roots.nutritionSnapshot())
   }
   func value(_ key: TrainingRecordKey) throws -> TrainingValue? {
     switch key.kind {
@@ -92,6 +92,8 @@ private actor RemoteJournal: TrainingRemoteServing {
     case .bodyWeight:
       try roots.bodyWeights().first { $0.id == key.id }.map(TrainingValue.bodyWeight)
     case .heartRate: pulse[key.id].map(TrainingValue.heartRate)
+    case .foodEntry, .waterEntry, .supplementEntry, .supplementPlan, .nutritionProfile:
+      try roots.currentNutritionValue(key)
     }
   }
   func apply(_ change: TrainingChange, expected: TrainingValue?, relatedPulse: TrainingValue?)
@@ -176,6 +178,7 @@ private actor GatedStateStore: TrainingSyncStateStoring {
 
 @main struct TrainingChecks {
   @MainActor static func main() async throws {
+    try await nutritionSyncAcrossDevicesAndOfflineDeletion()
     try await offlineDeletionAndInflightEdit()
     try await conflictsAndRelatedPulse()
     try await cancelledReadCannotCrossAccount()
@@ -185,6 +188,55 @@ private actor GatedStateStore: TrainingSyncStateStoring {
     try await wireValidation()
     print(
       "Training checks: restart/offline deletion, edits during upload, explicit conflicts, pulse cascade, cancellation, overlapping scene/account transitions, server restore, durable state corruption, scoped pulse adoption/CAS and real HTTP validation passed (no Apple SDK)."
+    )
+  }
+
+  @MainActor private static func nutritionSyncAcrossDevicesAndOfflineDeletion() async throws {
+    let remote = RemoteJournal()
+    let first = LocalJournal()
+    let second = LocalJournal()
+    let now = Date(timeIntervalSince1970: 1_700_000_000)
+    let plan = SupplementPlan(
+      prototype: SupplementEntry(date: now, kind: .creatine, amount: 3), startDate: now,
+      timeZoneID: "UTC", remindersEnabled: true)
+    let intake = plan.intake(scheduledFor: now, takenAt: now)
+    let water = WaterEntry(date: now, milliliters: 250)
+    try first.roots.saveSupplementPlan(plan)
+    try first.roots.saveSupplementEntry(intake)
+    try first.roots.saveWaterEntry(water)
+    try first.roots.saveNutritionGoal(NutritionGoal(calories: 2100))
+    let storageA = MemoryTrainingSyncStateStore()
+    let storageB = MemoryTrainingSyncStateStore()
+    let syncA = first.coordinator(remote, storage: storageA)
+    let syncB = second.coordinator(remote, storage: storageB)
+    try await syncA.connect("account-a")
+    await syncA.synchronizeNow()
+    try await syncB.connect("account-a")
+    await syncB.synchronizeNow()
+    expect(try second.roots.supplementPlans() == [plan])
+    expect(try second.roots.supplementEntries() == [intake])
+    expect(try second.roots.waterEntries() == [water])
+    expect(try second.roots.nutritionGoal()?.calories == 2100)
+    await syncA.disconnect()
+    await remote.setOffline(true)
+    try first.roots.deleteSupplementPlan(id: plan.id)
+    try first.roots.deleteWaterEntry(id: water.id)
+    let restarted = first.coordinator(remote, storage: storageA)
+    try await restarted.connect("account-a")
+    await restarted.synchronizeNow()
+    expect(restarted.errorMessage != nil)
+    await restarted.disconnect()
+    await remote.setOffline(false)
+    let online = first.coordinator(remote, storage: storageA)
+    try await online.connect("account-a")
+    await online.synchronizeNow()
+    await syncB.synchronizeNow()
+    expect(try second.roots.supplementPlans().isEmpty && second.roots.waterEntries().isEmpty)
+    expect(try second.roots.supplementEntries() == [intake])
+    await online.disconnect()
+    await syncB.disconnect()
+    print(
+      "Nutrition journal: two-device sync, profile, offline deletions after restart and preserved supplement history passed."
     )
   }
 
@@ -403,6 +455,17 @@ private actor GatedStateStore: TrainingSyncStateStoring {
     try await storage.save(state, for: "account-a")
     let reloaded = try await TrainingSyncStateStore(directory: stateDirectory).load("account-a")
     expect(reloaded == state)
+    var legacy =
+      try JSONSerialization.jsonObject(with: TrainingCoding.encoder().encode(state))
+      as! [String: Any]
+    legacy.removeValue(forKey: "nutritionFeedVersion")
+    try JSONSerialization.data(withJSONObject: legacy).write(
+      to: stateDirectory.appendingPathComponent("account-a.json"))
+    let upgraded = try await storage.load("account-a")
+    expect(upgraded.cursor == 0 && upgraded.nutritionFeedVersion == 1)
+    expect(upgraded.baselines == state.baselines && upgraded.conflicts == state.conflicts)
+    let repeatedUpgrade = try await storage.load("account-a")
+    expect(repeatedUpgrade == upgraded)
     try Data("broken".utf8).write(to: stateDirectory.appendingPathComponent("account-a.json"))
     do {
       _ = try await storage.load("account-a")
@@ -459,6 +522,26 @@ private actor GatedStateStore: TrainingSyncStateStoring {
       TrainingMutation(key: value.key, baseRevision: 0, value: value)
     ])
     expect(result == [change])
+    let precise = TrainingValue.supplementEntry(
+      SupplementEntry(
+        date: Date(timeIntervalSinceReferenceDate: 815_432_100.1234567), kind: .creatine, amount: 3)
+    )
+    let preciseChange = try TrainingChange(key: precise.key, revision: 2, value: precise)
+    let preciseData = try TrainingCoding.encoder().encode([preciseChange])
+    TrainingProtocol.response.withLock { $0 = (200, preciseData) }
+    let preciseResult = try await remote.apply([
+      TrainingMutation(key: precise.key, baseRevision: 0, value: precise)
+    ])
+    expect(try preciseResult[0].value?.canonicalData() == precise.canonicalData())
+    TrainingProtocol.response.withLock {
+      $0 = (400, Data(#"{"code":"invalid_training_mutation","current":null}"#.utf8))
+    }
+    do {
+      _ = try await remote.apply([
+        TrainingMutation(key: precise.key, baseRevision: 0, value: precise)
+      ])
+      preconditionFailure("Old backend rejection did not request an update")
+    } catch let error as ServerTrainingError { expect(error.code == "server_update_required") }
     let wrong = try TrainingChange(
       key: TrainingRecordKey(kind: .workout, id: UUID()), revision: 2, value: nil)
     TrainingProtocol.response.withLock { $0 = (200, try! TrainingCoding.encoder().encode([wrong])) }

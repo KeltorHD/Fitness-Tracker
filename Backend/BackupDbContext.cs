@@ -45,6 +45,7 @@ public sealed class BackupDbContext(DbContextOptions<BackupDbContext> options) :
         builder.Entity<BackupRecord>().HasIndex(backup => new { backup.OwnerId, backup.CreatedAtMilliseconds });
         builder.Entity<DeletedAccount>().Property(account => account.Id).HasMaxLength(36);
         TrainingModel.Configure(builder);
+        NutritionModel.Configure(builder);
         HealthSyncModel.Configure(builder);
     }
 }

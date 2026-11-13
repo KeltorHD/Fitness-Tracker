@@ -28,6 +28,11 @@ bin_path="$("$swift_bin" build "${flags[@]}" --show-bin-path)"
   "$bin_path"/FitLifeCore.build/*.swift.o Tests/HealthSyncContractChecks/main.swift \
   -o "$bin_path/health-sync-contract-checks"
 "$bin_path/health-sync-contract-checks" --verify Tests/Server/Fixtures/health-sync-contract.json
+"$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
+  -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \
+  "$bin_path"/FitLifeCore.build/*.swift.o Tests/NutritionContractChecks/main.swift \
+  -o "$bin_path/nutrition-contract-checks"
+"$bin_path/nutrition-contract-checks"
 # These presentation/data types use only Foundation/Observation. This is a real Swift 6
 # type check of this explicit subset; it does not compile SwiftUI or Apple integrations.
 "$swiftc_bin" -swift-version 6 -strict-concurrency=complete \
@@ -186,7 +191,7 @@ python3 Tests/TrainingContractChecks/validation-cases.py --verify
   -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \
   "$bin_path"/FitLifeCore.build/*.swift.o \
   Apple/Services/OpenFoodFactsClient.swift Apple/Services/FoodSearchClient.swift Apple/Features/NutritionDiaryModel.swift \
-  Apple/Features/SupplementEntryEditorModel.swift \
+  Apple/Features/SupplementEntryEditorModel.swift Apple/Services/SupplementReminderCoordinator.swift \
   Tests/PortableNutritionChecks/main.swift -o "$bin_path/portable-nutrition-checks"
 "$bin_path/portable-nutrition-checks"
 python3 scripts/parse-apple.py "$swiftc_bin"

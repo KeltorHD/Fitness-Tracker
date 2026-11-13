@@ -215,6 +215,11 @@ import WidgetKit
         })
     self.tracker.onHeartRateChange = { [weak self] in self?.scheduleHeartRateUpdate() }
     self.tracker.onRecordingSaved = { [weak self] in self?.account?.sync.requestSync() }
+    self.nutrition?.onChange = { [weak self] in self?.account?.sync.requestSync() }
+    if platformServicesEnabled { self.nutrition?.reminderService = SupplementNotificationService() }
+    self.nutrition?.accountNamespace = { [weak self] in
+      self?.repository.trainingAccountSelection?.currentAccountID
+    }
     self.repository.onTrainingChange = { [weak self] in self?.account?.sync.requestSync() }
     self.healthCharts.onHeartRateChange = { [weak self] in self?.scheduleHeartRateUpdate() }
     self.healthData.onSelectionChange = { [weak self] in
@@ -380,20 +385,27 @@ import WidgetKit
       }
     }
     return try TrainingSnapshot(
-      workouts: workouts, templates: templates, bodyWeights: weights, heartRate: pulse)
+      workouts: workouts, templates: templates, bodyWeights: weights, heartRate: pulse,
+      nutrition: nutrition?.syncSnapshot() ?? NutritionSnapshot())
   }
 
   func currentTrainingValue(_ key: TrainingRecordKey) async throws -> TrainingValue? {
-    if key.kind != .heartRate { return currentRootTrainingValue(key) }
+    if key.kind != .heartRate { return try currentRootTrainingValue(key) }
     return try await trainingHeartRates.recording(for: key.id).map(TrainingValue.heartRate)
   }
 
-  private func currentRootTrainingValue(_ key: TrainingRecordKey) -> TrainingValue? {
-    switch key.kind {
+  private func currentRootTrainingValue(_ key: TrainingRecordKey) throws -> TrainingValue? {
+    if key.kind.isNutrition {
+      return try nutrition?.syncValue(key)
+    }
+    return
+      switch key.kind
+    {
     case .workout: workouts.first { $0.id == key.id }.map(TrainingValue.workout)
     case .template: templates.first { $0.id == key.id }.map(TrainingValue.template)
     case .bodyWeight: bodyWeights.first { $0.id == key.id }.map(TrainingValue.bodyWeight)
-    case .heartRate: nil
+    case .heartRate, .foodEntry, .waterEntry, .supplementEntry, .supplementPlan, .nutritionProfile:
+      nil
     }
   }
 
@@ -413,12 +425,13 @@ import WidgetKit
       return applied ? .applied : .changed
     }
     // Read again immediately before the synchronous save; edits made during awaits stay local.
-    let current = currentRootTrainingValue(change.key)
+    let current = try currentRootTrainingValue(change.key)
     guard current == expected else { return .changed }
     if change.key.kind == .workout
       && (showingWorkoutDetail || showSession && active?.id == change.key.id)
       || change.key.kind == .template && showingTemplateEditor
       || change.key.kind == .bodyWeight && showingBodyWeightEditor
+      || change.key.kind.isNutrition && nutrition?.isPresenting == true
     {
       return .changed
     }
@@ -432,7 +445,7 @@ import WidgetKit
         try await trainingHeartRates.compareAndSet(
           workoutID: change.key.id, expected: removedPulse, replacement: nil)
       else { return .changed }
-      if currentRootTrainingValue(change.key) != expected || pulseIsBusy(for: change.key.id) {
+      if try currentRootTrainingValue(change.key) != expected || pulseIsBusy(for: change.key.id) {
         if let removedPulse {
           _ = try await trainingHeartRates.compareAndSet(
             workoutID: change.key.id, expected: nil, replacement: removedPulse)
@@ -443,6 +456,7 @@ import WidgetKit
     do {
       let wasActive = active?.id == change.key.id && change.key.kind == .workout
       try repository.applyTrainingChanges([change])
+      if change.key.kind.isNutrition { nutrition?.reload() }
       if change.key.kind == .workout && change.deleted {
         tracker.discardDeletedRecording(for: change.key.id)
       }
@@ -481,17 +495,22 @@ import WidgetKit
     guard selection.currentAccountID != namespace else { return }
     if selection.firstAccountID != nil,
       active != nil || showSession || showingWorkoutStart || showingWorkoutDetail
-        || showingTemplateEditor || showingBodyWeightEditor || archiveTransfer.isSaving
+        || showingTemplateEditor || showingBodyWeightEditor || nutrition?.isPresenting == true
+        || archiveTransfer.isSaving
     {
       throw TrainingSyncError.activeWorkout
     }
     switchingTrainingAccount = true
     repository.personalWritesSuspended = true
     tracker.trainingWritesSuspended = true
+    nutrition?.writesSuspended = true
+    nutrition?.refreshReminders()
     defer {
       switchingTrainingAccount = false
       repository.personalWritesSuspended = false
       tracker.trainingWritesSuspended = false
+      nutrition?.writesSuspended = false
+      nutrition?.switchWorkspace(isDemo: false)
     }
     do {
       guard !tracker.loadingHealth, !tracker.hasPendingHeartRateImports else {
@@ -522,6 +541,7 @@ import WidgetKit
 
   func resumeTrainingSync() async {
     trainingForeground = true
+    nutrition?.refreshReminders()
     if accountSession != nil, trainingNetworkMonitor == nil, platformServicesEnabled {
       let monitor = NWPathMonitor()
       monitor.pathUpdateHandler = { [weak self] path in

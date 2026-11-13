@@ -59,11 +59,14 @@ public struct SupplementEntry: Codable, Equatable, Identifiable, Sendable {
   public var includesNutrition: Bool
   public var nutritionPerBasis: Nutrients?
   public var note: String
+  public var planID: UUID?
+  public var scheduledFor: Date?
 
   public init(
     id: UUID = UUID(), date: Date = Date(), kind: SupplementKind, name: String = "",
     amount: Double, unit: SupplementUnit = .grams, includesNutrition: Bool? = nil,
-    nutritionPerBasis: Nutrients? = nil, note: String = ""
+    nutritionPerBasis: Nutrients? = nil, note: String = "",
+    planID: UUID? = nil, scheduledFor: Date? = nil
   ) {
     self.id = id
     schemaVersion = 1
@@ -75,6 +78,8 @@ public struct SupplementEntry: Codable, Equatable, Identifiable, Sendable {
     self.includesNutrition = includesNutrition ?? kind.normallyTracksNutrition
     self.nutritionPerBasis = nutritionPerBasis
     self.note = note
+    self.planID = planID
+    self.scheduledFor = scheduledFor
   }
 
   public var nutrients: Nutrients? {
@@ -84,6 +89,8 @@ public struct SupplementEntry: Codable, Equatable, Identifiable, Sendable {
 
   public func validate() throws {
     guard schemaVersion == 1, date.timeIntervalSince1970.isFinite,
+      (planID == nil) == (scheduledFor == nil),
+      scheduledFor?.timeIntervalSince1970.isFinite != false,
       name.count <= 300, note.count <= 2000,
       kind != .other || !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
       amount.isFinite, amount > 0, amount <= unit.maximumAmount,
@@ -112,6 +119,8 @@ public struct SupplementEntry: Codable, Equatable, Identifiable, Sendable {
     var copy = self
     copy.id = UUID()
     copy.date = date
+    copy.planID = nil
+    copy.scheduledFor = nil
     return copy
   }
 }

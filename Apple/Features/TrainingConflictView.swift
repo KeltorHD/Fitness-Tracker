@@ -175,6 +175,28 @@ private struct TrainingValuePreview: View {
         LabeledContent(L10n.text("Вес тела, кг", locale: locale)) {
           Text(entry.weightKG, format: .number)
         }
+      case .foodEntry(let value):
+        Text(value.title)
+        Text(value.date, format: .dateTime)
+        NutrientValues(value: value.nutrients)
+        Text(value.note)
+      case .waterEntry(let value):
+        Text(value.date, format: .dateTime)
+        Text(value.milliliters, format: .number)
+      case .supplementEntry(let value):
+        Text(value.name.isEmpty ? L10n.text(value.kind.title, locale: locale) : value.name)
+        Text(value.date, format: .dateTime)
+        Text(value.amount.formatted() + " " + L10n.text(value.unit.symbol, locale: locale))
+        Text(value.note)
+      case .supplementPlan(let value):
+        Text(
+          value.prototype.name.isEmpty
+            ? L10n.text(value.prototype.kind.title, locale: locale) : value.prototype.name)
+        Text(L10n.text(value.recurrence.title, locale: locale))
+        Text(value.timeZoneID)
+      case .nutritionProfile(let value):
+        if let goal = value.goal { Text(goal.calories, format: .number) }
+        ForEach(value.favorites) { product in Text(product.name) }
       case .heartRate(let recording):
         Text(
           L10n.text(

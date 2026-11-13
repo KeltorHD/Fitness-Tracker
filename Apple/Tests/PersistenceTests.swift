@@ -1,10 +1,11 @@
 import FitLifeCore
+import SwiftData
 import XCTest
 
 @testable import FitLife
 
 @MainActor final class PersistenceTests: XCTestCase {
-  func testAccountNamespacesAdoptTrainingOnceAndLeaveNutritionOnDevice() throws {
+  func testAccountNamespacesAdoptTrainingAndNutritionOnceAndKeepAccountsIsolated() throws {
     let repository = try SwiftDataWorkoutRepository(inMemory: true)
     var workout = Workout(name: "Сохранённая", startedAt: Date(timeIntervalSince1970: 100))
     try WorkoutEngine.cancel(&workout, at: Date(timeIntervalSince1970: 200))
@@ -25,16 +26,100 @@ import XCTest
     XCTAssertTrue(try repository.workouts().isEmpty)
     XCTAssertTrue(try repository.templates().isEmpty)
     XCTAssertTrue(try repository.bodyWeights().isEmpty)
-    XCTAssertEqual(try repository.foodEntries(), [food])
+    XCTAssertTrue(try repository.foodEntries().isEmpty)
     let other = BodyWeightEntry(weightKG: 82)
     try repository.saveBodyWeight(other)
     try repository.activateTrainingAccount("account-a")
     XCTAssertEqual(try repository.workouts(), [workout])
     XCTAssertEqual(try repository.templates(), [template])
     XCTAssertEqual(try repository.bodyWeights(), [weight])
+    XCTAssertEqual(try repository.foodEntries(), [food])
     XCTAssertEqual(repository.trainingAccountSelection.firstAccountID, "account-a")
     try repository.activateTrainingAccount("account-b")
     XCTAssertEqual(try repository.bodyWeights(), [other])
+  }
+
+  func testNutritionMigrationAdoptsExistingUnscopedDataIntoFirstKnownAccount() throws {
+    let repository = try SwiftDataWorkoutRepository(inMemory: true)
+    try repository.activateTrainingAccount("account-a")
+    let product = FoodProduct(
+      id: "saved-product", name: "Продукт", per100Units: Nutrients(calories: 100))
+    let food = FoodEntry(
+      title: "Еда", portions: [FoodPortion(product: product)], photo: Data([255, 216, 255]))
+    let goal = NutritionGoal(calories: 2100, waterMilliliters: 2000)
+    let plan = SupplementPlan(prototype: SupplementEntry(kind: .creatine, amount: 3))
+    let intake = plan.intake(scheduledFor: plan.startDate, takenAt: plan.startDate)
+    let context = ModelContext(repository.container)
+    context.insert(
+      StoredRecord(id: food.id, kind: "foodEntry", payload: try JSONEncoder().encode(food)))
+    context.insert(
+      StoredRecord(
+        id: intake.id, kind: "supplementEntry", payload: try JSONEncoder().encode(intake)))
+    context.insert(
+      StoredRecord(id: UUID(), kind: "nutritionGoal", payload: try JSONEncoder().encode(goal)))
+    context.insert(
+      StoredRecord(
+        id: UUID(), kind: "favoriteFoodProduct", payload: try JSONEncoder().encode(product)))
+    try context.save()
+    // The first account retains ownership even if another account is selected during upgrade.
+    try repository.activateTrainingAccount("account-b")
+    XCTAssertTrue(try repository.nutritionSnapshot().values.isEmpty)
+    try repository.activateTrainingAccount("account-a")
+    XCTAssertEqual(try repository.foodEntries(), [food])
+    XCTAssertEqual(try repository.supplementEntries(), [intake])
+    XCTAssertEqual(try repository.nutritionGoal(), goal)
+    XCTAssertEqual(try repository.favoriteFoodProducts(), [product])
+    try repository.activateTrainingAccount("account-b")
+    try repository.activateTrainingAccount("account-a")
+    XCTAssertEqual(try repository.foodEntries().count, 1)
+    let stored = try ModelContext(repository.container).fetch(FetchDescriptor<StoredRecord>())
+    XCTAssertFalse(
+      stored.contains {
+        ["nutritionGoal", "favoriteFoodProduct", "foodEntry", "supplementEntry"].contains($0.kind)
+      })
+    XCTAssertEqual(stored.filter { $0.kind == "nutritionProfile@account-a" }.count, 1)
+  }
+
+  func testNutritionRemoteBatchAndAccountAdoptionRollbackWithoutLosingLocalRecords() throws {
+    let repository = try SwiftDataWorkoutRepository(inMemory: true)
+    let water = WaterEntry(milliliters: 250)
+    try repository.saveWaterEntry(water)
+    let context = ModelContext(repository.container)
+    let corrupt = StoredRecord(id: UUID(), kind: "template", payload: Data("broken".utf8))
+    context.insert(corrupt)
+    try context.save()
+    XCTAssertThrowsError(try repository.activateTrainingAccount("account-a"))
+    XCTAssertNil(repository.trainingAccountSelection.firstAccountID)
+    XCTAssertEqual(try repository.waterEntries(), [water])
+    let raw = try ModelContext(repository.container).fetch(FetchDescriptor<StoredRecord>())
+    XCTAssertTrue(raw.contains { $0.kind == "waterEntry" && $0.recordID == water.id })
+    XCTAssertFalse(raw.contains { $0.kind == "waterEntry@account-a" })
+    context.delete(corrupt)
+    try context.save()
+    try repository.activateTrainingAccount("account-a")
+    let profile = NutritionProfile(goal: NutritionGoal(calories: 2200), favorites: [])
+    try repository.applyTrainingChanges([
+      TrainingChange(key: .init(kind: .waterEntry, id: water.id), revision: 1, value: nil),
+      TrainingChange(
+        key: .init(kind: .nutritionProfile, id: profile.id), revision: 2,
+        value: .nutritionProfile(profile)),
+    ])
+    XCTAssertTrue(try repository.waterEntries().isEmpty)
+    XCTAssertEqual(try repository.nutritionGoal(), profile.goal)
+  }
+
+  func testCorruptDestinationNutritionPreventsAccountSwitchWithoutChangingCurrentJournal() throws {
+    let repository = try SwiftDataWorkoutRepository(inMemory: true)
+    try repository.activateTrainingAccount("account-a")
+    let water = WaterEntry(milliliters: 250)
+    try repository.saveWaterEntry(water)
+    let context = ModelContext(repository.container)
+    context.insert(
+      StoredRecord(id: UUID(), kind: "supplementPlan@account-b", payload: Data("broken".utf8)))
+    try context.save()
+    XCTAssertThrowsError(try repository.activateTrainingAccount("account-b"))
+    XCTAssertEqual(repository.trainingAccountSelection.currentAccountID, "account-a")
+    XCTAssertEqual(try repository.waterEntries(), [water])
   }
 
   func testFailedAccountAdoptionRollsBackRetaggingAndRemoteBatchKeepsAllRoots() throws {

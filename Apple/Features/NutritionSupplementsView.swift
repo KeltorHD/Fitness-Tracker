@@ -89,9 +89,15 @@ struct SupplementEntryEditor: View {
   let diary: NutritionDiaryModel
   @State private var model: SupplementEntryEditorModel
   private let workspaceID: UUID
+  private let isPlan: Bool
+  @State private var schedule: SupplementPlan
+  @State private var saving = false
+  @State private var saveTask: Task<Void, Never>?
 
-  init(diary: NutritionDiaryModel, entry: SupplementEntry) {
+  init(diary: NutritionDiaryModel, entry: SupplementEntry, plan: SupplementPlan? = nil) {
     self.diary = diary
+    isPlan = plan != nil
+    _schedule = State(initialValue: plan ?? SupplementPlan(prototype: entry))
     workspaceID = diary.workspaceID
     _model = State(initialValue: SupplementEntryEditorModel(entry: entry))
   }
@@ -112,7 +118,9 @@ struct SupplementEntryEditor: View {
           }.accessibilityIdentifier("supplementKind")
           TextField(L10n.text("Название или бренд добавки", locale: locale), text: $model.name)
             .accessibilityIdentifier("supplementName")
-          DatePicker(L10n.text("Дата и время", locale: locale), selection: $model.date)
+          if !isPlan {
+            DatePicker(L10n.text("Дата и время", locale: locale), selection: $model.date)
+          }
           TextField(L10n.text("Принятое количество", locale: locale), text: $model.amount)
             .keyboardType(.decimalPad).accessibilityIdentifier("supplementAmount")
           Picker(
@@ -127,6 +135,7 @@ struct SupplementEntryEditor: View {
         } footer: {
           Text(L10n.text("Для другой добавки обязательно укажите название.", locale: locale))
         }
+        if isPlan { scheduleFields }
         Section {
           Toggle(L10n.text("Учитывать в КБЖУ", locale: locale), isOn: $model.includesNutrition)
             .accessibilityIdentifier("supplementIncludesNutrition")
@@ -152,7 +161,7 @@ struct SupplementEntryEditor: View {
         }
       }
       .scrollDismissesKeyboard(.interactively)
-      .navigationTitle(L10n.text("Приём добавки", locale: locale))
+      .navigationTitle(L10n.text(isPlan ? "Расписание добавки" : "Приём добавки", locale: locale))
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
@@ -160,10 +169,104 @@ struct SupplementEntryEditor: View {
         }
         ToolbarItem(placement: .confirmationAction) {
           Button(L10n.text("Сохранить", locale: locale)) { save() }
-            .accessibilityIdentifier("saveSupplementEntry")
+            .accessibilityIdentifier("saveSupplementEntry").disabled(saving)
         }
       }
     }.tint(colorTheme.accent)
+      .onDisappear { saveTask?.cancel() }
+  }
+
+  private var scheduleFields: some View {
+    Section {
+      Toggle(L10n.text("Расписание включено", locale: locale), isOn: $schedule.enabled)
+      Picker(L10n.text("Периодичность", locale: locale), selection: $schedule.recurrence) {
+        ForEach(SupplementRecurrence.allCases, id: \.self) { recurrence in
+          Text(L10n.text(recurrence.title, locale: locale)).tag(recurrence)
+        }
+      }
+      if schedule.recurrence == .intervalDays {
+        Stepper(value: $schedule.intervalDays, in: 1...365) {
+          Text(L10n.format("Интервал, дней: %@", String(schedule.intervalDays), locale: locale))
+        }
+      }
+      if schedule.recurrence == .weekdays {
+        ForEach(WorkoutWeekday.allCases, id: \.rawValue) { day in
+          Toggle(
+            L10n.text(day.title, locale: locale),
+            isOn: Binding(
+              get: { schedule.weekdays.contains(day.rawValue) },
+              set: { selected in
+                schedule.weekdays.removeAll { $0 == day.rawValue }
+                if selected { schedule.weekdays.append(day.rawValue) }
+                schedule.weekdays.sort()
+              }))
+        }
+      }
+      DatePicker(
+        L10n.text("Начало приёма", locale: locale), selection: $schedule.startDate,
+        displayedComponents: .date)
+      Toggle(
+        L10n.text("Указать окончание", locale: locale),
+        isOn: Binding(
+          get: { schedule.endDate != nil },
+          set: { schedule.endDate = $0 ? max(schedule.startDate, .now) : nil }))
+      if schedule.endDate != nil {
+        DatePicker(
+          L10n.text("Окончание приёма", locale: locale),
+          selection: Binding(
+            get: { schedule.endDate ?? schedule.startDate }, set: { schedule.endDate = $0 }),
+          in: schedule.startDate..., displayedComponents: .date)
+      }
+      ForEach(schedule.times.indices, id: \.self) { index in
+        HStack {
+          DatePicker(
+            L10n.text("Время приёма", locale: locale), selection: timeBinding(index),
+            displayedComponents: .hourAndMinute)
+          if schedule.times.count > 1 {
+            Button(
+              L10n.text("Удалить время", locale: locale), systemImage: "minus.circle",
+              role: .destructive
+            ) {
+              schedule.times.remove(at: index)
+            }.labelStyle(.iconOnly)
+          }
+        }
+      }
+      if schedule.times.count < 8 {
+        Button(L10n.text("Добавить время", locale: locale), systemImage: "plus") {
+          let next = (0..<1440).first { !schedule.times.contains($0) } ?? 0
+          schedule.times.append(next)
+        }
+      }
+      Text(schedule.timeZoneID).font(.caption).foregroundStyle(.secondary)
+      Toggle(L10n.text("Напоминать о приёме", locale: locale), isOn: $schedule.remindersEnabled)
+    } header: {
+      Text(L10n.text("Периодичность и напоминания", locale: locale))
+    } footer: {
+      Text(
+        L10n.text(
+          "Время сохраняется в часовом поясе расписания. Напоминание не отмечает приём автоматически. Открывайте приложение регулярно, чтобы обновлять ближайшие напоминания.",
+          locale: locale))
+    }
+    .environment(\.timeZone, TimeZone(identifier: schedule.timeZoneID) ?? .current)
+  }
+  private func timeBinding(_ index: Int) -> Binding<Date> {
+    var referenceCalendar = Calendar(identifier: .gregorian)
+    referenceCalendar.timeZone = TimeZone(identifier: schedule.timeZoneID) ?? .current
+    let calendar = referenceCalendar
+    return Binding(
+      get: {
+        guard schedule.times.indices.contains(index) else { return schedule.startDate }
+        let minutes = schedule.times[index]
+        return calendar.date(
+          bySettingHour: minutes / 60, minute: minutes % 60, second: 0, of: schedule.startDate)
+          ?? schedule.startDate
+      },
+      set: { date in
+        guard schedule.times.indices.contains(index) else { return }
+        schedule.times[index] =
+          calendar.component(.hour, from: date) * 60 + calendar.component(.minute, from: date)
+      })
   }
 
   private func nutrientField(_ title: String, text: Binding<String>, id: String) -> some View {
@@ -177,7 +280,22 @@ struct SupplementEntryEditor: View {
     }
     do {
       let entry = try model.validatedEntry()
-      if diary.saveSupplement(entry) { dismiss() } else { model.error = diary.error }
+      if isPlan {
+        schedule.prototype = entry
+        schedule.times.sort()
+        let value = schedule
+        try value.validate()
+        saving = true
+        saveTask?.cancel()
+        saveTask = Task {
+          defer { saving = false }
+          if await diary.savePlan(value) { dismiss() } else { model.error = diary.error }
+        }
+      } else if diary.saveSupplement(entry) {
+        dismiss()
+      } else {
+        model.error = diary.error
+      }
     } catch { model.error = error.localizedDescription }
   }
 }

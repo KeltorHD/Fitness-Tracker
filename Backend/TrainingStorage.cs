@@ -45,7 +45,11 @@ public sealed class TrainingStorage(BackupDbContext database, ILogger<TrainingSt
     }
 
     /// <summary>Читает согласованный снимок последних версий после курсора; превышение актуальной версии требует сверки.</summary>
-    public async Task<TrainingPage> ChangesAsync(string owner, long after, int limit, CancellationToken cancellationToken)
+    public Task<TrainingPage> ChangesAsync(string owner, long after, int limit, CancellationToken cancellationToken) =>
+        ChangesAsync(owner, after, limit, null, cancellationToken);
+
+    /// <summary>Читает только поддерживаемые клиентом типы, не раскрывая новые типы прежним клиентам.</summary>
+    public async Task<TrainingPage> ChangesAsync(string owner, long after, int limit, string[]? kinds, CancellationToken cancellationToken)
     {
         if (after < 0 || limit is < 1 or > 100) throw new TrainingException(400, "invalid_cursor");
         await using var transaction = await database.Database.BeginTransactionAsync(
@@ -53,7 +57,7 @@ public sealed class TrainingStorage(BackupDbContext database, ILogger<TrainingSt
         var currentRevision = await database.TrainingOwners.AsNoTracking().Where(x => x.OwnerId == owner)
             .Select(x => x.Revision).SingleOrDefaultAsync(cancellationToken);
         if (after > currentRevision) throw new TrainingException(409, "cursor_reset_required");
-        var records = await database.TrainingRecords.AsNoTracking().Where(x => x.OwnerId == owner && x.Revision > after)
+        var records = await database.TrainingRecords.AsNoTracking().Where(x => x.OwnerId == owner && x.Revision > after && (kinds == null || kinds.Contains(x.Kind)))
             .OrderBy(x => x.Revision).Take(limit + 1).ToListAsync(cancellationToken);
         var results = new List<TrainingChange>();
         var size = 0;
@@ -73,7 +77,8 @@ public sealed class TrainingStorage(BackupDbContext database, ILogger<TrainingSt
     /// <summary>Проверяет версию под блокировкой владельца и сохраняет граф либо tombstone в текущей транзакции.</summary>
     private async Task<TrainingChange> ApplyLockedAsync(string owner, TrainingMutation mutation, CancellationToken cancellationToken)
     {
-        if (!TrainingKinds.Contains(mutation.Kind) || mutation.BaseRevision < 0)
+        if (!TrainingKinds.Contains(mutation.Kind) || mutation.BaseRevision < 0
+            || mutation.Kind == TrainingKinds.NutritionProfile && mutation.Id != NutritionValidation.ProfileId)
             throw new TrainingException(400, "invalid_training_mutation");
         if (mutation.Deleted && mutation.Value is { ValueKind: not JsonValueKind.Null })
             throw new TrainingException(400, "invalid_training_mutation");
@@ -123,6 +128,11 @@ public sealed class TrainingStorage(BackupDbContext database, ILogger<TrainingSt
     /// <summary>Заменяет граф одного проверенного агрегата, сохраняя независимый пульс при правке тренировки.</summary>
     private async Task SaveAsync(string owner, string kind, Guid id, JsonElement value, CancellationToken cancellationToken)
     {
+        if (TrainingKinds.IsNutrition(kind))
+        {
+            await NutritionStorage.SaveAsync(database, owner, kind, id, value, cancellationToken);
+            return;
+        }
         switch (kind)
         {
             case TrainingKinds.Workout:
@@ -183,6 +193,11 @@ public sealed class TrainingStorage(BackupDbContext database, ILogger<TrainingSt
     /// <summary>Удаляет граф; для тренировки сохраняет tombstone пульса и самостоятельные замеры веса.</summary>
     private async Task RemoveAsync(string owner, string kind, Guid id, TrainingOwner account, CancellationToken cancellationToken)
     {
+        if (TrainingKinds.IsNutrition(kind))
+        {
+            await NutritionStorage.RemoveAsync(database, owner, kind, id, cancellationToken);
+            return;
+        }
         switch (kind)
         {
             case TrainingKinds.Workout:

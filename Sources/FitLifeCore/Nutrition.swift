@@ -2,7 +2,7 @@ import Foundation
 
 public enum NutritionError: Error, LocalizedError, Sendable {
   case invalidValues, invalidPortion, invalidEntry, invalidPhoto, invalidGoal, invalidWater
-  case invalidSupplement, invalidSupplementNutrition
+  case invalidSupplement, invalidSupplementNutrition, invalidSupplementPlan
   public var errorDescription: String? {
     switch self {
     case .invalidValues:
@@ -13,6 +13,7 @@ public enum NutritionError: Error, LocalizedError, Sendable {
     case .invalidGoal:
       "Укажите положительную цель калорий. Необязательные цели БЖУ тоже должны быть больше нуля."
     case .invalidWater: "Укажите объём воды больше нуля и не больше 10 000 мл."
+    case .invalidSupplementPlan: "Проверьте периодичность, время и даты расписания добавки."
     case .invalidSupplement:
       "Проверьте название добавки, дату и положительное количество в выбранных единицах."
     case .invalidSupplementNutrition:
@@ -302,6 +303,9 @@ public struct NutritionDay: Equatable, Sendable {
   func supplementEntries() throws -> [SupplementEntry]
   func saveSupplementEntry(_ entry: SupplementEntry) throws
   func deleteSupplementEntry(id: UUID) throws
+  func supplementPlans() throws -> [SupplementPlan]
+  func saveSupplementPlan(_ plan: SupplementPlan) throws
+  func deleteSupplementPlan(id: UUID) throws
   func favoriteFoodProducts() throws -> [FoodProduct]
   func setFavoriteFoodProduct(_ product: FoodProduct, isFavorite: Bool) throws
 }
@@ -311,6 +315,7 @@ public struct NutritionDay: Equatable, Sendable {
   private var goal: NutritionGoal?
   private var water: [UUID: WaterEntry] = [:]
   private var supplements: [UUID: SupplementEntry] = [:]
+  private var plans: [UUID: SupplementPlan] = [:]
   private var favorites: [String: FoodProduct] = [:]
   public init() {}
   public func foodEntries() throws -> [FoodEntry] { Array(entries.values) }
@@ -340,9 +345,45 @@ public struct NutritionDay: Equatable, Sendable {
     supplements[entry.id] = entry
   }
   public func deleteSupplementEntry(id: UUID) throws { supplements[id] = nil }
+  public func supplementPlans() throws -> [SupplementPlan] { Array(plans.values) }
+  public func saveSupplementPlan(_ plan: SupplementPlan) throws {
+    try plan.validate()
+    plans[plan.id] = plan
+  }
+  public func deleteSupplementPlan(id: UUID) throws { plans[id] = nil }
   public func favoriteFoodProducts() throws -> [FoodProduct] { Array(favorites.values) }
   public func setFavoriteFoodProduct(_ product: FoodProduct, isFavorite: Bool) throws {
     try product.validate()
+    guard !isFavorite || favorites[product.id] != nil || favorites.count < 500 else {
+      throw NutritionError.invalidEntry
+    }
     favorites[product.id] = isFavorite ? product : nil
   }
+  public func applyTrainingChanges(_ changes: [TrainingChange]) throws {
+    for change in changes { try change.value?.validate() }
+    for change in changes {
+      switch change.value {
+      case .foodEntry(let entry): entries[entry.id] = entry
+      case .waterEntry(let entry): water[entry.id] = entry
+      case .supplementEntry(let entry): supplements[entry.id] = entry
+      case .supplementPlan(let plan): plans[plan.id] = plan
+      case .nutritionProfile(let profile):
+        goal = profile.goal
+        favorites = Dictionary(uniqueKeysWithValues: profile.favorites.map { ($0.id, $0) })
+      case nil:
+        switch change.key.kind {
+        case .foodEntry: entries[change.key.id] = nil
+        case .waterEntry: water[change.key.id] = nil
+        case .supplementEntry: supplements[change.key.id] = nil
+        case .supplementPlan: plans[change.key.id] = nil
+        case .nutritionProfile:
+          goal = nil
+          favorites = [:]
+        default: break
+        }
+      default: break
+      }
+    }
+  }
+
 }

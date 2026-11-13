@@ -10,11 +10,14 @@ internal static class TrainingEndpoints
     {
         var group = app.MapGroup("/v1/training").RequireAuthorization("backend")
             .RequireRateLimiting("training").AddEndpointFilter<ActiveSessionFilter>();
-        group.MapGet("/changes", async (HttpContext context, TrainingStorage storage, long? after, int? limit, CancellationToken cancellationToken) =>
+        group.MapGet("/changes", async (HttpContext context, TrainingStorage storage, long? after, int? limit, string? kinds, CancellationToken cancellationToken) =>
         {
             try
             {
-                var page = await storage.ChangesAsync(Owner(context), after ?? 0, limit ?? 50, cancellationToken);
+                var selected = kinds?.Split(',') ?? [TrainingKinds.Workout, TrainingKinds.Template, TrainingKinds.BodyWeight, TrainingKinds.HeartRate];
+                if (selected.Length is < 1 or > 9 || selected.Any(x => !TrainingKinds.Contains(x)))
+                    return Results.BadRequest(new { code = "invalid_training_kind" });
+                var page = await storage.ChangesAsync(Owner(context), after ?? 0, limit ?? 50, selected, cancellationToken);
                 return Results.Json(page, TrainingJson.Options);
             }
             catch (TrainingException error) { return Failure(error); }
