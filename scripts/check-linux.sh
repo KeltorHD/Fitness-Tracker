@@ -186,6 +186,7 @@ python3 Tests/TrainingContractChecks/validation-cases.py --verify
   -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \
   "$bin_path"/FitLifeCore.build/*.swift.o \
   Apple/Services/OpenFoodFactsClient.swift Apple/Services/FoodSearchClient.swift Apple/Features/NutritionDiaryModel.swift \
+  Apple/Features/SupplementEntryEditorModel.swift \
   Tests/PortableNutritionChecks/main.swift -o "$bin_path/portable-nutrition-checks"
 "$bin_path/portable-nutrition-checks"
 python3 scripts/parse-apple.py "$swiftc_bin"

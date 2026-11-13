@@ -7,9 +7,12 @@ import Foundation
 
 private enum Failure: Error { case expected }
 
+private func expectSupplement(_ value: Bool) { precondition(value) }
+
 @MainActor private final class FailingRepository: NutritionRepository {
   let memory = MemoryNutritionRepository()
   var fail = false
+  var failSupplementReads = false
   func foodEntries() throws -> [FoodEntry] {
     if fail { throw Failure.expected }
     return try memory.foodEntries()
@@ -30,6 +33,18 @@ private enum Failure: Error { case expected }
   func deleteWaterEntry(id: UUID) throws {
     if fail { throw Failure.expected }
     try memory.deleteWaterEntry(id: id)
+  }
+  func supplementEntries() throws -> [SupplementEntry] {
+    if fail || failSupplementReads { throw Failure.expected }
+    return try memory.supplementEntries()
+  }
+  func saveSupplementEntry(_ entry: SupplementEntry) throws {
+    if fail { throw Failure.expected }
+    try memory.saveSupplementEntry(entry)
+  }
+  func deleteSupplementEntry(id: UUID) throws {
+    if fail { throw Failure.expected }
+    try memory.deleteSupplementEntry(id: id)
   }
   func favoriteFoodProducts() throws -> [FoodProduct] { try memory.favoriteFoodProducts() }
   func setFavoriteFoodProduct(_ product: FoodProduct, isFavorite: Bool) throws {
@@ -138,7 +153,101 @@ private final class FoodURLProtocol: URLProtocol {
 }
 
 @main struct NutritionChecks {
+  @MainActor static func supplements() throws {
+    let repository = FailingRepository()
+    let model = NutritionDiaryModel(repository: repository)
+    var calendar = Calendar(identifier: .gregorian)
+    calendar.timeZone = TimeZone(identifier: "Europe/Moscow")!
+    let date = Date(timeIntervalSince1970: 1_700_000_000)
+    model.selectDay(date, calendar: calendar)
+    let food = FoodEntry(
+      date: date, title: "Food",
+      portions: [
+        FoodPortion(product: FoodProduct(name: "Food", per100Units: Nutrients(calories: 50)))
+      ])
+    precondition(model.save(food))
+    let creatine = SupplementEntry(date: date, kind: .creatine, amount: 5)
+    var protein = SupplementEntry(
+      date: date, kind: .protein, amount: 30,
+      nutritionPerBasis: Nutrients(calories: 400, protein: 80, fat: 5, carbohydrates: 10))
+    precondition(model.saveSupplement(creatine) && model.saveSupplement(protein))
+    precondition(model.entries == [food] && model.supplements.count == 2)
+    precondition(model.day.total.calories == 170 && model.day.total.protein == 24)
+    precondition(model.week.last?.total.calories == 170)
+    protein.amount = 60
+    precondition(model.saveSupplement(protein) && model.supplements.count == 2)
+    precondition(model.day.total.calories == 290)
+    let editor = SupplementEntryEditorModel(entry: protein)
+    editor.amount = "12,5"
+    editor.note = " Updated "
+    let edited = try editor.validatedEntry()
+    precondition(
+      edited.id == protein.id && edited.amount == 12.5 && edited.nutrients?.calories == 50)
+    precondition(edited.note == "Updated")
+    expectSupplement(try repository.supplementEntries().first { $0.id == protein.id }?.amount == 60)
+    for input in ["0", "-1", "NaN", "1e3", "", "1.2.3"] {
+      editor.amount = input
+      do {
+        _ = try editor.validatedEntry()
+        preconditionFailure("Invalid supplement amount accepted")
+      } catch is NutritionError {}
+    }
+    editor.amount = "2"
+    editor.changeUnit(.servings)
+    precondition(editor.calories.isEmpty && editor.protein.isEmpty)
+    expectSupplement(try editor.validatedEntry().needsNutrition)
+    editor.calories = "400"
+    do {
+      _ = try editor.validatedEntry()
+      preconditionFailure("Partial nutrition was completed with invented zeros")
+    } catch is NutritionError {}
+    editor.includesNutrition = false
+    expectSupplement(try editor.validatedEntry().nutritionPerBasis == nil)
+    var precise = protein
+    precise.amount = 12.123456789012345
+    let preciseEditor = SupplementEntryEditorModel(entry: precise)
+    preciseEditor.note = "No numeric edit"
+    expectSupplement(try preciseEditor.validatedEntry().amount == precise.amount)
+    let other = SupplementEntryEditorModel(
+      entry: SupplementEntry(
+        date: date, kind: .other, amount: 1, unit: .capsules))
+    do {
+      _ = try other.validatedEntry()
+      preconditionFailure("Missing custom name accepted")
+    } catch is NutritionError {}
+    other.name = "Custom"
+    expectSupplement(try other.validatedEntry().name == "Custom")
+    let previous = model.supplements
+    repository.fail = true
+    precondition(!model.deleteSupplement(protein) && model.supplements == previous)
+    precondition(!model.saveSupplement(edited) && model.day.total.calories == 290)
+    repository.fail = false
+    let secondFood = food.repeated(on: date)
+    try repository.memory.saveFoodEntry(secondFood)
+    repository.failSupplementReads = true
+    model.reload()
+    precondition(!model.loaded && model.entries == [food] && model.supplements == previous)
+    repository.failSupplementReads = false
+    model.reload()
+    precondition(model.loaded && model.entries.count == 2 && model.supplements.count == 2)
+    model.switchWorkspace(isDemo: true)
+    precondition(model.supplements.isEmpty)
+    precondition(model.saveSupplement(creatine.repeated(on: date)))
+    model.switchWorkspace(isDemo: false)
+    precondition(Set(model.supplements.map(\.id)) == Set(previous.map(\.id)))
+    let tomorrow = calendar.date(byAdding: .day, value: 1, to: date)!
+    model.selectDay(tomorrow, calendar: calendar)
+    precondition(model.day.supplements.isEmpty)
+    precondition(model.saveSupplement(protein.repeated(on: tomorrow)))
+    precondition(model.day.supplements.count == 1 && model.day.total.calories == 240)
+    precondition(model.deleteSupplement(model.day.supplements[0]))
+    precondition(model.day.supplements.isEmpty)
+    print(
+      "Supplements: dose/units, packaging nutrition, unknown values, editing/cancellation, failures, atomic reload, day/week totals and demo isolation passed (no Apple SDK)."
+    )
+  }
   @MainActor static func main() async throws {
+    try supplements()
     let repository = FailingRepository()
     let model = NutritionDiaryModel(repository: repository)
     let entry = FoodEntry(

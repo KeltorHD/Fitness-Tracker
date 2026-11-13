@@ -262,6 +262,19 @@ import SwiftData
 }
 
 extension SwiftDataWorkoutRepository: NutritionRepository {
+  func supplementEntries() throws -> [SupplementEntry] {
+    try records(kind: "supplementEntry").map {
+      let entry = try JSONDecoder().decode(SupplementEntry.self, from: $0.payload)
+      guard entry.id == $0.recordID else { throw NutritionError.invalidSupplement }
+      try entry.validate()
+      return entry
+    }
+  }
+  func saveSupplementEntry(_ entry: SupplementEntry) throws {
+    try entry.validate()
+    try upsert(id: entry.id, kind: "supplementEntry", data: JSONEncoder().encode(entry))
+  }
+  func deleteSupplementEntry(id: UUID) throws { try remove(id: id, kind: "supplementEntry") }
   func foodEntries() throws -> [FoodEntry] {
     try records(kind: "foodEntry").map {
       let entry = try JSONDecoder().decode(FoodEntry.self, from: $0.payload)
