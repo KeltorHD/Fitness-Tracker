@@ -4,6 +4,30 @@ public enum HealthProviderID: String, Codable, CaseIterable, Sendable {
   case appleHealth, miFitness
 }
 
+/// Each metric has one source. Availability of a value never changes the user's preference.
+public struct HealthSourceSelection: Equatable, Sendable {
+  public var defaultProvider: HealthProviderID
+  public var preferences: [HealthMetric: HealthProviderID]
+
+  public init(
+    defaultProvider: HealthProviderID = .appleHealth,
+    preferences: [HealthMetric: HealthProviderID] = [:]
+  ) {
+    self.defaultProvider = defaultProvider
+    self.preferences = preferences
+  }
+
+  public func provider(
+    for metric: HealthMetric, supportedBy providers: [HealthProviderID: Set<HealthMetric>]
+  ) -> HealthProviderID? {
+    if let preferred = preferences[metric] {
+      return providers[preferred]?.contains(metric) == true ? preferred : nil
+    }
+    if providers[defaultProvider]?.contains(metric) == true { return defaultProvider }
+    return HealthProviderID.allCases.first { providers[$0]?.contains(metric) == true }
+  }
+}
+
 /// Units are part of the contract: kilograms, percentages, bpm, kcal and metres.
 public enum HealthMetric: String, Codable, CaseIterable, Sendable {
   case sleep, steps, bodyWeight, bodyFatPercentage, heartRate, restingHeartRate

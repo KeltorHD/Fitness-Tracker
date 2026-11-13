@@ -92,10 +92,11 @@ public struct HealthDaySummary: Sendable, Equatable {
   public let heartRateSource: String?
   public let fetchedAt: Date?
   public let isCached: Bool
+  public let unavailableMetrics: Set<HealthMetric>
   public init(
     day: Date, steps: Int?, activeEnergyKCal: Double?, sleepSeconds: TimeInterval?,
     latestHeartRate: HeartRateReading?, heartRateSource: String?, fetchedAt: Date? = nil,
-    isCached: Bool = false
+    isCached: Bool = false, unavailableMetrics: Set<HealthMetric> = []
   ) {
     self.day = day
     self.steps = steps
@@ -105,6 +106,7 @@ public struct HealthDaySummary: Sendable, Equatable {
     self.heartRateSource = heartRateSource
     self.fetchedAt = fetchedAt
     self.isCached = isCached
+    self.unavailableMetrics = unavailableMetrics
   }
   public var isEmpty: Bool {
     steps == nil && activeEnergyKCal == nil && sleepSeconds == nil && latestHeartRate == nil
@@ -113,6 +115,7 @@ public struct HealthDaySummary: Sendable, Equatable {
     day == other.day && steps == other.steps && activeEnergyKCal == other.activeEnergyKCal
       && sleepSeconds == other.sleepSeconds && latestHeartRate == other.latestHeartRate
       && heartRateSource == other.heartRateSource
+      && unavailableMetrics == other.unavailableMetrics
   }
 }
 

@@ -186,3 +186,50 @@ func healthWeightRejectsInvalidNumbers(_ value: Double) {
     isCached: true)
   #expect(first.hasSameValues(as: cached))
 }
+
+@Test func healthSourceSelectionRoutesEachMetricWithoutCombiningProviders() {
+  let supported: [HealthProviderID: Set<HealthMetric>] = [
+    .appleHealth: [.sleep, .steps, .heartRate, .activeEnergy, .distance],
+    .miFitness: [.sleep, .steps, .heartRate, .totalEnergy],
+  ]
+  let choice = HealthSourceSelection(preferences: [.sleep: .miFitness, .steps: .miFitness])
+  #expect(choice.provider(for: .sleep, supportedBy: supported) == .miFitness)
+  #expect(choice.provider(for: .steps, supportedBy: supported) == .miFitness)
+  #expect(choice.provider(for: .heartRate, supportedBy: supported) == .appleHealth)
+  #expect(choice.provider(for: .activeEnergy, supportedBy: supported) == .appleHealth)
+  #expect(choice.provider(for: .totalEnergy, supportedBy: supported) == .miFitness)
+  #expect(choice.provider(for: .bodyWeight, supportedBy: supported) == nil)
+}
+
+@Test func healthExplicitSourceNeverFallsBackWhenItIsUnavailable() {
+  let choice = HealthSourceSelection(preferences: [.steps: .miFitness])
+  #expect(choice.provider(for: .steps, supportedBy: [.appleHealth: [.steps]]) == nil)
+  #expect(choice.preferences[.steps] == .miFitness)
+}
+
+@Test func healthSourcePreferencesPreserveTheExistingDefaultForSharedMetrics() {
+  let supported: [HealthProviderID: Set<HealthMetric>] = [
+    .appleHealth: [.steps, .activeEnergy], .miFitness: [.steps, .totalEnergy],
+  ]
+  let choice = HealthSourceSelection(defaultProvider: .miFitness)
+  #expect(choice.provider(for: .steps, supportedBy: supported) == .miFitness)
+  #expect(choice.provider(for: .activeEnergy, supportedBy: supported) == .appleHealth)
+  #expect(choice.provider(for: .totalEnergy, supportedBy: supported) == .miFitness)
+}
+
+@Test func healthPartialSourceFailureChangesThePublishedSummary() {
+  let day = healthTestStart
+  let complete = HealthDaySummary(
+    day: day, steps: nil, activeEnergyKCal: nil, sleepSeconds: nil,
+    latestHeartRate: nil, heartRateSource: nil)
+  let failed = HealthDaySummary(
+    day: day, steps: nil, activeEnergyKCal: nil, sleepSeconds: nil,
+    latestHeartRate: nil, heartRateSource: nil, unavailableMetrics: [.steps])
+  #expect(!failed.hasSameValues(as: complete))
+  let chart = HealthChartSnapshot(
+    day: day, steps: [], heartRate: [], latestHeartRate: nil, heartRateSource: nil)
+  let unavailable = HealthChartSnapshot(
+    day: day, steps: [], heartRate: [], latestHeartRate: nil, heartRateSource: nil,
+    unavailableMetrics: [.steps])
+  #expect(!chart.hasSameValues(as: unavailable))
+}
