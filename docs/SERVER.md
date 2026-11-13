@@ -515,7 +515,7 @@ Backend отклоняет JWT с неверными issuer/audience/type/subjec
 
 ## Проверки
 
-Актуальный полный прогон 2026-11-13: **561 C# / xUnit-тест**, включая 43 на одноразовом PostgreSQL 18; ошибок и пропусков нет. Locked restore, сборка без warnings/errors, formatter и пять Python-тестов сети прошли. Для журнала тренировок выполнены 225 C#-сценариев (149 unit, 60 HTTP/SQLite, 16 PostgreSQL), из них 214 новых. Проверены границы и ошибки всех типов записей, транзакционные отказы/отмена, пагинация, потоковые лимиты, квоты, каскады и согласованное чтение при конкурентной правке. Регрессионный HTTP-тест выявил приём повторяющихся JSON-полей; теперь они отклоняются с 400. Полный `check-linux.sh` также прошёл: 312 Core-тестов и независимая проверка 149 ожидаемых результатов серверной валидации. Рабочие БД и внешние провайдеры не использовались.
+Проверка журнала и логирования до добавления провайдеров здоровья (2026-11-13): **561 C# / xUnit-тест**, включая 43 на одноразовом PostgreSQL 18; ошибок и пропусков нет. Locked restore, сборка без warnings/errors, formatter и пять Python-тестов сети прошли. Для журнала тренировок выполнены 225 C#-сценариев (149 unit, 60 HTTP/SQLite, 16 PostgreSQL), из них 214 новых. Проверены границы и ошибки всех типов записей, транзакционные отказы/отмена, пагинация, потоковые лимиты, квоты, каскады и согласованное чтение при конкурентной правке. Регрессионный HTTP-тест выявил приём повторяющихся JSON-полей; теперь они отклоняются с 400. Полный `check-linux.sh` также прошёл: 312 Core-тестов и независимая проверка 149 ожидаемых результатов серверной валидации. Рабочие БД и внешние провайдеры не использовались.
 
 После переноса логики контроллеров в сервисы полный `check-server.sh` прошёл: locked restore с Mapster 10.0.14, сборка без warnings/errors, 154 сценария (70 unit, 78 HTTP/Identity/SQLite, 6 PostgreSQL 16.6), проверка `dotnet format` и shell syntax. Новые проверки подтверждают зависимости тонких контроллеров, запрет неявного Identity entity mapping, сохранение native OAuth principal/stamp/grant/error, защиту от overposting, точный JSON профиля и безопасное PRG/TempData сообщение. Прежние PKCE, refresh/revoke, WebAuthn, race/rollback и межсервисные сценарии повторно прошли. EF-модель и миграции не менялись; рабочие базы не использовались.
 
@@ -542,8 +542,10 @@ dotnet ef migrations has-pending-model-changes --project Backend
 
 | Категория | Исходники | Что проверяется |
 | --- | --- | --- |
+| HTTP / fake HTTP | `Tests/Server/HealthConnectionTests.cs`, `HealthProviderTests.cs` | Реальный OpenIddict code/refresh с Xiaomi quirks, CSRF/state/owner binding, шифрование и отказ отзыва; нормализация health data, partial permissions, pagination, ошибки и JWT/introspection |
+| `PostgreSQL` | `Tests/Server/HealthConnectionPostgresTests.cs` | Новая миграция поверх прежних аккаунтов, owner FK/cascade и advisory locks с отменой ожидания |
 | `Unit` | `Tests/Server/BackupArchiveValidatorTests.cs` | только com.fitlife.archive v4, отказ для прежних форматов/версий, обязательные поля, неверные JSON-типы/UTF-8, точные границы байтов и количества записей, безопасные ошибки; без БД и HTTP |
-| `Unit` | `Tests/Server/TrainingValidationTests.cs` | 149 граничных сценариев C#-валидации тренировок, подходов/дропсетов/суперсетов, пауз, планов/вариаций, веса и пульса; ожидаемые результаты независимо сверяются с настоящим Swift Core |
+| `Unit` | `Tests/Server/TrainingValidationTests.cs` | 151 граничный сценарий C#-валидации тренировок, подходов/дропсетов/суперсетов, пауз, планов/вариаций, веса и пульса; ожидаемые результаты независимо сверяются с настоящим Swift Core |
 | `HTTP` | `Tests/Server/TrainingDataTests.cs` | Полный JSON round-trip, версии/конфликты/идемпотентность, изоляция владельцев и удаление тренировки с пульсом |
 | `HTTP` | `Tests/Server/TrainingHttpContractTests.cs` | Невалидный JSON и повторяющиеся поля, обязательность/типы, overposting, пакеты 1–100, курсоры/пагинация с правками и удалениями, принадлежащая владельцу тренировка для пульса и rate limit до introspection |
 | `HTTP` | `Tests/Server/TrainingTransactionTests.cs` | Откат всего пакета при позднем конфликте, ошибке записи после удаления детей и отмене; сохранность графов/пульса/версий и успешный повтор |
@@ -612,3 +614,5 @@ Apple XCTest `AccountSessionTests` проверяют callback validation, од�
 ## Источники здоровья
 
 Настройка прямого Mi Fitness cloud, callback, разрешения, миграция Authentication и границы проверок описаны в [HEALTH_PROVIDERS.md](HEALTH_PROVIDERS.md).
+
+Проверка провайдеров здоровья (2026-11-13): полный `check-server.sh` после объединения с main — 582 xUnit-теста с одноразовым PostgreSQL 18, пять Python-проверок, locked restore, сборка без warnings/errors и форматирование. Два дополнительных случая partial grants прошли отдельным прогоном. Полный `check-linux.sh` — 323 Core-теста, проверка 151 verdict серверной валидации и переносимые сценарии аккаунтов/провайдеров/кэша. Реальный Xiaomi cloud и Apple SDK не проверялись; необходимые регистрации и проверки устройства описаны в [HEALTH_PROVIDERS.md](HEALTH_PROVIDERS.md).

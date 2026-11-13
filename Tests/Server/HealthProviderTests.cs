@@ -16,6 +16,36 @@ public sealed class HealthProviderTests
     private static readonly DateTimeOffset _end = BackendFactory.BackupTime;
     private static readonly DateTimeOffset _start = _end.AddDays(-1);
 
+    /// <summary>Частичное согласие не раскрывает соседнюю категорию того же DataPoint; без нужных scopes облако не вызывается.</summary>
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public async Task ReadsOnlyActuallyGrantedMetricsAsync(bool permitted)
+    {
+        using var grant = new HttpClient(new Handler(_ => Json(new { accessToken = "test", clientId = "123", metrics = new[] { permitted ? "bodyWeight" : "steps" } })));
+        var calls = 0;
+        using var cloud = new HttpClient(new Handler(_ =>
+        {
+            calls++;
+            return Points(Point("com.xiaomi.weight.instantaneous", new { fieldName = "weight", floatValue = 72.5 }, new { fieldName = "body_fat_rate", floatValue = 20.5 }));
+        }));
+        var provider = Provider(grant, cloud);
+        if (permitted)
+        {
+            var snapshot = await provider.ReadAsync(Guid.NewGuid().ToString(), _start, _end, ["bodyWeight", "bodyFatPercentage"], TimeZoneInfo.Utc, default);
+            Assert.Equal("bodyWeight", Assert.Single(snapshot.Metrics));
+            Assert.Equal("bodyWeight", Assert.Single(snapshot.Quantities).Metric);
+            Assert.Equal(1, calls);
+        }
+        else
+        {
+            var error = await Assert.ThrowsAsync<HealthDataException>(() => provider.ReadAsync(Guid.NewGuid().ToString(), _start, _end, ["bodyWeight", "bodyFatPercentage"], TimeZoneInfo.Utc, default));
+            Assert.Equal(403, error.Status);
+            Assert.Equal("health_permission_required", error.Code);
+            Assert.Equal(0, calls);
+        }
+    }
+
     /// <summary>Общие единицы, partial grants, nonce, реальные фазы и устойчивые UUID сохраняются при повторе.</summary>
     [Fact]
     public async Task NormalizesActualDataWithoutInventingActiveEnergyOrSleepStagesAsync()
