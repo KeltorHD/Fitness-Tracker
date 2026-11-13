@@ -22,12 +22,19 @@ public sealed class BackupDbContext(DbContextOptions<BackupDbContext> options) :
 {
     public DbSet<BackupRecord> Backups => Set<BackupRecord>();
     public DbSet<DeletedAccount> DeletedAccounts => Set<DeletedAccount>();
+    /// <summary>Владельцы структурированных журналов и их счётчики версий.</summary>
     public DbSet<TrainingOwner> TrainingOwners => Set<TrainingOwner>();
+    /// <summary>Версии агрегатов и сохранённые удаления.</summary>
     public DbSet<TrainingRecordMetadata> TrainingRecords => Set<TrainingRecordMetadata>();
+    /// <summary>Тренировки со статусами, таймерами и паузами.</summary>
     public DbSet<TrainingWorkout> Workouts => Set<TrainingWorkout>();
+    /// <summary>Планы и их вариации.</summary>
     public DbSet<TrainingTemplate> Templates => Set<TrainingTemplate>();
+    /// <summary>Исторические снимки упражнений и дочерние подходы.</summary>
     public DbSet<TrainingExercise> Exercises => Set<TrainingExercise>();
+    /// <summary>Самостоятельные замеры веса.</summary>
     public DbSet<TrainingBodyWeight> BodyWeights => Set<TrainingBodyWeight>();
+    /// <summary>Записи пульса связанных тренировок.</summary>
     public DbSet<TrainingHeartRate> HeartRateRecordings => Set<TrainingHeartRate>();
 
     protected override void OnModelCreating(ModelBuilder builder)

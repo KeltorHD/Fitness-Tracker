@@ -10,8 +10,10 @@ using Xunit;
 
 namespace FitLife.Server.Tests;
 
+/// <summary>Согласует тестовые запросы и архивы с JSON, сгенерированным настоящим Swift Core.</summary>
 internal static class TrainingFixture
 {
+    /// <summary>Создаёт текущий полный v4 архив из реального Swift fixture без пульса.</summary>
     internal static byte[] Archive(IEnumerable<TrainingMutation> mutations)
     {
         var values = mutations.ToList();
@@ -26,6 +28,7 @@ internal static class TrainingFixture
         }, TrainingJson.Options);
     }
 
+    /// <summary>Читает воспроизводимый fixture действующего Core и создаёт мутации с исходными UUID.</summary>
     internal static List<TrainingMutation> Mutations()
     {
         using var document = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(AppContext.BaseDirectory, "Fixtures", "training-contract.json")));
@@ -49,6 +52,36 @@ internal static class TrainingFixture
 [Trait("Category", "HTTP")]
 public sealed class TrainingDataTests
 {
+    /// <summary>Отклоняет запись, чей канонический ответ вырос за 30 MiB после добавления необязательных null-полей.</summary>
+    [Fact]
+    public async Task CanonicalGrowthCannotStoreAnUndownloadableRecordAsync()
+    {
+        using var factory = new BackendFactory();
+        using var client = factory.Client(Guid.NewGuid().ToString());
+        var initial = TrainingFixture.Mutations()[0];
+        var value = JsonNode.Parse(initial.Value!.Value.GetRawText())!.AsObject();
+        value["notes"] = "";
+        var mutation = initial with { Value = JsonSerializer.SerializeToElement(value, TrainingJson.Options) };
+        var overhead = JsonSerializer.SerializeToUtf8Bytes(new[] { mutation }, TrainingJson.Options).Length;
+        value["notes"] = new string('a', TrainingStorage.MaximumBytes - overhead);
+        mutation = initial with { Value = JsonSerializer.SerializeToElement(value, TrainingJson.Options) };
+        var body = JsonSerializer.SerializeToUtf8Bytes(new[] { mutation }, TrainingJson.Options);
+        Assert.Equal(TrainingStorage.MaximumBytes, body.Length);
+        var canonical = TrainingValidation.Canonical(mutation.Kind, mutation.Id, mutation.Value!.Value);
+        Assert.True(Encoding.UTF8.GetByteCount(canonical.GetRawText()) > TrainingStorage.MaximumBytes);
+
+        using var request = new ByteArrayContent(body);
+        request.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+        using var response = await client.PostAsync("/v1/training/changes", request);
+
+        Assert.Equal(HttpStatusCode.RequestEntityTooLarge, response.StatusCode);
+        await using var scope = factory.Services.CreateAsyncScope();
+        var database = scope.ServiceProvider.GetRequiredService<BackupDbContext>();
+        Assert.Empty(await database.TrainingRecords.ToListAsync());
+        Assert.Empty(await database.Workouts.ToListAsync());
+    }
+
+    /// <summary>Проверяет все поля Core через настоящий HTTP host и нормализованные таблицы без архивных blob.</summary>
     [Fact]
     public async Task SwiftContractRoundTripsEveryTrainingFeatureWithoutArchivePayloadAsync()
     {
@@ -90,22 +123,23 @@ public sealed class TrainingDataTests
         Assert.Equal(3, await database.Set<TrainingDropStage>().CountAsync());
     }
 
+    /// <summary>Проверяет повтор после потери ответа и возврат текущей версии при устаревшей записи.</summary>
     [Fact]
     public async Task RetryIsIdempotentAndStaleUpdateReturnsCurrentValueWithoutOverwritingAsync()
     {
         using var factory = new BackendFactory();
         using var client = factory.Client(Guid.NewGuid().ToString());
         var initial = TrainingFixture.Mutations()[0];
-        var created = await Send(client, initial);
-        var repeated = await Send(client, initial);
+        var created = await SendAsync(client, initial);
+        var repeated = await SendAsync(client, initial);
         Assert.Equal(created.Revision, repeated.Revision);
         Assert.True(JsonElement.DeepEquals(created.Value!.Value, repeated.Value!.Value));
         var json = JsonNode.Parse(initial.Value!.Value.GetRawText())!.AsObject();
         json["name"] = "Изменено на другом устройстве";
         var edited = initial with { BaseRevision = created.Revision, Value = JsonSerializer.SerializeToElement(json) };
-        var updated = await Send(client, edited);
+        var updated = await SendAsync(client, edited);
         Assert.True(updated.Revision > created.Revision);
-        var acknowledged = await Send(client, edited);
+        var acknowledged = await SendAsync(client, edited);
         Assert.Equal(updated.Revision, acknowledged.Revision);
         Assert.True(JsonElement.DeepEquals(updated.Value!.Value, acknowledged.Value!.Value));
         json["name"] = "Не затирать сервер этой устаревшей записью";
@@ -119,6 +153,7 @@ public sealed class TrainingDataTests
         Assert.Equal("Изменено на другом устройстве", page!.Changes.Single().Value!.Value.GetProperty("name").GetString());
     }
 
+    /// <summary>Проверяет сохранность пульса при правке, каскад удаления и независимость взвешиваний.</summary>
     [Fact]
     public async Task WorkoutEditsPreservePulseAndDeletionTombstonesPulseButPreservesWeighInsAsync()
     {
@@ -130,12 +165,12 @@ public sealed class TrainingDataTests
         var first = (await saved.Content.ReadFromJsonAsync<List<TrainingChange>>(TrainingJson.Options))![0];
         var json = JsonNode.Parse(mutations[0].Value!.Value.GetRawText())!.AsObject();
         json["notes"] = "Исправленная заметка";
-        var edited = await Send(client, mutations[0] with { BaseRevision = first.Revision, Value = JsonSerializer.SerializeToElement(json) });
+        var edited = await SendAsync(client, mutations[0] with { BaseRevision = first.Revision, Value = JsonSerializer.SerializeToElement(json) });
         await using var scope = factory.Services.CreateAsyncScope();
         var database = scope.ServiceProvider.GetRequiredService<BackupDbContext>();
         Assert.Equal(2, await database.HeartRateRecordings.CountAsync());
         Assert.Equal(4, await database.Set<TrainingHeartRateReading>().CountAsync());
-        var deleted = await Send(client, mutations[0] with { BaseRevision = edited.Revision, Deleted = true, Value = null });
+        var deleted = await SendAsync(client, mutations[0] with { BaseRevision = edited.Revision, Deleted = true, Value = null });
         var page = await client.GetFromJsonAsync<TrainingPage>($"/v1/training/changes?after={edited.Revision}", TrainingJson.Options);
         Assert.Equal(2, page!.Changes.Count);
         Assert.All(page.Changes, change => Assert.True(change.Deleted));
@@ -147,6 +182,7 @@ public sealed class TrainingDataTests
         Assert.Contains(await database.BodyWeights.ToListAsync(), x => x.WorkoutID == first.Id);
     }
 
+    /// <summary>Проверяет полный откат пакета при ошибке поздней записи, включая счётчик версий.</summary>
     [Fact]
     public async Task FailedBatchRollsBackEarlierGraphsAndRevisionCounterAsync()
     {
@@ -167,6 +203,7 @@ public sealed class TrainingDataTests
         Assert.Empty(await database.Set<TrainingSet>().ToListAsync());
     }
 
+    /// <summary>Проверяет изоляцию UUID владельцев, обязательный вход и немедленный запрет отозванной сессии.</summary>
     [Fact]
     public async Task OwnerIsolationAndRevocationApplyBeforeReadingOrMutatingTrainingAsync()
     {
@@ -175,10 +212,10 @@ public sealed class TrainingDataTests
         using var second = factory.Client(Guid.NewGuid().ToString());
         using var anonymous = factory.Client();
         var mutation = TrainingFixture.Mutations()[0];
-        await Send(first, mutation);
+        await SendAsync(first, mutation);
         var other = await second.GetFromJsonAsync<TrainingPage>("/v1/training/changes", TrainingJson.Options);
         Assert.Empty(other!.Changes);
-        var secondChange = await Send(second, mutation);
+        var secondChange = await SendAsync(second, mutation);
         Assert.Equal(1, secondChange.Revision);
         using var unauthenticated = await anonymous.GetAsync("/v1/training/changes");
         Assert.Equal(HttpStatusCode.Unauthorized, unauthenticated.StatusCode);
@@ -189,7 +226,8 @@ public sealed class TrainingDataTests
         Assert.Equal(HttpStatusCode.Unauthorized, denied.StatusCode);
     }
 
-    private static async Task<TrainingChange> Send(HttpClient client, TrainingMutation mutation)
+    /// <summary>Отправляет одну проверяемую мутацию через HTTP и требует единственное подтверждение.</summary>
+    private static async Task<TrainingChange> SendAsync(HttpClient client, TrainingMutation mutation)
     {
         using var response = await client.PostAsJsonAsync("/v1/training/changes", new[] { mutation }, TrainingJson.Options);
         response.EnsureSuccessStatusCode();

@@ -6,10 +6,11 @@ namespace FitLife.Backend;
 /// <summary>Повторяет правила сохраняемых моделей Swift Core на недоверенной HTTP-границе.</summary>
 internal static class TrainingValidation
 {
-    private static readonly HashSet<string> Groups = ["chest", "back", "legs", "shoulders", "arms", "core", "fullBody"];
-    private static readonly HashSet<string> Muscles = ["chest", "lats", "middle back", "lower back", "traps", "quadriceps", "hamstrings", "glutes", "calves", "abductors", "adductors", "shoulders", "neck", "biceps", "triceps", "forearms", "abdominals"];
-    private static readonly HashSet<string> Regions = ["chestUpper", "chestMiddle", "chestLower", "deltoidAnterior", "deltoidLateral", "deltoidPosterior", "rotatorCuff", "trapeziusUpper", "trapeziusMiddle", "trapeziusLower", "rectusAbdominisUpper", "rectusAbdominisLower", "obliques", "transversusAbdominis", "bicepsLong", "bicepsShort", "tricepsLong", "tricepsLateral", "tricepsMedial", "rectusFemoris", "vastusLateralis", "vastusMedialis", "vastusIntermedius", "bicepsFemoris", "semitendinosus", "semimembranosus", "gluteusMaximus", "gluteusMedius", "gluteusMinimus", "gastrocnemius", "soleus"];
+    private static readonly HashSet<string> _groups = ["chest", "back", "legs", "shoulders", "arms", "core", "fullBody"];
+    private static readonly HashSet<string> _muscles = ["chest", "lats", "middle back", "lower back", "traps", "quadriceps", "hamstrings", "glutes", "calves", "abductors", "adductors", "shoulders", "neck", "biceps", "triceps", "forearms", "abdominals"];
+    private static readonly HashSet<string> _regions = ["chestUpper", "chestMiddle", "chestLower", "deltoidAnterior", "deltoidLateral", "deltoidPosterior", "rotatorCuff", "trapeziusUpper", "trapeziusMiddle", "trapeziusLower", "rectusAbdominisUpper", "rectusAbdominisLower", "obliques", "transversusAbdominis", "bicepsLong", "bicepsShort", "tricepsLong", "tricepsLateral", "tricepsMedial", "rectusFemoris", "vastusLateralis", "vastusMedialis", "vastusIntermedius", "bicepsFemoris", "semitendinosus", "semimembranosus", "gluteusMaximus", "gluteusMedius", "gluteusMinimus", "gastrocnemius", "soleus"];
 
+    /// <summary>Валидирует полный DTO по правилам Core и возвращает каноническое значение для хеша и записи.</summary>
     internal static JsonElement Canonical(string kind, Guid id, JsonElement value)
     {
         switch (kind)
@@ -57,6 +58,7 @@ internal static class TrainingValidation
         }
     }
 
+    /// <summary>Проверяет статусы, даты, паузы, подходы и непрерывность суперсетов тренировки.</summary>
     private static void Workout(WorkoutData value)
     {
         Name(value.Name);
@@ -108,6 +110,7 @@ internal static class TrainingValidation
         Check(value.Status != "completed" || completed);
     }
 
+    /// <summary>Проверяет все варианты плана, числовые цели, расписание и выбранные мышцы.</summary>
     private static void Template(TemplateData value)
     {
         Name(value.Name);
@@ -118,7 +121,7 @@ internal static class TrainingValidation
         List(value.MuscleRegions);
         List(value.PreferredWeekdays);
         List(value.Variations);
-        Check(value.MuscleGroups.All(Groups.Contains) && value.Muscles.All(Muscles.Contains) && value.MuscleRegions.All(Regions.Contains));
+        Check(value.MuscleGroups.All(_groups.Contains) && value.Muscles.All(_muscles.Contains) && value.MuscleRegions.All(_regions.Contains));
         Check(value.PreferredWeekdays.All(x => x is >= 1 and <= 7));
         Check(value.MuscleGroups.Distinct().Count() == value.MuscleGroups.Count && value.Muscles.Distinct().Count() == value.Muscles.Count);
         Check(value.MuscleRegions.Distinct().Count() == value.MuscleRegions.Count && value.PreferredWeekdays.Distinct().Count() == value.PreferredWeekdays.Count);
@@ -151,6 +154,7 @@ internal static class TrainingValidation
         }
     }
 
+    /// <summary>Проверяет основной и дополнительные этапы, порядок выполнения и заметку подхода.</summary>
     private static void Set(WorkoutSetData value, bool allowUnperformed)
     {
         Numbers(value.Repetitions, value.WeightKG, value.LoadMultiplier, allowUnperformed && value.CompletedAt is null);
@@ -173,23 +177,32 @@ internal static class TrainingValidation
         }
     }
 
+    /// <summary>Проверяет стабильный UUID, историческое имя, группу мышц и инструкцию.</summary>
     private static void Exercise(ExerciseData value)
     {
         Check(value is not null);
         Name(value!.Name);
-        Check(Groups.Contains(value.Muscle) && value.Instructions is not null);
+        Check(_groups.Contains(value.Muscle) && value.Instructions is not null);
     }
+    /// <summary>Проверяет повторы, вес снаряда и допустимый множитель нагрузки.</summary>
     private static void Numbers(int repetitions, double weight, int? multiplier, bool allowZero)
     {
         Check(repetitions is >= 1 and <= 1000 || allowZero && repetitions == 0);
         Check(double.IsFinite(weight) && weight is >= 0 and <= 1500 && (multiplier ?? 1) is >= 1 and <= 10);
     }
+    /// <summary>Проверяет конечный положительный вес тела в килограммах в пределах Core.</summary>
     private static void Weight(double value) => Check(double.IsFinite(value) && value is > 0 and <= 1000);
+    /// <summary>Отклоняет неконечную дату Unix seconds.</summary>
     private static void Time(double value) => Check(double.IsFinite(value));
+    /// <summary>Проверяет дату при её наличии, сохраняя null.</summary>
     private static void OptionalTime(double? value) { if (value is { } date) Time(date); }
+    /// <summary>Проверяет непустое имя длиной до 80 пользовательских символов.</summary>
     private static void Name(string value) => Check(value is not null && new StringInfo(value.Trim()).LengthInTextElements is >= 1 and <= 80);
+    /// <summary>Отклоняет повторяющиеся UUID внутри проверяемого списка.</summary>
     private static void Unique(IEnumerable<Guid> values) { var ids = values.ToList(); Check(ids.Distinct().Count() == ids.Count); }
+    /// <summary>Отклоняет отсутствующий список и null-элементы.</summary>
     private static void List<T>(List<T> values) => Check(values is not null && values.All(x => x is not null));
+    /// <summary>Проверяет непрерывную группу минимум из двух соседних упражнений.</summary>
     private static void Supersets(IEnumerable<Guid?> values)
     {
         foreach (var group in values.Select((id, index) => (id, index)).Where(x => x.id is not null).GroupBy(x => x.id))
@@ -198,5 +211,6 @@ internal static class TrainingValidation
             Check(indices.Count >= 2 && indices[^1] - indices[0] + 1 == indices.Count);
         }
     }
+    /// <summary>Преобразует нарушение доменного инварианта в безопасный HTTP 400.</summary>
     private static void Check(bool value) { if (!value) throw new TrainingException(400, "invalid_training_data"); }
 }

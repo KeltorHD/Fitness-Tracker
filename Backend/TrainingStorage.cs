@@ -9,62 +9,67 @@ namespace FitLife.Backend;
 /// <summary>Версионирует агрегаты одного владельца, сохраняя графы и tombstones транзакционно.</summary>
 public sealed class TrainingStorage(BackupDbContext database)
 {
+    /// <summary>Максимальный размер одного HTTP-пакета: 30 MiB.</summary>
     public const int MaximumBytes = 30 * 1024 * 1024;
 
-    public async Task<TrainingChange> ApplyAsync(string owner, TrainingMutation mutation, CancellationToken ct)
+    /// <summary>Атомарно применяет одну мутацию с проверкой версии и возвращает подтверждённое значение.</summary>
+    public async Task<TrainingChange> ApplyAsync(string owner, TrainingMutation mutation, CancellationToken cancellationToken)
     {
-        var result = await ApplyBatchAsync(owner, [mutation], ct);
+        var result = await ApplyBatchAsync(owner, [mutation], cancellationToken);
         return result[0];
     }
 
-    public async Task<IReadOnlyList<TrainingChange>> ApplyBatchAsync(string owner, IReadOnlyList<TrainingMutation> mutations, CancellationToken ct)
+    /// <summary>Атомарно применяет до ста мутаций одного владельца под общей блокировкой; конфликт откатывает весь пакет.</summary>
+    public async Task<IReadOnlyList<TrainingChange>> ApplyBatchAsync(string owner, IReadOnlyList<TrainingMutation> mutations, CancellationToken cancellationToken)
     {
         if (mutations.Count is < 1 or > 100 || mutations.Any(x => x is null) ||
             mutations.Select(x => (x.Kind, x.Id)).Distinct().Count() != mutations.Count)
             throw new TrainingException(400, "invalid_training_batch");
         await using var transaction = await database.Database.BeginTransactionAsync(
-            database.Database.IsNpgsql() ? IsolationLevel.ReadCommitted : IsolationLevel.Serializable, ct);
+            database.Database.IsNpgsql() ? IsolationLevel.ReadCommitted : IsolationLevel.Serializable, cancellationToken);
         try
         {
-            await LockOwnerAsync(owner, ct);
+            await LockOwnerAsync(owner, cancellationToken);
             var result = new List<TrainingChange>();
             foreach (var mutation in mutations)
             {
-                result.Add(await ApplyLockedAsync(owner, mutation, ct));
+                result.Add(await ApplyLockedAsync(owner, mutation, cancellationToken));
                 database.ChangeTracker.Clear();
             }
-            await transaction.CommitAsync(ct);
+            await transaction.CommitAsync(cancellationToken);
             return result;
         }
         finally { database.ChangeTracker.Clear(); }
     }
 
-    public async Task<TrainingPage> ChangesAsync(string owner, long after, int limit, CancellationToken ct)
+    /// <summary>Читает согласованный снимок последних версий после курсора; превышение актуальной версии требует сверки.</summary>
+    public async Task<TrainingPage> ChangesAsync(string owner, long after, int limit, CancellationToken cancellationToken)
     {
         if (after < 0 || limit is < 1 or > 100) throw new TrainingException(400, "invalid_cursor");
         await using var transaction = await database.Database.BeginTransactionAsync(
-            database.Database.IsNpgsql() ? IsolationLevel.RepeatableRead : IsolationLevel.Serializable, ct);
+            database.Database.IsNpgsql() ? IsolationLevel.RepeatableRead : IsolationLevel.Serializable, cancellationToken);
         var currentRevision = await database.TrainingOwners.AsNoTracking().Where(x => x.OwnerId == owner)
-            .Select(x => x.Revision).SingleOrDefaultAsync(ct);
+            .Select(x => x.Revision).SingleOrDefaultAsync(cancellationToken);
         if (after > currentRevision) throw new TrainingException(409, "cursor_reset_required");
         var records = await database.TrainingRecords.AsNoTracking().Where(x => x.OwnerId == owner && x.Revision > after)
-            .OrderBy(x => x.Revision).Take(limit + 1).ToListAsync(ct);
+            .OrderBy(x => x.Revision).Take(limit + 1).ToListAsync(cancellationToken);
         var results = new List<TrainingChange>();
         var size = 0;
         foreach (var record in records.Take(limit))
         {
-            var change = await ChangeAsync(record, ct);
+            var change = await ChangeAsync(record, cancellationToken);
             var bytes = change.Value is { } value ? Encoding.UTF8.GetByteCount(value.GetRawText()) : 0;
             if (results.Count > 0 && size + bytes > MaximumBytes) break;
             results.Add(change);
             size += bytes;
         }
         var cursor = results.Count > 0 ? results[^1].Revision : after;
-        await transaction.CommitAsync(ct);
+        await transaction.CommitAsync(cancellationToken);
         return new TrainingPage(results, cursor, records.Count > results.Count);
     }
 
-    private async Task<TrainingChange> ApplyLockedAsync(string owner, TrainingMutation mutation, CancellationToken ct)
+    /// <summary>Проверяет версию под блокировкой владельца и сохраняет граф либо tombstone в текущей транзакции.</summary>
+    private async Task<TrainingChange> ApplyLockedAsync(string owner, TrainingMutation mutation, CancellationToken cancellationToken)
     {
         if (!TrainingKinds.Contains(mutation.Kind) || mutation.BaseRevision < 0)
             throw new TrainingException(400, "invalid_training_mutation");
@@ -72,24 +77,26 @@ public sealed class TrainingStorage(BackupDbContext database)
             throw new TrainingException(400, "invalid_training_mutation");
         JsonElement? canonical = mutation.Deleted ? null : TrainingValidation.Canonical(mutation.Kind,
             mutation.Id, mutation.Value ?? throw new TrainingException(400, "invalid_training_data"));
+        if (canonical is { } encoded && Encoding.UTF8.GetByteCount(encoded.GetRawText()) > MaximumBytes)
+            throw new TrainingException(413, "record_too_large");
         var hash = canonical is { } value ? Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(value.GetRawText()))) : "";
-        if (await database.DeletedAccounts.AnyAsync(x => x.Id == owner, ct))
+        if (await database.DeletedAccounts.AnyAsync(x => x.Id == owner, cancellationToken))
             throw new TrainingException(403, "account_deleted");
         var record = await database.TrainingRecords.SingleOrDefaultAsync(
-            x => x.OwnerId == owner && x.Kind == mutation.Kind && x.Id == mutation.Id, ct);
+            x => x.OwnerId == owner && x.Kind == mutation.Kind && x.Id == mutation.Id, cancellationToken);
         if (record is not null && record.Deleted == mutation.Deleted && record.Hash == hash)
-            return await ChangeAsync(record, ct);
+            return await ChangeAsync(record, cancellationToken);
         if ((record?.Revision ?? 0) != mutation.BaseRevision)
-            throw new TrainingException(409, "training_conflict", record is null ? null : await ChangeAsync(record, ct));
-        if (record is null && await database.TrainingRecords.CountAsync(x => x.OwnerId == owner, ct) >= 100_000)
+            throw new TrainingException(409, "training_conflict", record is null ? null : await ChangeAsync(record, cancellationToken));
+        if (record is null && await database.TrainingRecords.CountAsync(x => x.OwnerId == owner, cancellationToken) >= 100_000)
             throw new TrainingException(409, "training_limit");
         if (!mutation.Deleted && (record is null || record.Deleted))
         {
             var limit = mutation.Kind == TrainingKinds.Template ? 1000 : 10_000;
-            if (await database.TrainingRecords.CountAsync(x => x.OwnerId == owner && x.Kind == mutation.Kind && !x.Deleted, ct) >= limit)
+            if (await database.TrainingRecords.CountAsync(x => x.OwnerId == owner && x.Kind == mutation.Kind && !x.Deleted, cancellationToken) >= limit)
                 throw new TrainingException(409, "training_limit");
         }
-        var account = await database.TrainingOwners.SingleOrDefaultAsync(x => x.OwnerId == owner, ct);
+        var account = await database.TrainingOwners.SingleOrDefaultAsync(x => x.OwnerId == owner, cancellationToken);
         if (account is null)
         {
             account = new TrainingOwner { OwnerId = owner };
@@ -104,58 +111,59 @@ public sealed class TrainingStorage(BackupDbContext database)
         record.Deleted = mutation.Deleted;
         record.Hash = hash;
         // Metadata создаётся до вставки зависимых строк, оставаясь внутри той же транзакции.
-        await database.SaveChangesAsync(ct);
-        if (mutation.Deleted) await RemoveAsync(owner, mutation.Kind, mutation.Id, account, ct);
-        else await SaveAsync(owner, mutation.Kind, mutation.Id, canonical!.Value, ct);
-        await database.SaveChangesAsync(ct);
+        await database.SaveChangesAsync(cancellationToken);
+        if (mutation.Deleted) await RemoveAsync(owner, mutation.Kind, mutation.Id, account, cancellationToken);
+        else await SaveAsync(owner, mutation.Kind, mutation.Id, canonical!.Value, cancellationToken);
+        await database.SaveChangesAsync(cancellationToken);
         return new TrainingChange(record.Kind, record.Id, record.Revision, record.Deleted, canonical);
     }
 
-    private async Task SaveAsync(string owner, string kind, Guid id, JsonElement value, CancellationToken ct)
+    /// <summary>Заменяет граф одного проверенного агрегата, сохраняя независимый пульс при правке тренировки.</summary>
+    private async Task SaveAsync(string owner, string kind, Guid id, JsonElement value, CancellationToken cancellationToken)
     {
         switch (kind)
         {
             case TrainingKinds.Workout:
                 var workout = TrainingJson.Read<WorkoutData>(value);
                 var workoutRow = TrainingMapping.Workout(owner, workout);
-                var currentWorkout = await database.Workouts.SingleOrDefaultAsync(x => x.OwnerId == owner && x.Id == id, ct);
+                var currentWorkout = await database.Workouts.SingleOrDefaultAsync(x => x.OwnerId == owner && x.Id == id, cancellationToken);
                 if (currentWorkout is null) database.Workouts.Add(workoutRow);
                 else
                 {
-                    await database.Set<TrainingPause>().Where(x => x.OwnerId == owner && x.WorkoutId == id).ExecuteDeleteAsync(ct);
+                    await database.Set<TrainingPause>().Where(x => x.OwnerId == owner && x.WorkoutId == id).ExecuteDeleteAsync(cancellationToken);
                     database.Entry(currentWorkout).CurrentValues.SetValues(workoutRow);
                     currentWorkout.Pauses = workoutRow.Pauses;
                 }
-                await ReplaceExercisesAsync(owner, kind, id, TrainingMapping.WorkoutExercises(owner, workout), ct);
+                await ReplaceExercisesAsync(owner, kind, id, TrainingMapping.WorkoutExercises(owner, workout), cancellationToken);
                 break;
             case TrainingKinds.Template:
                 var template = TrainingJson.Read<TemplateData>(value);
                 var templateRow = TrainingMapping.Template(owner, template);
-                var currentTemplate = await database.Templates.SingleOrDefaultAsync(x => x.OwnerId == owner && x.Id == id, ct);
+                var currentTemplate = await database.Templates.SingleOrDefaultAsync(x => x.OwnerId == owner && x.Id == id, cancellationToken);
                 if (currentTemplate is null) database.Templates.Add(templateRow);
                 else
                 {
-                    await database.Set<TrainingVariation>().Where(x => x.OwnerId == owner && x.TemplateId == id).ExecuteDeleteAsync(ct);
+                    await database.Set<TrainingVariation>().Where(x => x.OwnerId == owner && x.TemplateId == id).ExecuteDeleteAsync(cancellationToken);
                     database.Entry(currentTemplate).CurrentValues.SetValues(templateRow);
                     currentTemplate.Variations = templateRow.Variations;
                 }
-                await ReplaceExercisesAsync(owner, kind, id, TrainingMapping.TemplateExercises(owner, template), ct);
+                await ReplaceExercisesAsync(owner, kind, id, TrainingMapping.TemplateExercises(owner, template), cancellationToken);
                 break;
             case TrainingKinds.BodyWeight:
                 var weightRow = TrainingMapping.BodyWeight(owner, TrainingJson.Read<BodyWeightData>(value));
-                var currentWeight = await database.BodyWeights.SingleOrDefaultAsync(x => x.OwnerId == owner && x.Id == id, ct);
+                var currentWeight = await database.BodyWeights.SingleOrDefaultAsync(x => x.OwnerId == owner && x.Id == id, cancellationToken);
                 if (currentWeight is null) database.BodyWeights.Add(weightRow);
                 else database.Entry(currentWeight).CurrentValues.SetValues(weightRow);
                 break;
             case TrainingKinds.HeartRate:
-                if (!await database.Workouts.AnyAsync(x => x.OwnerId == owner && x.Id == id, ct))
+                if (!await database.Workouts.AnyAsync(x => x.OwnerId == owner && x.Id == id, cancellationToken))
                     throw new TrainingException(409, "workout_missing");
                 var heartRow = TrainingMapping.HeartRate(owner, TrainingJson.Read<HeartRateData>(value));
-                var currentHeart = await database.HeartRateRecordings.SingleOrDefaultAsync(x => x.OwnerId == owner && x.Id == id, ct);
+                var currentHeart = await database.HeartRateRecordings.SingleOrDefaultAsync(x => x.OwnerId == owner && x.Id == id, cancellationToken);
                 if (currentHeart is null) database.HeartRateRecordings.Add(heartRow);
                 else
                 {
-                    await database.Set<TrainingHeartRateReading>().Where(x => x.OwnerId == owner && x.WorkoutId == id).ExecuteDeleteAsync(ct);
+                    await database.Set<TrainingHeartRateReading>().Where(x => x.OwnerId == owner && x.WorkoutId == id).ExecuteDeleteAsync(cancellationToken);
                     database.Entry(currentHeart).CurrentValues.SetValues(heartRow);
                     currentHeart.Readings = heartRow.Readings;
                 }
@@ -163,87 +171,91 @@ public sealed class TrainingStorage(BackupDbContext database)
         }
     }
 
-    private async Task ReplaceExercisesAsync(string owner, string kind, Guid id, List<TrainingExercise> rows, CancellationToken ct)
+    /// <summary>Заменяет дочерние упражнения с каскадной очисткой прежних подходов и этапов.</summary>
+    private async Task ReplaceExercisesAsync(string owner, string kind, Guid id, List<TrainingExercise> rows, CancellationToken cancellationToken)
     {
-        await database.Exercises.Where(x => x.OwnerId == owner && x.Kind == kind && x.AggregateId == id).ExecuteDeleteAsync(ct);
+        await database.Exercises.Where(x => x.OwnerId == owner && x.Kind == kind && x.AggregateId == id).ExecuteDeleteAsync(cancellationToken);
         database.Exercises.AddRange(rows);
     }
 
-    private async Task RemoveAsync(string owner, string kind, Guid id, TrainingOwner account, CancellationToken ct)
+    /// <summary>Удаляет граф; для тренировки сохраняет tombstone пульса и самостоятельные замеры веса.</summary>
+    private async Task RemoveAsync(string owner, string kind, Guid id, TrainingOwner account, CancellationToken cancellationToken)
     {
         switch (kind)
         {
             case TrainingKinds.Workout:
                 var heart = await database.TrainingRecords.SingleOrDefaultAsync(
-                    x => x.OwnerId == owner && x.Kind == TrainingKinds.HeartRate && x.Id == id, ct);
+                    x => x.OwnerId == owner && x.Kind == TrainingKinds.HeartRate && x.Id == id, cancellationToken);
                 if (heart is not null && !heart.Deleted)
                 {
                     heart.Deleted = true;
                     heart.Hash = "";
                     heart.Revision = checked(++account.Revision);
                 }
-                await database.Workouts.Where(x => x.OwnerId == owner && x.Id == id).ExecuteDeleteAsync(ct);
+                await database.Workouts.Where(x => x.OwnerId == owner && x.Id == id).ExecuteDeleteAsync(cancellationToken);
                 break;
             case TrainingKinds.Template:
-                await database.Templates.Where(x => x.OwnerId == owner && x.Id == id).ExecuteDeleteAsync(ct);
+                await database.Templates.Where(x => x.OwnerId == owner && x.Id == id).ExecuteDeleteAsync(cancellationToken);
                 break;
             case TrainingKinds.BodyWeight:
-                await database.BodyWeights.Where(x => x.OwnerId == owner && x.Id == id).ExecuteDeleteAsync(ct);
+                await database.BodyWeights.Where(x => x.OwnerId == owner && x.Id == id).ExecuteDeleteAsync(cancellationToken);
                 break;
             case TrainingKinds.HeartRate:
-                await database.HeartRateRecordings.Where(x => x.OwnerId == owner && x.Id == id).ExecuteDeleteAsync(ct);
+                await database.HeartRateRecordings.Where(x => x.OwnerId == owner && x.Id == id).ExecuteDeleteAsync(cancellationToken);
                 break;
         }
-        await database.Exercises.Where(x => x.OwnerId == owner && x.Kind == kind && x.AggregateId == id).ExecuteDeleteAsync(ct);
+        await database.Exercises.Where(x => x.OwnerId == owner && x.Kind == kind && x.AggregateId == id).ExecuteDeleteAsync(cancellationToken);
     }
 
-    private async Task<TrainingChange> ChangeAsync(TrainingRecordMetadata record, CancellationToken ct) =>
+    /// <summary>Возвращает метаданные удаления либо восстановленное текущее значение агрегата.</summary>
+    private async Task<TrainingChange> ChangeAsync(TrainingRecordMetadata record, CancellationToken cancellationToken) =>
         new(record.Kind, record.Id, record.Revision, record.Deleted, record.Deleted ? null :
-            await TrainingMapping.ReadAsync(database, record.OwnerId, record.Kind, record.Id, ct));
+            await TrainingMapping.ReadAsync(database, record.OwnerId, record.Kind, record.Id, cancellationToken));
 
-    private async Task LockOwnerAsync(string owner, CancellationToken ct)
+    /// <summary>Сериализует записи и очистку одного аккаунта штатной PostgreSQL advisory-блокировкой.</summary>
+    private async Task LockOwnerAsync(string owner, CancellationToken cancellationToken)
     {
         if (database.Database.IsNpgsql())
-            await database.Database.ExecuteSqlInterpolatedAsync($"SELECT pg_advisory_xact_lock(hashtextextended({owner}, 0))", ct);
+            await database.Database.ExecuteSqlInterpolatedAsync($"SELECT pg_advisory_xact_lock(hashtextextended({owner}, 0))", cancellationToken);
     }
 
-    /// <summary>Однократно переносит последний полный v4-архив владельца, сохраняя оригинальные копии.</summary>
-    public async Task ImportLatestBackupsAsync(CancellationToken ct)
+    /// <summary>Однократно переносит последний полный v4 архив каждого владельца, сохраняя оригинал и откатывая владельца при ошибке.</summary>
+    public async Task ImportLatestBackupsAsync(CancellationToken cancellationToken)
     {
-        var owners = await database.Backups.AsNoTracking().Select(x => x.OwnerId).Distinct().ToListAsync(ct);
+        var owners = await database.Backups.AsNoTracking().Select(x => x.OwnerId).Distinct().ToListAsync(cancellationToken);
         foreach (var owner in owners)
         {
             await using var transaction = await database.Database.BeginTransactionAsync(
-                database.Database.IsNpgsql() ? IsolationLevel.ReadCommitted : IsolationLevel.Serializable, ct);
+                database.Database.IsNpgsql() ? IsolationLevel.ReadCommitted : IsolationLevel.Serializable, cancellationToken);
             try
             {
-                await LockOwnerAsync(owner, ct);
-                if (await database.TrainingOwners.AnyAsync(x => x.OwnerId == owner, ct) ||
-                    await database.DeletedAccounts.AnyAsync(x => x.Id == owner, ct)) continue;
+                await LockOwnerAsync(owner, cancellationToken);
+                if (await database.TrainingOwners.AnyAsync(x => x.OwnerId == owner, cancellationToken) ||
+                    await database.DeletedAccounts.AnyAsync(x => x.Id == owner, cancellationToken)) continue;
                 var backup = await database.Backups.AsNoTracking().Where(x => x.OwnerId == owner)
-                    .OrderByDescending(x => x.CreatedAtMilliseconds).ThenByDescending(x => x.Id).FirstAsync(ct);
+                    .OrderByDescending(x => x.CreatedAtMilliseconds).ThenByDescending(x => x.Id).FirstAsync(cancellationToken);
                 if (backup.Size != backup.Payload.Length || backup.Sha256 != Convert.ToHexStringLower(SHA256.HashData(backup.Payload)))
                     throw new InvalidOperationException("Stored training import failed: invalid archive integrity.");
                 var archive = JsonSerializer.Deserialize<StoredArchive>(backup.Payload, TrainingJson.Options)
                     ?? throw new InvalidOperationException("Stored training import failed: invalid archive.");
                 if (archive.Format != "com.fitlife.archive" || archive.Version != 4 || !double.IsFinite(archive.ExportedAt))
                     throw new InvalidOperationException("Stored training import requires a current version 4 archive.");
-                await Import(TrainingKinds.Workout, archive.Workouts.Select(x => (x.Id, TrainingJson.Element(x))));
-                await Import(TrainingKinds.Template, archive.Templates.Select(x => (x.Id, TrainingJson.Element(x))));
-                await Import(TrainingKinds.BodyWeight, archive.BodyWeights.Select(x => (x.Id, TrainingJson.Element(x))));
-                var account = await database.TrainingOwners.SingleOrDefaultAsync(x => x.OwnerId == owner, ct);
+                await ImportAsync(TrainingKinds.Workout, archive.Workouts.Select(x => (x.Id, TrainingJson.Element(x))));
+                await ImportAsync(TrainingKinds.Template, archive.Templates.Select(x => (x.Id, TrainingJson.Element(x))));
+                await ImportAsync(TrainingKinds.BodyWeight, archive.BodyWeights.Select(x => (x.Id, TrainingJson.Element(x))));
+                var account = await database.TrainingOwners.SingleOrDefaultAsync(x => x.OwnerId == owner, cancellationToken);
                 if (account is null) { account = new TrainingOwner { OwnerId = owner }; database.TrainingOwners.Add(account); }
                 account.ImportedBackupId = backup.Id;
-                await database.SaveChangesAsync(ct);
-                await transaction.CommitAsync(ct);
-                async Task Import(string kind, IEnumerable<(Guid Id, JsonElement Value)> values)
+                await database.SaveChangesAsync(cancellationToken);
+                await transaction.CommitAsync(cancellationToken);
+                async Task ImportAsync(string kind, IEnumerable<(Guid Id, JsonElement Value)> values)
                 {
                     var ids = new HashSet<Guid>();
                     foreach (var (id, value) in values)
                     {
                         if (!ids.Add(id)) throw new InvalidOperationException("Stored training import failed: duplicate record.");
                         await ApplyLockedAsync(owner, new TrainingMutation
-                        { Kind = kind, Id = id, BaseRevision = 0, Deleted = false, Value = value }, ct);
+                        { Kind = kind, Id = id, BaseRevision = 0, Deleted = false, Value = value }, cancellationToken);
                         database.ChangeTracker.Clear();
                     }
                 }
@@ -256,6 +268,7 @@ public sealed class TrainingStorage(BackupDbContext database)
         }
     }
 
+    /// <summary>Текущий полный v4 архив для однократного переноса в структурированный журнал.</summary>
     private sealed record StoredArchive
     {
         public required string Format { get; init; }

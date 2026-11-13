@@ -6,6 +6,7 @@ namespace FitLife.Backend;
 /// <summary>Явное преобразование wire DTO в нормализованные строки без сохранения архива/payload.</summary>
 internal static class TrainingMapping
 {
+    /// <summary>Создаёт корневую строку тренировки и точные интервалы пауз.</summary>
     internal static TrainingWorkout Workout(string owner, WorkoutData value) => new()
     {
         OwnerId = owner,
@@ -31,6 +32,7 @@ internal static class TrainingMapping
         }).ToList()
     };
 
+    /// <summary>Создаёт корневую строку плана с каноническими наборами выбора.</summary>
     internal static TrainingTemplate Template(string owner, TemplateData value) => new()
     {
         OwnerId = owner,
@@ -52,6 +54,7 @@ internal static class TrainingMapping
         }).ToList()
     };
 
+    /// <summary>Создаёт самостоятельный замер веса с необязательной связью с тренировкой.</summary>
     internal static TrainingBodyWeight BodyWeight(string owner, BodyWeightData value) => new()
     {
         OwnerId = owner,
@@ -61,6 +64,7 @@ internal static class TrainingMapping
         WorkoutID = value.WorkoutID
     };
 
+    /// <summary>Создаёт запись пульса и упорядоченные измерения с исходной точностью.</summary>
     internal static TrainingHeartRate HeartRate(string owner, HeartRateData value) => new()
     {
         OwnerId = owner,
@@ -78,10 +82,12 @@ internal static class TrainingMapping
         }).ToList()
     };
 
+    /// <summary>Создаёт нормализованные строки упражнений тренировки с исходными позициями.</summary>
     internal static List<TrainingExercise> WorkoutExercises(string owner, WorkoutData value) =>
         value.Exercises.Select((row, index) => Exercise(owner, TrainingKinds.Workout, value.Id, 0,
             index, row.Id, row.Exercise, row.SupersetID, row.Sets)).ToList();
 
+    /// <summary>Создаёт строки основного плана и всех вариаций с независимыми позициями.</summary>
     internal static List<TrainingExercise> TemplateExercises(string owner, TemplateData value)
     {
         var rows = new List<TrainingExercise>();
@@ -104,6 +110,7 @@ internal static class TrainingMapping
         }
     }
 
+    /// <summary>Создаёт снимок упражнения, подходов и дроп-этапов с исходными UUID.</summary>
     private static TrainingExercise Exercise(string owner, string kind, Guid aggregate, int variation,
         int position, Guid id, ExerciseData exercise, Guid? superset, List<WorkoutSetData> sets) => new()
         {
@@ -151,6 +158,7 @@ internal static class TrainingMapping
             }).ToList()
         };
 
+    /// <summary>Восстанавливает полный DTO из нормализованных таблиц только указанного владельца.</summary>
     internal static async Task<JsonElement> ReadAsync(BackupDbContext database, string owner, string kind,
         Guid id, CancellationToken cancellationToken)
     {
@@ -236,9 +244,11 @@ internal static class TrainingMapping
             }).ToList();
     }
 
+    /// <summary>Возвращает исторический снимок упражнения с исходным UUID.</summary>
     private static ExerciseData ExerciseValue(TrainingExercise value) => new()
     { Id = value.ExerciseId, Name = value.Name, Muscle = value.Muscle, Instructions = value.Instructions };
 
+    /// <summary>Восстанавливает упорядоченные подходы и дополнительные этапы, сохраняя null-списки.</summary>
     private static List<WorkoutSetData> Sets(TrainingExercise value) => value.Sets.OrderBy(x => x.Position).Select(x => new WorkoutSetData
     {
         Id = x.Id,
