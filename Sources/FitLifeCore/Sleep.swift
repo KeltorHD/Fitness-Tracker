@@ -41,6 +41,28 @@ public struct SleepPeriod: Identifiable, Equatable, Sendable {
   public let stage: SleepStage
 }
 
+/// A provider's actual report can contain duration without a detailed phase timeline.
+public struct SleepNightSummary: Equatable, Sendable {
+  public let start: Date
+  public let end: Date
+  public let asleepSeconds: TimeInterval
+  public let sourceName: String
+  public let sourceID: String?
+  public init(
+    start: Date, end: Date, asleepSeconds: TimeInterval, sourceName: String, sourceID: String? = nil
+  ) throws {
+    guard start.timeIntervalSince1970.isFinite, end.timeIntervalSince1970.isFinite, end > start,
+      asleepSeconds.isFinite, asleepSeconds >= 0, asleepSeconds <= end.timeIntervalSince(start),
+      !sourceName.isEmpty
+    else { throw HealthDataError.invalidData }
+    self.start = start
+    self.end = end
+    self.asleepSeconds = asleepSeconds
+    self.sourceName = sourceName
+    self.sourceID = sourceID
+  }
+}
+
 /// A night ends at noon on its diary date; all calendar boundaries include DST/timezone rules.
 public struct SleepNight: Identifiable, Equatable, Sendable {
   public var id: Date { day }
@@ -48,15 +70,24 @@ public struct SleepNight: Identifiable, Equatable, Sendable {
   public let window: DateInterval
   public let periods: [SleepPeriod]
   public let sourceName: String?
+  public let sourceID: String?
+  public let reportedSummary: SleepNightSummary?
+  public let fetchedAt: Date?
+  public let isCached: Bool
   public let inBed: TimeInterval?
   public let sleepOnsetLatency: TimeInterval?
   public let efficiency: Double?
   public var asleep: TimeInterval? {
+    if let reportedSummary { return reportedSummary.asleepSeconds }
     let value = periods.filter { $0.stage.isAsleep }.reduce(0) { $0 + $1.interval.duration }
     return value > 0 ? value : nil
   }
-  public var sleepStart: Date? { periods.first { $0.stage.isAsleep }?.interval.start }
-  public var sleepEnd: Date? { periods.last { $0.stage.isAsleep }?.interval.end }
+  public var sleepStart: Date? {
+    periods.first { $0.stage.isAsleep }?.interval.start ?? reportedSummary?.start
+  }
+  public var sleepEnd: Date? {
+    periods.last { $0.stage.isAsleep }?.interval.end ?? reportedSummary?.end
+  }
   public var hasStages: Bool { periods.contains { [.core, .deep, .rem].contains($0.stage) } }
   public func duration(_ stage: SleepStage) -> TimeInterval {
     periods.filter { $0.stage == stage }.reduce(0) { $0 + $1.interval.duration }
@@ -73,10 +104,21 @@ public struct SleepNight: Identifiable, Equatable, Sendable {
     else { return nil }
     return DateInterval(start: start, end: end)
   }
-  public init(day: Date, calendar: Calendar, samples: [SleepSample]) {
+  public init(
+    day: Date, calendar: Calendar, samples: [SleepSample],
+    reportedSummary: SleepNightSummary? = nil,
+    fetchedAt: Date? = nil, isCached: Bool = false
+  ) {
     self.day = calendar.startOfDay(for: day)
     window = Self.window(endingOn: day, calendar: calendar) ?? DateInterval(start: day, duration: 0)
     let window = window
+    // A report spanning the diary boundary cannot be proportionally split without fabricating data.
+    let summary = reportedSummary.flatMap {
+      $0.start >= window.start && $0.end <= window.end ? $0 : nil
+    }
+    self.reportedSummary = summary
+    self.fetchedAt = fetchedAt
+    self.isCached = isCached
     let clipped = samples.filter {
       $0.interval.duration > 0 && $0.interval.start < window.end && $0.interval.end > window.start
     }
@@ -100,7 +142,8 @@ public struct SleepNight: Identifiable, Equatable, Sendable {
             b.filter { $0.stage.isAsleep }.map(\.interval), within: window) ?? 0
         return aDuration != bDuration ? aDuration > bDuration : left < right
       }.first.flatMap { sources[$0] } ?? []
-    sourceName = chosen.first?.sourceName
+    sourceName = chosen.first?.sourceName ?? summary?.sourceName
+    sourceID = chosen.first?.sourceID ?? summary?.sourceID
     inBed = TrackerCalculations.sleepDuration(
       chosen.filter { $0.stage == .inBed }.map(\.interval), within: window)
     struct Edge {

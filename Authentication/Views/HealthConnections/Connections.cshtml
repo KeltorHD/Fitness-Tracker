@@ -1,0 +1,33 @@
+@model FitLife.Authentication.HealthConnectionsPageData
+<h1 data-localize>Источники здоровья</h1>
+<p data-localize>Подключение позволяет читать выбранные данные. Исходные записи в Mi Fitness сохраняются.</p>
+@foreach (var connection in Model.Connections)
+{
+  <section>
+    <h2>Mi Fitness</h2>
+    @if (connection.Connected)
+    {
+      <p data-localize>Подключено</p>
+      <form method="post" action="/account/health/mi-fitness/disconnect" asp-antiforgery="true">
+        <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+        <button type="submit" data-localize>Отключить Mi Fitness</button>
+      </form>
+    }
+    else if (connection.Available)
+    {
+      <form method="post" action="/account/health/mi-fitness/connect" asp-antiforgery="true">
+        <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+        <button type="submit" data-localize>Подключить Mi Fitness</button>
+      </form>
+    }
+    else
+    {
+      <p data-localize>Подключение Mi Fitness пока недоступно.</p>
+    }
+  </section>
+}
+<a class="button" href="@Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString("/account", "returnUrl", Model.ReturnUrl)" data-localize>Вернуться к аккаунту</a>
+@if (Model.ReturnUrl != "/account")
+{
+  <a class="button" href="@Model.ReturnUrl" data-localize>Вернуться в приложение</a>
+}

@@ -21,8 +21,9 @@ namespace FitLife.Server.Tests;
 
 /// <summary>Запускает настоящий API с собственной SQLite, ключом JWT и изолированной конфигурацией.</summary>
 /// <param name="authHandler">Реальный in-memory Auth для сквозных тестов; иначе подменяется только introspection.</param>
+/// <param name="configureServices">Необязательная подмена внешних источников в HTTP-тестах.</param>
 /// <param name="storageInterceptor">Необязательная точка отказа реального EF storage в изолированном тесте.</param>
-public sealed class BackendFactory(HttpMessageHandler? authHandler = null, IInterceptor? storageInterceptor = null) : WebApplicationFactory<Backend.Program>
+public sealed class BackendFactory(HttpMessageHandler? authHandler = null, IInterceptor? storageInterceptor = null, Action<IServiceCollection>? configureServices = null) : WebApplicationFactory<Backend.Program>
 {
     private readonly SqliteConnection _connection = new("Data Source=:memory:");
     private readonly BackupSaveInterceptor _saves = new();
@@ -68,6 +69,7 @@ public sealed class BackendFactory(HttpMessageHandler? authHandler = null, IInte
             services.RemoveAll<TimeProvider>();
             services.AddSingleton<TimeProvider>(new FrozenTimeProvider(BackupTime));
             services.AddHttpClient<TokenIntrospection>().ConfigurePrimaryHttpMessageHandler(() => authHandler ?? Introspection);
+            configureServices?.Invoke(services);
             services.PostConfigure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme, options =>
             {
                 if (authHandler is not null)

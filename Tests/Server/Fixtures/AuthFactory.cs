@@ -24,11 +24,12 @@ namespace FitLife.Server.Tests;
 /// <param name="appleAppIdentifier">Синтетическая привязка приложения для тестирования AASA без настоящего Apple аккаунта.</param>
 /// <param name="providerSettings">Синтетические настройки провайдеров для проверки доступности кнопок без внешних запросов.</param>
 /// <param name="personalCallbackScheme">Необязательная URL-схема отдельного Personal Team client.</param>
+/// <param name="configureServices">Подмена внешнего транспорта для изолированных проверок.</param>
 /// <param name="clock">Управляемое время для ограничений повторной отправки.</param>
 public sealed class AuthFactory(IPAddress? peerAddress = null, string? trustedProxy = null,
     IClaimsTransformation? claimsTransformation = null, string? appleAppIdentifier = null,
     IReadOnlyDictionary<string, string?>? providerSettings = null, string? personalCallbackScheme = null,
-    TimeProvider? clock = null) : WebApplicationFactory<Authentication.Program>
+    TimeProvider? clock = null, Action<IServiceCollection>? configureServices = null) : WebApplicationFactory<Authentication.Program>
 {
     /// <summary>Синтетический секрет отдельного confidential client в изолированной Auth-БД.</summary>
     internal const string IntrospectionSecret = "test-introspection-secret-with-at-least-32-characters";
@@ -88,6 +89,7 @@ public sealed class AuthFactory(IPAddress? peerAddress = null, string? trustedPr
                 .UseOpenIddict()
                 .ReplaceService<IModelCustomizer, AuthSqliteModelCustomizer>());
             services.AddHttpClient<BackupCleanup>().ConfigurePrimaryHttpMessageHandler(() => new CleanupHandler(this));
+            configureServices?.Invoke(services);
         });
     }
 

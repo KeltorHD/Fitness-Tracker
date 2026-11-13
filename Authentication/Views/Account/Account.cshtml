@@ -53,6 +53,7 @@
 }
 <p data-localize>Последний способ входа отключить нельзя.</p>
 <p data-localize>После отключения способа входа потребуется снова войти в приложение на всех устройствах.</p>
+<a class="button" href="@Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString("/account/health", "returnUrl", Model.ReturnUrl)" data-localize>Источники здоровья</a>
 @if (Model.ReturnUrl != "/account")
 {
   <a class="button" href="@Model.ReturnUrl" data-localize>Вернуться в приложение</a>

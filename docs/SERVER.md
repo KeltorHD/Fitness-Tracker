@@ -595,3 +595,7 @@ Apple XCTest `AccountSessionTests` проверяют callback validation, од�
 ## Опциональный поиск продуктов
 
 Публичный `GET /v1/foods/search?q=...` — отдельный от защищённых резервных копий маршрут Backend. Ключ perek.us остаётся в серверной конфигурации, ограничения общие для всех клиентов. Настройка, HTTP-контракт, кеш, лимиты и fallback приложения: [FOOD_SEARCH.md](FOOD_SEARCH.md).
+
+## Источники здоровья
+
+Настройка прямого Mi Fitness cloud, callback, разрешения, миграция Authentication и границы проверок описаны в [HEALTH_PROVIDERS.md](HEALTH_PROVIDERS.md).

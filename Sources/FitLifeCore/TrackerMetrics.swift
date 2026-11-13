@@ -6,6 +6,7 @@ public enum TrackerMode: String, CaseIterable, Codable, Sendable {
 
 public enum HeartRateRecordingOrigin: String, Codable, Sendable {
   case liveHealthKit
+  case miFitnessCloud
 }
 
 public struct HeartRateReading: Codable, Hashable, Sendable, Identifiable {
@@ -55,7 +56,7 @@ public struct HeartRateRecording: Codable, Equatable, Sendable {
     guard schemaVersion == 1, readings.count <= Self.maximumReadings else {
       throw TrackerDataError.invalidRecording
     }
-    guard origin != .liveHealthKit || mode == .appleHealth else {
+    guard origin == nil || mode == .appleHealth else {
       throw TrackerDataError.invalidRecording
     }
     var previous = Date.distantPast
@@ -89,9 +90,12 @@ public struct HealthDaySummary: Sendable, Equatable {
   public let sleepSeconds: TimeInterval?
   public let latestHeartRate: HeartRateReading?
   public let heartRateSource: String?
+  public let fetchedAt: Date?
+  public let isCached: Bool
   public init(
     day: Date, steps: Int?, activeEnergyKCal: Double?, sleepSeconds: TimeInterval?,
-    latestHeartRate: HeartRateReading?, heartRateSource: String?
+    latestHeartRate: HeartRateReading?, heartRateSource: String?, fetchedAt: Date? = nil,
+    isCached: Bool = false
   ) {
     self.day = day
     self.steps = steps
@@ -99,9 +103,16 @@ public struct HealthDaySummary: Sendable, Equatable {
     self.sleepSeconds = sleepSeconds
     self.latestHeartRate = latestHeartRate
     self.heartRateSource = heartRateSource
+    self.fetchedAt = fetchedAt
+    self.isCached = isCached
   }
   public var isEmpty: Bool {
     steps == nil && activeEnergyKCal == nil && sleepSeconds == nil && latestHeartRate == nil
+  }
+  public func hasSameValues(as other: Self) -> Bool {
+    day == other.day && steps == other.steps && activeEnergyKCal == other.activeEnergyKCal
+      && sleepSeconds == other.sleepSeconds && latestHeartRate == other.latestHeartRate
+      && heartRateSource == other.heartRateSource
   }
 }
 

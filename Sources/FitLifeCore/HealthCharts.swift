@@ -34,10 +34,12 @@ public struct HealthChartSnapshot: Equatable, Sendable {
   public let latestHeartRate: HeartRateReading?
   public let heartRateSource: String?
   public let currentDayHeartRate: [HeartRateReading]
+  public let fetchedAt: Date?
+  public let isCached: Bool
   public init(
     day: Date, steps: [HealthStepDay], heartRate: [HeartRateReading],
     latestHeartRate: HeartRateReading?, heartRateSource: String?,
-    currentDayHeartRate: [HeartRateReading] = []
+    currentDayHeartRate: [HeartRateReading] = [], fetchedAt: Date? = nil, isCached: Bool = false
   ) {
     self.day = day
     self.steps = steps
@@ -45,6 +47,14 @@ public struct HealthChartSnapshot: Equatable, Sendable {
     self.latestHeartRate = latestHeartRate
     self.heartRateSource = heartRateSource
     self.currentDayHeartRate = currentDayHeartRate
+    self.fetchedAt = fetchedAt
+    self.isCached = isCached
+  }
+
+  public func hasSameValues(as other: Self) -> Bool {
+    day == other.day && steps == other.steps && heartRate == other.heartRate
+      && latestHeartRate == other.latestHeartRate && heartRateSource == other.heartRateSource
+      && currentDayHeartRate == other.currentDayHeartRate
   }
 }
 

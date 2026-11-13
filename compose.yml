@@ -12,7 +12,10 @@ services:
       - "127.0.0.1:${AUTH_HTTP_PORT:-5080}:8080"
     environment:
       ASPNETCORE_ENVIRONMENT: Production
-      AllowedHosts: ${AUTH_DOMAIN:?Set AUTH_DOMAIN in .env}
+      AllowedHosts: ${AUTH_DOMAIN:?Set AUTH_DOMAIN in .env};authentication
+      HealthProviders__MiFitness__Enabled: ${MIFITNESS_ENABLED:-false}
+      HealthProviders__MiFitness__ClientId: ${MIFITNESS_CLIENT_ID:-}
+      HealthProviders__MiFitness__ClientSecret: ${MIFITNESS_CLIENT_SECRET:-}
       Ntfy__Enabled: ${NTFY_ENABLED:-false}
       Ntfy__ServerUrl: ${NTFY_SERVER_URL:-}
       Ntfy__Topic: ${AUTH_NTFY_TOPIC:-}
@@ -116,6 +119,7 @@ services:
       Auth__Issuer: https://${AUTH_DOMAIN}/
       Auth__IntrospectionClientSecret: ${BACKEND_INTROSPECTION_SECRET:?Set BACKEND_INTROSPECTION_SECRET in .env}
       ConnectionStrings__Database: Host=backend-db;Database=${BACKEND_DB_NAME:-backend};Username=${BACKEND_DB_USER:-backend};Password=${BACKEND_DB_PASSWORD:?Set BACKEND_DB_PASSWORD in .env}
+      HealthProviders__AuthenticationUrl: http://authentication:8080/
       DataProtection__Path: /app/keys
       Certificates__Encryption__Path: /run/certificates/encryption.pfx
       Certificates__Encryption__Password: ${CERTIFICATE_PASSWORD}
