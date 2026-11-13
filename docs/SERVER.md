@@ -503,6 +503,8 @@ Backend отклоняет JWT с неверными issuer/audience/type/subjec
 
 ## Проверки
 
+Актуальный полный прогон 2026-11-13: **555 C# / xUnit-тестов**, включая 43 на одноразовом PostgreSQL 18; ошибок и пропусков нет. Locked restore, сборка без warnings/errors, formatter и пять Python-тестов сети прошли. Для журнала тренировок выполнены 225 C#-сценариев (149 unit, 60 HTTP/SQLite, 16 PostgreSQL), из них 214 новых. Проверены границы и ошибки всех типов записей, транзакционные отказы/отмена, пагинация, потоковые лимиты, квоты, каскады и согласованное чтение при конкурентной правке. Регрессионный HTTP-тест выявил приём повторяющихся JSON-полей; теперь они отклоняются с 400. Полный `check-linux.sh` также прошёл: 312 Core-тестов и независимая проверка 149 ожидаемых результатов серверной валидации. Рабочие БД и внешние провайдеры не использовались.
+
 После переноса логики контроллеров в сервисы полный `check-server.sh` прошёл: locked restore с Mapster 10.0.14, сборка без warnings/errors, 154 сценария (70 unit, 78 HTTP/Identity/SQLite, 6 PostgreSQL 16.6), проверка `dotnet format` и shell syntax. Новые проверки подтверждают зависимости тонких контроллеров, запрет неявного Identity entity mapping, сохранение native OAuth principal/stamp/grant/error, защиту от overposting, точный JSON профиля и безопасное PRG/TempData сообщение. Прежние PKCE, refresh/revoke, WebAuthn, race/rollback и межсервисные сценарии повторно прошли. EF-модель и миграции не менялись; рабочие базы не использовались.
 
 После замены адресов развёртывания примерами: 21 OAuth/Identity/forwarded-HTTPS/AASA тест прошёл, Compose и изолированный Nginx syntax/ACL/header smoke проверены. Associated Domains использует локально переопределяемый host; структура проекта и plist проверены, signing/Apple SDK требуют Xcode.
@@ -529,6 +531,14 @@ dotnet ef migrations has-pending-model-changes --project Backend
 | Категория | Исходники | Что проверяется |
 | --- | --- | --- |
 | `Unit` | `Tests/Server/BackupArchiveValidatorTests.cs` | только com.fitlife.archive v4, отказ для прежних форматов/версий, обязательные поля, неверные JSON-типы/UTF-8, точные границы байтов и количества записей, безопасные ошибки; без БД и HTTP |
+| `Unit` | `Tests/Server/TrainingValidationTests.cs` | 149 граничных сценариев C#-валидации тренировок, подходов/дропсетов/суперсетов, пауз, планов/вариаций, веса и пульса; ожидаемые результаты независимо сверяются с настоящим Swift Core |
+| `HTTP` | `Tests/Server/TrainingDataTests.cs` | Полный JSON round-trip, версии/конфликты/идемпотентность, изоляция владельцев и удаление тренировки с пульсом |
+| `HTTP` | `Tests/Server/TrainingHttpContractTests.cs` | Невалидный JSON и повторяющиеся поля, обязательность/типы, overposting, пакеты 1–100, курсоры/пагинация с правками и удалениями, принадлежащая владельцу тренировка для пульса и rate limit до introspection |
+| `HTTP` | `Tests/Server/TrainingTransactionTests.cs` | Откат всего пакета при позднем конфликте, ошибке записи после удаления детей и отмене; сохранность графов/пульса/версий и успешный повтор |
+| `HTTP` | `Tests/Server/TrainingWireLimitsTests.cs` | Ровно 30 MiB и лишний байт с известным Content-Length и без него, отмена потокового тела, разделение больших записей по байтовому бюджету страницы без пропусков |
+| `PostgreSQL` | `Tests/Server/TrainingMigrationTests.cs` | Настоящие миграции и нормализованный Core round-trip, конфликт конкурентных версий, удаление аккаунта и перенос архивов |
+| `PostgreSQL` | `Tests/Server/TrainingPostgresTests.cs` | Замена/удаление вложенных строк без остаточных детей, параллельные записи и последовательные версии, согласованный снимок ленты при правке графа, rollback после настоящей SQL-ошибки |
+| `PostgreSQL` | `Tests/Server/TrainingQuotaTests.cs` | Границы 10 000 тренировок/взвешиваний, 1 000 планов и 100 000 metadata с tombstones; правка при полной квоте, освобождение живой квоты удалением и восстановление прежнего UUID |
 | `Unit` | `Tests/Server/BackupCleanupTests.cs` | DELETE/service key контракт, ошибки статуса и конфигурации, передача отмены в HTTP handler без сети |
 | `Unit` | `Tests/Server/TokenIntrospectionTests.cs` | RFC 7662 POST/body, active boolean, protocol/HTTP/transport errors, ограничение ответа, отмена, отсутствие утечек секретов |
 | `Unit` | `Tests/Server/AuthenticationMappingTests.cs` | Зависимости тонких контроллеров, запрет неявного Identity entity mapping, сохранение principal/stamp/grant и OAuth error при HTTP mapping |
@@ -580,7 +590,7 @@ Apple XCTest `AccountSessionTests` проверяют callback validation, од�
 
 Проверка миграции идентификаторов (2026-11-12): полный `check-server.sh` на одноразовом PostgreSQL 18 прошёл — 330 xUnit-сценариев (303 unit/HTTP и 27 PostgreSQL), пять Python-тестов, сборка без warnings/errors и formatter. Сквозная проверка создала архив действующим Swift Core, записала его с прежним идентификатором в отдельную тестовую PostgreSQL-БД, выполнила SQL миграции и прочитала результат текущим Swift Core: тренировки, шаблоны, взвешивания, UUID, дробные даты и заметки совпали. Это проверка Core-кодека на Linux, а не SwiftUI/Apple SDK. Рабочие БД не менялись.
 
-Проверка структурированного журнала (2026-11-13): полный `check-server.sh` на одноразовом PostgreSQL 18 — 341 xUnit-сценарий (309 unit/HTTP и 32 PostgreSQL), пять Python-тестов, locked restore, сборка без предупреждений/ошибок и formatter. Пройден нормализованный Core → PostgreSQL → Core round-trip со всеми полями, включая пульс и дробные даты; проверены рост канонического ответа за 30 MiB, перенос последнего v4, откат, конкурентные версии и удаление. Рабочая БД не менялась; Apple SDK и физическая доставка требуют отдельной проверки.
+Первоначальная проверка структурированного журнала (2026-11-13): полный `check-server.sh` на одноразовом PostgreSQL 18 — 341 xUnit-сценарий (309 unit/HTTP и 32 PostgreSQL), пять Python-тестов, locked restore, сборка без предупреждений/ошибок и formatter. Пройден нормализованный Core → PostgreSQL → Core round-trip со всеми полями, включая пульс и дробные даты; проверены рост канонического ответа за 30 MiB, перенос последнего v4, откат, конкурентные версии и удаление. Рабочая БД не менялась; Apple SDK и физическая доставка требуют отдельной проверки.
 
 ## Опциональный поиск продуктов
 

@@ -102,6 +102,16 @@ Watch сохраняет принадлежность активной трен�
 
 ## Проверки
 
-`scripts/check-linux.sh` запускает Core, переносимые OAuth/account/coordinator/файловые проверки, проверяет воспроизводимость `Tests/Server/Fixtures/training-contract.json` настоящим Core, ресурсы, RU/EN, syntax parser и strict lint. Apple SDK, SwiftData macro expansion, SwiftUI UI и реальный WCSession на Linux не проверяются.
+Серверные тесты написаны на **C# / xUnit** в `Tests/Server`. `TrainingValidationTests` проверяет 149 допустимых и ошибочных границ; HTTP-наборы проверяют JSON/пакеты/курсоры, потоковые лимиты, отмену и атомарность. PostgreSQL-наборы проверяют настоящие каскады, квоты, блокировки, согласованное чтение и откат при SQL-ошибке. [Состав наборов](SERVER.md#проверки).
+
+`scripts/check-linux.sh` запускает Core, переносимые OAuth/account/coordinator/файловые проверки, проверяет воспроизводимость `Tests/Server/Fixtures/training-contract.json` настоящим Core, ресурсы, RU/EN, syntax parser и strict lint. Дополнительно Python-генератор воспроизводит `training-validation.json`, а настоящий Core независимо проверяет все 149 ожидаемых результатов C#-тестов. Это защита от расхождения контрактов двух языков; серверные тесты выполняются отдельно через .NET. Apple SDK, SwiftData macro expansion, SwiftUI UI и реальный WCSession на Linux не проверяются.
 
 `scripts/check-server.sh` с `FITLIFE_TEST_POSTGRES` проверяет миграции, перенос, нормализованный round-trip, конкурентные правки/удаление, owner isolation, rollback и HTTP. Для обратной проверки Core задайте `FITLIFE_TEST_TRAINING_PAGE` путём временного JSON при запуске PostgreSQL-категории, затем выполните собранный `training-contract-checks --verify-server <путь>`. Тестовые базы случайные и удаляются после проверки; рабочая БД не используется.
+
+Быстрый запуск только C#-тестов журнала после сборки:
+
+```bash
+dotnet test Tests/Server/FitLife.Server.Tests.csproj --no-build --no-restore -m:1 --filter '(FullyQualifiedName~Training)&(Category!=PostgreSQL)'
+# С заданным FITLIFE_TEST_POSTGRES к одноразовому PostgreSQL:
+dotnet test Tests/Server/FitLife.Server.Tests.csproj --no-build --no-restore -m:1 --filter '(FullyQualifiedName~Training)&(Category=PostgreSQL)'
+```
