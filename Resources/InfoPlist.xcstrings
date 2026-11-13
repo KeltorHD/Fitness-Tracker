@@ -75,13 +75,13 @@
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Читать сон, пульс и другие показатели из «Здоровья» для дневника и статистики; по вашему запросу — данные тренировки для приёма измерений Apple Watch или AirPods Pro 3."
+            "value": "Читать сон, шаги, вес, долю жира, пульс, кислород в крови, активную энергию и расстояние из «Здоровья» для дневника и статистики; по вашему запросу — данные тренировки для приёма измерений Apple Watch или AirPods Pro 3."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Read sleep, heart rate and other Health metrics for your diary and statistics; when requested, read workout data to receive Apple Watch or AirPods Pro 3 measurements."
+            "value": "Read sleep, steps, weight, body fat, heart rate, blood oxygen, active energy and distance for your diary and statistics; when requested, read workout data to receive Apple Watch or AirPods Pro 3 measurements."
           }
         }
       }

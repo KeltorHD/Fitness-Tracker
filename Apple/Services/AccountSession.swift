@@ -59,14 +59,19 @@ actor AccountSession {
     return profile
   }
 
-  func authorizedData(_ request: URLRequest, maximumBytes: Int = 65_536) async throws -> Data {
+  func authorizedData(
+    _ request: URLRequest, maximumBytes: Int = 65_536, expectedUserID: String? = nil
+  ) async throws -> Data {
     let current = generation
     let token = try await accessToken()
+    guard current == generation, expectedUserID == nil || tokens?.profile.id == expectedUserID
+    else { throw CancellationError() }
     var request = request
     request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
     do {
       let data = try await http.send(request, maximumBytes: maximumBytes)
-      guard current == generation else { throw CancellationError() }
+      guard current == generation, expectedUserID == nil || tokens?.profile.id == expectedUserID
+      else { throw CancellationError() }
       return data
     } catch ServerError.signInRequired {
       let replacement = try await accessToken(rejected: token)

@@ -133,7 +133,9 @@ struct OAuthAttempt: Equatable, Sendable {
   let state: String
   let challenge: String
 
-  func authorizationURL(configuration: ServerConfiguration, manageAccount: Bool) throws -> URL {
+  func authorizationURL(
+    configuration: ServerConfiguration, manageAccount: Bool, manageHealth: Bool = false
+  ) throws -> URL {
     guard
       var parts = URLComponents(
         url: configuration.authenticationURL.appendingPathComponent("connect/authorize"),
@@ -152,7 +154,10 @@ struct OAuthAttempt: Equatable, Sendable {
     if !manageAccount {
       parts.queryItems?.append(URLQueryItem(name: "prompt", value: "select_account"))
     }
-    if manageAccount { parts.queryItems?.append(URLQueryItem(name: "screen", value: "account")) }
+    if manageAccount {
+      parts.queryItems?.append(
+        URLQueryItem(name: "screen", value: manageHealth ? "health" : "account"))
+    }
     guard let url = parts.url else { throw ServerError.invalidConfiguration }
     return url
   }

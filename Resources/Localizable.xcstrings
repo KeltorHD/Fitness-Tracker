@@ -375,6 +375,23 @@
         }
       }
     },
+    "1 день": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 день"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 day"
+          }
+        }
+      }
+    },
     "100 силовых упражнений и 200 фотографий, встроенных в приложение.": {
       "extractionState": "manual",
       "localizations": {
@@ -477,6 +494,23 @@
         }
       }
     },
+    "30 дней": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "30 дней"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "30 days"
+          }
+        }
+      }
+    },
     "4 недели": {
       "extractionState": "manual",
       "localizations": {
@@ -490,6 +524,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "4 weeks"
+          }
+        }
+      }
+    },
+    "7 дней": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 дней"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 days"
           }
         }
       }
@@ -1442,6 +1493,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Active workout"
+          }
+        }
+      }
+    },
+    "Активная энергия": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Активная энергия"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active energy"
           }
         }
       }
@@ -3146,6 +3214,23 @@
         }
       }
     },
+    "Войдите в FitLife, чтобы подключить источник здоровья.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Войдите в FitLife, чтобы подключить источник здоровья."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in to FitLife to connect a health source."
+          }
+        }
+      }
+    },
     "Войдите в iCloud в настройках устройства.": {
       "extractionState": "manual",
       "localizations": {
@@ -4506,6 +4591,23 @@
         }
       }
     },
+    "Данные могут ещё не синхронизироваться с устройства. Проверьте записи и разрешения выбранного источника здоровья.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Данные могут ещё не синхронизироваться с устройства. Проверьте записи и разрешения выбранного источника здоровья."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data may not have synced from your device yet. Check the records and permissions of the selected health source."
+          }
+        }
+      }
+    },
     "Данные могут ещё не синхронизироваться с часов. Проверьте записи и доступ в приложении «Здоровье».": {
       "extractionState": "manual",
       "localizations": {
@@ -4553,6 +4655,57 @@
           "stringUnit": {
             "state": "translated",
             "value": "Your data has not been deleted. Try opening the app again later."
+          }
+        }
+      }
+    },
+    "Данные получены": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Данные получены"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data fetched"
+          }
+        }
+      }
+    },
+    "Данные поступают из облака после синхронизации устройства с Mi Fitness. Для обновления нажмите «Обновить показатели».": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Данные поступают из облака после синхронизации устройства с Mi Fitness. Для обновления нажмите «Обновить показатели»."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data arrives from the cloud after your device syncs with Mi Fitness. Tap Update metrics to refresh."
+          }
+        }
+      }
+    },
+    "Данные поступают из облака после синхронизации устройства с Mi Fitness. Доступ подтверждается в окне Xiaomi.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Данные поступают из облака после синхронизации устройства с Mi Fitness. Доступ подтверждается в окне Xiaomi."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data arrives from the cloud after your device syncs with Mi Fitness. You approve access on the Xiaomi screen."
           }
         }
       }
@@ -5951,6 +6104,23 @@
         }
       }
     },
+    "Доля жира": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Доля жира"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Body fat"
+          }
+        }
+      }
+    },
     "Доля сна в постели": {
       "extractionState": "manual",
       "localizations": {
@@ -6032,6 +6202,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "iCloud access is restricted."
+          }
+        }
+      }
+    },
+    "Доступ к этому показателю не предоставлен.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Доступ к этому показателю не предоставлен."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Access to this metric has not been granted."
+          }
+        }
+      }
+    },
+    "Доступны только показатели, синхронизированные с облаком Mi Fitness и разрешённые для FitLife.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Доступны только показатели, синхронизированные с облаком Mi Fitness и разрешённые для FitLife."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Only metrics synced to the Mi Fitness cloud and permitted for FitLife are available."
           }
         }
       }
@@ -6661,6 +6865,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Loading sleep records"
+          }
+        }
+      }
+    },
+    "Загрузить пульс из Mi Fitness": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Загрузить пульс из Mi Fitness"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import heart rate from Mi Fitness"
           }
         }
       }
@@ -7430,6 +7651,23 @@
         }
       }
     },
+    "Измерение уже сохранено": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Измерение уже сохранено"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Measurement already saved"
+          }
+        }
+      }
+    },
     "Измерений пульса за день: %@. Дней с данными о шагах: %@ из 7.": {
       "extractionState": "manual",
       "localizations": {
@@ -7753,6 +7991,23 @@
         }
       }
     },
+    "Источник данных": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Источник данных"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data source"
+          }
+        }
+      }
+    },
     "Источник данных и фотографии": {
       "extractionState": "manual",
       "localizations": {
@@ -7766,6 +8021,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Data and photo sources"
+          }
+        }
+      }
+    },
+    "Источник здоровья недоступен. Проверьте подключение и повторите.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Источник здоровья недоступен. Проверьте подключение и повторите."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The health source is unavailable. Check your connection and try again."
           }
         }
       }
@@ -7800,6 +8072,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "This source did not provide detailed sleep stages."
+          }
+        }
+      }
+    },
+    "Источник недоступен. Показана последняя сохранённая копия этого периода.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Источник недоступен. Показана последняя сохранённая копия этого периода."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The source is unavailable. Showing the last saved data for this period."
           }
         }
       }
@@ -7923,6 +8212,23 @@
         }
       }
     },
+    "Источник: Mi Fitness": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Источник: Mi Fitness"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Source: Mi Fitness"
+          }
+        }
+      }
+    },
     "Источник: пульс во время тренировки": {
       "extractionState": "manual",
       "localizations": {
@@ -7953,6 +8259,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sources"
+          }
+        }
+      }
+    },
+    "Источники здоровья": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Источники здоровья"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Health sources"
           }
         }
       }
@@ -8259,6 +8582,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Quadriceps"
+          }
+        }
+      }
+    },
+    "Кислород в крови": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Кислород в крови"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blood oxygen"
           }
         }
       }
@@ -9827,6 +10167,23 @@
         }
       }
     },
+    "Не показывать показатели": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не показывать показатели"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hide health metrics"
+          }
+        }
+      }
+    },
     "Не удалось включить пульс. Проверьте разрешения «Здоровья» на часах и повторите с iPhone.": {
       "extractionState": "manual",
       "localizations": {
@@ -10524,6 +10881,23 @@
         }
       }
     },
+    "Не удалось проверить данные источника здоровья. Повторите попытку.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось проверить данные источника здоровья. Повторите попытку."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The health source data could not be verified. Try again."
+          }
+        }
+      }
+    },
     "Не удалось проверить ответ сервера. Повторите попытку.": {
       "extractionState": "manual",
       "localizations": {
@@ -10690,6 +11064,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Could not read alarm settings. Your saved data has not been deleted."
+          }
+        }
+      }
+    },
+    "Не удалось прочитать показатели. Повторите попытку.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось прочитать показатели. Повторите попытку."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The metrics could not be read. Try again."
           }
         }
       }
@@ -11527,6 +11918,23 @@
         }
       }
     },
+    "Нет доступных данных. Проверьте синхронизацию Mi Fitness и разрешённые показатели в источниках здоровья.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нет доступных данных. Проверьте синхронизацию Mi Fitness и разрешённые показатели в источниках здоровья."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No data is available. Check Mi Fitness syncing and the permitted metrics in Health sources."
+          }
+        }
+      }
+    },
     "Нет доступных данных. Проверьте синхронизацию приложения трекера и разрешения FitLife в «Здоровье».": {
       "extractionState": "manual",
       "localizations": {
@@ -12105,6 +12513,23 @@
         }
       }
     },
+    "Общая энергия": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Общая энергия"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Total energy"
+          }
+        }
+      }
+    },
     "Общий объём": {
       "extractionState": "manual",
       "localizations": {
@@ -12645,6 +13070,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rest applies to all exercises. No timer starts when resting as needed."
+          }
+        }
+      }
+    },
+    "Отключить Mi Fitness": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Отключить Mi Fitness"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Disconnect Mi Fitness"
           }
         }
       }
@@ -14009,6 +14451,23 @@
         }
       }
     },
+    "Подключение Mi Fitness пока недоступно.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Подключение Mi Fitness пока недоступно."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connecting Mi Fitness is currently unavailable."
+          }
+        }
+      }
+    },
     "Подключение к пульсометру…": {
       "extractionState": "manual",
       "localizations": {
@@ -14026,6 +14485,40 @@
         }
       }
     },
+    "Подключено": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Подключено"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connected"
+          }
+        }
+      }
+    },
+    "Подключите Mi Fitness в источниках здоровья и откройте журнал аккаунта.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Подключите Mi Fitness в источниках здоровья и откройте журнал аккаунта."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connect Mi Fitness in Health sources and open your account journal."
+          }
+        }
+      }
+    },
     "Подключите WATCH GT 6 Pro к HUAWEI Health на iPhone и включите доступную передачу данных в Apple «Здоровье». В «Здоровье» откройте профиль → Приложения и службы → HUAWEI Health и разрешите запись нужных показателей.": {
       "extractionState": "manual",
       "localizations": {
@@ -14039,6 +14532,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pair WATCH GT 6 Pro with HUAWEI Health on your iPhone and enable available data sharing with Apple Health. In Health, open your profile → Apps and Services → HUAWEI Health and allow writing the measurements you want to share."
+          }
+        }
+      }
+    },
+    "Подключите аккаунт Mi Fitness и разрешите нужные показатели.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Подключите аккаунт Mi Fitness и разрешите нужные показатели."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connect your Mi Fitness account and grant access to the metrics you need."
+          }
+        }
+      }
+    },
+    "Подключить Mi Fitness": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Подключить Mi Fitness"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connect Mi Fitness"
           }
         }
       }
@@ -14434,6 +14961,23 @@
         }
       }
     },
+    "Показатели здоровья": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Показатели здоровья"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Health metrics"
+          }
+        }
+      }
+    },
     "Показатели прочитаны.": {
       "extractionState": "manual",
       "localizations": {
@@ -14515,6 +15059,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Show exercises"
+          }
+        }
+      }
+    },
+    "Показываем данные выбранного источника. Источники не суммируются.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Показываем данные выбранного источника. Источники не суммируются."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Showing data from the selected source. Sources are not added together."
           }
         }
       }
@@ -14770,6 +15331,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Last 7 nights"
+          }
+        }
+      }
+    },
+    "Последние измерения за выбранный период; шаги и энергия — за выбранный день. Отсутствующие значения обозначены прочерком.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Последние измерения за выбранный период; шаги и энергия — за выбранный день. Отсутствующие значения обозначены прочерком."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Latest measurements in the selected period; steps and energy are for the selected day. Missing values appear as a dash."
           }
         }
       }
@@ -15454,6 +16032,23 @@
         }
       }
     },
+    "Продолжительность и записанные фазы сна из Mi Fitness.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Продолжительность и записанные фазы сна из Mi Fitness."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sleep duration and recorded stages from Mi Fitness."
+          }
+        }
+      }
+    },
     "Продолжительность и записанные фазы сна из «Здоровья», включая данные Apple Watch.": {
       "extractionState": "manual",
       "localizations": {
@@ -15552,6 +16147,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "As needed"
+          }
+        }
+      }
+    },
+    "Пройденное расстояние": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пройденное расстояние"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Walking and running distance"
           }
         }
       }
@@ -15726,6 +16338,23 @@
         }
       }
     },
+    "Пульс в покое": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пульс в покое"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resting heart rate"
+          }
+        }
+      }
+    },
     "Пульс во время тренировки": {
       "extractionState": "manual",
       "localizations": {
@@ -15773,6 +16402,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Heart rate and steps"
+          }
+        }
+      }
+    },
+    "Пульс и шаги из Mi Fitness": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пульс и шаги из Mi Fitness"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate and steps from Mi Fitness"
           }
         }
       }
@@ -16151,6 +16797,23 @@
         }
       }
     },
+    "Разрешение будет отозвано, сохранённая копия данных Mi Fitness на этом устройстве удалена. Исходные записи в Mi Fitness сохранятся.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Разрешение будет отозвано, сохранённая копия данных Mi Fitness на этом устройстве удалена. Исходные записи в Mi Fitness сохранятся."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permission will be revoked and cached Mi Fitness data on this device will be removed. Original records in Mi Fitness will remain."
+          }
+        }
+      }
+    },
     "Разрешите FitLife доступ к Bluetooth в настройках iOS.": {
       "extractionState": "manual",
       "localizations": {
@@ -16249,6 +16912,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Allow FitLife to write workouts in the Health app."
+          }
+        }
+      }
+    },
+    "Разрешите нужные показатели при подключении источника здоровья.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Разрешите нужные показатели при подключении источника здоровья."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grant access to the required metrics when connecting the health source."
           }
         }
       }
@@ -16933,6 +17613,23 @@
         }
       }
     },
+    "Сводка использует выбранный источник Mi Fitness. Сон — между полуднем предыдущего и выбранного дня.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сводка использует выбранный источник Mi Fitness. Сон — между полуднем предыдущего и выбранного дня."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This summary uses the selected Mi Fitness source. Sleep covers noon on the previous day to noon on the selected day."
+          }
+        }
+      }
+    },
     "Сводка учитывает доступные источники Apple «Здоровье», а не только выбранный трекер. Сон — между полуднем предыдущего и выбранного дня.": {
       "extractionState": "manual",
       "localizations": {
@@ -17354,6 +18051,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sync now"
+          }
+        }
+      }
+    },
+    "Синхронизируйте устройство с Mi Fitness и подключите аккаунт в источниках здоровья.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Синхронизируйте устройство с Mi Fitness и подключите аккаунт в источниках здоровья."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sync your device with Mi Fitness and connect your account in Health sources."
           }
         }
       }
@@ -18106,6 +18820,23 @@
         }
       }
     },
+    "Состояние подключения Mi Fitness пока неизвестно.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Состояние подключения Mi Fitness пока неизвестно."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Mi Fitness connection status is currently unknown."
+          }
+        }
+      }
+    },
     "Сохранение…": {
       "extractionState": "manual",
       "localizations": {
@@ -18225,6 +18956,23 @@
         }
       }
     },
+    "Сохранить измерение веса": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сохранить измерение веса"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save weight measurement"
+          }
+        }
+      }
+    },
     "Сохранить как шаблон": {
       "extractionState": "manual",
       "localizations": {
@@ -18289,6 +19037,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Saved meals"
+          }
+        }
+      }
+    },
+    "Сохранённые данные от": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сохранённые данные от"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cached data from"
           }
         }
       }
@@ -19190,6 +19955,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Workouts"
+          }
+        }
+      }
+    },
+    "Тренировки со всеми подходами и паузами, планы, записи веса и сохранённый пульс автоматически передаются в ваш аккаунт. Изменения офлайн отправятся при подключении. Питание и фотографии остаются на устройстве. Источники здоровья подключаются отдельно.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Тренировки со всеми подходами и паузами, планы, записи веса и сохранённый пульс автоматически передаются в ваш аккаунт. Изменения офлайн отправятся при подключении. Питание и фотографии остаются на устройстве. Источники здоровья подключаются отдельно."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workouts with all sets and pauses, plans, weight entries and saved heart rate sync automatically to your account. Offline changes are sent when connected. Food and photos stay on your device. Health sources are connected separately."
           }
         }
       }
@@ -21319,6 +22101,23 @@
         }
       }
     },
+    "Этот источник не предоставляет выбранные показатели.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Этот источник не предоставляет выбранные показатели."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This source does not provide the selected metrics."
+          }
+        }
+      }
+    },
     "Этот режим предназначен для AirPods Pro 3 с датчиком пульса. iOS выбирает доступный источник; вместе с AirPods может использоваться Apple Watch.": {
       "extractionState": "manual",
       "localizations": {
@@ -21523,6 +22322,23 @@
         }
       }
     },
+    "ккал": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ккал"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "kcal"
+          }
+        }
+      }
+    },
     "л": {
       "extractionState": "manual",
       "localizations": {
@@ -21536,6 +22352,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "l"
+          }
+        }
+      }
+    },
+    "м": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "м"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "m"
           }
         }
       }
@@ -21672,6 +22505,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "level"
+          }
+        }
+      }
+    },
+    "ч": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ч"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "h"
           }
         }
       }

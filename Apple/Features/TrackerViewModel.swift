@@ -108,6 +108,15 @@ import Observation
     defaults.set(mode.rawValue, forKey: "trackerMode")
     error = nil
   }
+  func healthDataSourceChanged() {
+    healthRequest = nil
+    summary = nil
+    loadingHealth = false
+    healthReadAt = nil
+    healthReadChanged = nil
+    healthBaseline = nil
+    healthReadFailed = false
+  }
   func selectDeviceProfile(_ profile: TrackerDeviceProfile) {
     if profile != deviceProfile, liveRequest != nil {
       queueSave()
@@ -378,11 +387,12 @@ import Observation
       try Task.checkCancellation()
       if healthRequest == request {
         healthReadChanged = healthBaseline.flatMap { previous in
-          calendar.isDate(previous.day, inSameDayAs: summary.day) ? previous != summary : nil
+          calendar.isDate(previous.day, inSameDayAs: summary.day)
+            ? !previous.hasSameValues(as: summary) : nil
         }
         healthBaseline = summary
         self.summary = summary
-        healthReadAt = now()
+        healthReadAt = summary.fetchedAt ?? now()
       }
     } catch {
       guard !Task.isCancelled, healthRequest == request else { return }

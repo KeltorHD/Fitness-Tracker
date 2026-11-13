@@ -41,7 +41,10 @@ bin_path="$("$swift_bin" build "${flags[@]}" --show-bin-path)"
   Apple/Services/ServerContracts.swift Apple/Services/ServerHTTPClient.swift \
   Apple/Services/AccountSession.swift Apple/Services/RemoteTrainingClient.swift \
   Apple/Services/TrainingSyncStateStore.swift Apple/Services/TrainingSyncCoordinator.swift \
-  Apple/Features/AccountTrainingViewModel.swift
+  Apple/Features/AccountTrainingViewModel.swift \
+  Apple/Services/HealthDataCache.swift Apple/Services/MiFitnessDataProvider.swift \
+  Apple/Services/HealthDataSources.swift Apple/Features/HealthProviderPresentation.swift \
+  Apple/Features/HealthDataViewModel.swift
 echo 'Portable presentation/data subset: Swift 6 type check passed (no Apple SDK).'
 # Compile the actual isolated Debug HTTP fixture as Foundation code, without SwiftUI stand-ins.
 "$swiftc_bin" -DDEBUG -swift-version 6 -strict-concurrency=complete \
@@ -59,6 +62,18 @@ echo 'Portable presentation/data subset: Swift 6 type check passed (no Apple SDK
   Apple/Features/AccountTrainingViewModel.swift Tests/PortableAccountChecks/main.swift \
   -o "$bin_path/portable-account-checks"
 "$bin_path/portable-account-checks"
+# Health providers use real disk caches and fakes for cloud/HealthKit; no external network.
+"$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
+  -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \
+  "$bin_path"/FitLifeCore.build/*.swift.o \
+  Apple/Services/ServerContracts.swift Apple/Services/ServerHTTPClient.swift \
+  Apple/Services/AccountSession.swift Apple/Services/RemoteTrainingClient.swift \
+  Apple/Services/TrainingSyncStateStore.swift Apple/Services/TrainingSyncCoordinator.swift \
+  Apple/Features/AccountTrainingViewModel.swift Apple/Services/HealthDataCache.swift \
+  Apple/Services/MiFitnessDataProvider.swift Apple/Services/HealthDataSources.swift \
+  Apple/Features/HealthProviderPresentation.swift Apple/Features/HealthDataViewModel.swift \
+  Tests/PortableHealthProviderChecks/main.swift -o "$bin_path/portable-health-provider-checks"
+"$bin_path/portable-health-provider-checks"
 # Exercise the real foreground sync coordinator, durable state and scoped pulse files offline.
 "$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
   -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \
@@ -130,6 +145,7 @@ python3 Tests/TrainingContractChecks/validation-cases.py --verify
 "$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
   -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \
   "$bin_path"/FitLifeCore.build/*.swift.o \
+  Apple/Services/ServerContracts.swift Apple/Features/HealthProviderPresentation.swift \
   Apple/Features/SleepDiaryModel.swift Apple/Features/SleepAlarmStore.swift \
   Tests/PortableSleepChecks/main.swift -o "$bin_path/portable-sleep-checks"
 "$bin_path/portable-sleep-checks"

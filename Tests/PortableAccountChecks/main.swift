@@ -55,6 +55,7 @@ private final class AccountProtocol: URLProtocol {
       ? "com.example.fitlife:/ios/oauth/callback"
       : "https://auth.example.com/ios/oauth/callback"
     let body: String
+    var status = 200
     if url.path == "/connect/token" || url.path == "/connect/revoke" {
       let data = request.httpBody ?? Data()
       let form = String(decoding: data, as: UTF8.self)
@@ -81,6 +82,9 @@ private final class AccountProtocol: URLProtocol {
         body = "{}"
       default: preconditionFailure("Unexpected fixture grant")
       }
+    } else if url.path == "/v1/health/providers/miFitness/data" {
+      status = 403
+      body = #"{"code":"health_not_connected"}"#
     } else if url.path == "/v1/account" {
       precondition(request.value(forHTTPHeaderField: "Authorization") == "Bearer initial")
       body =
@@ -91,7 +95,8 @@ private final class AccountProtocol: URLProtocol {
       body = #"{"changes":[],"cursor":0,"hasMore":false}"#
     }
     guard
-      let response = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)
+      let response = HTTPURLResponse(
+        url: url, statusCode: status, httpVersion: nil, headerFields: nil)
     else {
       preconditionFailure("Invalid fixture response")
     }
@@ -190,8 +195,21 @@ private final class AccountProtocol: URLProtocol {
       ]
       _ = try await session.finishAuthorization(attempt, callback: callback.url!)
       let client = RemoteTrainingClient(session: session)
+      do {
+        _ = try await session.authorizedData(
+          URLRequest(url: api.appendingPathComponent("must-not-be-sent")),
+          expectedUserID: UUID().uuidString)
+        preconditionFailure("Accepted another account before sending request")
+      } catch is CancellationError {}
       let page = try await client.changes(after: 0)
       precondition(page.changes.isEmpty)
+      do {
+        _ = try await session.authorizedData(
+          URLRequest(url: api.appendingPathComponent("v1/health/providers/miFitness/data")))
+        preconditionFailure("Accepted revoked Xiaomi grant")
+      } catch HealthDataError.notConnected {}
+      let profileAfterXiaomiRevocation = try await session.profile()
+      precondition(profileAfterXiaomiRevocation != nil)
       try await session.logout()
       let remainingCredentials = await credentials.load()
       precondition(remainingCredentials == nil)

@@ -46,10 +46,21 @@ struct ServerHTTPClient: Sendable {
     guard let response = response as? HTTPURLResponse, data.count <= maximumBytes else {
       throw ServerError.invalidResponse
     }
-    if [400, 403, 409, 413].contains(response.statusCode) {
+    if [400, 403, 409, 413, 429, 502, 503].contains(response.statusCode) {
       struct TrainingFailure: Decodable {
         let code: String
         let current: TrainingChange?
+      }
+      if let failure = try? TrainingCoding.decoder().decode(TrainingFailure.self, from: data),
+        failure.code.hasPrefix("health_") || failure.code.hasPrefix("invalid_health_")
+      {
+        switch failure.code {
+        case "health_not_connected": throw HealthDataError.notConnected
+        case "health_permission_required": throw HealthDataError.permissionRequired
+        case "health_rate_limited": throw ServerError.rateLimited
+        case "health_provider_unavailable": throw HealthDataError.unavailable
+        default: throw HealthDataError.invalidData
+        }
       }
       if let failure = try? TrainingCoding.decoder().decode(TrainingFailure.self, from: data),
         failure.code.hasPrefix("training_") || failure.code.hasPrefix("invalid_training_")
