@@ -108,7 +108,7 @@ struct TrainingConflictView: View {
       confirmation = try model.resolutionAction(
         latest, local: local, pulse: pulse, keepLocal: keepLocal)
     } catch {
-      error = L10n.text(
+      self.error = L10n.text(
         "Не удалось подготовить выбранную версию. Обновите предпросмотр.", locale: locale)
     }
   }
