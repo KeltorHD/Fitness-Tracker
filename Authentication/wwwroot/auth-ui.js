@@ -1,4 +1,12 @@
 const english = {
+  "Источники здоровья": "Health sources",
+  "Подключено": "Connected",
+  "Подключить Mi Fitness": "Connect Mi Fitness",
+  "Отключить Mi Fitness": "Disconnect Mi Fitness",
+  "Подключение Mi Fitness пока недоступно.": "Connecting Mi Fitness is currently unavailable.",
+  "Подключение позволяет читать выбранные данные. Исходные записи в Mi Fitness сохраняются.": "Connecting allows access to the selected data. Original records in Mi Fitness will remain.",
+  "Вернуться к аккаунту": "Back to account",
+
   "Аккаунт FitLife": "FitLife account",
   "Перейти к содержимому": "Skip to content",
   "Тема оформления": "Appearance",

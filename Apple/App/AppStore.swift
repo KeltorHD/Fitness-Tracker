@@ -28,6 +28,7 @@ import WidgetKit
   let settings: SettingsViewModel
   let tracker: TrackerViewModel
   let healthCharts: HealthChartsViewModel
+  let healthData: HealthDataSources
   @ObservationIgnored let exerciseImages: any ExerciseImageLoading
   @ObservationIgnored private let repository: WorkoutWorkspaceRepository
   @ObservationIgnored private let health: any HealthWorkoutExporting
@@ -107,6 +108,7 @@ import WidgetKit
     archiveFiles: any ArchiveFileHandling = ArchiveFileService(),
     tracker: TrackerViewModel? = nil,
     healthCharts: HealthChartsViewModel? = nil,
+    healthData: HealthDataSources? = nil,
     accountSession: AccountSession? = nil, sleepAlarmScheduler: (any SleepAlarmScheduling)? = nil,
     trainingHeartRates: (any TrainingHeartRateRepository)? = nil,
     trainingStateStorage: (any TrainingSyncStateStoring)? = nil,
@@ -145,6 +147,45 @@ import WidgetKit
       self.trainingStateStorage = MemoryTrainingSyncStateStore()
     }
     self.now = now
+    let healthAccount: @MainActor () -> String = {
+      (repository as? any TrainingAccountRepository)?.trainingAccountSelection.currentAccountID
+        ?? "local"
+    }
+    let healthCache: any HealthDataCaching
+    if platformServicesEnabled {
+      healthCache = HealthDataCache()
+    } else {
+      healthCache = MemoryHealthDataCache()
+    }
+    let cryptography = AppleServerCryptography()
+    let appleProvider: any HealthDataProviding
+    let appleSync: AppleHealthSyncCoordinator?
+    if let accountSession, platformServicesEnabled {
+      let remote = RemoteHealthSyncClient(
+        session: accountSession, cryptography: cryptography, account: healthAccount)
+      let sync = AppleHealthSyncCoordinator(
+        reader: AppleHealthSyncReader(), remote: remote,
+        storage: HealthSyncStateStore(), defaults: defaults, account: healthAccount, now: now)
+      appleSync = sync
+      appleProvider = SyncedAppleHealthProvider(
+        local: AppleHealthDataProvider(), remote: remote, preferLocal: { sync.enabled })
+    } else {
+      appleSync = nil
+      appleProvider = AppleHealthDataProvider()
+    }
+    self.healthData =
+      healthData
+      ?? HealthDataSources(
+        providers: [
+          appleProvider,
+          MiFitnessDataProvider(
+            session: accountSession, cryptography: cryptography, account: healthAccount),
+        ],
+        appleSleep: HealthSleepReader(), appleMetrics: HealthMetricsReader(),
+        appleCharts: HealthMetricsReader(),
+        cache: healthCache, defaults: defaults, account: healthAccount, now: now,
+        appleSync: appleSync)
+    appleSync?.onUpdate = { [weak sources = self.healthData] in sources?.appleHistoryDidChange() }
     let watchPulse = AppleWatchHeartRateService { [weak watch] command in
       guard let watch else { throw TrainingError.invalidState }
       try watch.sendHeartRateCommand(command)
@@ -152,24 +193,36 @@ import WidgetKit
     self.tracker =
       tracker
       ?? TrackerViewModel(
-        health: HealthMetricsReader(), sensor: BluetoothHeartRateService(),
+        health: self.healthData, sensor: BluetoothHeartRateService(),
         liveSource: HealthKitLiveHeartRateService(), watchLiveSource: watchPulse,
         recordings: self.trainingHeartRates, defaults: defaults,
-        errorMessage: { AppErrorReporter.message(for: $0, operation: $1, fallback: $2) })
+        errorMessage: {
+          $0 is HealthDataError
+            ? HealthProviderMessage.error($0)
+            : AppErrorReporter.message(for: $0, operation: $1, fallback: $2)
+        })
     self.healthCharts =
       healthCharts
       ?? HealthChartsViewModel(
-        reader: HealthMetricsReader(), defaults: defaults,
+        reader: self.healthData, defaults: defaults,
         errorMessage: {
-          AppErrorReporter.message(
-            for: $0, operation: "healthCharts",
-            fallback:
-              "Не удалось загрузить пульс и шаги. Проверьте доступ к «Здоровью» и повторите.")
+          $0 is HealthDataError
+            ? HealthProviderMessage.error($0)
+            : AppErrorReporter.message(
+              for: $0, operation: "healthCharts",
+              fallback:
+                "Не удалось загрузить пульс и шаги. Проверьте доступ к «Здоровью» и повторите.")
         })
     self.tracker.onHeartRateChange = { [weak self] in self?.scheduleHeartRateUpdate() }
     self.tracker.onRecordingSaved = { [weak self] in self?.account?.sync.requestSync() }
     self.repository.onTrainingChange = { [weak self] in self?.account?.sync.requestSync() }
     self.healthCharts.onHeartRateChange = { [weak self] in self?.scheduleHeartRateUpdate() }
+    self.healthData.onSelectionChange = { [weak self] in
+      guard let self else { return }
+      self.tracker.healthDataSourceChanged()
+      self.healthCharts.clear()
+      if self.healthCharts.enabled { self.healthCharts.retry() }
+    }
     watch.heartRateEvent = { [weak watchPulse] in watchPulse?.receive($0) }
     watch.heartRateFailure = { [weak watchPulse] in watchPulse?.connectionFailed(sessionID: $0) }
     watch.heartRateDisconnected = { [weak watchPulse] in watchPulse?.disconnected() }
@@ -289,6 +342,7 @@ import WidgetKit
     workouts loaded: [Workout], templates routines: [WorkoutTemplate],
     bodyWeights measurements: [BodyWeightEntry], refreshTracker: Bool = true
   ) {
+    healthData.refreshAccount()
     workouts = loaded
     completed = loaded.filter { $0.status == .completed }
     templates = routines
@@ -468,7 +522,10 @@ import WidgetKit
       let monitor = NWPathMonitor()
       monitor.pathUpdateHandler = { [weak self] path in
         guard path.status == .satisfied else { return }
-        Task { @MainActor in self?.account?.sync.requestSync(immediately: true) }
+        Task { @MainActor in
+          self?.account?.sync.requestSync(immediately: true)
+          self?.healthData.appleSync?.requestSync()
+        }
       }
       trainingNetworkMonitor = monitor
       monitor.start(queue: DispatchQueue(label: "FitLife.TrainingNetwork"))

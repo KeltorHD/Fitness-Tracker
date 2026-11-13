@@ -36,10 +36,11 @@ public sealed class AuthorizationService(UserManager<ApplicationUser> users,
             var returnUrl = HttpContext.Request.Path + QueryString.Create(HttpContext.Request.Query.Where(item => item.Key != "prompt"));
             return new OAuthRedirect("/login" + QueryString.Create("returnUrl", returnUrl));
         }
-        if (request.GetParameter("screen")?.ToString() == "account")
+        if (request.GetParameter("screen")?.ToString() is "account" or "health")
         {
             var returnUrl = HttpContext.Request.Path + QueryString.Create(HttpContext.Request.Query.Where(item => item.Key != "screen"));
-            return new OAuthRedirect("/account" + QueryString.Create("returnUrl", returnUrl));
+            var path = request.GetParameter("screen")?.ToString() == "health" ? "/account/health" : "/account";
+            return new OAuthRedirect(path + QueryString.Create("returnUrl", returnUrl));
         }
         var application = await applications.FindByClientIdAsync(request.ClientId!, cancellationToken)
             ?? throw new InvalidOperationException();

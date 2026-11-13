@@ -3,6 +3,7 @@ import SwiftUI
 import UIKit
 
 struct TrackerView: View {
+  @Environment(AppStore.self) private var store
   @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
   @Environment(\.calendar) private var calendar
@@ -29,7 +30,8 @@ struct TrackerView: View {
           selection: Binding(
             get: { model.mode }, set: { model.selectMode($0) })
         ) {
-          Text(L10n.text("Apple «Здоровье»", locale: locale)).tag(TrackerMode.appleHealth)
+          Text(L10n.text(store.healthData.selected.titleKey, locale: locale)).tag(
+            TrackerMode.appleHealth)
           Text(L10n.text("Bluetooth-пульс", locale: locale)).tag(TrackerMode.bluetooth)
         }.pickerStyle(.menu).accessibilityIdentifier("trackerModePicker")
       }
@@ -105,10 +107,18 @@ struct TrackerView: View {
   private var healthSections: some View {
     Group {
       Section {
+        NavigationLink(L10n.text("Источники здоровья", locale: locale)) {
+          HealthDataView(sources: store.healthData)
+        }
         NavigationLink(L10n.text("Пульс и шаги", locale: locale)) { HealthChartsView() }
         if ![.airPodsPro3, .appleWatch].contains(model.deviceProfile) {
-          Text(L10n.text(model.deviceProfile.healthSetupKey, locale: locale))
-            .accessibilityIdentifier("trackerHealthSetup")
+          Text(
+            L10n.text(
+              store.healthData.selected == .miFitness
+                ? "Синхронизируйте устройство с Mi Fitness и подключите аккаунт в источниках здоровья."
+                : model.deviceProfile.healthSetupKey, locale: locale)
+          )
+          .accessibilityIdentifier("trackerHealthSetup")
         }
         DatePicker(
           L10n.text("День", locale: locale), selection: $day, in: ...Date(),
@@ -134,11 +144,21 @@ struct TrackerView: View {
       } footer: {
         Text(
           L10n.text(
-            "Данные могут поступать с задержкой. Доступны только показатели, переданные в «Здоровье» и разрешённые для FitLife.",
+            store.healthData.selected == .miFitness
+              ? "Доступны только показатели, синхронизированные с облаком Mi Fitness и разрешённые для FitLife."
+              : "Данные могут поступать с задержкой. Доступны только показатели, переданные в «Здоровье» и разрешённые для FitLife.",
             locale: locale))
       }
       if let summary = model.summary {
         Section {
+          if summary.isCached {
+            Text(
+              L10n.text(
+                "Источник недоступен. Показана последняя сохранённая копия этого периода.",
+                locale: locale)
+            )
+            .font(.footnote).foregroundStyle(.secondary)
+          }
           LabeledContent(
             L10n.text("Шаги", locale: locale),
             value: summary.steps.map { $0.formatted(.number.locale(L10n.numberLocale)) } ?? "—")
@@ -166,7 +186,9 @@ struct TrackerView: View {
           if summary.isEmpty {
             Text(
               L10n.text(
-                "Нет доступных данных. Проверьте синхронизацию приложения трекера и разрешения FitLife в «Здоровье».",
+                store.healthData.selected == .miFitness
+                  ? "Нет доступных данных. Проверьте синхронизацию Mi Fitness и разрешённые показатели в источниках здоровья."
+                  : "Нет доступных данных. Проверьте синхронизацию приложения трекера и разрешения FitLife в «Здоровье».",
                 locale: locale))
           }
         } header: {
@@ -174,7 +196,11 @@ struct TrackerView: View {
         } footer: {
           Text(
             L10n.text(
-              "Сводка учитывает доступные источники Apple «Здоровье», а не только выбранный трекер. Сон — между полуднем предыдущего и выбранного дня.",
+              store.healthData.selected == .miFitness
+                ? "Сводка использует выбранный источник Mi Fitness. Сон — между полуднем предыдущего и выбранного дня."
+                : store.healthData.usesServerAppleHistory
+                  ? "Сводка использует историю Apple Health вашего аккаунта. Передача с этого iPhone включается в источниках здоровья."
+                  : "Сводка учитывает доступные источники Apple «Здоровье», а не только выбранный трекер. Сон — между полуднем предыдущего и выбранного дня.",
               locale: locale))
         }
       }

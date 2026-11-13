@@ -261,3 +261,9 @@ git status --short
 В этом обновлении изменены только существующие исходники: если Xcode-проект был сгенерирован после предыдущих добавлений файлов, повторять `xcodegen generate` не нужно. Достаточно pull и сборки ⌘B/запуска ⌘R. Кнопки общего старта теперь открывают полноразмерный выбор шаблонов с поиском и фильтрами; «Без шаблона» закреплено компактно сверху. Тема по умолчанию — зелёный «Лес», явно выбранная тема сохраняется. [Сценарии проверки](docs/XCODE_VALIDATION.md#старт-с-приоритетом-шаблонов-поиск-и-фильтры).
 
 Для HTTPS callback используйте полную схему `FitLife` с Associated Domains `webcredentials:$(FITLIFE_AUTH_DOMAIN)`, настоящим App ID Prefix.Bundle ID и соответствующим provisioning. Пример host — `auth.example.com`; реальный `FITLIFE_AUTH_DOMAIN` и HTTPS URL задайте в игнорируемом `Config/Local.xcconfig`. Задайте `IOS_APP_IDENTIFIER` на Auth Server и проверьте AASA по [SERVER.md](docs/SERVER.md#привязка-https-callback-к-ios). Пока Apple ID не зарегистрирован, возврат на iPhone не считается настроенным. Personal Team схема сохраняет прежние entitlements и использует отдельный private-use callback с PKCE по инструкции в SERVER.md.
+
+## Источники здоровья
+
+Настройка прямого Mi Fitness cloud, callback, разрешения, миграция Authentication и границы проверок описаны в [HEALTH_PROVIDERS.md](docs/HEALTH_PROVIDERS.md).
+
+При проверке Apple Health server sync включите передачу на одном iPhone, проверьте чтение на втором устройстве, явное удаление записи, offline/retry, переключение аккаунта и отмену при уходе в фон. Сверьте шаги/калории с HealthKit и проверьте разрешения отдельных типов. Linux-проверки используют fakes и не подтверждают SDK/runtime HealthKit.

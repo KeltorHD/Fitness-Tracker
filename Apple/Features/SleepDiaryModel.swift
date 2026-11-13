@@ -25,7 +25,7 @@ import Observation
       enabled = true
       defaults.set(true, forKey: "sleepDiaryEnabled")
     } catch is CancellationError {} catch {
-      self.error = "Не удалось прочитать данные сна. Проверьте доступ к «Здоровью» и повторите."
+      self.error = HealthProviderMessage.error(error)
     }
     loading = false
   }
@@ -51,7 +51,7 @@ import Observation
       nights = value
     } catch {
       guard generation == token, !Task.isCancelled else { return }
-      self.error = "Не удалось прочитать данные сна. Проверьте доступ к «Здоровью» и повторите."
+      self.error = HealthProviderMessage.error(error)
     }
   }
 }

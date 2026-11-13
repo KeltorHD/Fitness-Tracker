@@ -80,7 +80,7 @@ public sealed class TrainingMigrationTests
         Assert.Equal(previous.Payload, (await database.Backups.AsNoTracking().SingleAsync(x => x.Id == previous.Id, cancellationToken)).Payload);
         Assert.Equal(latest.Payload, (await database.Backups.AsNoTracking().SingleAsync(x => x.Id == latest.Id, cancellationToken)).Payload);
         Assert.False(database.Database.HasPendingModelChanges());
-        Assert.Equal(3, (await database.Database.GetAppliedMigrationsAsync(cancellationToken)).Count());
+        Assert.Equal(4, (await database.Database.GetAppliedMigrationsAsync(cancellationToken)).Count());
 
         var first = page.Changes.First(x => x.Kind == TrainingKinds.Workout);
         var editedValue = JsonNode.Parse(first.Value!.Value.GetRawText())!.AsObject();

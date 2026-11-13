@@ -55,6 +55,12 @@ struct SettingsView: View {
       }
       Section(L10n.text("Основные", locale: locale)) {
         NavigationLink {
+          HealthDataView(sources: store.healthData)
+        } label: {
+          SettingsLabel(
+            title: L10n.text("Источники здоровья", locale: locale), symbol: "heart.text.clipboard")
+        }.disabled(store.isDemoMode).accessibilityIdentifier("openHealthDataProviders")
+        NavigationLink {
           TrackerView(model: store.tracker)
         } label: {
           SettingsLabel(title: L10n.text("Трекер", locale: locale), symbol: "heart.circle")

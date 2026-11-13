@@ -48,6 +48,12 @@ struct ProgressScreen: View {
           }
           if !store.isDemoMode {
             NavigationLink {
+              HealthDataView(sources: store.healthData)
+            } label: {
+              Label(L10n.text("Показатели здоровья", locale: locale), systemImage: "figure.walk")
+                .font(.headline).frame(maxWidth: .infinity, alignment: .leading).resultsCard()
+            }.buttonStyle(.plain).accessibilityIdentifier("openHealthOverview")
+            NavigationLink {
               HealthChartsView()
             } label: {
               Label(L10n.text("Пульс и шаги", locale: locale), systemImage: "heart.text.clipboard")

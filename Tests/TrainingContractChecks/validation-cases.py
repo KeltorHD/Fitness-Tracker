@@ -131,6 +131,8 @@ def cases():
     add('pulse-empty', 7, True, [(['readings'], [])])
     add('pulse-unknown-version', 7, False, [(['schemaVersion'], 2)])
     add('pulse-unknown-mode', 7, False, [(['mode'], 'unknown')])
+    add('pulse-mi-fitness', 7, True, [(['origin'], 'miFitnessCloud')])
+    add('pulse-mi-fitness-wrong-mode', 7, False, [(['origin'], 'miFitnessCloud'), (['mode'], 'bluetooth')])
     add('pulse-unknown-origin', 7, False, [(['origin'], 'unknown')])
     add('pulse-wrong-origin-mode', 7, False, [(['mode'], 'bluetooth')])
     add('pulse-same-timestamps', 7, False, [(['readings', 1, 'date'], fixtures[7]['value']['readings'][0]['date'])])

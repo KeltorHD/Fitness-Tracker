@@ -4,11 +4,13 @@ import Foundation
 /// Isolated UI fixtures require both explicit launch flags and a Debug build.
 /// Neither HealthKit records nor system alarms are created by these fixtures.
 @MainActor enum SleepUITestFixture {
-  static func reader() -> any HealthSleepReading {
+  static func reader(fallback: any HealthSleepReading = HealthSleepReader())
+    -> any HealthSleepReading
+  {
     #if DEBUG
       if enabled { return Reader() }
     #endif
-    return HealthSleepReader()
+    return fallback
   }
   static func scheduler() -> (any SleepAlarmScheduling)? {
     #if DEBUG

@@ -50,6 +50,11 @@ public partial class Program
             builder.Services.AddHostedService<PendingRegistrationCleanupWorker>();
         builder.Services.AddScoped<PasskeyService>();
         builder.Services.AddScoped<ExternalLoginService>();
+        builder.Services.AddScoped<HealthConnectionService>();
+        builder.Services.AddSingleton<IHealthConnectionLocks, HealthConnectionLocks>();
+        builder.Services.AddHttpClient("xiaomi-health-revoke", client => client.Timeout = TimeSpan.FromSeconds(15))
+            .ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler { AllowAutoRedirect = false, UseCookies = false })
+            .RemoveAllLoggers();
         builder.Services.AddScoped<AuthorizationService>();
         builder.Services.AddScoped<AppAssociationService>();
         builder.Services.AddOpenApi();
@@ -125,7 +130,7 @@ public partial class Program
             .AddClient(options =>
             {
                 options.AllowAuthorizationCodeFlow();
-                options.SetRedirectionEndpointUris("callback/login/google", "callback/login/apple", "callback/login/yandex");
+                options.SetRedirectionEndpointUris("callback/login/google", "callback/login/apple", "callback/login/yandex", XiaomiHealthOAuth.CallbackPath);
                 if (builder.Environment.IsEnvironment("Testing"))
                     options.AddEphemeralEncryptionKey().AddEphemeralSigningKey();
                 else if (builder.Environment.IsDevelopment())
@@ -136,6 +141,7 @@ public partial class Program
                 options.UseAspNetCore().EnableRedirectionEndpointPassthrough();
                 options.UseSystemNetHttp();
                 AuthConfiguration.AddProviders(options, config);
+                XiaomiHealthOAuth.Configure(options, config);
             })
             .AddServer(options =>
             {
@@ -193,7 +199,8 @@ public partial class Program
             options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
                 // Introspection закрыта Nginx для внешних клиентов и использует confidential client.
                 // Её отдельный общий бюджет не расходует IP-лимит обычных пользовательских входов.
-                context.Request.Path.Value?.TrimEnd('/').Equals("/connect/introspect", StringComparison.OrdinalIgnoreCase) == true
+                context.Request.Path.Value?.TrimEnd('/').Equals("/connect/introspect", StringComparison.OrdinalIgnoreCase) == true ||
+                context.Request.Path.StartsWithSegments("/internal/health", StringComparison.OrdinalIgnoreCase)
                     ? RateLimitPartition.GetFixedWindowLimiter("service:introspection", _ =>
                         new FixedWindowRateLimiterOptions { PermitLimit = 1200, Window = TimeSpan.FromMinutes(1) })
                     : RateLimitPartition.GetFixedWindowLimiter("ip:" + (context.Connection.RemoteIpAddress?.ToString() ?? "unknown"),

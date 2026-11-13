@@ -2,6 +2,7 @@ import FitLifeCore
 import SwiftUI
 
 struct WorkoutHeartRateView: View {
+  @Environment(AppStore.self) private var store
   @Environment(\.locale) private var locale
   let workout: Workout
   @State private var model: WorkoutHeartRateViewModel
@@ -35,10 +36,12 @@ struct WorkoutHeartRateView: View {
           L10n.text("Пульс во время тренировки", locale: locale))
         Text(
           L10n.text(
-            record.origin == .liveHealthKit
-              ? "Источник: пульс во время тренировки"
-              : record.mode == .bluetooth
-                ? "Источник: Bluetooth-пульсометр" : "Источник: Apple «Здоровье»", locale: locale)
+            record.origin == .miFitnessCloud
+              ? "Источник: Mi Fitness"
+              : record.origin == .liveHealthKit
+                ? "Источник: пульс во время тренировки"
+                : record.mode == .bluetooth
+                  ? "Источник: Bluetooth-пульсометр" : "Источник: Apple «Здоровье»", locale: locale)
         )
         .font(.caption).foregroundStyle(.secondary)
       } else if !model.loading {
@@ -50,7 +53,11 @@ struct WorkoutHeartRateView: View {
         Button(L10n.text("Повторить", locale: locale)) { request += 1 }.disabled(model.loading)
       }
       if model.recording?.isLiveSensorRecording != true {
-        Button(L10n.text("Загрузить пульс из «Здоровья»", locale: locale)) {
+        Button(
+          L10n.text(
+            store.healthData.selected == .miFitness
+              ? "Загрузить пульс из Mi Fitness" : "Загрузить пульс из «Здоровья»", locale: locale)
+        ) {
           importHealth = true
           request += 1
         }.disabled(model.loading)

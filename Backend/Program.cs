@@ -41,6 +41,15 @@ public partial class Program
             }).RemoveAllLoggers();
         builder.Services.AddScoped<BackupStorage>();
         builder.Services.AddScoped<TrainingStorage>();
+        builder.Services.AddScoped<HealthSyncStorage>();
+        builder.Services.AddScoped<IHealthDataProvider, AppleHealthHistoryProvider>();
+        builder.Services.AddHttpClient<HealthProviderGrants>(client => client.Timeout = TimeSpan.FromSeconds(20))
+            .ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler { AllowAutoRedirect = false, UseCookies = false })
+            .RemoveAllLoggers();
+        builder.Services.AddHttpClient<XiaomiHealthProvider>(client => client.Timeout = TimeSpan.FromSeconds(20))
+            .ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler { AllowAutoRedirect = false, UseCookies = false })
+            .RemoveAllLoggers();
+        builder.Services.AddScoped<IHealthDataProvider>(services => services.GetRequiredService<XiaomiHealthProvider>());
         builder.Services.AddOptions<IntrospectionOptions>()
             .BindConfiguration("Auth")
             .Validate(options => Uri.TryCreate(options.Issuer, UriKind.Absolute, out var uri) &&
@@ -101,6 +110,11 @@ public partial class Program
             options.AddPolicy("training", context => RateLimitPartition.GetFixedWindowLimiter(
                 context.User.FindFirst("sub")?.Value ?? context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
                 _ => new FixedWindowRateLimiterOptions { PermitLimit = 240, Window = TimeSpan.FromMinutes(1) }));
+            options.AddPolicy("healthSync", context => RateLimitPartition.GetFixedWindowLimiter(
+                context.User.FindFirst("sub")?.Value ?? "anonymous", _ => new FixedWindowRateLimiterOptions { PermitLimit = 120, Window = TimeSpan.FromMinutes(1) }));
+            options.AddPolicy("health", context => RateLimitPartition.GetFixedWindowLimiter(
+                context.User.FindFirst("sub")?.Value ?? context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+                _ => new FixedWindowRateLimiterOptions { PermitLimit = 30, Window = TimeSpan.FromMinutes(1) }));
         });
         var protection = builder.Services.AddDataProtection().SetApplicationName("FitLife.Backend");
         if (config["DataProtection:Path"] is { Length: > 0 } keyPath)
@@ -134,6 +148,7 @@ public partial class Program
         app.UseAuthorization();
         app.UseRateLimiter();
         app.MapTraining();
+        app.MapHealthData();
         var backups = app.MapGroup("/v1/backups")
             .RequireAuthorization("backend")
             .RequireRateLimiting("backups")

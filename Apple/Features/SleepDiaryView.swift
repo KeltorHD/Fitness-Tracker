@@ -6,9 +6,11 @@ private struct SleepLoadKey: Hashable {
   let calendar: Calendar
   let active: Bool
   let enabled: Bool
+  let sourceRevision: Int
 }
 
 struct SleepDiaryView: View {
+  @Environment(AppStore.self) private var store
   @Environment(\.locale) private var locale
   @Environment(\.calendar) private var calendar
   @Environment(\.scenePhase) private var phase
@@ -28,6 +30,13 @@ struct SleepDiaryView: View {
   var body: some View {
     List {
       SleepAlarmPanel(store: alarms).cardListRow()
+      if model.enabled, let night = model.nights.first, let date = night.fetchedAt {
+        LabeledContent(
+          L10n.text(night.isCached ? "Сохранённые данные от" : "Данные получены", locale: locale)
+        ) {
+          Text(date, format: .dateTime.day().month().hour().minute())
+        }.cardListRow()
+      }
       if !model.enabled {
         VStack(alignment: .leading, spacing: 14) {
           Label(
@@ -36,7 +45,11 @@ struct SleepDiaryView: View {
           ).font(.title2.bold()).foregroundStyle(.tint)
           Text(
             L10n.text(
-              "Продолжительность и записанные фазы сна из «Здоровья», включая данные Apple Watch.",
+              store.healthData.selected == .miFitness
+                ? "Продолжительность и записанные фазы сна из Mi Fitness."
+                : store.healthData.usesServerAppleHistory
+                  ? "Сон из истории Apple Health вашего аккаунта. Передачу с iPhone можно включить в источниках здоровья."
+                  : "Продолжительность и записанные фазы сна из «Здоровья», включая данные Apple Watch.",
               locale: locale)
           ).foregroundStyle(.secondary)
           Button(L10n.text("Подключить данные сна", locale: locale)) {
@@ -62,6 +75,10 @@ struct SleepDiaryView: View {
         SleepInsightsView(nights: model.nights, day: date)
       }
       if model.enabled {
+        NavigationLink(L10n.text("Источники здоровья", locale: locale)) {
+          HealthDataView(sources: store.healthData)
+        }
+        .cardListRow()
         DisclosureGroup(L10n.text("Данные и доступ", locale: locale)) {
           Text(
             L10n.text(
@@ -82,7 +99,7 @@ struct SleepDiaryView: View {
     .task(
       id: SleepLoadKey(
         day: date, calendar: calendar, active: isSelected && phase == .active,
-        enabled: model.enabled)
+        enabled: model.enabled, sourceRevision: store.healthData.revision)
     ) {
       guard isSelected, phase == .active else { return }
       alarms.refresh()

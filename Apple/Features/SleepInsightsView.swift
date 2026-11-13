@@ -50,7 +50,7 @@ struct SleepInsightsView: View {
         } description: {
           Text(
             L10n.text(
-              "Данные могут ещё не синхронизироваться с часов. Проверьте записи и доступ в приложении «Здоровье».",
+              "Данные могут ещё не синхронизироваться с устройства. Проверьте записи и разрешения выбранного источника здоровья.",
               locale: locale))
         }.cardListRow()
       }
@@ -83,7 +83,7 @@ struct SleepInsightsView: View {
           Text(L10n.text("Во сне", locale: locale)).font(.subheadline).foregroundStyle(.secondary)
         }
         Spacer(minLength: 8)
-        phaseRing(night).frame(width: 136, height: 136)
+        if !night.periods.isEmpty { phaseRing(night).frame(width: 136, height: 136) }
       }
       if let delta = trend.differenceFromPrevious(night, calendar: calendar) {
         Label {

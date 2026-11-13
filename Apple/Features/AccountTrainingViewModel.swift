@@ -3,7 +3,7 @@ import Foundation
 import Observation
 
 enum AccountTrainingAction: Hashable {
-  case signIn, manage, refresh, logout, deleteAccount, openAccountJournal
+  case signIn, manage, manageHealth, refresh, logout, deleteAccount, openAccountJournal
   case openLocalJournal(String)
   case resolve(
     TrainingRecordKey, revision: Int64, localFingerprint: String?, pulseFingerprint: String?,
@@ -63,11 +63,12 @@ enum AccountTrainingAction: Hashable {
     }
     do {
       switch action {
-      case .signIn, .manage:
+      case .signIn, .manage, .manageHealth:
         await sync.disconnect()
         let attempt = try cryptography.authorizationAttempt()
         let url = try attempt.authorizationURL(
-          configuration: session.configuration, manageAccount: action == .manage)
+          configuration: session.configuration, manageAccount: action != .signIn,
+          manageHealth: action == .manageHealth)
         let callback = try await browser(url)
         profile = try await session.finishAuthorization(attempt, callback: callback)
         expectedNamespace = try profile.map(namespace)

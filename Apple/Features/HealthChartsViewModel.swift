@@ -147,11 +147,12 @@ struct HealthChartsObservation: Hashable {
     try Task.checkCancellation()
     guard generation == id, enabled else { return }
     snapshot = value
-    if reportResult || baseline != value {
+    if reportResult || baseline.map({ !$0.hasSameValues(as: value) }) != false {
       updateChanged = baseline.flatMap { previous in
-        calendar.isDate(previous.day, inSameDayAs: value.day) ? previous != value : nil
+        calendar.isDate(previous.day, inSameDayAs: value.day)
+          ? !previous.hasSameValues(as: value) : nil
       }
-      updatedAt = now()
+      updatedAt = value.fetchedAt ?? now()
     }
     baseline = value
     points = HeartRateChartPoint.make(readings: value.heartRate, gap: 300)

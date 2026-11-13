@@ -41,7 +41,7 @@ internal static class TrainingValidation
                 var heart = TrainingJson.Read<HeartRateData>(value);
                 Check(heart.WorkoutID == id && heart.SchemaVersion == 1);
                 Check(heart.Mode is "appleHealth" or "bluetooth");
-                Check(heart.Origin is null or "liveHealthKit");
+                Check(heart.Origin is null or "liveHealthKit" or "miFitnessCloud");
                 Check(heart.Origin is null || heart.Mode == "appleHealth");
                 List(heart.Readings);
                 Check(heart.Readings.Count <= 10_000);

@@ -59,7 +59,7 @@ struct DashboardView: View {
             } else {
               SleepDiaryView(
                 date: selectedDate, isSelected: section == .sleep, alarms: store.sleepAlarms,
-                reader: SleepUITestFixture.reader())
+                reader: SleepUITestFixture.reader(fallback: store.healthData))
             }
           }.tag(DiarySection.sleep)
         }.tabViewStyle(.page(indexDisplayMode: .never))

@@ -67,6 +67,133 @@ namespace FitLife.Backend.Migrations
                     b.ToTable("DeletedAccounts");
                 });
 
+            modelBuilder.Entity("FitLife.Backend.HealthSyncBucket", b =>
+                {
+                    b.Property<string>("OwnerId")
+                        .HasMaxLength(36)
+                        .HasColumnType("character varying(36)");
+
+                    b.Property<string>("Metric")
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)");
+
+                    b.Property<string>("TimeZoneId")
+                        .HasMaxLength(80)
+                        .HasColumnType("character varying(80)");
+
+                    b.Property<long>("StartMilliseconds")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("Dirty")
+                        .HasColumnType("boolean");
+
+                    b.Property<long>("EndMilliseconds")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("Revision")
+                        .HasColumnType("bigint");
+
+                    b.Property<double?>("Value")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("OwnerId", "Metric", "TimeZoneId", "StartMilliseconds");
+
+                    b.ToTable("HealthSyncBucket");
+                });
+
+            modelBuilder.Entity("FitLife.Backend.HealthSyncDevice", b =>
+                {
+                    b.Property<string>("OwnerId")
+                        .HasMaxLength(36)
+                        .HasColumnType("character varying(36)");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Acknowledgement")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("BatchId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Hash")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<long>("Sequence")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("OwnerId", "Id");
+
+                    b.ToTable("HealthSyncDevice");
+                });
+
+            modelBuilder.Entity("FitLife.Backend.HealthSyncOwner", b =>
+                {
+                    b.Property<string>("OwnerId")
+                        .HasMaxLength(36)
+                        .HasColumnType("character varying(36)");
+
+                    b.Property<long>("Revision")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("UpdatedAtMilliseconds")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("OwnerId");
+
+                    b.ToTable("HealthSyncOwner");
+                });
+
+            modelBuilder.Entity("FitLife.Backend.HealthSyncSample", b =>
+                {
+                    b.Property<string>("OwnerId")
+                        .HasMaxLength(36)
+                        .HasColumnType("character varying(36)");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<long>("EndMilliseconds")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Metric")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)");
+
+                    b.Property<string>("SourceId")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<string>("SourceName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("Stage")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<long>("StartMilliseconds")
+                        .HasColumnType("bigint");
+
+                    b.Property<double?>("Value")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("OwnerId", "Id");
+
+                    b.HasIndex("OwnerId", "Metric", "StartMilliseconds");
+
+                    b.ToTable("HealthSyncSample");
+                });
+
             modelBuilder.Entity("FitLife.Backend.TrainingBodyWeight", b =>
                 {
                     b.Property<string>("OwnerId")
@@ -506,6 +633,33 @@ namespace FitLife.Backend.Migrations
                     b.HasIndex("OwnerId", "Kind", "Id");
 
                     b.ToTable("Workouts");
+                });
+
+            modelBuilder.Entity("FitLife.Backend.HealthSyncBucket", b =>
+                {
+                    b.HasOne("FitLife.Backend.HealthSyncOwner", null)
+                        .WithMany()
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("FitLife.Backend.HealthSyncDevice", b =>
+                {
+                    b.HasOne("FitLife.Backend.HealthSyncOwner", null)
+                        .WithMany()
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("FitLife.Backend.HealthSyncSample", b =>
+                {
+                    b.HasOne("FitLife.Backend.HealthSyncOwner", null)
+                        .WithMany()
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("FitLife.Backend.TrainingBodyWeight", b =>
