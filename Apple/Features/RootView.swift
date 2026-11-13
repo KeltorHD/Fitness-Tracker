@@ -57,6 +57,7 @@ struct RootView: View {
       }
     }
     .background(FitTheme.paper)
+    .disabled(store.switchingTrainingAccount)
     .id(store.workspaceID)
     .safeAreaInset(edge: .top) { if store.isDemoMode { DemoModeBanner() } }
     .tint(.primary)
@@ -144,6 +145,13 @@ struct RootView: View {
     }
     .onChange(of: store.active?.status) { updateIdleTimer() }
     .onChange(of: phase, initial: true) { updateIdleTimer() }
+    .task(id: phase) {
+      if phase == .active {
+        await store.resumeTrainingSync()
+      } else {
+        await store.suspendTrainingSync()
+      }
+    }
     .task(
       id: HealthChartsObservation(
         day: store.healthCharts.day, calendar: calendar,

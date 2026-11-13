@@ -4,6 +4,66 @@ import XCTest
 @testable import FitLife
 
 @MainActor final class PersistenceTests: XCTestCase {
+  func testAccountNamespacesAdoptTrainingOnceAndLeaveNutritionOnDevice() throws {
+    let repository = try SwiftDataWorkoutRepository(inMemory: true)
+    var workout = Workout(name: "Сохранённая", startedAt: Date(timeIntervalSince1970: 100))
+    try WorkoutEngine.cancel(&workout, at: Date(timeIntervalSince1970: 200))
+    let template = ExerciseCatalog.starterTemplates[0]
+    let weight = BodyWeightEntry(weightKG: 75, workoutID: workout.id)
+    let food = FoodEntry(
+      title: "Food",
+      portions: [
+        FoodPortion(product: FoodProduct(name: "Food", per100Units: Nutrients(calories: 100)))
+      ])
+    try repository.save(workout)
+    try repository.saveTemplate(template)
+    try repository.saveBodyWeight(weight)
+    try repository.saveFoodEntry(food)
+    try repository.activateTrainingAccount("account-a")
+    XCTAssertEqual(try repository.workouts(), [workout])
+    try repository.activateTrainingAccount("account-b")
+    XCTAssertTrue(try repository.workouts().isEmpty)
+    XCTAssertTrue(try repository.templates().isEmpty)
+    XCTAssertTrue(try repository.bodyWeights().isEmpty)
+    XCTAssertEqual(try repository.foodEntries(), [food])
+    let other = BodyWeightEntry(weightKG: 82)
+    try repository.saveBodyWeight(other)
+    try repository.activateTrainingAccount("account-a")
+    XCTAssertEqual(try repository.workouts(), [workout])
+    XCTAssertEqual(try repository.templates(), [template])
+    XCTAssertEqual(try repository.bodyWeights(), [weight])
+    XCTAssertEqual(repository.trainingAccountSelection.firstAccountID, "account-a")
+    try repository.activateTrainingAccount("account-b")
+    XCTAssertEqual(try repository.bodyWeights(), [other])
+  }
+
+  func testFailedAccountAdoptionRollsBackRetaggingAndRemoteBatchKeepsAllRoots() throws {
+    let repository = try SwiftDataWorkoutRepository(inMemory: true)
+    let active = Workout(name: "Текущая")
+    try repository.save(active)
+    let invalid = StoredRecord(id: UUID(), kind: "template", payload: Data("broken".utf8))
+    repository.container.mainContext.insert(invalid)
+    try repository.container.mainContext.save()
+    XCTAssertThrowsError(try repository.activateTrainingAccount("account-a"))
+    XCTAssertEqual(repository.trainingAccountSelection, TrainingAccountSelection())
+    XCTAssertEqual(try repository.workouts(), [active])
+    repository.container.mainContext.delete(invalid)
+    try repository.container.mainContext.save()
+    try repository.activateTrainingAccount("account-a")
+    let weight = BodyWeightEntry(weightKG: 70)
+    let otherActive = TrainingValue.workout(Workout(name: "Другая"))
+    XCTAssertThrowsError(
+      try repository.applyTrainingChanges([
+        TrainingChange(
+          key: TrainingValue.bodyWeight(weight).key, revision: 1, value: .bodyWeight(weight)),
+        TrainingChange(key: otherActive.key, revision: 2, value: otherActive),
+      ]))
+    XCTAssertTrue(try repository.bodyWeights().isEmpty)
+    XCTAssertEqual(try repository.workouts(), [active])
+    XCTAssertThrowsError(try repository.activateTrainingAccount("account-b"))
+    XCTAssertEqual(repository.trainingAccountSelection.currentAccountID, "account-a")
+  }
+
   func testTemplateVariationsAndSupersetMembershipSurvivePersistenceAndArchiveImport() throws {
     let repository = try SwiftDataWorkoutRepository(inMemory: true)
     let date = Date(timeIntervalSince1970: 1_700_000_000)

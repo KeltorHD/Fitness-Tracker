@@ -129,12 +129,13 @@ struct SettingsView: View {
       }
       Section {
         NavigationLink {
-          AccountBackupView()
+          AccountTrainingView()
         } label: {
           SettingsLabel(
-            title: L10n.text("Аккаунт и копии", locale: locale), symbol: "person.crop.circle")
-        }.disabled(store.isDemoMode).accessibilityIdentifier("openAccountBackups")
-        if AppCapabilities.current.supportsCloudSync {
+            title: L10n.text("Аккаунт и синхронизация", locale: locale),
+            symbol: "person.crop.circle")
+        }.disabled(store.isDemoMode).accessibilityIdentifier("openAccountTraining")
+        if AppCapabilities.current.supportsCloudSync && !store.usesServerTraining {
           Toggle(isOn: $cloud) {
             SettingsLabel(
               title: L10n.text("Синхронизация iCloud", locale: locale), symbol: "icloud")

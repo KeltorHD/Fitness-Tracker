@@ -1,5 +1,6 @@
 import FitLifeCore
 import Foundation
+import Network
 import Observation
 import UIKit
 import WidgetKit
@@ -20,6 +21,7 @@ import WidgetKit
   var showingBodyWeightEditor = false
   private(set) var isDemoMode = false
   private(set) var switchingDemo = false
+  private(set) var switchingTrainingAccount = false
   private(set) var workspaceID = UUID()
   let nutrition: NutritionDiaryModel?
   let sleepAlarms: SleepAlarmStore
@@ -39,25 +41,43 @@ import WidgetKit
   @ObservationIgnored private let defaults: UserDefaults
   @ObservationIgnored private let archiveFiles: any ArchiveFileHandling
   @ObservationIgnored private let accountSession: AccountSession?
+  @ObservationIgnored private let trainingHeartRates: any TrainingHeartRateRepository
+  @ObservationIgnored private let trainingStateStorage: any TrainingSyncStateStoring
+  @ObservationIgnored private var trainingForeground = true
+  @ObservationIgnored private var trainingNetworkMonitor: NWPathMonitor?
+  let usesServerTraining: Bool
   @ObservationIgnored private let now: () -> Date
   @ObservationIgnored private var exerciseDraftStore: WorkoutExerciseDraftStore?
-  @ObservationIgnored lazy var accountBackups: AccountBackupViewModel? = {
+  @ObservationIgnored lazy var account: AccountTrainingViewModel? = {
     guard let accountSession else { return nil }
-    return AccountBackupViewModel(
-      session: accountSession,
-      client: RemoteBackupClient(session: accountSession, cryptography: AppleServerCryptography()),
+    let cryptography = AppleServerCryptography()
+    let sync = TrainingSyncCoordinator(
+      remote: RemoteTrainingClient(session: accountSession), storage: trainingStateStorage,
+      cryptography: cryptography,
       snapshot: { [weak self] in
-        guard let self, !self.isDemoMode, !self.switchingDemo else {
-          throw TrainingError.invalidState
-        }
-        return try self.archiveSnapshot()
+        guard let self else { throw CancellationError() }
+        return try await self.trainingSnapshot()
       },
-      preview: { [weak self] archive in
-        guard let self, !self.isDemoMode, !self.switchingDemo else {
-          throw TrainingError.invalidState
-        }
-        try self.archiveTransfer.presentBackup(archive)
+      current: { [weak self] key in
+        guard let self else { throw CancellationError() }
+        return try await self.currentTrainingValue(key)
+      },
+      apply: { [weak self] change, expected, pulse in
+        guard let self else { throw CancellationError() }
+        return try await self.applyTrainingChange(change, expected: expected, relatedPulse: pulse)
+      },
+      available: { [weak self] in
+        guard let self else { return false }
+        return self.trainingForeground && !self.isDemoMode && !self.switchingDemo
+          && !self.switchingTrainingAccount
       })
+    return AccountTrainingViewModel(
+      session: accountSession, sync: sync, storage: trainingStateStorage,
+      cryptography: cryptography,
+      activate: { [weak self] namespace in
+        guard let self else { throw CancellationError() }
+        try await self.activateTrainingAccount(namespace)
+      }, selection: { [weak self] in self?.repository.trainingAccountSelection })
   }()
   @ObservationIgnored lazy var archiveTransfer = ArchiveTransferViewModel(
     files: archiveFiles,
@@ -88,6 +108,9 @@ import WidgetKit
     tracker: TrackerViewModel? = nil,
     healthCharts: HealthChartsViewModel? = nil,
     accountSession: AccountSession? = nil, sleepAlarmScheduler: (any SleepAlarmScheduling)? = nil,
+    trainingHeartRates: (any TrainingHeartRateRepository)? = nil,
+    trainingStateStorage: (any TrainingSyncStateStoring)? = nil,
+    serverTrainingConfigured: Bool = false,
     now: @escaping () -> Date = Date.init
   ) {
     self.sleepAlarms = SleepAlarmStore(
@@ -104,6 +127,23 @@ import WidgetKit
     self.exerciseImages = exerciseImages
     self.archiveFiles = archiveFiles
     self.accountSession = accountSession
+    self.usesServerTraining = serverTrainingConfigured || accountSession != nil
+    if let trainingHeartRates {
+      self.trainingHeartRates = trainingHeartRates
+    } else if platformServicesEnabled {
+      self.trainingHeartRates = LocalHeartRateRepository(
+        scope: (repository as? any TrainingAccountRepository)?.trainingAccountSelection
+          .currentAccountID)
+    } else {
+      self.trainingHeartRates = MemoryTrainingHeartRateRepository()
+    }
+    if let trainingStateStorage {
+      self.trainingStateStorage = trainingStateStorage
+    } else if platformServicesEnabled {
+      self.trainingStateStorage = TrainingSyncStateStore()
+    } else {
+      self.trainingStateStorage = MemoryTrainingSyncStateStore()
+    }
     self.now = now
     let watchPulse = AppleWatchHeartRateService { [weak watch] command in
       guard let watch else { throw TrainingError.invalidState }
@@ -114,7 +154,7 @@ import WidgetKit
       ?? TrackerViewModel(
         health: HealthMetricsReader(), sensor: BluetoothHeartRateService(),
         liveSource: HealthKitLiveHeartRateService(), watchLiveSource: watchPulse,
-        recordings: LocalHeartRateRepository(), defaults: defaults,
+        recordings: self.trainingHeartRates, defaults: defaults,
         errorMessage: { AppErrorReporter.message(for: $0, operation: $1, fallback: $2) })
     self.healthCharts =
       healthCharts
@@ -127,6 +167,8 @@ import WidgetKit
               "Не удалось загрузить пульс и шаги. Проверьте доступ к «Здоровью» и повторите.")
         })
     self.tracker.onHeartRateChange = { [weak self] in self?.scheduleHeartRateUpdate() }
+    self.tracker.onRecordingSaved = { [weak self] in self?.account?.sync.requestSync() }
+    self.repository.onTrainingChange = { [weak self] in self?.account?.sync.requestSync() }
     self.healthCharts.onHeartRateChange = { [weak self] in self?.scheduleHeartRateUpdate() }
     watch.heartRateEvent = { [weak watchPulse] in watchPulse?.receive($0) }
     watch.heartRateFailure = { [weak watchPulse] in watchPulse?.connectionFailed(sessionID: $0) }
@@ -137,13 +179,16 @@ import WidgetKit
     watch.sleepConnection = { [weak sleepAlarms] connection in
       sleepAlarms?.setWatchConnection(connection)
     }
-    watch.receive = { [weak self] workout in self?.importWatch(workout) ?? false }
+    watch.receive = { [weak self] workout, owner in
+      self?.importWatch(workout, owner: owner) ?? false
+    }
     watch.failure = { [weak self] error in
       self?.report(
         error, operation: "watchConnection",
         message: "Не удалось обменяться данными с Apple Watch. Попробуйте ещё раз.")
     }
     reload()
+    sendWatchTrainingContext()
   }
   func startServices() {
     guard platformServicesEnabled, !servicesStarted else { return }
@@ -151,6 +196,7 @@ import WidgetKit
     sleepAlarms.refresh()
     watch.activate()
     refreshIntegrations()
+    Task { [weak self] in await self?.account?.foreground() }
   }
   func reload() {
     nutrition?.reload()
@@ -177,7 +223,8 @@ import WidgetKit
       try Task.checkCancellation()
       guard !showSession, !showingWorkoutStart, !showingWorkoutDetail, !showingTemplateEditor,
         !showingBodyWeightEditor, nutrition?.isPresenting != true,
-        !archiveTransfer.isPresented, !archiveTransfer.isSaving, accountBackups?.isBusy != true
+        !archiveTransfer.isPresented, !archiveTransfer.isSaving, account?.isBusy != true,
+        account?.sync.isSyncing != true, !switchingTrainingAccount
       else { throw TrainingError.invalidState }
       try repository.openDemo(archive)
       isDemoMode = true
@@ -229,16 +276,18 @@ import WidgetKit
     archiveTransfer.isPresented = false
     workspaceID = UUID()
   }
-  private func loadRepository() throws {
+  private func loadRepository(refreshTracker: Bool = true) throws {
     // Publish only after all reads succeed; a partial read preserves the previous UI snapshot.
     let loaded = try repository.workouts()
     let routines = try repository.templates()
     let measurements = try repository.bodyWeights()
-    applySnapshot(workouts: loaded, templates: routines, bodyWeights: measurements)
+    applySnapshot(
+      workouts: loaded, templates: routines, bodyWeights: measurements,
+      refreshTracker: refreshTracker)
   }
   private func applySnapshot(
     workouts loaded: [Workout], templates routines: [WorkoutTemplate],
-    bodyWeights measurements: [BodyWeightEntry]
+    bodyWeights measurements: [BodyWeightEntry], refreshTracker: Bool = true
   ) {
     workouts = loaded
     completed = loaded.filter { $0.status == .completed }
@@ -250,7 +299,7 @@ import WidgetKit
     currentBodyWeightKG =
       BodyWeightSummary(entries: measurements, workouts: loaded, now: now()).latest?.weightKG
       ?? active?.bodyWeightKG
-    if !isDemoMode {
+    if !isDemoMode && refreshTracker {
       tracker.attach(active)
       healthCharts.attach(active)
     }
@@ -261,6 +310,185 @@ import WidgetKit
       workouts: try repository.workouts(), templates: try repository.templates(),
       bodyWeights: try repository.bodyWeights())
   }
+  private func trainingSnapshot() async throws -> TrainingSnapshot {
+    let workouts = workouts
+    let templates = templates
+    let weights = bodyWeights
+    var pulse: [HeartRateRecording] = []
+    for workout in workouts {
+      try Task.checkCancellation()
+      if let recording = try await trainingHeartRates.recording(for: workout.id) {
+        pulse.append(recording)
+      }
+    }
+    return try TrainingSnapshot(
+      workouts: workouts, templates: templates, bodyWeights: weights, heartRate: pulse)
+  }
+
+  func currentTrainingValue(_ key: TrainingRecordKey) async throws -> TrainingValue? {
+    if key.kind != .heartRate { return currentRootTrainingValue(key) }
+    return try await trainingHeartRates.recording(for: key.id).map(TrainingValue.heartRate)
+  }
+
+  private func currentRootTrainingValue(_ key: TrainingRecordKey) -> TrainingValue? {
+    switch key.kind {
+    case .workout: workouts.first { $0.id == key.id }.map(TrainingValue.workout)
+    case .template: templates.first { $0.id == key.id }.map(TrainingValue.template)
+    case .bodyWeight: bodyWeights.first { $0.id == key.id }.map(TrainingValue.bodyWeight)
+    case .heartRate: nil
+    }
+  }
+
+  private func applyTrainingChange(
+    _ change: TrainingChange, expected: TrainingValue?, relatedPulse: TrainingValue?
+  ) async throws -> TrainingLocalApplyResult {
+    guard !isDemoMode, !switchingTrainingAccount else { throw CancellationError() }
+    if change.key.kind == .heartRate {
+      if pulseIsBusy(for: change.key.id) { return .activeWorkout }
+      let previous: HeartRateRecording?
+      let next: HeartRateRecording?
+      if case .heartRate(let value) = expected { previous = value } else { previous = nil }
+      if case .heartRate(let value) = change.value { next = value } else { next = nil }
+      let applied = try await trainingHeartRates.compareAndSet(
+        workoutID: change.key.id, expected: previous, replacement: next)
+      if applied { tracker.reloadStoredRecording(for: change.key.id) }
+      return applied ? .applied : .changed
+    }
+    // Read again immediately before the synchronous save; edits made during awaits stay local.
+    let current = currentRootTrainingValue(change.key)
+    guard current == expected else { return .changed }
+    if change.key.kind == .workout
+      && (showingWorkoutDetail || showSession && active?.id == change.key.id)
+      || change.key.kind == .template && showingTemplateEditor
+      || change.key.kind == .bodyWeight && showingBodyWeightEditor
+    {
+      return .changed
+    }
+    if change.key.kind == .workout && change.deleted && pulseIsBusy(for: change.key.id) {
+      return .activeWorkout
+    }
+    var removedPulse: HeartRateRecording?
+    if change.key.kind == .workout && change.deleted {
+      if case .heartRate(let value) = relatedPulse { removedPulse = value }
+      guard
+        try await trainingHeartRates.compareAndSet(
+          workoutID: change.key.id, expected: removedPulse, replacement: nil)
+      else { return .changed }
+      if currentRootTrainingValue(change.key) != expected || pulseIsBusy(for: change.key.id) {
+        if let removedPulse {
+          _ = try await trainingHeartRates.compareAndSet(
+            workoutID: change.key.id, expected: nil, replacement: removedPulse)
+        }
+        return .changed
+      }
+    }
+    do {
+      let wasActive = active?.id == change.key.id && change.key.kind == .workout
+      try repository.applyTrainingChanges([change])
+      if change.key.kind == .workout && change.deleted {
+        tracker.discardDeletedRecording(for: change.key.id)
+      }
+      let updatedActive: Bool
+      if case .workout(let value) = change.value {
+        updatedActive = [.active, .paused].contains(value.status)
+      } else {
+        updatedActive = false
+      }
+      try loadRepository(refreshTracker: wasActive || updatedActive)
+      if active == nil { showSession = false }
+      refreshIntegrations(allowStart: false)
+      return .applied
+    } catch {
+      if let removedPulse {
+        _ = try await trainingHeartRates.compareAndSet(
+          workoutID: change.key.id, expected: nil, replacement: removedPulse)
+      }
+      if error as? TrainingSyncError == .activeWorkout { return .activeWorkout }
+      throw error
+    }
+  }
+
+  private func pulseIsBusy(for workoutID: UUID) -> Bool {
+    if tracker.hasPendingHeartRateImports { return true }
+    guard tracker.attachedWorkoutID == workoutID else { return false }
+    return tracker.hasLiveSession || tracker.startingLive || tracker.hasPendingSaves
+      || tracker.loadingHealth || tracker.preparingRecording
+      || tracker.bluetooth.connection == .connected && tracker.attachedWorkoutStatus == .active
+  }
+
+  private func activateTrainingAccount(_ namespace: String) async throws {
+    guard !isDemoMode, !switchingDemo, !switchingTrainingAccount,
+      let selection = repository.trainingAccountSelection
+    else { throw TrainingSyncError.unsupportedStore }
+    guard selection.currentAccountID != namespace else { return }
+    if selection.firstAccountID != nil,
+      active != nil || showSession || showingWorkoutStart || showingWorkoutDetail
+        || showingTemplateEditor || showingBodyWeightEditor || archiveTransfer.isSaving
+    {
+      throw TrainingSyncError.activeWorkout
+    }
+    switchingTrainingAccount = true
+    repository.personalWritesSuspended = true
+    tracker.trainingWritesSuspended = true
+    defer {
+      switchingTrainingAccount = false
+      repository.personalWritesSuspended = false
+      tracker.trainingWritesSuspended = false
+    }
+    do {
+      guard !tracker.loadingHealth, !tracker.hasPendingHeartRateImports else {
+        throw TrainingSyncError.activeWorkout
+      }
+      tracker.disconnect()
+      tracker.attach(nil)
+      await tracker.flush()
+      guard !tracker.hasPendingSaves else { throw TrackerDataError.invalidRecording }
+      guard !tracker.hasPendingHeartRateImports else { throw TrainingSyncError.activeWorkout }
+      try await trainingHeartRates.activateTrainingAccount(
+        namespace, adoptUnscoped: selection.firstAccountID == nil)
+      try repository.activateTrainingAccount(namespace)
+      try loadRepository()
+      sendWatchTrainingContext()
+      refreshIntegrations(allowStart: false)
+    } catch {
+      let actual = repository.trainingAccountSelection?.currentAccountID
+      try await trainingHeartRates.setTrainingAccountScope(actual)
+      if actual != selection.currentAccountID {
+        applySnapshot(workouts: [], templates: [], bodyWeights: [])
+      } else {
+        try loadRepository()
+      }
+      throw error
+    }
+  }
+
+  func resumeTrainingSync() async {
+    trainingForeground = true
+    if accountSession != nil, trainingNetworkMonitor == nil, platformServicesEnabled {
+      let monitor = NWPathMonitor()
+      monitor.pathUpdateHandler = { [weak self] path in
+        guard path.status == .satisfied else { return }
+        Task { @MainActor in self?.account?.sync.requestSync(immediately: true) }
+      }
+      trainingNetworkMonitor = monitor
+      monitor.start(queue: DispatchQueue(label: "FitLife.TrainingNetwork"))
+    }
+    await account?.foreground()
+  }
+
+  func suspendTrainingSync() async {
+    trainingForeground = false
+    trainingNetworkMonitor?.cancel()
+    trainingNetworkMonitor = nil
+    await account?.suspend()
+  }
+
+  private var watchTrainingContext: WatchTrainingContext {
+    let selection = repository.trainingAccountSelection
+    return WatchTrainingContext(
+      currentAccountID: selection?.currentAccountID, firstAccountID: selection?.firstAccountID)
+  }
+  private func sendWatchTrainingContext() { watch.sendTrainingContext(watchTrainingContext) }
 
   @discardableResult func saveBodyWeight(_ entry: BodyWeightEntry) -> Bool {
     do {
@@ -606,8 +834,10 @@ import WidgetKit
       )
     }
   }
-  private func importWatch(_ workout: Workout) -> Bool {
-    guard !isDemoMode else { return false }
+  private func importWatch(_ workout: Workout, owner: String?) -> Bool {
+    guard !isDemoMode, !switchingTrainingAccount, watchTrainingContext.accepts(owner) else {
+      return false
+    }
     do {
       // Re-delivery must not erase body weight or other edits already saved on the phone.
       _ = try repository.importArchive(WorkoutArchive(workouts: [workout], templates: []))
@@ -623,7 +853,7 @@ import WidgetKit
   }
   /// Intents use the same context as the UI, even when the system cold-launches the process.
   func performLiveAction(_ action: WorkoutLiveAction, workoutID: UUID) async throws {
-    guard !isDemoMode else { throw TrainingError.invalidState }
+    guard !isDemoMode, !switchingTrainingAccount else { throw TrainingError.invalidState }
     do {
       guard var workout = try repository.workouts().first(where: { $0.id == workoutID }) else {
         throw TrainingError.invalidState

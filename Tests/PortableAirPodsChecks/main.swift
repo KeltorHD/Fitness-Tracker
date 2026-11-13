@@ -36,6 +36,14 @@ private actor RecordingStub: HeartRateRecordingRepository {
   }
   func save(_ recording: HeartRateRecording) { records[recording.workoutID] = recording }
   func remove(for id: UUID) { records[id] = nil }
+  func compareAndSet(
+    workoutID: UUID, expected: HeartRateRecording?, replacement: HeartRateRecording?
+  ) throws -> Bool {
+    guard try recording(for: workoutID) == expected else { return false }
+    if let replacement { save(replacement) } else { remove(for: workoutID) }
+    return true
+  }
+
 }
 
 @MainActor private final class LiveStub: LiveHeartRateServing {

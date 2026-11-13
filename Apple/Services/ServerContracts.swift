@@ -1,3 +1,4 @@
+import FitLifeCore
 import Foundation
 
 #if canImport(FoundationNetworking)
@@ -73,23 +74,42 @@ struct ServerConfiguration: Equatable, Sendable {
 enum ServerError: Error, Equatable, LocalizedError, Sendable {
   case invalidConfiguration, invalidResponse, invalidCallback, signInRequired,
     authenticationCancelled
-  case backupLimit, backupConflict, rateLimited, unavailable, credentialStorage
+  case rateLimited, unavailable, credentialStorage
   case rejected(Int)
 
   var errorDescription: String? {
     switch self {
-    case .invalidConfiguration: "Резервное копирование на сервер пока недоступно."
+    case .invalidConfiguration: "Синхронизация с сервером пока недоступна."
     case .invalidResponse: "Не удалось проверить ответ сервера. Повторите попытку."
     case .invalidCallback: "Не удалось подтвердить вход. Попробуйте войти ещё раз."
-    case .signInRequired: "Войдите в аккаунт, чтобы открыть резервные копии."
+    case .signInRequired: "Войдите в аккаунт для синхронизации тренировок."
     case .authenticationCancelled: "Вход в аккаунт не завершён."
-    case .backupLimit: "Сохранено 10 копий. Удалите ненужную копию и повторите попытку."
-    case .backupConflict: "Копия с этим идентификатором уже существует. Создайте новую копию."
     case .rateLimited: "Слишком много запросов. Подождите минуту и повторите попытку."
     case .unavailable: "Сервер недоступен. Проверьте подключение и повторите попытку."
     case .credentialStorage:
       "Не удалось открыть защищённую сессию. Разблокируйте устройство и повторите попытку."
     case .rejected: "Сервер не смог выполнить запрос. Повторите попытку."
+    }
+  }
+}
+
+/// Expected server decisions carry typed current data for reconciliation, never diagnostic logging.
+struct ServerTrainingError: Error, LocalizedError, Sendable {
+  let code: String
+  let current: TrainingChange?
+  var errorDescription: String? {
+    switch code {
+    case "training_conflict":
+      "Есть изменения с другого устройства. Выберите, какие данные сохранить."
+    case "workout_missing": "Не удалось синхронизировать связанную тренировку. Повторите попытку."
+    case "cursor_reset_required": "Серверный журнал изменился. Проверьте расхождения данных."
+    case "training_limit": "Достигнут предел записей серверного журнала."
+    case "account_deleted": "Аккаунт удалён. Войдите в аккаунт заново."
+    case "server_update_required": "Для синхронизации тренировок требуется обновить сервер."
+    case "record_too_large":
+      "Одна из записей слишком велика для синхронизации. Локальные данные сохранены."
+    case "local_changed": "Запись изменилась на устройстве. Обновите предпросмотр."
+    default: "Сервер не принял изменения. Локальные данные сохранены."
     }
   }
 }
@@ -106,14 +126,6 @@ struct AccountTokens: Codable, Equatable, Sendable {
   let refreshToken: String
   let expiresAt: Date
   let profile: AccountProfile
-}
-
-struct RemoteBackup: Codable, Equatable, Hashable, Identifiable, Sendable {
-  let id: UUID
-  let createdAt: Date
-  let archiveVersion: Int
-  let size: Int
-  let sha256: String
 }
 
 struct OAuthAttempt: Equatable, Sendable {

@@ -4,6 +4,8 @@ import Observation
 
 @MainActor @Observable final class TrackerViewModel {
   @ObservationIgnored var onHeartRateChange: (@MainActor () -> Void)?
+  @ObservationIgnored var onRecordingSaved: (@MainActor () -> Void)?
+  var attachedWorkoutID: UUID? { workout?.id }
   private(set) var mode: TrackerMode { didSet { onHeartRateChange?() } }
   private(set) var deviceProfile: TrackerDeviceProfile
   private(set) var bluetooth = HeartRateBluetoothSnapshot() { didSet { onHeartRateChange?() } }
@@ -27,6 +29,9 @@ import Observation
   }
   var error: String?
   var hasPendingSaves: Bool { !pendingSaves.isEmpty }
+  private var heartRateImports = 0
+  var hasPendingHeartRateImports: Bool { heartRateImports > 0 }
+  @ObservationIgnored var trainingWritesSuspended = false
   var canRetryRecordingLoad: Bool { workout != nil && recording == nil && !preparingRecording }
   @ObservationIgnored private let health: any HealthMetricsReading
   @ObservationIgnored private let sensor: any HeartRateBluetooth
@@ -306,6 +311,7 @@ import Observation
         if self?.pendingSaves[recording.workoutID] == recording {
           self?.pendingSaves[recording.workoutID] = nil
         }
+        self?.onRecordingSaved?()
       } catch {
         self?.report(
           error, operation: "saveHeartRate",
@@ -341,7 +347,10 @@ import Observation
     let previous = saveTask
     saveTask = Task { [weak self, recordings] in
       await previous?.value
-      do { try await recordings.remove(for: workoutID) } catch {
+      do {
+        try await recordings.remove(for: workoutID)
+        self?.onRecordingSaved?()
+      } catch {
         self?.report(
           error, operation: "deleteHeartRate",
           fallback: "Не удалось удалить запись пульса. Повторите действие.")
@@ -386,11 +395,15 @@ import Observation
   func importHeartRate(for workout: Workout) async throws -> HeartRateRecording {
     try Validation.workout(workout)
     guard workout.status == .completed else { throw TrainingError.invalidState }
-    if let existing = try await recording(for: workout.id), existing.mode == .bluetooth {
+    guard !trainingWritesSuspended else { throw CancellationError() }
+    heartRateImports += 1
+    defer { heartRateImports -= 1 }
+    let existing = try await recording(for: workout.id)
+    if existing?.mode == .bluetooth {
       throw ServiceError.unavailable(
         "Пульс Bluetooth уже сохранён. Он не будет заменён данными из «Здоровья».")
     }
-    if let existing = try await recording(for: workout.id), existing.origin == .liveHealthKit {
+    if existing?.origin == .liveHealthKit {
       throw ServiceError.unavailable(
         "Пульс этой тренировки уже записан в реальном времени. Он не будет заменён импортом из «Здоровья»."
       )
@@ -400,8 +413,45 @@ import Observation
     let imported = try await health.heartRate(for: workout)
     try Task.checkCancellation()
     guard !imported.readings.isEmpty else { return imported }
-    try await recordings.save(imported)
+    guard !trainingWritesSuspended,
+      try await recordings.compareAndSet(
+        workoutID: workout.id, expected: existing, replacement: imported)
+    else {
+      throw ServiceError.unavailable(
+        "Запись пульса изменилась. Обновите данные и повторите импорт.")
+    }
+    onRecordingSaved?()
     return imported
+  }
+  /// The repository already committed a remote deletion; avoid re-queuing the cached old sidecar.
+  @discardableResult func discardDeletedRecording(for workoutID: UUID) -> Bool {
+    guard workout?.id == workoutID else { return true }
+    guard !hasLiveSession, !startingLive, !hasPendingSaves, !loadingHealth,
+      !preparingRecording, !hasPendingHeartRateImports
+    else { return false }
+    recording = nil
+    attach(nil)
+    return true
+  }
+  func reloadStoredRecording(for workoutID: UUID) {
+    guard workout?.id == workoutID, !hasLiveSession, !hasPendingSaves else { return }
+    loadTask?.cancel()
+    preparingRecording = true
+    loadTask = Task { [weak self, recordings] in
+      guard let self else { return }
+      defer { if self.workout?.id == workoutID { self.preparingRecording = false } }
+      do {
+        let value = try await recordings.recording(for: workoutID)
+        try Task.checkCancellation()
+        guard self.workout?.id == workoutID else { return }
+        self.recording = value
+      } catch {
+        guard !Task.isCancelled else { return }
+        self.report(
+          error, operation: "reloadHeartRate",
+          fallback: "Не удалось прочитать сохранённый пульс. Повторите попытку.")
+      }
+    }
   }
   private func report(_ error: any Error, operation: String, fallback: String) {
     self.error = message(for: error, operation: operation, fallback: fallback)

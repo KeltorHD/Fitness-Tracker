@@ -137,14 +137,15 @@ public protocol HeartRateRecordingRepository: Sendable {
   func recording(for workoutID: UUID) async throws -> HeartRateRecording?
   func save(_ recording: HeartRateRecording) async throws
   func remove(for workoutID: UUID) async throws
+  /// Atomically preserves a newer recording written while a Health read or network request awaited.
+  func compareAndSet(
+    workoutID: UUID, expected: HeartRateRecording?, replacement: HeartRateRecording?
+  ) async throws -> Bool
 }
 
 public protocol TrainingHeartRateRepository: HeartRateRecordingRepository {
   func activateTrainingAccount(_ namespace: String, adoptUnscoped: Bool) async throws
   func setTrainingAccountScope(_ namespace: String?) async throws
-  func compareAndSet(
-    workoutID: UUID, expected: HeartRateRecording?, replacement: HeartRateRecording?
-  ) async throws -> Bool
 }
 
 public actor MemoryTrainingHeartRateRepository: TrainingHeartRateRepository {

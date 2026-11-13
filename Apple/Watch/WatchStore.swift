@@ -4,17 +4,13 @@ import Observation
 import WatchConnectivity
 import WatchKit
 
-private struct WatchArchive: Codable {
-  var active: Workout?
-  var pending: [Workout] = []
-}
-
 /// A wrist set logger with a separately owned, explicit HealthKit heart-rate session.
 @MainActor @Observable final class WatchStore: NSObject, WCSessionDelegate {
   let sleepAlarm = WatchSleepAlarm()
   let heartRate = WatchHeartRateController(source: HealthKitLiveHeartRateService())
-  private(set) var active: Workout?
-  private(set) var pending: [Workout] = []
+  private var archive = WatchTrainingArchive()
+  var active: Workout? { archive.active }
+  var pending: [Workout] { archive.pending }
   var error: String?
   @ObservationIgnored private var archiveURL: URL?
   @ObservationIgnored private var archiveReadable = true
@@ -50,12 +46,8 @@ private struct WatchArchive: Codable {
         appropriateFor: nil, create: true)
       archiveURL = folder.appendingPathComponent(AppIdentifiers.watchArchiveFileName)
       if let archiveURL, FileManager.default.fileExists(atPath: archiveURL.path) {
-        let archive = try JSONDecoder().decode(
-          WatchArchive.self, from: Data(contentsOf: archiveURL))
-        if let workout = archive.active { try Validation.workout(workout) }
-        for workout in archive.pending { try Validation.workout(workout) }
-        active = archive.active
-        pending = archive.pending
+        archive = try JSONDecoder().decode(
+          WatchTrainingArchive.self, from: Data(contentsOf: archiveURL))
       }
     } catch {
       archiveReadable = false
@@ -106,9 +98,11 @@ private struct WatchArchive: Codable {
           ($0.userInfo["id"] as? String) == workout.id.uuidString
         }
         if !queued {
-          WCSession.default.transferUserInfo([
+          var message: [String: Any] = [
             "id": workout.id.uuidString, "workout": try JSONEncoder().encode(workout),
-          ])
+          ]
+          if let owner = archive.account(for: workout.id) { message["trainingAccount"] = owner }
+          WCSession.default.transferUserInfo(message)
         }
       }
     } catch { self.error = error.localizedDescription }
@@ -116,14 +110,34 @@ private struct WatchArchive: Codable {
   private func commit(active: Workout?, pending: [Workout]) throws {
     guard archiveReadable else { throw CocoaError(.fileReadCorruptFile) }
     guard let archiveURL else { throw CocoaError(.fileNoSuchFile) }
-    try JSONEncoder().encode(WatchArchive(active: active, pending: pending)).write(
-      to: archiveURL, options: .atomic)
-    self.active = active
-    self.pending = pending
+    var updated = archive
+    try updated.update(active: active, pending: pending)
+    try persist(updated, to: archiveURL)
+  }
+  private func persist(_ value: WatchTrainingArchive, to url: URL) throws {
+    try JSONEncoder().encode(value).write(to: url, options: .atomic)
+    archive = value
+  }
+  nonisolated private func receiveTrainingContext(_ data: Data) {
+    guard data.count <= 4096 else { return }
+    Task { @MainActor in
+      do {
+        guard self.archiveReadable, let url = self.archiveURL else {
+          throw CocoaError(.fileReadCorruptFile)
+        }
+        var updated = self.archive
+        try updated.receive(JSONDecoder().decode(WatchTrainingContext.self, from: data))
+        try self.persist(updated, to: url)
+        self.sync()
+      } catch {
+        self.error = L10n.text("Не удалось обновить аккаунт часов. Повторите подключение к iPhone.")
+      }
+    }
   }
   nonisolated func session(
     _ session: WCSession, didReceiveApplicationContext applicationContext: [String: Any]
   ) {
+    if let data = applicationContext["trainingContext"] as? Data { receiveTrainingContext(data) }
     if let command = applicationContext["heartRateCommand"] as? Data {
       receiveHeartRateCommand(command)
     }
@@ -135,6 +149,7 @@ private struct WatchArchive: Codable {
     }
   }
   nonisolated func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
+    if let data = message["trainingContext"] as? Data { receiveTrainingContext(data) }
     if let data = message["heartRateCommand"] as? Data { receiveHeartRateCommand(data) }
   }
   nonisolated private func receiveHeartRateCommand(_ data: Data) {
@@ -161,6 +176,9 @@ private struct WatchArchive: Codable {
       if let message {
         self.error = message
       } else {
+        if let data = WCSession.default.receivedApplicationContext["trainingContext"] as? Data {
+          self.receiveTrainingContext(data)
+        }
         if let data = WCSession.default.receivedApplicationContext["heartRateCommand"] as? Data {
           self.receiveHeartRateCommand(data)
         }

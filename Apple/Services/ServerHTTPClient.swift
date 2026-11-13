@@ -1,3 +1,4 @@
+import FitLifeCore
 import Foundation
 
 #if canImport(FoundationNetworking)
@@ -45,14 +46,26 @@ struct ServerHTTPClient: Sendable {
     guard let response = response as? HTTPURLResponse, data.count <= maximumBytes else {
       throw ServerError.invalidResponse
     }
+    if [400, 403, 409, 413].contains(response.statusCode) {
+      struct TrainingFailure: Decodable {
+        let code: String
+        let current: TrainingChange?
+      }
+      if let failure = try? TrainingCoding.decoder().decode(TrainingFailure.self, from: data),
+        failure.code.hasPrefix("training_") || failure.code.hasPrefix("invalid_training_")
+          || [
+            "workout_missing", "cursor_reset_required", "account_deleted", "invalid_cursor",
+            "record_too_large",
+          ]
+          .contains(failure.code)
+      {
+        throw ServerTrainingError(code: failure.code, current: failure.current)
+      }
+    }
     switch response.statusCode {
     case 200..<300: return data
     case 401: throw ServerError.signInRequired
     case 429: throw ServerError.rateLimited
-    case 409:
-      struct Conflict: Decodable { let code: String }
-      let conflict = try? JSONDecoder().decode(Conflict.self, from: data)
-      throw conflict?.code == "backup_limit" ? ServerError.backupLimit : ServerError.backupConflict
     case 500..<600: throw ServerError.unavailable
     default: throw ServerError.rejected(response.statusCode)
     }

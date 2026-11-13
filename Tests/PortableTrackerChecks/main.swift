@@ -29,6 +29,9 @@ private func expect(_ condition: Bool, _ message: String) throws {
   var failDay = false
   var pending: CheckedContinuation<HealthDaySummary, any Error>?
   private var waiter: CheckedContinuation<Void, Never>?
+  var suspendHeartRate = false
+  var pendingHeartRate: CheckedContinuation<HeartRateRecording, Never>?
+  private var heartWaiter: CheckedContinuation<Void, Never>?
   func requestReadAuthorization() async throws { dayAuthorizations += 1 }
   func requestHeartRateAuthorization() async throws { heartAuthorizations += 1 }
   func daySummary(for day: Date, calendar: Calendar) async throws -> HealthDaySummary {
@@ -52,9 +55,19 @@ private func expect(_ condition: Bool, _ message: String) throws {
   }
   func heartRate(for workout: Workout) async throws -> HeartRateRecording {
     workoutReads += 1
+    if suspendHeartRate {
+      return await withCheckedContinuation {
+        pendingHeartRate = $0
+        heartWaiter?.resume()
+        heartWaiter = nil
+      }
+    }
     return try HeartRateRecording(
       workoutID: workout.id, mode: .appleHealth,
       readings: [HeartRateReading(date: workout.startedAt, beatsPerMinute: 80)])
+  }
+  func waitForHeartRate() async {
+    if pendingHeartRate == nil { await withCheckedContinuation { heartWaiter = $0 } }
   }
 }
 
@@ -68,6 +81,14 @@ private actor RecordingStub: HeartRateRecordingRepository {
     records[recording.workoutID] = recording
   }
   func remove(for workoutID: UUID) { records[workoutID] = nil }
+  func compareAndSet(
+    workoutID: UUID, expected: HeartRateRecording?, replacement: HeartRateRecording?
+  ) throws -> Bool {
+    guard recording(for: workoutID) == expected else { return false }
+    if let replacement { try save(replacement) } else { remove(for: workoutID) }
+    return true
+  }
+
 }
 
 @main private struct PortableTrackerChecks {
@@ -220,6 +241,52 @@ private actor RecordingStub: HeartRateRecordingRepository {
     await tracker.flush()
     let removed = await repository.recording(for: workout.id)
     try expect(removed == nil, "Deleting a workout deletes its sensor sidecar")
+
+    let deletionTracker = TrackerViewModel(
+      health: health, sensor: SensorStub(), recordings: repository,
+      defaults: defaults, errorMessage: { _, _, fallback in fallback })
+    deletionTracker.attach(other)
+    while deletionTracker.preparingRecording { await Task.yield() }
+    try expect(deletionTracker.recording != nil, "Load cached pulse before a remote deletion")
+    await repository.remove(for: other.id)
+    try expect(
+      deletionTracker.discardDeletedRecording(for: other.id), "Detach a committed deletion")
+    deletionTracker.attach(nil)
+    await deletionTracker.flush()
+    let stillRemoved = await repository.recording(for: other.id)
+    try expect(
+      stillRemoved == nil, "Reloading after a remote deletion must not re-save the cached pulse")
+
+    var importingWorkout = other
+    importingWorkout.id = UUID()
+    health.suspendHeartRate = true
+    let pendingImport = Task { try await tracker.importHeartRate(for: importingWorkout) }
+    await health.waitForHeartRate()
+    try expect(
+      tracker.hasPendingHeartRateImports,
+      "Account switching observes an outstanding historical Health read")
+    let concurrent = try HeartRateRecording(
+      workoutID: importingWorkout.id, mode: .bluetooth, readings: [first])
+    try await repository.save(concurrent)
+    health.pendingHeartRate?.resume(
+      returning: try HeartRateRecording(
+        workoutID: importingWorkout.id, mode: .appleHealth, readings: [second]))
+    health.pendingHeartRate = nil
+    health.suspendHeartRate = false
+    do {
+      _ = try await pendingImport.value
+      throw CheckFailure(message: "A stale Health read overwrote a newer sensor recording")
+    } catch is ServiceError {}
+    let preserved = await repository.recording(for: importingWorkout.id)
+    try expect(
+      preserved == concurrent && !tracker.hasPendingHeartRateImports,
+      "History import uses atomic comparison and preserves the new source")
+    tracker.trainingWritesSuspended = true
+    do {
+      _ = try await tracker.importHeartRate(for: other)
+      throw CheckFailure(message: "Import started during an account switch")
+    } catch is CancellationError {}
+    tracker.trainingWritesSuspended = false
 
     let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
     defer { try? FileManager.default.removeItem(at: directory) }

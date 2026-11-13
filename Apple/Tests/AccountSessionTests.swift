@@ -62,7 +62,7 @@ private final class AccountURLProtocol: URLProtocol {
   override func stopLoading() {}
 }
 
-@MainActor final class AccountBackupTests: XCTestCase {
+@MainActor final class AccountSessionTests: XCTestCase {
   func testAuthorizationRequestsProtocolScopesWithoutBackendPermissions() throws {
     let authURL = try XCTUnwrap(URL(string: "https://auth.example.com/"))
     let backendURL = try XCTUnwrap(URL(string: "https://api.example.com/"))
@@ -94,7 +94,7 @@ private final class AccountURLProtocol: URLProtocol {
     let http = ServerHTTPClient(session: URLSession(configuration: transport))
     return (
       AccountSession(configuration: configuration, http: http, credentials: credentials),
-      credentials, URLRequest(url: url.appendingPathComponent("v1/backups"))
+      credentials, URLRequest(url: url.appendingPathComponent("v1/training/changes"))
     )
   }
 
@@ -166,15 +166,4 @@ private final class AccountURLProtocol: URLProtocol {
       "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad")
   }
 
-  func testRestoreChecksIntegrityBeforeOpeningImport() async throws {
-    let (session, _, _) = try setup()
-    let client = RemoteBackupClient(session: session, cryptography: AppleServerCryptography())
-    let corrupt = RemoteBackup(
-      id: UUID(), createdAt: .now, archiveVersion: 4, size: 2,
-      sha256: String(repeating: "0", count: 64))
-    do {
-      _ = try await client.download(corrupt)
-      XCTFail("Expected integrity error")
-    } catch let error as ServerError { XCTAssertEqual(error, .invalidResponse) }
-  }
 }

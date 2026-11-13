@@ -562,6 +562,23 @@
         }
       }
     },
+    "Bluetooth-датчик": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bluetooth-датчик"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bluetooth sensor"
+          }
+        }
+      }
+    },
     "Bluetooth-пульс": {
       "extractionState": "manual",
       "localizations": {
@@ -1327,6 +1344,57 @@
         }
       }
     },
+    "Аккаунт и серверный журнал удалены. Данные на устройстве сохранены.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Аккаунт и серверный журнал удалены. Данные на устройстве сохранены."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The account and server journal have been deleted. Data on this device has been kept."
+          }
+        }
+      }
+    },
+    "Аккаунт и синхронизация": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Аккаунт и синхронизация"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Account and sync"
+          }
+        }
+      }
+    },
+    "Аккаунт удалён. Войдите в аккаунт заново.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Аккаунт удалён. Войдите в аккаунт заново."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The account has been deleted. Sign in again."
+          }
+        }
+      }
+    },
     "Аккаунт, привязанные способы входа и все серверные копии будут удалены. История на устройстве сохранится.": {
       "extractionState": "manual",
       "localizations": {
@@ -1340,6 +1408,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Your account, linked sign-in methods and all server backups will be deleted. The history on this device will be kept."
+          }
+        }
+      }
+    },
+    "Аккаунт, способы входа и весь серверный журнал, включая пульс, будут удалены. Данные на устройстве сохранятся.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Аккаунт, способы входа и весь серверный журнал, включая пульс, будут удалены. Данные на устройстве сохранятся."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your account, sign-in methods and entire server journal, including heart rate, will be deleted. Data on this device will be kept."
+          }
+        }
+      }
+    },
+    "Активная тренировка": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Активная тренировка"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active workout"
           }
         }
       }
@@ -2738,6 +2840,23 @@
         }
       }
     },
+    "Вес тела, кг": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вес тела, кг"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Body weight, kg"
+          }
+        }
+      }
+    },
     "Вес, %@": {
       "extractionState": "manual",
       "localizations": {
@@ -3044,6 +3163,23 @@
         }
       }
     },
+    "Войдите в аккаунт для синхронизации тренировок.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Войдите в аккаунт для синхронизации тренировок."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in to sync your workouts."
+          }
+        }
+      }
+    },
     "Войдите в аккаунт, чтобы открыть резервные копии.": {
       "extractionState": "manual",
       "localizations": {
@@ -3057,6 +3193,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sign in to access your backups."
+          }
+        }
+      }
+    },
+    "Войдите для автоматической синхронизации тренировок между устройствами.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Войдите для автоматической синхронизации тренировок между устройствами."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in to sync workouts automatically across your devices."
           }
         }
       }
@@ -3550,6 +3703,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sign-in was not completed."
+          }
+        }
+      }
+    },
+    "Вы вышли из аккаунта. Журнал на устройстве сохранён.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вы вышли из аккаунта. Журнал на устройстве сохранён."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You have signed out. The journal on this device has been kept."
           }
         }
       }
@@ -5084,6 +5254,23 @@
         }
       }
     },
+    "Для синхронизации тренировок требуется обновить сервер.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Для синхронизации тренировок требуется обновить сервер."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Update the server to sync workouts."
+          }
+        }
+      }
+    },
     "Для собственного упражнения можно сохранить технику в заметках тренировки.": {
       "extractionState": "manual",
       "localizations": {
@@ -5798,6 +5985,23 @@
         }
       }
     },
+    "Достигнут предел записей серверного журнала.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Достигнут предел записей серверного журнала."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The server journal has reached its record limit."
+          }
+        }
+      }
+    },
     "Достигнут предел записи пульса для этой тренировки.": {
       "extractionState": "manual",
       "localizations": {
@@ -5913,6 +6117,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Drop sets"
+          }
+        }
+      }
+    },
+    "Другая версия этой записи будет заменена. Если выбранная версия удалена, запись будет удалена на обоих устройствах.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Другая версия этой записи будет заменена. Если выбранная версия удалена, запись будет удалена на обоих устройствах."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The other version of this record will be replaced. If the selected version is deleted, the record will be deleted on both devices."
           }
         }
       }
@@ -6070,6 +6291,23 @@
         }
       }
     },
+    "Есть изменения с другого устройства. Выберите, какие данные сохранить.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Есть изменения с другого устройства. Выберите, какие данные сохранить."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Another device has made changes. Choose which data to keep."
+          }
+        }
+      }
+    },
     "Есть фото без КБЖУ — итог неполный": {
       "extractionState": "manual",
       "localizations": {
@@ -6155,6 +6393,40 @@
         }
       }
     },
+    "Журнал доступен офлайн": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Журнал доступен офлайн"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Journal available offline"
+          }
+        }
+      }
+    },
+    "Журналы на устройстве": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Журналы на устройстве"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Journals on this device"
+          }
+        }
+      }
+    },
     "ЗАМЕТКА": {
       "extractionState": "manual",
       "localizations": {
@@ -6223,6 +6495,23 @@
         }
       }
     },
+    "Завершите текущую тренировку или остановите приём пульса перед заменой данных.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Завершите текущую тренировку или остановите приём пульса перед заменой данных."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finish the current workout or stop heart rate recording before replacing data."
+          }
+        }
+      }
+    },
     "Завершите текущую тренировку перед открытием демо-профиля.": {
       "extractionState": "manual",
       "localizations": {
@@ -6236,6 +6525,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Finish your current workout before opening the demo profile."
+          }
+        }
+      }
+    },
+    "Завершите текущую тренировку перед принятием другой активной тренировки.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Завершите текущую тренировку перед принятием другой активной тренировки."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finish your current workout before accepting another active workout."
+          }
+        }
+      }
+    },
+    "Завершите текущую тренировку перед сменой журнала.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Завершите текущую тренировку перед сменой журнала."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finish your current workout before switching journals."
           }
         }
       }
@@ -6699,6 +7022,23 @@
         }
       }
     },
+    "Запись изменилась на устройстве. Обновите предпросмотр.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Запись изменилась на устройстве. Обновите предпросмотр."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The record has changed on this device. Refresh the preview."
+          }
+        }
+      }
+    },
     "Запись питания": {
       "extractionState": "manual",
       "localizations": {
@@ -6712,6 +7052,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Food entry"
+          }
+        }
+      }
+    },
+    "Запись пульса изменилась. Обновите данные и повторите импорт.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Запись пульса изменилась. Обновите данные и повторите импорт."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The heart rate recording has changed. Refresh the data and try importing again."
+          }
+        }
+      }
+    },
+    "Запись удалена": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Запись удалена"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Record deleted"
           }
         }
       }
@@ -6903,6 +7277,23 @@
         }
       }
     },
+    "Изменения сохраняются автоматически": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Изменения сохраняются автоматически"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Changes are saved automatically"
+          }
+        }
+      }
+    },
     "Измените поиск или сбросьте фильтры.": {
       "extractionState": "manual",
       "localizations": {
@@ -7052,6 +7443,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Heart rate readings for the day: %@. Days with step data: %@ of 7."
+          }
+        }
+      }
+    },
+    "Измерения пульса": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Измерения пульса"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate readings"
           }
         }
       }
@@ -8705,6 +9113,40 @@
         }
       }
     },
+    "На сервере": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "На сервере"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On the server"
+          }
+        }
+      }
+    },
+    "На устройстве": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "На устройстве"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On this device"
+          }
+        }
+      }
+    },
     "На этой неделе": {
       "extractionState": "manual",
       "localizations": {
@@ -9436,6 +9878,23 @@
         }
       }
     },
+    "Не удалось выполнить действие.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось выполнить действие."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not complete the action."
+          }
+        }
+      }
+    },
     "Не удалось выполнить действие. Повторите попытку.": {
       "extractionState": "manual",
       "localizations": {
@@ -9640,6 +10099,23 @@
         }
       }
     },
+    "Не удалось обновить аккаунт часов. Повторите подключение к iPhone.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось обновить аккаунт часов. Повторите подключение к iPhone."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not update the watch account. Reconnect to your iPhone."
+          }
+        }
+      }
+    },
     "Не удалось обновить показатели.": {
       "extractionState": "manual",
       "localizations": {
@@ -9827,6 +10303,23 @@
         }
       }
     },
+    "Не удалось открыть синхронизацию. Локальные данные сохранены; повторите попытку.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось открыть синхронизацию. Локальные данные сохранены; повторите попытку."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not open sync. Local data has been kept; try again."
+          }
+        }
+      }
+    },
     "Не удалось отправить состояние будильника на iPhone.": {
       "extractionState": "manual",
       "localizations": {
@@ -9891,6 +10384,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Couldn’t repeat the workout. Try again."
+          }
+        }
+      }
+    },
+    "Не удалось подготовить выбранную версию. Обновите предпросмотр.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось подготовить выбранную версию. Обновите предпросмотр."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not prepare the selected version. Refresh the preview."
           }
         }
       }
@@ -10150,6 +10660,23 @@
         }
       }
     },
+    "Не удалось прочитать локальную запись. Повторите попытку.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось прочитать локальную запись. Повторите попытку."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not read the local record. Try again."
+          }
+        }
+      }
+    },
     "Не удалось прочитать настройки будильников. Сохранённые данные не удалены.": {
       "extractionState": "manual",
       "localizations": {
@@ -10184,6 +10711,23 @@
         }
       }
     },
+    "Не удалось прочитать сохранённый пульс. Повторите попытку.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось прочитать сохранённый пульс. Повторите попытку."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not read saved heart rate data. Try again."
+          }
+        }
+      }
+    },
     "Не удалось прочитать файл. Попробуйте выбрать его ещё раз.": {
       "extractionState": "manual",
       "localizations": {
@@ -10214,6 +10758,57 @@
           "stringUnit": {
             "state": "translated",
             "value": "Couldn’t read the file. Make sure it is available on your device."
+          }
+        }
+      }
+    },
+    "Не удалось синхронизировать данные.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось синхронизировать данные."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not sync data."
+          }
+        }
+      }
+    },
+    "Не удалось синхронизировать данные. Локальный журнал сохранён; повторите попытку.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось синхронизировать данные. Локальный журнал сохранён; повторите попытку."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not sync data. The local journal has been kept; try again."
+          }
+        }
+      }
+    },
+    "Не удалось синхронизировать связанную тренировку. Повторите попытку.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось синхронизировать связанную тренировку. Повторите попытку."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not sync the linked workout. Try again."
           }
         }
       }
@@ -11459,6 +12054,23 @@
         }
       }
     },
+    "Обновить предпросмотр": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Обновить предпросмотр"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Refresh preview"
+          }
+        }
+      }
+    },
     "Обновить список": {
       "extractionState": "manual",
       "localizations": {
@@ -11612,6 +12224,40 @@
         }
       }
     },
+    "Одна запись изменена на разных устройствах. Сравните версии и выберите, какую сохранить.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Одна запись изменена на разных устройствах. Сравните версии и выберите, какую сохранить."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One record has changed on different devices. Compare the versions and choose which to keep."
+          }
+        }
+      }
+    },
+    "Одна из записей слишком велика для синхронизации. Локальные данные сохранены.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Одна из записей слишком велика для синхронизации. Локальные данные сохранены."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One record is too large to sync. Local data has been kept."
+          }
+        }
+      }
+    },
     "Ожидает подтверждения на Watch": {
       "extractionState": "manual",
       "localizations": {
@@ -11744,6 +12390,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Records will appear after working sets with added weight."
+          }
+        }
+      }
+    },
+    "Описание": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Описание"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Description"
           }
         }
       }
@@ -12173,6 +12836,40 @@
         }
       }
     },
+    "Открыт другой локальный журнал. Синхронизация приостановлена.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Открыт другой локальный журнал. Синхронизация приостановлена."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Another local journal is open. Sync is paused."
+          }
+        }
+      }
+    },
+    "Открыт локальный журнал. Для его синхронизации войдите в соответствующий аккаунт.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Открыт локальный журнал. Для его синхронизации войдите в соответствующий аккаунт."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A local journal is open. Sign in to its account to sync it."
+          }
+        }
+      }
+    },
     "Открыть демо-профиль": {
       "extractionState": "manual",
       "localizations": {
@@ -12186,6 +12883,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Open demo profile"
+          }
+        }
+      }
+    },
+    "Открыть журнал аккаунта": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Открыть журнал аккаунта"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open account journal"
           }
         }
       }
@@ -12560,6 +13274,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pause or resume workout"
+          }
+        }
+      }
+    },
+    "Паузы": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Паузы"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pauses"
           }
         }
       }
@@ -13346,6 +14077,23 @@
         }
       }
     },
+    "Подтвердите выбор версии": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Подтвердите выбор версии"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confirm version choice"
+          }
+        }
+      }
+    },
     "Подтвердите действие": {
       "extractionState": "manual",
       "localizations": {
@@ -14077,6 +14825,23 @@
         }
       }
     },
+    "Последняя синхронизация": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Последняя синхронизация"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last synced"
+          }
+        }
+      }
+    },
     "Предыдущая вариация": {
       "extractionState": "manual",
       "localizations": {
@@ -14247,6 +15012,23 @@
         }
       }
     },
+    "При удалении тренировки будет удалён и её пульс.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "При удалении тренировки будет удалён и её пульс."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deleting the workout will also delete its heart rate data."
+          }
+        }
+      }
+    },
     "Приводящие мышцы бедра": {
       "extractionState": "manual",
       "localizations": {
@@ -14260,6 +15042,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Adductors"
+          }
+        }
+      }
+    },
+    "Принять серверную версию": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Принять серверную версию"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accept server version"
           }
         }
       }
@@ -15573,6 +16372,40 @@
         }
       }
     },
+    "Расхождение данных": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Расхождение данных"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data conflict"
+          }
+        }
+      }
+    },
+    "Расхождения данных": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Расхождения данных"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data conflicts"
+          }
+        }
+      }
+    },
     "Расчётный 1ПМ": {
       "extractionState": "manual",
       "localizations": {
@@ -16236,6 +17069,23 @@
         }
       }
     },
+    "Сервер не принял изменения. Локальные данные сохранены.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сервер не принял изменения. Локальные данные сохранены."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The server did not accept the changes. Local data has been kept."
+          }
+        }
+      }
+    },
     "Сервер не смог выполнить запрос. Повторите попытку.": {
       "extractionState": "manual",
       "localizations": {
@@ -16266,6 +17116,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "The server is unavailable. Check your connection and try again."
+          }
+        }
+      }
+    },
+    "Серверная запись изменилась. Обновите предпросмотр.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Серверная запись изменилась. Обновите предпросмотр."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The server record has changed. Refresh the preview."
+          }
+        }
+      }
+    },
+    "Серверный журнал изменился. Проверьте расхождения данных.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Серверный журнал изменился. Проверьте расхождения данных."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The server journal has changed. Review data conflicts."
           }
         }
       }
@@ -16372,6 +17256,23 @@
         }
       }
     },
+    "Синхронизация": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Синхронизация"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sync"
+          }
+        }
+      }
+    },
     "Синхронизация iCloud": {
       "extractionState": "manual",
       "localizations": {
@@ -16402,6 +17303,57 @@
           "stringUnit": {
             "state": "translated",
             "value": "iCloud sync is currently unavailable."
+          }
+        }
+      }
+    },
+    "Синхронизация с сервером пока недоступна.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Синхронизация с сервером пока недоступна."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Server sync is currently unavailable."
+          }
+        }
+      }
+    },
+    "Синхронизация…": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Синхронизация…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Syncing…"
+          }
+        }
+      }
+    },
+    "Синхронизировать сейчас": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Синхронизировать сейчас"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sync now"
           }
         }
       }
@@ -17239,6 +18191,23 @@
         }
       }
     },
+    "Сохранить выбранную версию": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сохранить выбранную версию"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save selected version"
+          }
+        }
+      }
+    },
     "Сохранить изменения": {
       "extractionState": "manual",
       "localizations": {
@@ -17269,6 +18238,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Save as template"
+          }
+        }
+      }
+    },
+    "Сохранить локальную версию на сервере": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сохранить локальную версию на сервере"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep local version on server"
           }
         }
       }
@@ -17439,6 +18425,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Intermediate"
+          }
+        }
+      }
+    },
+    "Средний пульс": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Средний пульс"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Average heart rate"
           }
         }
       }
@@ -17711,6 +18714,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Original license text"
+          }
+        }
+      }
+    },
+    "Текущий журнал": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Текущий журнал"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current journal"
           }
         }
       }
@@ -18106,6 +19126,23 @@
         }
       }
     },
+    "Тренировка отменена": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Тренировка отменена"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workout cancelled"
+          }
+        }
+      }
+    },
     "Тренировка отправлена в «Здоровье».": {
       "extractionState": "manual",
       "localizations": {
@@ -18153,6 +19190,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Workouts"
+          }
+        }
+      }
+    },
+    "Тренировки со всеми подходами и паузами, планы, записи веса и сохранённый пульс автоматически передаются в ваш аккаунт. Изменения офлайн отправятся при подключении. Питание, сон и фотографии остаются на устройстве.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Тренировки со всеми подходами и паузами, планы, записи веса и сохранённый пульс автоматически передаются в ваш аккаунт. Изменения офлайн отправятся при подключении. Питание, сон и фотографии остаются на устройстве."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workouts with all sets and pauses, plans, weight entries and saved heart rate are automatically sent to your account. Offline changes will be sent when connected. Nutrition, sleep and photos stay on this device."
           }
         }
       }
@@ -18867,6 +19921,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Delete drop stage?"
+          }
+        }
+      }
+    },
+    "Удалённая запись": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Удалённая запись"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deleted record"
           }
         }
       }
