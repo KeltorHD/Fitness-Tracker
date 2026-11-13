@@ -123,6 +123,12 @@ public partial class Program
                 config["Certificates:Encryption:Password"]));
         await using var app = builder.Build();
         await using var ntfy = app.Services.StartNtfyLogging();
+        app.Logger.LogInformation(new EventId(4100, "BackendStarting"), "Backend starting. Mode: {Mode}.",
+            args.Contains("--migrate") ? "migrate" : "http");
+        app.Lifetime.ApplicationStarted.Register(() =>
+            app.Logger.LogInformation(new EventId(4105, "BackendReady"), "Backend ready to accept HTTP requests."));
+        app.Lifetime.ApplicationStopping.Register(() =>
+            app.Logger.LogInformation(new EventId(4106, "BackendStopping"), "Backend stopping."));
         app.UseForwardedHeaders();
         app.UseExceptionHandler();
         if (!app.Environment.IsDevelopment()) app.UseHsts();
@@ -132,6 +138,8 @@ public partial class Program
             context.Response.Headers["X-Content-Type-Options"] = "nosniff";
             await next();
         });
+        app.UseRouting();
+        app.UseMiddleware<BackendRequestLoggingMiddleware>();
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseRateLimiter();
@@ -193,11 +201,17 @@ public partial class Program
                     ApplicationName = "FitLife startup"
                 };
                 await using var startupConnection = new NpgsqlConnection(startupSettings.ConnectionString);
+                app.Logger.LogInformation(new EventId(4101, "BackendDatabaseConnecting"), "Connecting to Backend database.");
                 await startupConnection.OpenAsync(cancellationToken);
                 await using var startupLock = new NpgsqlCommand("SELECT pg_advisory_lock(447295635001)", startupConnection);
+                app.Logger.LogInformation(new EventId(4102, "BackendStartupLockWaiting"), "Waiting for database startup lock.");
                 await startupLock.ExecuteNonQueryAsync(cancellationToken);
                 await database.GetService<IHistoryRepository>().CreateIfNotExistsAsync(cancellationToken);
+                var pending = (await database.Database.GetPendingMigrationsAsync(cancellationToken)).ToArray();
+                app.Logger.LogInformation(new EventId(4103, "BackendMigrationsApplying"),
+                    "Applying {Count} pending database migrations: {Migrations}.", pending.Length, string.Join(", ", pending));
                 await database.Database.MigrateAsync(cancellationToken);
+                app.Logger.LogInformation(new EventId(4104, "BackendMigrationsCompleted"), "Backend database migrations completed.");
                 await scope.ServiceProvider.GetRequiredService<TrainingStorage>().ImportLatestBackupsAsync(cancellationToken);
                 if (args.Contains("--migrate")) return;
             }

@@ -217,6 +217,18 @@ sudo systemctl reload nginx
 
 В обоих virtual hosts отключён `proxy_cache`. Для `/connect/introspect` задан ACL по фактическому TCP peer: localhost и автоматически найденная `SERVER_NETWORK_SUBNET`; регистр и encoded slash не обходят запрет. Клиентский `X-Forwarded-For` не даёт доступ к этому endpoint. В Auth для introspection действует отдельный общий бюджет 1200 запросов/минуту; обычный IP-лимит входа остаётся 120/минуту. Backend применяет свои 30 запросов/минуту на пользователя до удалённой проверки, поэтому отклонённые запросы не расходуют бюджет Auth.
 
+### Логи Backend в Docker
+
+```bash
+docker compose logs --since=10m -f backend
+```
+
+В поставляемом `Backend/appsettings.json` включён Information для `FitLife.Backend` и `Microsoft.Hosting.Lifetime`; общий порог Warning сохраняется. Console выводит одну строку на событие с UTC timestamp. Штатный запуск больше не выглядит пустым: видны начало запуска, подключение к БД, ожидание startup lock, количество/имена отсутствующих миграций, их завершение, начало/итог переноса архивов и готовность HTTP. В режиме `--migrate` готовность HTTP не сообщается.
+
+После запроса пишутся метод, **шаблон маршрута**, HTTP-статус и длительность. Неизвестный путь обозначается `unmatched`; отмена клиентом — 499. Успешный `/health` не логируется, чтобы проверки доступности не вытесняли полезные события. Логи не содержат query-параметров, UUID записей/владельцев, headers, credentials, содержимого бэкапов и health payloads. Неожиданный отказ сохраняет штатную обработку исключения; краткая HTTP-запись не дублирует его приватный текст. Отправка ntfy использует прежний отдельный порог.
+
+После получения кода достаточно пересобрать Backend: `docker compose up -d --build --no-deps backend`. Новых env, миграций и изменений БД для логирования нет.
+
 ### Автоматическая сеть Docker и доверие к proxy
 
 `python3 scripts/setup-server-network.py` создаёт bridge-сеть без заданного IPAM-диапазона: Docker сам выбирает свободную подсеть и gateway. Скрипт считывает их через `docker network inspect`, обновляет только `SERVER_NETWORK_NAME`, `SERVER_NETWORK_SUBNET`, `SERVER_NETWORK_GATEWAY` в существующей `.env` и готовит `.local/nginx.generated.conf`. Пароли, `COMPOSE_FILE`, настройки bind mounts, PFX и volumes сохраняются. Чтение Compose учитывает `.env`, в том числе `COMPOSE_FILE=compose.yml:.local/compose.storage.yml` на Linux. Скрипт не выводит секреты, не читает `.env` как shell-код и не меняет системный Nginx.
@@ -503,7 +515,7 @@ Backend отклоняет JWT с неверными issuer/audience/type/subjec
 
 ## Проверки
 
-Актуальный полный прогон 2026-11-13: **555 C# / xUnit-тестов**, включая 43 на одноразовом PostgreSQL 18; ошибок и пропусков нет. Locked restore, сборка без warnings/errors, formatter и пять Python-тестов сети прошли. Для журнала тренировок выполнены 225 C#-сценариев (149 unit, 60 HTTP/SQLite, 16 PostgreSQL), из них 214 новых. Проверены границы и ошибки всех типов записей, транзакционные отказы/отмена, пагинация, потоковые лимиты, квоты, каскады и согласованное чтение при конкурентной правке. Регрессионный HTTP-тест выявил приём повторяющихся JSON-полей; теперь они отклоняются с 400. Полный `check-linux.sh` также прошёл: 312 Core-тестов и независимая проверка 149 ожидаемых результатов серверной валидации. Рабочие БД и внешние провайдеры не использовались.
+Актуальный полный прогон 2026-11-13: **561 C# / xUnit-тест**, включая 43 на одноразовом PostgreSQL 18; ошибок и пропусков нет. Locked restore, сборка без warnings/errors, formatter и пять Python-тестов сети прошли. Для журнала тренировок выполнены 225 C#-сценариев (149 unit, 60 HTTP/SQLite, 16 PostgreSQL), из них 214 новых. Проверены границы и ошибки всех типов записей, транзакционные отказы/отмена, пагинация, потоковые лимиты, квоты, каскады и согласованное чтение при конкурентной правке. Регрессионный HTTP-тест выявил приём повторяющихся JSON-полей; теперь они отклоняются с 400. Полный `check-linux.sh` также прошёл: 312 Core-тестов и независимая проверка 149 ожидаемых результатов серверной валидации. Рабочие БД и внешние провайдеры не использовались.
 
 После переноса логики контроллеров в сервисы полный `check-server.sh` прошёл: locked restore с Mapster 10.0.14, сборка без warnings/errors, 154 сценария (70 unit, 78 HTTP/Identity/SQLite, 6 PostgreSQL 16.6), проверка `dotnet format` и shell syntax. Новые проверки подтверждают зависимости тонких контроллеров, запрет неявного Identity entity mapping, сохранение native OAuth principal/stamp/grant/error, защиту от overposting, точный JSON профиля и безопасное PRG/TempData сообщение. Прежние PKCE, refresh/revoke, WebAuthn, race/rollback и межсервисные сценарии повторно прошли. EF-модель и миграции не менялись; рабочие базы не использовались.
 
@@ -554,6 +566,7 @@ dotnet ef migrations has-pending-model-changes --project Backend
 | `Unit` | `Tests/Server/PendingRegistrationSchemaTests.cs` | Миграция добавляет только неуникальный частичный индекс, без изменения колонок и данных |
 | `Unit` | `Tests/Server/ConfirmationEmailTests.cs` | Кнопка и полный URL после MIME round-trip, точные параметры токена, plain text, ссылки после удаления CSS и отказ небезопасным URI без утечки значений |
 | `HTTP` | `Tests/Server/AppAssociationTests.cs` | AASA только с настроенным App ID, безопасный HTTPS fallback без отражения code/state |
+| `HTTP` | `Tests/Server/BackendLoggingTests.cs` | Реальные shipped filters, запуск/готовность, HTTP-статусы/длительность, отсутствие UUID/query/headers/body/секретов, отмена и итог идемпотентного импорта |
 | `HTTP` | `Tests/Server/BackendTests.cs` | JWT/subject и изоляция пользователей без scopes, отсутствие дополнительных прав от scopes в токене, MIME type, SHA-256/headers/фиксированное время, квота, идемпотентность, откат при отказе/отмене записи |
 | `HTTP` | `Tests/Server/AuthenticationTests.cs` | PKCE, code/refresh/revoke, блокировка аккаунта, scopes, prompt=none, antiforgery, внешние привязки, отзыв сессий/гонка отвязки и удаление данных |
 | `HTTP` | `Tests/Server/AuthenticationSecurityTests.cs` | IP-лимит OAuth errors/discovery применяется до обработки запросов OpenIddict |

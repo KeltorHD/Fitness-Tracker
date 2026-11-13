@@ -3,12 +3,14 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace FitLife.Backend;
 
 /// <summary>Версионирует агрегаты одного владельца, сохраняя графы и tombstones транзакционно.</summary>
-public sealed class TrainingStorage(BackupDbContext database)
+public sealed class TrainingStorage(BackupDbContext database, ILogger<TrainingStorage>? logger = null)
 {
+    private readonly ILogger<TrainingStorage> _logger = logger ?? NullLogger<TrainingStorage>.Instance;
     /// <summary>Максимальный размер одного HTTP-пакета: 30 MiB.</summary>
     public const int MaximumBytes = 30 * 1024 * 1024;
 
@@ -222,6 +224,9 @@ public sealed class TrainingStorage(BackupDbContext database)
     /// <summary>Однократно переносит последний полный v4 архив каждого владельца, сохраняя оригинал и откатывая владельца при ошибке.</summary>
     public async Task ImportLatestBackupsAsync(CancellationToken cancellationToken)
     {
+        _logger.LogInformation(new EventId(4110, "TrainingImportStarting"), "Checking stored archives for training import.");
+        var imported = 0;
+        var skipped = 0;
         var owners = await database.Backups.AsNoTracking().Select(x => x.OwnerId).Distinct().ToListAsync(cancellationToken);
         foreach (var owner in owners)
         {
@@ -231,7 +236,11 @@ public sealed class TrainingStorage(BackupDbContext database)
             {
                 await LockOwnerAsync(owner, cancellationToken);
                 if (await database.TrainingOwners.AnyAsync(x => x.OwnerId == owner, cancellationToken) ||
-                    await database.DeletedAccounts.AnyAsync(x => x.Id == owner, cancellationToken)) continue;
+                    await database.DeletedAccounts.AnyAsync(x => x.Id == owner, cancellationToken))
+                {
+                    skipped++;
+                    continue;
+                }
                 var backup = await database.Backups.AsNoTracking().Where(x => x.OwnerId == owner)
                     .OrderByDescending(x => x.CreatedAtMilliseconds).ThenByDescending(x => x.Id).FirstAsync(cancellationToken);
                 if (backup.Size != backup.Payload.Length || backup.Sha256 != Convert.ToHexStringLower(SHA256.HashData(backup.Payload)))
@@ -248,6 +257,7 @@ public sealed class TrainingStorage(BackupDbContext database)
                 account.ImportedBackupId = backup.Id;
                 await database.SaveChangesAsync(cancellationToken);
                 await transaction.CommitAsync(cancellationToken);
+                imported++;
                 async Task ImportAsync(string kind, IEnumerable<(Guid Id, JsonElement Value)> values)
                 {
                     var ids = new HashSet<Guid>();
@@ -266,6 +276,8 @@ public sealed class TrainingStorage(BackupDbContext database)
             }
             finally { database.ChangeTracker.Clear(); }
         }
+        _logger.LogInformation(new EventId(4111, "TrainingImportCompleted"),
+            "Training archive import completed. Imported owners: {ImportedOwners}; skipped owners: {SkippedOwners}.", imported, skipped);
     }
 
     /// <summary>Текущий полный v4 архив для однократного переноса в структурированный журнал.</summary>
