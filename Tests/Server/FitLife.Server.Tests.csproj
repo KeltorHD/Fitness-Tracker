@@ -18,5 +18,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Update="Fixtures/training-*.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="Fixtures/health-sync-contract.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

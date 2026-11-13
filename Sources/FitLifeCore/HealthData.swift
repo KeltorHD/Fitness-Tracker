@@ -208,7 +208,8 @@ public struct HealthDataSnapshot: Codable, Equatable, Sendable {
         record.segments.map { segment in
           SleepSample(
             id: segment.id, interval: DateInterval(start: segment.start, end: segment.end),
-            stage: segment.stage, sourceID: record.sourceID, sourceName: record.sourceName)
+            stage: segment.stage, sourceID: record.sourceID, sourceName: record.sourceName,
+            fromWatch: provider == .appleHealth && record.sourceID.hasPrefix("watch:"))
         }
       }
       let preferred = SleepNight(day: date, calendar: calendar, samples: samples).sourceID

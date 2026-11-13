@@ -58,6 +58,7 @@ public sealed class BackupStorage(BackupDbContext database, TimeProvider clock)
             database.Database.IsNpgsql() ? IsolationLevel.ReadCommitted : IsolationLevel.Serializable, cancellationToken);
         await LockOwner(owner, cancellationToken);
         await database.Backups.Where(item => item.OwnerId == owner).ExecuteDeleteAsync(cancellationToken);
+        await database.Set<HealthSyncOwner>().Where(item => item.OwnerId == owner).ExecuteDeleteAsync(cancellationToken);
         await database.TrainingOwners.Where(item => item.OwnerId == owner).ExecuteDeleteAsync(cancellationToken);
         if (!await database.DeletedAccounts.AnyAsync(item => item.Id == owner, cancellationToken))
             database.DeletedAccounts.Add(new DeletedAccount { Id = owner });

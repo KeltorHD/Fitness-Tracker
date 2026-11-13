@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace FitLife.Backend;
 
 /// <summary>Описывает одну величину в единицах общего контракта, сохраняя источник и постоянный UUID.</summary>
@@ -27,7 +29,14 @@ public sealed record HealthSleepSegment(Guid Id, DateTimeOffset Start, DateTimeO
 /// <param name="SourceName">Название источника.</param>
 /// <param name="Segments">Доступные фазы, без искусственного заполнения пробелов.</param>
 public sealed record HealthSleepRecord(Guid Id, DateTimeOffset Start, DateTimeOffset End, double? AsleepSeconds,
-    string SourceId, string SourceName, IReadOnlyList<HealthSleepSegment> Segments);
+    string SourceId, string SourceName, IReadOnlyList<HealthSleepSegment> Segments)
+{
+    /// <summary>Допускает отсутствующую optional длительность в Codable payload Swift, сохраняя обязательность фаз и источника.</summary>
+    [JsonConstructor]
+    public HealthSleepRecord(Guid id, DateTimeOffset start, DateTimeOffset end, string sourceId,
+        string sourceName, IReadOnlyList<HealthSleepSegment> segments, double? asleepSeconds = null)
+        : this(id, start, end, asleepSeconds, sourceId, sourceName, segments) { }
+}
 
 /// <summary>Возвращает снимок одного провайдера; данные разных провайдеров не складываются.</summary>
 /// <param name="Provider">Провайдер.</param>

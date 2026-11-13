@@ -235,7 +235,8 @@ public sealed class StartupMigrationTests
         Assert.Equal(owner, backup.OwnerId);
         Assert.Equal(payload, backup.Payload);
         Assert.Single(await verification.DeletedAccounts.ToListAsync(cancellationToken));
-        Assert.Equal(3, (await verification.Database.GetAppliedMigrationsAsync(cancellationToken)).Count());
+        Assert.Equal(4, (await verification.Database.GetAppliedMigrationsAsync(cancellationToken)).Count());
+        Assert.Empty(await verification.Set<HealthSyncSample>().AsNoTracking().ToArrayAsync(cancellationToken));
     }
 
     /// <summary>Ошибка миграции обоих сервисов прерывает запуск до доступности HTTP.</summary>

@@ -41,6 +41,8 @@ public partial class Program
             }).RemoveAllLoggers();
         builder.Services.AddScoped<BackupStorage>();
         builder.Services.AddScoped<TrainingStorage>();
+        builder.Services.AddScoped<HealthSyncStorage>();
+        builder.Services.AddScoped<IHealthDataProvider, AppleHealthHistoryProvider>();
         builder.Services.AddHttpClient<HealthProviderGrants>(client => client.Timeout = TimeSpan.FromSeconds(20))
             .ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler { AllowAutoRedirect = false, UseCookies = false })
             .RemoveAllLoggers();
@@ -108,6 +110,8 @@ public partial class Program
             options.AddPolicy("training", context => RateLimitPartition.GetFixedWindowLimiter(
                 context.User.FindFirst("sub")?.Value ?? context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
                 _ => new FixedWindowRateLimiterOptions { PermitLimit = 240, Window = TimeSpan.FromMinutes(1) }));
+            options.AddPolicy("healthSync", context => RateLimitPartition.GetFixedWindowLimiter(
+                context.User.FindFirst("sub")?.Value ?? "anonymous", _ => new FixedWindowRateLimiterOptions { PermitLimit = 120, Window = TimeSpan.FromMinutes(1) }));
             options.AddPolicy("health", context => RateLimitPartition.GetFixedWindowLimiter(
                 context.User.FindFirst("sub")?.Value ?? context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
                 _ => new FixedWindowRateLimiterOptions { PermitLimit = 30, Window = TimeSpan.FromMinutes(1) }));
