@@ -3,6 +3,7 @@ import FitLifeCore
 import SwiftUI
 
 struct ProgressScreen: View {
+  let navigationResetID: UUID
   @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
   @Environment(AppStore.self) private var store
@@ -142,6 +143,7 @@ struct ProgressScreen: View {
         .onChange(of: calendar) { refresh() }
         .onChange(of: phase) { if phase == .active { refresh() } }
     }
+    .id(navigationResetID)
   }
   private func refresh() {
     model.refresh(workouts: store.workouts, calendar: calendar, bodyWeights: store.bodyWeights)

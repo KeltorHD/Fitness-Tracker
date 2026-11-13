@@ -8,6 +8,7 @@ struct RootView: View {
   @Environment(\.scenePhase) private var phase
   @Environment(\.calendar) private var calendar
   @State private var tab = 0
+  @State private var navigationResetID = UUID()
   @State private var pendingWorkoutStart: WorkoutStartSelection?
   @State private var presentingSession = false
   @AppStorage("keepScreenAwake") private var keepScreenAwake = false
@@ -16,21 +17,21 @@ struct RootView: View {
     VStack(spacing: 0) {
       TabView(selection: $tab) {
         Tab(value: 0) {
-          DashboardView().tint(colorTheme.accent)
+          DashboardView(navigationResetID: navigationResetID).tint(colorTheme.accent)
             .toolbar(.hidden, for: .tabBar)
         } label: {
           Label(L10n.text("Дневник", locale: locale), systemImage: "book")
             .environment(\.symbolVariants, SymbolVariants.none)
         }
         Tab(value: 1) {
-          TemplatesView().tint(colorTheme.accent)
+          TemplatesView().id(navigationResetID).tint(colorTheme.accent)
             .toolbar(.hidden, for: .tabBar)
         } label: {
           Label(L10n.text("Шаблоны", locale: locale), systemImage: "dumbbell")
             .environment(\.symbolVariants, SymbolVariants.none)
         }
         Tab(value: 2) {
-          ProgressScreen().tint(.primary)
+          ProgressScreen(navigationResetID: navigationResetID).tint(.primary)
             .toolbar(.hidden, for: .tabBar)
         } label: {
           Label(L10n.text("Результаты", locale: locale), systemImage: "chart.bar.xaxis")
@@ -45,6 +46,7 @@ struct RootView: View {
             .navigationTitle(L10n.text("Справка", locale: locale))
             .toolbar { SettingsToolbar() }
           }
+          .id(navigationResetID)
           .tint(colorTheme.accent)
           .toolbar(.hidden, for: .tabBar)
         } label: {
@@ -52,7 +54,11 @@ struct RootView: View {
             .environment(\.symbolVariants, SymbolVariants.none)
         }
       }
-      WorkoutNavigationBar(selection: $tab, hasActiveWorkout: store.active != nil) {
+      WorkoutNavigationBar(
+        selection: Binding(get: { tab }, set: { selectTab($0) }),
+        hasActiveWorkout: store.active != nil
+      ) {
+        resetNavigation()
         store.presentWorkoutStart()
       }
     }
@@ -183,6 +189,15 @@ struct RootView: View {
         await store.prepareForBackground()
       }
     }
+  }
+  private func selectTab(_ value: Int) {
+    resetNavigation()
+    tab = value
+  }
+  private func resetNavigation() {
+    pendingWorkoutStart = nil
+    store.dismissNavigationPresentations()
+    navigationResetID = UUID()
   }
   private func startSelectedWorkout() {
     // Keep the session content during its dismissal animation, then allow the next picker.

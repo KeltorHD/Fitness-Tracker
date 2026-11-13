@@ -31,6 +31,45 @@ private struct ArchiveFileStub: ArchiveFileHandling {
 }
 
 @MainActor final class ArchiveTransferTests: XCTestCase {
+  func testNavigationDismissalDiscardsLateArchivePreviewAndFilePickerState() async throws {
+    let repository = MemoryWorkoutRepository()
+    let archive = makeArchive()
+    let files = ControlledArchiveFiles()
+    let model = ArchiveTransferViewModel(
+      files: files, snapshot: { archive },
+      plan: {
+        try ArchiveImportPlan(
+          archive: $0, existingWorkouts: repository.workouts(), existingTemplates: []
+        ).summary
+      }, commit: { try repository.importArchive($0) })
+    model.present()
+    model.prepareExport()
+    XCTAssertNotNil(model.exportDocument)
+    model.openFile(URL(fileURLWithPath: "/fixture.fitlife"))
+    let request = try XCTUnwrap(model.request)
+    let loading = Task { await model.load(request) }
+    await files.waitForRead(count: 1)
+    model.showingImporter = true
+
+    model.dismissForNavigation()
+    files.requests[0].resume(returning: archive)
+    await loading.value
+
+    XCTAssertFalse(model.isPresented)
+    XCTAssertFalse(model.showingImporter)
+    XCTAssertFalse(model.showingExporter)
+    XCTAssertFalse(model.isLoading)
+    XCTAssertNil(model.exportDocument)
+    XCTAssertNil(model.request)
+    XCTAssertNil(model.preview)
+    XCTAssertNil(model.commitRequestID)
+    XCTAssertNil(model.errorMessage)
+    XCTAssertTrue(try repository.workouts().isEmpty)
+    model.present()
+    XCTAssertFalse(model.showingImporter)
+    XCTAssertFalse(model.showingExporter)
+  }
+
   func testCSVFileHasPreviewAndRequiresConfirmationBeforeSaving() async throws {
     let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
     try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)

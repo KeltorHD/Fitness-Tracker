@@ -114,6 +114,15 @@ struct ArchiveImportPreview {
     errorMessage = nil
   }
 
+  func dismissForNavigation() {
+    isPresented = false
+    showingImporter = false
+    showingExporter = false
+    exportDocument = nil
+    pendingOpenURL = nil
+    if !isSaving { cancelReading() }
+  }
+
   func load(_ request: ArchiveReadRequest) async {
     guard self.request?.id == request.id else { return }
     isLoading = true

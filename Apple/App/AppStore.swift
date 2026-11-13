@@ -318,6 +318,11 @@ import WidgetKit
   }
   private func resetWorkspacePresentation() {
     exerciseDraftStore = nil
+    dismissNavigationPresentations()
+    workspaceID = UUID()
+  }
+  /// Closes presentation state without replacing the workspace, workout or exercise input drafts.
+  func dismissNavigationPresentations() {
     error = nil
     notice = nil
     showSession = false
@@ -325,9 +330,8 @@ import WidgetKit
     showingWorkoutDetail = false
     showingTemplateEditor = false
     showingBodyWeightEditor = false
-    archiveTransfer.cancelReading()
-    archiveTransfer.isPresented = false
-    workspaceID = UUID()
+    nutrition?.isPresenting = false
+    archiveTransfer.dismissForNavigation()
   }
   private func loadRepository(refreshTracker: Bool = true) throws {
     // Publish only after all reads succeed; a partial read preserves the previous UI snapshot.

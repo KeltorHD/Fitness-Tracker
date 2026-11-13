@@ -3,6 +3,7 @@ import SwiftUI
 private enum DiarySection: Int, Hashable { case workouts, nutrition, sleep }
 
 struct DashboardView: View {
+  let navigationResetID: UUID
   @Environment(AppStore.self) private var store
   @Environment(\.locale) private var locale
   @State private var section = DiarySection.workouts
@@ -89,5 +90,6 @@ struct DashboardView: View {
         SettingsToolbar()
       }
     }
+    .id(navigationResetID)
   }
 }

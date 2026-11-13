@@ -154,7 +154,8 @@ struct WorkoutNavigationBar: View {
       }
       .onEnded { value in
         guard tabFrames.values.contains(where: { $0.contains(value.startLocation) }),
-          let target = tabFrames.first(where: { $0.value.contains(value.location) })?.key
+          let target = tabFrames.first(where: { $0.value.contains(value.location) })?.key,
+          target != selection
         else { return }
         select(target)
       }

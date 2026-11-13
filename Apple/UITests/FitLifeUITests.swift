@@ -1,6 +1,51 @@
 import XCTest
 
 final class FitLifeUITests: XCTestCase {
+  @MainActor func testBottomMenuClosesNestedScreensForDifferentAndRepeatedTabs() {
+    let app = launch()
+    for index in 0...3 {
+      let current = app.buttons["navigationTab_\(index)"]
+      XCTAssertTrue(current.waitForExistence(timeout: 10))
+      current.tap()
+      app.buttons["openSettings"].firstMatch.tap()
+      let tracker = app.buttons["openTracker"]
+      XCTAssertTrue(tracker.waitForExistence(timeout: 5))
+      reveal(tracker, in: app)
+      tracker.tap()
+      let mode = app.buttons["trackerModePicker"]
+      XCTAssertTrue(mode.waitForExistence(timeout: 5))
+      current.tap()
+      XCTAssertTrue(mode.waitForNonExistence(timeout: 5))
+      XCTAssertFalse(app.buttons["appLanguagePicker"].exists)
+      XCTAssertTrue(current.isSelected)
+
+      app.buttons["openSettings"].firstMatch.tap()
+      XCTAssertTrue(app.buttons["appLanguagePicker"].waitForExistence(timeout: 5))
+      let next = app.buttons["navigationTab_\((index + 1) % 4)"]
+      next.tap()
+      XCTAssertTrue(app.buttons["appLanguagePicker"].waitForNonExistence(timeout: 5))
+      XCTAssertTrue(next.isSelected)
+      current.tap()
+      XCTAssertFalse(app.buttons["appLanguagePicker"].exists)
+      XCTAssertFalse(mode.exists)
+    }
+  }
+
+  @MainActor func testBottomStartClosesSettingsBeforePresentingWorkoutSelection() {
+    let app = launch()
+    let results = app.buttons["navigationTab_2"]
+    XCTAssertTrue(results.waitForExistence(timeout: 10))
+    results.tap()
+    app.buttons["openSettings"].firstMatch.tap()
+    XCTAssertTrue(app.buttons["appLanguagePicker"].waitForExistence(timeout: 5))
+    app.buttons["workoutStartAction"].tap()
+    XCTAssertTrue(app.buttons["startSelectedTemplates"].waitForExistence(timeout: 5))
+    dismissWorkoutStart(in: app)
+    XCTAssertTrue(app.buttons["workoutStartAction"].waitForExistence(timeout: 5))
+    XCTAssertFalse(app.buttons["appLanguagePicker"].exists)
+    XCTAssertTrue(results.isSelected)
+  }
+
   @MainActor func testCalendarWorkoutFiltersKeepHistoryScopeUntilSelectingADay() {
     let app = launch(additionalArguments: ["--ui-testing-diary-insights", "-appearance", "light"])
     let filters = app.buttons["diaryWorkoutFilters"]

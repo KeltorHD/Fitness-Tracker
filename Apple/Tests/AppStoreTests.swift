@@ -64,6 +64,51 @@ import XCTest
 }
 
 @MainActor final class AppStoreTests: XCTestCase {
+  func testBottomNavigationDismissalKeepsTheActiveWorkoutWorkspaceAndInputDrafts() throws {
+    let repository = MemoryWorkoutRepository()
+    let row = WorkoutExercise(
+      exercise: ExerciseCatalog.all[0], sets: [WorkoutSet(repetitions: 0)])
+    let workout = Workout(name: "Navigation", exercises: [row])
+    try repository.save(workout)
+    let store = AppStore(
+      repository: repository, health: RecordingHealthExporter(), platformServicesEnabled: false)
+    let workspace = store.workspaceID
+    let drafts = store.exerciseDrafts(for: workout, unit: .kilograms)
+    store.showSession = true
+    store.showingWorkoutStart = true
+    store.showingWorkoutDetail = true
+    store.showingTemplateEditor = true
+    store.showingBodyWeightEditor = true
+    store.nutrition?.isPresenting = true
+    store.error = "Fixture error"
+    store.notice = "Fixture notice"
+    store.archiveTransfer.present()
+    store.archiveTransfer.showingImporter = true
+    store.archiveTransfer.showingExporter = true
+
+    store.dismissNavigationPresentations()
+
+    XCTAssertEqual(store.workspaceID, workspace)
+    XCTAssertEqual(store.active, workout)
+    XCTAssertEqual(try repository.workouts(), [workout])
+    XCTAssertTrue(store.exerciseDrafts(for: workout, unit: .kilograms) === drafts)
+    XCTAssertFalse(store.showSession)
+    XCTAssertFalse(store.showingWorkoutStart)
+    XCTAssertFalse(store.showingWorkoutDetail)
+    XCTAssertFalse(store.showingTemplateEditor)
+    XCTAssertFalse(store.showingBodyWeightEditor)
+    XCTAssertNotEqual(store.nutrition?.isPresenting, true)
+    XCTAssertFalse(store.archiveTransfer.isPresented)
+    XCTAssertFalse(store.archiveTransfer.showingImporter)
+    XCTAssertFalse(store.archiveTransfer.showingExporter)
+    XCTAssertNil(store.error)
+    XCTAssertNil(store.notice)
+    store.presentWorkoutStart()
+    XCTAssertTrue(store.showSession)
+    XCTAssertFalse(store.showingWorkoutStart)
+    XCTAssertEqual(store.active?.id, workout.id)
+  }
+
   func testExerciseInputSurvivesReopeningAndRepositoryReloadWithoutCompleting() throws {
     let repository = MemoryWorkoutRepository()
     let row = WorkoutExercise(
