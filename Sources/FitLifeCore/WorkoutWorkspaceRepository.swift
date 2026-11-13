@@ -4,6 +4,8 @@ import Foundation
 @MainActor public final class WorkoutWorkspaceRepository: WorkoutRepository {
   private let personal: any WorkoutRepository
   private var demo: MemoryWorkoutRepository?
+  public var onTrainingChange: (@MainActor () -> Void)?
+  public var personalWritesSuspended = false
   public var isDemoMode: Bool { demo != nil }
   private var current: any WorkoutRepository { demo ?? personal }
   public init(personal: any WorkoutRepository) { self.personal = personal }
@@ -28,21 +30,71 @@ import Foundation
   public func workouts() throws -> [Workout] { try current.workouts() }
   public func templates() throws -> [WorkoutTemplate] { try current.templates() }
   public func bodyWeights() throws -> [BodyWeightEntry] { try current.bodyWeights() }
-  public func saveBodyWeight(_ entry: BodyWeightEntry) throws { try current.saveBodyWeight(entry) }
+  public func saveBodyWeight(_ entry: BodyWeightEntry) throws {
+    try allowWrite()
+    try current.saveBodyWeight(entry)
+    notifyChange()
+  }
   public func saveBodyWeight(_ entry: BodyWeightEntry, updating workout: Workout?) throws {
+    try allowWrite()
     try current.saveBodyWeight(entry, updating: workout)
+    notifyChange()
   }
-  public func deleteBodyWeight(id: UUID) throws { try current.deleteBodyWeight(id: id) }
+  public func deleteBodyWeight(id: UUID) throws {
+    try allowWrite()
+    try current.deleteBodyWeight(id: id)
+    notifyChange()
+  }
   public func deleteBodyWeight(id: UUID, updating workout: Workout?) throws {
+    try allowWrite()
     try current.deleteBodyWeight(id: id, updating: workout)
+    notifyChange()
   }
-  public func save(_ workout: Workout) throws { try current.save(workout) }
+  public func save(_ workout: Workout) throws {
+    try allowWrite()
+    try current.save(workout)
+    notifyChange()
+  }
   public func saveTemplate(_ template: WorkoutTemplate) throws {
+    try allowWrite()
     try current.saveTemplate(template)
+    notifyChange()
   }
-  public func deleteWorkout(id: UUID) throws { try current.deleteWorkout(id: id) }
-  public func deleteTemplate(id: UUID) throws { try current.deleteTemplate(id: id) }
+  public func deleteWorkout(id: UUID) throws {
+    try allowWrite()
+    try current.deleteWorkout(id: id)
+    notifyChange()
+  }
+  public func deleteTemplate(id: UUID) throws {
+    try allowWrite()
+    try current.deleteTemplate(id: id)
+    notifyChange()
+  }
   public func importArchive(_ archive: WorkoutArchive) throws -> ArchiveImportSummary {
-    try current.importArchive(archive)
+    try allowWrite()
+    let result = try current.importArchive(archive)
+    if result.hasChanges { notifyChange() }
+    return result
+  }
+  public var trainingAccountSelection: TrainingAccountSelection? {
+    (personal as? any TrainingAccountRepository)?.trainingAccountSelection
+  }
+  public func activateTrainingAccount(_ namespace: String) throws {
+    guard demo == nil, let scoped = personal as? any TrainingAccountRepository else {
+      throw TrainingSyncError.unsupportedStore
+    }
+    try scoped.activateTrainingAccount(namespace)
+  }
+  public func applyTrainingChanges(_ changes: [TrainingChange]) throws {
+    guard demo == nil, let scoped = personal as? any TrainingAccountRepository else {
+      throw TrainingSyncError.unsupportedStore
+    }
+    try scoped.applyTrainingChanges(changes)
+  }
+  private func notifyChange() {
+    if demo == nil { onTrainingChange?() }
+  }
+  private func allowWrite() throws {
+    if demo == nil && personalWritesSuspended { throw TrainingSyncError.accountMismatch }
   }
 }
