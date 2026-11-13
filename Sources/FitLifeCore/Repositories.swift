@@ -148,6 +148,13 @@ extension MemoryWorkoutRepository: NutritionRepository {
   public func waterEntries() throws -> [WaterEntry] { try nutrition.waterEntries() }
   public func saveWaterEntry(_ entry: WaterEntry) throws { try nutrition.saveWaterEntry(entry) }
   public func deleteWaterEntry(id: UUID) throws { try nutrition.deleteWaterEntry(id: id) }
+  public func supplementEntries() throws -> [SupplementEntry] { try nutrition.supplementEntries() }
+  public func saveSupplementEntry(_ entry: SupplementEntry) throws {
+    try nutrition.saveSupplementEntry(entry)
+  }
+  public func deleteSupplementEntry(id: UUID) throws {
+    try nutrition.deleteSupplementEntry(id: id)
+  }
   public func favoriteFoodProducts() throws -> [FoodProduct] {
     try nutrition.favoriteFoodProducts()
   }

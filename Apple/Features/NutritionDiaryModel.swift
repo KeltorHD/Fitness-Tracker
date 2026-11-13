@@ -6,6 +6,7 @@ import Observation
   private(set) var entries: [FoodEntry] = []
   private(set) var goal: NutritionGoal?
   private(set) var water: [WaterEntry] = []
+  private(set) var supplements: [SupplementEntry] = []
   private(set) var favorites: [FoodProduct] = []
   var notice: String?
   private(set) var day = NutritionDay(entries: [], date: .now)
@@ -44,10 +45,12 @@ import Observation
       let entries = try repository.foodEntries()
       let goal = try repository.nutritionGoal()
       let water = try repository.waterEntries()
+      let supplements = try repository.supplementEntries()
       let favorites = try repository.favoriteFoodProducts()
       self.entries = entries
       self.goal = goal
       self.water = water.sorted { $0.date > $1.date }
+      self.supplements = supplements
       self.favorites = favorites.sorted {
         $0.name.localizedStandardCompare($1.name) == .orderedAscending
       }
@@ -145,6 +148,35 @@ import Observation
       return false
     }
   }
+  @discardableResult func saveSupplement(_ entry: SupplementEntry) -> Bool {
+    notice = nil
+    do {
+      try repository.saveSupplementEntry(entry)
+      supplements.removeAll { $0.id == entry.id }
+      supplements.append(entry)
+      rebuild()
+      error = nil
+      return true
+    } catch {
+      self.error =
+        (error as? NutritionError)?.errorDescription
+        ?? "Не удалось сохранить приём добавки. Попробуйте ещё раз."
+      return false
+    }
+  }
+  @discardableResult func deleteSupplement(_ entry: SupplementEntry) -> Bool {
+    notice = nil
+    do {
+      try repository.deleteSupplementEntry(id: entry.id)
+      supplements.removeAll { $0.id == entry.id }
+      rebuild()
+      error = nil
+      return true
+    } catch {
+      self.error = "Не удалось удалить приём добавки. Попробуйте ещё раз."
+      return false
+    }
+  }
   @discardableResult func copyMeals(
     from date: Date, meal: MealKind?, to target: Date, calendar: Calendar
   ) -> Bool {
@@ -186,18 +218,21 @@ import Observation
         ? $0.id.uuidString < $1.id.uuidString
         : $0.title.localizedStandardCompare($1.title) == .orderedAscending
     }
-    day = NutritionDay(entries: entries, date: selectedDate, calendar: calendar)
+    day = NutritionDay(
+      entries: entries, date: selectedDate, calendar: calendar, supplements: supplements)
     meals = Dictionary(grouping: day.entries, by: \.meal)
     waterToday = water.filter { calendar.isDate($0.date, inSameDayAs: selectedDate) }
       .sorted { $0.date == $1.date ? $0.id.uuidString < $1.id.uuidString : $0.date > $1.date }
     week = NutritionDaySummary.week(
-      ending: selectedDate, entries: entries, water: water, calendar: calendar)
+      ending: selectedDate, entries: entries, water: water, calendar: calendar,
+      supplements: supplements)
   }
   func switchWorkspace(isDemo: Bool) {
     demo = isDemo ? MemoryNutritionRepository() : nil
     entries = []
     goal = nil
     water = []
+    supplements = []
     favorites = []
     notice = nil
     isPresenting = false

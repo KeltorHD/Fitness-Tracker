@@ -1,6 +1,67 @@
 import XCTest
 
 final class FitLifeUITests: XCTestCase {
+  @MainActor func testNutritionLogsSupplementsAndCountsOnlyProvidedNutrition() {
+    let app = launch()
+    let nutrition = app.segmentedControls["diarySection"].buttons["Питание"]
+    XCTAssertTrue(nutrition.waitForExistence(timeout: 10))
+    nutrition.tap()
+    let add = app.buttons["addSupplement"]
+    reveal(add, in: app)
+    add.tap()
+    app.buttons["addSupplement_creatine"].tap()
+    let amount = app.textFields["supplementAmount"]
+    XCTAssertTrue(amount.waitForExistence(timeout: 5))
+    amount.tap()
+    amount.typeText("5")
+    app.buttons["saveSupplementEntry"].tap()
+    let creatine = app.buttons.matching(
+      NSPredicate(
+        format: "identifier BEGINSWITH %@ AND label CONTAINS %@", "supplementEntry_", "Креатин")
+    )
+    .firstMatch
+    XCTAssertTrue(creatine.waitForExistence(timeout: 5))
+    creatine.tap()
+    XCTAssertTrue(amount.waitForExistence(timeout: 5))
+    let existing = amount.value as? String ?? ""
+    amount.tap()
+    amount.typeText(
+      String(repeating: XCUIKeyboardKey.delete.rawValue, count: existing.count) + "99")
+    app.buttons["Отмена"].firstMatch.tap()
+    XCTAssertTrue(creatine.waitForExistence(timeout: 5))
+    creatine.tap()
+    XCTAssertTrue(amount.waitForExistence(timeout: 5))
+    let savedAmount = (amount.value as? String ?? "").replacingOccurrences(of: ",", with: ".")
+    XCTAssertEqual(Double(savedAmount), 5)
+    app.buttons["Отмена"].firstMatch.tap()
+
+    reveal(add, in: app)
+    add.tap()
+    app.buttons["addSupplement_protein"].tap()
+    let fields = [
+      ("supplementAmount", "30"), ("supplementCalories", "400"),
+      ("supplementProtein", "80"), ("supplementFat", "5"), ("supplementCarbohydrates", "10"),
+    ]
+    for (identifier, value) in fields {
+      let field = app.textFields[identifier]
+      reveal(field, in: app)
+      field.tap()
+      field.typeText(value)
+    }
+    app.buttons["saveSupplementEntry"].tap()
+    let protein = app.buttons.matching(
+      NSPredicate(
+        format: "identifier BEGINSWITH %@ AND label CONTAINS %@", "supplementEntry_", "Протеин")
+    )
+    .firstMatch
+    XCTAssertTrue(protein.waitForExistence(timeout: 5))
+    XCTAssertTrue(protein.label.contains("120"))
+    let balance = app.buttons["expandNutritionInsights"]
+    for _ in 0..<6 where !balance.isHittable { app.swipeDown() }
+    XCTAssertTrue(balance.isHittable)
+    XCTAssertTrue(balance.label.contains("120"))
+  }
+
   @MainActor func testBottomMenuClosesNestedScreensForDifferentAndRepeatedTabs() {
     let app = launch()
     for index in 0...3 {

@@ -27,13 +27,26 @@ struct NutrientValues: View {
 
 private enum NutritionSheet: Identifiable {
   case food(FoodEntry)
+  case supplement(SupplementEntry)
   case water
   case copy(MealKind?)
   var id: String {
     switch self {
     case .food(let entry): "food_\(entry.id)"
+    case .supplement(let entry): "supplement_\(entry.id)"
     case .water: "water"
     case .copy(let meal): "copy_\(meal?.rawValue ?? "all")"
+    }
+  }
+}
+
+private enum NutritionDeletion {
+  case food(FoodEntry)
+  case supplement(SupplementEntry)
+  var title: String {
+    switch self {
+    case .food: "Удалить запись питания?"
+    case .supplement: "Удалить приём добавки?"
     }
   }
 }
@@ -46,7 +59,7 @@ struct NutritionDiaryView: View {
   @Binding var date: Date
   var isSelected: Bool
   @State private var sheet: NutritionSheet?
-  @State private var pendingDelete: FoodEntry?
+  @State private var pendingDelete: NutritionDeletion?
 
   var body: some View {
     List {
@@ -82,6 +95,22 @@ struct NutritionDiaryView: View {
           .accessibilityIdentifier("nutritionWeek")
         }.buttonStyle(.bordered).controlSize(.small).cardListRow()
         NutritionWaterCard(model: model, date: date) { sheet = .water }.cardListRow()
+        NutritionSupplementsSection(
+          entries: model.day.supplements,
+          add: { kind in
+            sheet = .supplement(
+              SupplementEntry(
+                date: NutritionCalendar.date(on: date, timeOf: .now, calendar: calendar),
+                kind: kind, amount: 0))
+          },
+          edit: { sheet = .supplement($0) },
+          repeatEntry: { entry in
+            sheet = .supplement(
+              entry.repeated(
+                on: NutritionCalendar.date(
+                  on: date, timeOf: .now, calendar: calendar)))
+          },
+          delete: { pendingDelete = .supplement($0) })
         ForEach(MealKind.allCases, id: \.self) { meal in
           Section {
             let entries = model.meals[meal] ?? []
@@ -118,10 +147,11 @@ struct NutritionDiaryView: View {
                     updated.isSavedMeal.toggle()
                     model.save(updated)
                   }
-                  Button(L10n.text("Удалить", locale: locale)) { pendingDelete = entry }
+                  Button(L10n.text("Удалить", locale: locale)) { pendingDelete = .food(entry) }
                 }
                 .swipeActions(allowsFullSwipe: false) {
-                  Button(L10n.text("Удалить", locale: locale)) { pendingDelete = entry }.tint(.red)
+                  Button(L10n.text("Удалить", locale: locale)) { pendingDelete = .food(entry) }
+                    .tint(.red)
                 }
             }
             Button(L10n.text("Добавить еду", locale: locale), systemImage: "plus.circle.fill") {
@@ -198,6 +228,7 @@ struct NutritionDiaryView: View {
     .sheet(item: $sheet, onDismiss: { model.isPresenting = false }) { value in
       switch value {
       case .food(let entry): FoodEntryEditor(diary: model, entry: entry)
+      case .supplement(let entry): SupplementEntryEditor(diary: model, entry: entry)
       case .water: NavigationStack { NutritionWaterEditor(model: model, date: date) }
       case .copy(let meal):
         NavigationStack {
@@ -206,12 +237,16 @@ struct NutritionDiaryView: View {
       }
     }
     .confirmationDialog(
-      L10n.text("Удалить запись питания?", locale: locale),
+      L10n.text(pendingDelete?.title ?? "Удалить запись питания?", locale: locale),
       isPresented: Binding(get: { pendingDelete != nil }, set: { if !$0 { pendingDelete = nil } }),
       titleVisibility: .visible
     ) {
       Button(L10n.text("Удалить", locale: locale), role: .destructive) {
-        if let pendingDelete { model.delete(pendingDelete) }
+        switch pendingDelete {
+        case .food(let entry): model.delete(entry)
+        case .supplement(let entry): model.deleteSupplement(entry)
+        case nil: break
+        }
         pendingDelete = nil
       }
       Button(L10n.text("Отмена", locale: locale), role: .cancel) { pendingDelete = nil }

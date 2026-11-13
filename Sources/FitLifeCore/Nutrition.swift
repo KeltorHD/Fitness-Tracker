@@ -2,6 +2,7 @@ import Foundation
 
 public enum NutritionError: Error, LocalizedError, Sendable {
   case invalidValues, invalidPortion, invalidEntry, invalidPhoto, invalidGoal, invalidWater
+  case invalidSupplement, invalidSupplementNutrition
   public var errorDescription: String? {
     switch self {
     case .invalidValues:
@@ -12,6 +13,10 @@ public enum NutritionError: Error, LocalizedError, Sendable {
     case .invalidGoal:
       "Укажите положительную цель калорий. Необязательные цели БЖУ тоже должны быть больше нуля."
     case .invalidWater: "Укажите объём воды больше нуля и не больше 10 000 мл."
+    case .invalidSupplement:
+      "Проверьте название добавки, дату и положительное количество в выбранных единицах."
+    case .invalidSupplementNutrition:
+      "Введите все значения КБЖУ с упаковки или оставьте все поля пустыми. Проверьте единицы и значения."
     }
   }
 }
@@ -232,17 +237,19 @@ public struct NutritionDaySummary: Identifiable, Equatable, Sendable {
   public let entryCount: Int
 
   public static func week(
-    ending date: Date, entries: [FoodEntry], water: [WaterEntry], calendar: Calendar
+    ending date: Date, entries: [FoodEntry], water: [WaterEntry], calendar: Calendar,
+    supplements: [SupplementEntry] = []
   ) -> [Self] {
     (-6...0).compactMap { offset in
       guard
         let day = calendar.date(byAdding: .day, value: offset, to: calendar.startOfDay(for: date))
       else { return nil }
-      let nutrition = NutritionDay(entries: entries, date: day, calendar: calendar)
+      let nutrition = NutritionDay(
+        entries: entries, date: day, calendar: calendar, supplements: supplements)
       return Self(
         date: day, total: nutrition.total, incompleteCount: nutrition.incompleteCount,
         waterMilliliters: water.filter { calendar.isDate($0.date, inSameDayAs: day) }
-          .reduce(0) { $0 + $1.milliliters }, entryCount: nutrition.entries.count)
+          .reduce(0) { $0 + $1.milliliters }, entryCount: nutrition.nutritionEntryCount)
     }
   }
 }
@@ -259,13 +266,26 @@ public enum FoodBarcode {
 
 public struct NutritionDay: Equatable, Sendable {
   public let entries: [FoodEntry]
+  public let supplements: [SupplementEntry]
   public let total: Nutrients
   public let incompleteCount: Int
-  public init(entries: [FoodEntry], date: Date, calendar: Calendar = .current) {
+  public var nutritionEntryCount: Int {
+    entries.count + supplements.filter(\.includesNutrition).count
+  }
+  public init(
+    entries: [FoodEntry], date: Date, calendar: Calendar = .current,
+    supplements: [SupplementEntry] = []
+  ) {
     self.entries = entries.filter { calendar.isDate($0.date, inSameDayAs: date) }
       .sorted { $0.date == $1.date ? $0.id.uuidString < $1.id.uuidString : $0.date < $1.date }
-    total = self.entries.reduce(Nutrients()) { $0 + $1.nutrients }
-    incompleteCount = self.entries.filter(\.needsNutrition).count
+    self.supplements = supplements.filter { calendar.isDate($0.date, inSameDayAs: date) }
+      .sorted { $0.date == $1.date ? $0.id.uuidString < $1.id.uuidString : $0.date < $1.date }
+    total =
+      self.entries.reduce(Nutrients()) { $0 + $1.nutrients }
+      + self.supplements.compactMap(\.nutrients).reduce(Nutrients(), +)
+    incompleteCount =
+      self.entries.filter(\.needsNutrition).count
+      + self.supplements.filter(\.needsNutrition).count
   }
 }
 
@@ -279,6 +299,9 @@ public struct NutritionDay: Equatable, Sendable {
   func waterEntries() throws -> [WaterEntry]
   func saveWaterEntry(_ entry: WaterEntry) throws
   func deleteWaterEntry(id: UUID) throws
+  func supplementEntries() throws -> [SupplementEntry]
+  func saveSupplementEntry(_ entry: SupplementEntry) throws
+  func deleteSupplementEntry(id: UUID) throws
   func favoriteFoodProducts() throws -> [FoodProduct]
   func setFavoriteFoodProduct(_ product: FoodProduct, isFavorite: Bool) throws
 }
@@ -287,6 +310,7 @@ public struct NutritionDay: Equatable, Sendable {
   private var entries: [UUID: FoodEntry] = [:]
   private var goal: NutritionGoal?
   private var water: [UUID: WaterEntry] = [:]
+  private var supplements: [UUID: SupplementEntry] = [:]
   private var favorites: [String: FoodProduct] = [:]
   public init() {}
   public func foodEntries() throws -> [FoodEntry] { Array(entries.values) }
@@ -310,6 +334,12 @@ public struct NutritionDay: Equatable, Sendable {
     water[entry.id] = entry
   }
   public func deleteWaterEntry(id: UUID) throws { water[id] = nil }
+  public func supplementEntries() throws -> [SupplementEntry] { Array(supplements.values) }
+  public func saveSupplementEntry(_ entry: SupplementEntry) throws {
+    try entry.validate()
+    supplements[entry.id] = entry
+  }
+  public func deleteSupplementEntry(id: UUID) throws { supplements[id] = nil }
   public func favoriteFoodProducts() throws -> [FoodProduct] { Array(favorites.values) }
   public func setFavoriteFoodProduct(_ product: FoodProduct, isFavorite: Bool) throws {
     try product.validate()

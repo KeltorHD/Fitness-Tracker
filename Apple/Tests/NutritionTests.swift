@@ -1,11 +1,59 @@
 import FitLifeCore
 import ImageIO
+import SwiftData
 import UIKit
 import XCTest
 
 @testable import FitLife
 
 @MainActor final class NutritionTests: XCTestCase {
+  func testSupplementPersistencePreservesFoodWaterAndWorkoutRecords() throws {
+    let repository = try SwiftDataWorkoutRepository(inMemory: true)
+    let workout = Workout(name: "Workout")
+    try repository.save(workout)
+    let food = FoodEntry(
+      title: "Food",
+      portions: [
+        FoodPortion(product: FoodProduct(name: "Food", per100Units: Nutrients(calories: 100)))
+      ])
+    let water = WaterEntry(milliliters: 250)
+    try repository.saveFoodEntry(food)
+    try repository.saveWaterEntry(water)
+    var intake = SupplementEntry(
+      kind: .protein, amount: 30,
+      nutritionPerBasis: Nutrients(calories: 400, protein: 80))
+    try repository.saveSupplementEntry(intake)
+    try repository.saveSupplementEntry(intake)
+    XCTAssertEqual(try repository.supplementEntries(), [intake])
+    intake.amount = 60
+    intake.note = "Edited"
+    try repository.saveSupplementEntry(intake)
+    XCTAssertEqual(try repository.supplementEntries(), [intake])
+    var invalid = intake
+    invalid.amount = 0
+    XCTAssertThrowsError(try repository.saveSupplementEntry(invalid))
+    XCTAssertEqual(try repository.supplementEntries(), [intake])
+    try repository.deleteSupplementEntry(id: intake.id)
+    XCTAssertTrue(try repository.supplementEntries().isEmpty)
+    XCTAssertEqual(try repository.foodEntries(), [food])
+    XCTAssertEqual(try repository.waterEntries(), [water])
+    XCTAssertEqual(try repository.workouts(), [workout])
+  }
+
+  func testSupplementCorruptionIsReportedWithoutResettingTheStore() throws {
+    let repository = try SwiftDataWorkoutRepository(inMemory: true)
+    let intake = SupplementEntry(kind: .creatine, amount: 5)
+    let context = ModelContext(repository.container)
+    context.insert(
+      StoredRecord(
+        id: UUID(), kind: "supplementEntry",
+        payload: try JSONEncoder().encode(intake)))
+    try context.save()
+    XCTAssertThrowsError(try repository.supplementEntries())
+    let records = try context.fetch(FetchDescriptor<StoredRecord>())
+    XCTAssertEqual(records.filter { $0.kind == "supplementEntry" }.count, 1)
+  }
+
   func testNewNutritionRecordsAndBatchValidationPreserveStoredHistory() throws {
     let repository = try SwiftDataWorkoutRepository(inMemory: true)
     let product = FoodProduct(id: "12345678", name: "Food", per100Units: Nutrients(calories: 200))
