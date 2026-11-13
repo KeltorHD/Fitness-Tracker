@@ -165,7 +165,7 @@ import WidgetKit
         session: accountSession, cryptography: cryptography, account: healthAccount)
       let sync = AppleHealthSyncCoordinator(
         reader: AppleHealthSyncReader(), remote: remote,
-        storage: HealthSyncStateStore(), defaults: defaults, account: healthAccount, now: now)
+        storage: HealthSyncStateStore(), defaults: defaults, account: healthAccount, now: { now() })
       appleSync = sync
       appleProvider = SyncedAppleHealthProvider(
         local: AppleHealthDataProvider(), remote: remote, preferLocal: { sync.enabled })
@@ -183,7 +183,7 @@ import WidgetKit
         ],
         appleSleep: HealthSleepReader(), appleMetrics: HealthMetricsReader(),
         appleCharts: HealthMetricsReader(),
-        cache: healthCache, defaults: defaults, account: healthAccount, now: now,
+        cache: healthCache, defaults: defaults, account: healthAccount, now: { now() },
         appleSync: appleSync)
     appleSync?.onUpdate = { [weak sources = self.healthData] in sources?.appleHistoryDidChange() }
     let watchPulse = AppleWatchHeartRateService { [weak watch] command in

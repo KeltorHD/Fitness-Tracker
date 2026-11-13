@@ -171,11 +171,16 @@ private func expect(_ condition: Bool, _ message: String) throws {
     let namespace = Namespace()
     let reader = Reader()
     let remote = Remote(storage: disk, namespace: namespace)
-    func coordinator() -> AppleHealthSyncCoordinator {
+    // AppStore injects an ordinary clock closure; the adapter must keep calls on MainActor.
+    func coordinator(
+      now: @escaping () -> Date = {
+        Date(timeIntervalSinceReferenceDate: 760_000_000.001)
+      }
+    ) -> AppleHealthSyncCoordinator {
       AppleHealthSyncCoordinator(
         reader: reader, remote: remote, storage: disk, defaults: defaults,
         account: { namespace.value },
-        now: { Date(timeIntervalSinceReferenceDate: 760_000_000.001) }, waitForRetry: {}
+        now: { now() }, waitForRetry: {}
       )
     }
     let first = coordinator()
