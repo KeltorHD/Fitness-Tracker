@@ -16,4 +16,7 @@
     <ProjectReference Include="../../Authentication/FitLife.Authentication.csproj" />
     <ProjectReference Include="../../Backend/FitLife.Backend.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="Fixtures/training-*.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 </Project>

@@ -40,6 +40,7 @@ public partial class Program
                 PooledConnectionLifetime = TimeSpan.FromMinutes(5)
             }).RemoveAllLoggers();
         builder.Services.AddScoped<BackupStorage>();
+        builder.Services.AddScoped<TrainingStorage>();
         builder.Services.AddOptions<IntrospectionOptions>()
             .BindConfiguration("Auth")
             .Validate(options => Uri.TryCreate(options.Issuer, UriKind.Absolute, out var uri) &&
@@ -97,6 +98,9 @@ public partial class Program
             options.AddPolicy("backups", context => RateLimitPartition.GetFixedWindowLimiter(
                 context.User.FindFirst("sub")?.Value ?? context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
                 _ => new FixedWindowRateLimiterOptions { PermitLimit = 30, Window = TimeSpan.FromMinutes(1) }));
+            options.AddPolicy("training", context => RateLimitPartition.GetFixedWindowLimiter(
+                context.User.FindFirst("sub")?.Value ?? context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+                _ => new FixedWindowRateLimiterOptions { PermitLimit = 240, Window = TimeSpan.FromMinutes(1) }));
         });
         var protection = builder.Services.AddDataProtection().SetApplicationName("FitLife.Backend");
         if (config["DataProtection:Path"] is { Length: > 0 } keyPath)
@@ -121,6 +125,7 @@ public partial class Program
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseRateLimiter();
+        app.MapTraining();
         var backups = app.MapGroup("/v1/backups")
             .RequireAuthorization("backend")
             .RequireRateLimiting("backups")
@@ -182,6 +187,7 @@ public partial class Program
                 await startupLock.ExecuteNonQueryAsync(cancellationToken);
                 await database.GetService<IHistoryRepository>().CreateIfNotExistsAsync(cancellationToken);
                 await database.Database.MigrateAsync(cancellationToken);
+                await scope.ServiceProvider.GetRequiredService<TrainingStorage>().ImportLatestBackupsAsync(cancellationToken);
                 if (args.Contains("--migrate")) return;
             }
         }

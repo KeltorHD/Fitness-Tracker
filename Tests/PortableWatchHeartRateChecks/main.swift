@@ -58,6 +58,14 @@ private actor Records: HeartRateRecordingRepository {
   func recording(for workoutID: UUID) -> HeartRateRecording? { data[workoutID] }
   func save(_ recording: HeartRateRecording) { data[recording.workoutID] = recording }
   func remove(for workoutID: UUID) { data[workoutID] = nil }
+  func compareAndSet(
+    workoutID: UUID, expected: HeartRateRecording?, replacement: HeartRateRecording?
+  ) throws -> Bool {
+    guard recording(for: workoutID) == expected else { return false }
+    if let replacement { save(replacement) } else { remove(for: workoutID) }
+    return true
+  }
+
 }
 
 @main private struct Checks {

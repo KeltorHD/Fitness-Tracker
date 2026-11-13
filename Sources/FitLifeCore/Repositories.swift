@@ -35,12 +35,48 @@ extension WorkoutRepository {
   func export(_ workout: Workout) async throws
 }
 
-@MainActor public final class MemoryWorkoutRepository: WorkoutRepository {
+@MainActor public final class MemoryWorkoutRepository: TrainingAccountRepository {
+  public private(set) var trainingAccountSelection = TrainingAccountSelection()
+  private var accountJournals: [String: TrainingJournalSnapshot] = [:]
   private var sessions: [UUID: Workout] = [:]
   private var routines: [UUID: WorkoutTemplate] = [:]
   private let nutrition = MemoryNutritionRepository()
   private var measurements: [UUID: BodyWeightEntry] = [:]
   public init() {}
+
+  public func activateTrainingAccount(_ namespace: String) throws {
+    try TrainingAccountSelection(firstAccountID: namespace, currentAccountID: namespace).validate()
+    guard trainingAccountSelection.currentAccountID != namespace else { return }
+    if trainingAccountSelection.firstAccountID == nil {
+      trainingAccountSelection = TrainingAccountSelection(
+        firstAccountID: namespace, currentAccountID: namespace)
+      return
+    }
+    guard !sessions.values.contains(where: { [.active, .paused].contains($0.status) }) else {
+      throw TrainingSyncError.activeWorkout
+    }
+    if let previous = trainingAccountSelection.currentAccountID {
+      accountJournals[previous] = TrainingJournalSnapshot(
+        workouts: Array(sessions.values), templates: Array(routines.values),
+        bodyWeights: Array(measurements.values))
+    }
+    let journal =
+      accountJournals[namespace]
+      ?? TrainingJournalSnapshot(workouts: [], templates: [], bodyWeights: [])
+    sessions = Dictionary(uniqueKeysWithValues: journal.workouts.map { ($0.id, $0) })
+    routines = Dictionary(uniqueKeysWithValues: journal.templates.map { ($0.id, $0) })
+    measurements = Dictionary(uniqueKeysWithValues: journal.bodyWeights.map { ($0.id, $0) })
+    trainingAccountSelection.currentAccountID = namespace
+  }
+
+  public func applyTrainingChanges(_ changes: [TrainingChange]) throws {
+    let next = try TrainingJournalSnapshot(
+      workouts: workouts(), templates: templates(), bodyWeights: bodyWeights()
+    ).applying(changes)
+    sessions = Dictionary(uniqueKeysWithValues: next.workouts.map { ($0.id, $0) })
+    routines = Dictionary(uniqueKeysWithValues: next.templates.map { ($0.id, $0) })
+    measurements = Dictionary(uniqueKeysWithValues: next.bodyWeights.map { ($0.id, $0) })
+  }
   public func workouts() throws -> [Workout] {
     sessions.values.sorted { $0.startedAt > $1.startedAt }
   }

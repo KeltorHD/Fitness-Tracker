@@ -17,9 +17,11 @@ import SwiftData
   }
 }
 
-@MainActor final class SwiftDataWorkoutRepository: WorkoutRepository {
+@MainActor final class SwiftDataWorkoutRepository: TrainingAccountRepository {
   let container: ModelContainer
   private let context: ModelContext
+  private(set) var trainingAccountSelection = TrainingAccountSelection()
+  private static let scopeRecordID = UUID(uuid: (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1))
   init(inMemory: Bool = false, cloudEnabled: Bool = false) throws {
     let schema = Schema([StoredRecord.self])
     let cloudID =
@@ -32,6 +34,17 @@ import SwiftData
     container = try ModelContainer(for: schema, configurations: [configuration])
     context = ModelContext(container)
     context.autosaveEnabled = false
+    let scopeRecords = try allRecords(kind: "trainingScope")
+    guard scopeRecords.count <= 1 else { throw TrainingSyncError.invalidData }
+    if let metadata = scopeRecords.first {
+      guard metadata.recordID == Self.scopeRecordID else { throw TrainingSyncError.invalidData }
+      trainingAccountSelection = try JSONDecoder().decode(
+        TrainingAccountSelection.self, from: metadata.payload)
+      guard trainingAccountSelection.firstAccountID != nil,
+        trainingAccountSelection.currentAccountID != nil
+      else { throw TrainingSyncError.invalidData }
+      try trainingAccountSelection.validate()
+    }
   }
   func workouts() throws -> [Workout] {
     try records(kind: "workout").map {
@@ -115,13 +128,13 @@ import SwiftData
     guard plan.summary.hasChanges else { return plan.summary }
     do {
       for (id, data) in workouts {
-        context.insert(StoredRecord(id: id, kind: "workout", payload: data))
+        context.insert(StoredRecord(id: id, kind: storageKind("workout"), payload: data))
       }
       for (id, data) in templates {
-        context.insert(StoredRecord(id: id, kind: "template", payload: data))
+        context.insert(StoredRecord(id: id, kind: storageKind("template"), payload: data))
       }
       for (id, data) in bodyWeights {
-        context.insert(StoredRecord(id: id, kind: "bodyWeight", payload: data))
+        context.insert(StoredRecord(id: id, kind: storageKind("bodyWeight"), payload: data))
       }
       try context.save()
       return plan.summary
@@ -131,6 +144,9 @@ import SwiftData
     }
   }
   private func allRecords(kind: String) throws -> [StoredRecord] {
+    try rawRecords(kind: storageKind(kind))
+  }
+  private func rawRecords(kind: String) throws -> [StoredRecord] {
     try context.fetch(
       FetchDescriptor<StoredRecord>(
         predicate: #Predicate { $0.kind == kind },
@@ -156,12 +172,87 @@ import SwiftData
       record.modifiedAt = Date()
       for duplicate in matches.dropFirst() { context.delete(duplicate) }
     } else {
-      context.insert(StoredRecord(id: id, kind: kind, payload: data))
+      context.insert(StoredRecord(id: id, kind: storageKind(kind), payload: data))
     }
   }
   private func remove(id: UUID, kind: String) throws {
     do {
       for item in try allRecords(kind: kind) where item.recordID == id { context.delete(item) }
+      try context.save()
+    } catch {
+      context.rollback()
+      throw error
+    }
+  }
+
+  private func storageKind(_ kind: String, account: String? = nil) -> String {
+    guard ["workout", "template", "bodyWeight"].contains(kind),
+      let account = account ?? trainingAccountSelection.currentAccountID
+    else { return kind }
+    return kind + "@" + account
+  }
+
+  func activateTrainingAccount(_ namespace: String) throws {
+    try TrainingAccountSelection(firstAccountID: namespace, currentAccountID: namespace).validate()
+    guard trainingAccountSelection.currentAccountID != namespace else { return }
+    if trainingAccountSelection.firstAccountID != nil,
+      try workouts().contains(where: { [.active, .paused].contains($0.status) })
+    {
+      throw TrainingSyncError.activeWorkout
+    }
+    var selection = trainingAccountSelection
+    do {
+      if selection.firstAccountID == nil {
+        for kind in ["workout", "template", "bodyWeight"] {
+          for record in try rawRecords(kind: kind) {
+            record.kind = storageKind(kind, account: namespace)
+          }
+        }
+        selection.firstAccountID = namespace
+      }
+      // Validate the destination before committing the switch; every previous namespace remains.
+      for record in try rawRecords(kind: storageKind("workout", account: namespace)) {
+        try Validation.workout(JSONDecoder().decode(Workout.self, from: record.payload))
+      }
+      for record in try rawRecords(kind: storageKind("template", account: namespace)) {
+        try Validation.template(JSONDecoder().decode(WorkoutTemplate.self, from: record.payload))
+      }
+      for record in try rawRecords(kind: storageKind("bodyWeight", account: namespace)) {
+        try Validation.bodyWeightEntry(
+          JSONDecoder().decode(BodyWeightEntry.self, from: record.payload))
+      }
+      selection.currentAccountID = namespace
+      try stageUpsert(
+        id: Self.scopeRecordID, kind: "trainingScope", data: JSONEncoder().encode(selection))
+      try context.save()
+      trainingAccountSelection = selection
+    } catch {
+      context.rollback()
+      throw error
+    }
+  }
+
+  func applyTrainingChanges(_ changes: [TrainingChange]) throws {
+    _ = try TrainingJournalSnapshot(
+      workouts: workouts(), templates: templates(), bodyWeights: bodyWeights()
+    ).applying(changes)
+    do {
+      for change in changes {
+        switch change.value {
+        case .workout(let value):
+          try stageUpsert(id: value.id, kind: "workout", data: JSONEncoder().encode(value))
+        case .template(let value):
+          try stageUpsert(id: value.id, kind: "template", data: JSONEncoder().encode(value))
+        case .bodyWeight(let value):
+          try stageUpsert(id: value.id, kind: "bodyWeight", data: JSONEncoder().encode(value))
+        case .heartRate: throw TrainingSyncError.invalidData
+        case nil:
+          for record in try allRecords(kind: change.key.kind.rawValue)
+          where record.recordID == change.key.id {
+            context.delete(record)
+          }
+        }
+      }
       try context.save()
     } catch {
       context.rollback()

@@ -26,7 +26,7 @@ public struct HeartRateReading: Codable, Hashable, Sendable, Identifiable {
   }
 }
 
-/// Stored separately from Workout: personal sensor data must not enter CloudKit or archives.
+/// Stored separately from Workout; account synchronization includes it, file archives and CloudKit do not.
 public struct HeartRateRecording: Codable, Equatable, Sendable {
   public let schemaVersion: Int
   public let workoutID: UUID
@@ -137,6 +137,54 @@ public protocol HeartRateRecordingRepository: Sendable {
   func recording(for workoutID: UUID) async throws -> HeartRateRecording?
   func save(_ recording: HeartRateRecording) async throws
   func remove(for workoutID: UUID) async throws
+  /// Atomically preserves a newer recording written while a Health read or network request awaited.
+  func compareAndSet(
+    workoutID: UUID, expected: HeartRateRecording?, replacement: HeartRateRecording?
+  ) async throws -> Bool
+}
+
+public protocol TrainingHeartRateRepository: HeartRateRecordingRepository {
+  func activateTrainingAccount(_ namespace: String, adoptUnscoped: Bool) async throws
+  func setTrainingAccountScope(_ namespace: String?) async throws
+}
+
+public actor MemoryTrainingHeartRateRepository: TrainingHeartRateRepository {
+  private var scope: String?
+  private var firstAccount: String?
+  private var records: [String: [UUID: HeartRateRecording]] = [:]
+  public init() {}
+  private var current: String { scope ?? firstAccount ?? "local" }
+  public func recording(for workoutID: UUID) -> HeartRateRecording? { records[current]?[workoutID] }
+  public func save(_ recording: HeartRateRecording) throws {
+    try recording.validate()
+    records[current, default: [:]][recording.workoutID] = recording
+  }
+  public func remove(for workoutID: UUID) { records[current]?[workoutID] = nil }
+  public func activateTrainingAccount(_ namespace: String, adoptUnscoped: Bool) throws {
+    if adoptUnscoped {
+      guard firstAccount == nil || firstAccount == namespace else {
+        throw TrainingSyncError.accountMismatch
+      }
+      if firstAccount == nil {
+        records[namespace] = records["local"] ?? [:]
+        firstAccount = namespace
+      }
+    }
+    scope = namespace
+  }
+  public func setTrainingAccountScope(_ namespace: String?) { scope = namespace }
+  public func compareAndSet(
+    workoutID: UUID, expected: HeartRateRecording?, replacement: HeartRateRecording?
+  ) throws -> Bool {
+    guard recording(for: workoutID) == expected else { return false }
+    if let replacement {
+      guard replacement.workoutID == workoutID else { throw TrackerDataError.invalidRecording }
+      try save(replacement)
+    } else {
+      remove(for: workoutID)
+    }
+    return true
+  }
 }
 
 @MainActor public protocol HealthMetricsReading {

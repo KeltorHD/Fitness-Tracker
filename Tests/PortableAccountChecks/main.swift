@@ -21,6 +21,23 @@ private actor FixtureCredentials: AccountTokenStoring {
   func clear() { value = nil }
 }
 
+private actor BrowserGate {
+  private var entered = false
+  private var waiter: CheckedContinuation<Void, Never>?
+  private var continuation: CheckedContinuation<Void, Never>?
+  func block() async {
+    entered = true
+    waiter?.resume()
+    waiter = nil
+    await withCheckedContinuation { continuation = $0 }
+  }
+  func untilEntered() async { if !entered { await withCheckedContinuation { waiter = $0 } } }
+  func release() {
+    continuation?.resume()
+    continuation = nil
+  }
+}
+
 /// Проверяет реальные URLSession-запросы, не допуская обращения к внешней сети.
 private final class AccountProtocol: URLProtocol {
   static let operations = Mutex<[String: Int]>([:])
@@ -69,9 +86,9 @@ private final class AccountProtocol: URLProtocol {
       body =
         #"{"id":"00000000-0000-0000-0000-000000000001","name":"Fixture","createdAt":"2026-01-01T00:00:00Z","logins":["Email"]}"#
     } else {
-      precondition(url.path == "/v1/backups")
+      precondition(url.path == "/v1/training/changes")
       precondition(request.value(forHTTPHeaderField: "Authorization") == "Bearer rotated")
-      body = "[]"
+      body = #"{"changes":[],"cursor":0,"hasMore":false}"#
     }
     guard
       let response = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)
@@ -172,9 +189,9 @@ private final class AccountProtocol: URLProtocol {
         URLQueryItem(name: "state", value: "expected-state"),
       ]
       _ = try await session.finishAuthorization(attempt, callback: callback.url!)
-      let client = RemoteBackupClient(session: session, cryptography: FixtureCryptography())
-      let backups = try await client.list()
-      precondition(backups.isEmpty)
+      let client = RemoteTrainingClient(session: session)
+      let page = try await client.changes(after: 0)
+      precondition(page.changes.isEmpty)
       try await session.logout()
       let remainingCredentials = await credentials.load()
       precondition(remainingCredentials == nil)
@@ -182,20 +199,99 @@ private final class AccountProtocol: URLProtocol {
         precondition(
           AccountProtocol.operations.withLock { $0[configuration.oauthClientID + operation] } == 1)
       }
-      let model = AccountBackupViewModel(
-        session: session, client: client,
-        snapshot: { throw ServerError.invalidConfiguration },
-        preview: { _ in preconditionFailure("Unexpected import") })
+      let storage = MemoryTrainingSyncStateStore()
+      let coordinator = TrainingSyncCoordinator(
+        remote: client, storage: storage, cryptography: FixtureCryptography(),
+        snapshot: { throw ServerError.invalidConfiguration }, current: { _ in nil },
+        apply: { _, _, _ in preconditionFailure("Unexpected import") }, available: { true })
+      let model = AccountTrainingViewModel(
+        session: session, sync: coordinator, storage: storage, cryptography: FixtureCryptography(),
+        activate: { _ in preconditionFailure("Unexpected activation") }, selection: { nil })
       await model.perform(.signIn) { _ in throw ServerError.authenticationCancelled }
       precondition(!model.isBusy && model.errorMessage == nil && model.notice != nil)
-      precondition(!model.noticeIsSuccess)
       await model.perform(.signIn) { _ in throw CancellationError() }
       precondition(!model.isBusy && model.errorMessage == nil && model.notice == nil)
       await model.perform(.signIn) { _ in throw ServerError.invalidCallback }
-      precondition(model.errorMessage != nil && model.retryAction == .signIn)
+      precondition(model.errorMessage != nil)
     }
+    try await accountJournalIsolation(full)
     print(
       "Account checks: HTTPS/custom callback isolation, strict validation, PKCE requests, code/refresh/revoke client binding and cancellation feedback OK (HTTP fixtures; no Apple SDK)."
     )
+  }
+
+  @MainActor private static func accountJournalIsolation(_ configuration: ServerConfiguration)
+    async throws
+  {
+    let credentials = FixtureCredentials()
+    let initialID = "00000000-0000-0000-0000-000000000002"
+    await credentials.save(
+      AccountTokens(
+        accessToken: "stored", refreshToken: "stored-refresh", expiresAt: .distantFuture,
+        profile: AccountProfile(
+          id: initialID, name: "First account", createdAt: .distantPast, logins: [])))
+    let transport = URLSessionConfiguration.ephemeral
+    transport.protocolClasses = [AccountProtocol.self]
+    let urlSession = URLSession(configuration: transport)
+    defer { urlSession.invalidateAndCancel() }
+    let session = AccountSession(
+      configuration: configuration, http: ServerHTTPClient(session: urlSession),
+      credentials: credentials)
+    let repository = MemoryWorkoutRepository()
+    let storage = MemoryTrainingSyncStateStore()
+    var original = Workout(
+      name: "Local before first sign-in", startedAt: Date(timeIntervalSince1970: 100))
+    try WorkoutEngine.cancel(&original, at: Date(timeIntervalSince1970: 200))
+    try repository.save(original)
+    let sync = TrainingSyncCoordinator(
+      remote: RemoteTrainingClient(session: session), storage: storage,
+      cryptography: FixtureCryptography(), snapshot: { throw TrainingSyncError.invalidData },
+      current: { _ in nil },
+      apply: { _, _, _ in preconditionFailure("Unexpected remote apply") }, available: { false })
+    let model = AccountTrainingViewModel(
+      session: session, sync: sync, storage: storage, cryptography: FixtureCryptography(),
+      activate: { try repository.activateTrainingAccount($0) },
+      selection: { repository.trainingAccountSelection })
+    await model.load()
+    let first = model.expectedNamespace!
+    precondition(model.isAccountJournalOpen && sync.isConnected(to: first))
+    let adopted = try repository.workouts()
+    precondition(adopted == [original])
+
+    // Foreground re-entry while the browser is open must not reconnect the previous credentials.
+    let gate = BrowserGate()
+    let cancelled = Task {
+      await model.perform(.signIn) { _ in
+        await gate.block()
+        throw ServerError.authenticationCancelled
+      }
+    }
+    await gate.untilEntered()
+    await model.foreground()
+    precondition(!sync.isConnected(to: first))
+    await gate.release()
+    await cancelled.value
+    precondition(sync.isConnected(to: first) && model.profile?.id == initialID)
+
+    await model.perform(.signIn) { _ in
+      var callback = URLComponents(url: configuration.callbackURL, resolvingAgainstBaseURL: false)!
+      callback.queryItems = [
+        URLQueryItem(name: "code", value: "one-time-code"),
+        URLQueryItem(name: "state", value: "expected-state"),
+      ]
+      return callback.url!
+    }
+    let second = model.expectedNamespace!
+    precondition(second != first && model.isAccountJournalOpen && sync.isConnected(to: second))
+    let separate = try repository.workouts()
+    precondition(separate.isEmpty && model.localAccounts.count == 2)
+    await model.perform(.openLocalJournal(first)) { _ in preconditionFailure("Unexpected browser") }
+    let restored = try repository.workouts()
+    precondition(restored == [original] && !model.isAccountJournalOpen)
+    await model.foreground()
+    precondition(
+      repository.trainingAccountSelection.currentAccountID == first && !sync.isConnected(to: second)
+    )
+    await sync.disconnect()
   }
 }

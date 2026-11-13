@@ -9,6 +9,17 @@ import WatchConnectivity
   var heartRateEvent: ((WatchHeartRateEvent) -> Void)?
   var heartRateFailure: ((UUID) -> Void)?
   var heartRateDisconnected: (() -> Void)?
+  private var trainingContext = WatchTrainingContext()
+  func sendTrainingContext(_ value: WatchTrainingContext) {
+    trainingContext = value
+    guard WCSession.isSupported(), WCSession.default.activationState == .activated else { return }
+    do {
+      try value.validate()
+      var context = WCSession.default.applicationContext
+      context["trainingContext"] = try JSONEncoder().encode(value)
+      try WCSession.default.updateApplicationContext(context)
+    } catch { failure?(error) }
+  }
   private func updateSleepConnection() {
     let session = WCSession.default
     let state: SleepWatchConnection
@@ -56,7 +67,7 @@ import WatchConnectivity
       try WCSession.default.updateApplicationContext(context)
     } catch { failure?(error) }
   }
-  var receive: ((Workout) -> Bool)?
+  var receive: ((Workout, String?) -> Bool)?
   var failure: ((any Error) -> Void)?
   func activate() {
     guard WCSession.isSupported() else { return }
@@ -72,6 +83,7 @@ import WatchConnectivity
     } else {
       Task { @MainActor in
         self.updateSleepConnection()
+        self.sendTrainingContext(self.trainingContext)
         self.sleepReady?()
       }
     }
@@ -88,6 +100,7 @@ import WatchConnectivity
   nonisolated func sessionWatchStateDidChange(_ session: WCSession) {
     Task { @MainActor in
       self.updateSleepConnection()
+      self.sendTrainingContext(self.trainingContext)
       self.sleepReady?()
     }
   }
@@ -112,13 +125,15 @@ import WatchConnectivity
       }
       return
     }
-    guard let data = userInfo["workout"] as? Data else { return }
+    guard let data = userInfo["workout"] as? Data, data.count <= 30 * 1024 * 1024 else { return }
+    let owner = userInfo["trainingAccount"] as? String
+    guard userInfo["trainingAccount"] == nil || owner != nil else { return }
     Task { @MainActor in
       do {
         let workout = try JSONDecoder().decode(Workout.self, from: data)
         try Validation.workout(workout)
         guard workout.status == .completed else { throw TrainingError.invalidState }
-        if self.receive?(workout) == true {
+        if self.receive?(workout, owner) == true {
           WCSession.default.transferUserInfo(["ack": workout.id.uuidString])
         }
       } catch { self.failure?(error) }

@@ -39,18 +39,43 @@ bin_path="$("$swift_bin" build "${flags[@]}" --show-bin-path)"
   Apple/Features/HealthChartsViewModel.swift \
   Apple/Features/TrackerDeviceProfile.swift Apple/Shared/AppIdentifiers.swift \
   Apple/Services/ServerContracts.swift Apple/Services/ServerHTTPClient.swift \
-  Apple/Services/AccountSession.swift Apple/Services/RemoteBackupClient.swift \
-  Apple/Features/AccountBackupViewModel.swift
+  Apple/Services/AccountSession.swift Apple/Services/RemoteTrainingClient.swift \
+  Apple/Services/TrainingSyncStateStore.swift Apple/Services/TrainingSyncCoordinator.swift \
+  Apple/Features/AccountTrainingViewModel.swift
 echo 'Portable presentation/data subset: Swift 6 type check passed (no Apple SDK).'
+# Compile the actual isolated Debug HTTP fixture as Foundation code, without SwiftUI stand-ins.
+"$swiftc_bin" -DDEBUG -swift-version 6 -strict-concurrency=complete \
+  -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -typecheck -I "$bin_path/Modules" \
+  Apple/Services/ServerContracts.swift Apple/Services/ServerHTTPClient.swift \
+  Apple/Services/AccountSession.swift Apple/App/AccountTrainingUITestFixture.swift
+
 # OAuth contracts and presentation state use HTTP fixtures, without browser or Apple SDK.
 "$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
   -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \
   "$bin_path"/FitLifeCore.build/*.swift.o \
   Apple/Services/ServerContracts.swift Apple/Services/ServerHTTPClient.swift \
-  Apple/Services/AccountSession.swift Apple/Services/RemoteBackupClient.swift \
-  Apple/Features/AccountBackupViewModel.swift Tests/PortableAccountChecks/main.swift \
+  Apple/Services/AccountSession.swift Apple/Services/RemoteTrainingClient.swift \
+  Apple/Services/TrainingSyncStateStore.swift Apple/Services/TrainingSyncCoordinator.swift \
+  Apple/Features/AccountTrainingViewModel.swift Tests/PortableAccountChecks/main.swift \
   -o "$bin_path/portable-account-checks"
 "$bin_path/portable-account-checks"
+# Exercise the real foreground sync coordinator, durable state and scoped pulse files offline.
+"$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
+  -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \
+  "$bin_path"/FitLifeCore.build/*.swift.o \
+  Apple/Services/ServerContracts.swift Apple/Services/ServerHTTPClient.swift \
+  Apple/Services/AccountSession.swift Apple/Services/RemoteTrainingClient.swift \
+  Apple/Services/TrainingSyncStateStore.swift Apple/Services/TrainingSyncCoordinator.swift \
+  Apple/Services/LocalHeartRateRepository.swift Apple/Shared/AppIdentifiers.swift \
+  Tests/PortableTrainingChecks/main.swift -o "$bin_path/portable-training-checks"
+"$bin_path/portable-training-checks"
+"$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
+  -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \
+  "$bin_path"/FitLifeCore.build/*.swift.o Tests/TrainingContractChecks/main.swift \
+  -o "$bin_path/training-contract-checks"
+"$bin_path/training-contract-checks" --verify Tests/Server/Fixtures/training-contract.json
+python3 Tests/TrainingContractChecks/validation-cases.py --verify
+"$bin_path/training-contract-checks" --verify-validation Tests/Server/Fixtures/training-validation.json
 # Exercise chart presentation with real Core data, without SwiftUI/Charts SDK stand-ins.
 "$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
   -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \

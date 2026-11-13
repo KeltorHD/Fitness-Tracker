@@ -15,6 +15,7 @@ namespace FitLife.Server.Tests;
 public sealed class ArchiveIdentifierMigrationTests
 {
     private const string INITIAL_MIGRATION = "20261103183121_InitialBackups";
+    private const string ARCHIVE_MIGRATION = "20261111184926_UpdateArchiveFormatIdentifier";
 
     /// <summary>Меняет только корневой идентификатор и контрольные метаданные, сохраняя версии и данные владельцев.</summary>
     [Theory]
@@ -40,7 +41,7 @@ public sealed class ArchiveIdentifierMigrationTests
         await database.SaveChangesAsync(cancellationToken);
 
         // Act: штатный migrator выполняет одноразовую data migration в своей транзакции.
-        await database.Database.MigrateAsync(cancellationToken);
+        await database.GetService<IMigrator>().MigrateAsync(ARCHIVE_MIGRATION, cancellationToken);
         var migrated = await database.Backups.AsNoTracking().SingleAsync(item => item.OwnerId == original.OwnerId, cancellationToken);
 
         // Assert: все вложенные JSON-значения, UUID, даты и версии сохранены без перекодирования.
@@ -68,7 +69,7 @@ public sealed class ArchiveIdentifierMigrationTests
         Assert.Equal(3, await database.Backups.CountAsync(cancellationToken));
         Assert.False(database.Database.HasPendingModelChanges());
         Assert.Equal(2, (await database.Database.GetAppliedMigrationsAsync(cancellationToken)).Count());
-        await database.Database.MigrateAsync(cancellationToken);
+        await database.GetService<IMigrator>().MigrateAsync(ARCHIVE_MIGRATION, cancellationToken);
         var repeated = await database.Backups.AsNoTracking().SingleAsync(item => item.OwnerId == original.OwnerId, cancellationToken);
         Assert.Equal(migrated.Payload, repeated.Payload);
         Assert.Equal(migrated.Sha256, repeated.Sha256);
@@ -91,7 +92,7 @@ public sealed class ArchiveIdentifierMigrationTests
         database.Backups.Add(CreateRecord(Encoding.UTF8.GetBytes(payload), "owner"));
         await database.SaveChangesAsync(cancellationToken);
 
-        await database.Database.MigrateAsync(cancellationToken);
+        await database.GetService<IMigrator>().MigrateAsync(ARCHIVE_MIGRATION, cancellationToken);
 
         var migrated = await database.Backups.AsNoTracking().SingleAsync(cancellationToken);
         using var document = JsonDocument.Parse(migrated.Payload);
@@ -134,7 +135,7 @@ public sealed class ArchiveIdentifierMigrationTests
         await database.SaveChangesAsync(cancellationToken);
 
         // Act: новый history row и частично обработанный корректный архив должны откатиться вместе.
-        var error = await Assert.ThrowsAsync<PostgresException>(() => database.Database.MigrateAsync(cancellationToken));
+        var error = await Assert.ThrowsAsync<PostgresException>(() => database.GetService<IMigrator>().MigrateAsync(ARCHIVE_MIGRATION, cancellationToken));
 
         // Assert: ошибка безопасна даже с IncludeErrorDetail, прежние байты и метаданные не изменены.
         Assert.Equal("22000", error.SqlState);
@@ -169,7 +170,7 @@ public sealed class ArchiveIdentifierMigrationTests
         database.Backups.Add(CreateRecord(payload, "owner"));
         await database.SaveChangesAsync(cancellationToken);
 
-        await database.Database.MigrateAsync(cancellationToken);
+        await database.GetService<IMigrator>().MigrateAsync(ARCHIVE_MIGRATION, cancellationToken);
 
         var migrated = await database.Backups.AsNoTracking().SingleAsync(cancellationToken);
         Assert.Equal(BackupStorage.MaximumBytes - 7, migrated.Size);

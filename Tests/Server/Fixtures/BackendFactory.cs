@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -20,7 +21,8 @@ namespace FitLife.Server.Tests;
 
 /// <summary>Запускает настоящий API с собственной SQLite, ключом JWT и изолированной конфигурацией.</summary>
 /// <param name="authHandler">Реальный in-memory Auth для сквозных тестов; иначе подменяется только introspection.</param>
-public sealed class BackendFactory(HttpMessageHandler? authHandler = null) : WebApplicationFactory<Backend.Program>
+/// <param name="storageInterceptor">Необязательная точка отказа реального EF storage в изолированном тесте.</param>
+public sealed class BackendFactory(HttpMessageHandler? authHandler = null, IInterceptor? storageInterceptor = null) : WebApplicationFactory<Backend.Program>
 {
     private readonly SqliteConnection _connection = new("Data Source=:memory:");
     private readonly BackupSaveInterceptor _saves = new();
@@ -58,7 +60,11 @@ public sealed class BackendFactory(HttpMessageHandler? authHandler = null) : Web
         {
             services.RemoveAll<DbContextOptions<BackupDbContext>>();
             services.RemoveAll<IDbContextOptionsConfiguration<BackupDbContext>>();
-            services.AddDbContext<BackupDbContext>(options => options.UseSqlite(_connection).AddInterceptors(_saves));
+            services.AddDbContext<BackupDbContext>(options =>
+            {
+                options.UseSqlite(_connection).AddInterceptors(_saves);
+                if (storageInterceptor is not null) options.AddInterceptors(storageInterceptor);
+            });
             services.RemoveAll<TimeProvider>();
             services.AddSingleton<TimeProvider>(new FrozenTimeProvider(BackupTime));
             services.AddHttpClient<TokenIntrospection>().ConfigurePrimaryHttpMessageHandler(() => authHandler ?? Introspection);
