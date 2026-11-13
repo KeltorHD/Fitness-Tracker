@@ -30,7 +30,7 @@ struct TrackerView: View {
           selection: Binding(
             get: { model.mode }, set: { model.selectMode($0) })
         ) {
-          Text(L10n.text(store.healthData.selected.titleKey, locale: locale)).tag(
+          Text(L10n.text("Показатели здоровья", locale: locale)).tag(
             TrackerMode.appleHealth)
           Text(L10n.text("Bluetooth-пульс", locale: locale)).tag(TrackerMode.bluetooth)
         }.pickerStyle(.menu).accessibilityIdentifier("trackerModePicker")
@@ -114,7 +114,7 @@ struct TrackerView: View {
         if ![.airPodsPro3, .appleWatch].contains(model.deviceProfile) {
           Text(
             L10n.text(
-              store.healthData.selected == .miFitness
+              store.healthData.provider(for: .heartRate) == .miFitness
                 ? "Синхронизируйте устройство с Mi Fitness и подключите аккаунт в источниках здоровья."
                 : model.deviceProfile.healthSetupKey, locale: locale)
           )
@@ -144,13 +144,19 @@ struct TrackerView: View {
       } footer: {
         Text(
           L10n.text(
-            store.healthData.selected == .miFitness
-              ? "Доступны только показатели, синхронизированные с облаком Mi Fitness и разрешённые для FitLife."
-              : "Данные могут поступать с задержкой. Доступны только показатели, переданные в «Здоровье» и разрешённые для FitLife.",
+            "Каждый показатель берётся из своего основного источника. Доступны только синхронизированные и разрешённые для FitLife данные.",
             locale: locale))
       }
       if let summary = model.summary {
         Section {
+          if !summary.unavailableMetrics.isEmpty {
+            Text(
+              L10n.text(
+                "Часть показателей недоступна. Проверьте основные источники здоровья и повторите чтение.",
+                locale: locale)
+            )
+            .font(.footnote).foregroundStyle(.red)
+          }
           if summary.isCached {
             Text(
               L10n.text(
@@ -186,9 +192,7 @@ struct TrackerView: View {
           if summary.isEmpty {
             Text(
               L10n.text(
-                store.healthData.selected == .miFitness
-                  ? "Нет доступных данных. Проверьте синхронизацию Mi Fitness и разрешённые показатели в источниках здоровья."
-                  : "Нет доступных данных. Проверьте синхронизацию приложения трекера и разрешения FitLife в «Здоровье».",
+                "Нет доступных данных. Проверьте подключение, синхронизацию и разрешения основных источников здоровья.",
                 locale: locale))
           }
         } header: {
@@ -196,11 +200,7 @@ struct TrackerView: View {
         } footer: {
           Text(
             L10n.text(
-              store.healthData.selected == .miFitness
-                ? "Сводка использует выбранный источник Mi Fitness. Сон — между полуднем предыдущего и выбранного дня."
-                : store.healthData.usesServerAppleHistory
-                  ? "Сводка использует историю Apple Health вашего аккаунта. Передача с этого iPhone включается в источниках здоровья."
-                  : "Сводка учитывает доступные источники Apple «Здоровье», а не только выбранный трекер. Сон — между полуднем предыдущего и выбранного дня.",
+              "Сводка использует основные источники каждого показателя. Сон — между полуднем предыдущего и выбранного дня.",
               locale: locale))
         }
       }

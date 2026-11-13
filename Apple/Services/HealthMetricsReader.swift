@@ -9,9 +9,16 @@ import HealthKit
     try await Self.readCharts(day: day, calendar: calendar)
   }
   func changes(since date: Date) -> AsyncThrowingStream<Void, any Error> {
+    changes(since: date, metrics: [.heartRate, .steps])
+  }
+  func changes(since date: Date, metrics: Set<HealthMetric>)
+    -> AsyncThrowingStream<Void, any Error>
+  {
     stopChanges()
     return AsyncThrowingStream(bufferingPolicy: .bufferingNewest(1)) { continuation in
-      let task = Task { await Self.observeChanges(since: date, continuation: continuation) }
+      let task = Task {
+        await Self.observeChanges(since: date, metrics: metrics, continuation: continuation)
+      }
       observationTask = task
       continuation.onTermination = { _ in task.cancel() }
     }
@@ -30,15 +37,24 @@ import HealthKit
   }
 
   @concurrent nonisolated private static func observeChanges(
-    since date: Date, continuation: AsyncThrowingStream<Void, any Error>.Continuation
+    since date: Date, metrics: Set<HealthMetric>,
+    continuation: AsyncThrowingStream<Void, any Error>.Continuation
   ) async {
     do {
       let predicate = HKQuery.predicateForSamples(withStart: date, end: nil, options: [])
+      var predicates: [HKSamplePredicate<HKQuantitySample>] = []
+      if metrics.contains(.heartRate) {
+        predicates.append(.quantitySample(type: HKQuantityType(.heartRate), predicate: predicate))
+      }
+      if metrics.contains(.steps) {
+        predicates.append(.quantitySample(type: HKQuantityType(.stepCount), predicate: predicate))
+      }
+      guard !predicates.isEmpty else {
+        continuation.finish()
+        return
+      }
       let query = HKAnchoredObjectQueryDescriptor<HKQuantitySample>(
-        predicates: [
-          .quantitySample(type: HKQuantityType(.heartRate), predicate: predicate),
-          .quantitySample(type: HKQuantityType(.stepCount), predicate: predicate),
-        ], anchor: nil)
+        predicates: predicates, anchor: nil)
       for try await _ in query.results(for: HKHealthStore()) {
         try Task.checkCancellation()
         continuation.yield(())

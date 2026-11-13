@@ -1333,5 +1333,15 @@
   "История Apple Health загружается из аккаунта. Передачу с этого iPhone можно включить в источниках здоровья.": "Apple Health history is loaded from your account. Enable uploads from this iPhone in Health sources.",
   "Сводка использует историю Apple Health вашего аккаунта. Передача с этого iPhone включается в источниках здоровья.": "This summary uses your account’s Apple Health history. Enable uploads from this iPhone in Health sources.",
   "Сон из истории Apple Health вашего аккаунта. Передачу с iPhone можно включить в источниках здоровья.": "Sleep from your account’s Apple Health history. Enable uploads from your iPhone in Health sources.",
-  "На этом iPhone показываются локальные данные «Здоровья». Другие устройства видят сохранённую историю аккаунта.": "This iPhone shows its local Health data. Other devices display the saved account history."
+  "На этом iPhone показываются локальные данные «Здоровья». Другие устройства видят сохранённую историю аккаунта.": "This iPhone shows its local Health data. Other devices display the saved account history.",
+  "Основной источник для каждого показателя": "Primary source for each metric",
+  "Apple «Здоровье» и Mi Fitness могут использоваться одновременно. Каждый показатель берётся только из выбранного источника. При ошибке или отсутствии данных другой источник не подставляется.": "Apple Health and Mi Fitness can be used together. Each metric comes only from its selected source. Missing data or a source error does not switch to another source.",
+  "Сохранённые данные": "Cached data",
+  "Показывать пульс и шаги": "Show heart rate and steps",
+  "Пульс и шаги берутся из основных источников, выбранных для этих показателей. Данные Mi Fitness обновляются после синхронизации устройства с облаком. Для обновления нажмите «Обновить показатели».": "Heart rate and steps use their selected primary sources. Mi Fitness data is updated after your device syncs with the cloud. Tap Update measurements to refresh.",
+  "Нет доступных данных. Проверьте подключение, синхронизацию и разрешения основных источников здоровья.": "No data available. Check the connection, syncing and permissions of your primary health sources.",
+  "Часть показателей недоступна. Проверьте основные источники здоровья и повторите чтение.": "Some metrics are unavailable. Check your primary health sources and try reading again.",
+  "Каждый показатель берётся из своего основного источника. Доступны только синхронизированные и разрешённые для FitLife данные.": "Each metric uses its own primary source. Only data synced and authorized for FitLife is available.",
+  "Сводка использует основные источники каждого показателя. Сон — между полуднем предыдущего и выбранного дня.": "The summary uses the primary source of each metric. Sleep covers noon on the previous day to noon on the selected day.",
+  "Откройте журнал аккаунта и проверьте подключение источника здоровья.": "Open your account journal and check the health source connection."
 }

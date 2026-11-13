@@ -27,21 +27,31 @@ struct HealthDataView: View {
     @Bindable var model = self.model
     Form {
       Section {
-        Picker(
-          L10n.text("Источник данных", locale: locale),
-          selection: Binding(get: { model.sources.selected }, set: { model.select($0) })
-        ) {
-          ForEach(HealthProviderID.allCases, id: \.self) { provider in
-            Text(L10n.text(provider.titleKey, locale: locale)).tag(provider)
+        ForEach(
+          HealthMetric.allCases.filter { model.sources.supportedMetrics.contains($0) }, id: \.self
+        ) { metric in
+          Picker(
+            L10n.text(metric.titleKey, locale: locale),
+            selection: Binding<HealthProviderID?>(
+              get: { model.sources.provider(for: metric) },
+              set: { if let provider = $0 { model.select(provider, for: metric) } })
+          ) {
+            ForEach(model.sources.providers(for: metric), id: \.self) { provider in
+              Text(L10n.text(provider.titleKey, locale: locale)).tag(Optional(provider))
+            }
           }
-        }.disabled(model.loading || model.connecting).accessibilityIdentifier(
-          "healthProviderPicker")
+          .disabled(model.loading || model.connecting)
+          .accessibilityIdentifier("healthProviderPicker." + metric.rawValue)
+        }
+      } header: {
+        Text(L10n.text("Основной источник для каждого показателя", locale: locale))
       } footer: {
         Text(
           L10n.text(
-            "Показываем данные выбранного источника. Источники не суммируются.", locale: locale))
+            "Apple «Здоровье» и Mi Fitness могут использоваться одновременно. Каждый показатель берётся только из выбранного источника. При ошибке или отсутствии данных другой источник не подставляется.",
+            locale: locale))
       }
-      if model.sources.selected == .appleHealth, let sync = model.sources.appleSync {
+      if let sync = model.sources.appleSync {
         Section {
           Toggle(
             L10n.text("Синхронизировать Apple Health с аккаунтом", locale: locale),
@@ -83,7 +93,7 @@ struct HealthDataView: View {
               locale: locale))
         }
       }
-      if model.sources.selected == .miFitness {
+      Group {
         Section {
           if model.connection?.connected == true {
             Label(L10n.text("Подключено", locale: locale), systemImage: "checkmark.circle")
@@ -136,7 +146,9 @@ struct HealthDataView: View {
           LabeledContent(
             L10n.text(result.cached ? "Сохранённые данные от" : "Данные получены", locale: locale)
           ) {
-            Text(result.snapshot.fetchedAt, format: .dateTime.day().month().hour().minute())
+            if let date = result.fetchedAt {
+              Text(date, format: .dateTime.day().month().hour().minute())
+            }
           }
           if result.cached {
             Text(
@@ -160,17 +172,26 @@ struct HealthDataView: View {
             VStack(alignment: .leading, spacing: 4) {
               LabeledContent(
                 L10n.text(reading.metric.titleKey, locale: locale), value: text(reading))
+              Text(L10n.text(reading.provider.titleKey, locale: locale))
+                .font(.caption).foregroundStyle(.secondary)
+              if reading.cached {
+                Text(L10n.text("Сохранённые данные", locale: locale))
+                  .font(.caption).foregroundStyle(.secondary)
+              }
+              if let message = reading.failureMessage {
+                Text(L10n.text(message, locale: locale)).font(.footnote).foregroundStyle(.red)
+              }
               if let date = reading.date {
                 Text(date, format: .dateTime.day().month().hour().minute()).font(.caption)
                   .foregroundStyle(.secondary)
-              } else if !reading.permitted {
+              } else if !reading.permitted && reading.failureMessage == nil {
                 Text(L10n.text("Доступ к этому показателю не предоставлен.", locale: locale)).font(
                   .caption
                 ).foregroundStyle(.secondary)
               }
             }.accessibilityElement(children: .combine)
           }
-          if let weight = result.snapshot.latest(.bodyWeight) {
+          if let weight = result.snapshot(for: .bodyWeight)?.latest(.bodyWeight) {
             Button(
               L10n.text(
                 store.bodyWeights.contains { $0.id == weight.id }
@@ -198,11 +219,11 @@ struct HealthDataView: View {
     .navigationBarTitleDisplayMode(.inline)
     .task(
       id:
-        "\(model.sources.selected.rawValue)-\(model.sources.revision)-\(store.workspaceID)-\(model.day)-\(model.historyDays)-\(phase)-\(readRevision)"
+        "\(model.sources.contextID)-\(store.workspaceID)-\(model.day)-\(model.historyDays)-\(phase)-\(readRevision)"
     ) {
       guard phase == .active, !store.isDemoMode else { return }
       model.resetContext()
-      if model.sources.selected == .miFitness { await model.loadConnection() }
+      await model.loadConnection()
       await model.load(calendar: calendar)
     }
     .task(id: action) {

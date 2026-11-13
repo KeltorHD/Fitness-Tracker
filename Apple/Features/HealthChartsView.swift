@@ -14,18 +14,13 @@ struct HealthChartsView: View {
         CurrentHeartRateView(tracker: store.tracker, health: model).fitCard()
         Toggle(
           L10n.text(
-            store.healthData.selected == .miFitness
-              ? "Пульс и шаги из Mi Fitness" : "Пульс и шаги из «Здоровья»", locale: locale),
+            "Показывать пульс и шаги", locale: locale),
           isOn: $model.enabled
         )
         .accessibilityIdentifier("enableHealthCharts")
         Text(
           L10n.text(
-            store.healthData.selected == .miFitness
-              ? "Данные поступают из облака после синхронизации устройства с Mi Fitness. Для обновления нажмите «Обновить показатели»."
-              : store.healthData.usesServerAppleHistory
-                ? "История Apple Health загружается из аккаунта. Передачу с этого iPhone можно включить в источниках здоровья."
-                : "Показываем доступные источники: Apple Watch, AirPods, приложения браслетов и iPhone. Частота обновлений зависит от устройства и синхронизации с «Здоровьем».",
+            "Пульс и шаги берутся из основных источников, выбранных для этих показателей. Данные Mi Fitness обновляются после синхронизации устройства с облаком. Для обновления нажмите «Обновить показатели».",
             locale: locale)
         ).font(.footnote).foregroundStyle(.secondary)
         NavigationLink(L10n.text("Источники здоровья", locale: locale)) {
@@ -53,6 +48,14 @@ struct HealthChartsView: View {
                 locale: locale)
             })
           if let snapshot = model.snapshot {
+            if !snapshot.unavailableMetrics.isEmpty {
+              Text(
+                L10n.text(
+                  "Часть показателей недоступна. Проверьте основные источники здоровья и повторите чтение.",
+                  locale: locale)
+              )
+              .font(.footnote).foregroundStyle(.red)
+            }
             if snapshot.isCached {
               Text(
                 L10n.text(
@@ -64,9 +67,7 @@ struct HealthChartsView: View {
             if model.points.isEmpty && snapshot.steps.allSatisfy({ $0.steps == nil }) {
               Text(
                 L10n.text(
-                  store.healthData.selected == .miFitness
-                    ? "Нет доступных данных. Проверьте синхронизацию Mi Fitness и разрешённые показатели в источниках здоровья."
-                    : "Нет доступных данных. Проверьте синхронизацию приложения трекера и разрешения FitLife в «Здоровье».",
+                  "Нет доступных данных. Проверьте подключение, синхронизацию и разрешения основных источников здоровья.",
                   locale: locale)
               ).font(.footnote).foregroundStyle(.secondary)
             }

@@ -46,7 +46,7 @@ enum HealthProviderMessage {
     case HealthSyncFailure.limit:
       "Достигнут лимит истории здоровья на сервере. Очередь сохранена на этом iPhone."
     case HealthDataError.notConnected:
-      "Подключите Mi Fitness в источниках здоровья и откройте журнал аккаунта."
+      "Откройте журнал аккаунта и проверьте подключение источника здоровья."
     case HealthDataError.permissionRequired:
       "Разрешите нужные показатели при подключении источника здоровья."
     case HealthDataError.unsupportedMetric: "Этот источник не предоставляет выбранные показатели."

@@ -8,6 +8,9 @@ struct HealthMetricReading: Identifiable, Equatable, Sendable {
   let value: Double?
   let date: Date?
   let permitted: Bool
+  let provider: HealthProviderID
+  let cached: Bool
+  let failureMessage: String?
 }
 
 @MainActor @Observable final class HealthDataViewModel {
@@ -36,14 +39,14 @@ struct HealthMetricReading: Identifiable, Equatable, Sendable {
     self.defaults = preferences
     self.now = now
     day = now()
-    context = sources.accountID + sources.selected.rawValue + String(sources.revision)
+    context = sources.contextID
     enabled = preferences.bool(
-      forKey: "healthOverview." + sources.accountID + "." + sources.selected.rawValue)
+      forKey: "healthOverview." + sources.accountID + ".metrics")
   }
 
   func resetContext() {
     sources.refreshAccount()
-    let context = sources.accountID + sources.selected.rawValue + String(sources.revision)
+    let context = sources.contextID
     guard self.context != context else { return }
     self.context = context
     generation = UUID()
@@ -52,14 +55,14 @@ struct HealthMetricReading: Identifiable, Equatable, Sendable {
     connection = nil
     connectionError = nil
     enabled = defaults.bool(
-      forKey: "healthOverview." + sources.accountID + "." + sources.selected.rawValue)
+      forKey: "healthOverview." + sources.accountID + ".metrics")
     loading = false
     connecting = false
     error = nil
   }
 
-  func select(_ provider: HealthProviderID) {
-    sources.select(provider)
+  func select(_ provider: HealthProviderID, for metric: HealthMetric) {
+    sources.select(provider, for: metric)
     resetContext()
   }
 
@@ -67,13 +70,19 @@ struct HealthMetricReading: Identifiable, Equatable, Sendable {
     resetContext()
     guard let cloud = sources.miFitness else { return }
     let token = generation
+    let scope = sources.accountID
+    let context = sources.contextID
     do {
       let status = try await cloud.connection()
-      guard token == generation, !Task.isCancelled else { return }
+      guard token == generation, sources.accountID == scope, sources.contextID == context,
+        !Task.isCancelled
+      else { return }
       connection = status
       connectionError = nil
     } catch is CancellationError {} catch {
-      guard token == generation, !Task.isCancelled else { return }
+      guard token == generation, sources.accountID == scope, sources.contextID == context,
+        !Task.isCancelled
+      else { return }
       // Opening settings doesn't claim that an absent/offline session has been explicitly disconnected.
       connection = nil
       connectionError = HealthProviderMessage.error(error)
@@ -93,24 +102,24 @@ struct HealthMetricReading: Identifiable, Equatable, Sendable {
     defer { if generation == token { loading = false } }
     do {
       let metrics = sources.supportedMetrics
-      if explicit { try await sources.authorize(metrics: metrics) }
       guard [1, 7, 30].contains(historyDays),
         let start = calendar.date(
           byAdding: .day, value: -(historyDays - 1), to: calendar.startOfDay(for: day)),
         let end = calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: day))
       else { throw TrainingError.invalidDate }
       let value = try await sources.read(
-        start: start, end: min(end, now()), metrics: metrics, calendar: calendar)
+        start: start, end: min(end, now()), metrics: metrics, calendar: calendar,
+        authorize: explicit)
       let readings = try await Self.makeReadings(
-        value.snapshot, day: day, calendar: calendar, metrics: metrics)
+        value, day: day, calendar: calendar, metrics: metrics)
       guard generation == token, !Task.isCancelled,
-        context == sources.accountID + sources.selected.rawValue + String(sources.revision)
+        context == sources.contextID
       else { return }
       result = value
       self.readings = readings
       enabled = true
       defaults.set(
-        true, forKey: "healthOverview." + sources.accountID + "." + sources.selected.rawValue)
+        true, forKey: "healthOverview." + sources.accountID + ".metrics")
     } catch is CancellationError {} catch {
       guard generation == token, !Task.isCancelled else { return }
       self.error = HealthProviderMessage.error(error)
@@ -143,9 +152,8 @@ struct HealthMetricReading: Identifiable, Equatable, Sendable {
       try await sources.disconnectMiFitness()
       result = nil
       readings = []
-      enabled = false
+      resetContext()
       connection = nil
-      defaults.set(false, forKey: "healthOverview." + sources.accountID + ".miFitness")
       await loadConnection()
     } catch is CancellationError {} catch { self.error = HealthProviderMessage.error(error) }
   }
@@ -158,33 +166,38 @@ struct HealthMetricReading: Identifiable, Equatable, Sendable {
     enabled = false
     error = nil
     defaults.set(
-      false, forKey: "healthOverview." + sources.accountID + "." + sources.selected.rawValue)
+      false, forKey: "healthOverview." + sources.accountID + ".metrics")
   }
 
   @concurrent nonisolated private static func makeReadings(
-    _ snapshot: HealthDataSnapshot, day: Date, calendar: Calendar,
+    _ result: HealthDataReadResult, day: Date, calendar: Calendar,
     metrics: Set<HealthMetric>
   ) async throws -> [HealthMetricReading] {
     guard let interval = calendar.dateInterval(of: .day, for: day) else {
       throw TrainingError.invalidDate
     }
-    return try HealthMetric.allCases.filter(metrics.contains).map { metric in
+    return try HealthMetric.allCases.filter(metrics.contains).compactMap { metric in
+      guard let provider = result.routes[metric] else { return nil }
+      let snapshot = result.snapshot(for: metric)
       let value: Double?
       let date: Date?
       if metric == .sleep {
-        let night = try snapshot.nights(endingOn: day, count: 1, calendar: calendar).first
+        let night = try snapshot?.nights(endingOn: day, count: 1, calendar: calendar).first
         value = night?.asleep
         date = night?.sleepEnd
       } else if [.steps, .activeEnergy, .totalEnergy, .distance].contains(metric) {
-        value = snapshot.total(metric, during: interval)
+        value = snapshot?.total(metric, during: interval)
         date = nil
       } else {
-        let latest = snapshot.latest(metric)
+        let latest = snapshot?.latest(metric)
         value = latest?.value
         date = latest?.end
       }
       return HealthMetricReading(
-        metric: metric, value: value, date: date, permitted: snapshot.metrics.contains(metric))
+        metric: metric, value: value, date: date,
+        permitted: snapshot?.metrics.contains(metric) == true,
+        provider: provider, cached: result.cachedProviders.contains(provider),
+        failureMessage: result.failures[provider].map { HealthProviderMessage.error($0) })
     }
   }
 }

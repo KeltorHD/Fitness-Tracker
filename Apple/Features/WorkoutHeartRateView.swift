@@ -55,7 +55,7 @@ struct WorkoutHeartRateView: View {
       if model.recording?.isLiveSensorRecording != true {
         Button(
           L10n.text(
-            store.healthData.selected == .miFitness
+            store.healthData.provider(for: .heartRate) == .miFitness
               ? "Загрузить пульс из Mi Fitness" : "Загрузить пульс из «Здоровья»", locale: locale)
         ) {
           importHealth = true

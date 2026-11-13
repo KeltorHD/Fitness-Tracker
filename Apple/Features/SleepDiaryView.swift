@@ -45,7 +45,7 @@ struct SleepDiaryView: View {
           ).font(.title2.bold()).foregroundStyle(.tint)
           Text(
             L10n.text(
-              store.healthData.selected == .miFitness
+              store.healthData.provider(for: .sleep) == .miFitness
                 ? "Продолжительность и записанные фазы сна из Mi Fitness."
                 : store.healthData.usesServerAppleHistory
                   ? "Сон из истории Apple Health вашего аккаунта. Передачу с iPhone можно включить в источниках здоровья."

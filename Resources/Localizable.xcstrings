@@ -613,6 +613,23 @@
         }
       }
     },
+    "Apple «Здоровье» и Mi Fitness могут использоваться одновременно. Каждый показатель берётся только из выбранного источника. При ошибке или отсутствии данных другой источник не подставляется.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple «Здоровье» и Mi Fitness могут использоваться одновременно. Каждый показатель берётся только из выбранного источника. При ошибке или отсутствии данных другой источник не подставляется."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Health and Mi Fitness can be used together. Each metric comes only from its selected source. Missing data or a source error does not switch to another source."
+          }
+        }
+      }
+    },
     "Bluetooth-датчик": {
       "extractionState": "manual",
       "localizations": {
@@ -8433,6 +8450,23 @@
         }
       }
     },
+    "Каждый показатель берётся из своего основного источника. Доступны только синхронизированные и разрешённые для FitLife данные.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Каждый показатель берётся из своего основного источника. Доступны только синхронизированные и разрешённые для FitLife данные."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Each metric uses its own primary source. Only data synced and authorized for FitLife is available."
+          }
+        }
+      }
+    },
     "Как на устройстве": {
       "extractionState": "manual",
       "localizations": {
@@ -11986,6 +12020,23 @@
         }
       }
     },
+    "Нет доступных данных. Проверьте подключение, синхронизацию и разрешения основных источников здоровья.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нет доступных данных. Проверьте подключение, синхронизацию и разрешения основных источников здоровья."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No data available. Check the connection, syncing and permissions of your primary health sources."
+          }
+        }
+      }
+    },
     "Нет доступных данных. Проверьте синхронизацию Mi Fitness и разрешённые показатели в источниках здоровья.": {
       "extractionState": "manual",
       "localizations": {
@@ -12921,6 +12972,23 @@
         }
       }
     },
+    "Основной источник для каждого показателя": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Основной источник для каждого показателя"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Primary source for each metric"
+          }
+        }
+      }
+    },
     "Основные": {
       "extractionState": "manual",
       "localizations": {
@@ -13308,6 +13376,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Open your account journal to sync health data."
+          }
+        }
+      }
+    },
+    "Откройте журнал аккаунта и проверьте подключение источника здоровья.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Откройте журнал аккаунта и проверьте подключение источника здоровья."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open your account journal and check the health source connection."
           }
         }
       }
@@ -15182,6 +15267,23 @@
         }
       }
     },
+    "Показывать пульс и шаги": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Показывать пульс и шаги"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show heart rate and steps"
+          }
+        }
+      }
+    },
     "Положение %@ из %@": {
       "extractionState": "manual",
       "localizations": {
@@ -16491,6 +16593,23 @@
         }
       }
     },
+    "Пульс и шаги берутся из основных источников, выбранных для этих показателей. Данные Mi Fitness обновляются после синхронизации устройства с облаком. Для обновления нажмите «Обновить показатели».": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пульс и шаги берутся из основных источников, выбранных для этих показателей. Данные Mi Fitness обновляются после синхронизации устройства с облаком. Для обновления нажмите «Обновить показатели»."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate and steps use their selected primary sources. Mi Fitness data is updated after your device syncs with the cloud. Tap Update measurements to refresh."
+          }
+        }
+      }
+    },
     "Пульс и шаги из Mi Fitness": {
       "extractionState": "manual",
       "localizations": {
@@ -17728,6 +17847,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "This summary uses your account’s Apple Health history. Enable uploads from this iPhone in Health sources."
+          }
+        }
+      }
+    },
+    "Сводка использует основные источники каждого показателя. Сон — между полуднем предыдущего и выбранного дня.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сводка использует основные источники каждого показателя. Сон — между полуднем предыдущего и выбранного дня."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The summary uses the primary source of each metric. Sleep covers noon on the previous day to noon on the selected day."
           }
         }
       }
@@ -19190,6 +19326,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Saved meals"
+          }
+        }
+      }
+    },
+    "Сохранённые данные": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сохранённые данные"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cached data"
           }
         }
       }
@@ -21808,6 +21961,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Partially selected"
+          }
+        }
+      }
+    },
+    "Часть показателей недоступна. Проверьте основные источники здоровья и повторите чтение.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Часть показателей недоступна. Проверьте основные источники здоровья и повторите чтение."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Some metrics are unavailable. Check your primary health sources and try reading again."
           }
         }
       }
