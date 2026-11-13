@@ -46,6 +46,15 @@ private func expectSupplement(_ value: Bool) { precondition(value) }
     if fail { throw Failure.expected }
     try memory.deleteSupplementEntry(id: id)
   }
+  func supplementPlans() throws -> [SupplementPlan] { try memory.supplementPlans() }
+  func saveSupplementPlan(_ plan: SupplementPlan) throws {
+    if fail { throw Failure.expected }
+    try memory.saveSupplementPlan(plan)
+  }
+  func deleteSupplementPlan(id: UUID) throws {
+    if fail { throw Failure.expected }
+    try memory.deleteSupplementPlan(id: id)
+  }
   func favoriteFoodProducts() throws -> [FoodProduct] { try memory.favoriteFoodProducts() }
   func setFavoriteFoodProduct(_ product: FoodProduct, isFavorite: Bool) throws {
     if fail { throw Failure.expected }
@@ -59,6 +68,37 @@ private func expectSupplement(_ value: Bool) { precondition(value) }
   func saveNutritionGoal(_ goal: NutritionGoal?) throws {
     if fail { throw Failure.expected }
     try memory.saveNutritionGoal(goal)
+  }
+}
+
+@MainActor private final class ReminderStub: SupplementReminderServing {
+  var allowed = true
+  var fail = false
+  var holdAuthorization = false
+  var authorizations = 0
+  var scheduled: [SupplementReminder] = []
+  private var authorization: CheckedContinuation<Bool, Never>?
+  private var waiters: [CheckedContinuation<Void, Never>] = []
+  func authorize() async throws -> Bool {
+    authorizations += 1
+    for waiter in waiters { waiter.resume() }
+    waiters = []
+    if holdAuthorization { return await withCheckedContinuation { authorization = $0 } }
+    return allowed
+  }
+  func waitForAuthorization() async {
+    if authorization != nil { return }
+    await withCheckedContinuation { waiters.append($0) }
+  }
+  func completeAuthorization() {
+    authorization?.resume(returning: allowed)
+    authorization = nil
+  }
+  func replace(_ reminders: [SupplementReminder]) async throws -> SupplementReminderPermission {
+    try Task.checkCancellation()
+    if fail { throw Failure.expected }
+    scheduled = allowed ? reminders : []
+    return allowed ? .allowed : .denied
   }
 }
 
@@ -246,8 +286,92 @@ private final class FoodURLProtocol: URLProtocol {
       "Supplements: dose/units, packaging nutrition, unknown values, editing/cancellation, failures, atomic reload, day/week totals and demo isolation passed (no Apple SDK)."
     )
   }
+  @MainActor static func schedulesAndSynchronization() async throws {
+    let now = Date(timeIntervalSince1970: 1_711_929_600)
+    let repository = FailingRepository()
+    let model = NutritionDiaryModel(repository: repository, now: { now })
+    let notifications = ReminderStub()
+    model.reminderService = notifications
+    var namespace = "account-a"
+    model.accountNamespace = { namespace }
+    var changes = 0
+    model.onChange = { changes += 1 }
+    var plan = SupplementPlan(
+      prototype: SupplementEntry(date: now, kind: .creatine, amount: 3),
+      times: [540, 1200], startDate: now, timeZoneID: "UTC", remindersEnabled: true)
+    expectSupplement(await model.savePlan(plan))
+    await model.flushReminders()
+    precondition(changes == 1 && notifications.authorizations == 1)
+    precondition(notifications.scheduled.count == 48)
+    precondition(notifications.scheduled.allSatisfy { $0.id.hasPrefix("supplement.account-a.") })
+    let first = plan.occurrences(from: now, through: now.addingTimeInterval(86400), limit: 1)[0]
+    let intake = plan.intake(scheduledFor: first, takenAt: now)
+    precondition(model.saveSupplement(intake))
+    await model.flushReminders()
+    precondition(!notifications.scheduled.contains { $0.id.hasSuffix(intake.id.uuidString) })
+    let editor = SupplementEntryEditorModel(entry: intake)
+    expectSupplement(try editor.validatedEntry().planID == plan.id)
+    let beforeReload = changes
+    model.reload()
+    precondition(changes == beforeReload)
+    plan.enabled = false
+    expectSupplement(await model.savePlan(plan))
+    await model.flushReminders()
+    precondition(notifications.scheduled.isEmpty && notifications.authorizations == 1)
+    repository.fail = true
+    expectSupplement(!(await model.savePlan(plan)))
+    precondition(!model.deletePlan(plan))
+    precondition(model.plans.count == 1)
+    repository.fail = false
+    precondition(model.deletePlan(plan))
+    precondition(model.supplements == [intake])
+    namespace = "account-b"
+    let prior = changes
+    model.switchWorkspace(isDemo: true)
+    plan.enabled = true
+    expectSupplement(await model.savePlan(plan))
+    await model.flushReminders()
+    precondition(changes == prior && notifications.scheduled.isEmpty)
+    model.switchWorkspace(isDemo: false)
+    model.writesSuspended = true
+    precondition(!model.saveSupplement(intake))
+    expectSupplement(!(await model.savePlan(plan)))
+    model.writesSuspended = false
+    notifications.allowed = false
+    expectSupplement(await model.savePlan(plan))
+    await model.flushReminders()
+    precondition(model.reminderStatus != nil && notifications.scheduled.isEmpty)
+    notifications.allowed = true
+    await model.authorizeReminders()
+    await model.flushReminders()
+    precondition(model.reminderStatus == nil)
+    precondition(notifications.scheduled.allSatisfy { $0.id.hasPrefix("supplement.account-b.") })
+    notifications.fail = true
+    model.refreshReminders()
+    await model.flushReminders()
+    precondition(model.reminderStatus != nil)
+
+    // A permission sheet must never save into a workspace selected while it was open.
+    let held = ReminderStub()
+    held.holdAuthorization = true
+    model.reminderService = held
+    let other = SupplementPlan(
+      prototype: SupplementEntry(date: now, kind: .creatine, amount: 3), startDate: now,
+      timeZoneID: "UTC", remindersEnabled: true)
+    let save = Task { await model.savePlan(other) }
+    await held.waitForAuthorization()
+    model.switchWorkspace(isDemo: true)
+    held.completeAuthorization()
+    expectSupplement(!(await save.value))
+    precondition(model.plans.isEmpty)
+    await model.flushReminders()
+    print(
+      "Nutrition schedules: sync callbacks, persistence failures, permission denial, bounded reminders, logged slots, account/demo changes and stale authorization passed."
+    )
+  }
   @MainActor static func main() async throws {
     try supplements()
+    try await schedulesAndSynchronization()
     let repository = FailingRepository()
     let model = NutritionDiaryModel(repository: repository)
     let entry = FoodEntry(

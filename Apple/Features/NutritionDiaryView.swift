@@ -28,12 +28,14 @@ struct NutrientValues: View {
 private enum NutritionSheet: Identifiable {
   case food(FoodEntry)
   case supplement(SupplementEntry)
+  case plan(SupplementPlan)
   case water
   case copy(MealKind?)
   var id: String {
     switch self {
     case .food(let entry): "food_\(entry.id)"
     case .supplement(let entry): "supplement_\(entry.id)"
+    case .plan(let plan): "plan_\(plan.id)"
     case .water: "water"
     case .copy(let meal): "copy_\(meal?.rawValue ?? "all")"
     }
@@ -43,10 +45,12 @@ private enum NutritionSheet: Identifiable {
 private enum NutritionDeletion {
   case food(FoodEntry)
   case supplement(SupplementEntry)
+  case plan(SupplementPlan)
   var title: String {
     switch self {
     case .food: "Удалить запись питания?"
     case .supplement: "Удалить приём добавки?"
+    case .plan: "Удалить расписание? История приёмов сохранится."
     }
   }
 }
@@ -95,6 +99,18 @@ struct NutritionDiaryView: View {
           .accessibilityIdentifier("nutritionWeek")
         }.buttonStyle(.bordered).controlSize(.small).cardListRow()
         NutritionWaterCard(model: model, date: date) { sheet = .water }.cardListRow()
+        SupplementPlansSection(
+          model: model,
+          add: {
+            sheet = .plan(SupplementPlan(prototype: SupplementEntry(kind: .creatine, amount: 0)))
+          },
+          edit: { sheet = .plan($0) },
+          take: { value in
+            var entry = value
+            entry.date = .now
+            sheet = .supplement(entry)
+          },
+          delete: { pendingDelete = .plan($0) })
         NutritionSupplementsSection(
           entries: model.day.supplements,
           add: { kind in
@@ -229,6 +245,7 @@ struct NutritionDiaryView: View {
       switch value {
       case .food(let entry): FoodEntryEditor(diary: model, entry: entry)
       case .supplement(let entry): SupplementEntryEditor(diary: model, entry: entry)
+      case .plan(let plan): SupplementEntryEditor(diary: model, entry: plan.prototype, plan: plan)
       case .water: NavigationStack { NutritionWaterEditor(model: model, date: date) }
       case .copy(let meal):
         NavigationStack {
@@ -245,6 +262,7 @@ struct NutritionDiaryView: View {
         switch pendingDelete {
         case .food(let entry): model.delete(entry)
         case .supplement(let entry): model.deleteSupplement(entry)
+        case .plan(let plan): model.deletePlan(plan)
         case nil: break
         }
         pendingDelete = nil

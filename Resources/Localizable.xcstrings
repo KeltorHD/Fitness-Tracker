@@ -3367,19 +3367,19 @@
         }
       }
     },
-    "Войдите для автоматической синхронизации тренировок между устройствами.": {
+    "Войдите для автоматической синхронизации тренировок и питания между устройствами.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Войдите для автоматической синхронизации тренировок между устройствами."
+            "value": "Войдите для автоматической синхронизации тренировок и питания между устройствами."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sign in to sync workouts automatically across your devices."
+            "value": "Sign in to automatically sync workouts and nutrition between devices."
           }
         }
       }
@@ -3516,6 +3516,57 @@
           "stringUnit": {
             "state": "translated",
             "value": "Time to fall asleep"
+          }
+        }
+      }
+    },
+    "Время приёма": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Время приёма"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Intake time"
+          }
+        }
+      }
+    },
+    "Время приёма добавки": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Время приёма добавки"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Time for your supplement"
+          }
+        }
+      }
+    },
+    "Время сохраняется в часовом поясе расписания. Напоминание не отмечает приём автоматически. Открывайте приложение регулярно, чтобы обновлять ближайшие напоминания.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Время сохраняется в часовом поясе расписания. Напоминание не отмечает приём автоматически. Открывайте приложение регулярно, чтобы обновлять ближайшие напоминания."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Times use the saved schedule time zone. Reminders do not log intakes automatically. Open the app regularly to refresh upcoming reminders."
           }
         }
       }
@@ -5526,19 +5577,19 @@
         }
       }
     },
-    "Для синхронизации тренировок требуется обновить сервер.": {
+    "Для синхронизации данных требуется обновить сервер.": {
       "extractionState": "manual",
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Для синхронизации тренировок требуется обновить сервер."
+            "value": "Для синхронизации данных требуется обновить сервер."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Update the server to sync workouts."
+            "value": "Update the server to sync your data."
           }
         }
       }
@@ -5832,6 +5883,23 @@
         }
       }
     },
+    "Добавить время": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Добавить время"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add a time"
+          }
+        }
+      }
+    },
     "Добавить еду": {
       "extractionState": "manual",
       "localizations": {
@@ -5964,6 +6032,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Add food"
+          }
+        }
+      }
+    },
+    "Добавить расписание приёма": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Добавить расписание приёма"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add an intake schedule"
           }
         }
       }
@@ -6202,6 +6287,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Set nutrition goals to track your progress."
+          }
+        }
+      }
+    },
+    "Дождитесь переключения аккаунта.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Дождитесь переключения аккаунта."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wait for the account switch to finish."
           }
         }
       }
@@ -8110,6 +8212,23 @@
         }
       }
     },
+    "Интервал, дней: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Интервал, дней: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Interval in days: %@"
+          }
+        }
+      }
+    },
     "Искать в базе продуктов": {
       "extractionState": "manual",
       "localizations": {
@@ -8752,6 +8871,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Each point is one completed workout. Touch the chart to inspect its values."
+          }
+        }
+      }
+    },
+    "Каждый день": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Каждый день"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every day"
           }
         }
       }
@@ -10269,6 +10405,40 @@
         }
       }
     },
+    "Напоминания включены": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Напоминания включены"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reminders enabled"
+          }
+        }
+      }
+    },
+    "Напоминать о приёме": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Напоминать о приёме"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remind me to take it"
+          }
+        }
+      }
+    },
     "Нарушен формат CSV: проверьте разделители и кавычки.": {
       "extractionState": "manual",
       "localizations": {
@@ -10337,6 +10507,23 @@
         }
       }
     },
+    "Настройки уведомлений": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Настройки уведомлений"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notification settings"
+          }
+        }
+      }
+    },
     "Начало": {
       "extractionState": "manual",
       "localizations": {
@@ -10350,6 +10537,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Start"
+          }
+        }
+      }
+    },
+    "Начало приёма": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Начало приёма"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start date"
           }
         }
       }
@@ -10894,6 +11098,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Could not update the watch account. Reconnect to your iPhone."
+          }
+        }
+      }
+    },
+    "Не удалось обновить напоминания. Откройте дневник и повторите.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось обновить напоминания. Откройте дневник и повторите."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not update reminders. Open the diary and try again."
           }
         }
       }
@@ -11816,6 +12037,23 @@
         }
       }
     },
+    "Не удалось сохранить расписание. Попробуйте ещё раз.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось сохранить расписание. Попробуйте ещё раз."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not save the schedule. Try again."
+          }
+        }
+      }
+    },
     "Не удалось сохранить стартовые планы. Попробуйте ещё раз.": {
       "extractionState": "manual",
       "localizations": {
@@ -11982,6 +12220,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Could not delete the supplement intake. Try again."
+          }
+        }
+      }
+    },
+    "Не удалось удалить расписание. Попробуйте ещё раз.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось удалить расписание. Попробуйте ещё раз."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not delete the schedule. Try again."
           }
         }
       }
@@ -12955,6 +13210,23 @@
         }
       }
     },
+    "Обновить напоминания": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Обновить напоминания"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Update reminders"
+          }
+        }
+      }
+    },
     "Обновить показатели": {
       "extractionState": "manual",
       "localizations": {
@@ -13308,6 +13580,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rest ends"
+          }
+        }
+      }
+    },
+    "Окончание приёма": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Окончание приёма"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "End date"
           }
         }
       }
@@ -13754,6 +14043,23 @@
         }
       }
     },
+    "Откройте дневник питания, чтобы отметить приём.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Откройте дневник питания, чтобы отметить приём."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open the nutrition diary to log your intake."
+          }
+        }
+      }
+    },
     "Откройте журнал аккаунта для синхронизации здоровья.": {
       "extractionState": "manual",
       "localizations": {
@@ -14073,6 +14379,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cancel reading"
+          }
+        }
+      }
+    },
+    "Отметить приём": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Отметить приём"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log intake"
           }
         }
       }
@@ -14502,6 +14825,40 @@
         }
       }
     },
+    "Периодичность": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Периодичность"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recurrence"
+          }
+        }
+      }
+    },
+    "Периодичность и напоминания": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Периодичность и напоминания"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recurrence and reminders"
+          }
+        }
+      }
+    },
     "Периоды бодрствования": {
       "extractionState": "manual",
       "localizations": {
@@ -14634,6 +14991,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Shoulders and neck"
+          }
+        }
+      }
+    },
+    "По дням недели": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "По дням недели"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On selected weekdays"
           }
         }
       }
@@ -16304,6 +16678,23 @@
         }
       }
     },
+    "Приём отмечен": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Приём отмечен"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Intake logged"
+          }
+        }
+      }
+    },
     "Приём пищи": {
       "extractionState": "manual",
       "localizations": {
@@ -16538,6 +16929,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Check the supplement name, date and positive amount in the selected units."
+          }
+        }
+      }
+    },
+    "Проверьте периодичность, время и даты расписания добавки.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Проверьте периодичность, время и даты расписания добавки."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check the recurrence, times and dates of the supplement schedule."
           }
         }
       }
@@ -17647,6 +18055,40 @@
         }
       }
     },
+    "Разрешите уведомления в настройках iOS, чтобы получать напоминания.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Разрешите уведомления в настройках iOS, чтобы получать напоминания."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow notifications in iOS Settings to receive reminders."
+          }
+        }
+      }
+    },
+    "Разрешить уведомления": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Разрешить уведомления"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow notifications"
+          }
+        }
+      }
+    },
     "Разрывы графика означают отсутствие измерений.": {
       "extractionState": "manual",
       "localizations": {
@@ -17745,6 +18187,74 @@
           "stringUnit": {
             "state": "translated",
             "value": "Schedule"
+          }
+        }
+      }
+    },
+    "Расписание включено": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Расписание включено"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schedule enabled"
+          }
+        }
+      }
+    },
+    "Расписание добавки": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Расписание добавки"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supplement schedule"
+          }
+        }
+      }
+    },
+    "Расписание приостановлено": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Расписание приостановлено"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schedule paused"
+          }
+        }
+      }
+    },
+    "Расписания добавок": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Расписания добавок"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supplement schedules"
           }
         }
       }
@@ -20758,23 +21268,6 @@
         }
       }
     },
-    "Тренировки со всеми подходами и паузами, планы, записи веса и сохранённый пульс автоматически передаются в ваш аккаунт. Изменения офлайн отправятся при подключении. Питание и фотографии остаются на устройстве. Источники здоровья подключаются отдельно.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Тренировки со всеми подходами и паузами, планы, записи веса и сохранённый пульс автоматически передаются в ваш аккаунт. Изменения офлайн отправятся при подключении. Питание и фотографии остаются на устройстве. Источники здоровья подключаются отдельно."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Workouts with all sets and pauses, plans, weight entries and saved heart rate sync automatically to your account. Offline changes are sent when connected. Food and photos stay on your device. Health sources are connected separately."
-          }
-        }
-      }
-    },
     "Тренировки со всеми подходами и паузами, планы, записи веса и сохранённый пульс автоматически передаются в ваш аккаунт. Изменения офлайн отправятся при подключении. Питание, сон и фотографии остаются на устройстве.": {
       "extractionState": "manual",
       "localizations": {
@@ -20805,6 +21298,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Your workouts, plans and weight entries will be saved to your account on the server."
+          }
+        }
+      }
+    },
+    "Тренировки, планы, вес, сохранённый пульс, питание с фотографиями, вода, цели, избранные продукты, добавки и расписания автоматически передаются в ваш аккаунт. Изменения офлайн отправятся при подключении. Источники здоровья подключаются отдельно.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Тренировки, планы, вес, сохранённый пульс, питание с фотографиями, вода, цели, избранные продукты, добавки и расписания автоматически передаются в ваш аккаунт. Изменения офлайн отправятся при подключении. Источники здоровья подключаются отдельно."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workouts, plans, weight, saved heart rate, food and photos, water, goals, favorite foods, supplements and schedules sync automatically with your account. Offline changes upload when connected. Health sources are connected separately."
           }
         }
       }
@@ -21268,6 +21778,23 @@
         }
       }
     },
+    "Удалить время": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Удалить время"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove time"
+          }
+        }
+      }
+    },
     "Удалить группу дропсета": {
       "extractionState": "manual",
       "localizations": {
@@ -21400,6 +21927,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Delete supplement intake?"
+          }
+        }
+      }
+    },
+    "Удалить расписание? История приёмов сохранится.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Удалить расписание? История приёмов сохранится."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete this schedule? Your intake history will be kept."
           }
         }
       }
@@ -21706,6 +22250,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Add weight"
+          }
+        }
+      }
+    },
+    "Указать окончание": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Указать окончание"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set an end date"
           }
         }
       }
@@ -22373,6 +22934,23 @@
         }
       }
     },
+    "Цели и избранные продукты": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Цели и избранные продукты"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goals and favorite foods"
+          }
+        }
+      }
+    },
     "Цели питания": {
       "extractionState": "manual",
       "localizations": {
@@ -22573,6 +23151,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Watch estimates movement during the selected window, not your exact sleep stage. A system fallback alarm is set for the end of the window."
+          }
+        }
+      }
+    },
+    "Через несколько дней": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Через несколько дней"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every few days"
           }
         }
       }

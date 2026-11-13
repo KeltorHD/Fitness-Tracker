@@ -194,6 +194,283 @@ namespace FitLife.Backend.Migrations
                     b.ToTable("HealthSyncSample");
                 });
 
+            modelBuilder.Entity("FitLife.Backend.NutritionDose", b =>
+                {
+                    b.Property<string>("OwnerId")
+                        .HasMaxLength(36)
+                        .HasColumnType("character varying(36)");
+
+                    b.Property<string>("Kind")
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<double>("Amount")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("Calories")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("Carbohydrates")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("Date")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("Fat")
+                        .HasColumnType("double precision");
+
+                    b.Property<bool>("IncludesNutrition")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("PlanID")
+                        .HasColumnType("uuid");
+
+                    b.Property<double?>("Protein")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("ScheduledFor")
+                        .HasColumnType("double precision");
+
+                    b.Property<int>("SchemaVersion")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("SupplementKind")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("OwnerId", "Kind", "Id");
+
+                    b.HasIndex("OwnerId", "Date");
+
+                    b.ToTable("NutritionDose", (string)null);
+                });
+
+            modelBuilder.Entity("FitLife.Backend.NutritionFood", b =>
+                {
+                    b.Property<string>("OwnerId")
+                        .HasMaxLength(36)
+                        .HasColumnType("character varying(36)");
+
+                    b.Property<string>("Kind")
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<double>("Date")
+                        .HasColumnType("double precision");
+
+                    b.Property<bool>("IsSavedMeal")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Meal")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<byte[]>("Photo")
+                        .HasColumnType("bytea");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("OwnerId", "Kind", "Id");
+
+                    b.HasIndex("OwnerId", "Date");
+
+                    b.ToTable("NutritionFood", (string)null);
+                });
+
+            modelBuilder.Entity("FitLife.Backend.NutritionPlan", b =>
+                {
+                    b.Property<string>("OwnerId")
+                        .HasMaxLength(36)
+                        .HasColumnType("character varying(36)");
+
+                    b.Property<string>("Kind")
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<double?>("EndDate")
+                        .HasColumnType("double precision");
+
+                    b.Property<int>("IntervalDays")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Recurrence")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("RemindersEnabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<double>("StartDate")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("TimeZoneID")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("TimesJson")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("WeekdaysJson")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("OwnerId", "Kind", "Id");
+
+                    b.ToTable("NutritionPlan", (string)null);
+                });
+
+            modelBuilder.Entity("FitLife.Backend.NutritionProduct", b =>
+                {
+                    b.Property<string>("OwnerId")
+                        .HasMaxLength(36)
+                        .HasColumnType("character varying(36)");
+
+                    b.Property<string>("Kind")
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)");
+
+                    b.Property<Guid>("AggregateId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Position")
+                        .HasColumnType("integer");
+
+                    b.Property<double?>("Amount")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("Barcode")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Brand")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<double>("Calories")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("Carbohydrates")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("Fat")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("ImageURL")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("PortionId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ProductId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<double>("Protein")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("SourceURL")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("OwnerId", "Kind", "AggregateId", "Position");
+
+                    b.ToTable("NutritionProduct", (string)null);
+                });
+
+            modelBuilder.Entity("FitLife.Backend.NutritionProfileRow", b =>
+                {
+                    b.Property<string>("OwnerId")
+                        .HasMaxLength(36)
+                        .HasColumnType("character varying(36)");
+
+                    b.Property<string>("Kind")
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<double?>("Calories")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("Carbohydrates")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("Fat")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("Protein")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("WaterMilliliters")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("OwnerId", "Kind", "Id");
+
+                    b.ToTable("NutritionProfileRow", (string)null);
+                });
+
+            modelBuilder.Entity("FitLife.Backend.NutritionWater", b =>
+                {
+                    b.Property<string>("OwnerId")
+                        .HasMaxLength(36)
+                        .HasColumnType("character varying(36)");
+
+                    b.Property<string>("Kind")
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<double>("Date")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("Milliliters")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("OwnerId", "Kind", "Id");
+
+                    b.ToTable("NutritionWater", (string)null);
+                });
+
             modelBuilder.Entity("FitLife.Backend.TrainingBodyWeight", b =>
                 {
                     b.Property<string>("OwnerId")
@@ -658,6 +935,60 @@ namespace FitLife.Backend.Migrations
                     b.HasOne("FitLife.Backend.HealthSyncOwner", null)
                         .WithMany()
                         .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("FitLife.Backend.NutritionDose", b =>
+                {
+                    b.HasOne("FitLife.Backend.TrainingRecordMetadata", null)
+                        .WithMany()
+                        .HasForeignKey("OwnerId", "Kind", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("FitLife.Backend.NutritionFood", b =>
+                {
+                    b.HasOne("FitLife.Backend.TrainingRecordMetadata", null)
+                        .WithMany()
+                        .HasForeignKey("OwnerId", "Kind", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("FitLife.Backend.NutritionPlan", b =>
+                {
+                    b.HasOne("FitLife.Backend.TrainingRecordMetadata", null)
+                        .WithMany()
+                        .HasForeignKey("OwnerId", "Kind", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("FitLife.Backend.NutritionProduct", b =>
+                {
+                    b.HasOne("FitLife.Backend.TrainingRecordMetadata", null)
+                        .WithMany()
+                        .HasForeignKey("OwnerId", "Kind", "AggregateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("FitLife.Backend.NutritionProfileRow", b =>
+                {
+                    b.HasOne("FitLife.Backend.TrainingRecordMetadata", null)
+                        .WithMany()
+                        .HasForeignKey("OwnerId", "Kind", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("FitLife.Backend.NutritionWater", b =>
+                {
+                    b.HasOne("FitLife.Backend.TrainingRecordMetadata", null)
+                        .WithMany()
+                        .HasForeignKey("OwnerId", "Kind", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

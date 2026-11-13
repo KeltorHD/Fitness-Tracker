@@ -53,8 +53,13 @@ actor TrainingSyncStateStore: TrainingSyncStateStoring {
   func load(_ namespace: String) throws -> TrainingSyncState {
     let url = try file(namespace)
     guard FileManager.default.fileExists(atPath: url.path) else { return TrainingSyncState() }
-    let state = try TrainingCoding.decoder().decode(TrainingSyncState.self, from: read(url))
+    var state = try TrainingCoding.decoder().decode(TrainingSyncState.self, from: read(url))
     try state.validate()
+    if state.nutritionFeedVersion == nil {
+      state.cursor = 0
+      state.nutritionFeedVersion = 1
+      try save(state, for: namespace)
+    }
     return state
   }
   func save(_ state: TrainingSyncState, for namespace: String) throws {

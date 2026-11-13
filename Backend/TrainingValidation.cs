@@ -13,6 +13,7 @@ internal static class TrainingValidation
     /// <summary>Валидирует полный DTO по правилам Core и возвращает каноническое значение для хеша и записи.</summary>
     internal static JsonElement Canonical(string kind, Guid id, JsonElement value)
     {
+        if (TrainingKinds.IsNutrition(kind)) return NutritionValidation.Canonical(kind, id, value);
         switch (kind)
         {
             case TrainingKinds.Workout:

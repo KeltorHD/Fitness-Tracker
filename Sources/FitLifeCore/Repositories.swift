@@ -40,7 +40,8 @@ extension WorkoutRepository {
   private var accountJournals: [String: TrainingJournalSnapshot] = [:]
   private var sessions: [UUID: Workout] = [:]
   private var routines: [UUID: WorkoutTemplate] = [:]
-  private let nutrition = MemoryNutritionRepository()
+  private var nutrition = MemoryNutritionRepository()
+  private var accountNutrition: [String: MemoryNutritionRepository] = [:]
   private var measurements: [UUID: BodyWeightEntry] = [:]
   public init() {}
 
@@ -56,6 +57,7 @@ extension WorkoutRepository {
       throw TrainingSyncError.activeWorkout
     }
     if let previous = trainingAccountSelection.currentAccountID {
+      accountNutrition[previous] = nutrition
       accountJournals[previous] = TrainingJournalSnapshot(
         workouts: Array(sessions.values), templates: Array(routines.values),
         bodyWeights: Array(measurements.values))
@@ -63,6 +65,7 @@ extension WorkoutRepository {
     let journal =
       accountJournals[namespace]
       ?? TrainingJournalSnapshot(workouts: [], templates: [], bodyWeights: [])
+    nutrition = accountNutrition[namespace] ?? MemoryNutritionRepository()
     sessions = Dictionary(uniqueKeysWithValues: journal.workouts.map { ($0.id, $0) })
     routines = Dictionary(uniqueKeysWithValues: journal.templates.map { ($0.id, $0) })
     measurements = Dictionary(uniqueKeysWithValues: journal.bodyWeights.map { ($0.id, $0) })
@@ -73,6 +76,7 @@ extension WorkoutRepository {
     let next = try TrainingJournalSnapshot(
       workouts: workouts(), templates: templates(), bodyWeights: bodyWeights()
     ).applying(changes)
+    try nutrition.applyTrainingChanges(changes.filter { $0.key.kind.isNutrition })
     sessions = Dictionary(uniqueKeysWithValues: next.workouts.map { ($0.id, $0) })
     routines = Dictionary(uniqueKeysWithValues: next.templates.map { ($0.id, $0) })
     measurements = Dictionary(uniqueKeysWithValues: next.bodyWeights.map { ($0.id, $0) })
@@ -155,6 +159,11 @@ extension MemoryWorkoutRepository: NutritionRepository {
   public func deleteSupplementEntry(id: UUID) throws {
     try nutrition.deleteSupplementEntry(id: id)
   }
+  public func supplementPlans() throws -> [SupplementPlan] { try nutrition.supplementPlans() }
+  public func saveSupplementPlan(_ plan: SupplementPlan) throws {
+    try nutrition.saveSupplementPlan(plan)
+  }
+  public func deleteSupplementPlan(id: UUID) throws { try nutrition.deleteSupplementPlan(id: id) }
   public func favoriteFoodProducts() throws -> [FoodProduct] {
     try nutrition.favoriteFoodProducts()
   }

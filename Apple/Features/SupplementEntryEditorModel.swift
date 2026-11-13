@@ -75,7 +75,8 @@ import Observation
       name: name.trimmingCharacters(in: .whitespacesAndNewlines),
       amount: quantity, unit: unit,
       includesNutrition: includesNutrition, nutritionPerBasis: nutrition,
-      note: note.trimmingCharacters(in: .whitespacesAndNewlines))
+      note: note.trimmingCharacters(in: .whitespacesAndNewlines),
+      planID: original.planID, scheduledFor: original.scheduledFor)
     try result.validate()
     return result
   }

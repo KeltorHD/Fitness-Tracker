@@ -22,6 +22,8 @@ struct RemoteTrainingClient: TrainingRemoteServing {
     }
     components.queryItems = [
       URLQueryItem(name: "after", value: String(cursor)), URLQueryItem(name: "limit", value: "50"),
+      URLQueryItem(
+        name: "kinds", value: TrainingKind.allCases.map(\.rawValue).joined(separator: ",")),
     ]
     guard let url = components.url else { throw ServerError.invalidConfiguration }
     let page: TrainingPage = try decode(from: await send(URLRequest(url: url)))
@@ -49,11 +51,17 @@ struct RemoteTrainingClient: TrainingRemoteServing {
         throw ServerError.invalidResponse
       }
       throw error
+    } catch let error as ServerTrainingError
+      where ["invalid_training_mutation", "invalid_training_kind"].contains(error.code)
+      && mutations.contains(where: { $0.key.kind.isNutrition })
+    {
+      throw ServerTrainingError(code: "server_update_required", current: nil)
     }
     let changes: [TrainingChange] = try decode(from: response)
     guard changes.count == mutations.count else { throw ServerError.invalidResponse }
     for (mutation, change) in zip(mutations, changes) {
-      guard mutation.key == change.key, mutation.value == change.value,
+      guard mutation.key == change.key,
+        try mutation.value?.canonicalData() == change.value?.canonicalData(),
         change.revision >= mutation.baseRevision
       else { throw ServerError.invalidResponse }
     }

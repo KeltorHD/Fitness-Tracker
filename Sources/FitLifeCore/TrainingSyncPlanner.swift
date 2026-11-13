@@ -24,12 +24,14 @@ public struct TrainingConflict: Codable, Equatable, Identifiable, Sendable {
 
 public struct TrainingSyncState: Codable, Equatable, Sendable {
   public var version = 1
+  /// Missing in the previous journal feed: rewind only the cursor to discover nutrition history.
+  public var nutritionFeedVersion: Int? = 1
   public var cursor: Int64 = 0
   public var baselines: [TrainingBaseline] = []
   public var conflicts: [TrainingConflict] = []
   public init() {}
   public func validate() throws {
-    guard version == 1, cursor >= 0,
+    guard version == 1, nutritionFeedVersion == nil || nutritionFeedVersion == 1, cursor >= 0,
       Set(baselines.map(\.key)).count == baselines.count,
       Set(conflicts.map(\.id)).count == conflicts.count,
       baselines.allSatisfy({
@@ -105,7 +107,8 @@ public enum TrainingSyncPlanner {
   }
 
   public static func ordered(_ lhs: TrainingRecordKey, _ rhs: TrainingRecordKey) -> Bool {
-    let order: [TrainingKind: Int] = [.workout: 0, .template: 1, .bodyWeight: 2, .heartRate: 3]
+    let order = Dictionary(
+      uniqueKeysWithValues: TrainingKind.allCases.enumerated().map { ($0.element, $0.offset) })
     let left = order[lhs.kind, default: 0]
     let right = order[rhs.kind, default: 0]
     return left == right ? lhs.id.uuidString < rhs.id.uuidString : left < right
