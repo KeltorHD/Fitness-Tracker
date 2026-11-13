@@ -84,7 +84,7 @@ struct HealthDataView: View {
         }
       }
       if model.sources.selected == .miFitness {
-        Section("Mi Fitness") {
+        Section {
           if model.connection?.connected == true {
             Label(L10n.text("Подключено", locale: locale), systemImage: "checkmark.circle")
             Button(L10n.text("Отключить Mi Fitness", locale: locale), role: .destructive) {
@@ -107,6 +107,8 @@ struct HealthDataView: View {
               Text(L10n.text(message, locale: locale)).font(.footnote).foregroundStyle(.secondary)
             }
           }
+        } header: {
+          Text("Mi Fitness")
         } footer: {
           Text(
             L10n.text(
