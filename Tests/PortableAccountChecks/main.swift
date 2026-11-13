@@ -16,7 +16,12 @@ private struct FixtureCryptography: ServerCryptography {
 
 private actor FixtureCredentials: AccountTokenStoring {
   private var value: AccountTokens?
-  func load() -> AccountTokens? { value }
+  private let gate: BrowserGate?
+  init(gate: BrowserGate? = nil) { self.gate = gate }
+  func load() async -> AccountTokens? {
+    if let gate { await gate.block() }
+    return value
+  }
   func save(_ tokens: AccountTokens) { value = tokens }
   func clear() { value = nil }
 }
@@ -82,6 +87,23 @@ private final class AccountProtocol: URLProtocol {
         body = "{}"
       default: preconditionFailure("Unexpected fixture grant")
       }
+    } else if url.path == "/v1/health/providers/appleHealth/changes" {
+      precondition(request.value(forHTTPHeaderField: "Authorization") == "Bearer rotated")
+      let object =
+        try! JSONSerialization.jsonObject(with: request.httpBody ?? Data()) as! [String: Any]
+      precondition(object["observedAt"] is String)
+      let sleep = object["sleep"] as! [[String: Any]]
+      precondition(sleep.first?["start"] is String && sleep.first?["asleepSeconds"] == nil)
+      let ack: [String: Any] = [
+        "batchId": object["batchId"]!, "sequence": object["sequence"]!,
+        "buckets": [
+          [
+            "metric": "steps", "start": "2024-03-30T00:00:00Z", "end": "2024-03-31T00:00:00Z",
+            "timeZoneId": "UTC", "revision": 1, "excludedIds": [],
+          ] as [String: Any]
+        ],
+      ]
+      body = String(decoding: try! JSONSerialization.data(withJSONObject: ack), as: UTF8.self)
     } else if url.path == "/v1/health/providers/miFitness/data" {
       status = 403
       body = #"{"code":"health_not_connected"}"#
@@ -108,7 +130,63 @@ private final class AccountProtocol: URLProtocol {
   override func stopLoading() {}
 }
 
+@MainActor private final class HealthNamespace {
+  var value: String
+  init(_ value: String) { self.value = value }
+}
+
 @main struct AccountChecks {
+  @MainActor private static func checkHealthUploadScope(configuration: ServerConfiguration)
+    async throws
+  {
+    let gate = BrowserGate()
+    let credentials = FixtureCredentials(gate: gate)
+    let first = AccountProfile(
+      id: "00000000-0000-0000-0000-000000000001", name: "A", createdAt: Date(), logins: ["Email"])
+    let second = AccountProfile(
+      id: "00000000-0000-0000-0000-000000000002", name: "B", createdAt: Date(), logins: ["Email"])
+    func tokens(_ profile: AccountProfile) -> AccountTokens {
+      AccountTokens(
+        accessToken: "synthetic-token", refreshToken: "synthetic-refresh",
+        expiresAt: Date().addingTimeInterval(600), profile: profile)
+    }
+    await credentials.save(tokens(first))
+    let transport = URLSessionConfiguration.ephemeral
+    transport.protocolClasses = [AccountProtocol.self]
+    let urlSession = URLSession(configuration: transport)
+    defer { urlSession.invalidateAndCancel() }
+    let session = AccountSession(
+      configuration: configuration, http: ServerHTTPClient(session: urlSession),
+      credentials: credentials)
+    let prefix = String(repeating: "0", count: 64) + "-"
+    let namespace = HealthNamespace(prefix + first.id)
+    let remote = RemoteHealthSyncClient(
+      session: session, cryptography: FixtureCryptography(), account: { namespace.value })
+    let expected = namespace.value
+    let date = Date()
+    let batch = try HealthSyncBatch(
+      deviceID: UUID(), sequence: 1, timeZoneID: "UTC", observedAt: date,
+      quantities: [
+        HealthQuantity(
+          id: UUID(), metric: .bodyWeight, start: date, end: date, value: 71, sourceID: "source",
+          sourceName: "Source")
+      ])
+    let payload = try HealthSyncCoding.encoder().encode(batch)
+    let upload = Task { try await remote.apply(payload, account: expected) }
+    await gate.untilEntered()
+    namespace.value = prefix + second.id
+    await credentials.save(tokens(second))
+    await gate.release()
+    do {
+      _ = try await upload.value
+      preconditionFailure(
+        "Sent old account health data with restored credentials of another account")
+    } catch is CancellationError {}
+    print(
+      "Health upload tenant binding: account switch during credential restore sends no HTTP request."
+    )
+  }
+
   @MainActor static func main() async throws {
     let auth = URL(string: "https://auth.example.com/")!
     let api = URL(string: "https://api.example.com/")!
@@ -116,6 +194,7 @@ private final class AccountProtocol: URLProtocol {
     let personal = try ServerConfiguration(
       authenticationURL: URL(string: "https://personal-auth.example.com/")!, backendURL: api,
       callback: .customScheme("com.example.fitlife"))
+    try await checkHealthUploadScope(configuration: full)
     let attempt = FixtureCryptography().authorizationAttempt()
     precondition(full.oauthClientID != personal.oauthClientID)
     precondition(full.callbackURL.absoluteString == "https://auth.example.com/ios/oauth/callback")
@@ -210,6 +289,19 @@ private final class AccountProtocol: URLProtocol {
       } catch HealthDataError.notConnected {}
       let profileAfterXiaomiRevocation = try await session.profile()
       precondition(profileAfterXiaomiRevocation != nil)
+      let healthFixture = try Data(
+        contentsOf: URL(fileURLWithPath: "Tests/Server/Fixtures/health-sync-contract.json"))
+      let healthBatch = try HealthSyncCoding.decoder().decode(
+        HealthSyncBatch.self, from: healthFixture)
+      guard let healthProfile = try await session.profile() else {
+        preconditionFailure("Missing fixture profile")
+      }
+      let healthNamespace = String(repeating: "0", count: 64) + "-" + healthProfile.id.lowercased()
+      let healthRemote = RemoteHealthSyncClient(
+        session: session, cryptography: FixtureCryptography(), account: { healthNamespace })
+      let healthAcknowledgement = try await healthRemote.apply(
+        HealthSyncCoding.encoder().encode(healthBatch), account: healthNamespace)
+      precondition(healthAcknowledgement.buckets.first?.metric == .steps)
       try await session.logout()
       let remainingCredentials = await credentials.load()
       precondition(remainingCredentials == nil)

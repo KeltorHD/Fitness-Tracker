@@ -2,7 +2,10 @@ import AuthenticationServices
 import FitLifeCore
 import SwiftUI
 
-private enum HealthDataAction: Hashable { case read, connect, disconnect }
+private enum HealthDataAction: Hashable {
+  case read, connect, disconnect
+  case shareApple(Bool)
+}
 
 struct HealthDataView: View {
   @Environment(AppStore.self) private var store
@@ -37,6 +40,48 @@ struct HealthDataView: View {
         Text(
           L10n.text(
             "Показываем данные выбранного источника. Источники не суммируются.", locale: locale))
+      }
+      if model.sources.selected == .appleHealth, let sync = model.sources.appleSync {
+        Section {
+          Toggle(
+            L10n.text("Синхронизировать Apple Health с аккаунтом", locale: locale),
+            isOn: Binding(get: { sync.enabled }, set: { action = .shareApple($0) })
+          )
+          .disabled(!sync.available || sync.authorizing)
+          .accessibilityIdentifier("enableAppleHealthServerSync")
+          if sync.enabled {
+            Text(
+              L10n.text(
+                "На этом iPhone показываются локальные данные «Здоровья». Другие устройства видят сохранённую историю аккаунта.",
+                locale: locale)
+            ).font(.footnote).foregroundStyle(.secondary)
+          }
+          if sync.syncing || sync.authorizing {
+            ProgressView(L10n.text("Синхронизация…", locale: locale))
+          }
+          if let date = sync.lastSync {
+            LabeledContent(L10n.text("Последняя синхронизация", locale: locale)) {
+              Text(date, format: .dateTime.day().month().hour().minute())
+            }
+          }
+          if let message = sync.error {
+            Text(L10n.text(message, locale: locale)).foregroundStyle(.red)
+          }
+          if sync.enabled {
+            Button(L10n.text("Синхронизировать сейчас", locale: locale)) {
+              sync.requestSync()
+            }
+          }
+          if !sync.available {
+            Text(L10n.text("Откройте журнал аккаунта для синхронизации здоровья.", locale: locale))
+              .foregroundStyle(.secondary)
+          }
+        } footer: {
+          Text(
+            L10n.text(
+              "Сон, шаги, вес, доля жира, пульс, кислород, активная энергия и расстояние будут передаваться с этого iPhone на ваш сервер и доступны другим устройствам аккаунта. Первое чтение — за последние 30 дней, затем передаются изменения. Отключение останавливает передачу и сохраняет историю на сервере.",
+              locale: locale))
+        }
       }
       if model.sources.selected == .miFitness {
         Section("Mi Fitness") {
@@ -161,6 +206,7 @@ struct HealthDataView: View {
     .task(id: action) {
       guard let requested = action else { return }
       switch requested {
+      case .shareApple(let enabled): await model.sources.appleSync?.setEnabled(enabled)
       case .read: await model.load(calendar: calendar, explicit: true)
       case .disconnect: await model.disconnect()
       case .connect:

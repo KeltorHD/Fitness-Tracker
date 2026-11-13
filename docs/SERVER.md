@@ -543,6 +543,8 @@ dotnet ef migrations has-pending-model-changes --project Backend
 | Категория | Исходники | Что проверяется |
 | --- | --- | --- |
 | HTTP / fake HTTP | `Tests/Server/HealthConnectionTests.cs`, `HealthProviderTests.cs` | Реальный OpenIddict code/refresh с Xiaomi quirks, CSRF/state/owner binding, шифрование и отказ отзыва; нормализация health data, partial permissions, pagination, ошибки и JWT/introspection |
+| `HTTP` | `Tests/Server/AppleHealthSyncTests.cs` | HealthKit UUID/повторы/порядок, явные удаления и tombstones, нативные сводки и CAS, разные пояса/DST/отсутствующая полночь, очередь другого устройства, строгий JSON и настоящий Codable payload Swift |
+| `PostgreSQL` | `Tests/Server/AppleHealthSyncPostgresTests.cs` | Миграция с сохранением старых архивов, FK/cascade при удалении аккаунта, конкурентные повторы и delete/upsert на отдельных соединениях |
 | `PostgreSQL` | `Tests/Server/HealthConnectionPostgresTests.cs` | Новая миграция поверх прежних аккаунтов, owner FK/cascade и advisory locks с отменой ожидания |
 | `Unit` | `Tests/Server/BackupArchiveValidatorTests.cs` | только com.fitlife.archive v4, отказ для прежних форматов/версий, обязательные поля, неверные JSON-типы/UTF-8, точные границы байтов и количества записей, безопасные ошибки; без БД и HTTP |
 | `Unit` | `Tests/Server/TrainingValidationTests.cs` | 151 граничный сценарий C#-валидации тренировок, подходов/дропсетов/суперсетов, пауз, планов/вариаций, веса и пульса; ожидаемые результаты независимо сверяются с настоящим Swift Core |
@@ -613,6 +615,6 @@ Apple XCTest `AccountSessionTests` проверяют callback validation, од�
 
 ## Источники здоровья
 
-Настройка прямого Mi Fitness cloud, callback, разрешения, миграция Authentication и границы проверок описаны в [HEALTH_PROVIDERS.md](HEALTH_PROVIDERS.md).
+Настройка прямого Mi Fitness cloud и синхронизации Apple Health через iPhone, callback, разрешения, миграции Authentication/Backend и границы проверок описаны в [HEALTH_PROVIDERS.md](HEALTH_PROVIDERS.md).
 
-Проверка провайдеров здоровья (2026-11-13): полный `check-server.sh` после объединения с main — 582 xUnit-теста с одноразовым PostgreSQL 18, пять Python-проверок, locked restore, сборка без warnings/errors и форматирование. Два дополнительных случая partial grants прошли отдельным прогоном. Полный `check-linux.sh` — 323 Core-теста, проверка 151 verdict серверной валидации и переносимые сценарии аккаунтов/провайдеров/кэша. Реальный Xiaomi cloud и Apple SDK не проверялись; необходимые регистрации и проверки устройства описаны в [HEALTH_PROVIDERS.md](HEALTH_PROVIDERS.md).
+Проверка провайдеров и Apple Health server sync (2026-11-13): полный `check-server.sh` — 607 xUnit-тестов с одноразовым PostgreSQL 18, пять Python-проверок, locked restore, сборка без warnings/errors и форматирование. Проверены сохранность журнала при миграции, идемпотентность и конкурентная доставка, каскад удаления, нативные UUID, Swift JSON через HTTP, tombstones, условные сводки и разные часовые пояса. Полный `check-linux.sh` — 328 Core-тестов, проверка 151 verdict серверной валидации и переносимые сценарии аккаунтов/провайдеров/кэша/очереди HealthKit. Реальный Xiaomi cloud и Apple SDK не проверялись; необходимые регистрации и проверки устройства описаны в [HEALTH_PROVIDERS.md](HEALTH_PROVIDERS.md).

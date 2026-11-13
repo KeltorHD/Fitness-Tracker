@@ -265,3 +265,5 @@ git status --short
 ## Источники здоровья
 
 Настройка прямого Mi Fitness cloud, callback, разрешения, миграция Authentication и границы проверок описаны в [HEALTH_PROVIDERS.md](docs/HEALTH_PROVIDERS.md).
+
+При проверке Apple Health server sync включите передачу на одном iPhone, проверьте чтение на втором устройстве, явное удаление записи, offline/retry, переключение аккаунта и отмену при уходе в фон. Сверьте шаги/калории с HealthKit и проверьте разрешения отдельных типов. Linux-проверки используют fakes и не подтверждают SDK/runtime HealthKit.

@@ -67,7 +67,7 @@ import HealthKit
       quantities: quantities, sleep: records.filter { $0.start < end && $0.end > start })
   }
 
-  nonisolated private static func type(_ metric: HealthMetric) -> (
+  nonisolated static func type(_ metric: HealthMetric) -> (
     HKQuantityTypeIdentifier, HKUnit
   )? {
     switch metric {

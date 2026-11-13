@@ -13,6 +13,7 @@ final class HealthDataSources: HealthSleepReading, HealthChartsReading, HealthMe
   private(set) var revision = 0
   private(set) var cached = false
   private(set) var fetchedAt: Date?
+  let appleSync: AppleHealthSyncCoordinator?
   @ObservationIgnored var onSelectionChange: (@MainActor () -> Void)?
   @ObservationIgnored private let providers: [HealthProviderID: any HealthDataProviding]
   @ObservationIgnored private let appleSleep: any HealthSleepReading
@@ -29,8 +30,10 @@ final class HealthDataSources: HealthSleepReading, HealthChartsReading, HealthMe
     providers: [any HealthDataProviding], appleSleep: any HealthSleepReading,
     appleMetrics: any HealthMetricsReading, appleCharts: any HealthChartsReading,
     cache: any HealthDataCaching, defaults: UserDefaults = .standard,
-    account: @escaping @MainActor () -> String, now: @escaping @MainActor () -> Date = Date.init
+    account: @escaping @MainActor () -> String, now: @escaping @MainActor () -> Date = Date.init,
+    appleSync: AppleHealthSyncCoordinator? = nil
   ) {
+    self.appleSync = appleSync
     self.providers = Dictionary(uniqueKeysWithValues: providers.map { ($0.id, $0) })
     self.appleSleep = appleSleep
     self.appleMetrics = appleMetrics
@@ -45,6 +48,7 @@ final class HealthDataSources: HealthSleepReading, HealthChartsReading, HealthMe
       ?? .appleHealth
   }
 
+  var usesServerAppleHistory: Bool { appleSync?.available == true && appleSync?.enabled != true }
   var supportedMetrics: Set<HealthMetric> { providers[selected]?.supportedMetrics ?? [] }
   var accountID: String { account() }
   var preferences: UserDefaults { defaults }
@@ -56,6 +60,11 @@ final class HealthDataSources: HealthSleepReading, HealthChartsReading, HealthMe
     selected =
       HealthProviderID(rawValue: defaults.string(forKey: "healthProvider." + namespace) ?? "")
       ?? .appleHealth
+    invalidate()
+  }
+
+  func appleHistoryDidChange() {
+    guard selected == .appleHealth, appleSync?.available == true else { return }
     invalidate()
   }
 
@@ -170,7 +179,7 @@ final class HealthDataSources: HealthSleepReading, HealthChartsReading, HealthMe
 
   func authorize() async throws {
     refreshAccount()
-    if selected == .appleHealth {
+    if selected == .appleHealth && !usesServerAppleHistory {
       try await appleSleep.authorize()
     } else {
       try await authorize(metrics: [.sleep])
@@ -182,7 +191,7 @@ final class HealthDataSources: HealthSleepReading, HealthChartsReading, HealthMe
     let token = generation
     let scope = namespace
     let provider = selected
-    if selected == .appleHealth {
+    if selected == .appleHealth && !usesServerAppleHistory {
       let result = try await appleSleep.nights(endingOn: day, calendar: calendar)
       try check(token, account: scope, provider: provider)
       return result
@@ -201,7 +210,7 @@ final class HealthDataSources: HealthSleepReading, HealthChartsReading, HealthMe
 
   func requestChartAuthorization() async throws {
     refreshAccount()
-    if selected == .appleHealth {
+    if selected == .appleHealth && !usesServerAppleHistory {
       try await appleCharts.requestChartAuthorization()
     } else {
       try await authorize(metrics: [.steps, .heartRate])
@@ -213,7 +222,7 @@ final class HealthDataSources: HealthSleepReading, HealthChartsReading, HealthMe
     let token = generation
     let scope = namespace
     let provider = selected
-    if selected == .appleHealth {
+    if selected == .appleHealth && !usesServerAppleHistory {
       let result = try await appleCharts.chartSnapshot(day: day, calendar: calendar)
       try check(token, account: scope, provider: provider)
       return result
@@ -256,7 +265,8 @@ final class HealthDataSources: HealthSleepReading, HealthChartsReading, HealthMe
     return HealthChartSnapshot(
       day: window.day.start, steps: steps,
       heartRate: allRates.filter { $0.date >= window.day.start && $0.date <= window.day.end },
-      latestHeartRate: currentRates.last, heartRateSource: "Mi Fitness",
+      latestHeartRate: currentRates.last,
+      heartRateSource: provider == .miFitness ? "Mi Fitness" : "Apple Health",
       currentDayHeartRate: currentRates,
       fetchedAt: fetched, isCached: stale)
   }
@@ -275,7 +285,7 @@ final class HealthDataSources: HealthSleepReading, HealthChartsReading, HealthMe
 
   func requestReadAuthorization() async throws {
     refreshAccount()
-    if selected == .appleHealth {
+    if selected == .appleHealth && !usesServerAppleHistory {
       try await appleMetrics.requestReadAuthorization()
     } else {
       try await authorize(metrics: [.sleep, .steps, .heartRate])
@@ -283,7 +293,7 @@ final class HealthDataSources: HealthSleepReading, HealthChartsReading, HealthMe
   }
   func requestHeartRateAuthorization() async throws {
     refreshAccount()
-    if selected == .appleHealth {
+    if selected == .appleHealth && !usesServerAppleHistory {
       try await appleMetrics.requestHeartRateAuthorization()
     } else {
       try await authorize(metrics: [.heartRate])
@@ -294,7 +304,7 @@ final class HealthDataSources: HealthSleepReading, HealthChartsReading, HealthMe
     let token = generation
     let scope = namespace
     let provider = selected
-    if selected == .appleHealth {
+    if selected == .appleHealth && !usesServerAppleHistory {
       let result = try await appleMetrics.daySummary(for: day, calendar: calendar)
       try check(token, account: scope, provider: provider)
       return result
@@ -304,7 +314,7 @@ final class HealthDataSources: HealthSleepReading, HealthChartsReading, HealthMe
     else { throw TrainingError.invalidDate }
     let result = try await read(
       start: min(night.start, dayInterval.start), end: min(max(night.end, dayInterval.end), now()),
-      metrics: [.sleep, .steps, .heartRate], calendar: calendar)
+      metrics: [.sleep, .steps, .heartRate, .activeEnergy], calendar: calendar)
     let summary = try await Self.makeSummary(
       result, day: day, calendar: calendar, dayInterval: dayInterval)
     try check(token, account: scope, provider: provider)
@@ -321,7 +331,7 @@ final class HealthDataSources: HealthSleepReading, HealthChartsReading, HealthMe
     return HealthDaySummary(
       day: dayInterval.start,
       steps: value.total(.steps, during: dayInterval).flatMap(Int.init(exactly:)),
-      activeEnergyKCal: nil,
+      activeEnergyKCal: value.total(.activeEnergy, during: dayInterval),
       sleepSeconds: try value.nights(endingOn: day, count: 1, calendar: calendar).first?.asleep,
       latestHeartRate: latest.map { HeartRateReading(date: $0.start, beatsPerMinute: $0.value) },
       heartRateSource: latest?.sourceName,
@@ -333,7 +343,7 @@ final class HealthDataSources: HealthSleepReading, HealthChartsReading, HealthMe
     let token = generation
     let scope = namespace
     let provider = selected
-    if selected == .appleHealth {
+    if selected == .appleHealth && !usesServerAppleHistory {
       let result = try await appleMetrics.heartRate(for: workout)
       try check(token, account: scope, provider: provider)
       return result
@@ -344,7 +354,8 @@ final class HealthDataSources: HealthSleepReading, HealthChartsReading, HealthMe
     }
     if end == workout.startedAt {
       return try HeartRateRecording(
-        workoutID: workout.id, mode: .appleHealth, origin: .miFitnessCloud)
+        workoutID: workout.id, mode: .appleHealth,
+        origin: provider == .miFitness ? .miFitnessCloud : nil)
     }
     let value = try await snapshot(
       start: workout.startedAt, end: end, metrics: [.heartRate], calendar: .current)
@@ -372,6 +383,7 @@ final class HealthDataSources: HealthSleepReading, HealthChartsReading, HealthMe
       sampled.append(last)
     }
     return try HeartRateRecording(
-      workoutID: workout.id, mode: .appleHealth, readings: sampled, origin: .miFitnessCloud)
+      workoutID: workout.id, mode: .appleHealth, readings: sampled,
+      origin: value.provider == .miFitness ? .miFitnessCloud : nil)
   }
 }

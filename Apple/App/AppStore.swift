@@ -158,17 +158,34 @@ import WidgetKit
       healthCache = MemoryHealthDataCache()
     }
     let cryptography = AppleServerCryptography()
+    let appleProvider: any HealthDataProviding
+    let appleSync: AppleHealthSyncCoordinator?
+    if let accountSession, platformServicesEnabled {
+      let remote = RemoteHealthSyncClient(
+        session: accountSession, cryptography: cryptography, account: healthAccount)
+      let sync = AppleHealthSyncCoordinator(
+        reader: AppleHealthSyncReader(), remote: remote,
+        storage: HealthSyncStateStore(), defaults: defaults, account: healthAccount, now: now)
+      appleSync = sync
+      appleProvider = SyncedAppleHealthProvider(
+        local: AppleHealthDataProvider(), remote: remote, preferLocal: { sync.enabled })
+    } else {
+      appleSync = nil
+      appleProvider = AppleHealthDataProvider()
+    }
     self.healthData =
       healthData
       ?? HealthDataSources(
         providers: [
-          AppleHealthDataProvider(),
+          appleProvider,
           MiFitnessDataProvider(
             session: accountSession, cryptography: cryptography, account: healthAccount),
         ],
         appleSleep: HealthSleepReader(), appleMetrics: HealthMetricsReader(),
         appleCharts: HealthMetricsReader(),
-        cache: healthCache, defaults: defaults, account: healthAccount, now: now)
+        cache: healthCache, defaults: defaults, account: healthAccount, now: now,
+        appleSync: appleSync)
+    appleSync?.onUpdate = { [weak sources = self.healthData] in sources?.appleHistoryDidChange() }
     let watchPulse = AppleWatchHeartRateService { [weak watch] command in
       guard let watch else { throw TrainingError.invalidState }
       try watch.sendHeartRateCommand(command)
@@ -505,7 +522,10 @@ import WidgetKit
       let monitor = NWPathMonitor()
       monitor.pathUpdateHandler = { [weak self] path in
         guard path.status == .satisfied else { return }
-        Task { @MainActor in self?.account?.sync.requestSync(immediately: true) }
+        Task { @MainActor in
+          self?.account?.sync.requestSync(immediately: true)
+          self?.healthData.appleSync?.requestSync()
+        }
       }
       trainingNetworkMonitor = monitor
       monitor.start(queue: DispatchQueue(label: "FitLife.TrainingNetwork"))

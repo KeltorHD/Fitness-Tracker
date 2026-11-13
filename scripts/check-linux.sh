@@ -22,6 +22,12 @@ python3 scripts/validate-localizations.py
 python3 scripts/validate-branding.py
 swiftc_bin="$(dirname "$(command -v "$swift_bin")")/swiftc"
 bin_path="$("$swift_bin" build "${flags[@]}" --show-bin-path)"
+# Shared fixture exercises real Swift Codable output through the server HTTP tests.
+"$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
+  -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \
+  "$bin_path"/FitLifeCore.build/*.swift.o Tests/HealthSyncContractChecks/main.swift \
+  -o "$bin_path/health-sync-contract-checks"
+"$bin_path/health-sync-contract-checks" --verify Tests/Server/Fixtures/health-sync-contract.json
 # These presentation/data types use only Foundation/Observation. This is a real Swift 6
 # type check of this explicit subset; it does not compile SwiftUI or Apple integrations.
 "$swiftc_bin" -swift-version 6 -strict-concurrency=complete \
@@ -43,7 +49,9 @@ bin_path="$("$swift_bin" build "${flags[@]}" --show-bin-path)"
   Apple/Services/TrainingSyncStateStore.swift Apple/Services/TrainingSyncCoordinator.swift \
   Apple/Features/AccountTrainingViewModel.swift \
   Apple/Services/HealthDataCache.swift Apple/Services/MiFitnessDataProvider.swift \
-  Apple/Services/HealthDataSources.swift Apple/Features/HealthProviderPresentation.swift \
+  Apple/Services/HealthDataSources.swift Apple/Services/HealthSyncStateStore.swift \
+  Apple/Services/RemoteHealthSyncClient.swift Apple/Services/AppleHealthSyncCoordinator.swift \
+  Apple/Features/HealthProviderPresentation.swift \
   Apple/Features/HealthDataViewModel.swift
 echo 'Portable presentation/data subset: Swift 6 type check passed (no Apple SDK).'
 # Compile the actual isolated Debug HTTP fixture as Foundation code, without SwiftUI stand-ins.
@@ -57,7 +65,8 @@ echo 'Portable presentation/data subset: Swift 6 type check passed (no Apple SDK
   -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \
   "$bin_path"/FitLifeCore.build/*.swift.o \
   Apple/Services/ServerContracts.swift Apple/Services/ServerHTTPClient.swift \
-  Apple/Services/AccountSession.swift Apple/Services/RemoteTrainingClient.swift \
+  Apple/Services/AccountSession.swift Apple/Services/RemoteHealthSyncClient.swift \
+  Apple/Services/RemoteTrainingClient.swift \
   Apple/Services/TrainingSyncStateStore.swift Apple/Services/TrainingSyncCoordinator.swift \
   Apple/Features/AccountTrainingViewModel.swift Tests/PortableAccountChecks/main.swift \
   -o "$bin_path/portable-account-checks"
@@ -71,9 +80,20 @@ echo 'Portable presentation/data subset: Swift 6 type check passed (no Apple SDK
   Apple/Services/TrainingSyncStateStore.swift Apple/Services/TrainingSyncCoordinator.swift \
   Apple/Features/AccountTrainingViewModel.swift Apple/Services/HealthDataCache.swift \
   Apple/Services/MiFitnessDataProvider.swift Apple/Services/HealthDataSources.swift \
+  Apple/Services/HealthSyncStateStore.swift Apple/Services/RemoteHealthSyncClient.swift \
+  Apple/Services/AppleHealthSyncCoordinator.swift \
   Apple/Features/HealthProviderPresentation.swift Apple/Features/HealthDataViewModel.swift \
   Tests/PortableHealthProviderChecks/main.swift -o "$bin_path/portable-health-provider-checks"
 "$bin_path/portable-health-provider-checks"
+"$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
+  -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \
+  "$bin_path"/FitLifeCore.build/*.swift.o \
+  Apple/Services/ServerContracts.swift Apple/Services/ServerHTTPClient.swift \
+  Apple/Services/AccountSession.swift Apple/Services/HealthDataCache.swift \
+  Apple/Services/HealthSyncStateStore.swift Apple/Services/RemoteHealthSyncClient.swift \
+  Apple/Services/AppleHealthSyncCoordinator.swift Apple/Features/HealthProviderPresentation.swift \
+  Tests/PortableHealthSyncChecks/main.swift -o "$bin_path/portable-health-sync-checks"
+"$bin_path/portable-health-sync-checks"
 # Exercise the real foreground sync coordinator, durable state and scoped pulse files offline.
 "$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
   -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \

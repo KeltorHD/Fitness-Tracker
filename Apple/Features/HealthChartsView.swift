@@ -23,7 +23,9 @@ struct HealthChartsView: View {
           L10n.text(
             store.healthData.selected == .miFitness
               ? "Данные поступают из облака после синхронизации устройства с Mi Fitness. Для обновления нажмите «Обновить показатели»."
-              : "Показываем доступные источники: Apple Watch, AirPods, приложения браслетов и iPhone. Частота обновлений зависит от устройства и синхронизации с «Здоровьем».",
+              : store.healthData.usesServerAppleHistory
+                ? "История Apple Health загружается из аккаунта. Передачу с этого iPhone можно включить в источниках здоровья."
+                : "Показываем доступные источники: Apple Watch, AirPods, приложения браслетов и iPhone. Частота обновлений зависит от устройства и синхронизации с «Здоровьем».",
             locale: locale)
         ).font(.footnote).foregroundStyle(.secondary)
         NavigationLink(L10n.text("Источники здоровья", locale: locale)) {

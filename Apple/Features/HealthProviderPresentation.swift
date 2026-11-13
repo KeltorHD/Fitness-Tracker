@@ -41,6 +41,10 @@ extension HealthMetric {
 enum HealthProviderMessage {
   static func error(_ error: any Error) -> String {
     switch error {
+    case HealthSyncFailure.stateConflict:
+      "Не удалось согласовать очередь синхронизации с сервером. Данные сохранены на этом iPhone."
+    case HealthSyncFailure.limit:
+      "Достигнут лимит истории здоровья на сервере. Очередь сохранена на этом iPhone."
     case HealthDataError.notConnected:
       "Подключите Mi Fitness в источниках здоровья и откройте журнал аккаунта."
     case HealthDataError.permissionRequired:

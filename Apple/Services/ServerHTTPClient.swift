@@ -55,6 +55,8 @@ struct ServerHTTPClient: Sendable {
         failure.code.hasPrefix("health_") || failure.code.hasPrefix("invalid_health_")
       {
         switch failure.code {
+        case "health_sync_sequence_conflict": throw HealthSyncFailure.stateConflict
+        case "health_sync_limit": throw HealthSyncFailure.limit
         case "health_not_connected": throw HealthDataError.notConnected
         case "health_permission_required": throw HealthDataError.permissionRequired
         case "health_rate_limited": throw ServerError.rateLimited

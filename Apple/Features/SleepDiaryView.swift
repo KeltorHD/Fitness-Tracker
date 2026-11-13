@@ -47,7 +47,9 @@ struct SleepDiaryView: View {
             L10n.text(
               store.healthData.selected == .miFitness
                 ? "Продолжительность и записанные фазы сна из Mi Fitness."
-                : "Продолжительность и записанные фазы сна из «Здоровья», включая данные Apple Watch.",
+                : store.healthData.usesServerAppleHistory
+                  ? "Сон из истории Apple Health вашего аккаунта. Передачу с iPhone можно включить в источниках здоровья."
+                  : "Продолжительность и записанные фазы сна из «Здоровья», включая данные Apple Watch.",
               locale: locale)
           ).foregroundStyle(.secondary)
           Button(L10n.text("Подключить данные сна", locale: locale)) {

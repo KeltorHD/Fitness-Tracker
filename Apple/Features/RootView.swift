@@ -153,6 +153,15 @@ struct RootView: View {
       }
     }
     .task(
+      id:
+        "\(store.workspaceID)-\(phase)-\(calendar.timeZone.identifier)-\(store.healthData.appleSync?.revision ?? 0)-\(store.healthData.appleSync?.enabled == true)"
+    ) {
+      guard phase == .active, !store.isDemoMode, let sync = store.healthData.appleSync else {
+        return
+      }
+      await sync.observe(calendar: calendar)
+    }
+    .task(
       id: HealthChartsObservation(
         day: store.healthCharts.day, calendar: calendar,
         enabled: store.healthCharts.enabled && !store.isDemoMode, active: phase == .active,
