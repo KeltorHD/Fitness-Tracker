@@ -74,6 +74,8 @@ echo 'Portable presentation/data subset: Swift 6 type check passed (no Apple SDK
   "$bin_path"/FitLifeCore.build/*.swift.o Tests/TrainingContractChecks/main.swift \
   -o "$bin_path/training-contract-checks"
 "$bin_path/training-contract-checks" --verify Tests/Server/Fixtures/training-contract.json
+python3 Tests/TrainingContractChecks/validation-cases.py --verify
+"$bin_path/training-contract-checks" --verify-validation Tests/Server/Fixtures/training-validation.json
 # Exercise chart presentation with real Core data, without SwiftUI/Charts SDK stand-ins.
 "$swiftc_bin" -swift-version 6 -strict-concurrency=complete -parse-as-library \
   -module-cache-path "$SWIFTPM_MODULECACHE_OVERRIDE" -I "$bin_path/Modules" \

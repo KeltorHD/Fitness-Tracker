@@ -150,6 +150,27 @@ import Foundation
         TrainingPage.self, from: Data(contentsOf: path))
       try page.validate(after: 0)
       guard page.changes.compactMap(\.value) == values else { throw Failure.mismatch }
+    case "--verify-validation":
+      guard
+        let cases = try JSONSerialization.jsonObject(with: Data(contentsOf: path))
+          as? [[String: Any]]
+      else { throw Failure.mismatch }
+      for item in cases {
+        guard let name = item["name"] as? String, let expected = item["accepted"] as? Bool,
+          let kind = item["kind"], let value = item["value"]
+        else { throw Failure.mismatch }
+        let wire = try JSONSerialization.data(withJSONObject: ["kind": kind, "value": value])
+        let accepted: Bool
+        do {
+          _ = try TrainingCoding.decoder().decode(TrainingValue.self, from: wire)
+          accepted = true
+        } catch { accepted = false }
+        guard accepted == expected else {
+          print("Core validation mismatch: \(name), expected \(expected), actual \(accepted)")
+          throw Failure.mismatch
+        }
+      }
+      print("Actual Swift Core verified \(cases.count) validation verdicts.")
     default: throw Failure.mismatch
     }
     print(
