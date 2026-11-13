@@ -25,7 +25,7 @@
 - Swift Testing для Core, XCTest для Apple unit/UI tests.
 - URLSession — основной выбор для нового HTTP-клиента, если он понадобится.
 
-Серверный стек: **.NET 10 / C# 14**, ASP.NET Core, EF Core + Npgsql/PostgreSQL. Authentication использует ASP.NET Core Identity + OpenIddict; Backend проверяет JWT и пока отвечает только за резервные копии. Серверные тесты — xUnit, логирование — стандартный `ILogger<T>`, форматирование — `dotnet format`. Конфигурация и команды — в `docs/SERVER.md` и разделах 22/25.
+Серверный стек: **.NET 10 / C# 14**, ASP.NET Core, EF Core + Npgsql/PostgreSQL. Authentication использует ASP.NET Core Identity + OpenIddict; Backend проверяет JWT и хранит структурированный журнал тренировок, планы, вес и пульс с автоматической офлайн-синхронизацией; прежние архивы сохраняются для переноса и восстановления. Серверные тесты — xUnit, логирование — стандартный `ILogger<T>`, форматирование — `dotnet format`. Конфигурация и команды — в `docs/SERVER.md` и разделах 22/25.
 
 Не понижай deployment target до iOS 17: текущий проект использует API iOS 26. macOS 14 в Package.swift относится к независимому Core, а не к SwiftUI-приложению.
 
@@ -60,7 +60,7 @@ Directory.Build.props                # Общие .NET settings, nullable и war
 global.json                          # Версия .NET SDK и допустимый roll-forward
 Authentication/                      # Identity/OpenIddict, внешние входы, аккаунты и сессии
 Authentication/Migrations/           # EF Core migrations AuthDbContext
-Backend/                             # JWT-защищённый API резервных копий
+Backend/                             # JWT-защищённый журнал тренировок и сохранённые архивы
 Backend/Migrations/                  # EF Core migrations BackupDbContext
 ServerLogging/                       # Общая инфраструктура ILogger → ntfy, без доменных моделей и БД
 Tests/Server/                        # xUnit: HTTP/Identity/SQLite и отдельная категория PostgreSQL
@@ -101,7 +101,7 @@ Core не должен импортировать Apple-only фреймворк�
 
 MVVM — предпочтительный способ организации новой presentation logic. Существующие `@Observable @MainActor AppStore` и DI через initializer — рабочая основа. Не переписывай приложение и не вводи отдельный ViewModel для каждого маленького View без конкретной пользы.
 
-Authentication и Backend — самостоятельные исполняемые .NET-проекты без ссылок друг на друга и без общей рабочей БД. Authentication владеет пользователями, привязками и токенами; Backend — резервными копиями. Между ними используются OAuth/OIDC, discovery/JWKS и документированный внутренний HTTP-контракт. Не вводи дополнительные слои, общую библиотеку или универсальный repository без конкретной необходимости.
+Authentication и Backend — самостоятельные исполняемые .NET-проекты без ссылок друг на друга и без общей рабочей БД. Authentication владеет пользователями, привязками и токенами; Backend — структурированным журналом и сохранёнными архивами. Контракт и перенос — в docs/TRAINING_SYNC.md. Между ними используются OAuth/OIDC, discovery/JWKS и документированный внутренний HTTP-контракт. Не вводи дополнительные слои, общую библиотеку или универсальный repository без конкретной необходимости.
 
 ## 6. SwiftUI Views
 
@@ -164,7 +164,7 @@ Authentication и Backend — самостоятельные исполняем�
 - Используй текущий Codable-формат и стабильные UUID упражнений/тренировок. Не возвращай поддержку прежних архивов или отсутствующих обязательных полей шаблона без нового требования пользователя.
 - При изменении формата данных предусматривай явную миграцию; не удаляй store как способ исправить ошибку.
 - Для CloudKit-compatible StoredRecord сохраняй defaults полей и учитывай ограничения CloudKit. Не добавляй unique constraints без проверки совместимости.
-- Не запускай собственную дублирующую синхронизацию поверх SwiftData/CloudKit без обоснования.
+- При настроенном Backend используй серверную синхронизацию тренировок и открывай этот store без CloudKit. Не запускай оба механизма для одного журнала; аккаунты и пульс должны иметь изолированные локальные namespaces.
 - Не заменяй ошибку открытия пользовательского хранилища молчаливым переходом на пустую in-memory базу.
 
 ## 12. Правила данных тренировки
@@ -413,9 +413,9 @@ PNG/SVG в docs/previews — явно подписанные иллюстрат�
 - Для исходящего HTTP используй typed `HttpClient`/`IHttpClientFactory`, тайм-ауты, отмену и проверку статуса. Часы передавай через `TimeProvider`, если время влияет на проверяемое поведение.
 - Версии SDK задаёт `global.json`, общие свойства — `Directory.Build.props`, версии NuGet — текущие `.csproj`; сохраняй `packages.lock.json` и locked restore. Центрального `Directory.Packages.props`, AsyncFixer, NUnit/Moq и NLog здесь нет. Не добавляй их без отдельной причины и не отключай nullable, warnings as errors или NuGet audit ради прохождения проверок.
 
-### HTTP, аутентификация и резервные копии
+### HTTP, аутентификация и данные журнала
 
-- Сохраняй действующие явные маршруты `/connect/*`, `/callback/login/*`, `/v1/account`, `/v1/backups` и внутренний контракт удаления. Не заменяй их маршрутизацией по именам контроллеров/actions. Изменения DTO, status codes, scopes и OpenAPI согласовывай с iOS-клиентом и `docs/SERVER.md`.
+- Сохраняй действующие явные маршруты `/connect/*`, `/callback/login/*`, `/v1/account`, `/v1/training/changes`, `/v1/backups` и внутренний контракт удаления. Не заменяй их маршрутизацией по именам контроллеров/actions. Изменения DTO, status codes, scopes и OpenAPI согласовывай с iOS-клиентом и `docs/SERVER.md`.
 - Backend использует minimal API, Auth — MVC/Razor для браузерного входа и аккаунта. Сохраняй эти решения; API-контроллеры при необходимости используют `ControllerBase`, HTML/Razor-контроллеры — `Controller`.
 - Контроллеры должны быть тонкими: HTTP binding/атрибуты, маппинг входных и выходных моделей через Mapster, вызов сервиса и формирование HTTP-результата. Бизнес-проверки, Identity/OpenIddict orchestration, запросы EF Core, транзакции, отзыв сессий и удаление данных размещай в сервисах. Не переноси тело контроллера в сервис, возвращающий MVC `IActionResult`: сервис возвращает данные или типизированное решение, HTTP-преобразование остаётся на границе MVC.
 - Mapster настраивай явно через отдельный DI `TypeAdapterConfig`, без изменяемого `GlobalSettings`. Маппинг не должен подменять проверку прав, назначать user ID из входного DTO или публиковать EF entities, password hashes, SecurityStamp и ключевой материал. Сохраняй штатные payloads OpenIddict/WebAuthn.
