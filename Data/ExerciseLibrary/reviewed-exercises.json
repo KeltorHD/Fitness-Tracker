@@ -1427,5 +1427,23 @@
   "Clean_and_Jerk": {},
   "Double_Kettlebell_Jerk": {},
   "Double_Kettlebell_Push_Press": {},
-  "Double_Kettlebell_Snatch": {}
+  "Double_Kettlebell_Snatch": {},
+  "Cable_Preacher_Curl": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=mM1LTsy8cRg"
+  },
+  "Isometric_Neck_Exercise_-_Front_And_Back": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=PSwHo-kcfhc"
+  },
+  "Split_Squats": {
+    "equipment": "body only",
+    "primaryMuscles": [
+      "quadriceps"
+    ],
+    "secondaryMuscles": [
+      "calves",
+      "glutes",
+      "hamstrings"
+    ],
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=YW_efyr_RKc"
+  }
 }

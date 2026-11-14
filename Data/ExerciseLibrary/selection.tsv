@@ -197,7 +197,7 @@ Cable_Iron_Cross	Железный крест на верхних блоках	О
 Cable_Judo_Flip	Скручивание корпуса с нижним блоком через плечо	Силовые упражнения;strength;Дзюдо-бросок на блоке
 Cable_Lying_Triceps_Extension	Разгибание рук с прямой рукоятью нижнего блока лёжа на плоской скамье	Разгибание рук на нижнем блоке лёжа на плоской скамье;Французский жим на нижнем блоке лёжа;Cable Lying Triceps Extension
 Cable_One_Arm_Tricep_Extension	Разгибание одной руки на верхнем блоке обратным хватом	Разгибание одной руки в кроссовере;Cable One Arm Tricep Extension
-Cable_Preacher_Curl	Сгибание рук с блоком на скамье Скотта	Силовые упражнения;strength
+Cable_Preacher_Curl	Сгибание рук на скамье Скотта с прямой рукоятью нижнего блока	Сгибание рук на бицепс на скамье Скотта на нижнем блоке;Cable Preacher Curl
 Cable_Rear_Delt_Fly	Разведение рук на задние дельты стоя в кроссовере	Разведение рук на верхних блоках;Cable Rear Delt Fly
 Cable_Reverse_Crunch	Обратные скручивания лёжа с нижним блоком	Обратные скручивания с нижним блоком;Cable Reverse Crunch
 Cable_Rope_Rear-Delt_Rows	Тяга задних дельт со скакалкой	Силовые упражнения;strength
@@ -399,7 +399,7 @@ Inverted_Row_with_Straps	Горизонтальные подтягивания �
 Iron_Cross	Приседание с разведением гантелей	Железный крест;Железный крест с гантелями;Dumbbell Iron Cross;Iron Cross
 Iron_Crosses_stretch	Перекрёстные махи ногами лёжа на животе	Растяжка с поворотом таза лёжа на животе;Iron Crosses Stretch
 Isometric_Chest_Squeezes	Изометрическое сжатие ладоней перед грудью	Сведение ладоней с напряжением грудных мышц;Isometric Chest Squeezes
-Isometric_Neck_Exercise_-_Front_And_Back	Изометрическое упражнение для шеи — спереди и сзади	Силовые упражнения;strength
+Isometric_Neck_Exercise_-_Front_And_Back	Изометрическое сгибание и разгибание шеи с сопротивлением рук	Изометрическое упражнение для шеи спереди и сзади;Isometric Neck Exercise Front And Back
 Isometric_Neck_Exercise_-_Sides	Изометрическое напряжение шеи с сопротивлением сбоку	Сопротивление ладонью боковому наклону головы;Isometric Neck Exercise Sides
 Isometric_Wipers	Отжимания с переносом веса из стороны в сторону	Дворники в упоре лёжа;Isometric Wipers
 JM_Press	Жим JM со штангой лёжа на плоской скамье	JM-пресс со штангой;Жим с разгибанием рук лёжа;JM Press
@@ -751,7 +751,7 @@ Split_Clean	Взятие штанги на грудь в ножницы	Взят
 Split_Jerk	Толчок штанги в ножницы от груди	Толчок штанги в разножку;Split jerk;Сплит-рывок;Тяжёлая атлетика;olympic weightlifting
 Split_Jump	Прыжок из выпада без смены ног	Прыжки в разножке без смены ног;Split jump;Сплит-прыжок;Плиометрика;plyometrics
 Split_Snatch	Рывок штанги в ножницы	Рывок штанги в разножку;Split snatch;Сплит-рывок;Тяжёлая атлетика;olympic weightlifting
-Split_Squats	Сплит-приседания	Растяжка;stretching
+Split_Squats	Прыжки из выпада со сменой ног	Выпрыгивания из разножки со сменой ног;Split Squats
 Squat_Jerk	Толчок штанги в сед от груди	Толчок штанги с приёмом в глубокий присед;Squat jerk;Приседания с толчком;Силовые упражнения;strength
 Squat_with_Bands	Приседания со штангой на спине с резинками снизу	Приседания со штангой и резинками;Banded barbell squat;Приседания с лентами;Пауэрлифтинг;powerlifting
 Squat_with_Chains	Приседания со штангой на спине с цепями	Приседания со штангой и цепями;Barbell squat with chains;Приседания с цепями;Пауэрлифтинг;powerlifting

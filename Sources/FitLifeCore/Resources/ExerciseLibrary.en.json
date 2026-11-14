@@ -7878,8 +7878,8 @@
       "name": "Cable Preacher Curl",
       "englishName": "Cable Preacher Curl",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Сгибание рук на бицепс на скамье Скотта на нижнем блоке",
+        "Cable Preacher Curl"
       ],
       "group": "arms",
       "equipment": "cable",
@@ -7910,7 +7910,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "preacher-curl",
+        "title": "Preacher curl"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=mM1LTsy8cRg"
     },
     {
       "id": "fd2704e8-b929-5b31-b860-655063db88ea",
@@ -15446,8 +15451,8 @@
       "name": "Isometric Neck Exercise - Front And Back",
       "englishName": "Isometric Neck Exercise - Front And Back",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Изометрическое упражнение для шеи спереди и сзади",
+        "Isometric Neck Exercise Front And Back"
       ],
       "group": "shoulders",
       "equipment": "body only",
@@ -15471,7 +15476,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=PSwHo-kcfhc"
     },
     {
       "id": "ed54aecf-270b-5cfd-9c5b-d850b3e0f0d8",
@@ -19060,7 +19066,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "preacher-curl",
+        "title": "Preacher curl"
+      }
     },
     {
       "id": "7f4b878f-97f2-50eb-9888-9d49d9de3a32",
@@ -21029,7 +21039,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "preacher-curl",
+        "title": "Preacher curl"
+      }
     },
     {
       "id": "32378baa-8cf0-5eb1-a4d1-63edccee0bbc",
@@ -23965,7 +23979,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "preacher-curl",
+        "title": "Preacher curl"
+      }
     },
     {
       "id": "aa2d208d-40a1-5da0-9ffe-5949b4764685",
@@ -29179,7 +29197,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "split-jump",
+        "title": "Split squat jump"
+      }
     },
     {
       "id": "2bead154-b2c6-5142-92ab-87d4942dc659",
@@ -29233,19 +29255,19 @@
       "name": "Split Squats",
       "englishName": "Split Squats",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Выпрыгивания из разножки со сменой ног",
+        "Split Squats"
       ],
       "group": "legs",
-      "equipment": "unspecified",
+      "equipment": "body only",
       "level": "intermediate",
       "primaryMuscles": [
-        "hamstrings"
+        "quadriceps"
       ],
       "secondaryMuscles": [
         "calves",
         "glutes",
-        "quadriceps"
+        "hamstrings"
       ],
       "trainingRegions": [],
       "steps": [
@@ -29259,7 +29281,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "split-jump",
+        "title": "Split squat jump"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=YW_efyr_RKc"
     },
     {
       "id": "527e5309-14b6-59f6-af09-0c6976c00567",
@@ -32499,7 +32526,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "preacher-curl",
+        "title": "Preacher curl"
+      }
     },
     {
       "id": "cc683c27-9d19-53bb-ad2d-802575432c7b",

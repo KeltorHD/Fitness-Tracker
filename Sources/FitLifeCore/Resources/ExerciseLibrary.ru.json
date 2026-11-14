@@ -7601,11 +7601,11 @@
     {
       "id": "d78d2b30-d762-53db-b173-b79b7705a10f",
       "sourceID": "Cable_Preacher_Curl",
-      "name": "Сгибание рук с блоком на скамье Скотта",
+      "name": "Сгибание рук на скамье Скотта с прямой рукоятью нижнего блока",
       "englishName": "Cable Preacher Curl",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Сгибание рук на бицепс на скамье Скотта на нижнем блоке",
+        "Cable Preacher Curl"
       ],
       "group": "arms",
       "equipment": "cable",
@@ -7621,13 +7621,9 @@
         "bicepsShort"
       ],
       "steps": [
-        "Поместите скамейку скамьи Скотта примерно в 2 футах перед шкивом.",
-        "Прикрепите прямую штангу к нижнему шкиву.",
-        "Сядьте на скамью скамьи Скотта, крепко положив локоть и плечи на подставку для скамьи, и попросите кого-нибудь передать вам штангу с нижнего блока.",
-        "Возьмите перекладину и полностью вытяните руки на подушке скамьи скамьи Скотта. Это будет ваша исходная позиция.",
-        "Теперь начните переносить вес к плечам и сильно напрягайте бицепсы в верхней части движения. Выдохните, выполняя это движение. Также задержитесь на секунду вверху.",
-        "Теперь медленно опустите вес в исходное положение.",
-        "Повторите рекомендуемое количество повторений."
+        "Прикрепите прямую рукоять к нижнему блоку и поставьте перед ним скамью Скотта.",
+        "Сядьте, упритесь плечами в подушку и возьмитесь за рукоять ладонями вверх.",
+        "Согните руки, подтягивая рукоять к плечам, затем плавно опустите её."
       ],
       "images": [
         "Cable_Preacher_Curl/0.jpg",
@@ -7636,7 +7632,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "preacher-curl",
+        "title": "Сгибание рук на скамье Скотта"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=mM1LTsy8cRg"
     },
     {
       "id": "fd2704e8-b929-5b31-b860-655063db88ea",
@@ -14991,11 +14992,11 @@
     {
       "id": "fea2ef29-b75b-5272-a5c6-561a567b02b0",
       "sourceID": "Isometric_Neck_Exercise_-_Front_And_Back",
-      "name": "Изометрическое упражнение для шеи — спереди и сзади",
+      "name": "Изометрическое сгибание и разгибание шеи с сопротивлением рук",
       "englishName": "Isometric Neck Exercise - Front And Back",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Изометрическое упражнение для шеи спереди и сзади",
+        "Isometric Neck Exercise Front And Back"
       ],
       "group": "shoulders",
       "equipment": "body only",
@@ -15006,11 +15007,9 @@
       "secondaryMuscles": [],
       "trainingRegions": [],
       "steps": [
-        "Поместите голову и шею в нейтральное положение (нормальное положение, когда голова поднята вперед), положите обе руки на переднюю часть головы.",
-        "Теперь осторожно надавите вперед, сокращая мышцы шеи, но сопротивляясь любому движению головы. Начните с медленного напряжения и постепенно увеличивайте его. Продолжайте дышать нормально, выполняя это сокращение.",
-        "Удерживайте рекомендованное количество секунд.",
-        "Теперь медленно ослабьте напряжение.",
-        "Отдохните рекомендуемое время и повторите, положив руки на затылок."
+        "Держите голову прямо и приложите ладони ко лбу.",
+        "Мягко надавите головой на ладони, не допуская движения, и продолжайте спокойно дышать.",
+        "Плавно расслабьтесь, затем повторите, положив ладони на затылок."
       ],
       "images": [
         "Isometric_Neck_Exercise_-_Front_And_Back/0.jpg",
@@ -15019,7 +15018,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=PSwHo-kcfhc"
     },
     {
       "id": "ed54aecf-270b-5cfd-9c5b-d850b3e0f0d8",
@@ -18548,7 +18548,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "preacher-curl",
+        "title": "Сгибание рук на скамье Скотта"
+      }
     },
     {
       "id": "7f4b878f-97f2-50eb-9888-9d49d9de3a32",
@@ -20460,7 +20464,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "preacher-curl",
+        "title": "Сгибание рук на скамье Скотта"
+      }
     },
     {
       "id": "32378baa-8cf0-5eb1-a4d1-63edccee0bbc",
@@ -23298,7 +23306,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "preacher-curl",
+        "title": "Сгибание рук на скамье Скотта"
+      }
     },
     {
       "id": "aa2d208d-40a1-5da0-9ffe-5949b4764685",
@@ -28368,7 +28380,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "split-jump",
+        "title": "Прыжки из выпада"
+      }
     },
     {
       "id": "2bead154-b2c6-5142-92ab-87d4942dc659",
@@ -28416,29 +28432,28 @@
     {
       "id": "b3c86c50-812a-592f-8252-340000bad825",
       "sourceID": "Split_Squats",
-      "name": "Сплит-приседания",
+      "name": "Прыжки из выпада со сменой ног",
       "englishName": "Split Squats",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Выпрыгивания из разножки со сменой ног",
+        "Split Squats"
       ],
       "group": "legs",
-      "equipment": "unspecified",
+      "equipment": "body only",
       "level": "intermediate",
       "primaryMuscles": [
-        "Задняя поверхность бедра"
+        "Квадрицепс"
       ],
       "secondaryMuscles": [
         "Икроножные мышцы",
         "Ягодичные мышцы",
-        "Квадрицепс"
+        "Задняя поверхность бедра"
       ],
       "trainingRegions": [],
       "steps": [
-        "Находясь в положении стоя.",
-        "Прыгните в положение разведенных ног, поставив одну ногу вперед, а другую назад, сгибая при этом колени и слегка опуская бедра.",
-        "Когда вы спускаетесь, немедленно измените направление, вставайте и подпрыгивайте, меняя положение ног.",
-        "Повторите 5-10 раз на каждую ногу."
+        "Встаньте в положение выпада: одна нога впереди, другая сзади.",
+        "Выпрыгните вверх и поменяйте положение ног в воздухе.",
+        "Мягко приземлитесь в выпад и повторите движение, чередуя ноги."
       ],
       "images": [
         "Split_Squats/0.jpg",
@@ -28447,7 +28462,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "split-jump",
+        "title": "Прыжки из выпада"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=YW_efyr_RKc"
     },
     {
       "id": "527e5309-14b6-59f6-af09-0c6976c00567",
@@ -31592,7 +31612,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "preacher-curl",
+        "title": "Сгибание рук на скамье Скотта"
+      }
     },
     {
       "id": "cc683c27-9d19-53bb-ad2d-802575432c7b",

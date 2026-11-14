@@ -813,5 +813,24 @@
       "Two-Arm_Kettlebell_Jerk",
       "Double_Kettlebell_Jerk"
     ]
+  },
+  "preacher-curl": {
+    "ru": "Сгибание рук на скамье Скотта",
+    "en": "Preacher curl",
+    "members": [
+      "Cable_Preacher_Curl",
+      "Machine_Preacher_Curls",
+      "One_Arm_Dumbbell_Preacher_Curl",
+      "Two-Arm_Dumbbell_Preacher_Curl",
+      "Reverse_Barbell_Preacher_Curls"
+    ]
+  },
+  "split-jump": {
+    "ru": "Прыжки из выпада",
+    "en": "Split squat jump",
+    "members": [
+      "Split_Squats",
+      "Split_Jump"
+    ]
   }
 }
