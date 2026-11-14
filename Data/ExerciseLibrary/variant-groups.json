@@ -556,5 +556,13 @@
       "Decline_Smith_Press",
       "Smith_Machine_Decline_Press"
     ]
+  },
+  "zottman-curl": {
+    "ru": "Сгибания Зоттмана",
+    "en": "Zottman curl",
+    "members": [
+      "Zottman_Curl",
+      "Zottman_Preacher_Curl"
+    ]
   }
 }

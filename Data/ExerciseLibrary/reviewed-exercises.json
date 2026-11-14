@@ -1125,5 +1125,19 @@
   "Windmills": {},
   "Worlds_Greatest_Stretch": {},
   "Wrist_Circles": {},
-  "Wrist_Roller": {}
+  "Wrist_Roller": {},
+  "Wrist_Rotations_with_Straight_Bar": {},
+  "Yoke_Walk": {},
+  "Zercher_Squats": {
+    "englishSteps": [
+      "Position the bar in the crooks of your elbows and lift it from the rack.",
+      "Bend your knees and hips to descend into a controlled squat, keeping the bar secure.",
+      "Drive through your feet and extend your legs to stand up."
+    ],
+    "instructionSourceURL": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4262933/",
+    "instructionCorrectionReason": "The source incorrectly claims that any knee travel beyond the toes makes the squat harmful.",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=_fXBhqQWj64"
+  },
+  "Zottman_Curl": {},
+  "Zottman_Preacher_Curl": {}
 }

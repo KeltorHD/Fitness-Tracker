@@ -566,6 +566,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     ["Sumo_Deadlift_with_Bands", "Reverse_Band_Sumo_Deadlift", "Sumo_Deadlift_with_Chains"],
     ["Supine_One-Arm_Overhead_Throw", "Supine_Two-Arm_Overhead_Throw"],
     ["One-Arm_Kettlebell_Row", "Two-Arm_Kettlebell_Row"],
+    ["Zottman_Curl", "Zottman_Preacher_Curl"],
     [
       "Standing_Alternating_Dumbbell_Press", "Standing_Palm-In_One-Arm_Dumbbell_Press",
       "Standing_Palms-In_Dumbbell_Press",
