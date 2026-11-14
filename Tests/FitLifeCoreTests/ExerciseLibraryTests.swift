@@ -343,10 +343,20 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     ExerciseLibrary.entries.first { $0.sourceID == "Barbell_Deadlift" })
   let variants = ExerciseLibrary.variants(for: entry.id, language: .russian)
   #expect(Set(variants.map(\.sourceID)) == [
-    "Barbell_Deadlift", "Deadlift_with_Bands", "Deadlift_with_Chains",
+    "Barbell_Deadlift", "Deadlift_with_Bands", "Deadlift_with_Chains", "Deficit_Deadlift",
   ])
-  #expect(Set(variants.map(\.id)).count == 3)
+  #expect(Set(variants.map(\.id)).count == 4)
   #expect(ExerciseLibrary.search("Становая тяга").contains { $0.id == entry.id })
+}
+
+@Test func alternatingKettlebellCleansStayIndividuallyIdentifiable() throws {
+  let entry = try #require(
+    ExerciseLibrary.entries.first { $0.sourceID == "Alternating_Hang_Clean" })
+  let variants = ExerciseLibrary.variants(for: entry.id, language: .russian)
+  #expect(Set(variants.map(\.sourceID)) == [
+    "Alternating_Hang_Clean", "Double_Kettlebell_Alternating_Hang_Clean",
+  ])
+  #expect(Set(variants.map(\.id)).count == 2)
 }
 
 @Test func multipleEquipmentFiltersUseUnionAndIntersectWithMuscleAndSearch() {

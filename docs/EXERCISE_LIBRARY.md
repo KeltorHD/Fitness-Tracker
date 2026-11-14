@@ -64,6 +64,8 @@ python3 scripts/import-exercise-library.py --download-only
 
 Уточнены 12 карточек от `Crucifix` до `Decline_Reverse_Crunch` и классическая становая тяга. Её варианты с петлями и цепями объединены в группу; исходный UUID классической тяги и её прежнее название в поиске сохранены. Отжимания с ногами на возвышении и скручивания с ногами на фитболе получили правильный вид оборудования. Техника сверена с [описанием становой тяги](https://www.nasm.org/resource-center/exercise-library/barbell-deadlift) и [отжиманий](https://www.nasm.org/resource-center/exercise-library/decline-push-up); видео найдены по названиям и описаниям без просмотра. У `Decline_EZ_Bar_Triceps_Extension` и `Decline_Close-Grip_Bench_To_Skull_Crusher` исходные фотографии показывают гантели вместо указанного в инструкции грифа; карточки оставлены для исправления фотографий. Фото `Cuban_Press` не показывает финальный жим над головой.
 
+Проверены семь карточек от `Decline_Smith_Press` до `Dumbbell_Alternate_Bicep_Curl`. К группе классической тяги добавлена тяга с возвышения; две записи попеременного взятия гирь на грудь сгруппированы с сохранением отдельных UUID. Вторая карточка уточняет одновременную смену рук согласно [исходной инструкции](https://fitnesstracker.ca/resources/exercises/double-kettlebell-alternating-hang-clean/). Сгибание с отведением локтей также снабжено названием «подъём Жиронды», сверенным с [описанием упражнения](https://bestbodyblog.com/podyom-shtangi-na-bitseps-8-variantov-bazovogo-uprazhneniya-na-ruki/). Ролики подобраны по текстовому описанию или названию, без просмотра. Остальные упражнения этого участка требуют уточнения фотографий и техники.
+
 ## Проверки и статусы
 
 - **Implemented:** библиотека RU/EN, локальные фотографии, поиск, фильтры и SwiftUI-карточки.

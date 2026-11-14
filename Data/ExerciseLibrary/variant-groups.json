@@ -95,7 +95,16 @@
     "members": [
       "Barbell_Deadlift",
       "Deadlift_with_Bands",
-      "Deadlift_with_Chains"
+      "Deadlift_with_Chains",
+      "Deficit_Deadlift"
+    ]
+  },
+  "alternating-kettlebell-clean": {
+    "ru": "Попеременное взятие двух гирь на грудь",
+    "en": "Alternating double kettlebell clean",
+    "members": [
+      "Alternating_Hang_Clean",
+      "Double_Kettlebell_Alternating_Hang_Clean"
     ]
   }
 }

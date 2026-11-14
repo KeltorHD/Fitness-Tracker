@@ -255,5 +255,20 @@
     "equipment": "body only",
     "techniqueVideoURL": "https://www.youtube.com/watch?v=DBz85WuXqMk"
   },
-  "Decline_Reverse_Crunch": {}
+  "Decline_Reverse_Crunch": {},
+  "Decline_Smith_Press": {},
+  "Deficit_Deadlift": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=Z3VwAO2_H-c"
+  },
+  "Dip_Machine": {},
+  "Double_Kettlebell_Alternating_Hang_Clean": {},
+  "Double_Kettlebell_Windmill": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=TOkKFoo6XjI"
+  },
+  "Drag_Curl": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=6KdYexgsY0E"
+  },
+  "Dumbbell_Alternate_Bicep_Curl": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=O8QTrvGX3OU"
+  }
 }

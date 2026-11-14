@@ -4185,7 +4185,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "alternating-kettlebell-clean",
+        "title": "Alternating double kettlebell clean"
+      }
     },
     {
       "id": "94cb04c4-cf3a-54aa-998b-8cffd8316eea",
@@ -10059,8 +10063,8 @@
       "name": "Decline Smith Press",
       "englishName": "Decline Smith Press",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Жим в Смите вниз головой",
+        "Decline Smith Press"
       ],
       "group": "chest",
       "equipment": "machine",
@@ -10097,8 +10101,8 @@
       "name": "Deficit Deadlift",
       "englishName": "Deficit Deadlift",
       "aliases": [
-        "Пауэрлифтинг",
-        "powerlifting"
+        "Становая тяга с дефицитом",
+        "Deficit Deadlift"
       ],
       "group": "back",
       "equipment": "barbell",
@@ -10127,7 +10131,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "conventional-barbell-deadlift",
+        "title": "Conventional barbell deadlift"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=Z3VwAO2_H-c"
     },
     {
       "id": "dc8727b8-3171-55c8-9f6b-89a7c6fbb8a8",
@@ -10173,8 +10182,8 @@
       "name": "Dip Machine",
       "englishName": "Dip Machine",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Разгибание рук в тренажёре для отжиманий",
+        "Dip Machine"
       ],
       "group": "arms",
       "equipment": "machine",
@@ -10245,8 +10254,8 @@
       "name": "Double Kettlebell Alternating Hang Clean",
       "englishName": "Double Kettlebell Alternating Hang Clean",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Взятие двух гирь на грудь из виса со сменой рук",
+        "Double Kettlebell Alternating Hang Clean"
       ],
       "group": "legs",
       "equipment": "kettlebells",
@@ -10276,7 +10285,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "alternating-kettlebell-clean",
+        "title": "Alternating double kettlebell clean"
+      }
     },
     {
       "id": "01f8c4fb-3269-56f5-970b-b2573f4c2133",
@@ -10393,8 +10406,8 @@
       "name": "Double Kettlebell Windmill",
       "englishName": "Double Kettlebell Windmill",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Наклон с одной гирей над головой и подъёмом второй с пола",
+        "Double Kettlebell Windmill"
       ],
       "group": "core",
       "equipment": "kettlebells",
@@ -10424,7 +10437,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=TOkKFoo6XjI"
     },
     {
       "id": "f6f7773b-7816-5688-ad02-1d12c087ffdc",
@@ -10505,8 +10519,9 @@
       "name": "Drag Curl",
       "englishName": "Drag Curl",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подъём Жиронды",
+        "Подъём штанги на бицепс с протяжкой вдоль корпуса",
+        "Drag Curl"
       ],
       "group": "arms",
       "equipment": "barbell",
@@ -10531,7 +10546,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=6KdYexgsY0E"
     },
     {
       "id": "a8557c21-6a5e-5bbd-b503-202b4ef4cf31",
@@ -10573,8 +10589,8 @@
       "name": "Dumbbell Alternate Bicep Curl",
       "englishName": "Dumbbell Alternate Bicep Curl",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Попеременный подъём гантелей на бицепс с поворотом кисти",
+        "Dumbbell Alternate Bicep Curl"
       ],
       "group": "arms",
       "equipment": "dumbbell",
@@ -10603,7 +10619,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=O8QTrvGX3OU"
     },
     {
       "id": "60266d34-74db-53fe-81be-997042596420",
