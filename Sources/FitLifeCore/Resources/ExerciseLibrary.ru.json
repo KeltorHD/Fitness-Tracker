@@ -14387,11 +14387,13 @@
     {
       "id": "7eb60d56-6e63-52ff-9a00-04f9ed0dbd7b",
       "sourceID": "Iron_Cross",
-      "name": "Железный Крест",
+      "name": "Приседание с разведением гантелей",
       "englishName": "Iron Cross",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Железный крест",
+        "Железный крест с гантелями",
+        "Dumbbell Iron Cross",
+        "Iron Cross"
       ],
       "group": "shoulders",
       "equipment": "dumbbell",
@@ -14408,15 +14410,20 @@
         "Трапециевидные мышцы"
       ],
       "trainingRegions": [],
-      "steps": [],
+      "steps": [
+        "Встаньте с гантелями и разведите руки в стороны примерно до уровня плеч.",
+        "Опуститесь в приседание, одновременно сводя прямые руки перед собой.",
+        "Выпрямите ноги и одновременно разведите руки в стороны, возвращаясь в исходное положение."
+      ],
       "images": [
         "Iron_Cross/0.jpg",
         "Iron_Cross/1.jpg"
       ],
-      "techniqueUnavailable": true,
+      "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=VsGuw0SwSeY"
     },
     {
       "id": "3a147439-81f7-5d6d-83c2-4bd085d3ea87",

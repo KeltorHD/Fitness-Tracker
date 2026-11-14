@@ -14836,8 +14836,10 @@
       "name": "Iron Cross",
       "englishName": "Iron Cross",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Железный крест",
+        "Железный крест с гантелями",
+        "Dumbbell Iron Cross",
+        "Iron Cross"
       ],
       "group": "shoulders",
       "equipment": "dumbbell",
@@ -14854,15 +14856,20 @@
         "traps"
       ],
       "trainingRegions": [],
-      "steps": [],
+      "steps": [
+        "Stand with a dumbbell in each hand and extend your arms out to the sides at shoulder height.",
+        "Lower into a squat while bringing your straight arms together in front of you.",
+        "Stand up while opening your arms back out to the sides."
+      ],
       "images": [
         "Iron_Cross/0.jpg",
         "Iron_Cross/1.jpg"
       ],
-      "techniqueUnavailable": true,
+      "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=VsGuw0SwSeY"
     },
     {
       "id": "3a147439-81f7-5d6d-83c2-4bd085d3ea87",

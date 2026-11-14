@@ -15,6 +15,7 @@ document = json.loads((root / 'Sources/FitLifeCore/Resources/ExerciseLibrary.ru.
 english_resource = root / 'Sources/FitLifeCore/Resources/ExerciseLibrary.en.json'
 english = json.loads(english_resource.read_text())
 source = {item['id']: item for item in json.loads((vendor / 'exercises.selected.json').read_text())}
+reviewed = json.loads((root / 'Data/ExerciseLibrary/reviewed-exercises.json').read_text())
 assert hashlib.sha256((vendor / 'exercises.selected.json').read_bytes()).hexdigest() == manifest['selectedDataSHA256']
 assert hashlib.sha256((vendor / 'LICENSE.md').read_bytes()).hexdigest() == manifest['licenseSHA256']
 assert document['source']['revision'] == manifest['revision']
@@ -27,10 +28,15 @@ for ru, en in zip(document['entries'], english['entries']):
     assert ru['id'] == en['id'] and ru['images'] == en['images']
     assert ru['trainingRegions'] == en['trainingRegions']
     assert (ru.get('variantGroup') or {}).get('id') == (en.get('variantGroup') or {}).get('id')
-    assert en['name'] == original['name'] and en['steps'] == [s for s in original['instructions'] if s.strip()]
+    authored = reviewed.get(en['sourceID'], {}).get('englishSteps')
+    assert en['name'] == original['name']
+    assert en['steps'] == (authored if authored is not None else [s for s in original['instructions'] if s.strip()])
+    if authored is not None:
+        assert not original['instructions'] and len(authored) >= 3
+        assert re.fullmatch(r'https://[^\s]+', reviewed[en['sourceID']]['instructionSourceURL'])
 assert len(manifest['images']) == 1746
 assert len([entry for entry in document['entries'] if entry['imagesUnavailable']]) == 3
-assert len([entry for entry in document['entries'] if entry['techniqueUnavailable']]) == 5
+assert len([entry for entry in document['entries'] if entry['techniqueUnavailable']]) == 4
 generated = json.loads((root / 'Data/ExerciseLibrary/generated-media.json').read_text())
 generated_provenance = json.loads((root / 'Data/ExerciseLibrary/generated-media.provenance.json').read_text())
 generated_files = {item['path'] for entry in generated_provenance['entries'] for item in entry['files']}
@@ -67,7 +73,8 @@ for index, entry in enumerate(document['entries']):
     assert entry['images'] == source[entry['sourceID']]['images']
     assert entry['englishName'] == source[entry['sourceID']]['name']
     assert re.search('[А-Яа-яЁё]', entry['name'])
-    assert bool(entry['steps']) == bool(source[entry['sourceID']]['instructions'])
+    assert bool(entry['steps']) == bool(source[entry['sourceID']]['instructions'] or reviewed.get(entry['sourceID'], {}).get('englishSteps'))
+    assert entry['techniqueUnavailable'] == (not bool(entry['steps']))
     assert not entry['steps'] or len(entry['steps']) >= 3
     assert entry['generatedMedia'] == generated.get(entry['sourceID'])
     assert all(re.search('[А-Яа-яЁё]', step) for step in entry['steps'])

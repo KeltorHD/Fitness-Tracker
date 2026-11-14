@@ -119,8 +119,21 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     ])
   #expect(
     Set(ExerciseLibrary.entries.filter { $0.techniqueUnavailable == true }.map(\.sourceID)) == [
-      "Iron_Cross", "One-Arm_Kettlebell_Swings", "Push_Press", "Side_Bridge", "Side_Jackknife",
+      "One-Arm_Kettlebell_Swings", "Push_Press", "Side_Bridge", "Side_Jackknife",
     ])
+}
+
+@Test func ironCrossUsesUserSelectedNameAndLocallyAuthoredTechnique() throws {
+  let russian = try #require(
+    ExerciseLibrary.entries(language: .russian).first { $0.sourceID == "Iron_Cross" })
+  let english = try #require(
+    ExerciseLibrary.entries(language: .english).first { $0.sourceID == "Iron_Cross" })
+  #expect(russian.id == english.id)
+  #expect(russian.name == "Приседание с разведением гантелей")
+  #expect(ExerciseLibrary.search("Железный крест").contains { $0.id == russian.id })
+  #expect(russian.steps.count >= 3 && english.steps.count >= 3)
+  #expect(russian.techniqueUnavailable == false && english.techniqueUnavailable == false)
+  #expect(russian.equipment == .dumbbell && russian.images.count == 2)
 }
 
 @Test func originalLibraryWithoutOptionalMetadataStillDecodes() throws {

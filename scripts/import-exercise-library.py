@@ -121,7 +121,12 @@ def generate():
         assert all(muscle in MUSCLES for muscle in secondary_muscles), source_id
         assert 0 < len(name) <= 80 and re.search('[А-Яа-яЁё]', name)
         steps = translations[source_id]
-        assert bool(steps) == bool(item['instructions']), source_id
+        authored_english_steps = reviewed.get(source_id, {}).get('englishSteps')
+        if authored_english_steps is not None:
+            assert not item['instructions'] and len(authored_english_steps) >= 3, source_id
+            assert all(isinstance(step, str) and len(step.strip()) >= 5 for step in authored_english_steps), source_id
+            assert re.fullmatch(r'https://[^\s]+', reviewed[source_id].get('instructionSourceURL', '')), source_id
+        assert bool(steps) == bool(item['instructions'] or authored_english_steps), source_id
         assert not steps or len(steps) >= 3, source_id
         assert all(len(s) >= 5 and re.search('[А-Яа-яЁё]', s) for s in steps), source_id
         stable_id = LEGACY_IDS.get(source_id) or str(uuid.uuid5(uuid.NAMESPACE_URL, 'https://github.com/yuhonas/free-exercise-db/' + source_id))
@@ -134,7 +139,7 @@ def generate():
                         'secondaryMuscles': [MUSCLES[m] for m in secondary_muscles],
                         'trainingRegions': regions.get(source_id, []),
                         'steps': steps, 'images': item['images'],
-                        'techniqueUnavailable': not bool(item['instructions']),
+                        'techniqueUnavailable': not bool(steps),
                         'imagesUnavailable': not bool(item['images']),
                         'generatedMedia': generated.get(source_id),
                         'translationAutomatic': source_id in automatic and source_id not in reviewed,
@@ -156,7 +161,8 @@ def generate():
             **({'variantGroup': {'id': group_by_member[entry['sourceID']],
                                  'title': variant_groups[group_by_member[entry['sourceID']]]['en']}}
                if entry['sourceID'] in group_by_member else {}),
-            'steps': [step for step in item['instructions'] if step.strip()],
+            'steps': reviewed.get(entry['sourceID'], {}).get('englishSteps',
+                      [step for step in item['instructions'] if step.strip()]),
             'translationAutomatic': False})
     russian = json.loads(RESOURCE.read_text())
     write_json(ENGLISH_RESOURCE, {**russian, 'locale': 'en', 'entries': english_entries})
