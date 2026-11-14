@@ -116,7 +116,7 @@ watchOS 10+ и три режима будильника (2026-11-10) — **Imple
 | project.yml / Info / entitlements / assets | Да | Структура/ресурсы проверяются скриптом | Да, XcodeGen + actool + signing | Да для capabilities |
 | setup/check scripts и Linux CI | Да | Локальный check script; remote CI ещё не запускался | setup-macos.sh ещё не запускался на Mac | Нет |
 | WorkoutLiveState / idempotent Live Actions | Да | Да, 8 новых тестов | UI отдельно | Нет |
-| Exercise Library: 876 записей RU/EN, поиск, фильтры; 774 автоматических перевода отмечены | Да | Да, 8 новых тестов | UI отдельно | Нет |
+| Exercise Library: 879 записей RU/EN, поиск, фильтры и группы вариантов; редакционная проверка продолжается | Да | Core и проверка ресурсов на Linux | UI отдельно | Нет |
 | Локальные фото (1746 JPEG), 11 готовых ИИ-анимаций, SwiftUI-карточки; генерация остальных остановлена | Да | Hashes и структура — да; Apple UI — нет | Да, folder resources, листание, пауза/Reduce Motion/retry анимации, отсутствие исходных материалов, добавление | Обычный signing |
 | Иллюстративные PNG/SVG-макеты | Да | Отрендерены и просмотрены | Не заменяют проверку SwiftUI | Нет |
 | TrainingJournal: недельная лента, календарь, ЛР; повтор с новыми ID | Да | Да, 7 новых тестов | UI отдельно | Нет |

@@ -1,6 +1,6 @@
 import Foundation
 
-/// Stable IDs are the original free-exercise-db muscle names, not localized display strings.
+/// Stable IDs are source or FitLife muscle names, not localized display strings.
 public enum ExerciseMuscle: String, Codable, CaseIterable, Sendable {
   case chest
   case lats
@@ -8,6 +8,9 @@ public enum ExerciseMuscle: String, Codable, CaseIterable, Sendable {
   case lowerBack = "lower back"
   case traps
   case quadriceps, hamstrings, glutes, calves, abductors, adductors
+  case tibialisAnterior = "tibialis anterior"
+  case hipFlexors = "hip flexors"
+  case feet
   case shoulders, neck, biceps, triceps, forearms, abdominals
 
   public var title: String {
@@ -20,7 +23,10 @@ public enum ExerciseMuscle: String, Codable, CaseIterable, Sendable {
     case .quadriceps: "Квадрицепс"
     case .hamstrings: "Задняя поверхность бедра"
     case .glutes: "Ягодичные мышцы"
-    case .calves: "Мышцы голени"
+    case .calves: "Икроножные мышцы"
+    case .tibialisAnterior: "Передняя большеберцовая мышца"
+    case .hipFlexors: "Сгибатели бедра"
+    case .feet: "Мышцы стопы"
     case .abductors: "Отводящие мышцы бедра"
     case .adductors: "Приводящие мышцы бедра"
     case .shoulders: "Мышцы плечевого сустава"
@@ -36,7 +42,10 @@ public enum ExerciseMuscle: String, Codable, CaseIterable, Sendable {
     switch self {
     case .chest: .chest
     case .lats, .middleBack, .lowerBack, .traps: .back
-    case .quadriceps, .hamstrings, .glutes, .calves, .abductors, .adductors: .legs
+    case .quadriceps, .hamstrings, .glutes, .calves, .tibialisAnterior, .hipFlexors, .feet,
+      .abductors,
+      .adductors:
+      .legs
     case .shoulders, .neck: .shoulders
     case .biceps, .triceps, .forearms: .arms
     case .abdominals: .core
@@ -51,7 +60,7 @@ public enum ExerciseMuscle: String, Codable, CaseIterable, Sendable {
     var names = Dictionary(
       uniqueKeysWithValues: allCases.flatMap { [($0.rawValue, $0), ($0.title, $0)] })
     names["Дельтовидные мышцы"] = .shoulders
-    names["Икроножные мышцы"] = .calves
+    names["Мышцы голени"] = .calves
     return names
   }()
 

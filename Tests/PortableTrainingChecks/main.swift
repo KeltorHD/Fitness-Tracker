@@ -83,7 +83,8 @@ private actor RemoteJournal: TrainingRemoteServing {
   func snapshot() throws -> TrainingSnapshot {
     try TrainingSnapshot(
       workouts: roots.workouts(), templates: roots.templates(), bodyWeights: roots.bodyWeights(),
-      heartRate: Array(pulse.values), nutrition: roots.nutritionSnapshot())
+      heartRate: Array(pulse.values), nutrition: roots.nutritionSnapshot(),
+      exerciseLinks: roots.exerciseLinks())
   }
   func value(_ key: TrainingRecordKey) throws -> TrainingValue? {
     switch key.kind {
@@ -92,6 +93,8 @@ private actor RemoteJournal: TrainingRemoteServing {
     case .bodyWeight:
       try roots.bodyWeights().first { $0.id == key.id }.map(TrainingValue.bodyWeight)
     case .heartRate: pulse[key.id].map(TrainingValue.heartRate)
+    case .exerciseLink:
+      try roots.exerciseLinks().first { $0.id == key.id }.map(TrainingValue.exerciseLink)
     case .foodEntry, .waterEntry, .supplementEntry, .supplementPlan, .nutritionProfile:
       try roots.currentNutritionValue(key)
     }
@@ -179,6 +182,7 @@ private actor GatedStateStore: TrainingSyncStateStoring {
 @main struct TrainingChecks {
   @MainActor static func main() async throws {
     try await nutritionSyncAcrossDevicesAndOfflineDeletion()
+    try await exerciseLinkSyncAcrossDevicesAndOfflineDeletion()
     try await offlineDeletionAndInflightEdit()
     try await conflictsAndRelatedPulse()
     try await cancelledReadCannotCrossAccount()
@@ -189,6 +193,39 @@ private actor GatedStateStore: TrainingSyncStateStoring {
     print(
       "Training checks: restart/offline deletion, edits during upload, explicit conflicts, pulse cascade, cancellation, overlapping scene/account transitions, server restore, durable state corruption, scoped pulse adoption/CAS and real HTTP validation passed (no Apple SDK)."
     )
+  }
+
+  @MainActor private static func exerciseLinkSyncAcrossDevicesAndOfflineDeletion() async throws {
+    let remote = RemoteJournal()
+    let first = LocalJournal()
+    let second = LocalJournal()
+    let link = ExerciseLink(id: UUID(), catalogID: ExerciseCatalog.all[0].id)
+    let firstStorage = MemoryTrainingSyncStateStore()
+    let secondStorage = MemoryTrainingSyncStateStore()
+    try first.roots.saveExerciseLink(link)
+    let sender = first.coordinator(remote, storage: firstStorage)
+    let receiver = second.coordinator(remote, storage: secondStorage)
+    try await sender.connect("account-a")
+    await sender.synchronizeNow()
+    try await receiver.connect("account-a")
+    await receiver.synchronizeNow()
+    expect(try second.roots.exerciseLinks() == [link])
+    await sender.disconnect()
+    await remote.setOffline(true)
+    try first.roots.deleteExerciseLink(id: link.id)
+    let offline = first.coordinator(remote, storage: firstStorage)
+    try await offline.connect("account-a")
+    await offline.synchronizeNow()
+    expect(offline.errorMessage != nil)
+    await offline.disconnect()
+    await remote.setOffline(false)
+    let resumed = first.coordinator(remote, storage: firstStorage)
+    try await resumed.connect("account-a")
+    await resumed.synchronizeNow()
+    await receiver.synchronizeNow()
+    expect(try second.roots.exerciseLinks().isEmpty)
+    await resumed.disconnect()
+    await receiver.disconnect()
   }
 
   @MainActor private static func nutritionSyncAcrossDevicesAndOfflineDeletion() async throws {
@@ -466,6 +503,16 @@ private actor GatedStateStore: TrainingSyncStateStoring {
     expect(upgraded.baselines == state.baselines && upgraded.conflicts == state.conflicts)
     let repeatedUpgrade = try await storage.load("account-a")
     expect(repeatedUpgrade == upgraded)
+    var preLinks =
+      try JSONSerialization.jsonObject(with: TrainingCoding.encoder().encode(state))
+      as! [String: Any]
+    preLinks.removeValue(forKey: "exerciseLinksFeedVersion")
+    try JSONSerialization.data(withJSONObject: preLinks).write(
+      to: stateDirectory.appendingPathComponent("account-a.json"))
+    let linksUpgrade = try await storage.load("account-a")
+    expect(linksUpgrade.cursor == 0 && linksUpgrade.exerciseLinksFeedVersion == 1)
+    expect(linksUpgrade.baselines == state.baselines && linksUpgrade.conflicts == state.conflicts)
+    expect(try await storage.load("account-a") == linksUpgrade)
     try Data("broken".utf8).write(to: stateDirectory.appendingPathComponent("account-a.json"))
     do {
       _ = try await storage.load("account-a")
@@ -572,6 +619,13 @@ private actor GatedStateStore: TrainingSyncStateStoring {
     do {
       _ = try await remote.changes(after: 0)
       preconditionFailure("Ignored missing server update")
+    } catch let error as ServerTrainingError { expect(error.code == "server_update_required") }
+    TrainingProtocol.response.withLock {
+      $0 = (400, Data(#"{"code":"invalid_training_kind","current":null}"#.utf8))
+    }
+    do {
+      _ = try await remote.changes(after: 0)
+      preconditionFailure("Old server kind rejection did not request an update")
     } catch let error as ServerTrainingError { expect(error.code == "server_update_required") }
   }
 }

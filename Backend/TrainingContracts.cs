@@ -25,8 +25,10 @@ public static class TrainingKinds
     public const string SupplementPlan = "supplementPlan";
     /// <summary>Тип записи питания: nutritionProfile.</summary>
     public const string NutritionProfile = "nutritionProfile";
+    /// <summary>Связь пользовательского упражнения с упражнением каталога.</summary>
+    public const string ExerciseLink = "exerciseLink";
     /// <summary>Возвращает true только для действующих типов журнала.</summary>
-    public static bool Contains(string kind) => kind is Workout or Template or BodyWeight or HeartRate || IsNutrition(kind);
+    public static bool Contains(string kind) => kind is Workout or Template or BodyWeight or HeartRate or ExerciseLink || IsNutrition(kind);
     /// <summary>Определяет агрегаты дневника питания.</summary>
     public static bool IsNutrition(string kind) => kind is FoodEntry or WaterEntry or SupplementEntry or SupplementPlan or NutritionProfile;
 }
@@ -50,6 +52,15 @@ public sealed record TrainingMutation
 public sealed record TrainingChange(string Kind, Guid Id, long Revision, bool Deleted, JsonElement? Value);
 /// <summary>Страница последних версий агрегатов после указанного курсора.</summary>
 public sealed record TrainingPage(IReadOnlyList<TrainingChange> Changes, long Cursor, bool HasMore);
+
+/// <summary>Связь исторического UUID упражнения с UUID каталога без изменения тренировки.</summary>
+public sealed record ExerciseLinkData
+{
+    /// <summary>UUID пользовательского упражнения.</summary>
+    public required Guid Id { get; init; }
+    /// <summary>UUID выбранного упражнения каталога.</summary>
+    public required Guid CatalogID { get; init; }
+}
 
 /// <summary>Историческое определение упражнения в контракте Core.</summary>
 public sealed record ExerciseData

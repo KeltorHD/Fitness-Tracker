@@ -235,8 +235,21 @@ struct ExerciseProgressScreen: View {
   }
 
   var body: some View {
+    let language = AppLanguage.system.resolved(preferredLanguages: [locale.identifier])
+    let catalogID = PersonalExercises.catalogID(for: exercise.id, links: store.exerciseLinks)
+    let variants = ExerciseLibrary.variants(for: catalogID, language: language)
     ScrollView {
       LazyVStack(alignment: .leading, spacing: 20) {
+        if variants.count > 1 {
+          Picker(
+            L10n.text("Вариант упражнения", locale: locale), selection: $model.selectedExerciseID
+          ) {
+            ForEach(variants) { variant in
+              Text(variant.name).tag(Optional(variant.id))
+            }
+          }
+          .pickerStyle(.menu).accessibilityIdentifier("exerciseProgressVariant")
+        }
         Picker(L10n.text("История упражнения", locale: locale), selection: $section) {
           Text(L10n.text("История", locale: locale)).tag(ExerciseHistorySection.history)
           Text(L10n.text("Графики", locale: locale)).tag(ExerciseHistorySection.charts)
@@ -279,15 +292,21 @@ struct ExerciseProgressScreen: View {
     .safeAreaInset(edge: .top) {
       if store.isDemoMode && showsDemoBanner { DemoModeBanner() }
     }
-    .navigationTitle(L10n.exerciseName(exercise, locale: locale))
+    .navigationTitle(
+      variants.first(where: { $0.id == model.selectedExerciseID })?.name
+        ?? L10n.exerciseName(exercise, locale: locale)
+    )
     .navigationBarTitleDisplayMode(.inline)
     .accessibilityIdentifier("exerciseProgressScreen")
     .onChange(of: store.workouts, initial: true) { refresh() }
+    .onChange(of: store.exerciseLinks) { refresh() }
     .onChange(of: calendar) { refresh() }
     .onChange(of: phase) { if phase == .active { refresh() } }
   }
 
-  private func refresh() { model.refresh(workouts: store.workouts, calendar: calendar) }
+  private func refresh() {
+    model.refresh(workouts: store.workouts, calendar: calendar, links: store.exerciseLinks)
+  }
 }
 
 private enum ExerciseHistorySection: Hashable { case history, charts }

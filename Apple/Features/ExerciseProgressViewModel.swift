@@ -43,6 +43,7 @@ struct ExerciseMetricPoint: Identifiable, Equatable {
   @ObservationIgnored private var calendar: Calendar = .current
   @ObservationIgnored private let now: () -> Date
   @ObservationIgnored private var workouts: [Workout] = []
+  @ObservationIgnored private var links: [ExerciseLink] = []
 
   init(
     exerciseID: UUID? = nil, workoutID: UUID? = nil,
@@ -55,10 +56,21 @@ struct ExerciseMetricPoint: Identifiable, Equatable {
     self.now = now
   }
 
-  func refresh(workouts: [Workout], calendar: Calendar) {
+  func refresh(workouts: [Workout], calendar: Calendar, links: [ExerciseLink] = []) {
+    let previousFixed = fixedExerciseID.map {
+      PersonalExercises.catalogID(for: $0, links: self.links)
+    }
     self.workouts = workouts
+    self.links = links
     self.calendar = calendar
-    histories = ExerciseProgressReport(workouts: workouts, now: now()).exercises
+    histories = ExerciseProgressReport(workouts: workouts, now: now(), links: links).exercises
+    if let fixedExerciseID, selectedExerciseID == previousFixed {
+      let resolved = PersonalExercises.catalogID(for: fixedExerciseID, links: links)
+      if resolved != selectedExerciseID { selectedExerciseID = resolved }
+    } else if let selectedExerciseID {
+      let resolved = PersonalExercises.catalogID(for: selectedExerciseID, links: links)
+      if resolved != selectedExerciseID { self.selectedExerciseID = resolved }
+    }
     if fixedExerciseID == nil, !histories.contains(where: { $0.id == selectedExerciseID }) {
       selectedExerciseID = histories.first?.id
     } else {
@@ -70,7 +82,7 @@ struct ExerciseMetricPoint: Identifiable, Equatable {
     let date = now()
     historyEntries =
       selectedExerciseID.map {
-        ExerciseWorkoutHistoryEntry.entries(for: $0, workouts: workouts, now: date)
+        ExerciseWorkoutHistoryEntry.entries(for: $0, workouts: workouts, now: date, links: links)
       } ?? []
     filterHistory()
     history = histories.first { $0.id == selectedExerciseID }

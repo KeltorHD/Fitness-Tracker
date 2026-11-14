@@ -7,6 +7,7 @@ import WidgetKit
 
 @MainActor @Observable final class AppStore {
   private(set) var workouts: [Workout] = []
+  private(set) var exerciseLinks: [ExerciseLink] = []
   private(set) var completed: [Workout] = []
   private(set) var templates: [WorkoutTemplate] = []
   private(set) var bodyWeights: [BodyWeightEntry] = []
@@ -307,12 +308,14 @@ import WidgetKit
     defer { switchingDemo = false }
     do {
       try Task.checkCancellation()
+      let links = try repository.personalExerciseLinks()
       let snapshot = try repository.closeDemo()
       isDemoMode = false
       nutrition?.switchWorkspace(isDemo: false)
       applySnapshot(
         workouts: snapshot.workouts, templates: snapshot.templates,
         bodyWeights: snapshot.bodyWeights)
+      exerciseLinks = links
       resetWorkspacePresentation()
       refreshIntegrations()
     } catch {
@@ -343,9 +346,11 @@ import WidgetKit
     let loaded = try repository.workouts()
     let routines = try repository.templates()
     let measurements = try repository.bodyWeights()
+    let links = try repository.exerciseLinks()
     applySnapshot(
       workouts: loaded, templates: routines, bodyWeights: measurements,
       refreshTracker: refreshTracker)
+    exerciseLinks = links
   }
   private func applySnapshot(
     workouts loaded: [Workout], templates routines: [WorkoutTemplate],
@@ -386,7 +391,7 @@ import WidgetKit
     }
     return try TrainingSnapshot(
       workouts: workouts, templates: templates, bodyWeights: weights, heartRate: pulse,
-      nutrition: nutrition?.syncSnapshot() ?? NutritionSnapshot())
+      nutrition: nutrition?.syncSnapshot() ?? NutritionSnapshot(), exerciseLinks: exerciseLinks)
   }
 
   func currentTrainingValue(_ key: TrainingRecordKey) async throws -> TrainingValue? {
@@ -404,6 +409,7 @@ import WidgetKit
     case .workout: workouts.first { $0.id == key.id }.map(TrainingValue.workout)
     case .template: templates.first { $0.id == key.id }.map(TrainingValue.template)
     case .bodyWeight: bodyWeights.first { $0.id == key.id }.map(TrainingValue.bodyWeight)
+    case .exerciseLink: exerciseLinks.first { $0.id == key.id }.map(TrainingValue.exerciseLink)
     case .heartRate, .foodEntry, .waterEntry, .supplementEntry, .supplementPlan, .nutritionProfile:
       nil
     }
@@ -532,10 +538,40 @@ import WidgetKit
       try await trainingHeartRates.setTrainingAccountScope(actual)
       if actual != selection.currentAccountID {
         applySnapshot(workouts: [], templates: [], bodyWeights: [])
+        exerciseLinks = []
       } else {
         try loadRepository()
       }
       throw error
+    }
+  }
+
+  @discardableResult func setExerciseLink(_ link: ExerciseLink) -> Bool {
+    do {
+      guard
+        PersonalExercises.list(workouts: workouts, templates: templates)
+          .contains(where: { $0.id == link.id })
+      else { throw TrainingSyncError.invalidData }
+      let updated = (exerciseLinks.filter { $0.id != link.id } + [link]).sorted {
+        $0.id.uuidString < $1.id.uuidString
+      }
+      try repository.saveExerciseLink(link)
+      exerciseLinks = updated
+      return true
+    } catch {
+      report(error, operation: "saveExerciseLink", message: "Не удалось связать упражнения.")
+      return false
+    }
+  }
+
+  @discardableResult func removeExerciseLink(id: UUID) -> Bool {
+    do {
+      try repository.deleteExerciseLink(id: id)
+      exerciseLinks.removeAll { $0.id == id }
+      return true
+    } catch {
+      report(error, operation: "deleteExerciseLink", message: "Не удалось убрать связь упражнений.")
+      return false
     }
   }
 
@@ -746,7 +782,7 @@ import WidgetKit
   private func activate(_ workout: Workout) throws {
     var workout = workout
     try WorkoutEngine.applyPreviousTargets(
-      to: Set(workout.exercises.map(\.id)), in: &workout, history: workouts)
+      to: Set(workout.exercises.map(\.id)), in: &workout, history: workouts, links: exerciseLinks)
     try WorkoutEngine.setBodyWeight(currentBodyWeightKG, in: &workout)
     try repository.save(workout)
     try loadRepository()
@@ -809,7 +845,7 @@ import WidgetKit
           !original.exercises.contains { $0.id == row.id && $0.exercise.id == row.exercise.id }
         }
         try WorkoutEngine.applyPreviousTargets(
-          to: Set(added.map(\.id)), in: &workout, history: workouts)
+          to: Set(added.map(\.id)), in: &workout, history: workouts, links: exerciseLinks)
       }
       try repository.save(workout)
       try loadRepository()

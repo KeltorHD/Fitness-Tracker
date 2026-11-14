@@ -22,13 +22,16 @@ public struct ExerciseWorkoutHistoryEntry: Identifiable, Equatable, Sendable {
 
   /// Uses saved sessions only; template and catalog edits cannot rewrite recorded targets.
   public static func entries(
-    for exerciseID: UUID, workouts: [Workout], now: Date = Date()
+    for exerciseID: UUID, workouts: [Workout], now: Date = Date(), links: [ExerciseLink] = []
   ) -> [Self] {
-    workouts.compactMap { workout -> Self? in
+    let resolvedID = PersonalExercises.catalogID(for: exerciseID, links: links)
+    return workouts.compactMap { workout -> Self? in
       guard workout.status == .completed, workout.startedAt <= now else { return nil }
       let rows = workout.exercises.enumerated().compactMap {
         index, row -> ExerciseWorkoutHistoryRow? in
-        guard row.exercise.id == exerciseID else { return nil }
+        guard PersonalExercises.catalogID(for: row.exercise.id, links: links) == resolvedID else {
+          return nil
+        }
         let sets = row.sets.enumerated().compactMap { index, set -> ExerciseWorkoutHistorySet? in
           guard !set.performedStages.isEmpty else { return nil }
           return ExerciseWorkoutHistorySet(position: index + 1, set: set)
@@ -150,7 +153,7 @@ public struct ExerciseProgressHistory: Identifiable, Equatable, Sendable {
 public struct ExerciseProgressReport: Equatable, Sendable {
   public let exercises: [ExerciseProgressHistory]
 
-  public init(workouts: [Workout], now: Date = Date()) {
+  public init(workouts: [Workout], now: Date = Date(), links: [ExerciseLink] = []) {
     let completed = workouts.filter { $0.status == .completed && $0.startedAt <= now }.sorted {
       $0.startedAt == $1.startedAt
         ? $0.id.uuidString < $1.id.uuidString : $0.startedAt < $1.startedAt
@@ -158,11 +161,15 @@ public struct ExerciseProgressReport: Equatable, Sendable {
     var definitions: [UUID: Exercise] = [:]
     var histories: [UUID: [ExerciseProgressPoint]] = [:]
     for workout in completed {
-      let rows = Dictionary(grouping: workout.exercises, by: { $0.exercise.id })
+      let rows = Dictionary(grouping: workout.exercises) {
+        PersonalExercises.catalogID(for: $0.exercise.id, links: links)
+      }
       for (exerciseID, items) in rows {
         let sets = items.flatMap(\.sets).filter { $0.completedAt != nil && !$0.isWarmup }
         guard !sets.isEmpty, let exercise = items.last?.exercise else { continue }
-        definitions[exerciseID] = exercise
+        definitions[exerciseID] =
+          links.contains(where: { $0.catalogID == exerciseID })
+          ? ExerciseLibrary.entry(for: exerciseID)?.exercise ?? exercise : exercise
         histories[exerciseID, default: []].append(
           ExerciseProgressPoint(
             id: workout.id, date: workout.startedAt,

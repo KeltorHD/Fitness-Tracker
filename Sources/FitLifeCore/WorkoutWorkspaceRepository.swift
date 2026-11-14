@@ -30,6 +30,18 @@ import Foundation
   public func workouts() throws -> [Workout] { try current.workouts() }
   public func templates() throws -> [WorkoutTemplate] { try current.templates() }
   public func bodyWeights() throws -> [BodyWeightEntry] { try current.bodyWeights() }
+  public func exerciseLinks() throws -> [ExerciseLink] { try current.exerciseLinks() }
+  public func personalExerciseLinks() throws -> [ExerciseLink] { try personal.exerciseLinks() }
+  public func saveExerciseLink(_ link: ExerciseLink) throws {
+    try allowWrite()
+    try current.saveExerciseLink(link)
+    notifyChange()
+  }
+  public func deleteExerciseLink(id: UUID) throws {
+    try allowWrite()
+    try current.deleteExerciseLink(id: id)
+    notifyChange()
+  }
   public func saveBodyWeight(_ entry: BodyWeightEntry) throws {
     try allowWrite()
     try current.saveBodyWeight(entry)

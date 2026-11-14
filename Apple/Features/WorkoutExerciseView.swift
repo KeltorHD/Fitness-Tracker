@@ -94,7 +94,10 @@ struct WorkoutExerciseView: View {
       numberPad.reconcile(value)
     }
     .onChange(of: store.workouts, initial: true) { _, history in
-      if let workout { model.updateHistory(history, for: workout) }
+      if let workout { model.updateHistory(history, for: workout, links: store.exerciseLinks) }
+    }
+    .onChange(of: store.exerciseLinks) { _, links in
+      if let workout { model.updateHistory(store.workouts, for: workout, links: links) }
     }
     .onDisappear {
       numberPad.dismiss()
@@ -162,7 +165,8 @@ struct WorkoutExerciseView: View {
   }
   private func primaryMuscleNames(_ exercise: Exercise) -> String {
     let language = AppLanguage.system.resolved(preferredLanguages: [locale.identifier])
-    return ExerciseLibrary.entry(for: exercise.id, language: language)
+    let id = PersonalExercises.catalogID(for: exercise.id, links: store.exerciseLinks)
+    return ExerciseLibrary.entry(for: id, language: language)
       .map { $0.primaryMuscles.joined(separator: ", ") } ?? exercise.muscle.title
   }
 
@@ -518,8 +522,9 @@ struct WorkoutExerciseView: View {
         .accessibilityLabel(L10n.text("История упражнения", locale: locale))
         .accessibilityIdentifier("openExerciseProgress")
         Spacer()
-        if let entry = ExerciseLibrary.entry(for: row.exercise.id),
-          entry.generatedMedia != nil || !entry.images.isEmpty
+        if let entry = ExerciseLibrary.entry(
+          for: PersonalExercises.catalogID(for: row.exercise.id, links: store.exerciseLinks)),
+          entry.generatedMedia != nil || entry.generatedIllustration != nil || !entry.images.isEmpty
         {
           Button {
             numberPad.dismiss()
@@ -701,7 +706,8 @@ struct WorkoutExerciseSheet: View {
       let current = store.workouts.first { $0.id == workout.id } ?? workout
       presentation = WorkoutExercisePresentation(
         workout: current, exerciseID: exerciseID, unit: unit, locale: L10n.numberLocale,
-        history: store.workouts, draftStore: store.exerciseDrafts(for: current, unit: unit))
+        history: store.workouts, draftStore: store.exerciseDrafts(for: current, unit: unit),
+        links: store.exerciseLinks)
     }
     .tint(colorTheme.accent)
     .presentationDetents([.large])

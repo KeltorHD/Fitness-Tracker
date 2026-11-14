@@ -15,28 +15,73 @@ document = json.loads((root / 'Sources/FitLifeCore/Resources/ExerciseLibrary.ru.
 english_resource = root / 'Sources/FitLifeCore/Resources/ExerciseLibrary.en.json'
 english = json.loads(english_resource.read_text())
 source = {item['id']: item for item in json.loads((vendor / 'exercises.selected.json').read_text())}
+custom_items = json.loads((root / 'Data/ExerciseLibrary/custom-exercises.json').read_text())
+custom = {item['id']: item for item in custom_items}
+assert len(custom) == len(custom_items) and not set(source) & set(custom)
+assert all(item['id'].startswith('FitLife_') and re.fullmatch(r'https://[^\s]+', item['referenceURL'])
+           for item in custom_items)
+source.update(custom)
+reviewed = json.loads((root / 'Data/ExerciseLibrary/reviewed-exercises.json').read_text())
+external = json.loads((root / 'Data/ExerciseLibrary/external-media.json').read_text())
+stills = json.loads((root / 'Data/ExerciseLibrary/generated-stills.json').read_text())
 assert hashlib.sha256((vendor / 'exercises.selected.json').read_bytes()).hexdigest() == manifest['selectedDataSHA256']
 assert hashlib.sha256((vendor / 'LICENSE.md').read_bytes()).hexdigest() == manifest['licenseSHA256']
 assert document['source']['revision'] == manifest['revision']
 assert document['source']['licenseText'] == (vendor / 'LICENSE.md').read_text()
-assert len(document['entries']) == manifest['selectedExerciseCount'] == manifest['upstreamExerciseCount'] == 876
-assert english['locale'] == 'en' and len(english['entries']) == 876
+assert manifest['selectedExerciseCount'] == manifest['upstreamExerciseCount'] == 876
+assert len(document['entries']) == manifest['selectedExerciseCount'] + len(custom)
+assert english['locale'] == 'en' and len(english['entries']) == len(document['entries'])
 assert english['source'] == document['source']
 for ru, en in zip(document['entries'], english['entries']):
     original = source[en['sourceID']]
     assert ru['id'] == en['id'] and ru['images'] == en['images']
+    assert ru.get('imageCredit') == en.get('imageCredit')
+    assert ru.get('generatedIllustration') == en.get('generatedIllustration')
     assert ru['trainingRegions'] == en['trainingRegions']
-    assert en['name'] == original['name'] and en['steps'] == [s for s in original['instructions'] if s.strip()]
+    assert (ru.get('variantGroup') or {}).get('id') == (en.get('variantGroup') or {}).get('id')
+    authored = reviewed.get(en['sourceID'], {}).get('englishSteps')
+    english_name = reviewed.get(en['sourceID'], {}).get('englishName', original['name'])
+    assert en['name'] == english_name
+    if english_name != original['name']:
+        assert reviewed[en['sourceID']].get('englishNameCorrectionReason', '').strip()
+        assert original['name'] in ru['aliases']
+    assert en['steps'] == (authored if authored is not None else [s for s in original['instructions'] if s.strip()])
+    if authored is not None:
+        assert len(authored) >= 3
+        assert re.fullmatch(r'https://[^\s]+', reviewed[en['sourceID']]['instructionSourceURL'])
+        if original['instructions']:
+            assert reviewed[en['sourceID']].get('instructionCorrectionReason', '').strip()
 assert len(manifest['images']) == 1746
-assert len([entry for entry in document['entries'] if entry['imagesUnavailable']]) == 3
-assert len([entry for entry in document['entries'] if entry['techniqueUnavailable']]) == 5
+unavailable = {
+    source_id for source_id, item in source.items()
+    if (not item['images'] or reviewed.get(source_id, {}).get('excludeSourceImages', False))
+    and not reviewed.get(source_id, {}).get('replacementImageSourceID')
+    and source_id not in external
+}
+assert {entry['sourceID'] for entry in document['entries'] if entry['imagesUnavailable']} == unavailable
+assert not any(entry['techniqueUnavailable'] for entry in document['entries'])
 generated = json.loads((root / 'Data/ExerciseLibrary/generated-media.json').read_text())
 generated_provenance = json.loads((root / 'Data/ExerciseLibrary/generated-media.provenance.json').read_text())
 generated_files = {item['path'] for entry in generated_provenance['entries'] for item in entry['files']}
-expected = {image for entry in document['entries'] for image in entry['images']}
+expected = {image for item in source.values() for image in item['images']}
 assert expected == {item['path'] for item in manifest['images']}
-assert expected | {p for p in generated_files if p.endswith('.jpg')} == {str(p.relative_to(root / 'Resources/ExerciseMedia')) for p in (root / 'Resources/ExerciseMedia').rglob('*.jpg')}
+replacements = {
+    f'{source_id}/replacement-{index}.jpg'
+    for source_id, review in reviewed.items() if review.get('replacementImageSourceID')
+    for index in range(2)
+}
+external_files = {item['path'] for credit in external.values() for item in credit['files']}
+assert expected | replacements | external_files | {p for p in generated_files if p.endswith('.jpg')} == {str(p.relative_to(root / 'Resources/ExerciseMedia')) for p in (root / 'Resources/ExerciseMedia').rglob('*.jpg')}
 assert {p for p in generated_files if p.endswith('.gif')} == {str(p.relative_to(root / 'Resources/ExerciseMedia')) for p in (root / 'Resources/ExerciseMedia').rglob('*.gif')}
+assert {item['path'] for item in stills.values()} == {str(p.relative_to(root / 'Resources/ExerciseMedia')) for p in (root / 'Resources/ExerciseMedia').rglob('*.png')}
+for source_id, still in stills.items():
+    assert still['path'] == f'{source_id}/ai-still.png' and still['description'].strip()
+    assert still['generator'] == 'built-in image_gen'
+    data = (root / 'Resources/ExerciseMedia' / still['path']).read_bytes()
+    assert data.startswith(b'\x89PNG\r\n\x1a\n')
+    assert len(data) == still['bytes'] and hashlib.sha256(data).hexdigest() == still['sha256']
+    with Image.open(root / 'Resources/ExerciseMedia' / still['path']) as image:
+        image.verify()
 for entry in generated_provenance['entries']:
     assert entry['generator'] == 'built-in image_gen' and entry['prompt']
     media = generated[entry['sourceID']]
@@ -52,7 +97,9 @@ preserved = json.loads((root / 'Data/ExerciseLibrary/preserved-identities.json')
 by_id = {entry['sourceID']: entry for entry in document['entries']}
 assert len(preserved) == 100
 for previous in preserved:
-    assert all(by_id[previous['sourceID']][key] == previous[key] for key in ['sourceID', 'id', 'name'])
+    entry = by_id[previous['sourceID']]
+    assert entry['id'] == previous['id']
+    assert previous['name'] == entry['name'] or previous['name'] in entry['aliases']
 for image in manifest['images']:
     path = image['path']
     assert '..' not in path and not path.startswith('/')
@@ -61,12 +108,41 @@ for image in manifest['images']:
     assert len(data) == image['bytes'], path
     assert hashlib.sha256(data).hexdigest() == image['sha256'], path
 for index, entry in enumerate(document['entries']):
-    assert entry['images'] == source[entry['sourceID']]['images']
-    assert entry['englishName'] == source[entry['sourceID']]['name']
+    review = reviewed.get(entry['sourceID'], {})
+    if review.get('excludeSourceImages', False):
+        assert review.get('imageExclusionReason', '').strip()
+        assert source[entry['sourceID']]['images']
+        donor_id = review.get('replacementImageSourceID')
+        if donor_id:
+            assert donor_id in source and donor_id != entry['sourceID']
+            assert review.get('replacementImageReason', '').strip()
+            assert not reviewed.get(donor_id, {}).get('excludeSourceImages', False)
+            assert entry['images'] == [f"{entry['sourceID']}/replacement-{index}.jpg" for index in range(2)]
+            for replacement, donor in zip(entry['images'], source[donor_id]['images']):
+                assert (root / 'Resources/ExerciseMedia' / replacement).read_bytes() == (root / 'Resources/ExerciseMedia' / donor).read_bytes()
+        elif entry['sourceID'] not in external:
+            assert entry['images'] == []
+    else:
+        assert not review.get('replacementImageSourceID')
+        if entry['sourceID'] not in external:
+            assert entry['images'] == source[entry['sourceID']]['images']
+    if entry['sourceID'] in external:
+        credit = external[entry['sourceID']]
+        assert entry['images'] == [item['path'] for item in credit['files']]
+        assert entry['imageCredit'] == {key: credit[key] for key in ('author', 'sourceURL', 'licenseName', 'licenseURL')}
+        for item in credit['files']:
+            data = (root / 'Resources/ExerciseMedia' / item['path']).read_bytes()
+            assert data[:2] == b'\xff\xd8' and data[-2:] == b'\xff\xd9'
+            assert len(data) == item['bytes'] and hashlib.sha256(data).hexdigest() == item['sha256']
+    else:
+        assert 'imageCredit' not in entry
+    assert entry['englishName'] == review.get('englishName', source[entry['sourceID']]['name'])
     assert re.search('[А-Яа-яЁё]', entry['name'])
-    assert bool(entry['steps']) == bool(source[entry['sourceID']]['instructions'])
+    assert bool(entry['steps']) == bool(source[entry['sourceID']]['instructions'] or reviewed.get(entry['sourceID'], {}).get('englishSteps'))
+    assert entry['techniqueUnavailable'] == (not bool(entry['steps']))
     assert not entry['steps'] or len(entry['steps']) >= 3
     assert entry['generatedMedia'] == generated.get(entry['sourceID'])
+    assert entry.get('generatedIllustration') == (stills.get(entry['sourceID']) or {}).get('path')
     assert all(re.search('[А-Яа-яЁё]', step) for step in entry['steps'])
     if index < 8: assert entry['id'] == f'10000000-0000-0000-0000-{index + 1:012d}'
 resource = root / 'Sources/FitLifeCore/Resources/ExerciseLibrary.ru.json'
@@ -75,4 +151,4 @@ original_english = english_resource.read_bytes()
 subprocess.run([sys.executable, str(root / 'scripts/import-exercise-library.py')], check=True, stdout=subprocess.DEVNULL)
 assert resource.read_bytes() == original, 'Generated resource differs from checked-in Russian translations'
 assert english_resource.read_bytes() == original_english, 'English resource differs from pinned source'
-print(f'Exercise library: 876 Russian entries, 1746 original JPEGs, {len(generated)} generated animations, preserved IDs, SHA-256 and reproducible offline generation: OK.')
+print(f'Exercise library: {len(document["entries"])} Russian entries, 1746 original JPEGs, {len(generated)} generated animations, preserved IDs, SHA-256 and reproducible offline generation: OK.')

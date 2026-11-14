@@ -30,6 +30,19 @@ public sealed class TrainingRecordMetadata
     public string Hash { get; set; } = "";
 }
 
+/// <summary>Личная связь упражнения с каталогом, изолированная владельцем.</summary>
+public sealed class TrainingExerciseLink
+{
+    /// <summary>Владелец записи.</summary>
+    public string OwnerId { get; set; } = "";
+    /// <summary>Тип синхронизируемой записи.</summary>
+    public string Kind { get; set; } = TrainingKinds.ExerciseLink;
+    /// <summary>UUID пользовательского упражнения.</summary>
+    public Guid Id { get; set; }
+    /// <summary>UUID упражнения каталога.</summary>
+    public Guid CatalogID { get; set; }
+}
+
 /// <summary>Состояние тренировки; упражнения и подходы хранятся в зависимых таблицах.</summary>
 public sealed class TrainingWorkout
 {
@@ -287,7 +300,7 @@ internal static class TrainingModel
         builder.Entity<TrainingRecordMetadata>().Property(x => x.Hash).HasMaxLength(64);
         builder.Entity<TrainingRecordMetadata>().HasOne<TrainingOwner>().WithMany()
             .HasForeignKey(x => x.OwnerId).OnDelete(DeleteBehavior.Cascade);
-        foreach (var type in new[] { typeof(TrainingWorkout), typeof(TrainingTemplate), typeof(TrainingBodyWeight), typeof(TrainingHeartRate) })
+        foreach (var type in new[] { typeof(TrainingWorkout), typeof(TrainingTemplate), typeof(TrainingBodyWeight), typeof(TrainingHeartRate), typeof(TrainingExerciseLink) })
         {
             builder.Entity(type).HasKey("OwnerId", "Id");
             builder.Entity(type).HasOne(typeof(TrainingRecordMetadata)).WithMany()

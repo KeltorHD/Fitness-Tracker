@@ -76,10 +76,12 @@ struct WorkoutExerciseListRow: View {
 }
 
 struct WorkoutExerciseThumbnail: View {
+  @Environment(AppStore.self) private var store
   let exercise: Exercise
   var body: some View {
-    if let entry = ExerciseLibrary.entry(for: exercise.id),
-      let path = entry.generatedMedia?.poster ?? entry.images.first
+    if let entry = ExerciseLibrary.entry(
+      for: PersonalExercises.catalogID(for: exercise.id, links: store.exerciseLinks)),
+      let path = entry.generatedMedia?.poster ?? entry.generatedIllustration ?? entry.images.first
     {
       ExercisePhoto(path: path).frame(width: 46, height: 46)
         .background(FitTheme.paper, in: .rect(cornerRadius: 12))

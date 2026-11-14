@@ -1,0 +1,1014 @@
+{
+  "cable-triceps-pushdown": {
+    "ru": "Разгибание рук на верхнем блоке",
+    "en": "Cable triceps pushdown",
+    "members": [
+      "Triceps_Pushdown",
+      "Triceps_Pushdown_-_Rope_Attachment",
+      "Triceps_Pushdown_-_V-Bar_Attachment",
+      "Reverse_Grip_Triceps_Pushdown",
+      "Cable_One_Arm_Tricep_Extension",
+      "FitLife_Triceps_Pushdown_EZ_Bar",
+      "FitLife_Triceps_Pushdown_One_Arm_Overhand"
+    ]
+  },
+  "barbell-flat-bench-press": {
+    "ru": "Жим штанги лёжа",
+    "en": "Barbell bench press",
+    "members": [
+      "Barbell_Bench_Press_-_Medium_Grip",
+      "Close-Grip_Barbell_Bench_Press",
+      "Wide-Grip_Barbell_Bench_Press",
+      "Bench_Press_-_Powerlifting",
+      "Bench_Press_with_Chains",
+      "Board_Press",
+      "Reverse_Band_Bench_Press",
+      "Reverse_Triceps_Bench_Press",
+      "Smith_Machine_Bench_Press",
+      "Smith_Machine_Close-Grip_Bench_Press"
+    ]
+  },
+  "barbell-ab-rollout": {
+    "ru": "Выкатывание штанги",
+    "en": "Barbell rollout",
+    "members": [
+      "Barbell_Ab_Rollout",
+      "Barbell_Ab_Rollout_-_On_Knees",
+      "Barbell_Rollout_from_Bench"
+    ]
+  },
+  "band-good-morning": {
+    "ru": "Наклоны «гудморнинг»",
+    "en": "Good morning",
+    "members": [
+      "Band_Good_Morning",
+      "Band_Good_Morning_Pull_Through",
+      "Good_Morning",
+      "Good_Morning_off_Pins",
+      "Hanging_Bar_Good_Morning",
+      "Seated_Good_Mornings",
+      "Stiff_Leg_Barbell_Good_Morning"
+    ]
+  },
+  "long-bar-row": {
+    "ru": "Тяга конца штанги в наклоне",
+    "en": "Bent-over long bar row",
+    "members": [
+      "Bent_Over_One-Arm_Long_Bar_Row",
+      "Bent_Over_Two-Arm_Long_Bar_Row"
+    ]
+  },
+  "walking-lunge": {
+    "ru": "Выпады в ходьбе",
+    "en": "Walking lunge",
+    "members": [
+      "Bodyweight_Walking_Lunge",
+      "Barbell_Walking_Lunge"
+    ]
+  },
+  "barbell-box-squat": {
+    "ru": "Приседания к опоре",
+    "en": "Squat to a box",
+    "members": [
+      "Box_Squat",
+      "Barbell_Squat_To_A_Bench",
+      "Box_Squat_with_Bands",
+      "Box_Squat_with_Chains",
+      "Dumbbell_Squat_To_A_Bench",
+      "Front_Barbell_Squat_To_A_Bench",
+      "Reverse_Band_Box_Squat",
+      "Speed_Box_Squat",
+      "FitLife_Single_Leg_Squat_To_High_Box"
+    ]
+  },
+  "standing-hip-adduction": {
+    "ru": "Приведение ноги стоя",
+    "en": "Standing hip adduction",
+    "members": [
+      "Band_Hip_Adductions",
+      "Cable_Hip_Adduction"
+    ]
+  },
+  "standing-cable-shoulder-press": {
+    "ru": "Жим над головой на нижних блоках",
+    "en": "Standing cable shoulder press",
+    "members": [
+      "Cable_Shoulder_Press",
+      "Alternating_Cable_Shoulder_Press"
+    ]
+  },
+  "standing-close-grip-curl": {
+    "ru": "Сгибание рук стоя со штангой или на нижнем блоке",
+    "en": "Standing barbell and cable curl",
+    "members": [
+      "Close-Grip_Standing_Barbell_Curl",
+      "Close-Grip_EZ_Bar_Curl",
+      "Barbell_Curl",
+      "EZ-Bar_Curl",
+      "Reverse_Barbell_Curl",
+      "Wide-Grip_Standing_Barbell_Curl",
+      "Standing_Biceps_Cable_Curl",
+      "Reverse_Cable_Curl",
+      "Standing_One-Arm_Cable_Curl",
+      "Close-Grip_EZ-Bar_Curl_with_Band"
+    ]
+  },
+  "conventional-barbell-deadlift": {
+    "ru": "Классическая становая тяга со штангой",
+    "en": "Conventional barbell deadlift",
+    "members": [
+      "Barbell_Deadlift",
+      "Deadlift_with_Bands",
+      "Deadlift_with_Chains",
+      "Deficit_Deadlift",
+      "Reverse_Band_Deadlift"
+    ]
+  },
+  "alternating-kettlebell-clean": {
+    "ru": "Попеременное взятие двух гирь на грудь",
+    "en": "Alternating double kettlebell clean",
+    "members": [
+      "Alternating_Hang_Clean",
+      "Double_Kettlebell_Alternating_Hang_Clean"
+    ]
+  },
+  "flat-dumbbell-bench-press": {
+    "ru": "Жим гантелей лёжа на плоской скамье",
+    "en": "Flat dumbbell bench press",
+    "members": [
+      "Dumbbell_Bench_Press",
+      "Dumbbell_Bench_Press_with_Neutral_Grip",
+      "One_Arm_Dumbbell_Bench_Press"
+    ]
+  },
+  "chest-supported-dumbbell-rear-fly": {
+    "ru": "Разведение гантелей с опорой грудью на скамью",
+    "en": "Chest-supported dumbbell rear fly",
+    "members": [
+      "Dumbbell_Lying_Rear_Lateral_Raise",
+      "Dumbbell_Lying_One-Arm_Rear_Lateral_Raise",
+      "Lying_Rear_Delt_Raise",
+      "Reverse_Flyes",
+      "Reverse_Flyes_With_External_Rotation"
+    ]
+  },
+  "standing-dumbbell-upright-row": {
+    "ru": "Тяга к подбородку стоя",
+    "en": "Standing upright row",
+    "members": [
+      "Dumbbell_Raise",
+      "Dumbbell_One-Arm_Upright_Row",
+      "Standing_Dumbbell_Upright_Row",
+      "Smith_Machine_Upright_Row",
+      "Smith_Machine_One-Arm_Upright_Row",
+      "Upright_Barbell_Row",
+      "Upright_Cable_Row",
+      "Upright_Row_-_With_Bands"
+    ]
+  },
+  "exercise-ball-crunch": {
+    "ru": "Скручивания с фитболом",
+    "en": "Exercise ball crunch",
+    "members": [
+      "Exercise_Ball_Crunch",
+      "Crunch_-_Legs_On_Exercise_Ball"
+    ]
+  },
+  "external-shoulder-rotation": {
+    "ru": "Наружная ротация плеча",
+    "en": "Shoulder external rotation",
+    "members": [
+      "External_Rotation",
+      "External_Rotation_with_Band",
+      "External_Rotation_with_Cable"
+    ]
+  },
+  "floor-press": {
+    "ru": "Жим лёжа на полу",
+    "en": "Floor press",
+    "members": [
+      "Floor_Press",
+      "Floor_Press_with_Chains",
+      "Dumbbell_Floor_Press",
+      "Extended_Range_One-Arm_Kettlebell_Floor_Press",
+      "Leg-Over_Floor_Press",
+      "One-Arm_Kettlebell_Floor_Press",
+      "One_Arm_Floor_Press"
+    ]
+  },
+  "front-raise": {
+    "ru": "Подъём рук перед собой",
+    "en": "Front raise",
+    "members": [
+      "Front_Dumbbell_Raise",
+      "Front_Two-Dumbbell_Raise",
+      "Front_Incline_Dumbbell_Raise",
+      "Front_Cable_Raise",
+      "Front_Plate_Raise",
+      "Single_Dumbbell_Raise",
+      "Standing_Dumbbell_Straight-Arm_Front_Delt_Raise_Above_Head",
+      "Standing_Front_Barbell_Raise_Over_Head",
+      "Straight_Raises_on_Incline_Bench"
+    ]
+  },
+  "front-squat": {
+    "ru": "Фронтальные приседания",
+    "en": "Front squat",
+    "members": [
+      "Front_Squat_Clean_Grip",
+      "Front_Squats_With_Two_Kettlebells",
+      "Frankenstein_Squat",
+      "Front_Barbell_Squat"
+    ]
+  },
+  "glute-ham-raise": {
+    "ru": "Сгибание ног с фиксацией стоп",
+    "en": "Glute-ham raise",
+    "members": [
+      "Floor_Glute-Ham_Raise",
+      "Glute_Ham_Raise",
+      "Natural_Glute_Ham_Raise"
+    ]
+  },
+  "hammer-curl": {
+    "ru": "Молотковые сгибания рук",
+    "en": "Hammer curl",
+    "members": [
+      "Hammer_Curls",
+      "Cross_Body_Hammer_Curl",
+      "Cable_Hammer_Curls_-_Rope_Attachment",
+      "Incline_Hammer_Curls",
+      "Preacher_Hammer_Dumbbell_Curl",
+      "Alternate_Hammer_Curl"
+    ]
+  },
+  "hip-extension": {
+    "ru": "Отведение ноги назад",
+    "en": "Hip extension",
+    "members": [
+      "Glute_Kickback",
+      "Hip_Extension_with_Bands",
+      "Leg_Lift",
+      "One-Legged_Cable_Kickback",
+      "Rear_Leg_Raises"
+    ]
+  },
+  "glute-bridge": {
+    "ru": "Ягодичный мост лёжа на полу",
+    "en": "Floor glute bridge",
+    "members": [
+      "Barbell_Glute_Bridge",
+      "Hip_Lift_with_Band",
+      "Pelvic_Tilt_Into_Bridge",
+      "Butt_Lift_Bridge",
+      "Single_Leg_Glute_Bridge"
+    ]
+  },
+  "incline-dumbbell-bench-press": {
+    "ru": "Жим гантелей лёжа на наклонной скамье",
+    "en": "Incline dumbbell bench press",
+    "members": [
+      "Incline_Dumbbell_Press",
+      "Hammer_Grip_Incline_DB_Bench_Press",
+      "Incline_Dumbbell_Bench_With_Palms_Facing_In"
+    ]
+  },
+  "bench-cable-fly": {
+    "ru": "Сведение рук на блоках лёжа на скамье",
+    "en": "Bench cable fly",
+    "members": [
+      "Flat_Bench_Cable_Flyes",
+      "Incline_Cable_Flye"
+    ]
+  },
+  "elevated-hands-push-up": {
+    "ru": "Отжимания от высокой опоры",
+    "en": "Incline push-up",
+    "members": [
+      "Incline_Push-Up_Medium",
+      "Incline_Push-Up_Close-Grip",
+      "Incline_Push-Up_Reverse_Grip",
+      "Incline_Push-Up_Wide",
+      "Incline_Push-Up",
+      "Close-Grip_Push-Up_off_of_a_Dumbbell"
+    ]
+  },
+  "internal-shoulder-rotation": {
+    "ru": "Внутренняя ротация плеча",
+    "en": "Shoulder internal rotation",
+    "members": [
+      "Cable_Internal_Rotation",
+      "Internal_Rotation_with_Band"
+    ]
+  },
+  "standing-overhead-triceps-extension": {
+    "ru": "Разгибание рук из-за головы стоя",
+    "en": "Standing overhead triceps extension",
+    "members": [
+      "Dumbbell_One-Arm_Triceps_Extension",
+      "Kettlebell_Overhead_Triceps_Extension",
+      "Speed_Band_Overhead_Triceps",
+      "Standing_Dumbbell_Triceps_Extension",
+      "Standing_Low-Pulley_One-Arm_Triceps_Extension",
+      "Standing_Overhead_Barbell_Triceps_Extension",
+      "Standing_Towel_Triceps_Extension",
+      "Triceps_Overhead_Extension_with_Rope",
+      "Cable_Rope_Overhead_Triceps_Extension",
+      "Standing_One-Arm_Dumbbell_Triceps_Extension"
+    ]
+  },
+  "kettlebell-windmill": {
+    "ru": "Мельница с гирей",
+    "en": "Kettlebell windmill",
+    "members": [
+      "Kettlebell_Windmill",
+      "Double_Kettlebell_Windmill",
+      "Advanced_Kettlebell_Windmill"
+    ]
+  },
+  "kneeling-high-cable-row": {
+    "ru": "Тяга верхнего блока стоя на коленях",
+    "en": "Kneeling high cable row",
+    "members": [
+      "Kneeling_High_Pulley_Row",
+      "Kneeling_Single-Arm_High_Pulley_Row"
+    ]
+  },
+  "leverage-chest-press": {
+    "ru": "Жим от груди в рычажном тренажёре",
+    "en": "Leverage chest press",
+    "members": [
+      "Leverage_Chest_Press",
+      "Leverage_Decline_Chest_Press",
+      "Leverage_Incline_Chest_Press"
+    ]
+  },
+  "leverage-row": {
+    "ru": "Тяга в рычажном тренажёре сидя",
+    "en": "Seated leverage row",
+    "members": [
+      "Leverage_High_Row",
+      "Leverage_Iso_Row"
+    ]
+  },
+  "lying-cable-triceps-extension": {
+    "ru": "Разгибание рук с нижним блоком лёжа",
+    "en": "Lying low cable triceps extension",
+    "members": [
+      "Cable_Lying_Triceps_Extension",
+      "Low_Cable_Triceps_Extension"
+    ]
+  },
+  "lying-dumbbell-triceps-extension": {
+    "ru": "Разгибание рук лёжа на плоской скамье",
+    "en": "Flat lying triceps extension",
+    "members": [
+      "Lying_Dumbbell_Tricep_Extension",
+      "Dumbbell_Tricep_Extension_-Pronated_Grip",
+      "One_Arm_Pronated_Dumbbell_Triceps_Extension",
+      "One_Arm_Supinated_Dumbbell_Triceps_Extension",
+      "EZ-Bar_Skullcrusher",
+      "Lying_Close-Grip_Barbell_Triceps_Press_To_Chin",
+      "Lying_Triceps_Press"
+    ]
+  },
+  "hack-squat": {
+    "ru": "Гакк-приседания в тренажёре",
+    "en": "Machine hack squat",
+    "members": [
+      "Hack_Squat",
+      "Narrow_Stance_Hack_Squats"
+    ]
+  },
+  "pallof-press": {
+    "ru": "Жим Паллофа на блоке",
+    "en": "Cable Pallof press",
+    "members": [
+      "Pallof_Press",
+      "Pallof_Press_With_Rotation"
+    ]
+  },
+  "bench-wrist-curl": {
+    "ru": "Сгибание и разгибание кистей с опорой на скамью",
+    "en": "Bench-supported wrist curl and extension",
+    "members": [
+      "Palms-Down_Dumbbell_Wrist_Curl_Over_A_Bench",
+      "Palms-Down_Wrist_Curl_Over_A_Bench",
+      "Palms-Up_Barbell_Wrist_Curl_Over_A_Bench",
+      "Palms-Up_Dumbbell_Wrist_Curl_Over_A_Bench"
+    ]
+  },
+  "overhead-squat": {
+    "ru": "Приседания с отягощением над головой",
+    "en": "Overhead squat",
+    "members": [
+      "Overhead_Squat",
+      "One-Arm_Overhead_Kettlebell_Squats"
+    ]
+  },
+  "plyometric-push-up": {
+    "ru": "Плиометрические отжимания",
+    "en": "Plyometric push-up",
+    "members": [
+      "Plyo_Push-up",
+      "Plyo_Kettlebell_Pushups"
+    ]
+  },
+  "floor-push-up": {
+    "ru": "Отжимания от пола",
+    "en": "Floor push-up",
+    "members": [
+      "Push-Up_Wide",
+      "Push-Ups_-_Close_Triceps_Position",
+      "Push-Ups_With_Feet_On_An_Exercise_Ball",
+      "Pushups_Close_and_Wide_Hand_Positions",
+      "Single-Arm_Push-Up",
+      "Pushups",
+      "Push-Ups_With_Feet_Elevated",
+      "Clock_Push-Up"
+    ]
+  },
+  "barbell-push-press": {
+    "ru": "Жимовой швунг штанги",
+    "en": "Barbell push press",
+    "members": [
+      "Push_Press",
+      "Push_Press_-_Behind_the_Neck"
+    ]
+  },
+  "rack-pull": {
+    "ru": "Тяга штанги с упоров",
+    "en": "Rack pull",
+    "members": [
+      "Rack_Pulls",
+      "Rack_Pull_with_Bands"
+    ]
+  },
+  "dips": {
+    "ru": "Отжимания в упоре",
+    "en": "Dips",
+    "members": [
+      "Parallel_Bar_Dip",
+      "Ring_Dips",
+      "Dips_-_Chest_Version",
+      "Dips_-_Triceps_Version"
+    ]
+  },
+  "romanian-deadlift": {
+    "ru": "Румынская тяга со штангой",
+    "en": "Barbell Romanian deadlift",
+    "members": [
+      "Romanian_Deadlift",
+      "Romanian_Deadlift_from_Deficit"
+    ]
+  },
+  "seated-dumbbell-kickback": {
+    "ru": "Разгибание рук с гантелями в наклоне сидя",
+    "en": "Seated bent-over dumbbell triceps kickback",
+    "members": [
+      "Seated_Bent-Over_One-Arm_Dumbbell_Triceps_Extension",
+      "Seated_Bent-Over_Two-Arm_Dumbbell_Triceps_Extension"
+    ]
+  },
+  "seated-dumbbell-curl": {
+    "ru": "Сгибание рук с гантелями сидя",
+    "en": "Seated dumbbell curl",
+    "members": [
+      "Seated_Dumbbell_Curl",
+      "Seated_Dumbbell_Inner_Biceps_Curl"
+    ]
+  },
+  "seated-dumbbell-wrist-curl": {
+    "ru": "Сгибание и разгибание кистей сидя",
+    "en": "Seated wrist curl and extension",
+    "members": [
+      "Seated_Dumbbell_Palms-Down_Wrist_Curl",
+      "Seated_Dumbbell_Palms-Up_Wrist_Curl",
+      "Seated_One-Arm_Dumbbell_Palms-Down_Wrist_Curl",
+      "Seated_One-Arm_Dumbbell_Palms-Up_Wrist_Curl",
+      "Seated_Palm-Up_Barbell_Wrist_Curl",
+      "Seated_Palms-Down_Barbell_Wrist_Curl"
+    ]
+  },
+  "sled-push": {
+    "ru": "Толкание тренировочных саней",
+    "en": "Sled push",
+    "members": [
+      "Sled_Push",
+      "Prowler_Sprint"
+    ]
+  },
+  "snatch-grip-pull": {
+    "ru": "Тяга штанги рывковым хватом",
+    "en": "Snatch-grip pull",
+    "members": [
+      "Snatch_Deadlift",
+      "Snatch_Pull"
+    ]
+  },
+  "barbell-back-squat": {
+    "ru": "Приседания со штангой на спине",
+    "en": "Barbell back squat",
+    "members": [
+      "Barbell_Squat",
+      "Narrow_Stance_Squats",
+      "Speed_Squats",
+      "Squat_with_Bands",
+      "Squat_with_Chains",
+      "Wide_Stance_Barbell_Squat"
+    ]
+  },
+  "standing-dumbbell-kickback": {
+    "ru": "Разгибание рук с гантелями в наклоне стоя",
+    "en": "Standing bent-over dumbbell triceps kickback",
+    "members": [
+      "Standing_Bent-Over_One-Arm_Dumbbell_Triceps_Extension",
+      "Standing_Bent-Over_Two-Arm_Dumbbell_Triceps_Extension"
+    ]
+  },
+  "cable-wood-chop": {
+    "ru": "Диагональная тяга блока стоя",
+    "en": "Standing cable diagonal lift and chop",
+    "members": [
+      "Standing_Cable_Lift",
+      "Standing_Cable_Wood_Chop"
+    ]
+  },
+  "standing-dumbbell-shoulder-press": {
+    "ru": "Жим гантелей от плеч стоя",
+    "en": "Standing dumbbell shoulder press",
+    "members": [
+      "Standing_Alternating_Dumbbell_Press",
+      "Standing_Palm-In_One-Arm_Dumbbell_Press",
+      "Standing_Palms-In_Dumbbell_Press",
+      "Standing_Dumbbell_Press"
+    ]
+  },
+  "stiff-leg-deadlift": {
+    "ru": "Становая тяга на прямых ногах",
+    "en": "Stiff-legged deadlift",
+    "members": [
+      "Stiff-Legged_Barbell_Deadlift",
+      "Smith_Machine_Stiff-Legged_Deadlift",
+      "Wide_Stance_Stiff_Legs",
+      "Stiff-Legged_Dumbbell_Deadlift"
+    ]
+  },
+  "sumo-deadlift": {
+    "ru": "Становая тяга сумо со штангой",
+    "en": "Barbell sumo deadlift",
+    "members": [
+      "Sumo_Deadlift_with_Bands",
+      "Reverse_Band_Sumo_Deadlift",
+      "Sumo_Deadlift_with_Chains",
+      "Sumo_Deadlift"
+    ]
+  },
+  "supine-overhead-medicine-ball-throw": {
+    "ru": "Бросок медбола из-за головы с подъёмом корпуса",
+    "en": "Supine overhead medicine ball throw",
+    "members": [
+      "Supine_One-Arm_Overhead_Throw",
+      "Supine_Two-Arm_Overhead_Throw"
+    ]
+  },
+  "kettlebell-row": {
+    "ru": "Тяга гири к поясу в наклоне",
+    "en": "Bent-over kettlebell row",
+    "members": [
+      "One-Arm_Kettlebell_Row",
+      "Two-Arm_Kettlebell_Row"
+    ]
+  },
+  "decline-bench-press": {
+    "ru": "Жим лёжа на скамье с отрицательным наклоном",
+    "en": "Decline bench press",
+    "members": [
+      "Decline_Barbell_Bench_Press",
+      "Wide-Grip_Decline_Barbell_Bench_Press",
+      "Decline_Smith_Press",
+      "Smith_Machine_Decline_Press",
+      "Decline_Dumbbell_Bench_Press"
+    ]
+  },
+  "zottman-curl": {
+    "ru": "Сгибания Зоттмана",
+    "en": "Zottman curl",
+    "members": [
+      "Zottman_Curl",
+      "Zottman_Preacher_Curl"
+    ]
+  },
+  "leg-press": {
+    "ru": "Жим ногами",
+    "en": "Leg press",
+    "members": [
+      "Leg_Press",
+      "Narrow_Stance_Leg_Press",
+      "Smith_Machine_Leg_Press"
+    ]
+  },
+  "stationary-lunge": {
+    "ru": "Выпады с возвращением на место",
+    "en": "Stationary return lunge",
+    "members": [
+      "Barbell_Lunge",
+      "Dumbbell_Lunges",
+      "Dumbbell_Rear_Lunge"
+    ]
+  },
+  "bulgarian-split-squat": {
+    "ru": "Болгарские сплит-приседания",
+    "en": "Bulgarian split squat",
+    "members": [
+      "Split_Squat_with_Dumbbells",
+      "One_Leg_Barbell_Squat",
+      "Smith_Single-Leg_Split_Squat"
+    ]
+  },
+  "machine-leg-curl": {
+    "ru": "Сгибание ног в тренажёре",
+    "en": "Machine leg curl",
+    "members": [
+      "Lying_Leg_Curls",
+      "Seated_Leg_Curl",
+      "Standing_Leg_Curl"
+    ]
+  },
+  "machine-leg-extension": {
+    "ru": "Разгибание ног в тренажёре",
+    "en": "Machine leg extension",
+    "members": [
+      "Leg_Extensions",
+      "Single-Leg_Leg_Extension"
+    ]
+  },
+  "pull-up": {
+    "ru": "Подтягивания на перекладине",
+    "en": "Pull-up",
+    "members": [
+      "Pullups",
+      "Chin-Up",
+      "Mixed_Grip_Chin",
+      "Wide-Grip_Rear_Pull-Up",
+      "Weighted_Pull_Ups",
+      "V-Bar_Pullup",
+      "Side_To_Side_Chins",
+      "Rocky_Pull-Ups_Pulldowns",
+      "Gironda_Sternum_Chins",
+      "One_Arm_Chin-Up"
+    ]
+  },
+  "lat-pulldown": {
+    "ru": "Тяга верхнего блока к груди и за голову",
+    "en": "Lat pulldown",
+    "members": [
+      "Wide-Grip_Lat_Pulldown",
+      "Close-Grip_Front_Lat_Pulldown",
+      "Underhand_Cable_Pulldowns",
+      "V-Bar_Pulldown",
+      "Wide-Grip_Pulldown_Behind_The_Neck"
+    ]
+  },
+  "seated-cable-row": {
+    "ru": "Тяга нижнего блока сидя",
+    "en": "Seated cable row",
+    "members": [
+      "Seated_Cable_Rows",
+      "Seated_One-arm_Cable_Pulley_Rows",
+      "Elevated_Cable_Rows"
+    ]
+  },
+  "straight-arm-pulldown": {
+    "ru": "Тяга верхнего блока прямыми руками",
+    "en": "Straight-arm cable pulldown",
+    "members": [
+      "Straight-Arm_Pulldown",
+      "Rope_Straight-Arm_Pulldown"
+    ]
+  },
+  "dumbbell-bench-fly": {
+    "ru": "Разведение гантелей лёжа на скамье",
+    "en": "Dumbbell bench fly",
+    "members": [
+      "Dumbbell_Flyes",
+      "One-Arm_Flat_Bench_Dumbbell_Flye",
+      "Incline_Dumbbell_Flyes",
+      "Incline_Dumbbell_Flyes_-_With_A_Twist",
+      "Decline_Dumbbell_Flyes"
+    ]
+  },
+  "incline-barbell-bench-press": {
+    "ru": "Жим штанги лёжа на наклонной скамье",
+    "en": "Incline barbell bench press",
+    "members": [
+      "Barbell_Incline_Bench_Press_-_Medium_Grip",
+      "Smith_Machine_Incline_Bench_Press"
+    ]
+  },
+  "standing-shrug": {
+    "ru": "Шраги стоя",
+    "en": "Standing shrug",
+    "members": [
+      "Barbell_Shrug",
+      "Dumbbell_Shrug",
+      "Smith_Machine_Behind_the_Back_Shrug"
+    ]
+  },
+  "cable-crossover": {
+    "ru": "Сведение рук на верхних блоках стоя",
+    "en": "Standing high cable crossover",
+    "members": [
+      "Cable_Crossover",
+      "Single-Arm_Cable_Crossover"
+    ]
+  },
+  "seated-dumbbell-shoulder-press": {
+    "ru": "Жим гантелей от плеч сидя",
+    "en": "Seated dumbbell shoulder press",
+    "members": [
+      "Seated_Dumbbell_Press",
+      "Arnold_Dumbbell_Press",
+      "Dumbbell_Shoulder_Press"
+    ]
+  },
+  "lateral-raise": {
+    "ru": "Подъём рук через стороны",
+    "en": "Lateral raise",
+    "members": [
+      "Side_Lateral_Raise",
+      "Seated_Side_Lateral_Raise",
+      "One-Arm_Side_Laterals",
+      "One-Arm_Incline_Lateral_Raise",
+      "Standing_Low-Pulley_Deltoid_Raise",
+      "Lying_One-Arm_Lateral_Raise",
+      "Power_Partials"
+    ]
+  },
+  "bench-dip": {
+    "ru": "Обратные отжимания от скамьи",
+    "en": "Bench dip",
+    "members": [
+      "Bench_Dips",
+      "Weighted_Bench_Dip"
+    ]
+  },
+  "russian-twist": {
+    "ru": "Русский твист с блином",
+    "en": "Weighted Russian twist",
+    "members": [
+      "Russian_Twist",
+      "Plate_Twist"
+    ]
+  },
+  "standing-side-bend": {
+    "ru": "Наклоны корпуса в сторону стоя",
+    "en": "Standing side bend",
+    "members": [
+      "Barbell_Side_Bend",
+      "Dumbbell_Side_Bend",
+      "One-Arm_High-Pulley_Cable_Side_Bends"
+    ]
+  },
+  "barbell-clean-variations": {
+    "ru": "Взятие штанги на грудь",
+    "en": "Barbell clean",
+    "members": [
+      "Clean",
+      "Hang_Clean",
+      "Hang_Clean_-_Below_the_Knees",
+      "Clean_from_Blocks",
+      "Power_Clean_from_Blocks"
+    ]
+  },
+  "barbell-snatch-variations": {
+    "ru": "Рывок штанги",
+    "en": "Barbell snatch",
+    "members": [
+      "Hang_Snatch",
+      "Hang_Snatch_-_Below_Knees",
+      "Snatch_from_Blocks",
+      "Power_Snatch_from_Blocks",
+      "Muscle_Snatch"
+    ]
+  },
+  "inverted-row": {
+    "ru": "Горизонтальные подтягивания",
+    "en": "Inverted row",
+    "members": [
+      "Inverted_Row",
+      "Inverted_Row_with_Straps"
+    ]
+  },
+  "box-jump": {
+    "ru": "Запрыгивание на тумбу",
+    "en": "Box jump",
+    "members": [
+      "Front_Box_Jump",
+      "Box_Jump_Multiple_Response",
+      "Dumbbell_Seated_Box_Jump"
+    ]
+  },
+  "kettlebell-halo": {
+    "ru": "Гало с гирей",
+    "en": "Kettlebell halo",
+    "members": [
+      "Kettlebell_Halo",
+      "Kettlebell_Halo_With_Overhead_Extension"
+    ]
+  },
+  "turkish-get-up": {
+    "ru": "Турецкий подъём с гирей",
+    "en": "Kettlebell Turkish get-up",
+    "members": [
+      "Kettlebell_Turkish_Get-Up_Lunge_style",
+      "Kettlebell_Turkish_Get-Up_Squat_style"
+    ]
+  },
+  "kettlebell-jerk": {
+    "ru": "Толчок гири от плеча",
+    "en": "Kettlebell jerk",
+    "members": [
+      "One-Arm_Kettlebell_Jerk",
+      "One-Arm_Kettlebell_Split_Jerk",
+      "Two-Arm_Kettlebell_Jerk",
+      "Double_Kettlebell_Jerk"
+    ]
+  },
+  "preacher-curl": {
+    "ru": "Сгибание рук на скамье Скотта",
+    "en": "Preacher curl",
+    "members": [
+      "Cable_Preacher_Curl",
+      "Machine_Preacher_Curls",
+      "One_Arm_Dumbbell_Preacher_Curl",
+      "Two-Arm_Dumbbell_Preacher_Curl",
+      "Reverse_Barbell_Preacher_Curls",
+      "Preacher_Curl"
+    ]
+  },
+  "split-jump": {
+    "ru": "Прыжки из выпада",
+    "en": "Split squat jump",
+    "members": [
+      "Split_Squats",
+      "Split_Jump",
+      "Lunge_Sprint"
+    ]
+  },
+  "medicine-ball-chest-throw": {
+    "ru": "Бросок медбола от груди",
+    "en": "Medicine ball chest throw",
+    "members": [
+      "Chest_Push_from_3_point_stance",
+      "Chest_Push_multiple_response",
+      "Chest_Push_single_response",
+      "Chest_Push_with_Run_Release"
+    ]
+  },
+  "hurdle-hop": {
+    "ru": "Прыжки через препятствия с двух ног",
+    "en": "Two-foot hurdle hops",
+    "members": [
+      "Hurdle_Hops",
+      "Front_Cone_Hops_or_hurdle_hops"
+    ]
+  },
+  "standing-kettlebell-press": {
+    "ru": "Жим гири от плеча стоя",
+    "en": "Standing kettlebell shoulder press",
+    "members": [
+      "One-Arm_Kettlebell_Military_Press_To_The_Side",
+      "Two-Arm_Kettlebell_Military_Press",
+      "One-Arm_Kettlebell_Para_Press"
+    ]
+  },
+  "decline-triceps-extension": {
+    "ru": "Французский жим на скамье с наклоном вниз",
+    "en": "Decline lying triceps extension",
+    "members": [
+      "Decline_Dumbbell_Triceps_Extension",
+      "Decline_EZ_Bar_Triceps_Extension"
+    ]
+  },
+  "standing-calf-raise": {
+    "ru": "Подъём на носки стоя",
+    "en": "Standing calf raise",
+    "members": [
+      "Standing_Calf_Raises",
+      "Standing_Barbell_Calf_Raise",
+      "Standing_Dumbbell_Calf_Raise",
+      "Smith_Machine_Calf_Raise",
+      "Calf_Raise_On_A_Dumbbell",
+      "Calf_Raises_-_With_Bands",
+      "Donkey_Calf_Raises"
+    ]
+  },
+  "forearm-pronation-supination": {
+    "ru": "Повороты предплечья с гантелью лёжа",
+    "en": "Lying dumbbell forearm rotation",
+    "members": [
+      "Dumbbell_Lying_Pronation",
+      "Dumbbell_Lying_Supination"
+    ]
+  },
+  "bench-knee-tuck": {
+    "ru": "Подтягивание коленей сидя на скамье",
+    "en": "Seated bench knee tuck",
+    "members": [
+      "Seated_Flat_Bench_Leg_Pull-In",
+      "Seated_Leg_Tucks"
+    ]
+  },
+  "bicycle-crunch": {
+    "ru": "Скручивания «Велосипед»",
+    "en": "Bicycle crunch",
+    "members": [
+      "Air_Bike",
+      "Elbow_to_Knee"
+    ]
+  },
+  "ring-muscle-up": {
+    "ru": "Выход силой на кольцах",
+    "en": "Ring muscle-up",
+    "members": [
+      "Muscle_Up",
+      "Kipping_Muscle_Up"
+    ]
+  },
+  "depth-jump-to-box": {
+    "ru": "Спрыгивание с запрыгиванием на тумбу",
+    "en": "Depth jump to box",
+    "members": [
+      "Depth_Jump_Leap",
+      "Linear_Depth_Jump"
+    ]
+  },
+  "incline-dumbbell-curl": {
+    "ru": "Сгибание рук с гантелями на наклонной скамье",
+    "en": "Incline dumbbell curl",
+    "members": [
+      "Incline_Dumbbell_Curl",
+      "Alternate_Incline_Dumbbell_Curl",
+      "Incline_Inner_Biceps_Curl",
+      "Flexor_Incline_Dumbbell_Curls"
+    ]
+  },
+  "barbell-overhead-press": {
+    "ru": "Жим штанги над головой",
+    "en": "Barbell overhead press",
+    "members": [
+      "Standing_Military_Press",
+      "Barbell_Shoulder_Press",
+      "Seated_Barbell_Military_Press",
+      "Standing_Barbell_Press_Behind_Neck",
+      "Bradford_Rocky_Presses",
+      "Standing_Bradford_Press"
+    ]
+  },
+  "kneeling-cable-crunch": {
+    "ru": "Скручивания на верхнем блоке стоя на коленях",
+    "en": "Kneeling cable crunch",
+    "members": [
+      "Cable_Crunch",
+      "Kneeling_Cable_Crunch_With_Alternating_Oblique_Twists"
+    ]
+  },
+  "kettlebell-clean": {
+    "ru": "Взятие гири на грудь",
+    "en": "Kettlebell clean",
+    "members": [
+      "Kettlebell_Dead_Clean",
+      "Kettlebell_Hang_Clean",
+      "One-Arm_Kettlebell_Clean",
+      "Two-Arm_Kettlebell_Clean",
+      "Bottoms-Up_Clean_From_The_Hang_Position"
+    ]
+  },
+  "open-palm-kettlebell-clean": {
+    "ru": "Подброс гири на раскрытые ладони",
+    "en": "Open-palm kettlebell clean",
+    "members": [
+      "One-Arm_Open_Palm_Kettlebell_Clean",
+      "Open_Palm_Kettlebell_Clean"
+    ]
+  },
+  "step-up": {
+    "ru": "Зашагивание на платформу",
+    "en": "Step-up",
+    "members": [
+      "Dumbbell_Step_Ups",
+      "Barbell_Step_Ups",
+      "Step-up_with_Knee_Raise",
+      "Single-Leg_High_Box_Squat"
+    ]
+  },
+  "high-cable-curl": {
+    "ru": "Сгибание рук на двух верхних блоках",
+    "en": "High cable curl",
+    "members": [
+      "High_Cable_Curls",
+      "Overhead_Cable_Curl"
+    ]
+  }
+}

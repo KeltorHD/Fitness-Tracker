@@ -26,12 +26,15 @@ public struct TrainingSyncState: Codable, Equatable, Sendable {
   public var version = 1
   /// Missing in the previous journal feed: rewind only the cursor to discover nutrition history.
   public var nutritionFeedVersion: Int? = 1
+  /// Rewind existing cursors once so previously saved exercise links are discovered.
+  public var exerciseLinksFeedVersion: Int? = 1
   public var cursor: Int64 = 0
   public var baselines: [TrainingBaseline] = []
   public var conflicts: [TrainingConflict] = []
   public init() {}
   public func validate() throws {
-    guard version == 1, nutritionFeedVersion == nil || nutritionFeedVersion == 1, cursor >= 0,
+    guard version == 1, nutritionFeedVersion == nil || nutritionFeedVersion == 1,
+      exerciseLinksFeedVersion == nil || exerciseLinksFeedVersion == 1, cursor >= 0,
       Set(baselines.map(\.key)).count == baselines.count,
       Set(conflicts.map(\.id)).count == conflicts.count,
       baselines.allSatisfy({

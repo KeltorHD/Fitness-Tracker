@@ -71,6 +71,19 @@ import SwiftData
   }
   func deleteWorkout(id: UUID) throws { try remove(id: id, kind: "workout") }
   func deleteTemplate(id: UUID) throws { try remove(id: id, kind: "template") }
+  func exerciseLinks() throws -> [ExerciseLink] {
+    try records(kind: "exerciseLink").map {
+      let link = try JSONDecoder().decode(ExerciseLink.self, from: $0.payload)
+      guard link.id == $0.recordID else { throw TrainingSyncError.invalidData }
+      try link.validate()
+      return link
+    }.sorted { $0.id.uuidString < $1.id.uuidString }
+  }
+  func saveExerciseLink(_ link: ExerciseLink) throws {
+    try link.validate()
+    try upsert(id: link.id, kind: "exerciseLink", data: JSONEncoder().encode(link))
+  }
+  func deleteExerciseLink(id: UUID) throws { try remove(id: id, kind: "exerciseLink") }
   func bodyWeights() throws -> [BodyWeightEntry] {
     try records(kind: "bodyWeight").map {
       let entry = try JSONDecoder().decode(BodyWeightEntry.self, from: $0.payload)
@@ -187,7 +200,8 @@ import SwiftData
   }
 
   private func storageKind(_ kind: String, account: String? = nil) -> String {
-    guard (["workout", "template", "bodyWeight"] + Self.nutritionKinds).contains(kind),
+    guard
+      (["workout", "template", "bodyWeight", "exerciseLink"] + Self.nutritionKinds).contains(kind),
       let account = account ?? trainingAccountSelection.currentAccountID
     else { return kind }
     return kind + "@" + account
@@ -205,7 +219,7 @@ import SwiftData
     do {
       try migrateNutrition(adopting: namespace, commit: false)
       if selection.firstAccountID == nil {
-        for kind in ["workout", "template", "bodyWeight"] {
+        for kind in ["workout", "template", "bodyWeight", "exerciseLink"] {
           for record in try rawRecords(kind: kind) {
             record.kind = storageKind(kind, account: namespace)
           }
@@ -223,6 +237,11 @@ import SwiftData
         try Validation.bodyWeightEntry(
           JSONDecoder().decode(BodyWeightEntry.self, from: record.payload))
       }
+      for record in try rawRecords(kind: storageKind("exerciseLink", account: namespace)) {
+        let link = try JSONDecoder().decode(ExerciseLink.self, from: record.payload)
+        guard link.id == record.recordID else { throw TrainingSyncError.invalidData }
+        try link.validate()
+      }
       try validateNutrition(account: namespace)
       selection.currentAccountID = namespace
       try stageUpsert(
@@ -237,7 +256,8 @@ import SwiftData
 
   func applyTrainingChanges(_ changes: [TrainingChange]) throws {
     _ = try TrainingJournalSnapshot(
-      workouts: workouts(), templates: templates(), bodyWeights: bodyWeights()
+      workouts: workouts(), templates: templates(), bodyWeights: bodyWeights(),
+      exerciseLinks: exerciseLinks()
     ).applying(changes)
     do {
       for change in changes {
@@ -258,6 +278,8 @@ import SwiftData
           try stageUpsert(id: value.id, kind: "supplementPlan", data: JSONEncoder().encode(value))
         case .nutritionProfile(let value):
           try stageUpsert(id: value.id, kind: "nutritionProfile", data: JSONEncoder().encode(value))
+        case .exerciseLink(let value):
+          try stageUpsert(id: value.id, kind: "exerciseLink", data: JSONEncoder().encode(value))
         case .heartRate: throw TrainingSyncError.invalidData
         case nil:
           for record in try allRecords(kind: change.key.kind.rawValue)

@@ -1,0 +1,56 @@
+[
+  {
+    "id": "FitLife_Triceps_Pushdown_EZ_Bar",
+    "name": "Cable Triceps Pushdown with EZ-Bar Attachment",
+    "equipment": "cable",
+    "level": "beginner",
+    "primaryMuscles": [
+      "triceps"
+    ],
+    "secondaryMuscles": [],
+    "instructions": [
+      "Attach an EZ-bar handle to a high pulley and grasp it with an overhand grip.",
+      "Stand facing the machine with your upper arms close to your sides and elbows bent.",
+      "Extend your elbows to press the handle down, then return slowly without moving your upper arms."
+    ],
+    "images": [],
+    "referenceURL": "https://www.catalystathletics.com/exercise/839/EZ-Tricep-Pushdown/"
+  },
+  {
+    "id": "FitLife_Triceps_Pushdown_One_Arm_Overhand",
+    "name": "One-Arm Cable Triceps Pushdown with Overhand Grip",
+    "equipment": "cable",
+    "level": "beginner",
+    "primaryMuscles": [
+      "triceps"
+    ],
+    "secondaryMuscles": [],
+    "instructions": [
+      "Attach a single handle to a high pulley and grasp it with one hand using an overhand grip.",
+      "Stand facing the machine and keep the working upper arm close to your side.",
+      "Extend the elbow to press the handle down, then return slowly and repeat on the other side."
+    ],
+    "images": [],
+    "referenceURL": "https://www.bodytrainer.tv/en/exercise/cable_triceps_pushdown_one_arm"
+  },
+  {
+    "id": "FitLife_Single_Leg_Squat_To_High_Box",
+    "name": "Single-Leg Squat to a High Box",
+    "equipment": "body only",
+    "level": "intermediate",
+    "primaryMuscles": [
+      "quadriceps"
+    ],
+    "secondaryMuscles": [
+      "glutes",
+      "hamstrings"
+    ],
+    "instructions": [
+      "Stand in front of a stable high box with your back to it and lift one foot off the floor.",
+      "Bend your supporting knee and hip to lower until your hips lightly touch the box.",
+      "Press through the supporting foot to stand, then repeat on the other side."
+    ],
+    "images": [],
+    "referenceURL": "https://whatmuscle.com/exercises/single-leg-high-box-squat"
+  }
+]

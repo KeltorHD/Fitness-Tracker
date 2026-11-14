@@ -55,9 +55,10 @@ actor TrainingSyncStateStore: TrainingSyncStateStoring {
     guard FileManager.default.fileExists(atPath: url.path) else { return TrainingSyncState() }
     var state = try TrainingCoding.decoder().decode(TrainingSyncState.self, from: read(url))
     try state.validate()
-    if state.nutritionFeedVersion == nil {
+    if state.nutritionFeedVersion == nil || state.exerciseLinksFeedVersion == nil {
       state.cursor = 0
       state.nutritionFeedVersion = 1
+      state.exerciseLinksFeedVersion = 1
       try save(state, for: namespace)
     }
     return state

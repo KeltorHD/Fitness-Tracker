@@ -7,7 +7,7 @@ namespace FitLife.Backend;
 internal static class TrainingValidation
 {
     private static readonly HashSet<string> _groups = ["chest", "back", "legs", "shoulders", "arms", "core", "fullBody"];
-    private static readonly HashSet<string> _muscles = ["chest", "lats", "middle back", "lower back", "traps", "quadriceps", "hamstrings", "glutes", "calves", "abductors", "adductors", "shoulders", "neck", "biceps", "triceps", "forearms", "abdominals"];
+    private static readonly HashSet<string> _muscles = ["chest", "lats", "middle back", "lower back", "traps", "quadriceps", "hamstrings", "glutes", "calves", "tibialis anterior", "hip flexors", "feet", "abductors", "adductors", "shoulders", "neck", "biceps", "triceps", "forearms", "abdominals"];
     private static readonly HashSet<string> _regions = ["chestUpper", "chestMiddle", "chestLower", "deltoidAnterior", "deltoidLateral", "deltoidPosterior", "rotatorCuff", "trapeziusUpper", "trapeziusMiddle", "trapeziusLower", "rectusAbdominisUpper", "rectusAbdominisLower", "obliques", "transversusAbdominis", "bicepsLong", "bicepsShort", "tricepsLong", "tricepsLateral", "tricepsMedial", "rectusFemoris", "vastusLateralis", "vastusMedialis", "vastusIntermedius", "bicepsFemoris", "semitendinosus", "semimembranosus", "gluteusMaximus", "gluteusMedius", "gluteusMinimus", "gastrocnemius", "soleus"];
 
     /// <summary>Валидирует полный DTO по правилам Core и возвращает каноническое значение для хеша и записи.</summary>
@@ -16,6 +16,10 @@ internal static class TrainingValidation
         if (TrainingKinds.IsNutrition(kind)) return NutritionValidation.Canonical(kind, id, value);
         switch (kind)
         {
+            case TrainingKinds.ExerciseLink:
+                var link = TrainingJson.Read<ExerciseLinkData>(value);
+                Check(link.Id == id && id != Guid.Empty && link.CatalogID != Guid.Empty && link.CatalogID != id);
+                return TrainingJson.Element(link);
             case TrainingKinds.Workout:
                 var workout = TrainingJson.Read<WorkoutData>(value);
                 Check(workout.Id == id);

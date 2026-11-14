@@ -35,10 +35,11 @@ public struct TrainingReport: Equatable, Sendable {
   public let exerciseVolumes: [UUID: [ExerciseVolumePoint]]
 
   public init(
-    workouts: [Workout], month: Date, now: Date = Date(), calendar: Calendar = .current
+    workouts: [Workout], month: Date, now: Date = Date(), calendar: Calendar = .current,
+    links: [ExerciseLink] = []
   ) {
     let completed = workouts.filter { $0.status == .completed && $0.startedAt <= now }
-    records = TrainingStatistics.records(in: completed)
+    records = TrainingStatistics.records(in: completed, links: links)
     weeks = TrainingStatistics.weeks(in: completed, count: 26, now: now, calendar: calendar)
     years = Set(
       completed.map { calendar.component(.year, from: $0.startedAt) }
@@ -53,7 +54,8 @@ public struct TrainingReport: Equatable, Sendable {
     {
       var volumes: [UUID: Double] = [:]
       for item in workout.exercises {
-        volumes[item.exercise.id, default: 0] += item.sets.reduce(0) { $0 + $1.volume }
+        let id = PersonalExercises.catalogID(for: item.exercise.id, links: links)
+        volumes[id, default: 0] += item.sets.reduce(0) { $0 + $1.volume }
       }
       for (exerciseID, volume) in volumes {
         points[exerciseID, default: []].append(

@@ -10,13 +10,16 @@ public struct PreviousWorkoutValues: Equatable, Sendable {
 
   /// Repeated exercises match by occurrence; warmup and working sets have separate ordinals.
   /// Unperformed historical targets retain their positions and never become suggestions.
-  public init?(exerciseRowID: UUID, in workout: Workout, history: [Workout]) {
+  public init?(
+    exerciseRowID: UUID, in workout: Workout, history: [Workout], links: [ExerciseLink] = []
+  ) {
     guard let rowIndex = workout.exercises.firstIndex(where: { $0.id == exerciseRowID }) else {
       return nil
     }
     let row = workout.exercises[rowIndex]
+    let identity = PersonalExercises.catalogID(for: row.exercise.id, links: links)
     let occurrence = workout.exercises[..<rowIndex].filter {
-      $0.exercise.id == row.exercise.id
+      PersonalExercises.catalogID(for: $0.exercise.id, links: links) == identity
     }.count
     var previous: (workout: Workout, row: WorkoutExercise)?
     for candidate in history {
@@ -31,7 +34,9 @@ public struct PreviousWorkoutValues: Equatable, Sendable {
               && candidate.id.uuidString < previous.workout.id.uuidString)
         else { continue }
       }
-      let rows = candidate.exercises.filter { $0.exercise.id == row.exercise.id }
+      let rows = candidate.exercises.filter {
+        PersonalExercises.catalogID(for: $0.exercise.id, links: links) == identity
+      }
       guard rows.indices.contains(occurrence),
         rows[occurrence].sets.contains(where: { !$0.performedStages.isEmpty })
       else { continue }
@@ -67,7 +72,8 @@ extension WorkoutEngine {
   /// Copies the latest recorded count and values only into newly created, empty exercise rows.
   /// Existing edits, removed sets, completed targets and explicitly repeated sessions stay intact.
   public static func applyPreviousTargets(
-    to rowIDs: Set<UUID>, in workout: inout Workout, history: [Workout]
+    to rowIDs: Set<UUID>, in workout: inout Workout, history: [Workout],
+    links: [ExerciseLink] = []
   ) throws {
     guard workout.status == .active else { throw TrainingError.invalidState }
     var candidate = workout
@@ -77,7 +83,8 @@ extension WorkoutEngine {
         row.sets.allSatisfy({
           $0.completedAt == nil && $0.repetitions == 0 && $0.weightKG == 0 && !$0.isDropSet
         }),
-        let previous = PreviousWorkoutValues(exerciseRowID: row.id, in: workout, history: history)
+        let previous = PreviousWorkoutValues(
+          exerciseRowID: row.id, in: workout, history: history, links: links)
       else { continue }
       let plannedWarmups = row.sets.filter(\.isWarmup)
       let plannedWorking = row.sets.filter { !$0.isWarmup }

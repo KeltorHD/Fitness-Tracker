@@ -1,0 +1,1854 @@
+{
+  "Barbell_Bench_Press_-_Medium_Grip": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=CayG6UYqL8g"
+  },
+  "Close-Grip_Barbell_Bench_Press": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=LJeqLAmJLfs"
+  },
+  "Dumbbell_Bench_Press": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=4_QuyfOCI5U"
+  },
+  "Wide-Grip_Barbell_Bench_Press": {},
+  "Butterfly": {},
+  "3_4_Sit-Up": {},
+  "90_90_Hamstring": {},
+  "Ab_Crunch_Machine": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=JSBuaT1tHfM"
+  },
+  "Adductor": {},
+  "Adductor_Groin": {},
+  "Advanced_Kettlebell_Windmill": {},
+  "All_Fours_Quad_Stretch": {
+    "secondaryMuscles": []
+  },
+  "Alternate_Incline_Dumbbell_Curl": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=B4HGtMhGI2s"
+  },
+  "Alternate_Leg_Diagonal_Bound": {},
+  "Alternating_Cable_Shoulder_Press": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=RoLdoKk-FkM"
+  },
+  "Sit-Up": {},
+  "Alternating_Deltoid_Raise": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=zg8BvNfsVek"
+  },
+  "Alternating_Floor_Press": {},
+  "Alternating_Hang_Clean": {},
+  "Alternating_Kettlebell_Press": {},
+  "Alternating_Kettlebell_Row": {},
+  "Alternating_Renegade_Row": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=lUbi7_YOmOo"
+  },
+  "Ankle_Circles": {},
+  "Ankle_On_The_Knee": {},
+  "Anti-Gravity_Press": {},
+  "Arm_Circles": {},
+  "Around_The_Worlds": {},
+  "Atlas_Stone_Trainer": {},
+  "Atlas_Stones": {},
+  "Axle_Deadlift": {},
+  "Triceps_Pushdown": {},
+  "Triceps_Pushdown_-_Rope_Attachment": {},
+  "Triceps_Pushdown_-_V-Bar_Attachment": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=OnVieK1-sEE"
+  },
+  "Reverse_Grip_Triceps_Pushdown": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=ZJG-FlD0M_c"
+  },
+  "Cable_One_Arm_Tricep_Extension": {},
+  "Back_Flyes_-_With_Bands": {},
+  "Backward_Drag": {},
+  "Backward_Medicine_Ball_Throw": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=fU1O_5bfFXY"
+  },
+  "Balance_Board": {},
+  "Ball_Leg_Curl": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=zkzi1klvHps"
+  },
+  "Band_Assisted_Pull-Up": {
+    "equipment": "bands",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=B_VkNQS5YLs"
+  },
+  "Band_Good_Morning": {},
+  "Band_Good_Morning_Pull_Through": {},
+  "Band_Hip_Adductions": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=lUI8App_XdY",
+    "englishSteps": [
+      "Anchor a resistance band low and loop it around the ankle nearest the anchor.",
+      "Stand upright and hold a support if needed; keep the working knee straight.",
+      "Draw the working leg toward the midline against the band, then return slowly and repeat on the other side."
+    ],
+    "instructionSourceURL": "https://www.catalystathletics.com/exercise/779/Standing-Banded-Hip-Adduction/",
+    "instructionCorrectionReason": "Original name and photos indicate hip adduction, but upstream instructions describe abduction; user chose the original name."
+  },
+  "Band_Pull_Apart": {},
+  "Band_Skull_Crusher": {},
+  "Barbell_Ab_Rollout": {},
+  "Barbell_Ab_Rollout_-_On_Knees": {},
+  "Barbell_Curls_Lying_Against_An_Incline": {},
+  "Barbell_Full_Squat": {},
+  "Barbell_Guillotine_Bench_Press": {},
+  "Barbell_Hack_Squat": {},
+  "Barbell_Incline_Shoulder_Raise": {},
+  "Barbell_Rear_Delt_Row": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=rTbb70P8_BI"
+  },
+  "Barbell_Rollout_from_Bench": {},
+  "Barbell_Seated_Calf_Raise": {},
+  "Barbell_Shoulder_Press": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=lPFwcHl0a2c"
+  },
+  "Barbell_Shrug_Behind_The_Back": {},
+  "Barbell_Side_Split_Squat": {},
+  "Barbell_Squat_To_A_Bench": {},
+  "Barbell_Step_Ups": {
+    "secondaryMuscles": [
+      "calves",
+      "glutes",
+      "hamstrings"
+    ]
+  },
+  "Barbell_Walking_Lunge": {},
+  "Battling_Ropes": {},
+  "Bear_Crawl_Sled_Drags": {},
+  "Behind_Head_Chest_Stretch": {},
+  "Bench_Jump": {},
+  "Bench_Press_-_Powerlifting": {},
+  "Bench_Press_-_With_Bands": {},
+  "Bench_Press_with_Chains": {},
+  "Bench_Sprint": {},
+  "Bent-Arm_Barbell_Pullover": {
+    "secondaryMuscles": [
+      "chest",
+      "shoulders",
+      "triceps"
+    ],
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=sgiOWa0qyeg"
+  },
+  "Bent-Arm_Dumbbell_Pullover": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=4B-BrBH17uM"
+  },
+  "Bent-Knee_Hip_Raise": {},
+  "Bent_Over_Dumbbell_Rear_Delt_Raise_With_Head_On_Bench": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=yVdMZVia504"
+  },
+  "Bent_Over_Low-Pulley_Side_Lateral": {},
+  "Bent_Over_One-Arm_Long_Bar_Row": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=6e-RoYjC6UQ"
+  },
+  "Bent_Over_Two-Arm_Long_Bar_Row": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=O2V58mCnmQc"
+  },
+  "Bent_Over_Two-Dumbbell_Row_With_Palms_In": {},
+  "Bent_Press": {},
+  "Bicycling_Stationary": {},
+  "Board_Press": {},
+  "Body-Up": {},
+  "Body_Tricep_Press": {},
+  "Bodyweight_Flyes": {},
+  "Bodyweight_Mid_Row": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=UC1fA33s_6E"
+  },
+  "Bodyweight_Walking_Lunge": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=K0RiO0TsMbE",
+    "equipment": "body only"
+  },
+  "Bosu_Ball_Cable_Crunch_With_Side_Bends": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=ghrP6z8spxo"
+  },
+  "Bottoms_Up": {},
+  "Box_Jump_Multiple_Response": {},
+  "Box_Skip": {},
+  "Box_Squat": {},
+  "Box_Squat_with_Bands": {},
+  "Box_Squat_with_Chains": {},
+  "Butt-Ups": {},
+  "Cable_Chest_Press": {},
+  "Cable_Deadlifts": {},
+  "Cable_Hammer_Curls_-_Rope_Attachment": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=BJYlyoGZtdk"
+  },
+  "Cable_Hip_Adduction": {
+    "primaryMuscles": [
+      "adductors"
+    ]
+  },
+  "Cable_Incline_Pushdown": {},
+  "Cable_Incline_Triceps_Extension": {},
+  "Cable_Internal_Rotation": {},
+  "Cable_Iron_Cross": {},
+  "Cable_Lying_Triceps_Extension": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=xeA2l-CP6wU"
+  },
+  "Cable_Rear_Delt_Fly": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=ATSjVXoOgVg"
+  },
+  "Cable_Reverse_Crunch": {},
+  "Cable_Russian_Twists": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=M3qA79xn4VE"
+  },
+  "Cable_Seated_Crunch": {},
+  "Cable_Seated_Lateral_Raise": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=eozOiJMU2f8"
+  },
+  "Cable_Shoulder_Press": {},
+  "Cable_Shrugs": {},
+  "Cable_Wrist_Curl": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=SocQpoy56pQ"
+  },
+  "Calf-Machine_Shoulder_Shrug": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=B2pVOQwM4es"
+  },
+  "Calf_Press": {},
+  "Calf_Stretch_Elbows_Against_Wall": {},
+  "Calf_Stretch_Hands_Against_Wall": {},
+  "Calves-SMR": {},
+  "Car_Deadlift": {},
+  "Car_Drivers": {
+    "equipment": "other"
+  },
+  "Carioca_Quick_Step": {},
+  "Cat_Stretch": {},
+  "Chain_Handle_Extension": {},
+  "Chain_Press": {},
+  "Chair_Leg_Extended_Stretch": {},
+  "Chair_Lower_Back_Stretch": {},
+  "Chair_Squat": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=7IQov02SVx8"
+  },
+  "Chair_Upper_Body_Stretch": {},
+  "Chest_Stretch_on_Stability_Ball": {},
+  "Childs_Pose": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=_ZX_zTOBgp8"
+  },
+  "Chin_To_Chest_Stretch": {},
+  "Clean_Shrug": {},
+  "Close-Grip_Dumbbell_Press": {},
+  "Close-Grip_EZ-Bar_Press": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=sUJSWbLCMok"
+  },
+  "Close-Grip_EZ_Bar_Curl": {
+    "equipment": "e-z curl bar",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=QzIA4DU0jtM"
+  },
+  "Close-Grip_Standing_Barbell_Curl": {},
+  "Cocoons": {},
+  "Cross-Body_Crunch": {},
+  "Cross_Body_Hammer_Curl": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=buP9fSqWcw4"
+  },
+  "Cross_Over_-_With_Bands": {},
+  "Crossover_Reverse_Lunge": {
+    "equipment": "body only"
+  },
+  "Barbell_Deadlift": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=Z6gcRfPNcZo"
+  },
+  "Crucifix": {},
+  "Crunch_-_Hands_Overhead": {},
+  "Crunch_-_Legs_On_Exercise_Ball": {
+    "equipment": "exercise ball"
+  },
+  "Dancers_Stretch": {},
+  "Deadlift_with_Bands": {},
+  "Deadlift_with_Chains": {},
+  "Decline_Crunch": {},
+  "Decline_Dumbbell_Flyes": {},
+  "Decline_Dumbbell_Triceps_Extension": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=HTqpP_Th49Q"
+  },
+  "Decline_Oblique_Crunch": {},
+  "Decline_Push-Up": {
+    "equipment": "body only",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=DBz85WuXqMk"
+  },
+  "Decline_Reverse_Crunch": {},
+  "Decline_Smith_Press": {},
+  "Deficit_Deadlift": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=Z3VwAO2_H-c"
+  },
+  "Dip_Machine": {},
+  "Double_Kettlebell_Alternating_Hang_Clean": {},
+  "Double_Kettlebell_Windmill": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=TOkKFoo6XjI"
+  },
+  "Drag_Curl": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=6KdYexgsY0E"
+  },
+  "Dumbbell_Alternate_Bicep_Curl": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=O8QTrvGX3OU"
+  },
+  "Dumbbell_Bench_Press_with_Neutral_Grip": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=Cp8CixmENnk"
+  },
+  "Dumbbell_Floor_Press": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=9vcKpv45aeE"
+  },
+  "Dumbbell_Incline_Shoulder_Raise": {},
+  "Dumbbell_Lying_One-Arm_Rear_Lateral_Raise": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=WtC-HSDKPHM"
+  },
+  "Dumbbell_Lying_Rear_Lateral_Raise": {},
+  "Dumbbell_One-Arm_Shoulder_Press": {},
+  "Dumbbell_One-Arm_Triceps_Extension": {},
+  "Dumbbell_One-Arm_Upright_Row": {},
+  "Dumbbell_Prone_Incline_Curl": {},
+  "Dumbbell_Raise": {},
+  "Dumbbell_Scaption": {},
+  "Dumbbell_Seated_One-Leg_Calf_Raise": {},
+  "Dumbbell_Squat_To_A_Bench": {},
+  "Dumbbell_Tricep_Extension_-Pronated_Grip": {},
+  "Dynamic_Back_Stretch": {
+    "equipment": "body only"
+  },
+  "Dynamic_Chest_Stretch": {
+    "equipment": "body only"
+  },
+  "Elbow_Circles": {
+    "equipment": "body only"
+  },
+  "Elbows_Back": {
+    "equipment": "body only"
+  },
+  "Elevated_Back_Lunge": {},
+  "Elliptical_Trainer": {},
+  "Exercise_Ball_Crunch": {},
+  "Exercise_Ball_Pull-In": {},
+  "Extended_Range_One-Arm_Kettlebell_Floor_Press": {},
+  "External_Rotation": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=7gFkxXUEkwM"
+  },
+  "External_Rotation_with_Band": {},
+  "External_Rotation_with_Cable": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=PVdgjHqAes8"
+  },
+  "Farmers_Walk": {},
+  "Fast_Skipping": {},
+  "Flat_Bench_Cable_Flyes": {},
+  "Flat_Bench_Leg_Pull-In": {},
+  "Floor_Glute-Ham_Raise": {
+    "equipment": "body only"
+  },
+  "Floor_Press": {},
+  "Floor_Press_with_Chains": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=rgDzHCcTLac"
+  },
+  "Flutter_Kicks": {},
+  "Forward_Drag_with_Press": {},
+  "Frankenstein_Squat": {},
+  "Freehand_Jump_Squat": {},
+  "Frog_Sit-Ups": {},
+  "Front_Barbell_Squat_To_A_Bench": {},
+  "Front_Cable_Raise": {},
+  "Front_Incline_Dumbbell_Raise": {},
+  "Front_Leg_Raises": {},
+  "Front_Plate_Raise": {},
+  "Front_Raise_And_Pullover": {},
+  "Front_Squat_Clean_Grip": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=sVdNmIdaYWM"
+  },
+  "Front_Squats_With_Two_Kettlebells": {},
+  "Front_Two-Dumbbell_Raise": {},
+  "Front_Dumbbell_Raise": {},
+  "Full_Range-Of-Motion_Lat_Pulldown": {},
+  "Glute_Ham_Raise": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=w_7UaXfsbaw"
+  },
+  "Glute_Kickback": {},
+  "Good_Morning": {},
+  "Good_Morning_off_Pins": {},
+  "Gorilla_Chin_Crunch": {},
+  "Groin_and_Back_Stretch": {
+    "equipment": "body only"
+  },
+  "Groiners": {},
+  "Hack_Squat": {},
+  "Hammer_Curls": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=zC3nLlEvin4"
+  },
+  "Hammer_Grip_Incline_DB_Bench_Press": {},
+  "Hamstring-SMR": {},
+  "Hamstring_Stretch": {
+    "equipment": "other"
+  },
+  "Handstand_Push-Ups": {},
+  "Hanging_Bar_Good_Morning": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=wp4lOBIKQh4"
+  },
+  "Hanging_Pike": {},
+  "Heavy_Bag_Thrust": {},
+  "Hip_Circles_prone": {},
+  "Hip_Extension_with_Bands": {},
+  "Hip_Lift_with_Band": {},
+  "Barbell_Glute_Bridge": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=3Rsib0Ralo4"
+  },
+  "Hug_A_Ball": {},
+  "Hug_Knees_To_Chest": {
+    "equipment": "body only"
+  },
+  "Hurdle_Hops": {
+    "secondaryMuscles": [
+      "abductors",
+      "adductors",
+      "calves",
+      "glutes"
+    ]
+  },
+  "Hyperextensions_With_No_Hyperextension_Bench": {},
+  "IT_Band_and_Glute_Stretch": {},
+  "Incline_Barbell_Triceps_Extension": {},
+  "Incline_Bench_Pull": {
+    "englishSteps": [
+      "Lie chest-down on an incline bench and grasp the barbell with an overhand grip.",
+      "Pull the bar toward your upper chest, keeping your elbows high and out to the sides.",
+      "Lower the barbell under control."
+    ],
+    "instructionSourceURL": "https://kysero.io/exercise-library/barbell-chest-supported-incline-face-pull/",
+    "instructionCorrectionReason": "The source instructions describe dumbbells, but the source equipment and photos show a barbell."
+  },
+  "Incline_Cable_Chest_Press": {},
+  "Incline_Cable_Flye": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=7Z4CZXzluqU"
+  },
+  "Incline_Dumbbell_Press": {},
+  "Incline_Dumbbell_Flyes_-_With_A_Twist": {},
+  "Incline_Hammer_Curls": {},
+  "Incline_Inner_Biceps_Curl": {},
+  "Incline_Push-Up_Close-Grip": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=qs9saDG4g_o"
+  },
+  "Incline_Push-Up_Depth_Jump": {},
+  "Incline_Push-Up_Medium": {},
+  "Incline_Push-Up_Reverse_Grip": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=22aAph9oDBA"
+  },
+  "Incline_Push-Up_Wide": {},
+  "Intermediate_Groin_Stretch": {
+    "primaryMuscles": [
+      "adductors"
+    ],
+    "secondaryMuscles": [
+      "hamstrings"
+    ]
+  },
+  "Intermediate_Hip_Flexor_and_Quad_Stretch": {},
+  "Internal_Rotation_with_Band": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=fluODOqvjlg"
+  },
+  "Inverted_Row_with_Straps": {},
+  "Iron_Crosses_stretch": {},
+  "Isometric_Chest_Squeezes": {},
+  "Isometric_Neck_Exercise_-_Sides": {},
+  "Isometric_Wipers": {},
+  "JM_Press": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=hOCW9cE-GJg"
+  },
+  "Jackknife_Sit-Up": {},
+  "Iron_Cross": {
+    "englishSteps": [
+      "Stand with a dumbbell in each hand and extend your arms out to the sides at shoulder height.",
+      "Lower into a squat while bringing your straight arms together in front of you.",
+      "Stand up while opening your arms back out to the sides."
+    ],
+    "instructionSourceURL": "https://inhouse.center/zheleznyy-krest/",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=VsGuw0SwSeY"
+  },
+  "Janda_Sit-Up": {},
+  "Jefferson_Squats": {},
+  "Jerk_Dip_Squat": {},
+  "Jogging_Treadmill": {},
+  "Kettlebell_Arnold_Press": {},
+  "Kettlebell_Dead_Clean": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=6Hjuscd4ab4"
+  },
+  "Kettlebell_Figure_8": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=CIJrBjSxlyQ"
+  },
+  "Kettlebell_One-Legged_Deadlift": {},
+  "Kettlebell_Overhead_Triceps_Extension": {},
+  "Kettlebell_Pirate_Ships": {},
+  "Kettlebell_Pistol_Squat": {},
+  "Kettlebell_Seated_Press": {},
+  "Kettlebell_Seesaw_Press": {},
+  "Kettlebell_Sumo_High_Pull": {},
+  "Kettlebell_Windmill": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=81H6MOcRpmc"
+  },
+  "Knee_Across_The_Body": {
+    "equipment": "body only"
+  },
+  "Knee_Hip_Raise_On_Parallel_Bars": {
+    "englishSteps": [
+      "Rest your forearms on the pads and hold the handles, keeping your back against the support.",
+      "Raise your bent knees in front of you without swinging.",
+      "Lower your legs under control to the starting position."
+    ],
+    "instructionSourceURL": "https://www.fcr-mm.org/wp-content/uploads/2025/09/Exercises.pdf",
+    "instructionCorrectionReason": "Original name and photos show a bent-knee raise; upstream steps describe raising straight legs."
+  },
+  "Kneeling_Arm_Drill": {
+    "equipment": "body only"
+  },
+  "Kneeling_Cable_Triceps_Extension": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=otYqHZLbSTU"
+  },
+  "Kneeling_Forearm_Stretch": {
+    "equipment": "body only"
+  },
+  "Kneeling_High_Pulley_Row": {},
+  "Kneeling_Hip_Flexor": {
+    "equipment": "body only",
+    "secondaryMuscles": []
+  },
+  "Kneeling_Single-Arm_High_Pulley_Row": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=83BT6B4v7T4"
+  },
+  "Kneeling_Squat": {},
+  "Landmine_180s": {},
+  "Landmine_Linear_Jammer": {},
+  "Lateral_Bound": {},
+  "Lateral_Box_Jump": {},
+  "Lateral_Cone_Hops": {},
+  "Lateral_Raise_-_With_Bands": {},
+  "Latissimus_Dorsi-SMR": {},
+  "Leg-Over_Floor_Press": {},
+  "Leg-Up_Hamstring_Stretch": {
+    "equipment": "body only"
+  },
+  "Leg_Lift": {
+    "englishSteps": [
+      "Stand upright and hold a stable support with both hands.",
+      "Lift one straight leg behind you while keeping your torso steady.",
+      "Lower the leg under control and repeat on the other side."
+    ],
+    "instructionSourceURL": "https://www.fargoparks.com/sites/default/files/2025-02/SAIL%20Class%20Exercise%20Guide_0.pdf",
+    "instructionCorrectionReason": "Source photos show straight-leg hip extension, while its text compares the movement to a leg curl."
+  },
+  "Leg_Pull-In": {},
+  "Leverage_Chest_Press": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=-YiqDRTu8ag"
+  },
+  "Leverage_Deadlift": {
+    "englishSteps": [
+      "Stand between the handles of the leverage machine, bend your knees and grip the lower handles.",
+      "Extend your knees and hips to stand, keeping your arms straight.",
+      "Bend your knees and hips to lower the handles under control."
+    ],
+    "instructionSourceURL": "https://fitnesstracker.ca/resources/exercises/leverage-deadlift/",
+    "instructionCorrectionReason": "Source instructions omit the lifting phase shown in the original photos."
+  },
+  "Leverage_Decline_Chest_Press": {},
+  "Leverage_High_Row": {},
+  "Leverage_Incline_Chest_Press": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=imgwuFidFGE"
+  },
+  "Leverage_Iso_Row": {},
+  "Leverage_Shoulder_Press": {},
+  "Leverage_Shrug": {},
+  "Linear_Acceleration_Wall_Drill": {
+    "equipment": "body only"
+  },
+  "Looking_At_Ceiling": {
+    "equipment": "body only"
+  },
+  "Low_Cable_Crossover": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=erTwf-R8xRY"
+  },
+  "Low_Cable_Triceps_Extension": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=fCvAFnB1TuY"
+  },
+  "Low_Pulley_Row_To_Neck": {},
+  "Lower_Back-SMR": {},
+  "Lower_Back_Curl": {
+    "primaryMuscles": [
+      "lower back"
+    ]
+  },
+  "Lunge_Pass_Through": {},
+  "Lying_Bent_Leg_Groin": {},
+  "Lying_Cable_Curl": {},
+  "Lying_Cambered_Barbell_Row": {
+    "equipment": "e-z curl bar"
+  },
+  "Lying_Close-Grip_Barbell_Triceps_Extension_Behind_The_Head": {},
+  "Lying_Crossover": {},
+  "Lying_Dumbbell_Tricep_Extension": {},
+  "Lying_Face_Down_Plate_Neck_Resistance": {},
+  "Lying_Face_Up_Plate_Neck_Resistance": {},
+  "Lying_Glute": {},
+  "Lying_Hamstring": {},
+  "Lying_High_Bench_Barbell_Curl": {},
+  "Lying_Prone_Quadriceps": {},
+  "Lying_Rear_Delt_Raise": {},
+  "Lying_Supine_Dumbbell_Curl": {},
+  "Lying_T-Bar_Row": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=w0KnlQ-b7jw"
+  },
+  "Machine_Bench_Press": {},
+  "Machine_Bicep_Curl": {},
+  "Machine_Preacher_Curls": {},
+  "Machine_Shoulder_Military_Press": {},
+  "Machine_Triceps_Extension": {},
+  "Medicine_Ball_Chest_Pass": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=upEOUUXso2Q"
+  },
+  "Medicine_Ball_Full_Twist": {},
+  "Medicine_Ball_Scoop_Throw": {},
+  "Middle_Back_Shrug": {},
+  "Middle_Back_Stretch": {},
+  "Mixed_Grip_Chin": {},
+  "Monster_Walk": {},
+  "Mountain_Climbers": {},
+  "Muscle_Up": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=SPlFapG3KEE"
+  },
+  "Narrow_Stance_Hack_Squats": {},
+  "Narrow_Stance_Leg_Press": {},
+  "Narrow_Stance_Squats": {},
+  "Natural_Glute_Ham_Raise": {},
+  "Neck-SMR": {},
+  "Neck_Press": {},
+  "Oblique_Crunches": {},
+  "Oblique_Crunches_-_On_The_Floor": {},
+  "Olympic_Squat": {},
+  "On-Your-Back_Quad_Stretch": {},
+  "On_Your_Side_Quad_Stretch": {},
+  "One-Arm_Flat_Bench_Dumbbell_Flye": {},
+  "One-Arm_High-Pulley_Cable_Side_Bends": {},
+  "One-Arm_Incline_Lateral_Raise": {},
+  "One-Arm_Kettlebell_Clean": {},
+  "One-Arm_Kettlebell_Clean_and_Jerk": {},
+  "One-Arm_Kettlebell_Floor_Press": {},
+  "One-Arm_Kettlebell_Jerk": {},
+  "One-Arm_Kettlebell_Push_Press": {},
+  "One-Arm_Kettlebell_Row": {},
+  "One-Arm_Kettlebell_Snatch": {},
+  "One-Arm_Kettlebell_Split_Jerk": {},
+  "One-Arm_Kettlebell_Split_Snatch": {},
+  "One-Arm_Kettlebell_Swings": {
+    "englishSteps": [
+      "Place a kettlebell in front of you, hinge at the hips and grip the handle with one hand.",
+      "Hike the kettlebell back between your legs, then drive through your hips and legs to swing it forward to approximately chest height.",
+      "Let the kettlebell swing back between your legs as you hinge again. Repeat with the other hand."
+    ],
+    "instructionSourceURL": "https://www.puregym.com/exercises/plyometrics/kettlebells/one-arm-kb-swing/",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=ANjKto7aSH0"
+  },
+  "One-Arm_Long_Bar_Row": {},
+  "One-Arm_Medicine_Ball_Slam": {},
+  "One-Arm_Overhead_Kettlebell_Squats": {},
+  "One-Arm_Side_Deadlift": {},
+  "One-Arm_Side_Laterals": {},
+  "One-Legged_Cable_Kickback": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=xO5WVJGVJ2w"
+  },
+  "One_Arm_Against_Wall": {},
+  "One_Arm_Dumbbell_Bench_Press": {},
+  "One_Arm_Dumbbell_Preacher_Curl": {},
+  "One_Arm_Floor_Press": {},
+  "One_Arm_Lat_Pulldown": {},
+  "One_Arm_Pronated_Dumbbell_Triceps_Extension": {},
+  "One_Arm_Supinated_Dumbbell_Triceps_Extension": {},
+  "One_Half_Locust": {},
+  "One_Handed_Hang": {},
+  "One_Knee_To_Chest": {},
+  "One_Leg_Barbell_Squat": {},
+  "Otis-Up": {},
+  "Overhead_Cable_Curl": {},
+  "Overhead_Lat": {},
+  "Overhead_Slam": {},
+  "Overhead_Squat": {},
+  "Overhead_Stretch": {},
+  "Overhead_Triceps": {},
+  "Pallof_Press": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=YxIGl7JQ_sE"
+  },
+  "Pallof_Press_With_Rotation": {},
+  "Palms-Down_Dumbbell_Wrist_Curl_Over_A_Bench": {},
+  "Palms-Down_Wrist_Curl_Over_A_Bench": {},
+  "Palms-Up_Barbell_Wrist_Curl_Over_A_Bench": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=dQtMZ3ZEGwU"
+  },
+  "Palms-Up_Dumbbell_Wrist_Curl_Over_A_Bench": {},
+  "Parallel_Bar_Dip": {},
+  "Pelvic_Tilt_Into_Bridge": {
+    "equipment": "body only"
+  },
+  "Peroneals-SMR": {},
+  "Peroneals_Stretch": {},
+  "Physioball_Hip_Bridge": {},
+  "Pin_Presses": {},
+  "Piriformis-SMR": {},
+  "Plank": {},
+  "Plate_Pinch": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=aW0GOG8XSHk"
+  },
+  "Plate_Twist": {},
+  "Platform_Hamstring_Slides": {},
+  "Plie_Dumbbell_Squat": {},
+  "Plyo_Kettlebell_Pushups": {},
+  "Plyo_Push-up": {},
+  "Posterior_Tibialis_Stretch": {},
+  "Power_Clean": {},
+  "Power_Jerk": {},
+  "Power_Snatch": {},
+  "Power_Stairs": {},
+  "Preacher_Hammer_Dumbbell_Curl": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=-MPHGPjtiOk"
+  },
+  "Prone_Manual_Hamstring": {
+    "equipment": "body only"
+  },
+  "Prowler_Sprint": {},
+  "Pull_Through": {},
+  "Push-Up_Wide": {},
+  "Push-Ups_-_Close_Triceps_Position": {},
+  "Push-Ups_With_Feet_On_An_Exercise_Ball": {},
+  "Push_Press": {
+    "englishSteps": [
+      "Hold the bar across the front of your shoulders and stand tall.",
+      "Dip slightly at the knees with an upright torso, then drive forcefully through your legs.",
+      "Use the leg drive to press the bar overhead, then lower it under control to your shoulders."
+    ],
+    "instructionSourceURL": "https://www.catalystathletics.com/exercise/87/Push-Press/",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=yCvb3ZBPM9s"
+  },
+  "Push_Press_-_Behind_the_Neck": {},
+  "Push_Up_to_Side_Plank": {},
+  "Pushups_Close_and_Wide_Hand_Positions": {},
+  "Quad_Stretch": {},
+  "Quadriceps-SMR": {},
+  "Quick_Leap": {},
+  "Rack_Delivery": {},
+  "Rack_Pull_with_Bands": {},
+  "Rack_Pulls": {},
+  "Rear_Leg_Raises": {
+    "primaryMuscles": [
+      "glutes"
+    ],
+    "secondaryMuscles": [
+      "hamstrings"
+    ]
+  },
+  "Recumbent_Bike": {},
+  "Return_Push_from_Stance": {},
+  "Reverse_Band_Bench_Press": {},
+  "Reverse_Band_Box_Squat": {},
+  "Reverse_Band_Deadlift": {},
+  "Reverse_Band_Power_Squat": {},
+  "Reverse_Band_Sumo_Deadlift": {},
+  "Reverse_Barbell_Preacher_Curls": {},
+  "Reverse_Cable_Curl": {},
+  "Reverse_Flyes": {},
+  "Reverse_Flyes_With_External_Rotation": {},
+  "Reverse_Grip_Bent-Over_Rows": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=IswHeM10XFA"
+  },
+  "Reverse_Hyperextension": {},
+  "Reverse_Plate_Curls": {},
+  "Reverse_Triceps_Bench_Press": {},
+  "Rhomboids-SMR": {},
+  "Rickshaw_Carry": {},
+  "Rickshaw_Deadlift": {},
+  "Ring_Dips": {},
+  "Rocket_Jump": {},
+  "Rocking_Standing_Calf_Raise": {},
+  "Rocky_Pull-Ups_Pulldowns": {},
+  "Romanian_Deadlift": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=1srqEAPcUCc"
+  },
+  "Romanian_Deadlift_from_Deficit": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=XLCOasfz1uI"
+  },
+  "Rope_Climb": {},
+  "Rope_Crunch": {},
+  "Rope_Jumping": {},
+  "Rope_Straight-Arm_Pulldown": {},
+  "Round_The_World_Shoulder_Stretch": {},
+  "Rowing_Stationary": {},
+  "Runners_Stretch": {
+    "equipment": "body only"
+  },
+  "Running_Treadmill": {},
+  "Sandbag_Load": {},
+  "Scapular_Pull-Up": {
+    "equipment": "other",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=ZKO2-MM5ydE"
+  },
+  "Scissor_Kick": {},
+  "Scissors_Jump": {},
+  "Seated_Band_Hamstring_Curl": {
+    "equipment": "bands"
+  },
+  "Seated_Barbell_Twist": {},
+  "Seated_Bent-Over_One-Arm_Dumbbell_Triceps_Extension": {},
+  "Seated_Bent-Over_Two-Arm_Dumbbell_Triceps_Extension": {},
+  "Seated_Biceps": {},
+  "Seated_Cable_Shoulder_Press": {},
+  "Seated_Calf_Stretch": {},
+  "Seated_Dumbbell_Curl": {},
+  "Seated_Dumbbell_Inner_Biceps_Curl": {},
+  "Seated_Dumbbell_Palms-Down_Wrist_Curl": {},
+  "Seated_Dumbbell_Palms-Up_Wrist_Curl": {},
+  "Seated_Dumbbell_Press": {},
+  "Seated_Floor_Hamstring_Stretch": {},
+  "Seated_Front_Deltoid": {},
+  "Seated_Glute": {},
+  "Seated_Good_Mornings": {},
+  "Seated_Hamstring": {},
+  "Seated_Hamstring_and_Calf_Stretch": {},
+  "Seated_Head_Harness_Neck_Resistance": {},
+  "Seated_One-Arm_Dumbbell_Palms-Down_Wrist_Curl": {},
+  "Seated_One-Arm_Dumbbell_Palms-Up_Wrist_Curl": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=Q7dTbE4kRUY"
+  },
+  "Seated_One-arm_Cable_Pulley_Rows": {},
+  "Seated_Overhead_Stretch": {},
+  "Seated_Two-Arm_Palms-Up_Low-Pulley_Wrist_Curl": {},
+  "See-Saw_Press_Alternating_Side_Press": {},
+  "Shotgun_Row": {},
+  "Shoulder_Circles": {},
+  "Shoulder_Press_-_With_Bands": {},
+  "Shoulder_Raise": {},
+  "Shoulder_Stretch": {},
+  "Side-Lying_Floor_Stretch": {},
+  "Side_Bridge": {
+    "englishSteps": [
+      "Lie on your side with your forearm on the floor and your legs extended.",
+      "Raise your hips until your body forms a straight line from shoulders to feet.",
+      "Lower your hips with control and repeat, then switch sides."
+    ],
+    "instructionSourceURL": "https://www.catalystathletics.com/exercise/499/Side-Plank-Lift/"
+  },
+  "Side_Hop-Sprint": {},
+  "Side_Jackknife": {
+    "englishSteps": [
+      "Lie on your side with your legs extended and your top hand behind your head.",
+      "Raise your top leg and curl your upper body toward it at the same time.",
+      "Lower under control and repeat, then switch sides."
+    ],
+    "instructionSourceURL": "https://www.skimble.com/exercises/21818-side-jackknife-how-to-do-exercise"
+  },
+  "Side_Laterals_to_Front_Raise": {
+    "englishSteps": [
+      "Stand upright with a dumbbell in each hand at your sides.",
+      "Raise your slightly bent arms out to the sides to shoulder height.",
+      "Move the dumbbells forward at shoulder height, then lower them under control."
+    ],
+    "instructionSourceURL": "https://www.dynperformance.com/en/exercises/fedb-side-laterals-to-front-raise",
+    "instructionCorrectionReason": "The original title specifies a lateral-to-front raise, but the first raise in the upstream instructions incorrectly says to raise forward.",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=bzI-XoUgQMU"
+  },
+  "Side_Leg_Raises": {
+    "primaryMuscles": [
+      "abductors"
+    ],
+    "secondaryMuscles": [
+      "glutes"
+    ]
+  },
+  "Side_Lying_Groin_Stretch": {},
+  "Side_Neck_Stretch": {},
+  "Side_Standing_Long_Jump": {},
+  "Side_To_Side_Chins": {},
+  "Side_Wrist_Pull": {},
+  "Side_to_Side_Box_Shuffle": {},
+  "Single-Arm_Cable_Crossover": {},
+  "Single-Arm_Linear_Jammer": {},
+  "Single-Arm_Push-Up": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=kuM-IvATYms"
+  },
+  "Single-Cone_Sprint_Drill": {},
+  "Single-Leg_Hop_Progression": {},
+  "Single-Leg_Lateral_Hop": {},
+  "Single-Leg_Leg_Extension": {},
+  "Single_Dumbbell_Raise": {},
+  "Single_Leg_Butt_Kick": {},
+  "Single_Leg_Push-off": {},
+  "Sit_Squats": {
+    "equipment": "body only"
+  },
+  "Skating": {},
+  "Sled_Drag_-_Harness": {},
+  "Sled_Overhead_Backward_Walk": {},
+  "Sled_Overhead_Triceps_Extension": {},
+  "Sled_Push": {},
+  "Sled_Reverse_Flye": {},
+  "Sled_Row": {},
+  "Sledgehammer_Swings": {},
+  "Smith_Incline_Shoulder_Raise": {
+    "equipment": "machine"
+  },
+  "Smith_Machine_Behind_the_Back_Shrug": {},
+  "Smith_Machine_Bench_Press": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=7FyJdsXeta8"
+  },
+  "Smith_Machine_Bent_Over_Row": {},
+  "Smith_Machine_Calf_Raise": {},
+  "Smith_Machine_Close-Grip_Bench_Press": {},
+  "Smith_Machine_Decline_Press": {},
+  "Smith_Machine_Hang_Power_Clean": {},
+  "Smith_Machine_Hip_Raise": {},
+  "Smith_Machine_Incline_Bench_Press": {},
+  "Smith_Machine_Leg_Press": {},
+  "Smith_Machine_One-Arm_Upright_Row": {},
+  "Smith_Machine_Overhead_Shoulder_Press": {},
+  "Smith_Machine_Pistol_Squat": {},
+  "Smith_Machine_Squat": {},
+  "Smith_Machine_Stiff-Legged_Deadlift": {},
+  "Smith_Machine_Upright_Row": {},
+  "Smith_Single-Leg_Split_Squat": {
+    "englishSteps": [
+      "Place a bench behind the Smith machine and position the bar across your upper back.",
+      "Unrack the bar, place one foot forward and rest the other foot on the bench behind you.",
+      "Bend the front knee and lower under control, then stand up and repeat on the other side."
+    ],
+    "instructionSourceURL": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4262933/",
+    "instructionCorrectionReason": "The source asserts that any knee movement beyond the toes is incorrect and harmful; this blanket claim is unsupported."
+  },
+  "Snatch": {},
+  "Snatch_Balance": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=8KKQTdnxWso"
+  },
+  "Snatch_Deadlift": {
+    "secondaryMuscles": [
+      "forearms",
+      "glutes",
+      "lower back",
+      "quadriceps",
+      "traps"
+    ]
+  },
+  "Snatch_Pull": {},
+  "Snatch_Shrug": {},
+  "Speed_Band_Overhead_Triceps": {},
+  "Speed_Box_Squat": {},
+  "Speed_Squats": {},
+  "Spell_Caster": {},
+  "Spider_Crawl": {},
+  "Spider_Curl": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=B1fVN5zOit4"
+  },
+  "Spinal_Stretch": {},
+  "Split_Clean": {},
+  "Split_Jerk": {},
+  "Split_Jump": {},
+  "Split_Snatch": {
+    "secondaryMuscles": [
+      "calves",
+      "forearms",
+      "glutes",
+      "lower back",
+      "quadriceps",
+      "shoulders",
+      "traps",
+      "triceps"
+    ]
+  },
+  "Squat_Jerk": {},
+  "Barbell_Squat": {
+    "englishSteps": [
+      "Position the bar across your upper back and lift it from the rack.",
+      "Bend your knees and hips to descend into a controlled squat.",
+      "Drive through your feet and extend your legs to stand up."
+    ],
+    "instructionSourceURL": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4262933/",
+    "instructionCorrectionReason": "The source incorrectly asserts that any forward knee travel beyond the toes makes the squat harmful."
+  },
+  "Squat_with_Bands": {},
+  "Squat_with_Chains": {},
+  "Squat_with_Plate_Movers": {},
+  "Squats_-_With_Bands": {},
+  "Stairmaster": {},
+  "Standing_Alternating_Dumbbell_Press": {},
+  "Standing_Barbell_Calf_Raise": {},
+  "Standing_Barbell_Press_Behind_Neck": {},
+  "Standing_Bent-Over_One-Arm_Dumbbell_Triceps_Extension": {},
+  "Standing_Bent-Over_Two-Arm_Dumbbell_Triceps_Extension": {},
+  "Standing_Biceps_Stretch": {},
+  "Standing_Bradford_Press": {},
+  "Standing_Cable_Chest_Press": {},
+  "Standing_Cable_Lift": {},
+  "Standing_Cable_Wood_Chop": {},
+  "Standing_Concentration_Curl": {},
+  "Standing_Dumbbell_Calf_Raise": {},
+  "Standing_Dumbbell_Reverse_Curl": {},
+  "Standing_Dumbbell_Straight-Arm_Front_Delt_Raise_Above_Head": {},
+  "Standing_Dumbbell_Triceps_Extension": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=7h3lG2WnLXg"
+  },
+  "Standing_Dumbbell_Upright_Row": {},
+  "Standing_Elevated_Quad_Stretch": {
+    "englishSteps": [
+      "Stand with your back to a stable bench and rest one foot on it behind you.",
+      "Keep the supporting knee slightly bent and your torso upright.",
+      "Hold a comfortable stretch in the front of the raised leg, then switch sides."
+    ],
+    "instructionSourceURL": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4262933/",
+    "instructionCorrectionReason": "The source gives an absolute instruction to prevent the knee moving beyond the toes; forward knee travel is not inherently incorrect."
+  },
+  "Standing_Front_Barbell_Raise_Over_Head": {},
+  "Standing_Gastrocnemius_Calf_Stretch": {},
+  "Standing_Hamstring_and_Calf_Stretch": {},
+  "Standing_Hip_Circles": {},
+  "Standing_Inner-Biceps_Curl": {},
+  "Standing_Lateral_Stretch": {},
+  "Standing_Leg_Curl": {},
+  "Standing_Long_Jump": {},
+  "Standing_Low-Pulley_One-Arm_Triceps_Extension": {},
+  "Standing_Olympic_Plate_Hand_Squeeze": {},
+  "Standing_One-Arm_Cable_Curl": {},
+  "Standing_One-Arm_Dumbbell_Curl_Over_Incline_Bench": {},
+  "Standing_Overhead_Barbell_Triceps_Extension": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=qkZBtEHUjfw"
+  },
+  "Standing_Palm-In_One-Arm_Dumbbell_Press": {},
+  "Standing_Palms-In_Dumbbell_Press": {},
+  "Standing_Palms-Up_Barbell_Behind_The_Back_Wrist_Curl": {},
+  "Standing_Pelvic_Tilt": {
+    "equipment": "body only"
+  },
+  "Standing_Rope_Crunch": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=DrQxmuqkfV8"
+  },
+  "Standing_Soleus_And_Achilles_Stretch": {},
+  "Standing_Toe_Touches": {},
+  "Standing_Towel_Triceps_Extension": {
+    "equipment": "other",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=fpmhCrrnP0M"
+  },
+  "Standing_Two-Arm_Overhead_Throw": {},
+  "Star_Jump": {},
+  "Step-up_with_Knee_Raise": {},
+  "Step_Mill": {},
+  "Stiff-Legged_Barbell_Deadlift": {},
+  "Stiff_Leg_Barbell_Good_Morning": {},
+  "Stomach_Vacuum": {},
+  "Straight_Bar_Bench_Mid_Rows": {},
+  "Straight_Raises_on_Incline_Bench": {},
+  "Stride_Jump_Crossover": {},
+  "Sumo_Deadlift_with_Bands": {},
+  "Sumo_Deadlift_with_Chains": {},
+  "Superman": {},
+  "Supine_Chest_Throw": {},
+  "Supine_One-Arm_Overhead_Throw": {},
+  "Supine_Two-Arm_Overhead_Throw": {},
+  "Suspended_Fallout": {},
+  "Suspended_Push-Up": {},
+  "Suspended_Reverse_Crunch": {
+    "englishSteps": [
+      "Secure the straps low, place your feet in the handles and assume a strong high plank.",
+      "Bend your knees and draw them toward your torso while maintaining shoulder support.",
+      "Slowly extend your legs and return to the plank."
+    ],
+    "instructionSourceURL": "https://www.trxtraining.com/blogs/news/trx-moves-of-the-week-the-basics",
+    "instructionCorrectionReason": "The source asks for anterior pelvic tilt while flexing the spine during the crunch; the revised instructions describe the movement without that conflicting cue."
+  },
+  "Suspended_Row": {
+    "englishSteps": [
+      "Hold the handles of securely anchored straps and lean back with your arms extended.",
+      "Bend your elbows and draw your shoulder blades together as you pull your chest toward the handles.",
+      "Slowly straighten your arms while keeping your body aligned."
+    ],
+    "instructionSourceURL": "https://www.trxtraining.com/blogs/news/trx-shoulder-exercises",
+    "instructionCorrectionReason": "The upstream text incorrectly instructs scapular protraction during the pull; the shoulders retract as the body approaches the handles."
+  },
+  "Suspended_Split_Squat": {},
+  "Svend_Press": {},
+  "Tate_Press": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=cCSxFRaN2Kg"
+  },
+  "The_Straddle": {},
+  "Tire_Flip": {},
+  "Toe_Touchers": {},
+  "Torso_Rotation": {},
+  "Trail_Running_Walking": {
+    "equipment": "body only"
+  },
+  "Trap_Bar_Deadlift": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=sNmGkfMhma0"
+  },
+  "Tricep_Side_Stretch": {},
+  "Triceps_Overhead_Extension_with_Rope": {},
+  "Triceps_Stretch": {},
+  "Tuck_Crunch": {},
+  "Two-Arm_Dumbbell_Preacher_Curl": {},
+  "Two-Arm_Kettlebell_Clean": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=Yaelrl1VN20"
+  },
+  "Two-Arm_Kettlebell_Jerk": {},
+  "Two-Arm_Kettlebell_Military_Press": {},
+  "Two-Arm_Kettlebell_Row": {},
+  "Upper_Back-Leg_Grab": {},
+  "Upper_Back_Stretch": {
+    "secondaryMuscles": []
+  },
+  "Upright_Barbell_Row": {},
+  "Upright_Cable_Row": {},
+  "Upright_Row_-_With_Bands": {},
+  "Upward_Stretch": {},
+  "V-Bar_Pulldown": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=IjoFCmLX7z0"
+  },
+  "V-Bar_Pullup": {},
+  "Vertical_Swing": {},
+  "Walking_Treadmill": {},
+  "Weighted_Ball_Hyperextension": {},
+  "Weighted_Ball_Side_Bend": {},
+  "Weighted_Bench_Dip": {},
+  "Weighted_Crunches": {
+    "equipment": "other"
+  },
+  "Weighted_Jump_Squat": {},
+  "Weighted_Pull_Ups": {},
+  "Weighted_Sissy_Squat": {
+    "equipment": "other"
+  },
+  "Weighted_Squat": {},
+  "Decline_Barbell_Bench_Press": {},
+  "Wide-Grip_Decline_Barbell_Bench_Press": {},
+  "Wide-Grip_Pulldown_Behind_The_Neck": {},
+  "Wide-Grip_Rear_Pull-Up": {},
+  "Wide-Grip_Standing_Barbell_Curl": {},
+  "Wide_Stance_Barbell_Squat": {
+    "englishSteps": [
+      "Position the bar across your upper back and lift it from the rack.",
+      "Set your feet wider than shoulder width and descend into a controlled squat.",
+      "Drive through your feet and extend your legs to stand up."
+    ],
+    "instructionSourceURL": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4262933/",
+    "instructionCorrectionReason": "The source incorrectly claims that knee travel beyond the toes always makes the squat harmful."
+  },
+  "Wide_Stance_Stiff_Legs": {},
+  "Wind_Sprints": {},
+  "Windmills": {},
+  "Worlds_Greatest_Stretch": {},
+  "Wrist_Circles": {},
+  "Wrist_Roller": {},
+  "Wrist_Rotations_with_Straight_Bar": {},
+  "Yoke_Walk": {},
+  "Zercher_Squats": {
+    "englishSteps": [
+      "Position the bar in the crooks of your elbows and lift it from the rack.",
+      "Bend your knees and hips to descend into a controlled squat, keeping the bar secure.",
+      "Drive through your feet and extend your legs to stand up."
+    ],
+    "instructionSourceURL": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4262933/",
+    "instructionCorrectionReason": "The source incorrectly claims that any knee travel beyond the toes makes the squat harmful.",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=_fXBhqQWj64"
+  },
+  "Zottman_Curl": {},
+  "Zottman_Preacher_Curl": {},
+  "Bent_Over_Barbell_Row": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=bm0_q9bR_HA"
+  },
+  "Standing_Military_Press": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=3VpI0V_9D0Y"
+  },
+  "Pullups": {},
+  "Dumbbell_Bicep_Curl": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=QaXCjUMCp90"
+  },
+  "Crunches": {},
+  "Bodyweight_Squat": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=P-yaD24bUE8"
+  },
+  "Front_Barbell_Squat": {
+    "englishSteps": [
+      "Rest the bar across the fronts of your shoulders and hold it with crossed arms.",
+      "Unrack the bar and descend into a controlled squat with a stable torso.",
+      "Extend your legs and return to standing."
+    ],
+    "instructionSourceURL": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4262933/",
+    "instructionCorrectionReason": "The upstream text asserts that any knee travel beyond the toes is necessarily harmful; that blanket claim is unsupported.",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=7nDvE3LdiAc"
+  },
+  "Goblet_Squat": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=MWHIs0zxkCU"
+  },
+  "Dumbbell_Squat": {
+    "englishSteps": [
+      "Stand upright holding a dumbbell in each hand at your sides.",
+      "Bend your knees and hips to descend into a controlled squat.",
+      "Drive through your feet and extend your legs to stand up."
+    ],
+    "instructionSourceURL": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4262933/",
+    "instructionCorrectionReason": "The upstream text asserts that any knee travel beyond the toes is necessarily harmful; that blanket claim is unsupported."
+  },
+  "Barbell_Lunge": {
+    "englishSteps": [
+      "Place the bar across your upper back and lift it from the rack.",
+      "Step forward with one leg and bend both knees to lower into a lunge.",
+      "Push through your front foot to return to standing, then repeat on the other side."
+    ],
+    "instructionSourceURL": "https://synergysportsmedicine.com/should-we-squat-and-lunge-with-our-knees-over-our-toes/",
+    "instructionCorrectionReason": "The upstream text asserts that any knee travel beyond the toes is necessarily harmful; that blanket claim is unsupported."
+  },
+  "Dumbbell_Lunges": {
+    "englishSteps": [
+      "Stand upright holding dumbbells at your sides.",
+      "Step forward with one leg and bend both knees to lower into a lunge.",
+      "Push through your front foot to return to standing, then repeat on the other side."
+    ],
+    "instructionSourceURL": "https://synergysportsmedicine.com/should-we-squat-and-lunge-with-our-knees-over-our-toes/",
+    "instructionCorrectionReason": "The upstream text asserts that any knee travel beyond the toes is necessarily harmful; that blanket claim is unsupported."
+  },
+  "Dumbbell_Rear_Lunge": {
+    "englishSteps": [
+      "Stand upright holding dumbbells at your sides.",
+      "Step backward with one leg and bend both knees to lower into a lunge.",
+      "Push through your front foot to return to standing, then repeat on the other side."
+    ],
+    "instructionSourceURL": "https://synergysportsmedicine.com/should-we-squat-and-lunge-with-our-knees-over-our-toes/",
+    "instructionCorrectionReason": "The upstream text asserts that any knee travel beyond the toes is necessarily harmful; that blanket claim is unsupported.",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=jklUSipBe28"
+  },
+  "Split_Squat_with_Dumbbells": {},
+  "Dumbbell_Step_Ups": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=hgkk12L_Umk"
+  },
+  "Leg_Press": {},
+  "Leg_Extensions": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=Cy9TJ_jhEBs"
+  },
+  "Lying_Leg_Curls": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=lUH80pneL5w"
+  },
+  "Seated_Leg_Curl": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=EqCsK_vlnfE"
+  },
+  "Sumo_Deadlift": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=qy75WDhRTsw"
+  },
+  "Stiff-Legged_Dumbbell_Deadlift": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=jVyvO0LlMFs"
+  },
+  "Barbell_Hip_Thrust": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=4hYRM_60BD4"
+  },
+  "Butt_Lift_Bridge": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=eFrJy6keSSE"
+  },
+  "Single_Leg_Glute_Bridge": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=HkF61M6StlY"
+  },
+  "Thigh_Abductor": {},
+  "Thigh_Adductor": {},
+  "Standing_Calf_Raises": {},
+  "Seated_Calf_Raise": {},
+  "Calf_Press_On_The_Leg_Press_Machine": {},
+  "Chin-Up": {},
+  "Wide-Grip_Lat_Pulldown": {},
+  "Close-Grip_Front_Lat_Pulldown": {},
+  "Underhand_Cable_Pulldowns": {},
+  "Seated_Cable_Rows": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=xQNrFHEMhI4"
+  },
+  "One-Arm_Dumbbell_Row": {},
+  "Bent_Over_Two-Dumbbell_Row": {},
+  "Dumbbell_Incline_Row": {},
+  "T-Bar_Row_with_Handle": {},
+  "Straight-Arm_Pulldown": {},
+  "Hyperextensions_Back_Extensions": {},
+  "Barbell_Shrug": {},
+  "Dumbbell_Shrug": {},
+  "Barbell_Incline_Bench_Press_-_Medium_Grip": {},
+  "Decline_Dumbbell_Bench_Press": {},
+  "Dumbbell_Flyes": {},
+  "Incline_Dumbbell_Flyes": {},
+  "Cable_Crossover": {},
+  "Pushups": {},
+  "Push-Ups_With_Feet_Elevated": {},
+  "Dips_-_Chest_Version": {},
+  "Straight-Arm_Dumbbell_Pullover": {},
+  "Arnold_Dumbbell_Press": {},
+  "Side_Lateral_Raise": {},
+  "Seated_Side_Lateral_Raise": {},
+  "Seated_Bent-Over_Rear_Delt_Raise": {},
+  "Reverse_Machine_Flyes": {},
+  "Face_Pull": {
+    "englishSteps": [
+      "Attach a rope to a high pulley and stand facing the cable machine.",
+      "Pull the rope toward your face, separating your hands and directing your elbows outward.",
+      "Extend your arms under control to return the rope forward."
+    ],
+    "instructionSourceURL": "https://www.nasm.org/resource-center/exercise-library/face-pull",
+    "instructionCorrectionReason": "The source contains a single abbreviated instruction; the revision adds setup and controlled return.",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=eTCBSFlCJ_s"
+  },
+  "Standing_Low-Pulley_Deltoid_Raise": {},
+  "Barbell_Curl": {},
+  "EZ-Bar_Curl": {},
+  "Alternate_Hammer_Curl": {},
+  "Incline_Dumbbell_Curl": {},
+  "Concentration_Curls": {},
+  "Standing_Biceps_Cable_Curl": {},
+  "Reverse_Barbell_Curl": {},
+  "EZ-Bar_Skullcrusher": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=ea4fGqPJicA"
+  },
+  "Seated_Triceps_Press": {},
+  "Dips_-_Triceps_Version": {},
+  "Bench_Dips": {},
+  "Air_Bike": {},
+  "Reverse_Crunch": {},
+  "Flat_Bench_Lying_Leg_Raise": {},
+  "Russian_Twist": {
+    "equipment": "other",
+    "englishSteps": [
+      "Sit on the floor with knees bent and feet secured, holding a weight plate with both hands in front of you.",
+      "Lean back slightly and turn your torso and the plate to one side.",
+      "Turn under control to the other side and continue alternating."
+    ],
+    "instructionSourceURL": "https://www.ddxfitness.ru/blog/training/russkiy-tvist/",
+    "instructionCorrectionReason": "The source name is generic and the photos show a weight plate, which is omitted from the source equipment and instructions."
+  },
+  "Dead_Bug": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=bxn9FBrt4-A"
+  },
+  "Alternate_Heel_Touchers": {},
+  "Ab_Roller": {},
+  "Barbell_Side_Bend": {},
+  "Dumbbell_Side_Bend": {},
+  "Hang_Clean": {
+    "englishSteps": [
+      "Hold the bar at mid-thigh with a clean-width overhand grip, knees slightly bent and torso inclined forward.",
+      "Extend the legs and hips to accelerate the bar close to the body.",
+      "Pull under the bar, turn the elbows forward and receive it across the shoulders in a squat.",
+      "Stand up and lower the bar under control."
+    ],
+    "instructionSourceURL": "https://www.catalystathletics.com/exercise/70/3-Position-Clean/",
+    "instructionCorrectionReason": "The original instructions omit pulling under the bar and receiving it at the shoulders.",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=uUeV3LwisDI"
+  },
+  "Hang_Clean_-_Below_the_Knees": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=uUeV3LwisDI"
+  },
+  "Hang_Snatch": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=QZU7URo6HME"
+  },
+  "Hang_Snatch_-_Below_Knees": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=QZU7URo6HME"
+  },
+  "Clean_from_Blocks": {},
+  "Power_Clean_from_Blocks": {},
+  "Snatch_from_Blocks": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=hWLOXxFDz9o"
+  },
+  "Power_Snatch_from_Blocks": {},
+  "Clean_and_Press": {
+    "secondaryMuscles": [
+      "abdominals",
+      "calves",
+      "glutes",
+      "hamstrings",
+      "lower back",
+      "middle back",
+      "quadriceps",
+      "traps",
+      "triceps"
+    ]
+  },
+  "Incline_Push-Up": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=PewU12kHcDA"
+  },
+  "Lying_One-Arm_Lateral_Raise": {
+    "englishSteps": [
+      "Lie on your side on a flat bench with a dumbbell in your upper hand.",
+      "Lower the arm in front of your torso with a slight bend in the elbow.",
+      "Raise the dumbbell in an arc toward the ceiling, then lower it under control.",
+      "Repeat on the other side."
+    ],
+    "instructionSourceURL": "https://www.muscleandstrength.com/articles/lying-side-lateral-raise-gangster-delts",
+    "instructionCorrectionReason": "The generic original name and photographs show a side-lying raise, while the original text describes a prone rear raise."
+  },
+  "Lying_Machine_Squat": {
+    "englishSteps": [
+      "Adjust the squat machine, lie back against the pad and place your shoulders under the supports.",
+      "Place your feet about shoulder-width apart on the platform and hold the handles.",
+      "Press through the whole foot to extend the legs, then bend the knees and return slowly to a comfortable depth."
+    ],
+    "instructionSourceURL": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4262933/",
+    "instructionCorrectionReason": "The source instruction imposes an unsupported universal restriction on knees passing toes."
+  },
+  "Cable_Judo_Flip": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=dfB2MPXzjYc"
+  },
+  "Chest_And_Front_Of_Shoulder_Stretch": {},
+  "Inverted_Row": {
+    "equipment": "other",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=jTaIMXRT6qY"
+  },
+  "Inchworm": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=giKZKWugGE4"
+  },
+  "Frog_Hops": {
+    "equipment": "body only"
+  },
+  "Front_Box_Jump": {
+    "primaryMuscles": [
+      "quadriceps"
+    ],
+    "secondaryMuscles": [
+      "abductors",
+      "adductors",
+      "calves",
+      "glutes",
+      "hamstrings"
+    ],
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=qEpCvxPjoP0"
+  },
+  "Knee_Tuck_Jump": {
+    "primaryMuscles": [
+      "quadriceps"
+    ],
+    "secondaryMuscles": [
+      "abductors",
+      "adductors",
+      "calves",
+      "glutes",
+      "hamstrings"
+    ],
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=-bnJGikRGsM"
+  },
+  "Double_Leg_Butt_Kick": {},
+  "Kettlebell_Halo": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=lFLg0nPSP8k"
+  },
+  "Kettlebell_Halo_With_Overhead_Extension": {},
+  "Kettlebell_Hang_Clean": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=lliRf_d6MDc"
+  },
+  "Kettlebell_Pass_Between_The_Legs": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=xpHWMC2_e3c"
+  },
+  "Kettlebell_Thruster": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=L-JGYn4xUF8"
+  },
+  "Kettlebell_Turkish_Get-Up_Lunge_style": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=0bWRPC49-KI"
+  },
+  "Kettlebell_Turkish_Get-Up_Squat_style": {
+    "englishSteps": [
+      "Lie on your back, hold the kettlebell above your shoulder with a straight arm and bend the knee on the same side.",
+      "Use your free hand to raise your torso, transfer your weight to your feet and move into a squat.",
+      "Stand up from the squat while keeping the kettlebell above your shoulder.",
+      "Reverse the sequence to return to the floor and repeat on the other side."
+    ],
+    "instructionSourceURL": "https://fitwill.app/ru/exercise/11497/kettlebell-turkish-get-up-squat-style/",
+    "instructionCorrectionReason": "The original squat-style name specifies a squat, but the original instructions incorrectly call for a lunge."
+  },
+  "Clean": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=oQIaWLrB318"
+  },
+  "Clean_Deadlift": {},
+  "Clean_Pull": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=xx8WkFrST2Y"
+  },
+  "Clean_and_Jerk": {},
+  "Double_Kettlebell_Jerk": {},
+  "Double_Kettlebell_Push_Press": {},
+  "Double_Kettlebell_Snatch": {},
+  "Cable_Preacher_Curl": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=mM1LTsy8cRg"
+  },
+  "Isometric_Neck_Exercise_-_Front_And_Back": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=PSwHo-kcfhc"
+  },
+  "Split_Squats": {
+    "equipment": "body only",
+    "primaryMuscles": [
+      "quadriceps"
+    ],
+    "secondaryMuscles": [
+      "calves",
+      "glutes",
+      "hamstrings"
+    ],
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=YW_efyr_RKc"
+  },
+  "Catch_and_Overhead_Throw": {},
+  "Chest_Push_from_3_point_stance": {},
+  "Chest_Push_multiple_response": {},
+  "Chest_Push_single_response": {},
+  "Chest_Push_with_Run_Release": {},
+  "Dumbbell_Seated_Box_Jump": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=NVQLEHdJlAw"
+  },
+  "Front_Cone_Hops_or_hurdle_hops": {},
+  "Kneeling_Jump_Squat": {},
+  "Drop_Push": {},
+  "Anterior_Tibialis-SMR": {
+    "primaryMuscles": [
+      "tibialis anterior"
+    ]
+  },
+  "Smith_Machine_Reverse_Calf_Raises": {
+    "primaryMuscles": [
+      "tibialis anterior"
+    ],
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=y_HYoKh7LJA",
+    "englishSteps": [
+      "Place the Smith machine bar across your shoulders and position your heels on a stable platform with the forefeet extending beyond its edge.",
+      "Raise the forefeet while keeping the heels supported and the knees still.",
+      "Lower the forefeet under control and repeat."
+    ],
+    "instructionSourceURL": "https://www.ncbi.nlm.nih.gov/books/NBK513304/",
+    "instructionCorrectionReason": "The original instructions incorrectly describe the calf as the contracting muscle during ankle dorsiflexion."
+  },
+  "Tricep_Dumbbell_Kickback": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=kGaKNszNcBI",
+    "englishSteps": [
+      "Support yourself on a bench with one hand and the knee on the same side, and hold a dumbbell in the other hand.",
+      "Bring the working upper arm alongside the torso with the elbow bent.",
+      "Keep the upper arm still, straighten the elbow behind you and lower the forearm under control.",
+      "Repeat with the other arm."
+    ],
+    "instructionSourceURL": "https://resources.t-fitness.com/pdf/bowflex/Bedienungsanleitung/Kraft/Englisch/manual-Bowflex-dumbbell%20BF1090-ENG-1.pdf",
+    "instructionCorrectionReason": "The generic original name and photographs show a one-arm bench-supported kickback, while the original instructions describe two dumbbells without support."
+  },
+  "One-Arm_Kettlebell_Military_Press_To_The_Side": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=QQBZuMOqgEw"
+  },
+  "One-Arm_Kettlebell_Para_Press": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=iwO_F8dokMU"
+  },
+  "Circus_Bell": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=o3CQ9ExKESg"
+  },
+  "Conans_Wheel": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=oEsyO1PVDNY"
+  },
+  "Keg_Load": {},
+  "Log_Lift": {},
+  "Close-Grip_EZ-Bar_Curl_with_Band": {},
+  "Cuban_Press": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=19Q1-2ExnE0"
+  },
+  "Dumbbell_Clean": {},
+  "Finger_Curls": {},
+  "Bicycling": {
+    "englishSteps": [
+      "Choose a bicycle that fits, adjust the saddle and wear a properly fitted helmet.",
+      "Check the brakes and tires before riding.",
+      "Sit on the bicycle, hold the handlebars and pedal at a comfortable pace."
+    ],
+    "instructionSourceURL": "https://www.nhtsa.gov/road-safety/bicycle-safety",
+    "instructionCorrectionReason": "The original instruction only describes sitting on a bicycle and omits the activity itself."
+  },
+  "Moving_Claw_Series": {
+    "equipment": "body only"
+  },
+  "Pyramid": {},
+  "Power_Partials": {
+    "englishSteps": [
+      "Stand upright holding a dumbbell in each hand at your sides.",
+      "Raise the dumbbells out to the sides a short distance, using only the bottom portion of a lateral raise.",
+      "Lower the weights under control while keeping the torso still."
+    ],
+    "instructionSourceURL": "https://whatmuscle.com/exercises/power-partials",
+    "instructionCorrectionReason": "The user selected the partial-range variant; the original instructions describe a full shoulder-height lateral raise.",
+    "excludeSourceImages": true,
+    "imageExclusionReason": "The original photos show a full lateral raise to shoulder height rather than the user-selected partial-range movement."
+  },
+  "Seated_Palm-Up_Barbell_Wrist_Curl": {},
+  "Seated_Palms-Down_Barbell_Wrist_Curl": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=dhtQp111x7U"
+  },
+  "Decline_Close-Grip_Bench_To_Skull_Crusher": {},
+  "Decline_EZ_Bar_Triceps_Extension": {
+    "excludeSourceImages": true,
+    "imageExclusionReason": "The original exercise specifies an EZ curl bar, whereas the photographs show a straight fixed-weight bar.",
+    "equipment": "e-z curl bar",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=53hk6U9K13I"
+  },
+  "Lying_Close-Grip_Barbell_Triceps_Press_To_Chin": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=mauSRcRf7-g"
+  },
+  "Wide-Grip_Decline_Barbell_Pullover": {
+    "excludeSourceImages": true,
+    "imageExclusionReason": "The original exercise specifies a wide grip, but the photographs show a narrow grip on a short bar."
+  },
+  "Weighted_Sit-Ups_-_With_Bands": {
+    "equipment": "bands"
+  },
+  "FitLife_Triceps_Pushdown_EZ_Bar": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=KqWAO0bi2PY"
+  },
+  "FitLife_Triceps_Pushdown_One_Arm_Overhand": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=g_s1BHCR3qc"
+  },
+  "Preacher_Curl": {
+    "equipment": "e-z curl bar",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=dFJUWGdStV0"
+  },
+  "Dumbbell_Shoulder_Press": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=rO_iEImwHyo"
+  },
+  "Standing_Dumbbell_Press": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=bmy7tIopNt4"
+  },
+  "Cable_Rope_Overhead_Triceps_Extension": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=xqm4cRFwZEo"
+  },
+  "Cable_Crunch": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=NJQROeaBiVE"
+  },
+  "Hanging_Leg_Raise": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=iC_fu-XjNPo"
+  },
+  "Standing_One-Arm_Dumbbell_Triceps_Extension": {
+    "secondaryMuscles": [],
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=GdiRJesto9U"
+  },
+  "Calf_Raise_On_A_Dumbbell": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=TW13pFWnEs0"
+  },
+  "Calf_Raises_-_With_Bands": {},
+  "Donkey_Calf_Raises": {
+    "englishSteps": [
+      "Lean forward and hold a stable support. Have a partner sit securely over your hips.",
+      "Keep your knees nearly straight and raise your heels under control.",
+      "Lower your heels slowly and repeat."
+    ],
+    "instructionSourceURL": "https://tviky.com/en/exercises/donkey-calf-raise-partner/",
+    "instructionCorrectionReason": "The source photos show a partner providing resistance, while the source instructions describe a machine.",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=SbKjS4_iDyk"
+  },
+  "Hip_Flexion_with_Band": {
+    "primaryMuscles": [
+      "hip flexors"
+    ],
+    "secondaryMuscles": [
+      "quadriceps"
+    ],
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=VqIcPRE66Cc"
+  },
+  "Standing_Hip_Flexors": {
+    "equipment": "body only",
+    "primaryMuscles": [
+      "hip flexors"
+    ],
+    "secondaryMuscles": [
+      "quadriceps"
+    ],
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=WEb0pHYhfBY"
+  },
+  "Dumbbell_Lying_Pronation": {
+    "englishSteps": [
+      "Lie on your side on a flat bench with your working arm supported and elbow bent. Hold a light end-loaded dumbbell.",
+      "Turn your forearm so your palm moves from facing up toward facing down.",
+      "Return slowly and repeat with the other arm."
+    ],
+    "instructionSourceURL": "https://weighttraining.guide/exercises/lying-dumbbell-pronation/",
+    "instructionCorrectionReason": "The source name and photos describe forearm pronation; the source instructions describe shoulder rotation."
+  },
+  "Dumbbell_Lying_Supination": {
+    "englishSteps": [
+      "Lie on your side on a flat bench with your working arm supported and elbow bent. Hold a light end-loaded dumbbell.",
+      "Turn your forearm so your palm moves from facing down toward facing up.",
+      "Return slowly and repeat with the other arm."
+    ],
+    "instructionSourceURL": "https://www.fullphysio.com/en/exercises/supinationpronation-strengthening-with-dumbbell",
+    "instructionCorrectionReason": "The source name and photos describe forearm supination; the source instructions describe shoulder rotation."
+  },
+  "Cable_Rope_Rear-Delt_Rows": {
+    "englishSteps": [
+      "Attach a rope to a cable around shoulder height, grasp its ends and stand facing the machine.",
+      "Keeping your elbows high and out, pull the rope toward your upper chest.",
+      "Slowly extend your arms and return to the starting position."
+    ],
+    "instructionSourceURL": "https://weighttraining.guide/exercises/standing-cable-rear-delt-row-with-rope/",
+    "instructionCorrectionReason": "The source photos show the standing rope row, while the source instructions describe a seated row."
+  },
+  "High_Cable_Curls": {
+    "excludeSourceImages": true,
+    "imageExclusionReason": "The source photos show a lying cable triceps extension, while the source name and instructions describe standing curls with two high pulleys.",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=7N4Xga9Yo5s",
+    "replacementImageSourceID": "Overhead_Cable_Curl",
+    "replacementImageReason": "The source photos of Overhead Cable Curl show the same standing high-pulley curl described in this card."
+  },
+  "Elbow_to_Knee": {
+    "englishSteps": [
+      "Lie on your back with your hands lightly supporting your head and your knees raised.",
+      "Rotate your torso toward one knee while extending the other leg.",
+      "Switch sides in a controlled alternating motion."
+    ],
+    "instructionSourceURL": "https://www.fittr.com/exercise-video/bicycle-crunch-187/",
+    "instructionCorrectionReason": "The generic source title and photos show alternating bicycle crunches; the source instructions describe a fixed crossed-leg crunch.",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=wpRI3xBhJmo"
+  },
+  "Lying_Triceps_Press": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=ea4fGqPJicA"
+  },
+  "Seated_Flat_Bench_Leg_Pull-In": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=54q250IUEAc"
+  },
+  "Seated_Leg_Tucks": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=54q250IUEAc"
+  },
+  "Incline_Dumbbell_Bench_With_Palms_Facing_In": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=rq2fUEabPOk"
+  },
+  "Bradford_Rocky_Presses": {
+    "englishSteps": [
+      "Sit upright with a barbell at the front of your shoulders and take a grip wider than shoulder width.",
+      "Press the bar just high enough to clear your head and lower it behind your head within a comfortable range.",
+      "Lift it over your head again and return it to the front."
+    ],
+    "instructionSourceURL": "https://www.muscleandstrength.com/exercises/seated-alternating-front-back-barbell-press.html",
+    "instructionCorrectionReason": "The source instructs a full lockout, while the named Bradford press uses a shorter movement over the head.",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=cKyh38FOx9E"
+  },
+  "Depth_Jump_Leap": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=KsWyPw6w2i0"
+  },
+  "Linear_Depth_Jump": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=KsWyPw6w2i0"
+  },
+  "Gironda_Sternum_Chins": {
+    "excludeSourceImages": true,
+    "imageExclusionReason": "The original photos show a conventional upright chin-up instead of the named Gironda sternum pull with a pronounced backward lean.",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=5CdBXD0uQLw"
+  },
+  "One_Arm_Chin-Up": {
+    "primaryMuscles": [
+      "lats"
+    ],
+    "secondaryMuscles": [
+      "biceps",
+      "forearms",
+      "middle back"
+    ],
+    "englishSteps": [
+      "Hang from the bar with one hand using an underhand grip and keep the free hand clear.",
+      "Pull yourself upward with the working arm until your chin reaches the bar.",
+      "Lower under control and repeat on the other side."
+    ],
+    "instructionSourceURL": "https://kysero.io/exercise-library/one-arm-chin-up/",
+    "instructionCorrectionReason": "The name specifies a one-arm chin-up, while the source instructions describe assistance from the other hand holding a towel.",
+    "excludeSourceImages": true,
+    "imageExclusionReason": "The source photos show the free hand assisting with a towel, not a one-arm chin-up.",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=Nj1NvN7Te_s"
+  },
+  "Kipping_Muscle_Up": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=5XCv9gUrz9I"
+  },
+  "Press_Sit-Up": {},
+  "Brachialis-SMR": {},
+  "Foot-SMR": {
+    "primaryMuscles": [
+      "feet"
+    ]
+  },
+  "Iliotibial_Tract-SMR": {
+    "excludeSourceImages": true,
+    "imageExclusionReason": "The source photos show the inner thigh facing the foam roller rather than the outer thigh described by the iliotibial tract exercise.",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=eI9qLfSlCuI"
+  },
+  "Knee_Circles": {
+    "primaryMuscles": [
+      "quadriceps"
+    ],
+    "secondaryMuscles": [
+      "hamstrings",
+      "calves"
+    ]
+  },
+  "Clock_Push-Up": {},
+  "Close-Grip_Push-Up_off_of_a_Dumbbell": {
+    "equipment": "dumbbell"
+  },
+  "Downward_Facing_Balance": {},
+  "Elevated_Cable_Rows": {
+    "excludeSourceImages": true,
+    "imageExclusionReason": "The source photos show a normal seated cable row without the raised seating platform specified by the name and instructions."
+  },
+  "Flexor_Incline_Dumbbell_Curls": {
+    "secondaryMuscles": [
+      "forearms"
+    ],
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=cjnaJSYbG3g"
+  },
+  "Kneeling_Cable_Crunch_With_Alternating_Oblique_Twists": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=9zWWTq4YtmI"
+  },
+  "Seated_Barbell_Military_Press": {
+    "englishSteps": [
+      "Sit upright and hold the barbell in front of your shoulders with an overhand grip.",
+      "Press the bar overhead while keeping your torso steady.",
+      "Lower the bar under control to the front of your shoulders."
+    ],
+    "instructionSourceURL": "https://fitloop.app/exercises/seated-barbell-military-press",
+    "instructionCorrectionReason": "The source name and later instruction describe a front press, but the initial instruction and source photos place the bar behind the head.",
+    "excludeSourceImages": true,
+    "imageExclusionReason": "The source photos show a behind-the-neck press rather than the named seated military press to the front.",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=0igVSywXKK8",
+    "replacementImageSourceID": "Barbell_Shoulder_Press",
+    "replacementImageReason": "The source photos of Barbell Shoulder Press show a seated barbell press in front of the head."
+  },
+  "Seated_Close-Grip_Concentration_Barbell_Curl": {
+    "englishSteps": [
+      "Sit on a bench with your feet apart and hold a barbell using a close underhand grip.",
+      "Rest the backs of your upper arms against your inner thighs and curl the bar.",
+      "Lower the bar under control while keeping your upper arms supported."
+    ],
+    "instructionSourceURL": "https://whatmuscle.com/exercises/seated-close-grip-concentration-barbell-curl",
+    "instructionCorrectionReason": "The source instructions mistakenly refer to dumbbells despite the source name and photos specifying a barbell.",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=iynnTu_mPw8"
+  },
+  "Bottoms-Up_Clean_From_The_Hang_Position": {
+    "englishSteps": [
+      "Stand with a kettlebell hanging from one hand.",
+      "Swing the bell back, then extend your hips and guide it up to shoulder height with its bottom pointing upward.",
+      "Keep a firm grip and lower the bell under control, then repeat with the other hand."
+    ],
+    "instructionSourceURL": "https://fitnesstracker.ca/resources/exercises/bottoms-up-clean-from-the-hang-position/",
+    "instructionCorrectionReason": "The source instructions omit the bottoms-up position specified in the exercise name.",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=GM0QG8H5aA4"
+  },
+  "Heaving_Snatch_Balance": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=xoXwoXoJo_Y"
+  },
+  "Jerk_Balance": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=VWU_0OwXoPQ"
+  },
+  "Linear_3-Part_Start_Technique": {
+    "equipment": "body only",
+    "englishSteps": [
+      "Stand at a line with one foot ahead of the other and place the opposite hand on the line.",
+      "Bend your knees and lean forward, extending your free arm behind you.",
+      "Drive through the front leg and accelerate forward."
+    ],
+    "instructionSourceURL": "https://bikkel.app/exercises/linear-3-part-start-technique",
+    "instructionCorrectionReason": "The source description contains typographical errors and conflicting foot placement; the steps clarify the named three-point sprint start."
+  },
+  "London_Bridges": {
+    "englishSteps": [
+      "Secure a rope above a stable bar and stand on the bar while holding the rope.",
+      "Keep your body straight and lean backward while moving your hands down the rope one at a time.",
+      "Move your hands up the rope to return to the starting position."
+    ],
+    "instructionSourceURL": "https://getwrkout.com/exercises/london-bridges/",
+    "instructionCorrectionReason": "The source text describes the lowered position as perpendicular to the ground although the movement lowers the body backward."
+  },
+  "Lunge_Sprint": {},
+  "Lying_Close-Grip_Bar_Curl_On_High_Pulley": {},
+  "Muscle_Snatch": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=nJmtGVutszE"
+  },
+  "One-Arm_Open_Palm_Kettlebell_Clean": {},
+  "Open_Palm_Kettlebell_Clean": {},
+  "Single-Leg_High_Box_Squat": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=_OwMpiC0oLE",
+    "englishName": "Band-Assisted High Box Step-Up",
+    "englishNameCorrectionReason": "The user selected the source photos and instructions as a band-assisted step-up and requested a separate squat-to-box exercise; the ambiguous original name remains an alias."
+  },
+  "Single-Leg_Stride_Jump": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=cX1j823o6A0"
+  },
+  "FitLife_Single_Leg_Squat_To_High_Box": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=7sMCw2CGMz0"
+  }
+}

@@ -605,6 +605,30 @@ namespace FitLife.Backend.Migrations
                     b.ToTable("Exercises");
                 });
 
+            modelBuilder.Entity("FitLife.Backend.TrainingExerciseLink", b =>
+                {
+                    b.Property<string>("OwnerId")
+                        .HasMaxLength(36)
+                        .HasColumnType("character varying(36)");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CatalogID")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Kind")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)");
+
+                    b.HasKey("OwnerId", "Id");
+
+                    b.HasIndex("OwnerId", "Kind", "Id");
+
+                    b.ToTable("TrainingExerciseLink");
+                });
+
             modelBuilder.Entity("FitLife.Backend.TrainingHeartRate", b =>
                 {
                     b.Property<string>("OwnerId")
@@ -1016,6 +1040,15 @@ namespace FitLife.Backend.Migrations
                     b.HasOne("FitLife.Backend.TrainingRecordMetadata", null)
                         .WithMany()
                         .HasForeignKey("OwnerId", "Kind", "AggregateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("FitLife.Backend.TrainingExerciseLink", b =>
+                {
+                    b.HasOne("FitLife.Backend.TrainingRecordMetadata", null)
+                        .WithMany()
+                        .HasForeignKey("OwnerId", "Kind", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -235,7 +235,7 @@ public sealed class StartupMigrationTests
         Assert.Equal(owner, backup.OwnerId);
         Assert.Equal(payload, backup.Payload);
         Assert.Single(await verification.DeletedAccounts.ToListAsync(cancellationToken));
-        Assert.Equal(5, (await verification.Database.GetAppliedMigrationsAsync(cancellationToken)).Count());
+        Assert.Equal(6, (await verification.Database.GetAppliedMigrationsAsync(cancellationToken)).Count());
         Assert.Empty(await verification.Set<HealthSyncSample>().AsNoTracking().ToArrayAsync(cancellationToken));
     }
 

@@ -20,7 +20,8 @@ public enum TrainingStatistics {
     }
     return repetitions == 1 ? weightKG : weightKG * (1 + Double(repetitions) / 30)
   }
-  public static func records(in workouts: [Workout]) -> [PersonalRecord] {
+  public static func records(in workouts: [Workout], links: [ExerciseLink] = []) -> [PersonalRecord]
+  {
     var records: [UUID: PersonalRecord] = [:]
     for workout in workouts where workout.status == .completed {
       for exercise in workout.exercises {
@@ -30,9 +31,13 @@ public enum TrainingStatistics {
           sets.compactMap { estimatedOneRepMax(weightKG: $0.weightKG, repetitions: $0.repetitions) }
           .max() ?? 0
         guard bestWeight > 0 else { continue }
-        let previous = records[exercise.exercise.id]
-        records[exercise.exercise.id] = PersonalRecord(
-          exercise: exercise.exercise,
+        let id = PersonalExercises.catalogID(for: exercise.exercise.id, links: links)
+        let previous = records[id]
+        let definition =
+          links.contains(where: { $0.catalogID == id })
+          ? ExerciseLibrary.entry(for: id)?.exercise ?? exercise.exercise : exercise.exercise
+        records[id] = PersonalRecord(
+          exercise: definition,
           weightKG: max(previous?.weightKG ?? 0, bestWeight),
           estimatedOneRepMax: max(previous?.estimatedOneRepMax ?? 0, bestEstimate))
       }

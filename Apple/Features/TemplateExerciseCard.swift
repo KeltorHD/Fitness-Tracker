@@ -7,6 +7,7 @@ struct TemplateExerciseCard: View {
   @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
   @Environment(\.dynamicTypeSize) private var typeSize
+  @Environment(AppStore.self) private var store
   let item: TemplateExercise
   let index: Int
   var order: TemplateExerciseOrder? = nil
@@ -18,7 +19,7 @@ struct TemplateExerciseCard: View {
 
   private var entry: ExerciseLibraryEntry? {
     ExerciseLibrary.entry(
-      for: item.exercise.id,
+      for: PersonalExercises.catalogID(for: item.exercise.id, links: store.exerciseLinks),
       language: AppLanguage.system.resolved(preferredLanguages: [locale.identifier]))
   }
 

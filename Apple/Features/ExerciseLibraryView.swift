@@ -22,6 +22,14 @@ struct ExerciseLibraryView: View {
     List {
       Section {
         NavigationLink {
+          PersonalExercisesView(onSelect: onSelect)
+        } label: {
+          Label(L10n.text("Мои упражнения", locale: locale), systemImage: "person.text.rectangle")
+        }
+        .accessibilityIdentifier("personalExercises")
+      }
+      Section {
+        NavigationLink {
           MuscleSelectionView(selection: $model.muscleSelection, showsDoneButton: true)
         } label: {
           Label(
@@ -82,25 +90,18 @@ struct ExerciseLibraryView: View {
         }
       }
       ForEach(model.results) { entry in
-        NavigationLink {
-          ExerciseDetailView(exercise: entry.exercise, onSelect: onSelect)
-        } label: {
-          HStack(spacing: 12) {
-            if let path = entry.generatedMedia?.poster ?? entry.images.first {
-              ExercisePhoto(path: path).frame(width: 76, height: 60)
-                .clipShape(.rect(cornerRadius: 12)).accessibilityHidden(true)
-            } else {
-              Image(systemName: "dumbbell").frame(width: 76, height: 60).foregroundStyle(.secondary)
-                .accessibilityHidden(true)
+        if let group = entry.variantGroup {
+          let members = model.results.filter { $0.variantGroup?.id == group.id }
+          if members.first?.id == entry.id {
+            DisclosureGroup(group.title) {
+              ForEach(members) { member in
+                exerciseLink(member)
+              }
             }
-            VStack(alignment: .leading, spacing: 5) {
-              Text(entry.name).font(.headline).foregroundStyle(.primary)
-              Text(
-                "\(entry.primaryMuscles.joined(separator: ", ")) · \(L10n.text(entry.equipment.title, locale: locale))"
-              )
-              .font(.caption).foregroundStyle(.secondary)
-            }
-          }.padding(.vertical, 4)
+            .accessibilityIdentifier("exerciseVariantGroup_\(group.id)")
+          }
+        } else {
+          exerciseLink(entry)
         }
       }
       Section {
@@ -121,17 +122,43 @@ struct ExerciseLibraryView: View {
       model.language = AppLanguage.system.resolved(preferredLanguages: [locale.identifier])
     }
   }
+
+  private func exerciseLink(_ entry: ExerciseLibraryEntry) -> some View {
+    NavigationLink {
+      ExerciseDetailView(exercise: entry.exercise, onSelect: onSelect)
+    } label: {
+      HStack(spacing: 12) {
+        if let path = entry.generatedMedia?.poster ?? entry.generatedIllustration
+          ?? entry.images.first
+        {
+          ExercisePhoto(path: path).frame(width: 76, height: 60)
+            .clipShape(.rect(cornerRadius: 12)).accessibilityHidden(true)
+        } else {
+          Image(systemName: "dumbbell").frame(width: 76, height: 60).foregroundStyle(.secondary)
+            .accessibilityHidden(true)
+        }
+        VStack(alignment: .leading, spacing: 5) {
+          Text(entry.name).font(.headline).foregroundStyle(.primary)
+          Text(
+            "\(entry.primaryMuscles.joined(separator: ", ")) · \(L10n.text(entry.equipment.title, locale: locale))"
+          )
+          .font(.caption).foregroundStyle(.secondary)
+        }
+      }.padding(.vertical, 4)
+    }
+  }
 }
 
 struct ExerciseDetailView: View {
   @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
+  @Environment(AppStore.self) private var store
   let exercise: Exercise
   var onSelect: ((Exercise) -> Void)? = nil
   @State private var photo = 0
   private var entry: ExerciseLibraryEntry? {
     ExerciseLibrary.entry(
-      for: exercise.id,
+      for: PersonalExercises.catalogID(for: exercise.id, links: store.exerciseLinks),
       language: AppLanguage.system.resolved(preferredLanguages: [locale.identifier]))
   }
 
@@ -141,7 +168,10 @@ struct ExerciseDetailView: View {
         if let entry {
           if let generated = entry.generatedMedia {
             ExerciseAnimation(media: generated)
-          } else if !entry.images.isEmpty {
+          } else if let illustration = entry.generatedIllustration {
+            ExerciseGeneratedIllustration(path: illustration)
+          }
+          if !entry.images.isEmpty {
             VStack(spacing: 8) {
               TabView(selection: $photo) {
                 ForEach(Array(entry.images.enumerated()), id: \.offset) { index, path in
@@ -155,27 +185,32 @@ struct ExerciseDetailView: View {
               }
               .tabViewStyle(.page(indexDisplayMode: .never)).frame(height: 270)
               .background(Color(.secondarySystemGroupedBackground), in: .rect(cornerRadius: 20))
-              HStack {
-                Button(L10n.text("Предыдущее фото", locale: locale), systemImage: "chevron.left") {
-                  photo = max(0, photo - 1)
-                }
-                .labelStyle(.iconOnly).disabled(photo == 0)
-                Spacer()
-                Text(
-                  L10n.format(
-                    "Положение %@ из %@", String(photo + 1),
-                    String(entry.images.count), locale: locale)
-                ).font(.caption)
-                  .foregroundStyle(.secondary)
-                Spacer()
-                Button(L10n.text("Следующее фото", locale: locale), systemImage: "chevron.right") {
-                  photo = min(entry.images.count - 1, photo + 1)
-                }
-                .labelStyle(.iconOnly).disabled(photo == entry.images.count - 1)
-              }.buttonStyle(.glass)
+              if entry.images.count > 1 {
+                HStack {
+                  Button(L10n.text("Предыдущее фото", locale: locale), systemImage: "chevron.left")
+                  {
+                    photo = max(0, photo - 1)
+                  }
+                  .labelStyle(.iconOnly).disabled(photo == 0)
+                  Spacer()
+                  Text(
+                    L10n.format(
+                      "Положение %@ из %@", String(photo + 1),
+                      String(entry.images.count), locale: locale)
+                  ).font(.caption)
+                    .foregroundStyle(.secondary)
+                  Spacer()
+                  Button(L10n.text("Следующее фото", locale: locale), systemImage: "chevron.right")
+                  {
+                    photo = min(entry.images.count - 1, photo + 1)
+                  }
+                  .labelStyle(.iconOnly).disabled(photo == entry.images.count - 1)
+                }.buttonStyle(.glass)
+              }
+              if let credit = entry.imageCredit { ExerciseImageCreditView(credit: credit) }
             }
-          } else {
-            Text(L10n.text("В исходном каталоге нет изображений этого упражнения.", locale: locale))
+          } else if entry.generatedMedia == nil && entry.generatedIllustration == nil {
+            Text(L10n.text("Фотографии пока недоступны.", locale: locale))
               .foregroundStyle(.secondary)
           }
           HStack(alignment: .top, spacing: 12) {
@@ -196,6 +231,24 @@ struct ExerciseDetailView: View {
               )
               .font(.subheadline).foregroundStyle(.secondary)
             }
+          }
+          let variants = ExerciseLibrary.variants(
+            for: entry.id,
+            language: AppLanguage.system.resolved(preferredLanguages: [locale.identifier]))
+          if variants.count > 1 {
+            VStack(alignment: .leading, spacing: 8) {
+              Text(L10n.text("Другие варианты", locale: locale)).font(.title2.bold())
+              ForEach(variants.filter { $0.id != entry.id }) { variant in
+                NavigationLink(variant.name) {
+                  ExerciseDetailView(exercise: variant.exercise, onSelect: onSelect)
+                }
+              }
+            }
+          }
+          NavigationLink {
+            ExerciseProgressScreen(exercise: entry.exercise)
+          } label: {
+            Label(L10n.text("История и графики", locale: locale), systemImage: "chart.xyaxis.line")
           }
           Text(L10n.text("Техника выполнения", locale: locale)).font(.title2.bold())
           if entry.translationAutomatic == true && !entry.steps.isEmpty {
@@ -219,14 +272,20 @@ struct ExerciseDetailView: View {
               Text(text).frame(maxWidth: .infinity, alignment: .leading)
             }.accessibilityElement(children: .combine)
           }
-          Text(
-            L10n.text(
-              entry.generatedMedia == nil
-                ? "Техника из free-exercise-db. Показаны фотографии отдельных положений, а не видеозапись движения."
-                : "Техника из free-exercise-db. Иллюстрация движения создана ИИ.",
-              locale: locale)
-          )
-          .font(.caption).foregroundStyle(.secondary)
+          if let address = entry.techniqueVideoURL, let url = URL(string: address) {
+            Link(destination: url) {
+              Label(
+                L10n.text("Видео техники на YouTube", locale: locale),
+                systemImage: "play.rectangle")
+            }
+          }
+          if entry.generatedMedia != nil {
+            Text(L10n.text("Иллюстрация движения создана ИИ.", locale: locale))
+              .font(.caption).foregroundStyle(.secondary)
+          } else if !entry.images.isEmpty {
+            Text(L10n.text("Фотографии показывают отдельные положения упражнения.", locale: locale))
+              .font(.caption).foregroundStyle(.secondary)
+          }
           NavigationLink {
             ExerciseCreditsView()
           } label: {
@@ -265,11 +324,12 @@ struct ExerciseCreditsView: View {
     List {
       Section(L10n.text("Библиотека FitLife", locale: locale)) {
         Text(
-          L10n.text(
-            "876 упражнений и 1746 фотографий, встроенных в приложение.", locale: locale))
+          L10n.format(
+            "Упражнений в каталоге: %@. Доступные фотографии встроены в приложение.",
+            String(ExerciseLibrary.document?.entries.count ?? 0), locale: locale))
         Text(
           L10n.text(
-            "Каталог переведён на русский язык. Новые описания преимущественно переведены автоматически; такие карточки отмечены.",
+            "Русские и английские названия и инструкции прошли первичную редакционную проверку.",
             locale: locale)
         )
       }
@@ -278,7 +338,7 @@ struct ExerciseCreditsView: View {
           if let url = URL(string: source.repositoryURL) { Link(source.name, destination: url) }
           Text(
             L10n.text(
-              "Исходная база: yuhonas/free-exercise-db; первоначальные данные — Ollie Jennings / exercises.json.",
+              "Большинство упражнений и фотографии взяты из yuhonas/free-exercise-db; часть описаний подготовлена FitLife.",
               locale: locale)
           )
           LabeledContent(L10n.text("Лицензия", locale: locale), value: source.licenseName)

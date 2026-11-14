@@ -26,7 +26,12 @@ struct RemoteTrainingClient: TrainingRemoteServing {
         name: "kinds", value: TrainingKind.allCases.map(\.rawValue).joined(separator: ",")),
     ]
     guard let url = components.url else { throw ServerError.invalidConfiguration }
-    let page: TrainingPage = try decode(from: await send(URLRequest(url: url)))
+    let page: TrainingPage
+    do {
+      page = try decode(from: await send(URLRequest(url: url)))
+    } catch let error as ServerTrainingError where error.code == "invalid_training_kind" {
+      throw ServerTrainingError(code: "server_update_required", current: nil)
+    }
     try page.validate(after: cursor)
     return page
   }
@@ -53,7 +58,7 @@ struct RemoteTrainingClient: TrainingRemoteServing {
       throw error
     } catch let error as ServerTrainingError
       where ["invalid_training_mutation", "invalid_training_kind"].contains(error.code)
-      && mutations.contains(where: { $0.key.kind.isNutrition })
+      && mutations.contains(where: { $0.key.kind.isNutrition || $0.key.kind == .exerciseLink })
     {
       throw ServerTrainingError(code: "server_update_required", current: nil)
     }

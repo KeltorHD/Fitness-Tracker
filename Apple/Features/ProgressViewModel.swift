@@ -16,6 +16,7 @@ struct TrainingMonthPage: Identifiable {
   private(set) var report: TrainingReport
   private(set) var monthPages: [TrainingMonthPage] = []
   @ObservationIgnored private var workouts: [Workout] = []
+  @ObservationIgnored private var links: [ExerciseLink] = []
   @ObservationIgnored private var calendar: Calendar
   @ObservationIgnored private let now: () -> Date
 
@@ -32,10 +33,14 @@ struct TrainingMonthPage: Identifiable {
 
   var year: Int { calendar.component(.year, from: month) }
 
-  func refresh(workouts: [Workout], calendar: Calendar, bodyWeights: [BodyWeightEntry] = []) {
+  func refresh(
+    workouts: [Workout], calendar: Calendar, bodyWeights: [BodyWeightEntry] = [],
+    links: [ExerciseLink] = []
+  ) {
     self.workouts = workouts
+    self.links = links
     self.calendar = calendar
-    exerciseProgress.refresh(workouts: workouts, calendar: calendar)
+    exerciseProgress.refresh(workouts: workouts, calendar: calendar, links: links)
     bodyWeight.refresh(entries: bodyWeights, workouts: workouts)
     rebuild()
   }
@@ -52,7 +57,8 @@ struct TrainingMonthPage: Identifiable {
   func showCurrentMonth() { month = now() }
   private func rebuild() {
     let currentTime = now()
-    report = TrainingReport(workouts: workouts, month: month, now: currentTime, calendar: calendar)
+    report = TrainingReport(
+      workouts: workouts, month: month, now: currentTime, calendar: calendar, links: links)
     let start = calendar.dateInterval(of: .month, for: month)?.start ?? month
     monthPages = (-1...1).compactMap { offset in
       guard let date = calendar.date(byAdding: .month, value: offset, to: start) else { return nil }

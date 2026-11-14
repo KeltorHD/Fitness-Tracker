@@ -29,17 +29,19 @@ import Testing
 @Test func englishAndRussianLibrariesShareIdentityAndMediaWithoutChangingStoredWorkouts() throws {
   let ru = try ExerciseLibrary.entries(language: .russian)
   let en = try ExerciseLibrary.entries(language: .english)
-  #expect(en.count == 876)
+  #expect(en.count == 879)
   #expect(en.map(\.id) == ru.map(\.id))
   #expect(en.map(\.images) == ru.map(\.images))
   #expect(en.allSatisfy { $0.translationAutomatic == false })
-  #expect(ru.filter { $0.translationAutomatic == true }.count == 774)
+  #expect(ru.first { $0.sourceID == "3_4_Sit-Up" }?.translationAutomatic == false)
   #expect(
     en.allSatisfy {
       $0.name == $0.englishName && ($0.steps.isEmpty == ($0.techniqueUnavailable == true))
     })
+  var originalExercise = ru[0].exercise
+  originalExercise.name = "Приседания"
   let stored = Workout(
-    name: "Моя тренировка", exercises: [WorkoutExercise(exercise: ru[0].exercise)])
+    name: "Моя тренировка", exercises: [WorkoutExercise(exercise: originalExercise)])
   let localized = try #require(ExerciseLibrary.entry(for: ru[0].id, language: .english))
   #expect(localized.name == "Barbell Squat")
   #expect(stored.exercises[0].exercise.name == "Приседания")

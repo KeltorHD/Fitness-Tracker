@@ -27,9 +27,11 @@ MUSCLES = {
     'hamstrings': 'Задняя поверхность бедра', 'lats': 'Широчайшие мышцы спины',
     'lower back': 'Разгибатели спины', 'middle back': 'Средняя часть спины',
     'quadriceps': 'Квадрицепс', 'shoulders': 'Дельтовидные мышцы',
-    'traps': 'Трапециевидные мышцы', 'triceps': 'Трицепс', 'neck': 'Мышцы шеи'
+    'traps': 'Трапециевидные мышцы', 'triceps': 'Трицепс', 'neck': 'Мышцы шеи',
+    'tibialis anterior': 'Передняя большеберцовая мышца', 'hip flexors': 'Сгибатели бедра', 'feet': 'Мышцы стопы'
 }
-GROUPS = {**dict.fromkeys(['abductors', 'adductors', 'calves', 'glutes', 'hamstrings', 'quadriceps'], 'legs'),
+GROUPS = {**dict.fromkeys(['abductors', 'adductors', 'calves', 'glutes', 'hamstrings', 'quadriceps',
+                           'tibialis anterior', 'hip flexors', 'feet'], 'legs'),
           **dict.fromkeys(['lats', 'lower back', 'middle back', 'traps'], 'back'),
           **dict.fromkeys(['biceps', 'forearms', 'triceps'], 'arms'),
           'abdominals': 'core', 'chest': 'chest', 'shoulders': 'shoulders', 'neck': 'shoulders'}
@@ -48,6 +50,16 @@ def selection():
     assert len({row[0] for row in rows}) == len(rows)
     return rows
 
+def custom_exercises():
+    path = ROOT / 'Data/ExerciseLibrary/custom-exercises.json'
+    items = json.loads(path.read_text()) if path.exists() else []
+    assert len({item['id'] for item in items}) == len(items)
+    for item in items:
+        assert re.fullmatch(r'FitLife_[A-Za-z0-9_]+', item['id'])
+        assert re.fullmatch(r'https://[^\s]+', item['referenceURL'])
+        assert item['images'] == [] and len(item['instructions']) >= 3
+    return {item['id']: item for item in items}
+
 def fetch(relative):
     with urllib.request.urlopen(BASE + relative, timeout=45) as response:
         return response.read()
@@ -55,7 +67,8 @@ def fetch(relative):
 def download():
     source = json.loads(fetch('dist/exercises.json'))
     by_id = {item['id']: item for item in source}
-    selected = [by_id[row[0]] for row in selection()]
+    custom = custom_exercises()
+    selected = [by_id[row[0]] for row in selection() if row[0] not in custom]
     VENDOR.mkdir(parents=True, exist_ok=True)
     write_json(VENDOR / 'exercises.selected.json', selected)
     (VENDOR / 'LICENSE.md').write_bytes(fetch('LICENSE.md'))
@@ -85,6 +98,9 @@ def download():
 
 def generate():
     source = {item['id']: item for item in json.loads((VENDOR / 'exercises.selected.json').read_text())}
+    custom = custom_exercises()
+    assert not set(source) & set(custom)
+    source.update(custom)
     regions = {}
     for line in (ROOT / 'Data/ExerciseLibrary/muscle-regions.tsv').read_text().splitlines()[1:]:
         source_id, values = line.split('\t')
@@ -93,8 +109,23 @@ def generate():
         assert len(regions[source_id]) == len(set(regions[source_id])), source_id
     generated_path = ROOT / 'Data/ExerciseLibrary/generated-media.json'
     generated = json.loads(generated_path.read_text()) if generated_path.exists() else {}
+    stills = json.loads((ROOT / 'Data/ExerciseLibrary/generated-stills.json').read_text())
+    assert set(stills) <= set(source) and not set(stills) & set(generated)
+    external = json.loads((ROOT / 'Data/ExerciseLibrary/external-media.json').read_text())
+    assert set(external) <= set(source)
     translation_path = ROOT / 'Data/ExerciseLibrary/translation-provenance.json'
     automatic = set(json.loads(translation_path.read_text()).get('automaticSourceIDs', [])) if translation_path.exists() else set()
+    reviewed_path = ROOT / 'Data/ExerciseLibrary/reviewed-exercises.json'
+    reviewed = json.loads(reviewed_path.read_text())
+    assert set(reviewed) <= set(source)
+    variant_groups = json.loads((ROOT / 'Data/ExerciseLibrary/variant-groups.json').read_text())
+    group_by_member = {}
+    for group_id, group in variant_groups.items():
+        assert re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*', group_id)
+        assert group['ru'] and group['en'] and len(group['members']) >= 2
+        for member in group['members']:
+            assert member in source and member not in group_by_member, member
+            group_by_member[member] = group_id
     translations = {}
     for line in (ROOT / 'Data/ExerciseLibrary/instructions.ru.tsv').read_text().splitlines():
         fields = line.split('\t')
@@ -104,23 +135,87 @@ def generate():
     entries = []
     for index, (source_id, name, aliases) in enumerate(selection()):
         item = source[source_id]
+        review = reviewed.get(source_id, {})
+        english_name = review.get('englishName', item['name'])
+        if english_name != item['name']:
+            assert review.get('englishNameCorrectionReason', '').strip(), source_id
+            assert item['name'] in aliases.split(';'), source_id
+        primary_muscles = reviewed.get(source_id, {}).get('primaryMuscles', item['primaryMuscles'])
+        secondary_muscles = reviewed.get(source_id, {}).get('secondaryMuscles', item['secondaryMuscles'])
+        excluded_images = reviewed.get(source_id, {}).get('excludeSourceImages', False)
+        assert isinstance(excluded_images, bool), source_id
+        if excluded_images:
+            assert item['images'] and reviewed[source_id].get('imageExclusionReason', '').strip(), source_id
+        images = [] if excluded_images else item['images']
+        donor_id = review.get('replacementImageSourceID')
+        if donor_id:
+            assert excluded_images and donor_id in source and donor_id != source_id, source_id
+            assert review.get('replacementImageReason', '').strip(), source_id
+            assert not reviewed.get(donor_id, {}).get('excludeSourceImages', False), source_id
+            donor_images = source[donor_id]['images']
+            assert len(donor_images) == 2, source_id
+            images = [f'{source_id}/replacement-{index}.jpg' for index in range(2)]
+            assert all((MEDIA / path).read_bytes() == (MEDIA / original).read_bytes()
+                       for path, original in zip(images, donor_images)), source_id
+        credit = external.get(source_id)
+        if credit:
+            assert not images and not donor_id, source_id
+            assert credit['author'].strip() and credit['licenseName'].strip(), source_id
+            assert all(re.fullmatch(r'https://[^\s]+', credit[key])
+                       for key in ('sourceURL', 'licenseURL')), source_id
+            assert 1 <= len(credit['files']) <= 2, source_id
+            images = [file['path'] for file in credit['files']]
+            for file in credit['files']:
+                assert re.fullmatch(re.escape(source_id) + r'/wger-[0-9]+\.jpg', file['path']), source_id
+                assert re.fullmatch(r'https://[^\s]+', file['originalURL']), source_id
+                data = (MEDIA / file['path']).read_bytes()
+                assert len(data) == file['bytes'] and hashlib.sha256(data).hexdigest() == file['sha256'], source_id
+        still = stills.get(source_id)
+        if still:
+            assert not images and still['generator'] == 'built-in image_gen', source_id
+            assert still['description'].strip(), source_id
+            assert still['path'] == f'{source_id}/ai-still.png', source_id
+            data = (MEDIA / still['path']).read_bytes()
+            assert data.startswith(b'\x89PNG\r\n\x1a\n'), source_id
+            assert len(data) == still['bytes'] and hashlib.sha256(data).hexdigest() == still['sha256'], source_id
+        assert primary_muscles and all(muscle in MUSCLES for muscle in primary_muscles), source_id
+        assert all(muscle in MUSCLES for muscle in secondary_muscles), source_id
         assert 0 < len(name) <= 80 and re.search('[А-Яа-яЁё]', name)
         steps = translations[source_id]
-        assert bool(steps) == bool(item['instructions']), source_id
+        authored_english_steps = reviewed.get(source_id, {}).get('englishSteps')
+        if authored_english_steps is not None:
+            assert len(authored_english_steps) >= 3, source_id
+            assert all(isinstance(step, str) and len(step.strip()) >= 5 for step in authored_english_steps), source_id
+            assert re.fullmatch(r'https://[^\s]+', reviewed[source_id].get('instructionSourceURL', '')), source_id
+            if item['instructions']:
+                assert reviewed[source_id].get('instructionCorrectionReason', '').strip(), source_id
+        assert bool(steps) == bool(item['instructions'] or authored_english_steps), source_id
         assert not steps or len(steps) >= 3, source_id
         assert all(len(s) >= 5 and re.search('[А-Яа-яЁё]', s) for s in steps), source_id
-        stable_id = LEGACY_IDS.get(source_id) or str(uuid.uuid5(uuid.NAMESPACE_URL, 'https://github.com/yuhonas/free-exercise-db/' + source_id))
+        identity = ('urn:fitlife:exercise:' if source_id in custom else
+                    'https://github.com/yuhonas/free-exercise-db/') + source_id
+        stable_id = LEGACY_IDS.get(source_id) or str(uuid.uuid5(uuid.NAMESPACE_URL, identity))
+        group_id = group_by_member.get(source_id)
         entries.append({'id': stable_id, 'sourceID': source_id, 'name': name,
-                        'englishName': item['name'], 'aliases': aliases.split(';'),
-                        'group': GROUPS[item['primaryMuscles'][0]], 'equipment': item['equipment'] or 'unspecified',
-                        'level': item['level'], 'primaryMuscles': [MUSCLES[m] for m in item['primaryMuscles']],
-                        'secondaryMuscles': [MUSCLES[m] for m in item['secondaryMuscles']],
+                        'englishName': english_name, 'aliases': aliases.split(';'),
+                        'group': GROUPS[primary_muscles[0]],
+                        'equipment': reviewed.get(source_id, {}).get('equipment', item['equipment'] or 'unspecified'),
+                        'level': item['level'], 'primaryMuscles': [MUSCLES[m] for m in primary_muscles],
+                        'secondaryMuscles': [MUSCLES[m] for m in secondary_muscles],
                         'trainingRegions': regions.get(source_id, []),
-                        'steps': steps, 'images': item['images'],
-                        'techniqueUnavailable': not bool(item['instructions']),
-                        'imagesUnavailable': not bool(item['images']),
+                        'steps': steps, 'images': images,
+                        'techniqueUnavailable': not bool(steps),
+                        'imagesUnavailable': not bool(images),
                         'generatedMedia': generated.get(source_id),
-                        'translationAutomatic': source_id in automatic})
+                        **({'generatedIllustration': still['path']} if still else {}),
+                        **({'imageCredit': {key: credit[key] for key in
+                                           ('author', 'sourceURL', 'licenseName', 'licenseURL')}}
+                           if credit else {}),
+                        'translationAutomatic': source_id in automatic and source_id not in reviewed,
+                        **({'variantGroup': {'id': group_id, 'title': variant_groups[group_id]['ru']}}
+                           if group_id else {}),
+                        **({'techniqueVideoURL': reviewed[source_id]['techniqueVideoURL']}
+                           if reviewed.get(source_id, {}).get('techniqueVideoURL') else {})})
     write_json(RESOURCE, {'schemaVersion': 1, 'locale': 'ru',
                          'source': {'name': 'free-exercise-db',
                                     'repositoryURL': 'https://github.com/yuhonas/free-exercise-db',
@@ -129,9 +224,14 @@ def generate():
     english_entries = []
     for entry in entries:
         item = source[entry['sourceID']]
-        english_entries.append({**entry, 'name': item['name'],
-            'primaryMuscles': item['primaryMuscles'], 'secondaryMuscles': item['secondaryMuscles'],
-            'steps': [step for step in item['instructions'] if step.strip()],
+        english_entries.append({**entry, 'name': entry['englishName'],
+            'primaryMuscles': reviewed.get(entry['sourceID'], {}).get('primaryMuscles', item['primaryMuscles']),
+            'secondaryMuscles': reviewed.get(entry['sourceID'], {}).get('secondaryMuscles', item['secondaryMuscles']),
+            **({'variantGroup': {'id': group_by_member[entry['sourceID']],
+                                 'title': variant_groups[group_by_member[entry['sourceID']]]['en']}}
+               if entry['sourceID'] in group_by_member else {}),
+            'steps': reviewed.get(entry['sourceID'], {}).get('englishSteps',
+                      [step for step in item['instructions'] if step.strip()]),
             'translationAutomatic': False})
     russian = json.loads(RESOURCE.read_text())
     write_json(ENGLISH_RESOURCE, {**russian, 'locale': 'en', 'entries': english_entries})

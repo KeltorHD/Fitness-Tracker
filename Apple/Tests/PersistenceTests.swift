@@ -5,6 +5,28 @@ import XCTest
 @testable import FitLife
 
 @MainActor final class PersistenceTests: XCTestCase {
+  func testExerciseLinksAreScopedAndSynchronizedWithoutChangingWorkouts() throws {
+    let repository = try SwiftDataWorkoutRepository(inMemory: true)
+    let target = try XCTUnwrap(ExerciseLibrary.entries.first)
+    let link = ExerciseLink(id: UUID(), catalogID: target.id)
+    try repository.saveExerciseLink(link)
+    try repository.activateTrainingAccount("account-a")
+    XCTAssertEqual(try repository.exerciseLinks(), [link])
+    try repository.activateTrainingAccount("account-b")
+    XCTAssertTrue(try repository.exerciseLinks().isEmpty)
+    try repository.applyTrainingChanges([
+      TrainingChange(
+        key: .init(kind: .exerciseLink, id: link.id), revision: 1, value: .exerciseLink(link))
+    ])
+    XCTAssertEqual(try repository.exerciseLinks(), [link])
+    try repository.applyTrainingChanges([
+      TrainingChange(key: .init(kind: .exerciseLink, id: link.id), revision: 2, value: nil)
+    ])
+    XCTAssertTrue(try repository.exerciseLinks().isEmpty)
+    try repository.activateTrainingAccount("account-a")
+    XCTAssertEqual(try repository.exerciseLinks(), [link])
+  }
+
   func testAccountNamespacesAdoptTrainingAndNutritionOnceAndKeepAccountsIsolated() throws {
     let repository = try SwiftDataWorkoutRepository(inMemory: true)
     var workout = Workout(name: "Сохранённая", startedAt: Date(timeIntervalSince1970: 100))

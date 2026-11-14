@@ -545,23 +545,6 @@
         }
       }
     },
-    "876 упражнений и 1746 фотографий, встроенных в приложение.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "876 упражнений и 1746 фотографий, встроенных в приложение."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "876 exercises and 1746 photos included in the app."
-          }
-        }
-      }
-    },
     "Apple Watch на связи": {
       "extractionState": "manual",
       "localizations": {
@@ -2007,6 +1990,23 @@
         }
       }
     },
+    "Большинство упражнений и фотографии взяты из yuhonas/free-exercise-db; часть описаний подготовлена FitLife.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Большинство упражнений и фотографии взяты из yuhonas/free-exercise-db; часть описаний подготовлена FitLife."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Most exercises and photos come from yuhonas/free-exercise-db; some descriptions were prepared by FitLife."
+          }
+        }
+      }
+    },
     "Будет удалено только это упражнение из текущей тренировки.": {
       "extractionState": "manual",
       "localizations": {
@@ -2207,23 +2207,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Selected portion"
-          }
-        }
-      }
-    },
-    "В исходном каталоге нет изображений этого упражнения.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "В исходном каталоге нет изображений этого упражнения."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The source catalog has no images for this exercise."
           }
         }
       }
@@ -2479,6 +2462,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Variation %@"
+          }
+        }
+      }
+    },
+    "Вариант упражнения": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вариант упражнения"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exercise variation"
           }
         }
       }
@@ -3108,6 +3108,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Body view"
+          }
+        }
+      }
+    },
+    "Видео техники на YouTube": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Видео техники на YouTube"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exercise technique on YouTube"
           }
         }
       }
@@ -4060,6 +4077,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Select a bar to view that night. Days without records are excluded from the average."
+          }
+        }
+      }
+    },
+    "Выберите упражнение": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выберите упражнение"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose an exercise"
           }
         }
       }
@@ -6614,6 +6648,23 @@
         }
       }
     },
+    "Другие варианты": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Другие варианты"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Other variations"
+          }
+        }
+      }
+    },
     "Другие шаблоны": {
       "extractionState": "manual",
       "localizations": {
@@ -7719,6 +7770,23 @@
         }
       }
     },
+    "Здесь появятся упражнения из импортированных тренировок и планов.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Здесь появятся упражнения из импортированных тренировок и планов."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exercises from imported workouts and plans will appear here."
+          }
+        }
+      }
+    },
     "Здоровье": {
       "extractionState": "manual",
       "localizations": {
@@ -7974,6 +8042,23 @@
         }
       }
     },
+    "Изменить связь": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Изменить связь"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Change link"
+          }
+        }
+      }
+    },
     "Изменить тренировку": {
       "extractionState": "manual",
       "localizations": {
@@ -8072,6 +8157,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Calves"
+          }
+        }
+      }
+    },
+    "Иллюстрация движения создана ИИ.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Иллюстрация движения создана ИИ."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Movement illustration generated with AI."
           }
         }
       }
@@ -8293,6 +8395,57 @@
           "stringUnit": {
             "state": "translated",
             "value": "Weight history"
+          }
+        }
+      }
+    },
+    "История и графики": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "История и графики"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "History and charts"
+          }
+        }
+      }
+    },
+    "История и статистика": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "История и статистика"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "History and statistics"
+          }
+        }
+      }
+    },
+    "История и статистика объединятся. Записи тренировок сохранят прежние названия и подходы.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "История и статистика объединятся. Записи тренировок сохранят прежние названия и подходы."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "History and statistics will be combined. Saved workouts will retain their original names and sets."
           }
         }
       }
@@ -9606,6 +9759,23 @@
         }
       }
     },
+    "Мои упражнения": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Мои упражнения"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "My exercises"
+          }
+        }
+      }
+    },
     "Мои шаблоны": {
       "extractionState": "manual",
       "localizations": {
@@ -9721,6 +9891,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Forearms"
+          }
+        }
+      }
+    },
+    "Мышцы стопы": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Мышцы стопы"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Foot muscles"
           }
         }
       }
@@ -10813,6 +11000,23 @@
         }
       }
     },
+    "Не связано с каталогом": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не связано с каталогом"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not linked to the catalog"
+          }
+        }
+      }
+    },
     "Не удалось включить пульс. Проверьте разрешения «Здоровья» на часах и повторите с iPhone.": {
       "extractionState": "manual",
       "localizations": {
@@ -11799,6 +12003,23 @@
         }
       }
     },
+    "Не удалось связать упражнения.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось связать упражнения."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not link the exercises."
+          }
+        }
+      }
+    },
     "Не удалось синхронизировать данные.": {
       "extractionState": "manual",
       "localizations": {
@@ -12118,6 +12339,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Could not save the goal. Check the values and try again."
+          }
+        }
+      }
+    },
+    "Не удалось убрать связь упражнений.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось убрать связь упражнений."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not remove the exercise link."
           }
         }
       }
@@ -12972,6 +13210,23 @@
         }
       }
     },
+    "Ничего не найдено": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ничего не найдено"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing found"
+          }
+        }
+      }
+    },
     "Новая тренировка": {
       "extractionState": "manual",
       "localizations": {
@@ -13665,6 +13920,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Primary source for each metric"
+          }
+        }
+      }
+    },
+    "Основной каталог": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Основной каталог"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Main catalog"
           }
         }
       }
@@ -14685,6 +14957,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Workout type, duration and pause intervals are exported. Heart rate and calorie data are not generated."
+          }
+        }
+      }
+    },
+    "Передняя большеберцовая мышца": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Передняя большеберцовая мышца"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tibialis anterior"
           }
         }
       }
@@ -15909,6 +16198,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "No records yet"
+          }
+        }
+      }
+    },
+    "Пока нет своих упражнений": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пока нет своих упражнений"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No personal exercises yet"
           }
         }
       }
@@ -18565,6 +18871,23 @@
         }
       }
     },
+    "Русские и английские названия и инструкции прошли первичную редакционную проверку.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Русские и английские названия и инструкции прошли первичную редакционную проверку."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Russian and English names and instructions have undergone an initial editorial review."
+          }
+        }
+      }
+    },
     "Русский": {
       "extractionState": "manual",
       "localizations": {
@@ -18922,6 +19245,57 @@
         }
       }
     },
+    "Связать": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Связать"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Link"
+          }
+        }
+      }
+    },
+    "Связать с каталогом": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Связать с каталогом"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Link to catalog"
+          }
+        }
+      }
+    },
+    "Связать упражнения?": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Связать упражнения?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Link exercises?"
+          }
+        }
+      }
+    },
     "Связь с пульсометром потеряна. Повторите подключение.": {
       "extractionState": "manual",
       "localizations": {
@@ -18935,6 +19309,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "The heart rate monitor disconnected. Connect again."
+          }
+        }
+      }
+    },
+    "Связь упражнений": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Связь упражнений"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exercise link"
           }
         }
       }
@@ -18969,6 +19360,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Biceps curls"
+          }
+        }
+      }
+    },
+    "Сгибатели бедра": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сгибатели бедра"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hip flexors"
           }
         }
       }
@@ -21591,6 +21999,23 @@
         }
       }
     },
+    "Убрать связь": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Убрать связь"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove link"
+          }
+        }
+      }
+    },
     "Убрать упражнение": {
       "extractionState": "manual",
       "localizations": {
@@ -22390,6 +22815,40 @@
         }
       }
     },
+    "Упражнение недоступно": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Упражнение недоступно"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exercise unavailable"
+          }
+        }
+      }
+    },
+    "Упражнений в каталоге: %@. Доступные фотографии встроены в приложение.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Упражнений в каталоге: %@. Доступные фотографии встроены в приложение."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ exercises are in the catalog. Available photos are included in the app."
+          }
+        }
+      }
+    },
     "Упражнения": {
       "extractionState": "manual",
       "localizations": {
@@ -22879,6 +23338,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Your photo stays in your diary and is not sent to the food database. Enter nutrition using ingredients or packaging."
+          }
+        }
+      }
+    },
+    "Фотографии пока недоступны.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Фотографии пока недоступны."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photos are not available yet."
+          }
+        }
+      }
+    },
+    "Фотографии показывают отдельные положения упражнения.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Фотографии показывают отдельные положения упражнения."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photos show individual positions of the exercise."
           }
         }
       }
