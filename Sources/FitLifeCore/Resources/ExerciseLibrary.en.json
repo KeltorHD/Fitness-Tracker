@@ -23179,6 +23179,9 @@
       "name": "Reverse Band Box Squat",
       "englishName": "Reverse Band Box Squat",
       "aliases": [
+        "Приседания на ящик с разгрузочными резинками",
+        "Reverse band box squat",
+        "Приседания на ящик с обратным бинтом",
         "Пауэрлифтинг",
         "powerlifting"
       ],
@@ -23211,7 +23214,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-box-squat",
+        "title": "Squat to a box"
+      }
     },
     {
       "id": "7a88e92f-3c8d-549f-bd6d-8b9b279c9c24",
@@ -23219,6 +23226,9 @@
       "name": "Reverse Band Deadlift",
       "englishName": "Reverse Band Deadlift",
       "aliases": [
+        "Становая тяга с разгрузочными резинками",
+        "Reverse band deadlift",
+        "Становая тяга с обратной лентой",
         "Пауэрлифтинг",
         "powerlifting"
       ],
@@ -23251,7 +23261,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "conventional-barbell-deadlift",
+        "title": "Conventional barbell deadlift"
+      }
     },
     {
       "id": "fb20c460-6ce2-5fa0-bcd1-5bc36ed91b65",
@@ -23259,6 +23273,9 @@
       "name": "Reverse Band Power Squat",
       "englishName": "Reverse Band Power Squat",
       "aliases": [
+        "Приседания с разгрузочными резинками",
+        "Reverse band squat",
+        "Силовые приседания с обратной лентой",
         "Пауэрлифтинг",
         "powerlifting"
       ],
@@ -23297,6 +23314,9 @@
       "name": "Reverse Band Sumo Deadlift",
       "englishName": "Reverse Band Sumo Deadlift",
       "aliases": [
+        "Тяга сумо с разгрузочными резинками",
+        "Reverse band sumo deadlift",
+        "Становая тяга сумо с обратной лентой",
         "Пауэрлифтинг",
         "powerlifting"
       ],
@@ -23339,6 +23359,8 @@
       "name": "Reverse Barbell Preacher Curls",
       "englishName": "Reverse Barbell Preacher Curls",
       "aliases": [
+        "Обратные сгибания рук на скамье Скотта",
+        "Сгибания рук обратным хватом на скамье Скотта",
         "Силовые упражнения",
         "strength"
       ],
@@ -23377,6 +23399,9 @@
       "name": "Reverse Cable Curl",
       "englishName": "Reverse Cable Curl",
       "aliases": [
+        "Обратные сгибания рук на блоке",
+        "Reverse cable curl",
+        "Сгибание рук с нижним блоком обратным хватом",
         "Силовые упражнения",
         "strength"
       ],
@@ -23414,6 +23439,9 @@
       "name": "Reverse Flyes",
       "englishName": "Reverse Flyes",
       "aliases": [
+        "Разведение гантелей на задние дельты на наклонной скамье",
+        "Reverse flyes",
+        "Обратные полеты",
         "Силовые упражнения",
         "strength"
       ],
@@ -23442,7 +23470,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "chest-supported-dumbbell-rear-fly",
+        "title": "Chest-supported dumbbell rear fly"
+      }
     },
     {
       "id": "911218cc-47f1-54e1-b00b-144a7962f2a1",
@@ -23450,6 +23482,8 @@
       "name": "Reverse Flyes With External Rotation",
       "englishName": "Reverse Flyes With External Rotation",
       "aliases": [
+        "Разведение гантелей на задние дельты с вращением кистей",
+        "Обратные полеты с внешним вращением",
         "Силовые упражнения",
         "strength"
       ],
@@ -23480,7 +23514,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "chest-supported-dumbbell-rear-fly",
+        "title": "Chest-supported dumbbell rear fly"
+      }
     },
     {
       "id": "360a6bc0-aa2e-58b7-9b42-54f555893f1e",
@@ -23488,6 +23526,9 @@
       "name": "Reverse Grip Bent-Over Rows",
       "englishName": "Reverse Grip Bent-Over Rows",
       "aliases": [
+        "Тяга штанги в наклоне обратным хватом",
+        "Reverse grip bent-over row",
+        "Тяга в наклоне обратным хватом",
         "Силовые упражнения",
         "strength"
       ],
@@ -23519,7 +23560,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=IswHeM10XFA"
     },
     {
       "id": "2201d15f-53fe-55e7-af56-2977e56d4c1a",
@@ -23569,6 +23611,9 @@
       "name": "Reverse Hyperextension",
       "englishName": "Reverse Hyperextension",
       "aliases": [
+        "Подъём ног в тренажёре обратной гиперэкстензии",
+        "Reverse hyperextension",
+        "Обратная гиперэкстензия",
         "Силовые упражнения",
         "strength"
       ],
@@ -23605,6 +23650,9 @@
       "name": "Reverse Plate Curls",
       "englishName": "Reverse Plate Curls",
       "aliases": [
+        "Подъём блина на бицепс хватом сверху",
+        "Reverse plate curl",
+        "Сгибания рук с обратными пластинами",
         "Силовые упражнения",
         "strength"
       ],
@@ -23643,6 +23691,9 @@
       "name": "Reverse Triceps Bench Press",
       "englishName": "Reverse Triceps Bench Press",
       "aliases": [
+        "Жим штанги лёжа обратным хватом на трицепс",
+        "Reverse-grip triceps bench press",
+        "Обратный жим на трицепс лежа",
         "Силовые упражнения",
         "strength"
       ],
@@ -23671,7 +23722,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-flat-bench-press",
+        "title": "Barbell bench press"
+      }
     },
     {
       "id": "d63f7fa2-9d01-5d04-8bc0-ed31534494f6",
@@ -23679,6 +23734,9 @@
       "name": "Rhomboids-SMR",
       "englishName": "Rhomboids-SMR",
       "aliases": [
+        "Прокатывание ромбовидных мышц",
+        "Rhomboids SMR",
+        "Ромбоиды-СМР",
         "Растяжка",
         "stretching"
       ],
@@ -23711,6 +23769,9 @@
       "name": "Rickshaw Carry",
       "englishName": "Rickshaw Carry",
       "aliases": [
+        "Ходьба с рамой рикши",
+        "Rickshaw carry",
+        "Рикша Керри",
         "Силовой экстрим",
         "strongman"
       ],

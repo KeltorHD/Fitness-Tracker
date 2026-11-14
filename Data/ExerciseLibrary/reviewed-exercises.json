@@ -727,5 +727,21 @@
   },
   "Recumbent_Bike": {},
   "Return_Push_from_Stance": {},
-  "Reverse_Band_Bench_Press": {}
+  "Reverse_Band_Bench_Press": {},
+  "Reverse_Band_Box_Squat": {},
+  "Reverse_Band_Deadlift": {},
+  "Reverse_Band_Power_Squat": {},
+  "Reverse_Band_Sumo_Deadlift": {},
+  "Reverse_Barbell_Preacher_Curls": {},
+  "Reverse_Cable_Curl": {},
+  "Reverse_Flyes": {},
+  "Reverse_Flyes_With_External_Rotation": {},
+  "Reverse_Grip_Bent-Over_Rows": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=IswHeM10XFA"
+  },
+  "Reverse_Hyperextension": {},
+  "Reverse_Plate_Curls": {},
+  "Reverse_Triceps_Bench_Press": {},
+  "Rhomboids-SMR": {},
+  "Rickshaw_Carry": {}
 }

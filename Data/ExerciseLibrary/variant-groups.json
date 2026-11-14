@@ -20,7 +20,8 @@
       "Bench_Press_-_Powerlifting",
       "Bench_Press_with_Chains",
       "Board_Press",
-      "Reverse_Band_Bench_Press"
+      "Reverse_Band_Bench_Press",
+      "Reverse_Triceps_Bench_Press"
     ]
   },
   "barbell-ab-rollout": {
@@ -68,7 +69,8 @@
       "Box_Squat_with_Bands",
       "Box_Squat_with_Chains",
       "Dumbbell_Squat_To_A_Bench",
-      "Front_Barbell_Squat_To_A_Bench"
+      "Front_Barbell_Squat_To_A_Bench",
+      "Reverse_Band_Box_Squat"
     ]
   },
   "standing-hip-adduction": {
@@ -102,7 +104,8 @@
       "Barbell_Deadlift",
       "Deadlift_with_Bands",
       "Deadlift_with_Chains",
-      "Deficit_Deadlift"
+      "Deficit_Deadlift",
+      "Reverse_Band_Deadlift"
     ]
   },
   "alternating-kettlebell-clean": {
@@ -128,7 +131,9 @@
     "members": [
       "Dumbbell_Lying_Rear_Lateral_Raise",
       "Dumbbell_Lying_One-Arm_Rear_Lateral_Raise",
-      "Lying_Rear_Delt_Raise"
+      "Lying_Rear_Delt_Raise",
+      "Reverse_Flyes",
+      "Reverse_Flyes_With_External_Rotation"
     ]
   },
   "standing-dumbbell-upright-row": {

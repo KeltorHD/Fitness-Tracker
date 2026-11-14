@@ -267,6 +267,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     "Barbell_Bench_Press_-_Medium_Grip", "Close-Grip_Barbell_Bench_Press",
     "Wide-Grip_Barbell_Bench_Press", "Bench_Press_-_Powerlifting",
     "Bench_Press_with_Chains", "Board_Press", "Reverse_Band_Bench_Press",
+    "Reverse_Triceps_Bench_Press",
   ])
 }
 
@@ -394,8 +395,9 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   let variants = ExerciseLibrary.variants(for: entry.id, language: .russian)
   #expect(Set(variants.map(\.sourceID)) == [
     "Barbell_Deadlift", "Deadlift_with_Bands", "Deadlift_with_Chains", "Deficit_Deadlift",
+    "Reverse_Band_Deadlift",
   ])
-  #expect(Set(variants.map(\.id)).count == 4)
+  #expect(Set(variants.map(\.id)).count == 5)
   #expect(ExerciseLibrary.search("Становая тяга").contains { $0.id == entry.id })
 }
 

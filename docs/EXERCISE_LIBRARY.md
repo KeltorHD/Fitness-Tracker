@@ -120,3 +120,7 @@ python3 scripts/import-exercise-library.py --download-only
 Тяжелоатлетические варианты взятия и рывка в стойку сверены с [описанием приёма штанги](https://pm.catalystathletics.com/article/273/One-and-One-and-One-Is-Three-And-Other-Complicated-Ideas-Abo/). Видео молотковых сгибаний на скамье Скотта найдено по названию без просмотра.
 
 Для `Push_Press` отсутствовавшая в источнике техника написана на двух языках по [описанию жимового швунга](https://www.catalystathletics.com/exercise/87/Push-Press/); видео найдено по названию без просмотра. У `Rear_Leg_Raises` основная мышечная группа исправлена на ягодицы по [описанию разгибания бедра на четвереньках](https://www.meganwolfmd.com/pdf/foot-and-ankle/basic-ankle-hep-mwolf.pdf). Исходные фотографии тяги с резинками не показывают их достаточно отчётливо.
+
+Названия хватов сверены с [терминологией атлетических упражнений](https://www.phantastike.com/bodybuilding/terminologiya_atleticheskikh_uprazhnenij/pdf/): в названиях дополнительно указано положение ладоней. Видео тяги штанги в наклоне найдено по названию и описанию без просмотра.
+
+`Reverse_Flyes` и `Dumbbell_Lying_Rear_Lateral_Raise` описывают очень похожее разведение с опорой на наклонную скамью; обе карточки и их идентификаторы сохранены до отдельного решения о возможном объединении истории.
