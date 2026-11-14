@@ -651,7 +651,9 @@
       "Weighted_Pull_Ups",
       "V-Bar_Pullup",
       "Side_To_Side_Chins",
-      "Rocky_Pull-Ups_Pulldowns"
+      "Rocky_Pull-Ups_Pulldowns",
+      "Gironda_Sternum_Chins",
+      "One_Arm_Chin-Up"
     ]
   },
   "lat-pulldown": {
@@ -918,6 +920,22 @@
     "members": [
       "Air_Bike",
       "Elbow_to_Knee"
+    ]
+  },
+  "ring-muscle-up": {
+    "ru": "Выход силой на кольцах",
+    "en": "Ring muscle-up",
+    "members": [
+      "Muscle_Up",
+      "Kipping_Muscle_Up"
+    ]
+  },
+  "depth-jump-to-box": {
+    "ru": "Спрыгивание с запрыгиванием на тумбу",
+    "en": "Depth jump to box",
+    "members": [
+      "Depth_Jump_Leap",
+      "Linear_Depth_Jump"
     ]
   }
 }

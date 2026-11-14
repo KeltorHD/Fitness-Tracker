@@ -118,7 +118,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
       "Kettlebell_Overhead_Triceps_Extension", "Power_Partials",
       "Decline_EZ_Bar_Triceps_Extension", "Wide-Grip_Decline_Barbell_Pullover",
       "FitLife_Triceps_Pushdown_EZ_Bar", "FitLife_Triceps_Pushdown_One_Arm_Overhand",
-      "High_Cable_Curls",
+      "High_Cable_Curls", "Gironda_Sternum_Chins", "One_Arm_Chin-Up",
     ])
   #expect(ExerciseLibrary.entries.allSatisfy { $0.techniqueUnavailable == false })
 }
@@ -785,6 +785,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     [
       "Pullups", "Chin-Up", "Mixed_Grip_Chin", "Wide-Grip_Rear_Pull-Up", "Weighted_Pull_Ups",
       "V-Bar_Pullup", "Side_To_Side_Chins", "Rocky_Pull-Ups_Pulldowns",
+      "Gironda_Sternum_Chins", "One_Arm_Chin-Up",
     ],
     ["Supine_One-Arm_Overhead_Throw", "Supine_Two-Arm_Overhead_Throw"],
     ["One-Arm_Kettlebell_Row", "Two-Arm_Kettlebell_Row"],
@@ -1150,5 +1151,17 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     let entry = try #require(
       ExerciseLibrary.entries(language: language).first { $0.sourceID == "Elbow_to_Knee" })
     #expect(entry.muscleRegions.contains(.obliques))
+  }
+}
+
+@Test func ringMuscleUpsAndDepthJumpsHaveDistinctVariantHistories() throws {
+  for expected in [["Muscle_Up", "Kipping_Muscle_Up"], ["Depth_Jump_Leap", "Linear_Depth_Jump"]] {
+    for language in [AppLanguage.russian, .english] {
+      let entry = try #require(
+        ExerciseLibrary.entries(language: language).first { $0.sourceID == expected[0] })
+      let variants = ExerciseLibrary.variants(for: entry.id, language: language)
+      #expect(Set(variants.map(\.sourceID)) == Set(expected))
+      #expect(Set(variants.map(\.id)).count == 2)
+    }
   }
 }

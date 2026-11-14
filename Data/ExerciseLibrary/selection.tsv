@@ -184,7 +184,7 @@ Box_Squat	Приседания со штангой на ящик	Приседа�
 Box_Squat_with_Bands	Приседания со штангой на ящик с резиновыми петлями	Приседания на ящик со штангой и резинками;Box Squat with Bands
 Box_Squat_with_Chains	Приседания со штангой на ящик с цепями	Приседания на ящик со штангой и цепями;Box Squat with Chains
 Brachialis-SMR	Брахиалис-СМР	Растяжка;stretching
-Bradford_Rocky_Presses	Брэдфорд / Рокки Прессс	Силовые упражнения;strength
+Bradford_Rocky_Presses	Жим Брэдфорда сидя	Жим штанги сидя с переносом перед и за голову;Bradford Rocky Press;Силовые упражнения;strength
 Butt-Ups	Подъём таза из планки на предплечьях	Складка в планке на предплечьях;Butt-Ups
 Cable_Chest_Press	Жим рукоятей блоков от груди сидя	Жим от груди в кроссовере сидя;Cable Chest Press
 Cable_Deadlifts	Становая тяга с двух нижних блоков	Становая тяга с нижним блоком;Cable Deadlifts
@@ -271,7 +271,7 @@ Decline_Push-Up	Отжимания от пола с ногами на возвы
 Decline_Reverse_Crunch	Обратные скручивания на скамье с наклоном вниз	Подтягивание коленей с подкручиванием таза на отрицательной скамье;Decline Reverse Crunch
 Decline_Smith_Press	Жим в тренажёре Смита на скамье с наклоном вниз широким хватом	Жим в Смите вниз головой;Decline Smith Press
 Deficit_Deadlift	Классическая становая тяга со штангой стоя на возвышении	Становая тяга с дефицитом;Deficit Deadlift
-Depth_Jump_Leap	Прыжок в глубину	Плиометрика;plyometrics
+Depth_Jump_Leap	Спрыгивание с последующим запрыгиванием на тумбу	Прыжок в глубину с запрыгиванием на тумбу;Depth Jump Leap;Силовые упражнения;strength
 Dip_Machine	Отжимания в тренажёре сидя	Разгибание рук в тренажёре для отжиманий;Dip Machine
 Donkey_Calf_Raises	Ослик	Подъём на носки в наклоне с партнёром;Donkey Calf Raises;Силовые упражнения;strength
 Double_Kettlebell_Alternating_Hang_Clean	Попеременное взятие двух гирь на грудь с одновременной сменой рук	Взятие двух гирь на грудь из виса со сменой рук;Double Kettlebell Alternating Hang Clean
@@ -344,7 +344,7 @@ Front_Squat_Clean_Grip	Фронтальные приседания со штан
 Front_Squats_With_Two_Kettlebells	Фронтальные приседания с двумя гирями на груди	Приседания с двумя гирями у плеч;Front Squats With Two Kettlebells
 Front_Two-Dumbbell_Raise	Одновременный подъём двух гантелей перед собой стоя	Одновременные махи гантелями вперёд;Front Two-Dumbbell Raise
 Full_Range-Of-Motion_Lat_Pulldown	Тяга верхних блоков перекрёстным хватом с поворотом кистей	Тяга перекрещённых рукоятей верхних блоков;Full Range-Of-Motion Lat Pulldown
-Gironda_Sternum_Chins	Жиронда Грудина Подбородки	Силовые упражнения;strength
+Gironda_Sternum_Chins	Подтягивания Жиронды	Подтягивание обратным хватом к грудине с отклонением назад;Gironda Sternum Chins;Силовые упражнения;strength
 Glute_Ham_Raise	Подъём корпуса в тренажёре GHD	Сгибание ног с опорой бёдрами в тренажёре GHD;Glute Ham Raise
 Glute_Kickback	Отведение согнутой ноги назад на четвереньках	Подъём ноги на ягодицы стоя на четвереньках;Glute Kickback
 Good_Morning	Гудморнинг со штангой на плечах стоя	Наклоны со штангой на плечах;Good Morning
@@ -428,7 +428,7 @@ Kettlebell_Thruster	Трастеры с двумя гирями	Приседан
 Kettlebell_Turkish_Get-Up_Lunge_style	Турецкий подъём с гирей через выпад	Подъём с пола с гирей через выпад;Turkish Get-Up Lunge Style
 Kettlebell_Turkish_Get-Up_Squat_style	Турецкий подъём с гирей через присед	Подъём с пола с гирей через присед;Turkish Get-Up Squat Style
 Kettlebell_Windmill	Мельница с гирей	Наклон с гирей над головой и касанием пола свободной рукой;Kettlebell Windmill
-Kipping_Muscle_Up	Поднятие мышц вверх	Силовые упражнения;strength
+Kipping_Muscle_Up	Выход силой на кольцах с киппингом	Выход силой на кольцах с раскачиванием;Kipping Ring Muscle Up;Силовые упражнения;strength
 Knee_Across_The_Body	Растяжка ягодиц лёжа с приведением колена через корпус	Поворот таза лёжа с согнутой ногой;Knee Across The Body
 Knee_Circles	Коленные круги	Растяжка;stretching
 Knee_Hip_Raise_On_Parallel_Bars	Подъём коленей с опорой на предплечья в тренажёре	Подъём согнутых ног в упоре на брусьях;Knee Hip Raise On Parallel Bars
@@ -463,7 +463,7 @@ Leverage_Shoulder_Press	Жим над головой в рычажном тре�
 Leverage_Shrug	Шраги в рычажном тренажёре стоя	Подъём плеч в рычажном тренажёре;Leverage Shrug
 Linear_3-Part_Start_Technique	Техника линейного старта из трех частей	Плиометрика;plyometrics
 Linear_Acceleration_Wall_Drill	Попеременный подъём коленей с опорой на стену	Имитация ускорения у стены;Linear Acceleration Wall Drill
-Linear_Depth_Jump	Линейный прыжок в глубину	Плиометрика;plyometrics
+Linear_Depth_Jump	Прыжок в глубину вперёд с запрыгиванием на тумбу	Спрыгивание и прыжок вперёд на тумбу;Linear Depth Jump;Силовые упражнения;strength
 Log_Lift	Лог-лифт	Взятие бревна на грудь и жим над головой;Log Lift
 London_Bridges	Лондонские мосты	Силовые упражнения;strength
 Looking_At_Ceiling	Прогиб назад на коленях с опорой руками на пятки	Растяжка передней поверхности тела с опорой на пятки;Looking At Ceiling
@@ -544,7 +544,7 @@ One-Arm_Side_Deadlift	Чемоданная тяга штанги одной ру
 One-Arm_Side_Laterals	Подъём гантели в сторону одной рукой с опорой	Мах гантелью в сторону одной рукой;Боковые упражнения на одной руке;Силовые упражнения;strength
 One-Legged_Cable_Kickback	Отведение ноги назад на нижнем блоке стоя	Разгибание бедра в кроссовере;Cable glute kickback;Отдача на тросе на одной ноге;Силовые упражнения;strength
 One_Arm_Against_Wall	Растяжка широчайшей мышцы с опорой одной рукой о стену	Растяжка широчайших у стены одной рукой;Одна рука к стене;Растяжка;stretching
-One_Arm_Chin-Up	Подтягивания на одной руке	Силовые упражнения;strength
+One_Arm_Chin-Up	Подтягивание на одной руке обратным хватом	Подтягивания на одной руке;One Arm Chin-Up;Силовые упражнения;strength
 One_Arm_Dumbbell_Bench_Press	Жим гантели одной рукой лёжа на плоской скамье	Жим одной гантели лёжа;One-arm dumbbell bench press;Жим гантели одной рукой;Силовые упражнения;strength
 One_Arm_Dumbbell_Preacher_Curl	Сгибание руки с гантелью на скамье Скотта	Подъём гантели на бицепс одной рукой на скамье Скотта;Сгибание руки с гантелью на скамье Скотта;Силовые упражнения;strength
 One_Arm_Floor_Press	Жим штанги одной рукой лёжа на полу	Одноручный жим штанги с пола;One-arm floor press;Жим с пола одной рукой;Силовые упражнения;strength
@@ -592,7 +592,7 @@ Power_Snatch	Рывок штанги в стойку с пола	Силовой 
 Power_Snatch_from_Blocks	Рывок штанги в полуприсед с плинтов	Тяжёлая атлетика;olympic weightlifting
 Power_Stairs	Подъём отягощения на силовую платформу	Силовая лестница;Power stairs;Лестницы с электроприводом;Силовой экстрим;strongman
 Preacher_Hammer_Dumbbell_Curl	Молотковые сгибания рук с гантелями на скамье Скотта	Молотки на скамье Скотта;Preacher hammer dumbbell curl;Молотковые сгибания с гантелями на скамье Скотта;Силовые упражнения;strength
-Press_Sit-Up	Жим приседаниями	Силовые упражнения;strength
+Press_Sit-Up	Подъём корпуса с жимом штанги на скамье с наклоном вниз	Подъём корпуса с жимом штанги над головой;Press Sit-Up;Силовые упражнения;strength
 Prone_Manual_Hamstring	Сгибание ноги лёжа с сопротивлением партнёра	Сгибание ноги на бицепс бедра с партнёром;Ручное подколенное сухожилие лежа;Силовые упражнения;strength
 Prowler_Sprint	Толкание саней с ускорением	Спринт с санями;Prowler sprint;Проулер Спринт;Кардио;cardio
 Pull_Through	Тяга нижнего блока между ног	Пул-тру на блоке;Cable pull-through;Вытащить через;Силовые упражнения;strength

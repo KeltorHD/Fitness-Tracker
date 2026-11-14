@@ -1664,5 +1664,50 @@
   },
   "Incline_Dumbbell_Bench_With_Palms_Facing_In": {
     "techniqueVideoURL": "https://www.youtube.com/watch?v=rq2fUEabPOk"
-  }
+  },
+  "Bradford_Rocky_Presses": {
+    "englishSteps": [
+      "Sit upright with a barbell at the front of your shoulders and take a grip wider than shoulder width.",
+      "Press the bar just high enough to clear your head and lower it behind your head within a comfortable range.",
+      "Lift it over your head again and return it to the front."
+    ],
+    "instructionSourceURL": "https://www.muscleandstrength.com/exercises/seated-alternating-front-back-barbell-press.html",
+    "instructionCorrectionReason": "The source instructs a full lockout, while the named Bradford press uses a shorter movement over the head.",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=cKyh38FOx9E"
+  },
+  "Depth_Jump_Leap": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=KsWyPw6w2i0"
+  },
+  "Linear_Depth_Jump": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=KsWyPw6w2i0"
+  },
+  "Gironda_Sternum_Chins": {
+    "excludeSourceImages": true,
+    "imageExclusionReason": "The original photos show a conventional upright chin-up instead of the named Gironda sternum pull with a pronounced backward lean.",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=5CdBXD0uQLw"
+  },
+  "One_Arm_Chin-Up": {
+    "primaryMuscles": [
+      "lats"
+    ],
+    "secondaryMuscles": [
+      "biceps",
+      "forearms",
+      "middle back"
+    ],
+    "englishSteps": [
+      "Hang from the bar with one hand using an underhand grip and keep the free hand clear.",
+      "Pull yourself upward with the working arm until your chin reaches the bar.",
+      "Lower under control and repeat on the other side."
+    ],
+    "instructionSourceURL": "https://kysero.io/exercise-library/one-arm-chin-up/",
+    "instructionCorrectionReason": "The name specifies a one-arm chin-up, while the source instructions describe assistance from the other hand holding a towel.",
+    "excludeSourceImages": true,
+    "imageExclusionReason": "The source photos show the free hand assisting with a towel, not a one-arm chin-up.",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=Nj1NvN7Te_s"
+  },
+  "Kipping_Muscle_Up": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=5XCv9gUrz9I"
+  },
+  "Press_Sit-Up": {}
 }
