@@ -6747,8 +6747,8 @@
       "name": "Bicycling",
       "englishName": "Bicycling",
       "aliases": [
-        "Кардио",
-        "cardio"
+        "Велосипедная прогулка",
+        "Bicycling"
       ],
       "group": "legs",
       "equipment": "other",
@@ -6763,7 +6763,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "To begin, seat yourself on the bike and adjust the seat to your height."
+        "Choose a bicycle that fits, adjust the saddle and wear a properly fitted helmet.",
+        "Check the brakes and tires before riding.",
+        "Sit on the bicycle, hold the handlebars and pedal at a comfortable pace."
       ],
       "images": [
         "Bicycling/0.jpg",
@@ -19499,11 +19501,11 @@
       "name": "Moving Claw Series",
       "englishName": "Moving Claw Series",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Бег с активным выносом ноги и постановкой стопы",
+        "Moving Claw Series"
       ],
       "group": "legs",
-      "equipment": "unspecified",
+      "equipment": "body only",
       "level": "beginner",
       "primaryMuscles": [
         "hamstrings"
@@ -22724,8 +22726,8 @@
       "name": "Power Partials",
       "englishName": "Power Partials",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подъёмы гантелей через стороны в нижней части амплитуды",
+        "Power Partials"
       ],
       "group": "shoulders",
       "equipment": "dumbbell",
@@ -22738,20 +22740,19 @@
         "deltoidLateral"
       ],
       "steps": [
-        "Stand up with your torso upright and a dumbbell on each hand being held at arms length. The elbows should be close to the torso.",
-        "The palms of the hands should be facing your torso. Your feet should be about shoulder width apart. This will be your starting position.",
-        "Keeping your arms straight and the torso stationary, lift the weights out to your sides until they are about shoulder level height while exhaling.",
-        "Feel the contraction for a second and begin to lower the weights back down to the starting position while inhaling. Tip: Keep the palms facing down with the little finger slightly higher while lifting and lowering the weights as it will concentrate the stress on your shoulders mainly.",
-        "Repeat for the recommended amount of repetitions."
+        "Stand upright holding a dumbbell in each hand at your sides.",
+        "Raise the dumbbells out to the sides a short distance, using only the bottom portion of a lateral raise.",
+        "Lower the weights under control while keeping the torso still."
       ],
-      "images": [
-        "Power_Partials/0.jpg",
-        "Power_Partials/1.jpg"
-      ],
+      "images": [],
       "techniqueUnavailable": false,
-      "imagesUnavailable": false,
+      "imagesUnavailable": true,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "lateral-raise",
+        "title": "Lateral raise"
+      }
     },
     {
       "id": "f3a39a64-3139-5ec7-bf0e-b31638db2f0e",
@@ -23392,8 +23393,8 @@
       "name": "Pyramid",
       "englishName": "Pyramid",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Растяжка спины с опорой тазом на фитбол",
+        "Pyramid"
       ],
       "group": "back",
       "equipment": "exercise ball",

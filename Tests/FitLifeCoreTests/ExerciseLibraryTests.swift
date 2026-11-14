@@ -111,13 +111,23 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   #expect(ExerciseLibrary.entry(for: exercise.id)?.steps.count == 3)
 }
 
-@Test func fullCatalogRepresentsMissingSourceMaterialsExplicitly() {
+@Test func fullCatalogRepresentsMissingOrExcludedPhotosExplicitly() {
   #expect(
     Set(ExerciseLibrary.entries.filter { $0.imagesUnavailable == true }.map(\.sourceID)) == [
       "Kettlebell_Halo", "Kettlebell_Halo_With_Overhead_Extension",
-      "Kettlebell_Overhead_Triceps_Extension",
+      "Kettlebell_Overhead_Triceps_Extension", "Power_Partials",
     ])
   #expect(ExerciseLibrary.entries.allSatisfy { $0.techniqueUnavailable == false })
+}
+
+@Test func partialLateralRaiseDoesNotShowFullRangeSourcePhotos() throws {
+  for language in [AppLanguage.russian, .english] {
+    let entry = try #require(
+      ExerciseLibrary.entries(language: language).first { $0.sourceID == "Power_Partials" })
+    #expect(entry.imagesUnavailable == true)
+    #expect(entry.images.isEmpty)
+    #expect(entry.steps.count >= 3)
+  }
 }
 
 @Test func sideExercisesHaveTechniqueAndCorrectMuscleMapping() throws {
@@ -501,7 +511,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     [
       "Side_Lateral_Raise", "Seated_Side_Lateral_Raise", "One-Arm_Side_Laterals",
       "One-Arm_Incline_Lateral_Raise", "Standing_Low-Pulley_Deltoid_Raise",
-      "Lying_One-Arm_Lateral_Raise",
+      "Lying_One-Arm_Lateral_Raise", "Power_Partials",
     ],
   ] {
     for language in [AppLanguage.russian, .english] {

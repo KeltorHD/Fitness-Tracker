@@ -37,12 +37,12 @@ for ru, en in zip(document['entries'], english['entries']):
         if original['instructions']:
             assert reviewed[en['sourceID']].get('instructionCorrectionReason', '').strip()
 assert len(manifest['images']) == 1746
-assert len([entry for entry in document['entries'] if entry['imagesUnavailable']]) == 3
+assert len([entry for entry in document['entries'] if entry['imagesUnavailable']]) == 4
 assert not any(entry['techniqueUnavailable'] for entry in document['entries'])
 generated = json.loads((root / 'Data/ExerciseLibrary/generated-media.json').read_text())
 generated_provenance = json.loads((root / 'Data/ExerciseLibrary/generated-media.provenance.json').read_text())
 generated_files = {item['path'] for entry in generated_provenance['entries'] for item in entry['files']}
-expected = {image for entry in document['entries'] for image in entry['images']}
+expected = {image for item in source.values() for image in item['images']}
 assert expected == {item['path'] for item in manifest['images']}
 assert expected | {p for p in generated_files if p.endswith('.jpg')} == {str(p.relative_to(root / 'Resources/ExerciseMedia')) for p in (root / 'Resources/ExerciseMedia').rglob('*.jpg')}
 assert {p for p in generated_files if p.endswith('.gif')} == {str(p.relative_to(root / 'Resources/ExerciseMedia')) for p in (root / 'Resources/ExerciseMedia').rglob('*.gif')}
@@ -72,7 +72,12 @@ for image in manifest['images']:
     assert len(data) == image['bytes'], path
     assert hashlib.sha256(data).hexdigest() == image['sha256'], path
 for index, entry in enumerate(document['entries']):
-    assert entry['images'] == source[entry['sourceID']]['images']
+    review = reviewed.get(entry['sourceID'], {})
+    if review.get('excludeSourceImages', False):
+        assert review.get('imageExclusionReason', '').strip()
+        assert source[entry['sourceID']]['images'] and entry['images'] == []
+    else:
+        assert entry['images'] == source[entry['sourceID']]['images']
     assert entry['englishName'] == source[entry['sourceID']]['name']
     assert re.search('[А-Яа-яЁё]', entry['name'])
     assert bool(entry['steps']) == bool(source[entry['sourceID']]['instructions'] or reviewed.get(entry['sourceID'], {}).get('englishSteps'))

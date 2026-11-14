@@ -1505,5 +1505,29 @@
     "techniqueVideoURL": "https://www.youtube.com/watch?v=19Q1-2ExnE0"
   },
   "Dumbbell_Clean": {},
-  "Finger_Curls": {}
+  "Finger_Curls": {},
+  "Bicycling": {
+    "englishSteps": [
+      "Choose a bicycle that fits, adjust the saddle and wear a properly fitted helmet.",
+      "Check the brakes and tires before riding.",
+      "Sit on the bicycle, hold the handlebars and pedal at a comfortable pace."
+    ],
+    "instructionSourceURL": "https://www.nhtsa.gov/road-safety/bicycle-safety",
+    "instructionCorrectionReason": "The original instruction only describes sitting on a bicycle and omits the activity itself."
+  },
+  "Moving_Claw_Series": {
+    "equipment": "body only"
+  },
+  "Pyramid": {},
+  "Power_Partials": {
+    "englishSteps": [
+      "Stand upright holding a dumbbell in each hand at your sides.",
+      "Raise the dumbbells out to the sides a short distance, using only the bottom portion of a lateral raise.",
+      "Lower the weights under control while keeping the torso still."
+    ],
+    "instructionSourceURL": "https://whatmuscle.com/exercises/power-partials",
+    "instructionCorrectionReason": "The user selected the partial-range variant; the original instructions describe a full shoulder-height lateral raise.",
+    "excludeSourceImages": true,
+    "imageExclusionReason": "The original photos show a full lateral raise to shoulder height rather than the user-selected partial-range movement."
+  }
 }

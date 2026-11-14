@@ -119,6 +119,11 @@ def generate():
         item = source[source_id]
         primary_muscles = reviewed.get(source_id, {}).get('primaryMuscles', item['primaryMuscles'])
         secondary_muscles = reviewed.get(source_id, {}).get('secondaryMuscles', item['secondaryMuscles'])
+        excluded_images = reviewed.get(source_id, {}).get('excludeSourceImages', False)
+        assert isinstance(excluded_images, bool), source_id
+        if excluded_images:
+            assert item['images'] and reviewed[source_id].get('imageExclusionReason', '').strip(), source_id
+        images = [] if excluded_images else item['images']
         assert primary_muscles and all(muscle in MUSCLES for muscle in primary_muscles), source_id
         assert all(muscle in MUSCLES for muscle in secondary_muscles), source_id
         assert 0 < len(name) <= 80 and re.search('[А-Яа-яЁё]', name)
@@ -142,9 +147,9 @@ def generate():
                         'level': item['level'], 'primaryMuscles': [MUSCLES[m] for m in primary_muscles],
                         'secondaryMuscles': [MUSCLES[m] for m in secondary_muscles],
                         'trainingRegions': regions.get(source_id, []),
-                        'steps': steps, 'images': item['images'],
+                        'steps': steps, 'images': images,
                         'techniqueUnavailable': not bool(steps),
-                        'imagesUnavailable': not bool(item['images']),
+                        'imagesUnavailable': not bool(images),
                         'generatedMedia': generated.get(source_id),
                         'translationAutomatic': source_id in automatic and source_id not in reviewed,
                         **({'variantGroup': {'id': group_id, 'title': variant_groups[group_id]['ru']}}
