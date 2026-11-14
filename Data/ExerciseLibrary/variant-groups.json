@@ -139,5 +139,24 @@
       "Exercise_Ball_Crunch",
       "Crunch_-_Legs_On_Exercise_Ball"
     ]
+  },
+  "external-shoulder-rotation": {
+    "ru": "Наружная ротация плеча",
+    "en": "Shoulder external rotation",
+    "members": [
+      "External_Rotation",
+      "External_Rotation_with_Band",
+      "External_Rotation_with_Cable"
+    ]
+  },
+  "floor-press": {
+    "ru": "Жим лёжа на полу",
+    "en": "Floor press",
+    "members": [
+      "Floor_Press",
+      "Floor_Press_with_Chains",
+      "Dumbbell_Floor_Press",
+      "Extended_Range_One-Arm_Kettlebell_Floor_Press"
+    ]
   }
 }

@@ -310,5 +310,23 @@
   "Extended_Range_One-Arm_Kettlebell_Floor_Press": {},
   "External_Rotation": {
     "techniqueVideoURL": "https://www.youtube.com/watch?v=7gFkxXUEkwM"
-  }
+  },
+  "External_Rotation_with_Band": {},
+  "External_Rotation_with_Cable": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=PVdgjHqAes8"
+  },
+  "Farmers_Walk": {},
+  "Fast_Skipping": {},
+  "Flat_Bench_Cable_Flyes": {},
+  "Flat_Bench_Leg_Pull-In": {},
+  "Floor_Glute-Ham_Raise": {
+    "equipment": "body only"
+  },
+  "Floor_Press": {},
+  "Floor_Press_with_Chains": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=rgDzHCcTLac"
+  },
+  "Flutter_Kicks": {},
+  "Forward_Drag_with_Press": {},
+  "Frankenstein_Squat": {}
 }

@@ -10746,6 +10746,10 @@
       "imagesUnavailable": false,
       "generatedMedia": null,
       "translationAutomatic": false,
+      "variantGroup": {
+        "id": "floor-press",
+        "title": "Floor press"
+      },
       "techniqueVideoURL": "https://www.youtube.com/watch?v=9vcKpv45aeE"
     },
     {
@@ -11687,7 +11691,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "floor-press",
+        "title": "Floor press"
+      }
     },
     {
       "id": "9573a5d5-663b-597c-bbe6-39964bc426ff",
@@ -11724,6 +11732,10 @@
       "imagesUnavailable": false,
       "generatedMedia": null,
       "translationAutomatic": false,
+      "variantGroup": {
+        "id": "external-shoulder-rotation",
+        "title": "Shoulder external rotation"
+      },
       "techniqueVideoURL": "https://www.youtube.com/watch?v=7gFkxXUEkwM"
     },
     {
@@ -11732,8 +11744,8 @@
       "name": "External Rotation with Band",
       "englishName": "External Rotation with Band",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Вращение плеча наружу с эспандером",
+        "External Rotation with Band"
       ],
       "group": "shoulders",
       "equipment": "bands",
@@ -11759,7 +11771,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "external-shoulder-rotation",
+        "title": "Shoulder external rotation"
+      }
     },
     {
       "id": "4fb27e45-9687-536f-89bd-f6251ae9541f",
@@ -11767,8 +11783,8 @@
       "name": "External Rotation with Cable",
       "englishName": "External Rotation with Cable",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Вращение плеча наружу на блоке",
+        "External Rotation with Cable"
       ],
       "group": "shoulders",
       "equipment": "cable",
@@ -11793,7 +11809,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "external-shoulder-rotation",
+        "title": "Shoulder external rotation"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=PVdgjHqAes8"
     },
     {
       "id": "81c46539-d648-5575-9db6-f6d5832dd550",
@@ -11801,8 +11822,8 @@
       "name": "Farmer's Walk",
       "englishName": "Farmer's Walk",
       "aliases": [
-        "Силовой экстрим",
-        "strongman"
+        "Ходьба с отягощениями в опущенных руках",
+        "Farmers Walk"
       ],
       "group": "arms",
       "equipment": "other",
@@ -11839,8 +11860,8 @@
       "name": "Fast Skipping",
       "englishName": "Fast Skipping",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Скиппинг с чередованием ног",
+        "Fast Skipping"
       ],
       "group": "legs",
       "equipment": "body only",
@@ -11908,8 +11929,8 @@
       "name": "Flat Bench Cable Flyes",
       "englishName": "Flat Bench Cable Flyes",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Разведение рук с блоками на горизонтальной скамье",
+        "Flat Bench Cable Flyes"
       ],
       "group": "chest",
       "equipment": "cable",
@@ -11945,8 +11966,8 @@
       "name": "Flat Bench Leg Pull-In",
       "englishName": "Flat Bench Leg Pull-In",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подтягивание ног к груди лёжа на скамье",
+        "Flat Bench Leg Pull-In"
       ],
       "group": "core",
       "equipment": "body only",
@@ -12018,11 +12039,12 @@
       "name": "Floor Glute-Ham Raise",
       "englishName": "Floor Glute-Ham Raise",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Опускание корпуса с колен с фиксацией стоп",
+        "Floor Glute-Ham Raise",
+        "Nordic Hamstring Curl"
       ],
       "group": "legs",
-      "equipment": "unspecified",
+      "equipment": "body only",
       "level": "intermediate",
       "primaryMuscles": [
         "hamstrings"
@@ -12057,8 +12079,8 @@
       "name": "Floor Press",
       "englishName": "Floor Press",
       "aliases": [
-        "Пауэрлифтинг",
-        "powerlifting"
+        "Жим штанги с пола",
+        "Floor Press"
       ],
       "group": "arms",
       "equipment": "barbell",
@@ -12083,7 +12105,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "floor-press",
+        "title": "Floor press"
+      }
     },
     {
       "id": "fc8bf413-6dfe-5aab-8756-d2107d2456bb",
@@ -12091,8 +12117,8 @@
       "name": "Floor Press with Chains",
       "englishName": "Floor Press with Chains",
       "aliases": [
-        "Пауэрлифтинг",
-        "powerlifting"
+        "Жим штанги с пола с цепями",
+        "Floor Press with Chains"
       ],
       "group": "arms",
       "equipment": "barbell",
@@ -12118,7 +12144,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "floor-press",
+        "title": "Floor press"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=rgDzHCcTLac"
     },
     {
       "id": "d2a455cf-7f63-567b-9067-e7c906cb25ee",
@@ -12126,8 +12157,8 @@
       "name": "Flutter Kicks",
       "englishName": "Flutter Kicks",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Махи ногами лёжа на скамье",
+        "Flutter Kicks"
       ],
       "group": "legs",
       "equipment": "body only",
@@ -12193,8 +12224,8 @@
       "name": "Forward Drag with Press",
       "englishName": "Forward Drag with Press",
       "aliases": [
-        "Силовой экстрим",
-        "strongman"
+        "Ходьба с санями и жимом вперёд",
+        "Forward Drag with Press"
       ],
       "group": "chest",
       "equipment": "other",
@@ -12230,8 +12261,8 @@
       "name": "Frankenstein Squat",
       "englishName": "Frankenstein Squat",
       "aliases": [
-        "Тяжёлая атлетика",
-        "olympic weightlifting"
+        "Фронтальные приседания со штангой на плечах и вытянутыми руками",
+        "Frankenstein Squat"
       ],
       "group": "legs",
       "equipment": "barbell",
