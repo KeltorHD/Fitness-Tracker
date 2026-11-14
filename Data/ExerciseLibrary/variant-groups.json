@@ -770,5 +770,21 @@
       "Snatch_from_Blocks",
       "Power_Snatch_from_Blocks"
     ]
+  },
+  "inverted-row": {
+    "ru": "Горизонтальные подтягивания",
+    "en": "Inverted row",
+    "members": [
+      "Inverted_Row",
+      "Inverted_Row_with_Straps"
+    ]
+  },
+  "box-jump": {
+    "ru": "Запрыгивание на тумбу",
+    "en": "Box jump",
+    "members": [
+      "Front_Box_Jump",
+      "Box_Jump_Multiple_Response"
+    ]
   }
 }

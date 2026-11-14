@@ -7179,7 +7179,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "box-jump",
+        "title": "Box jump"
+      }
     },
     {
       "id": "b1f094f6-363e-5995-aaa2-c1270ce19b63",
@@ -10921,8 +10925,8 @@
       "name": "Double Leg Butt Kick",
       "englishName": "Double Leg Butt Kick",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Прыжок с подтягиванием пяток к ягодицам",
+        "Double-Leg Butt Kick"
       ],
       "group": "legs",
       "equipment": "body only",
@@ -12823,11 +12827,11 @@
       "name": "Frog Hops",
       "englishName": "Frog Hops",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Прыжки вперёд из приседа с руками за головой",
+        "Frog Hops"
       ],
       "group": "legs",
-      "equipment": "unspecified",
+      "equipment": "body only",
       "level": "intermediate",
       "primaryMuscles": [
         "quadriceps"
@@ -12937,21 +12941,21 @@
       "name": "Front Box Jump",
       "englishName": "Front Box Jump",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Прыжок на тумбу вперёд",
+        "Front Box Jump"
       ],
       "group": "legs",
       "equipment": "other",
       "level": "beginner",
       "primaryMuscles": [
-        "hamstrings"
+        "quadriceps"
       ],
       "secondaryMuscles": [
         "abductors",
         "adductors",
         "calves",
         "glutes",
-        "quadriceps"
+        "hamstrings"
       ],
       "trainingRegions": [],
       "steps": [
@@ -12967,7 +12971,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "box-jump",
+        "title": "Box jump"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=qEpCvxPjoP0"
     },
     {
       "id": "c04ec81a-f8f8-5437-9329-248bf2ed5fa4",
@@ -14578,8 +14587,8 @@
       "name": "Inchworm",
       "englishName": "Inchworm",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Ходьба руками в планку с подшагиванием ног",
+        "Inchworm"
       ],
       "group": "legs",
       "equipment": "body only",
@@ -14603,7 +14612,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=giKZKWugGE4"
     },
     {
       "id": "cad937be-1f27-5061-ad9a-2e6a7c697743",
@@ -15235,11 +15245,11 @@
       "name": "Inverted Row",
       "englishName": "Inverted Row",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Горизонтальные подтягивания к низкому грифу",
+        "Inverted Row"
       ],
       "group": "back",
-      "equipment": "unspecified",
+      "equipment": "other",
       "level": "beginner",
       "primaryMuscles": [
         "middle back"
@@ -15264,7 +15274,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "inverted-row",
+        "title": "Inverted row"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=jTaIMXRT6qY"
     },
     {
       "id": "d77486ce-3303-5d72-a6d1-68880c0291d5",
@@ -15301,7 +15316,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "inverted-row",
+        "title": "Inverted row"
+      }
     },
     {
       "id": "7eb60d56-6e63-52ff-9a00-04f9ed0dbd7b",
@@ -16646,21 +16665,21 @@
       "name": "Knee Tuck Jump",
       "englishName": "Knee Tuck Jump",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Прыжок с группировкой",
+        "Knee Tuck Jump"
       ],
       "group": "legs",
       "equipment": "body only",
       "level": "beginner",
       "primaryMuscles": [
-        "hamstrings"
+        "quadriceps"
       ],
       "secondaryMuscles": [
         "abductors",
         "adductors",
         "calves",
         "glutes",
-        "quadriceps"
+        "hamstrings"
       ],
       "trainingRegions": [],
       "steps": [
@@ -16675,7 +16694,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=-bnJGikRGsM"
     },
     {
       "id": "6219ddab-f518-5d0f-8919-e0ee6f3adab7",

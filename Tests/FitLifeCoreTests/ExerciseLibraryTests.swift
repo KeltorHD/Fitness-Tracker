@@ -513,6 +513,21 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   }
 }
 
+@Test func horizontalRowsAndBoxJumpsKeepDistinctVariants() throws {
+  for expected in [
+    ["Inverted_Row", "Inverted_Row_with_Straps"],
+    ["Front_Box_Jump", "Box_Jump_Multiple_Response"],
+  ] {
+    for language in [AppLanguage.russian, .english] {
+      let entry = try #require(
+        ExerciseLibrary.entries(language: language).first { $0.sourceID == expected[0] })
+      let variants = ExerciseLibrary.variants(for: entry.id, language: language)
+      #expect(Set(variants.map(\.sourceID)) == Set(expected))
+      #expect(Set(variants.map(\.id)).count == expected.count)
+    }
+  }
+}
+
 @Test func alternatingAndSimultaneousFrontRaisesAreSeparateVariants() throws {
   let alternating = try #require(
     ExerciseLibrary.entries.first { $0.sourceID == "Front_Dumbbell_Raise" })

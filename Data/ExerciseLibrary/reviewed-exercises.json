@@ -1353,5 +1353,42 @@
   "Cable_Judo_Flip": {
     "techniqueVideoURL": "https://www.youtube.com/watch?v=dfB2MPXzjYc"
   },
-  "Chest_And_Front_Of_Shoulder_Stretch": {}
+  "Chest_And_Front_Of_Shoulder_Stretch": {},
+  "Inverted_Row": {
+    "equipment": "other",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=jTaIMXRT6qY"
+  },
+  "Inchworm": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=giKZKWugGE4"
+  },
+  "Frog_Hops": {
+    "equipment": "body only"
+  },
+  "Front_Box_Jump": {
+    "primaryMuscles": [
+      "quadriceps"
+    ],
+    "secondaryMuscles": [
+      "abductors",
+      "adductors",
+      "calves",
+      "glutes",
+      "hamstrings"
+    ],
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=qEpCvxPjoP0"
+  },
+  "Knee_Tuck_Jump": {
+    "primaryMuscles": [
+      "quadriceps"
+    ],
+    "secondaryMuscles": [
+      "abductors",
+      "adductors",
+      "calves",
+      "glutes",
+      "hamstrings"
+    ],
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=-bnJGikRGsM"
+  },
+  "Double_Leg_Butt_Kick": {}
 }
