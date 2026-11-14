@@ -62,7 +62,7 @@ private struct PersonalExerciseDetail: View {
 
   var body: some View {
     List {
-      Section(L10n.text("Основной каталог", locale: locale)) {
+      Section {
         if let catalogEntry {
           NavigationLink {
             ExerciseDetailView(exercise: catalogEntry.exercise)
@@ -82,6 +82,8 @@ private struct PersonalExerciseDetail: View {
             L10n.text(link == nil ? "Связать с каталогом" : "Изменить связь", locale: locale),
             systemImage: "link")
         }
+      } header: {
+        Text(L10n.text("Основной каталог", locale: locale))
       } footer: {
         Text(
           L10n.text(
