@@ -56,13 +56,14 @@
     ]
   },
   "barbell-box-squat": {
-    "ru": "Приседания со штангой к опоре",
-    "en": "Barbell squat to a box",
+    "ru": "Приседания к опоре",
+    "en": "Squat to a box",
     "members": [
       "Box_Squat",
       "Barbell_Squat_To_A_Bench",
       "Box_Squat_with_Bands",
-      "Box_Squat_with_Chains"
+      "Box_Squat_with_Chains",
+      "Dumbbell_Squat_To_A_Bench"
     ]
   },
   "standing-hip-adduction": {
@@ -129,6 +130,14 @@
     "members": [
       "Dumbbell_Raise",
       "Dumbbell_One-Arm_Upright_Row"
+    ]
+  },
+  "exercise-ball-crunch": {
+    "ru": "Скручивания с фитболом",
+    "en": "Exercise ball crunch",
+    "members": [
+      "Exercise_Ball_Crunch",
+      "Crunch_-_Legs_On_Exercise_Ball"
     ]
   }
 }

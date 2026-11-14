@@ -5575,7 +5575,7 @@
       "translationAutomatic": false,
       "variantGroup": {
         "id": "barbell-box-squat",
-        "title": "Barbell squat to a box"
+        "title": "Squat to a box"
       }
     },
     {
@@ -6826,7 +6826,7 @@
       "translationAutomatic": false,
       "variantGroup": {
         "id": "barbell-box-squat",
-        "title": "Barbell squat to a box"
+        "title": "Squat to a box"
       }
     },
     {
@@ -6869,7 +6869,7 @@
       "translationAutomatic": false,
       "variantGroup": {
         "id": "barbell-box-squat",
-        "title": "Barbell squat to a box"
+        "title": "Squat to a box"
       }
     },
     {
@@ -6913,7 +6913,7 @@
       "translationAutomatic": false,
       "variantGroup": {
         "id": "barbell-box-squat",
-        "title": "Barbell squat to a box"
+        "title": "Squat to a box"
       }
     },
     {
@@ -9607,7 +9607,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "exercise-ball-crunch",
+        "title": "Exercise ball crunch"
+      }
     },
     {
       "id": "bb971df1-e16d-59d3-a7b1-9ae14e2b39ef",
@@ -11200,8 +11204,8 @@
       "name": "Dumbbell Seated One-Leg Calf Raise",
       "englishName": "Dumbbell Seated One-Leg Calf Raise",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подъём на носок сидя с гантелью на колене",
+        "Dumbbell Seated One-Leg Calf Raise"
       ],
       "group": "legs",
       "equipment": "dumbbell",
@@ -11236,8 +11240,8 @@
       "name": "Dumbbell Squat To A Bench",
       "englishName": "Dumbbell Squat To A Bench",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Приседания с гантелями к опоре",
+        "Dumbbell Squat To A Bench"
       ],
       "group": "legs",
       "equipment": "dumbbell",
@@ -11266,7 +11270,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-box-squat",
+        "title": "Squat to a box"
+      }
     },
     {
       "id": "c1fbe027-bdd4-5417-b1a8-99819a34b194",
@@ -11274,8 +11282,8 @@
       "name": "Dumbbell Tricep Extension -Pronated Grip",
       "englishName": "Dumbbell Tricep Extension -Pronated Grip",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Разгибание рук с гантелями лёжа ладонями вперёд",
+        "Dumbbell Tricep Extension Pronated Grip"
       ],
       "group": "arms",
       "equipment": "dumbbell",
@@ -11310,11 +11318,11 @@
       "name": "Dynamic Back Stretch",
       "englishName": "Dynamic Back Stretch",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Махи прямыми руками вперёд и вверх",
+        "Dynamic Back Stretch"
       ],
       "group": "back",
-      "equipment": "unspecified",
+      "equipment": "body only",
       "level": "beginner",
       "primaryMuscles": [
         "lats"
@@ -11340,11 +11348,11 @@
       "name": "Dynamic Chest Stretch",
       "englishName": "Dynamic Chest Stretch",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Разведение и сведение прямых рук перед грудью",
+        "Dynamic Chest Stretch"
       ],
       "group": "chest",
-      "equipment": "unspecified",
+      "equipment": "body only",
       "level": "beginner",
       "primaryMuscles": [
         "chest"
@@ -11372,11 +11380,11 @@
       "name": "Elbow Circles",
       "englishName": "Elbow Circles",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Вращение локтями стоя или сидя",
+        "Elbow Circles"
       ],
       "group": "shoulders",
-      "equipment": "unspecified",
+      "equipment": "body only",
       "level": "beginner",
       "primaryMuscles": [
         "shoulders"
@@ -11436,11 +11444,11 @@
       "name": "Elbows Back",
       "englishName": "Elbows Back",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Сведение локтей за спиной стоя",
+        "Elbows Back"
       ],
       "group": "chest",
-      "equipment": "unspecified",
+      "equipment": "body only",
       "level": "beginner",
       "primaryMuscles": [
         "chest"
@@ -11469,8 +11477,8 @@
       "name": "Elevated Back Lunge",
       "englishName": "Elevated Back Lunge",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Выпад назад со штангой с платформы",
+        "Elevated Back Lunge"
       ],
       "group": "legs",
       "equipment": "barbell",
@@ -11542,8 +11550,8 @@
       "name": "Elliptical Trainer",
       "englishName": "Elliptical Trainer",
       "aliases": [
-        "Кардио",
-        "cardio"
+        "Эллиптический тренажёр",
+        "Elliptical Trainer"
       ],
       "group": "legs",
       "equipment": "machine",
@@ -11576,8 +11584,8 @@
       "name": "Exercise Ball Crunch",
       "englishName": "Exercise Ball Crunch",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Скручивания на фитболе",
+        "Exercise Ball Crunch"
       ],
       "group": "core",
       "equipment": "exercise ball",
@@ -11604,7 +11612,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "exercise-ball-crunch",
+        "title": "Exercise ball crunch"
+      }
     },
     {
       "id": "1cca97ff-39c4-5d49-97cb-819ab786b0f4",
@@ -11612,8 +11624,8 @@
       "name": "Exercise Ball Pull-In",
       "englishName": "Exercise Ball Pull-In",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подтягивание фитбола коленями в планке",
+        "Exercise Ball Pull-In"
       ],
       "group": "core",
       "equipment": "exercise ball",
@@ -11648,8 +11660,8 @@
       "name": "Extended Range One-Arm Kettlebell Floor Press",
       "englishName": "Extended Range One-Arm Kettlebell Floor Press",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Жим гири с пола с увеличенной амплитудой",
+        "Extended Range One-Arm Kettlebell Floor Press"
       ],
       "group": "chest",
       "equipment": "kettlebells",
@@ -11683,8 +11695,8 @@
       "name": "External Rotation",
       "englishName": "External Rotation",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Вращение плеча наружу лёжа с гантелью",
+        "External Rotation"
       ],
       "group": "shoulders",
       "equipment": "dumbbell",
@@ -11711,7 +11723,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=7gFkxXUEkwM"
     },
     {
       "id": "0dbdeb94-ac4e-5ddf-b002-d0a4cf800198",

@@ -287,5 +287,28 @@
   "Dumbbell_One-Arm_Upright_Row": {},
   "Dumbbell_Prone_Incline_Curl": {},
   "Dumbbell_Raise": {},
-  "Dumbbell_Scaption": {}
+  "Dumbbell_Scaption": {},
+  "Dumbbell_Seated_One-Leg_Calf_Raise": {},
+  "Dumbbell_Squat_To_A_Bench": {},
+  "Dumbbell_Tricep_Extension_-Pronated_Grip": {},
+  "Dynamic_Back_Stretch": {
+    "equipment": "body only"
+  },
+  "Dynamic_Chest_Stretch": {
+    "equipment": "body only"
+  },
+  "Elbow_Circles": {
+    "equipment": "body only"
+  },
+  "Elbows_Back": {
+    "equipment": "body only"
+  },
+  "Elevated_Back_Lunge": {},
+  "Elliptical_Trainer": {},
+  "Exercise_Ball_Crunch": {},
+  "Exercise_Ball_Pull-In": {},
+  "Extended_Range_One-Arm_Kettlebell_Floor_Press": {},
+  "External_Rotation": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=7gFkxXUEkwM"
+  }
 }

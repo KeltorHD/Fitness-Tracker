@@ -299,21 +299,21 @@ Dumbbell_Prone_Incline_Curl	Сгибание рук с гантелями лёж
 Dumbbell_Raise	Тяга двух гантелей к подбородку стоя	Протяжка гантелей стоя;Dumbbell Raise
 Dumbbell_Scaption	Подъём гантелей в плоскости лопаток стоя	Скапция с гантелями;Подъём гантелей вперёд под углом;Dumbbell Scaption
 Dumbbell_Seated_Box_Jump	Прыжок на коробку с гантелями сидя	Плиометрика;plyometrics
-Dumbbell_Seated_One-Leg_Calf_Raise	Подъем гантели на одной ноге сидя	Силовые упражнения;strength
-Dumbbell_Squat_To_A_Bench	Приседания с гантелями на скамье	Силовые упражнения;strength
-Dumbbell_Tricep_Extension_-Pronated_Grip	Разгибание трицепса с гантелью — хват с пронацией	Силовые упражнения;strength
-Dynamic_Back_Stretch	Динамическая растяжка спины	Растяжка;stretching
-Dynamic_Chest_Stretch	Динамическая растяжка груди	Растяжка;stretching
-Elbow_Circles	Круги локтями	Растяжка;stretching
+Dumbbell_Seated_One-Leg_Calf_Raise	Подъём на носок одной ногой сидя с гантелью	Подъём на носок сидя с гантелью на колене;Dumbbell Seated One-Leg Calf Raise
+Dumbbell_Squat_To_A_Bench	Приседания с гантелями до касания скамьи	Приседания с гантелями к опоре;Dumbbell Squat To A Bench
+Dumbbell_Tricep_Extension_-Pronated_Grip	Французский жим гантелей лёжа на плоской скамье прямым хватом	Разгибание рук с гантелями лёжа ладонями вперёд;Dumbbell Tricep Extension Pronated Grip
+Dynamic_Back_Stretch	Динамическая растяжка спины с подъёмом рук стоя	Махи прямыми руками вперёд и вверх;Dynamic Back Stretch
+Dynamic_Chest_Stretch	Динамическая растяжка груди с разведением рук стоя	Разведение и сведение прямых рук перед грудью;Dynamic Chest Stretch
+Elbow_Circles	Круговые движения локтями с руками на плечах	Вращение локтями стоя или сидя;Elbow Circles
 Elbow_to_Knee	От локтя до колена	Силовые упражнения;strength
-Elbows_Back	Локти назад	Растяжка;stretching
-Elevated_Back_Lunge	Приподнятый выпад назад	Силовые упражнения;strength
+Elbows_Back	Растяжка груди стоя с отведением локтей назад	Сведение локтей за спиной стоя;Elbows Back
+Elevated_Back_Lunge	Обратные выпады со штангой с передней ногой на возвышении	Выпад назад со штангой с платформы;Elevated Back Lunge
 Elevated_Cable_Rows	Тяга нижнего блока сидя на возвышении	Силовые упражнения;strength
-Elliptical_Trainer	Эллиптический тренажер	Кардио;cardio
-Exercise_Ball_Crunch	Упражнение «Скручивание мяча»	Силовые упражнения;strength
-Exercise_Ball_Pull-In	Упражнение «Подтягивание мяча»	Силовые упражнения;strength
-Extended_Range_One-Arm_Kettlebell_Floor_Press	Жим гири с пола расширенной амплитуды одной рукой	Силовые упражнения;strength
-External_Rotation	Внешнее вращение	Силовые упражнения;strength
+Elliptical_Trainer	Ходьба на эллиптическом тренажёре	Эллиптический тренажёр;Elliptical Trainer
+Exercise_Ball_Crunch	Скручивания лёжа спиной на фитболе	Скручивания на фитболе;Exercise Ball Crunch
+Exercise_Ball_Pull-In	Подтягивание коленей к груди в упоре с ногами на фитболе	Подтягивание фитбола коленями в планке;Exercise Ball Pull-In
+Extended_Range_One-Arm_Kettlebell_Floor_Press	Жим гири одной рукой лёжа на полу с поворотом корпуса	Жим гири с пола с увеличенной амплитудой;Extended Range One-Arm Kettlebell Floor Press
+External_Rotation	Наружная ротация плеча с гантелью лёжа на боку	Вращение плеча наружу лёжа с гантелью;External Rotation
 External_Rotation_with_Band	Внешнее вращение с лентой	Силовые упражнения;strength
 External_Rotation_with_Cable	Внешнее вращение с помощью троса	Силовые упражнения;strength
 Farmers_Walk	Фермерская прогулка	Силовой экстрим;strongman
