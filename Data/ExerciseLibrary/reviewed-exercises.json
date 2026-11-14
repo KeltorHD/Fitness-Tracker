@@ -399,7 +399,13 @@
   "IT_Band_and_Glute_Stretch": {},
   "Incline_Barbell_Triceps_Extension": {},
   "Incline_Bench_Pull": {
-    "equipment": "dumbbell"
+    "englishSteps": [
+      "Lie chest-down on an incline bench and grasp the barbell with an overhand grip.",
+      "Pull the bar toward your upper chest, keeping your elbows high and out to the sides.",
+      "Lower the barbell under control."
+    ],
+    "instructionSourceURL": "https://kysero.io/exercise-library/barbell-chest-supported-incline-face-pull/",
+    "instructionCorrectionReason": "The source instructions describe dumbbells, but the source equipment and photos show a barbell."
   },
   "Incline_Cable_Chest_Press": {},
   "Incline_Cable_Flye": {
@@ -920,15 +926,7 @@
   "Spell_Caster": {},
   "Spider_Crawl": {},
   "Spider_Curl": {
-    "equipment": "dumbbell",
-    "englishSteps": [
-      "Lean your chest against the inclined side of a preacher bench and hold a dumbbell in each hand.",
-      "Let your arms hang down, then bend your elbows and curl the dumbbells upward.",
-      "Lower the dumbbells under control, keeping your upper arms steady."
-    ],
-    "instructionSourceURL": "https://www.catalystathletics.com/exercise/835/Dumbbell-Spider-Curl/",
-    "instructionCorrectionReason": "The source name is generic, while its photos and accompanying exercise video show dumbbells rather than the EZ bar described in the source text.",
-    "techniqueVideoURL": "https://www.youtube.com/watch?v=TVjOooXvzO8"
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=B1fVN5zOit4"
   },
   "Spinal_Stretch": {},
   "Split_Clean": {},
@@ -1530,13 +1528,8 @@
     "excludeSourceImages": true,
     "imageExclusionReason": "The original photos show a full lateral raise to shoulder height rather than the user-selected partial-range movement."
   },
-  "Seated_Palm-Up_Barbell_Wrist_Curl": {
-    "excludeSourceImages": true,
-    "imageExclusionReason": "The original exercise name and instructions specify a barbell, but the original photographs show dumbbells."
-  },
+  "Seated_Palm-Up_Barbell_Wrist_Curl": {},
   "Seated_Palms-Down_Barbell_Wrist_Curl": {
-    "excludeSourceImages": true,
-    "imageExclusionReason": "The original exercise name and instructions specify a barbell, but the original photographs show dumbbells.",
     "techniqueVideoURL": "https://www.youtube.com/watch?v=dhtQp111x7U"
   },
   "Decline_Close-Grip_Bench_To_Skull_Crusher": {},
@@ -1561,5 +1554,9 @@
   },
   "FitLife_Triceps_Pushdown_One_Arm_Overhand": {
     "techniqueVideoURL": "https://www.youtube.com/watch?v=g_s1BHCR3qc"
+  },
+  "Preacher_Curl": {
+    "equipment": "e-z curl bar",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=dFJUWGdStV0"
   }
 }

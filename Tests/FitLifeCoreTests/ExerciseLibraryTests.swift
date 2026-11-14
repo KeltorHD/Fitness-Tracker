@@ -116,7 +116,6 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     Set(ExerciseLibrary.entries.filter { $0.imagesUnavailable == true }.map(\.sourceID)) == [
       "Kettlebell_Halo", "Kettlebell_Halo_With_Overhead_Extension",
       "Kettlebell_Overhead_Triceps_Extension", "Power_Partials",
-      "Seated_Palm-Up_Barbell_Wrist_Curl", "Seated_Palms-Down_Barbell_Wrist_Curl",
       "Decline_EZ_Bar_Triceps_Extension", "Wide-Grip_Decline_Barbell_Pullover",
       "FitLife_Triceps_Pushdown_EZ_Bar", "FitLife_Triceps_Pushdown_One_Arm_Overhand",
     ])
@@ -133,14 +132,14 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   }
 }
 
-@Test func barbellWristCurlsDoNotShowDumbbellSourcePhotos() throws {
+@Test func barbellWristCurlsShowSourcePhotos() throws {
   for language in [AppLanguage.russian, .english] {
     for sourceID in ["Seated_Palm-Up_Barbell_Wrist_Curl", "Seated_Palms-Down_Barbell_Wrist_Curl"] {
       let entry = try #require(
         ExerciseLibrary.entries(language: language).first { $0.sourceID == sourceID })
       #expect(entry.equipment == .barbell)
-      #expect(entry.imagesUnavailable == true)
-      #expect(entry.images.isEmpty)
+      #expect(entry.imagesUnavailable == false)
+      #expect(entry.images.count == 2)
     }
   }
 }
@@ -631,7 +630,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   for expected in [
     [
       "Cable_Preacher_Curl", "Machine_Preacher_Curls", "One_Arm_Dumbbell_Preacher_Curl",
-      "Two-Arm_Dumbbell_Preacher_Curl", "Reverse_Barbell_Preacher_Curls",
+      "Two-Arm_Dumbbell_Preacher_Curl", "Reverse_Barbell_Preacher_Curls", "Preacher_Curl",
     ],
     ["Split_Squats", "Split_Jump"],
   ] {
@@ -724,11 +723,11 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   }
 }
 
-@Test func inclineBenchPullUsesDumbbellsInBothLanguages() throws {
+@Test func inclineBenchPullUsesBarbellInBothLanguages() throws {
   for language in [AppLanguage.russian, .english] {
     let entry = try #require(
       ExerciseLibrary.entries(language: language).first { $0.sourceID == "Incline_Bench_Pull" })
-    #expect(entry.equipment == .dumbbell)
+    #expect(entry.equipment == .barbell)
   }
 }
 
@@ -909,17 +908,17 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   #expect(!english.steps.joined().contains("knees are past"))
 }
 
-@Test func spiderCurlUsesTheDumbbellsShownInItsPhotos() throws {
+@Test func spiderCurlUsesTheEZBarShownInItsPhotos() throws {
   for language in [AppLanguage.russian, .english] {
     let entry = try #require(
       ExerciseLibrary.entries(language: language).first { $0.sourceID == "Spider_Curl" })
-    #expect(entry.equipment == .dumbbell)
+    #expect(entry.equipment == .ezBar)
     #expect(entry.steps.count >= 3)
     #expect(entry.imagesUnavailable == false)
   }
   let english = try #require(
     ExerciseLibrary.entries(language: .english).first { $0.sourceID == "Spider_Curl" })
-  #expect(english.steps.contains { $0.contains("dumbbell") })
+  #expect(english.steps.contains { $0.lowercased().contains("barbell") })
 }
 
 @Test func suspensionInstructionsUseCorrectMovementCues() throws {

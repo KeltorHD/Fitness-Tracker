@@ -3073,13 +3073,15 @@
     {
       "id": "4b498274-bf05-5850-87b1-ddccd604c40a",
       "sourceID": "Preacher_Curl",
-      "name": "Сгибания рук на скамье Скотта",
+      "name": "Сгибание рук с EZ-штангой на скамье Скотта",
       "englishName": "Preacher Curl",
       "aliases": [
-        "Бицепс на скамье Скотта"
+        "Сгибания рук на скамье Скотта",
+        "Бицепс на скамье Скотта",
+        "EZ Bar Preacher Curl"
       ],
       "group": "arms",
-      "equipment": "barbell",
+      "equipment": "e-z curl bar",
       "level": "beginner",
       "primaryMuscles": [
         "Бицепс"
@@ -3101,7 +3103,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "preacher-curl",
+        "title": "Сгибание рук на скамье Скотта"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=dFJUWGdStV0"
     },
     {
       "id": "0eb7172b-3f36-59b1-a06f-0395a7121845",
@@ -3558,9 +3565,12 @@
         "Положите предплечья на бёдра, оставив кисти за коленями.",
         "Плавно опустите штангу движением кистей, затем согните кисти вверх."
       ],
-      "images": [],
+      "images": [
+        "Seated_Palm-Up_Barbell_Wrist_Curl/0.jpg",
+        "Seated_Palm-Up_Barbell_Wrist_Curl/1.jpg"
+      ],
       "techniqueUnavailable": false,
-      "imagesUnavailable": true,
+      "imagesUnavailable": false,
       "generatedMedia": null,
       "translationAutomatic": false,
       "variantGroup": {
@@ -3590,9 +3600,12 @@
         "Положите предплечья на бёдра, оставив кисти за коленями.",
         "Поднимите штангу разгибанием кистей и плавно опустите её."
       ],
-      "images": [],
+      "images": [
+        "Seated_Palms-Down_Barbell_Wrist_Curl/0.jpg",
+        "Seated_Palms-Down_Barbell_Wrist_Curl/1.jpg"
+      ],
       "techniqueUnavailable": false,
-      "imagesUnavailable": true,
+      "imagesUnavailable": false,
       "generatedMedia": null,
       "translationAutomatic": false,
       "variantGroup": {
@@ -14272,14 +14285,14 @@
     {
       "id": "0703acb6-0af6-5048-bb34-76b3ae2fc1f6",
       "sourceID": "Incline_Bench_Pull",
-      "name": "Тяга гантелей лёжа грудью на наклонной скамье с разведёнными локтями",
+      "name": "Тяга штанги лёжа грудью на наклонной скамье с разведёнными локтями",
       "englishName": "Incline Bench Pull",
       "aliases": [
-        "Тяга гантелей с опорой грудью на наклонную скамью",
+        "Тяга штанги с опорой грудью на наклонную скамью",
         "Incline Bench Pull"
       ],
       "group": "back",
-      "equipment": "dumbbell",
+      "equipment": "barbell",
       "level": "beginner",
       "primaryMuscles": [
         "Средняя часть спины"
@@ -14290,9 +14303,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "Лягте грудью на наклонную скамью и опустите гантели прямым хватом.",
-        "Согните локти и разведите их в стороны, поднимая гантели к корпусу.",
-        "Плавно опустите гантели в исходное положение."
+        "Лягте грудью на наклонную скамью и возьмите штангу хватом сверху.",
+        "Согните локти и разведите их в стороны, подтягивая штангу к верхней части груди.",
+        "Плавно опустите штангу в исходное положение."
       ],
       "images": [
         "Incline_Bench_Pull/0.jpg",
@@ -28224,17 +28237,17 @@
     {
       "id": "df6252b6-ca7a-56e0-a98f-b507a8049d87",
       "sourceID": "Spider_Curl",
-      "name": "Паучьи сгибания рук с гантелями",
+      "name": "Паучьи сгибания рук с EZ-штангой",
       "englishName": "Spider Curl",
       "aliases": [
-        "Сгибание рук с гантелями с опорой грудью на скамью",
-        "Spider curl",
+        "Сгибание рук с EZ-грифом с опорой грудью на скамью",
+        "Spider Curl",
         "Паучьи сгибания рук",
         "Силовые упражнения",
         "strength"
       ],
       "group": "arms",
-      "equipment": "dumbbell",
+      "equipment": "e-z curl bar",
       "level": "beginner",
       "primaryMuscles": [
         "Бицепс"
@@ -28245,9 +28258,9 @@
         "bicepsShort"
       ],
       "steps": [
-        "Упритесь грудью в наклонную сторону скамьи Скотта и возьмите по гантели в каждую руку.",
-        "Опустите руки вниз, затем согните локти и поднимите гантели.",
-        "Плавно опустите гантели, удерживая плечи на месте."
+        "Упритесь грудью в наклонную сторону скамьи Скотта и возьмитесь за EZ-гриф.",
+        "Опустите руки вниз, затем согните локти и поднимите гриф.",
+        "Плавно опустите гриф, удерживая плечи на месте."
       ],
       "images": [
         "Spider_Curl/0.jpg",
@@ -28257,7 +28270,7 @@
       "imagesUnavailable": false,
       "generatedMedia": null,
       "translationAutomatic": false,
-      "techniqueVideoURL": "https://www.youtube.com/watch?v=TVjOooXvzO8"
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=B1fVN5zOit4"
     },
     {
       "id": "bf35cf10-417c-53f9-8849-0e91bec8885c",

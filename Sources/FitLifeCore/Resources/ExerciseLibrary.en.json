@@ -3196,10 +3196,12 @@
       "name": "Preacher Curl",
       "englishName": "Preacher Curl",
       "aliases": [
-        "Бицепс на скамье Скотта"
+        "Сгибания рук на скамье Скотта",
+        "Бицепс на скамье Скотта",
+        "EZ Bar Preacher Curl"
       ],
       "group": "arms",
-      "equipment": "barbell",
+      "equipment": "e-z curl bar",
       "level": "beginner",
       "primaryMuscles": [
         "biceps"
@@ -3223,7 +3225,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "preacher-curl",
+        "title": "Preacher curl"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=dFJUWGdStV0"
     },
     {
       "id": "0eb7172b-3f36-59b1-a06f-0395a7121845",
@@ -3696,9 +3703,12 @@
         "Lower the bar as far as possible while inhaling and keeping a tight grip.",
         "Now curl bar up as high as possible while flexing the forearms and exhaling. Hold the contraction at the top for a second and Tip: Only the wrist should move."
       ],
-      "images": [],
+      "images": [
+        "Seated_Palm-Up_Barbell_Wrist_Curl/0.jpg",
+        "Seated_Palm-Up_Barbell_Wrist_Curl/1.jpg"
+      ],
       "techniqueUnavailable": false,
-      "imagesUnavailable": true,
+      "imagesUnavailable": false,
       "generatedMedia": null,
       "translationAutomatic": false,
       "variantGroup": {
@@ -3730,9 +3740,12 @@
         "Lower the bar as far as possible while inhaling and keeping a tight grip.",
         "Now curl bar up as high as possible while flexing the forearms and exhaling. Hold the contraction at the top for a second and Tip: Only the wrist should move."
       ],
-      "images": [],
+      "images": [
+        "Seated_Palms-Down_Barbell_Wrist_Curl/0.jpg",
+        "Seated_Palms-Down_Barbell_Wrist_Curl/1.jpg"
+      ],
       "techniqueUnavailable": false,
-      "imagesUnavailable": true,
+      "imagesUnavailable": false,
       "generatedMedia": null,
       "translationAutomatic": false,
       "variantGroup": {
@@ -14728,11 +14741,11 @@
       "name": "Incline Bench Pull",
       "englishName": "Incline Bench Pull",
       "aliases": [
-        "Тяга гантелей с опорой грудью на наклонную скамью",
+        "Тяга штанги с опорой грудью на наклонную скамью",
         "Incline Bench Pull"
       ],
       "group": "back",
-      "equipment": "dumbbell",
+      "equipment": "barbell",
       "level": "beginner",
       "primaryMuscles": [
         "middle back"
@@ -14743,13 +14756,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "Grab a dumbbell in each hand and lie face down on an incline bench that is set to an incline that is approximately 30 degrees.",
-        "Let the arms hang to your sides fully extended as they point to the floor.",
-        "Turn the wrists until your hands have a pronated (palms down) grip.",
-        "Now flare the elbows out. This will be your starting position.",
-        "As you breathe out, start to pull the dumbbells up as if you are doing a reverse bench press. You will do this by bending at the elbows and bringing the upper arms up as you let the forearms hang. Continue this motion until the upper arms are at the same level as your back. Tip: The elbows will come out to the side and your upper arms and torso should make the letter \"T\" at the top of the movement. Hold the contraction at the top for a second.",
-        "Slowly go back down to the starting position as you breathe in.",
-        "Repeat for the recommended amount of repetitions."
+        "Lie chest-down on an incline bench and grasp the barbell with an overhand grip.",
+        "Pull the bar toward your upper chest, keeping your elbows high and out to the sides.",
+        "Lower the barbell under control."
       ],
       "images": [
         "Incline_Bench_Pull/0.jpg",
@@ -29065,14 +29074,14 @@
       "name": "Spider Curl",
       "englishName": "Spider Curl",
       "aliases": [
-        "Сгибание рук с гантелями с опорой грудью на скамью",
-        "Spider curl",
+        "Сгибание рук с EZ-грифом с опорой грудью на скамью",
+        "Spider Curl",
         "Паучьи сгибания рук",
         "Силовые упражнения",
         "strength"
       ],
       "group": "arms",
-      "equipment": "dumbbell",
+      "equipment": "e-z curl bar",
       "level": "beginner",
       "primaryMuscles": [
         "biceps"
@@ -29083,9 +29092,13 @@
         "bicepsShort"
       ],
       "steps": [
-        "Lean your chest against the inclined side of a preacher bench and hold a dumbbell in each hand.",
-        "Let your arms hang down, then bend your elbows and curl the dumbbells upward.",
-        "Lower the dumbbells under control, keeping your upper arms steady."
+        "Start out by setting the bar on the part of the preacher bench that you would normally sit on. Make sure to align the barbell properly so that it is balanced and will not fall off.",
+        "Move to the front side of the preacher bench (the part where the arms usually lay) and position yourself to lay at a 45 degree slant with your torso and stomach pressed against the front side of the preacher bench.",
+        "Make sure that your feet (especially the toes) are well positioned on the floor and place your upper arms on top of the pad located on the inside part of the preacher bench.",
+        "Use your arms to grab the barbell with a supinated grip (palms facing up) at about shoulder width apart or slightly closer from each other.",
+        "Slowly begin to lift the barbell upwards and exhale. Hold the contracted position for a second as you squeeze the biceps.",
+        "Slowly begin to bring the barbell back to the starting position as your breathe in. .",
+        "Repeat for the recommended amount of repetitions."
       ],
       "images": [
         "Spider_Curl/0.jpg",
@@ -29095,7 +29108,7 @@
       "imagesUnavailable": false,
       "generatedMedia": null,
       "translationAutomatic": false,
-      "techniqueVideoURL": "https://www.youtube.com/watch?v=TVjOooXvzO8"
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=B1fVN5zOit4"
     },
     {
       "id": "bf35cf10-417c-53f9-8849-0e91bec8885c",
