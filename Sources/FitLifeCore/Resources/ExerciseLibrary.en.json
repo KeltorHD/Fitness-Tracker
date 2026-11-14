@@ -9390,7 +9390,6 @@
         "lower back",
         "middle back",
         "quadriceps",
-        "shoulders",
         "traps",
         "triceps"
       ],
@@ -9449,7 +9448,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-clean-variations",
+        "title": "Barbell clean"
+      }
     },
     {
       "id": "79c750ed-66d0-5abe-b389-79aee30c9df7",
@@ -13876,9 +13879,10 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "Begin with a shoulder width, double overhand or hook grip, with the bar hanging at the mid thigh position. Your back should be straight and inclined slightly forward.",
-        "Begin by aggressively extending through the hips, knees and ankles, driving the weight upward. As you do so, shrug your shoulders towards your ears.",
-        "Immediately recover by driving through the heels, keeping the torso upright and elbows up. Continue until you have risen to a standing position."
+        "Hold the bar at mid-thigh with a clean-width overhand grip, knees slightly bent and torso inclined forward.",
+        "Extend the legs and hips to accelerate the bar close to the body.",
+        "Pull under the bar, turn the elbows forward and receive it across the shoulders in a squat.",
+        "Stand up and lower the bar under control."
       ],
       "images": [
         "Hang_Clean/0.jpg",
@@ -13887,7 +13891,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-clean-variations",
+        "title": "Barbell clean"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=uUeV3LwisDI"
     },
     {
       "id": "239fbb5c-a266-590a-846a-0194f2e1fe28",
@@ -13927,7 +13936,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-clean-variations",
+        "title": "Barbell clean"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=uUeV3LwisDI"
     },
     {
       "id": "693cbb27-df32-53cf-84b6-a3d8c8e6b79f",
@@ -13968,7 +13982,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-snatch-variations",
+        "title": "Barbell snatch"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=QZU7URo6HME"
     },
     {
       "id": "2f67199f-5c9d-589e-9780-279e3e00b175",
@@ -14009,7 +14028,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-snatch-variations",
+        "title": "Barbell snatch"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=QZU7URo6HME"
     },
     {
       "id": "68402edf-b665-597e-957a-528d302db84d",
@@ -22486,7 +22510,8 @@
       "englishName": "Power Clean from Blocks",
       "aliases": [
         "Тяжёлая атлетика",
-        "olympic weightlifting"
+        "olympic weightlifting",
+        "Взятие штанги на грудь в полуприсед с плинтов"
       ],
       "group": "legs",
       "equipment": "barbell",
@@ -22512,7 +22537,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-clean-variations",
+        "title": "Barbell clean"
+      }
     },
     {
       "id": "67011667-74c0-594b-bac1-2f5c1b9a6834",
@@ -22676,7 +22705,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-snatch-variations",
+        "title": "Barbell snatch"
+      }
     },
     {
       "id": "e9b7beea-30f0-5e76-89ec-b0de47f6e6b5",
@@ -28663,7 +28696,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-snatch-variations",
+        "title": "Barbell snatch"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=hWLOXxFDz9o"
     },
     {
       "id": "9e3c6b30-55a3-5aad-bc6a-174fc8928c53",

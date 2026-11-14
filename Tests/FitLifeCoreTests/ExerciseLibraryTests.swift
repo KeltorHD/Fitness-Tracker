@@ -469,6 +469,28 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   #expect(Set(variants.map(\.id)).count == 3)
 }
 
+@Test func weightliftingVariationsKeepSeparateIdentities() throws {
+  for expected in [
+    [
+      "Hang_Clean", "Hang_Clean_-_Below_the_Knees", "Clean_from_Blocks",
+      "Power_Clean_from_Blocks",
+    ],
+    [
+      "Hang_Snatch", "Hang_Snatch_-_Below_Knees", "Snatch_from_Blocks",
+      "Power_Snatch_from_Blocks",
+    ],
+  ] {
+    for language in [AppLanguage.russian, .english] {
+      let entry = try #require(
+        ExerciseLibrary.entries(language: language).first { $0.sourceID == expected[0] })
+      let variants = ExerciseLibrary.variants(for: entry.id, language: language)
+      #expect(Set(variants.map(\.sourceID)) == Set(expected))
+      #expect(Set(variants.map(\.id)).count == expected.count)
+      #expect(variants.allSatisfy { $0.equipment == .barbell })
+    }
+  }
+}
+
 @Test func alternatingAndSimultaneousFrontRaisesAreSeparateVariants() throws {
   let alternating = try #require(
     ExerciseLibrary.entries.first { $0.sourceID == "Front_Dumbbell_Raise" })

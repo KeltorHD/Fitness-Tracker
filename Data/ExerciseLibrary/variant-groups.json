@@ -748,5 +748,25 @@
       "Dumbbell_Side_Bend",
       "One-Arm_High-Pulley_Cable_Side_Bends"
     ]
+  },
+  "barbell-clean-variations": {
+    "ru": "Взятие штанги на грудь",
+    "en": "Barbell clean",
+    "members": [
+      "Hang_Clean",
+      "Hang_Clean_-_Below_the_Knees",
+      "Clean_from_Blocks",
+      "Power_Clean_from_Blocks"
+    ]
+  },
+  "barbell-snatch-variations": {
+    "ru": "Рывок штанги",
+    "en": "Barbell snatch",
+    "members": [
+      "Hang_Snatch",
+      "Hang_Snatch_-_Below_Knees",
+      "Snatch_from_Blocks",
+      "Power_Snatch_from_Blocks"
+    ]
   }
 }

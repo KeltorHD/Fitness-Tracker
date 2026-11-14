@@ -1288,5 +1288,44 @@
   "Alternate_Heel_Touchers": {},
   "Ab_Roller": {},
   "Barbell_Side_Bend": {},
-  "Dumbbell_Side_Bend": {}
+  "Dumbbell_Side_Bend": {},
+  "Hang_Clean": {
+    "englishSteps": [
+      "Hold the bar at mid-thigh with a clean-width overhand grip, knees slightly bent and torso inclined forward.",
+      "Extend the legs and hips to accelerate the bar close to the body.",
+      "Pull under the bar, turn the elbows forward and receive it across the shoulders in a squat.",
+      "Stand up and lower the bar under control."
+    ],
+    "instructionSourceURL": "https://www.catalystathletics.com/exercise/70/3-Position-Clean/",
+    "instructionCorrectionReason": "The original instructions omit pulling under the bar and receiving it at the shoulders.",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=uUeV3LwisDI"
+  },
+  "Hang_Clean_-_Below_the_Knees": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=uUeV3LwisDI"
+  },
+  "Hang_Snatch": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=QZU7URo6HME"
+  },
+  "Hang_Snatch_-_Below_Knees": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=QZU7URo6HME"
+  },
+  "Clean_from_Blocks": {},
+  "Power_Clean_from_Blocks": {},
+  "Snatch_from_Blocks": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=hWLOXxFDz9o"
+  },
+  "Power_Snatch_from_Blocks": {},
+  "Clean_and_Press": {
+    "secondaryMuscles": [
+      "abdominals",
+      "calves",
+      "glutes",
+      "hamstrings",
+      "lower back",
+      "middle back",
+      "quadriceps",
+      "traps",
+      "triceps"
+    ]
+  }
 }
