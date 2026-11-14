@@ -183,7 +183,8 @@
       "Front_Two-Dumbbell_Raise",
       "Front_Incline_Dumbbell_Raise",
       "Front_Cable_Raise",
-      "Front_Plate_Raise"
+      "Front_Plate_Raise",
+      "Single_Dumbbell_Raise"
     ]
   },
   "front-squat": {
@@ -378,7 +379,8 @@
       "Push-Up_Wide",
       "Push-Ups_-_Close_Triceps_Position",
       "Push-Ups_With_Feet_On_An_Exercise_Ball",
-      "Pushups_Close_and_Wide_Hand_Positions"
+      "Pushups_Close_and_Wide_Hand_Positions",
+      "Single-Arm_Push-Up"
     ]
   },
   "barbell-push-press": {

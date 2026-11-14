@@ -544,7 +544,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     ["Plyo_Push-up", "Plyo_Kettlebell_Pushups"],
     [
       "Push-Up_Wide", "Push-Ups_-_Close_Triceps_Position", "Push-Ups_With_Feet_On_An_Exercise_Ball",
-      "Pushups_Close_and_Wide_Hand_Positions",
+      "Pushups_Close_and_Wide_Hand_Positions", "Single-Arm_Push-Up",
     ],
     ["Push_Press", "Push_Press_-_Behind_the_Neck"],
     ["Rack_Pulls", "Rack_Pull_with_Bands"],

@@ -841,5 +841,20 @@
     ]
   },
   "Side_Lying_Groin_Stretch": {},
-  "Side_Neck_Stretch": {}
+  "Side_Neck_Stretch": {},
+  "Side_Standing_Long_Jump": {},
+  "Side_To_Side_Chins": {},
+  "Side_Wrist_Pull": {},
+  "Side_to_Side_Box_Shuffle": {},
+  "Single-Arm_Cable_Crossover": {},
+  "Single-Arm_Linear_Jammer": {},
+  "Single-Arm_Push-Up": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=kuM-IvATYms"
+  },
+  "Single-Cone_Sprint_Drill": {},
+  "Single-Leg_Hop_Progression": {},
+  "Single-Leg_Lateral_Hop": {},
+  "Single-Leg_Leg_Extension": {},
+  "Single_Dumbbell_Raise": {},
+  "Single_Leg_Butt_Kick": {}
 }

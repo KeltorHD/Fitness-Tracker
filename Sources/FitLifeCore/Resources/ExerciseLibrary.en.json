@@ -26113,6 +26113,9 @@
       "name": "Side Standing Long Jump",
       "englishName": "Side Standing Long Jump",
       "aliases": [
+        "Прыжок в длину в сторону с места",
+        "Side standing long jump",
+        "Прыжок в длину с места на боку",
         "Плиометрика",
         "plyometrics"
       ],
@@ -26148,6 +26151,9 @@
       "name": "Side To Side Chins",
       "englishName": "Side To Side Chins",
       "aliases": [
+        "Подтягивания из стороны в сторону",
+        "Side-to-side pull-ups",
+        "Подбородки из стороны в сторону",
         "Силовые упражнения",
         "strength"
       ],
@@ -26188,6 +26194,8 @@
       "name": "Side Wrist Pull",
       "englishName": "Side Wrist Pull",
       "aliases": [
+        "Растяжка руки поперёк корпуса с захватом запястья",
+        "Боковая тяга запястья",
         "Растяжка",
         "stretching"
       ],
@@ -26221,6 +26229,9 @@
       "name": "Side to Side Box Shuffle",
       "englishName": "Side to Side Box Shuffle",
       "aliases": [
+        "Боковые перепрыгивания через платформу",
+        "Side-to-side box shuffle",
+        "Перетасовка коробки из стороны в сторону",
         "Плиометрика",
         "plyometrics"
       ],
@@ -26257,6 +26268,9 @@
       "name": "Single-Arm Cable Crossover",
       "englishName": "Single-Arm Cable Crossover",
       "aliases": [
+        "Сведение одной руки в кроссовере с удержанием другой",
+        "Single-arm cable crossover",
+        "Сведение одной руки в кроссовере",
         "Силовые упражнения",
         "strength"
       ],
@@ -26292,6 +26306,9 @@
       "name": "Single-Arm Linear Jammer",
       "englishName": "Single-Arm Linear Jammer",
       "aliases": [
+        "Жим лендмайн одной рукой",
+        "Single-arm landmine press",
+        "Однорычажный линейный глушитель",
         "Силовые упражнения",
         "strength"
       ],
@@ -26327,6 +26344,9 @@
       "name": "Single-Arm Push-Up",
       "englishName": "Single-Arm Push-Up",
       "aliases": [
+        "Одноручные отжимания",
+        "One-arm push-up",
+        "Отжимания на одной руке",
         "Силовые упражнения",
         "strength"
       ],
@@ -26356,7 +26376,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "floor-push-up",
+        "title": "Floor push-up"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=kuM-IvATYms"
     },
     {
       "id": "8b251d74-843a-56c2-ba4f-6f1943a410b6",
@@ -26364,6 +26389,9 @@
       "name": "Single-Cone Sprint Drill",
       "englishName": "Single-Cone Sprint Drill",
       "aliases": [
+        "Спринтерское упражнение вокруг конуса",
+        "Single-cone sprint drill",
+        "Одноконусное спринтерское упражнение",
         "Плиометрика",
         "plyometrics"
       ],
@@ -26433,6 +26461,9 @@
       "name": "Single-Leg Hop Progression",
       "englishName": "Single-Leg Hop Progression",
       "aliases": [
+        "Последовательные прыжки на одной ноге",
+        "Single-leg hop progression",
+        "Прогрессия прыжков на одной ноге",
         "Плиометрика",
         "plyometrics"
       ],
@@ -26470,6 +26501,9 @@
       "name": "Single-Leg Lateral Hop",
       "englishName": "Single-Leg Lateral Hop",
       "aliases": [
+        "Прыжки в сторону на одной ноге",
+        "Single-leg lateral hop",
+        "Боковой прыжок на одной ноге",
         "Плиометрика",
         "plyometrics"
       ],
@@ -26507,6 +26541,9 @@
       "name": "Single-Leg Leg Extension",
       "englishName": "Single-Leg Leg Extension",
       "aliases": [
+        "Одностороннее разгибание ног в тренажёре",
+        "Single-leg leg extension",
+        "Разгибание ног на одной ноге",
         "Силовые упражнения",
         "strength"
       ],
@@ -26580,6 +26617,9 @@
       "name": "Single Dumbbell Raise",
       "englishName": "Single Dumbbell Raise",
       "aliases": [
+        "Фронтальный подъём одной гантели",
+        "Single dumbbell front raise",
+        "Одиночный подъем гантели",
         "Силовые упражнения",
         "strength"
       ],
@@ -26606,7 +26646,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "front-raise",
+        "title": "Front raise"
+      }
     },
     {
       "id": "1fe45edf-6f63-5915-b304-4076019b3992",
@@ -26614,6 +26658,9 @@
       "name": "Single Leg Butt Kick",
       "englishName": "Single Leg Butt Kick",
       "aliases": [
+        "Прыжок с пяткой к ягодице на одной ноге",
+        "Single-leg butt kick",
+        "Удар ногой одной ногой",
         "Плиометрика",
         "plyometrics"
       ],
