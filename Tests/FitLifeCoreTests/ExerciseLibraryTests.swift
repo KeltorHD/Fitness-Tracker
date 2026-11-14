@@ -119,8 +119,28 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     ])
   #expect(
     Set(ExerciseLibrary.entries.filter { $0.techniqueUnavailable == true }.map(\.sourceID)) == [
-      "One-Arm_Kettlebell_Swings", "Push_Press", "Side_Bridge", "Side_Jackknife",
+      "Push_Press", "Side_Bridge", "Side_Jackknife",
     ])
+}
+
+@Test func oneArmKettlebellSwingHasTechniqueInBothLanguages() throws {
+  for language in [AppLanguage.russian, .english] {
+    let entry = try #require(
+      ExerciseLibrary.entries(language: language).first {
+        $0.sourceID == "One-Arm_Kettlebell_Swings"
+      })
+    #expect(entry.techniqueUnavailable == false)
+    #expect(entry.steps.count >= 3)
+  }
+}
+
+@Test func kettlebellFloorPressJoinsRelatedVariantsWithItsOwnID() throws {
+  let entry = try #require(
+    ExerciseLibrary.entries.first { $0.sourceID == "One-Arm_Kettlebell_Floor_Press" })
+  let variants = ExerciseLibrary.variants(for: entry.id, language: .russian)
+  #expect(variants.contains { $0.sourceID == "Floor_Press" })
+  #expect(variants.contains { $0.sourceID == "One-Arm_Kettlebell_Floor_Press" })
+  #expect(Set(variants.map(\.id)).count == variants.count)
 }
 
 @Test func ironCrossUsesUserSelectedNameAndLocallyAuthoredTechnique() throws {

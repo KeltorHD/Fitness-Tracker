@@ -19596,6 +19596,9 @@
       "name": "One-Arm Kettlebell Clean",
       "englishName": "One-Arm Kettlebell Clean",
       "aliases": [
+        "Подъём гири на грудь одной рукой",
+        "One-arm kettlebell clean",
+        "Подъём гири одной рукой",
         "Силовые упражнения",
         "strength"
       ],
@@ -19632,6 +19635,8 @@
       "name": "One-Arm Kettlebell Clean and Jerk",
       "englishName": "One-Arm Kettlebell Clean and Jerk",
       "aliases": [
+        "One-arm kettlebell clean and jerk",
+        "Гиря на одной руке в толчке",
         "Силовые упражнения",
         "strength"
       ],
@@ -19666,6 +19671,8 @@
       "name": "One-Arm Kettlebell Floor Press",
       "englishName": "One-Arm Kettlebell Floor Press",
       "aliases": [
+        "Жим гири с пола одной рукой",
+        "One-arm kettlebell floor press",
         "Силовые упражнения",
         "strength"
       ],
@@ -19693,7 +19700,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "floor-press",
+        "title": "Floor press"
+      }
     },
     {
       "id": "fa1d3ab1-e395-5a63-ab68-d79acbf0c08d",
@@ -19701,6 +19712,8 @@
       "name": "One-Arm Kettlebell Jerk",
       "englishName": "One-Arm Kettlebell Jerk",
       "aliases": [
+        "One-arm kettlebell jerk",
+        "Толчок гири одной рукой",
         "Силовые упражнения",
         "strength"
       ],
@@ -19806,6 +19819,9 @@
       "name": "One-Arm Kettlebell Push Press",
       "englishName": "One-Arm Kettlebell Push Press",
       "aliases": [
+        "Жимовой швунг гири одной рукой",
+        "One-arm kettlebell push press",
+        "Жим гири одной рукой",
         "Силовые упражнения",
         "strength"
       ],
@@ -19841,6 +19857,9 @@
       "name": "One-Arm Kettlebell Row",
       "englishName": "One-Arm Kettlebell Row",
       "aliases": [
+        "Тяга гири к поясу одной рукой",
+        "One-arm kettlebell row",
+        "Тяга гири одной рукой",
         "Силовые упражнения",
         "strength"
       ],
@@ -19875,6 +19894,8 @@
       "name": "One-Arm Kettlebell Snatch",
       "englishName": "One-Arm Kettlebell Snatch",
       "aliases": [
+        "One-arm kettlebell snatch",
+        "Рывок гири одной рукой",
         "Силовые упражнения",
         "strength"
       ],
@@ -19913,6 +19934,8 @@
       "name": "One-Arm Kettlebell Split Jerk",
       "englishName": "One-Arm Kettlebell Split Jerk",
       "aliases": [
+        "One-arm kettlebell split jerk",
+        "Толчок гири одной рукой в шпагате",
         "Силовые упражнения",
         "strength"
       ],
@@ -19951,6 +19974,8 @@
       "name": "One-Arm Kettlebell Split Snatch",
       "englishName": "One-Arm Kettlebell Split Snatch",
       "aliases": [
+        "One-arm kettlebell split snatch",
+        "Рывок гири одной рукой в шпагате",
         "Силовые упражнения",
         "strength"
       ],
@@ -19986,6 +20011,9 @@
       "name": "One-Arm Kettlebell Swings",
       "englishName": "One-Arm Kettlebell Swings",
       "aliases": [
+        "Одноручные махи гирей",
+        "One-arm kettlebell swing",
+        "Махи гири одной рукой",
         "Силовые упражнения",
         "strength"
       ],
@@ -20002,15 +20030,20 @@
         "shoulders"
       ],
       "trainingRegions": [],
-      "steps": [],
+      "steps": [
+        "Place a kettlebell in front of you, hinge at the hips and grip the handle with one hand.",
+        "Hike the kettlebell back between your legs, then drive through your hips and legs to swing it forward to approximately chest height.",
+        "Let the kettlebell swing back between your legs as you hinge again. Repeat with the other hand."
+      ],
       "images": [
         "One-Arm_Kettlebell_Swings/0.jpg",
         "One-Arm_Kettlebell_Swings/1.jpg"
       ],
-      "techniqueUnavailable": true,
+      "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=ANjKto7aSH0"
     },
     {
       "id": "da8df2bb-21b9-5375-9222-7aad48135024",
@@ -20018,6 +20051,9 @@
       "name": "One-Arm Long Bar Row",
       "englishName": "One-Arm Long Bar Row",
       "aliases": [
+        "Тяга Т-грифа одной рукой",
+        "One-arm long bar row",
+        "Тяга штанги на одной руке",
         "Силовые упражнения",
         "strength"
       ],
@@ -20056,6 +20092,9 @@
       "name": "One-Arm Medicine Ball Slam",
       "englishName": "One-Arm Medicine Ball Slam",
       "aliases": [
+        "Удар медболом в пол одной рукой",
+        "One-arm medicine ball slam",
+        "Удар набивным мячом одной рукой",
         "Силовые упражнения",
         "strength"
       ],

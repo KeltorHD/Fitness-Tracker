@@ -610,5 +610,25 @@
   "On_Your_Side_Quad_Stretch": {},
   "One-Arm_Flat_Bench_Dumbbell_Flye": {},
   "One-Arm_High-Pulley_Cable_Side_Bends": {},
-  "One-Arm_Incline_Lateral_Raise": {}
+  "One-Arm_Incline_Lateral_Raise": {},
+  "One-Arm_Kettlebell_Clean": {},
+  "One-Arm_Kettlebell_Clean_and_Jerk": {},
+  "One-Arm_Kettlebell_Floor_Press": {},
+  "One-Arm_Kettlebell_Jerk": {},
+  "One-Arm_Kettlebell_Push_Press": {},
+  "One-Arm_Kettlebell_Row": {},
+  "One-Arm_Kettlebell_Snatch": {},
+  "One-Arm_Kettlebell_Split_Jerk": {},
+  "One-Arm_Kettlebell_Split_Snatch": {},
+  "One-Arm_Kettlebell_Swings": {
+    "englishSteps": [
+      "Place a kettlebell in front of you, hinge at the hips and grip the handle with one hand.",
+      "Hike the kettlebell back between your legs, then drive through your hips and legs to swing it forward to approximately chest height.",
+      "Let the kettlebell swing back between your legs as you hinge again. Repeat with the other hand."
+    ],
+    "instructionSourceURL": "https://www.puregym.com/exercises/plyometrics/kettlebells/one-arm-kb-swing/",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=ANjKto7aSH0"
+  },
+  "One-Arm_Long_Bar_Row": {},
+  "One-Arm_Medicine_Ball_Slam": {}
 }
