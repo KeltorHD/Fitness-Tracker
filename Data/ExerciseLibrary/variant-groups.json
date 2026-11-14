@@ -19,7 +19,8 @@
       "Wide-Grip_Barbell_Bench_Press",
       "Bench_Press_-_Powerlifting",
       "Bench_Press_with_Chains",
-      "Board_Press"
+      "Board_Press",
+      "Reverse_Band_Bench_Press"
     ]
   },
   "barbell-ab-rollout": {
@@ -215,7 +216,8 @@
       "Glute_Kickback",
       "Hip_Extension_with_Bands",
       "Leg_Lift",
-      "One-Legged_Cable_Kickback"
+      "One-Legged_Cable_Kickback",
+      "Rear_Leg_Raises"
     ]
   },
   "glute-bridge": {
@@ -369,7 +371,24 @@
     "members": [
       "Push-Up_Wide",
       "Push-Ups_-_Close_Triceps_Position",
-      "Push-Ups_With_Feet_On_An_Exercise_Ball"
+      "Push-Ups_With_Feet_On_An_Exercise_Ball",
+      "Pushups_Close_and_Wide_Hand_Positions"
+    ]
+  },
+  "barbell-push-press": {
+    "ru": "Жимовой швунг штанги",
+    "en": "Barbell push press",
+    "members": [
+      "Push_Press",
+      "Push_Press_-_Behind_the_Neck"
+    ]
+  },
+  "rack-pull": {
+    "ru": "Тяга штанги с упоров",
+    "en": "Rack pull",
+    "members": [
+      "Rack_Pulls",
+      "Rack_Pull_with_Bands"
     ]
   }
 }

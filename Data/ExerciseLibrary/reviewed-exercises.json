@@ -698,5 +698,34 @@
   "Pull_Through": {},
   "Push-Up_Wide": {},
   "Push-Ups_-_Close_Triceps_Position": {},
-  "Push-Ups_With_Feet_On_An_Exercise_Ball": {}
+  "Push-Ups_With_Feet_On_An_Exercise_Ball": {},
+  "Push_Press": {
+    "englishSteps": [
+      "Hold the bar across the front of your shoulders and stand tall.",
+      "Dip slightly at the knees with an upright torso, then drive forcefully through your legs.",
+      "Use the leg drive to press the bar overhead, then lower it under control to your shoulders."
+    ],
+    "instructionSourceURL": "https://www.catalystathletics.com/exercise/87/Push-Press/",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=yCvb3ZBPM9s"
+  },
+  "Push_Press_-_Behind_the_Neck": {},
+  "Push_Up_to_Side_Plank": {},
+  "Pushups_Close_and_Wide_Hand_Positions": {},
+  "Quad_Stretch": {},
+  "Quadriceps-SMR": {},
+  "Quick_Leap": {},
+  "Rack_Delivery": {},
+  "Rack_Pull_with_Bands": {},
+  "Rack_Pulls": {},
+  "Rear_Leg_Raises": {
+    "primaryMuscles": [
+      "glutes"
+    ],
+    "secondaryMuscles": [
+      "hamstrings"
+    ]
+  },
+  "Recumbent_Bike": {},
+  "Return_Push_from_Stance": {},
+  "Reverse_Band_Bench_Press": {}
 }

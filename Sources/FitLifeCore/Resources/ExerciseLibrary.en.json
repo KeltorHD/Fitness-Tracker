@@ -22593,6 +22593,9 @@
       "name": "Push Press",
       "englishName": "Push Press",
       "aliases": [
+        "Швунг штанги от груди",
+        "Barbell push press",
+        "Нажмите Пресс",
         "Тяжёлая атлетика",
         "olympic weightlifting"
       ],
@@ -22607,15 +22610,24 @@
         "triceps"
       ],
       "trainingRegions": [],
-      "steps": [],
+      "steps": [
+        "Hold the bar across the front of your shoulders and stand tall.",
+        "Dip slightly at the knees with an upright torso, then drive forcefully through your legs.",
+        "Use the leg drive to press the bar overhead, then lower it under control to your shoulders."
+      ],
       "images": [
         "Push_Press/0.jpg",
         "Push_Press/1.jpg"
       ],
-      "techniqueUnavailable": true,
+      "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-push-press",
+        "title": "Barbell push press"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=yCvb3ZBPM9s"
     },
     {
       "id": "1199ce35-594f-51bd-8af6-cc7aa1d37758",
@@ -22623,6 +22635,9 @@
       "name": "Push Press - Behind the Neck",
       "englishName": "Push Press - Behind the Neck",
       "aliases": [
+        "Швунг штанги из-за головы",
+        "Behind-the-neck push press",
+        "Толкающий пресс – из-за шеи",
         "Тяжёлая атлетика",
         "olympic weightlifting"
       ],
@@ -22650,7 +22665,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-push-press",
+        "title": "Barbell push press"
+      }
     },
     {
       "id": "162cba0b-2422-5a4a-8b25-6ae37f0034d8",
@@ -22658,6 +22677,8 @@
       "name": "Push Up to Side Plank",
       "englishName": "Push Up to Side Plank",
       "aliases": [
+        "Отжимания с поворотом в боковую планку",
+        "Отжимание до боковой планки",
         "Силовые упражнения",
         "strength"
       ],
@@ -22695,6 +22716,8 @@
       "name": "Pushups (Close and Wide Hand Positions)",
       "englishName": "Pushups (Close and Wide Hand Positions)",
       "aliases": [
+        "Отжимания с разной постановкой рук",
+        "Отжимания (близкие и широкие положения рук)",
         "Силовые упражнения",
         "strength"
       ],
@@ -22724,7 +22747,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "floor-push-up",
+        "title": "Floor push-up"
+      }
     },
     {
       "id": "f7f08572-3038-5caf-89e4-8f5765932550",
@@ -22764,6 +22791,8 @@
       "name": "Quad Stretch",
       "englishName": "Quad Stretch",
       "aliases": [
+        "Растяжка квадрицепса с ремнём",
+        "Квад-стретч",
         "Растяжка",
         "stretching"
       ],
@@ -22794,6 +22823,9 @@
       "name": "Quadriceps-SMR",
       "englishName": "Quadriceps-SMR",
       "aliases": [
+        "Прокатывание квадрицепса роликом",
+        "Quadriceps SMR",
+        "Квадрицепс-SMR",
         "Растяжка",
         "stretching"
       ],
@@ -22824,6 +22856,9 @@
       "name": "Quick Leap",
       "englishName": "Quick Leap",
       "aliases": [
+        "Запрыгивание на платформу с выпрямлением",
+        "Quick leap",
+        "Быстрый прыжок",
         "Плиометрика",
         "plyometrics"
       ],
@@ -22859,6 +22894,9 @@
       "name": "Rack Delivery",
       "englishName": "Rack Delivery",
       "aliases": [
+        "Отработка приёма штанги на грудь",
+        "Rack delivery",
+        "Доставка стойки",
         "Тяжёлая атлетика",
         "olympic weightlifting"
       ],
@@ -22893,6 +22931,9 @@
       "name": "Rack Pull with Bands",
       "englishName": "Rack Pull with Bands",
       "aliases": [
+        "Тяга с плинтов с резинками",
+        "Rack pull with bands",
+        "Тяга в стойке с лентами",
         "Пауэрлифтинг",
         "powerlifting"
       ],
@@ -22922,7 +22963,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "rack-pull",
+        "title": "Rack pull"
+      }
     },
     {
       "id": "21c82b76-ab1e-5ed6-86a3-cab1e0fff273",
@@ -22930,6 +22975,9 @@
       "name": "Rack Pulls",
       "englishName": "Rack Pulls",
       "aliases": [
+        "Тяга с ограничителей",
+        "Rack pull",
+        "Тяги для стойки",
         "Пауэрлифтинг",
         "powerlifting"
       ],
@@ -22958,7 +23006,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "rack-pull",
+        "title": "Rack pull"
+      }
     },
     {
       "id": "b7f141dc-cd9f-54dc-9113-ee4c9f3c5b73",
@@ -22966,6 +23018,9 @@
       "name": "Rear Leg Raises",
       "englishName": "Rear Leg Raises",
       "aliases": [
+        "Отведение прямой ноги назад на четвереньках",
+        "Rear leg raises",
+        "Подъемы задних ног",
         "Растяжка",
         "stretching"
       ],
@@ -22973,9 +23028,11 @@
       "equipment": "body only",
       "level": "beginner",
       "primaryMuscles": [
-        "quadriceps"
+        "glutes"
       ],
-      "secondaryMuscles": [],
+      "secondaryMuscles": [
+        "hamstrings"
+      ],
       "trainingRegions": [],
       "steps": [
         "Place yourself on your hands knees on an exercise mat. Your head should be looking forward and the bend of the knees should create a 90-degree angle between the hamstrings and the calves. This will be your starting position.",
@@ -22988,7 +23045,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "hip-extension",
+        "title": "Hip extension"
+      }
     },
     {
       "id": "b58a2d09-f887-5c28-8c44-a363a4fff891",
@@ -22996,6 +23057,9 @@
       "name": "Recumbent Bike",
       "englishName": "Recumbent Bike",
       "aliases": [
+        "Езда на горизонтальном велотренажёре",
+        "Recumbent bike",
+        "Лежачий велосипед",
         "Кардио",
         "cardio"
       ],
@@ -23031,6 +23095,9 @@
       "name": "Return Push from Stance",
       "englishName": "Return Push from Stance",
       "aliases": [
+        "Передача медбола партнёру из стойки",
+        "Return push from stance",
+        "Ответный толчок из стойки",
         "Плиометрика",
         "plyometrics"
       ],
@@ -23067,6 +23134,9 @@
       "name": "Reverse Band Bench Press",
       "englishName": "Reverse Band Bench Press",
       "aliases": [
+        "Жим лёжа с разгрузочными резинками",
+        "Reverse band bench press",
+        "Жим лежа с обратной лентой",
         "Пауэрлифтинг",
         "powerlifting"
       ],
@@ -23097,7 +23167,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-flat-bench-press",
+        "title": "Barbell bench press"
+      }
     },
     {
       "id": "d2f282bf-1a48-5407-b5b9-ad0bf90ae0a0",

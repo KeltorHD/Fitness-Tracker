@@ -119,7 +119,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     ])
   #expect(
     Set(ExerciseLibrary.entries.filter { $0.techniqueUnavailable == true }.map(\.sourceID)) == [
-      "Push_Press", "Side_Bridge", "Side_Jackknife",
+      "Side_Bridge", "Side_Jackknife",
     ])
 }
 
@@ -131,6 +131,19 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
       })
     #expect(entry.techniqueUnavailable == false)
     #expect(entry.steps.count >= 3)
+  }
+}
+
+@Test func pushPressHasTechniqueAndRearLegRaiseUsesGlutesInBothLanguages() throws {
+  for language in [AppLanguage.russian, .english] {
+    let pushPress = try #require(
+      ExerciseLibrary.entries(language: language).first { $0.sourceID == "Push_Press" })
+    let legRaise = try #require(
+      ExerciseLibrary.entries(language: language).first { $0.sourceID == "Rear_Leg_Raises" })
+    #expect(pushPress.techniqueUnavailable == false)
+    #expect(pushPress.steps.count >= 3)
+    #expect(legRaise.primaryMuscleIDs == [.glutes])
+    #expect(legRaise.secondaryMuscleIDs.contains(.hamstrings))
   }
 }
 
@@ -253,7 +266,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   #expect(Set(variants.map(\.sourceID)) == [
     "Barbell_Bench_Press_-_Medium_Grip", "Close-Grip_Barbell_Bench_Press",
     "Wide-Grip_Barbell_Bench_Press", "Bench_Press_-_Powerlifting",
-    "Bench_Press_with_Chains", "Board_Press",
+    "Bench_Press_with_Chains", "Board_Press", "Reverse_Band_Bench_Press",
   ])
 }
 
@@ -508,7 +521,10 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     ["Plyo_Push-up", "Plyo_Kettlebell_Pushups"],
     [
       "Push-Up_Wide", "Push-Ups_-_Close_Triceps_Position", "Push-Ups_With_Feet_On_An_Exercise_Ball",
+      "Pushups_Close_and_Wide_Hand_Positions",
     ],
+    ["Push_Press", "Push_Press_-_Behind_the_Neck"],
+    ["Rack_Pulls", "Rack_Pull_with_Bands"],
   ] {
     for language in [AppLanguage.russian, .english] {
       let entry = try #require(
