@@ -20168,6 +20168,8 @@
       "name": "One-Arm Overhead Kettlebell Squats",
       "englishName": "One-Arm Overhead Kettlebell Squats",
       "aliases": [
+        "One-arm overhead kettlebell squat",
+        "Приседания с гирей на одной руке над головой",
         "Силовые упражнения",
         "strength"
       ],
@@ -20204,6 +20206,9 @@
       "name": "One-Arm Side Deadlift",
       "englishName": "One-Arm Side Deadlift",
       "aliases": [
+        "Становая тяга штанги сбоку одной рукой",
+        "Suitcase deadlift",
+        "Становая тяга на одной руке",
         "Силовые упражнения",
         "strength"
       ],
@@ -20245,6 +20250,8 @@
       "name": "One-Arm Side Laterals",
       "englishName": "One-Arm Side Laterals",
       "aliases": [
+        "Мах гантелью в сторону одной рукой",
+        "Боковые упражнения на одной руке",
         "Силовые упражнения",
         "strength"
       ],
@@ -20281,6 +20288,9 @@
       "name": "One-Legged Cable Kickback",
       "englishName": "One-Legged Cable Kickback",
       "aliases": [
+        "Разгибание бедра в кроссовере",
+        "Cable glute kickback",
+        "Отдача на тросе на одной ноге",
         "Силовые упражнения",
         "strength"
       ],
@@ -20311,7 +20321,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "hip-extension",
+        "title": "Hip extension"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=xO5WVJGVJ2w"
     },
     {
       "id": "704ab6e1-f8de-5f23-8045-921729a77c12",
@@ -20319,6 +20334,8 @@
       "name": "One Arm Against Wall",
       "englishName": "One Arm Against Wall",
       "aliases": [
+        "Растяжка широчайших у стены одной рукой",
+        "Одна рука к стене",
         "Растяжка",
         "stretching"
       ],
@@ -20388,6 +20405,9 @@
       "name": "One Arm Dumbbell Bench Press",
       "englishName": "One Arm Dumbbell Bench Press",
       "aliases": [
+        "Жим одной гантели лёжа",
+        "One-arm dumbbell bench press",
+        "Жим гантели одной рукой",
         "Силовые упражнения",
         "strength"
       ],
@@ -20420,7 +20440,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "flat-dumbbell-bench-press",
+        "title": "Flat dumbbell bench press"
+      }
     },
     {
       "id": "3bb52e47-6faa-51dc-ac79-a61c3bcebb38",
@@ -20428,6 +20452,8 @@
       "name": "One Arm Dumbbell Preacher Curl",
       "englishName": "One Arm Dumbbell Preacher Curl",
       "aliases": [
+        "Подъём гантели на бицепс одной рукой на скамье Скотта",
+        "Сгибание руки с гантелью на скамье Скотта",
         "Силовые упражнения",
         "strength"
       ],
@@ -20464,6 +20490,9 @@
       "name": "One Arm Floor Press",
       "englishName": "One Arm Floor Press",
       "aliases": [
+        "Одноручный жим штанги с пола",
+        "One-arm floor press",
+        "Жим с пола одной рукой",
         "Силовые упражнения",
         "strength"
       ],
@@ -20494,7 +20523,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "floor-press",
+        "title": "Floor press"
+      }
     },
     {
       "id": "ae4f3832-7f36-5f1a-bd14-e744eae442b6",
@@ -20502,6 +20535,9 @@
       "name": "One Arm Lat Pulldown",
       "englishName": "One Arm Lat Pulldown",
       "aliases": [
+        "Вертикальная тяга одной рукой",
+        "One-arm lat pulldown",
+        "Тяга широчайших мышц одной рукой",
         "Силовые упражнения",
         "strength"
       ],
@@ -20537,6 +20573,8 @@
       "name": "One Arm Pronated Dumbbell Triceps Extension",
       "englishName": "One Arm Pronated Dumbbell Triceps Extension",
       "aliases": [
+        "Французский жим гантели одной рукой хватом сверху",
+        "Разгибание трицепса с гантелью одной рукой с пронацией",
         "Силовые упражнения",
         "strength"
       ],
@@ -20567,7 +20605,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "lying-dumbbell-triceps-extension",
+        "title": "Flat dumbbell lying triceps extension"
+      }
     },
     {
       "id": "8269a08a-503a-543b-a129-e3a658fb7a60",
@@ -20575,6 +20617,8 @@
       "name": "One Arm Supinated Dumbbell Triceps Extension",
       "englishName": "One Arm Supinated Dumbbell Triceps Extension",
       "aliases": [
+        "Французский жим гантели одной рукой обратным хватом",
+        "Разгибание трицепса с гантелью на одной руке с супинацией",
         "Силовые упражнения",
         "strength"
       ],
@@ -20606,7 +20650,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "lying-dumbbell-triceps-extension",
+        "title": "Flat dumbbell lying triceps extension"
+      }
     },
     {
       "id": "049c1197-2ce4-5b09-aa94-fc0564b9f8e9",
@@ -20614,6 +20662,9 @@
       "name": "One Half Locust",
       "englishName": "One Half Locust",
       "aliases": [
+        "Растяжка передней поверхности бедра лёжа на животе",
+        "Half locust",
+        "Половина саранчи",
         "Растяжка",
         "stretching"
       ],
@@ -20650,6 +20701,8 @@
       "name": "One Handed Hang",
       "englishName": "One Handed Hang",
       "aliases": [
+        "Вис на перекладине одной рукой с поддержкой ног",
+        "Вис одной рукой",
         "Растяжка",
         "stretching"
       ],
@@ -20681,6 +20734,8 @@
       "name": "One Knee To Chest",
       "englishName": "One Knee To Chest",
       "aliases": [
+        "Растяжка ягодиц с подтягиванием колена к груди",
+        "Одно колено к груди",
         "Растяжка",
         "stretching"
       ],

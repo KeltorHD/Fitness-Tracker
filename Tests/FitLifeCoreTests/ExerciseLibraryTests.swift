@@ -402,8 +402,9 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   let variants = ExerciseLibrary.variants(for: entry.id, language: .russian)
   #expect(Set(variants.map(\.sourceID)) == [
     "Dumbbell_Bench_Press", "Dumbbell_Bench_Press_with_Neutral_Grip",
+    "One_Arm_Dumbbell_Bench_Press",
   ])
-  #expect(Set(variants.map(\.id)).count == 2)
+  #expect(Set(variants.map(\.id)).count == 3)
   #expect(ExerciseLibrary.search("Жим гантелей лёжа").contains { $0.id == entry.id })
 }
 
@@ -620,8 +621,10 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   let variants = ExerciseLibrary.variants(for: entry.id, language: .russian)
   #expect(Set(variants.map(\.sourceID)) == [
     "Lying_Dumbbell_Tricep_Extension", "Dumbbell_Tricep_Extension_-Pronated_Grip",
+    "One_Arm_Pronated_Dumbbell_Triceps_Extension",
+    "One_Arm_Supinated_Dumbbell_Triceps_Extension",
   ])
-  #expect(Set(variants.map(\.id)).count == 2)
+  #expect(Set(variants.map(\.id)).count == 4)
 }
 
 @Test func multipleEquipmentFiltersUseUnionAndIntersectWithMuscleAndSearch() {

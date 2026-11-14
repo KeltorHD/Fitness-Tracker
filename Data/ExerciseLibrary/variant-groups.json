@@ -117,7 +117,8 @@
     "en": "Flat dumbbell bench press",
     "members": [
       "Dumbbell_Bench_Press",
-      "Dumbbell_Bench_Press_with_Neutral_Grip"
+      "Dumbbell_Bench_Press_with_Neutral_Grip",
+      "One_Arm_Dumbbell_Bench_Press"
     ]
   },
   "chest-supported-dumbbell-rear-fly": {
@@ -163,7 +164,8 @@
       "Dumbbell_Floor_Press",
       "Extended_Range_One-Arm_Kettlebell_Floor_Press",
       "Leg-Over_Floor_Press",
-      "One-Arm_Kettlebell_Floor_Press"
+      "One-Arm_Kettlebell_Floor_Press",
+      "One_Arm_Floor_Press"
     ]
   },
   "front-raise": {
@@ -211,7 +213,8 @@
     "members": [
       "Glute_Kickback",
       "Hip_Extension_with_Bands",
-      "Leg_Lift"
+      "Leg_Lift",
+      "One-Legged_Cable_Kickback"
     ]
   },
   "glute-bridge": {
@@ -311,7 +314,9 @@
     "en": "Flat dumbbell lying triceps extension",
     "members": [
       "Lying_Dumbbell_Tricep_Extension",
-      "Dumbbell_Tricep_Extension_-Pronated_Grip"
+      "Dumbbell_Tricep_Extension_-Pronated_Grip",
+      "One_Arm_Pronated_Dumbbell_Triceps_Extension",
+      "One_Arm_Supinated_Dumbbell_Triceps_Extension"
     ]
   },
   "hack-squat": {
