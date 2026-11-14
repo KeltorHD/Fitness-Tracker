@@ -238,7 +238,17 @@
     "en": "Incline push-up",
     "members": [
       "Incline_Push-Up_Medium",
-      "Incline_Push-Up_Close-Grip"
+      "Incline_Push-Up_Close-Grip",
+      "Incline_Push-Up_Reverse_Grip",
+      "Incline_Push-Up_Wide"
+    ]
+  },
+  "internal-shoulder-rotation": {
+    "ru": "Внутренняя ротация плеча",
+    "en": "Shoulder internal rotation",
+    "members": [
+      "Cable_Internal_Rotation",
+      "Internal_Rotation_with_Band"
     ]
   }
 }

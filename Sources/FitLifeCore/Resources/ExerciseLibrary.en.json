@@ -7296,7 +7296,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "internal-shoulder-rotation",
+        "title": "Shoulder internal rotation"
+      }
     },
     {
       "id": "7162909e-77f7-5b48-966a-c638f989a968",
@@ -14569,8 +14573,8 @@
       "name": "Incline Push-Up Reverse Grip",
       "englishName": "Incline Push-Up Reverse Grip",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Отжимания от грифа в тренажёре Смита обратным хватом",
+        "Incline Push-Up Reverse Grip"
       ],
       "group": "chest",
       "equipment": "body only",
@@ -14600,7 +14604,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "elevated-hands-push-up",
+        "title": "Incline push-up"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=22aAph9oDBA"
     },
     {
       "id": "0a68bf3f-abd1-55cc-a166-44ce2e5e7955",
@@ -14608,8 +14617,8 @@
       "name": "Incline Push-Up Wide",
       "englishName": "Incline Push-Up Wide",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Отжимания от грифа в тренажёре Смита широким хватом",
+        "Incline Push-Up Wide"
       ],
       "group": "chest",
       "equipment": "body only",
@@ -14639,7 +14648,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "elevated-hands-push-up",
+        "title": "Incline push-up"
+      }
     },
     {
       "id": "81f42955-7484-57e2-b4d9-bf95db17ff5f",
@@ -14647,16 +14660,18 @@
       "name": "Intermediate Groin Stretch",
       "englishName": "Intermediate Groin Stretch",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Растяжка внутренней поверхности бедра лёжа с ремнём",
+        "Intermediate Groin Stretch"
       ],
       "group": "legs",
       "equipment": "other",
       "level": "intermediate",
       "primaryMuscles": [
+        "adductors"
+      ],
+      "secondaryMuscles": [
         "hamstrings"
       ],
-      "secondaryMuscles": [],
       "trainingRegions": [],
       "steps": [
         "Lie on your back with your legs extended. Loop a belt, rope, or band around one of your feet, and swing that leg as far to the side as you can. This will be your starting position.",
@@ -14677,8 +14692,8 @@
       "name": "Intermediate Hip Flexor and Quad Stretch",
       "englishName": "Intermediate Hip Flexor and Quad Stretch",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Растяжка квадрицепса лёжа с ремнём",
+        "Intermediate Hip Flexor and Quad Stretch"
       ],
       "group": "legs",
       "equipment": "other",
@@ -14707,8 +14722,8 @@
       "name": "Internal Rotation with Band",
       "englishName": "Internal Rotation with Band",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Вращение плеча внутрь стоя с эспандером",
+        "Internal Rotation with Band"
       ],
       "group": "shoulders",
       "equipment": "bands",
@@ -14734,7 +14749,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "internal-shoulder-rotation",
+        "title": "Shoulder internal rotation"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=fluODOqvjlg"
     },
     {
       "id": "624e5e9e-9af0-5cfc-9d1b-a109a2ff5917",
@@ -14779,8 +14799,8 @@
       "name": "Inverted Row with Straps",
       "englishName": "Inverted Row with Straps",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Тяга собственного веса на подвесных петлях",
+        "Inverted Row with Straps"
       ],
       "group": "back",
       "equipment": "other",
@@ -14850,8 +14870,8 @@
       "name": "Iron Crosses (stretch)",
       "englishName": "Iron Crosses (stretch)",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Растяжка с поворотом таза лёжа на животе",
+        "Iron Crosses Stretch"
       ],
       "group": "legs",
       "equipment": "unspecified",
@@ -14881,8 +14901,8 @@
       "name": "Isometric Chest Squeezes",
       "englishName": "Isometric Chest Squeezes",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Сведение ладоней с напряжением грудных мышц",
+        "Isometric Chest Squeezes"
       ],
       "group": "chest",
       "equipment": "body only",
@@ -14950,8 +14970,8 @@
       "name": "Isometric Neck Exercise - Sides",
       "englishName": "Isometric Neck Exercise - Sides",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Сопротивление ладонью боковому наклону головы",
+        "Isometric Neck Exercise Sides"
       ],
       "group": "shoulders",
       "equipment": "body only",
@@ -14983,8 +15003,8 @@
       "name": "Isometric Wipers",
       "englishName": "Isometric Wipers",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Дворники в упоре лёжа",
+        "Isometric Wipers"
       ],
       "group": "chest",
       "equipment": "body only",
@@ -15019,8 +15039,9 @@
       "name": "JM Press",
       "englishName": "JM Press",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "JM-пресс со штангой",
+        "Жим с разгибанием рук лёжа",
+        "JM Press"
       ],
       "group": "arms",
       "equipment": "barbell",
@@ -15047,7 +15068,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=hOCW9cE-GJg"
     },
     {
       "id": "8cf340df-fac1-5c61-b0db-a9be74c87303",
@@ -15055,8 +15077,8 @@
       "name": "Jackknife Sit-Up",
       "englishName": "Jackknife Sit-Up",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Одновременный подъём корпуса и прямых ног лёжа",
+        "Jackknife Sit-Up"
       ],
       "group": "core",
       "equipment": "body only",

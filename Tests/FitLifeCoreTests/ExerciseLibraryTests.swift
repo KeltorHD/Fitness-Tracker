@@ -455,6 +455,17 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   })
 }
 
+@Test func groinStretchUsesAdductorsInBothLanguages() throws {
+  for language in [AppLanguage.russian, .english] {
+    let entry = try #require(
+      ExerciseLibrary.entries(language: language).first {
+        $0.sourceID == "Intermediate_Groin_Stretch"
+      })
+    #expect(entry.primaryMuscleIDs == [.adductors])
+    #expect(entry.secondaryMuscleIDs.contains(.hamstrings))
+  }
+}
+
 @Test func multipleEquipmentFiltersUseUnionAndIntersectWithMuscleAndSearch() {
   let equipment: Set<ExerciseEquipment> = [.barbell, .dumbbell]
   let combined = ExerciseLibrary.search(equipment: equipment)

@@ -406,5 +406,30 @@
     "techniqueVideoURL": "https://www.youtube.com/watch?v=qs9saDG4g_o"
   },
   "Incline_Push-Up_Depth_Jump": {},
-  "Incline_Push-Up_Medium": {}
+  "Incline_Push-Up_Medium": {},
+  "Incline_Push-Up_Reverse_Grip": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=22aAph9oDBA"
+  },
+  "Incline_Push-Up_Wide": {},
+  "Intermediate_Groin_Stretch": {
+    "primaryMuscles": [
+      "adductors"
+    ],
+    "secondaryMuscles": [
+      "hamstrings"
+    ]
+  },
+  "Intermediate_Hip_Flexor_and_Quad_Stretch": {},
+  "Internal_Rotation_with_Band": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=fluODOqvjlg"
+  },
+  "Inverted_Row_with_Straps": {},
+  "Iron_Crosses_stretch": {},
+  "Isometric_Chest_Squeezes": {},
+  "Isometric_Neck_Exercise_-_Sides": {},
+  "Isometric_Wipers": {},
+  "JM_Press": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=hOCW9cE-GJg"
+  },
+  "Jackknife_Sit-Up": {}
 }
