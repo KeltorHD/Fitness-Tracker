@@ -832,5 +832,15 @@
       "Split_Squats",
       "Split_Jump"
     ]
+  },
+  "medicine-ball-chest-throw": {
+    "ru": "Бросок медбола от груди",
+    "en": "Medicine ball chest throw",
+    "members": [
+      "Chest_Push_from_3_point_stance",
+      "Chest_Push_multiple_response",
+      "Chest_Push_single_response",
+      "Chest_Push_with_Run_Release"
+    ]
   }
 }

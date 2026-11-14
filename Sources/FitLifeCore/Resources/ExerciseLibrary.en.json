@@ -8638,8 +8638,8 @@
       "name": "Catch and Overhead Throw",
       "englishName": "Catch and Overhead Throw",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Бросок медбола вперёд из-за головы с ловлей",
+        "Catch and Overhead Throw"
       ],
       "group": "back",
       "equipment": "medicine ball",
@@ -8915,8 +8915,8 @@
       "name": "Chest Push from 3 point stance",
       "englishName": "Chest Push from 3 point stance",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Бросок медбола от груди с опорой на одну руку",
+        "Chest Push from 3 Point Stance"
       ],
       "group": "chest",
       "equipment": "medicine ball",
@@ -8942,7 +8942,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "medicine-ball-chest-throw",
+        "title": "Medicine ball chest throw"
+      }
     },
     {
       "id": "06209c84-a559-550c-a14a-cea34d62bf22",
@@ -8950,8 +8954,8 @@
       "name": "Chest Push (multiple response)",
       "englishName": "Chest Push (multiple response)",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Бросок медбола от груди с падением и повтором",
+        "Chest Push Multiple Response"
       ],
       "group": "chest",
       "equipment": "medicine ball",
@@ -8978,7 +8982,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "medicine-ball-chest-throw",
+        "title": "Medicine ball chest throw"
+      }
     },
     {
       "id": "aa7f3fd0-5f04-5191-b2c5-597549df6c59",
@@ -8986,8 +8994,8 @@
       "name": "Chest Push (single response)",
       "englishName": "Chest Push (single response)",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Бросок медбола от груди с падением на руки",
+        "Chest Push Single Response"
       ],
       "group": "chest",
       "equipment": "medicine ball",
@@ -9013,7 +9021,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "medicine-ball-chest-throw",
+        "title": "Medicine ball chest throw"
+      }
     },
     {
       "id": "f57bbfc3-9215-5749-9ebc-af690aac58a1",
@@ -9021,8 +9033,8 @@
       "name": "Chest Push with Run Release",
       "englishName": "Chest Push with Run Release",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Бросок медбола от груди с разбегом и ускорением",
+        "Chest Push with Run Release"
       ],
       "group": "chest",
       "equipment": "medicine ball",
@@ -9048,7 +9060,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "medicine-ball-chest-throw",
+        "title": "Medicine ball chest throw"
+      }
     },
     {
       "id": "7faeb364-2a6c-586b-9521-29ea025a1dd2",

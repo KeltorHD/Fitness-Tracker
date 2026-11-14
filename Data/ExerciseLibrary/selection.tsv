@@ -218,7 +218,7 @@ Car_Deadlift	Становая тяга на раме для силового э�
 Car_Drivers	Руль с диском стоя	Вращение диска перед собой;Водитель автобуса с блином;Car Drivers
 Carioca_Quick_Step	Боковые приставные шаги с перекрёстом «кариока»	Кариока быстрые шаги;Carioca Quick Step
 Cat_Stretch	Растяжка «кошка» на четвереньках	Округление спины на четвереньках;Cat Stretch
-Catch_and_Overhead_Throw	Ловля и бросок через голову	Плиометрика;plyometrics
+Catch_and_Overhead_Throw	Бросок и ловля медбола из-за головы	Бросок медбола вперёд из-за головы с ловлей;Catch and Overhead Throw
 Chain_Handle_Extension	Разгибание рук с цепями лёжа на плоской скамье	Французский жим с цепями лёжа;Chain Handle Extension
 Chain_Press	Жим цепей лёжа на плоской скамье	Жим рукоятей с цепями лёжа;Chain Press
 Chair_Leg_Extended_Stretch	Растяжка ноги с отведением сидя на стуле	Растяжка задней поверхности бедра сидя на стуле;Chair Leg Extended Stretch
@@ -226,10 +226,10 @@ Chair_Lower_Back_Stretch	Боковая растяжка спины сидя н�
 Chair_Squat	Приседания в тренажёре Смита с ногами впереди	Приседания стул в тренажёре Смита;Chair Squat;Smith Chair Squat
 Chair_Upper_Body_Stretch	Растяжка плеч и груди сидя на стуле	Растяжка верхней части тела сидя на стуле;Chair Upper Body Stretch
 Chest_And_Front_Of_Shoulder_Stretch	Растяжка груди и плеч с гимнастической палкой	Растяжка;stretching
-Chest_Push_from_3_point_stance	Толчок грудью из трехточечной позиции	Плиометрика;plyometrics
-Chest_Push_multiple_response	Толчок от груди (множественный ответ)	Плиометрика;plyometrics
-Chest_Push_single_response	Толчок от груди (один ответ)	Плиометрика;plyometrics
-Chest_Push_with_Run_Release	Толчок от груди с разбегом	Плиометрика;plyometrics
+Chest_Push_from_3_point_stance	Бросок медбола от груди из трёхточечной стойки	Бросок медбола от груди с опорой на одну руку;Chest Push from 3 Point Stance
+Chest_Push_multiple_response	Повторные броски медбола от груди стоя на коленях	Бросок медбола от груди с падением и повтором;Chest Push Multiple Response
+Chest_Push_single_response	Одиночный бросок медбола от груди стоя на коленях	Бросок медбола от груди с падением на руки;Chest Push Single Response
+Chest_Push_with_Run_Release	Бросок медбола от груди с последующим спринтом	Бросок медбола от груди с разбегом и ускорением;Chest Push with Run Release
 Chest_Stretch_on_Stability_Ball	Растяжка грудных мышц с опорой на фитбол	Растяжка груди на фитболе;Chest Stretch on Stability Ball
 Childs_Pose	Поза ребёнка	Баласана;Растяжка спины на коленях с опусканием на пятки;Child’s Pose;Child's Pose
 Chin_To_Chest_Stretch	Растяжка задней поверхности шеи сидя	Наклон головы к груди сидя;Chin To Chest Stretch

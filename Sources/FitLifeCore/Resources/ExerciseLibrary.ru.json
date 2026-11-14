@@ -8334,11 +8334,11 @@
     {
       "id": "9c4e48c3-1eaf-59b8-9dbb-9180ab317564",
       "sourceID": "Catch_and_Overhead_Throw",
-      "name": "Ловля и бросок через голову",
+      "name": "Бросок и ловля медбола из-за головы",
       "englishName": "Catch and Overhead Throw",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Бросок медбола вперёд из-за головы с ловлей",
+        "Catch and Overhead Throw"
       ],
       "group": "back",
       "equipment": "medicine ball",
@@ -8353,9 +8353,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "Начните стоять лицом к стене или партнеру.",
-        "Обеими руками расположите мяч за головой, максимально вытягиваясь, и с силой бросьте мяч вперед.",
-        "Убедитесь, что вы выполняете бросок, будучи готовым получить отскок от броска. Если вы бросаете мяч в стену, убедитесь, что вы стоите достаточно близко к стене, чтобы получить отскок, и цельтесь немного выше, чем с партнером."
+        "Встаньте лицом к партнёру или стене, удерживая медбол обеими руками.",
+        "Заведите мяч за голову в комфортной амплитуде и бросьте его вперёд.",
+        "Подготовьте руки и поймайте мяч после возврата партнёром или отскока от стены."
       ],
       "images": [
         "Catch_and_Overhead_Throw/0.jpg",
@@ -8364,7 +8364,7 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false
     },
     {
       "id": "d8f99c16-9490-5840-9cd6-fe69160c74a0",
@@ -8608,11 +8608,11 @@
     {
       "id": "fe45654a-0846-510e-aab0-aef894f87b25",
       "sourceID": "Chest_Push_from_3_point_stance",
-      "name": "Толчок грудью из трехточечной позиции",
+      "name": "Бросок медбола от груди из трёхточечной стойки",
       "englishName": "Chest Push from 3 point stance",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Бросок медбола от груди с опорой на одну руку",
+        "Chest Push from 3 Point Stance"
       ],
       "group": "chest",
       "equipment": "medicine ball",
@@ -8627,9 +8627,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "Начните с трехточечной стойки, присев на корточки с ровной спиной и одной рукой на земле. Поместите медицинский мяч прямо перед собой.",
-        "Для начала сделайте первый шаг, подтянув мяч к груди и расположив обе руки так, чтобы подготовиться к броску.",
-        "Выполняя второй шаг, резко выбросьте мяч вперед как можно сильнее."
+        "Примите низкую стойку с опорой на одну руку и поставьте медбол перед собой.",
+        "С первым шагом возьмите мяч обеими руками и подведите его к груди.",
+        "Со вторым шагом энергично вытолкните мяч вперёд."
       ],
       "images": [
         "Chest_Push_from_3_point_stance/0.jpg",
@@ -8638,16 +8638,20 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "medicine-ball-chest-throw",
+        "title": "Бросок медбола от груди"
+      }
     },
     {
       "id": "06209c84-a559-550c-a14a-cea34d62bf22",
       "sourceID": "Chest_Push_multiple_response",
-      "name": "Толчок от груди (множественный ответ)",
+      "name": "Повторные броски медбола от груди стоя на коленях",
       "englishName": "Chest Push (multiple response)",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Бросок медбола от груди с падением и повтором",
+        "Chest Push Multiple Response"
       ],
       "group": "chest",
       "equipment": "medicine ball",
@@ -8662,10 +8666,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "Начните с положения на коленях лицом к стене или воспользуйтесь партнером. Прижмите мяч обеими руками к груди.",
-        "Выполните пас, взрывая бедра вперед и наружу, толкая мяч как можно сильнее.",
-        "Завершите падение вперед, ловя себя руками.",
-        "Немедленно вернитесь в вертикальное положение. Повторите необходимое количество повторений."
+        "Встаньте на колени лицом к стене или партнёру и удерживайте медбол у груди.",
+        "Подайте таз вперёд и энергично бросьте мяч от груди.",
+        "Продолжите движение вперёд, опираясь руками о пол, затем вернитесь на колени и повторите бросок."
       ],
       "images": [
         "Chest_Push_multiple_response/0.jpg",
@@ -8674,16 +8677,20 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "medicine-ball-chest-throw",
+        "title": "Бросок медбола от груди"
+      }
     },
     {
       "id": "aa7f3fd0-5f04-5191-b2c5-597549df6c59",
       "sourceID": "Chest_Push_single_response",
-      "name": "Толчок от груди (один ответ)",
+      "name": "Одиночный бросок медбола от груди стоя на коленях",
       "englishName": "Chest Push (single response)",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Бросок медбола от груди с падением на руки",
+        "Chest Push Single Response"
       ],
       "group": "chest",
       "equipment": "medicine ball",
@@ -8698,9 +8705,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "Начните в положении стоя на коленях, крепко прижав медицинский мяч обеими руками к груди.",
-        "Выполните передачу, взрывая бедра вперед и наружу, толкая мяч как можно дальше.",
-        "Завершите падение вперед, ловя себя руками."
+        "Встаньте на колени и удерживайте медбол обеими руками у груди.",
+        "Подайте таз вперёд и энергично бросьте мяч от груди.",
+        "Продолжите движение вперёд и примите вес тела на руки."
       ],
       "images": [
         "Chest_Push_single_response/0.jpg",
@@ -8709,16 +8716,20 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "medicine-ball-chest-throw",
+        "title": "Бросок медбола от груди"
+      }
     },
     {
       "id": "f57bbfc3-9215-5749-9ebc-af690aac58a1",
       "sourceID": "Chest_Push_with_Run_Release",
-      "name": "Толчок от груди с разбегом",
+      "name": "Бросок медбола от груди с последующим спринтом",
       "englishName": "Chest Push with Run Release",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Бросок медбола от груди с разбегом и ускорением",
+        "Chest Push with Run Release"
       ],
       "group": "chest",
       "equipment": "medicine ball",
@@ -8733,9 +8744,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "Начните с спортивной позиции, согнув колени, отведя бедра назад и выпрямив спину. Держите медицинский мяч возле ног. Это будет ваша исходная позиция.",
-        "Делая первый шаг, прижмите медицинский мяч к груди.",
-        "Делая второй шаг, резко толкните мяч вперед, сразу же после его броска пробежав 10 ярдов. Если вы действительно быстры, вы сможете поймать свой пас!"
+        "Встаньте в спортивную стойку, держа медбол перед ногами.",
+        "С первым шагом подведите мяч к груди, а со вторым энергично вытолкните его вперёд.",
+        "Сразу после броска выполните короткое ускорение."
       ],
       "images": [
         "Chest_Push_with_Run_Release/0.jpg",
@@ -8744,7 +8755,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "medicine-ball-chest-throw",
+        "title": "Бросок медбола от груди"
+      }
     },
     {
       "id": "7faeb364-2a6c-586b-9521-29ea025a1dd2",
