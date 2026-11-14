@@ -95,11 +95,18 @@
     ]
   },
   "standing-close-grip-curl": {
-    "ru": "Сгибание рук стоя узким хватом",
-    "en": "Standing close-grip curl",
+    "ru": "Сгибание рук стоя со штангой или на нижнем блоке",
+    "en": "Standing barbell and cable curl",
     "members": [
       "Close-Grip_Standing_Barbell_Curl",
-      "Close-Grip_EZ_Bar_Curl"
+      "Close-Grip_EZ_Bar_Curl",
+      "Barbell_Curl",
+      "EZ-Bar_Curl",
+      "Reverse_Barbell_Curl",
+      "Wide-Grip_Standing_Barbell_Curl",
+      "Standing_Biceps_Cable_Curl",
+      "Reverse_Cable_Curl",
+      "Standing_One-Arm_Cable_Curl"
     ]
   },
   "conventional-barbell-deadlift": {
@@ -227,7 +234,8 @@
       "Cross_Body_Hammer_Curl",
       "Cable_Hammer_Curls_-_Rope_Attachment",
       "Incline_Hammer_Curls",
-      "Preacher_Hammer_Dumbbell_Curl"
+      "Preacher_Hammer_Dumbbell_Curl",
+      "Alternate_Hammer_Curl"
     ]
   },
   "hip-extension": {
@@ -343,13 +351,14 @@
     ]
   },
   "lying-dumbbell-triceps-extension": {
-    "ru": "Разгибание рук с гантелями лёжа на плоской скамье",
-    "en": "Flat dumbbell lying triceps extension",
+    "ru": "Разгибание рук лёжа на плоской скамье",
+    "en": "Flat lying triceps extension",
     "members": [
       "Lying_Dumbbell_Tricep_Extension",
       "Dumbbell_Tricep_Extension_-Pronated_Grip",
       "One_Arm_Pronated_Dumbbell_Triceps_Extension",
-      "One_Arm_Supinated_Dumbbell_Triceps_Extension"
+      "One_Arm_Supinated_Dumbbell_Triceps_Extension",
+      "EZ-Bar_Skullcrusher"
     ]
   },
   "hack-squat": {

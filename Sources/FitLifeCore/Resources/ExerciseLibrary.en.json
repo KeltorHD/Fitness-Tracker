@@ -2981,6 +2981,9 @@
       "name": "Barbell Curl",
       "englishName": "Barbell Curl",
       "aliases": [
+        "Подъём штанги на бицепс стоя",
+        "Barbell curl",
+        "Сгибания рук со штангой",
         "Подъём штанги на бицепс"
       ],
       "group": "arms",
@@ -3010,7 +3013,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-close-grip-curl",
+        "title": "Standing barbell and cable curl"
+      }
     },
     {
       "id": "4983e50f-edbe-549d-926f-92252e3a3bf8",
@@ -3018,6 +3025,9 @@
       "name": "EZ-Bar Curl",
       "englishName": "EZ-Bar Curl",
       "aliases": [
+        "Подъём EZ-грифа на бицепс стоя",
+        "EZ-bar curl",
+        "Сгибания рук с EZ-грифом",
         "Подъём EZ-штанги на бицепс"
       ],
       "group": "arms",
@@ -3045,7 +3055,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-close-grip-curl",
+        "title": "Standing barbell and cable curl"
+      }
     },
     {
       "id": "fd8689e0-08f2-5f5c-8f04-b10f35fdd7cd",
@@ -3053,6 +3067,9 @@
       "name": "Alternate Hammer Curl",
       "englishName": "Alternate Hammer Curl",
       "aliases": [
+        "Молотки с гантелями попеременно",
+        "Alternating hammer curl",
+        "Попеременные молотковые сгибания",
         "Молотки",
         "Молотковый подъём"
       ],
@@ -3084,7 +3101,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "hammer-curl",
+        "title": "Hammer curl"
+      }
     },
     {
       "id": "f3991dd6-1c65-5f95-ac35-b3c59a492abc",
@@ -3092,6 +3113,9 @@
       "name": "Incline Dumbbell Curl",
       "englishName": "Incline Dumbbell Curl",
       "aliases": [
+        "Подъём гантелей на бицепс на наклонной скамье",
+        "Incline dumbbell curl",
+        "Сгибания рук на наклонной скамье",
         "Бицепс на наклонной скамье"
       ],
       "group": "arms",
@@ -3126,6 +3150,9 @@
       "name": "Concentration Curls",
       "englishName": "Concentration Curls",
       "aliases": [
+        "Концентрированный подъём гантели на бицепс",
+        "Concentration curl",
+        "Концентрированные сгибания",
         "Сгибания с упором локтя"
       ],
       "group": "arms",
@@ -3198,6 +3225,9 @@
       "name": "Standing Biceps Cable Curl",
       "englishName": "Standing Biceps Cable Curl",
       "aliases": [
+        "Сгибание рук на бицепс на нижнем блоке",
+        "Standing cable curl",
+        "Сгибания рук на нижнем блоке",
         "Бицепс на блоке"
       ],
       "group": "arms",
@@ -3224,7 +3254,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-close-grip-curl",
+        "title": "Standing barbell and cable curl"
+      }
     },
     {
       "id": "b03e86b4-84aa-51d6-a063-0968fe074110",
@@ -3232,6 +3266,9 @@
       "name": "Reverse Barbell Curl",
       "englishName": "Reverse Barbell Curl",
       "aliases": [
+        "Обратные сгибания рук со штангой",
+        "Reverse barbell curl",
+        "Сгибания со штангой обратным хватом",
         "Обратные сгибания"
       ],
       "group": "arms",
@@ -3260,7 +3297,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-close-grip-curl",
+        "title": "Standing barbell and cable curl"
+      }
     },
     {
       "id": "523c01f8-5df1-52f1-b9de-5bda5638709c",
@@ -3309,6 +3350,9 @@
       "name": "EZ-Bar Skullcrusher",
       "englishName": "EZ-Bar Skullcrusher",
       "aliases": [
+        "Разгибание рук с EZ-грифом лёжа",
+        "EZ-bar skullcrusher",
+        "Французский жим с EZ-грифом лёжа",
         "Разгибание рук лёжа"
       ],
       "group": "arms",
@@ -3338,7 +3382,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "lying-dumbbell-triceps-extension",
+        "title": "Flat lying triceps extension"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=ea4fGqPJicA"
     },
     {
       "id": "384723df-3a8f-5119-99ed-644811e9c17c",
@@ -3346,6 +3395,9 @@
       "name": "Seated Triceps Press",
       "englishName": "Seated Triceps Press",
       "aliases": [
+        "Французский жим гантели двумя руками сидя",
+        "Seated dumbbell triceps extension",
+        "Разгибание рук с гантелью из-за головы сидя",
         "Французский жим сидя"
       ],
       "group": "arms",
@@ -9538,7 +9590,7 @@
       "translationAutomatic": false,
       "variantGroup": {
         "id": "standing-close-grip-curl",
-        "title": "Standing close-grip curl"
+        "title": "Standing barbell and cable curl"
       },
       "techniqueVideoURL": "https://www.youtube.com/watch?v=QzIA4DU0jtM"
     },
@@ -9617,7 +9669,7 @@
       "translationAutomatic": false,
       "variantGroup": {
         "id": "standing-close-grip-curl",
-        "title": "Standing close-grip curl"
+        "title": "Standing barbell and cable curl"
       }
     },
     {
@@ -11675,7 +11727,7 @@
       "translationAutomatic": false,
       "variantGroup": {
         "id": "lying-dumbbell-triceps-extension",
-        "title": "Flat dumbbell lying triceps extension"
+        "title": "Flat lying triceps extension"
       }
     },
     {
@@ -18332,7 +18384,7 @@
       "translationAutomatic": false,
       "variantGroup": {
         "id": "lying-dumbbell-triceps-extension",
-        "title": "Flat dumbbell lying triceps extension"
+        "title": "Flat lying triceps extension"
       }
     },
     {
@@ -20956,7 +21008,7 @@
       "translationAutomatic": false,
       "variantGroup": {
         "id": "lying-dumbbell-triceps-extension",
-        "title": "Flat dumbbell lying triceps extension"
+        "title": "Flat lying triceps extension"
       }
     },
     {
@@ -21001,7 +21053,7 @@
       "translationAutomatic": false,
       "variantGroup": {
         "id": "lying-dumbbell-triceps-extension",
-        "title": "Flat dumbbell lying triceps extension"
+        "title": "Flat lying triceps extension"
       }
     },
     {
@@ -23791,7 +23843,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-close-grip-curl",
+        "title": "Standing barbell and cable curl"
+      }
     },
     {
       "id": "532bf9c5-2b28-588b-a2c8-0b481b9c9447",
@@ -30444,7 +30500,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-close-grip-curl",
+        "title": "Standing barbell and cable curl"
+      }
     },
     {
       "id": "459b0a56-7958-5730-84cc-f8d13ffb132b",
@@ -33421,7 +33481,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-close-grip-curl",
+        "title": "Standing barbell and cable curl"
+      }
     },
     {
       "id": "937dbdcc-00c5-50b1-a28b-52241583fddf",

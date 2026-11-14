@@ -1255,5 +1255,16 @@
     "instructionCorrectionReason": "The source contains a single abbreviated instruction; the revision adds setup and controlled return.",
     "techniqueVideoURL": "https://www.youtube.com/watch?v=eTCBSFlCJ_s"
   },
-  "Standing_Low-Pulley_Deltoid_Raise": {}
+  "Standing_Low-Pulley_Deltoid_Raise": {},
+  "Barbell_Curl": {},
+  "EZ-Bar_Curl": {},
+  "Alternate_Hammer_Curl": {},
+  "Incline_Dumbbell_Curl": {},
+  "Concentration_Curls": {},
+  "Standing_Biceps_Cable_Curl": {},
+  "Reverse_Barbell_Curl": {},
+  "EZ-Bar_Skullcrusher": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=ea4fGqPJicA"
+  },
+  "Seated_Triceps_Press": {}
 }
