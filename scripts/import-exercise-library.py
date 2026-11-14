@@ -143,6 +143,16 @@ def generate():
         if excluded_images:
             assert item['images'] and reviewed[source_id].get('imageExclusionReason', '').strip(), source_id
         images = [] if excluded_images else item['images']
+        donor_id = review.get('replacementImageSourceID')
+        if donor_id:
+            assert excluded_images and donor_id in source and donor_id != source_id, source_id
+            assert review.get('replacementImageReason', '').strip(), source_id
+            assert not reviewed.get(donor_id, {}).get('excludeSourceImages', False), source_id
+            donor_images = source[donor_id]['images']
+            assert len(donor_images) == 2, source_id
+            images = [f'{source_id}/replacement-{index}.jpg' for index in range(2)]
+            assert all((MEDIA / path).read_bytes() == (MEDIA / original).read_bytes()
+                       for path, original in zip(images, donor_images)), source_id
         assert primary_muscles and all(muscle in MUSCLES for muscle in primary_muscles), source_id
         assert all(muscle in MUSCLES for muscle in secondary_muscles), source_id
         assert 0 < len(name) <= 80 and re.search('[А-Яа-яЁё]', name)

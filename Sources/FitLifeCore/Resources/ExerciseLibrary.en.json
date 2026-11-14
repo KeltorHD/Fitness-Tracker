@@ -237,7 +237,8 @@
       "variantGroup": {
         "id": "barbell-overhead-press",
         "title": "Barbell overhead press"
-      }
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=3VpI0V_9D0Y"
     },
     {
       "id": "10000000-0000-0000-0000-000000000005",
@@ -293,7 +294,8 @@
       "variantGroup": {
         "id": "romanian-deadlift",
         "title": "Barbell Romanian deadlift"
-      }
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=1srqEAPcUCc"
     },
     {
       "id": "10000000-0000-0000-0000-000000000006",
@@ -401,7 +403,8 @@
         ],
         "frameDuration": 0.25
       },
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=QaXCjUMCp90"
     },
     {
       "id": "10000000-0000-0000-0000-000000000008",
@@ -489,7 +492,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=P-yaD24bUE8"
     },
     {
       "id": "3c067a0d-d946-56d2-92ec-45f1d24c646e",
@@ -531,7 +535,8 @@
       "variantGroup": {
         "id": "front-squat",
         "title": "Front squat"
-      }
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=7nDvE3LdiAc"
     },
     {
       "id": "ed465484-107c-5708-8ff8-382a6b70ee00",
@@ -726,7 +731,8 @@
       "variantGroup": {
         "id": "stationary-lunge",
         "title": "Stationary return lunge"
-      }
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=jklUSipBe28"
     },
     {
       "id": "25c70770-0592-5a41-b61c-f1eabd03aeef",
@@ -809,7 +815,8 @@
       "variantGroup": {
         "id": "step-up",
         "title": "Step-up"
-      }
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=hgkk12L_Umk"
     },
     {
       "id": "69e24aea-c818-5ce4-ba9f-9c4adb7d2798",
@@ -894,7 +901,8 @@
       "variantGroup": {
         "id": "machine-leg-extension",
         "title": "Machine leg extension"
-      }
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=Cy9TJ_jhEBs"
     },
     {
       "id": "5e911f6c-3710-5b1a-843d-86373e826908",
@@ -980,7 +988,8 @@
       "variantGroup": {
         "id": "machine-leg-curl",
         "title": "Machine leg curl"
-      }
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=EqCsK_vlnfE"
     },
     {
       "id": "60a5a10a-940e-57a3-b83b-9d8d51dc4bf3",
@@ -1073,7 +1082,8 @@
       "variantGroup": {
         "id": "sumo-deadlift",
         "title": "Barbell sumo deadlift"
-      }
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=qy75WDhRTsw"
     },
     {
       "id": "5e3e91da-a533-5fd2-bfd1-ea1f2e76b88a",
@@ -1114,7 +1124,8 @@
       "variantGroup": {
         "id": "stiff-leg-deadlift",
         "title": "Stiff-legged deadlift"
-      }
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=jVyvO0LlMFs"
     },
     {
       "id": "d81e0a08-b853-524c-b049-6b4bc7eb2908",
@@ -1236,7 +1247,8 @@
       "variantGroup": {
         "id": "glute-bridge",
         "title": "Floor glute bridge"
-      }
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=eFrJy6keSSE"
     },
     {
       "id": "31527337-22cf-5a8a-8602-c36cde9b3fc0",
@@ -1278,7 +1290,8 @@
       "variantGroup": {
         "id": "glute-bridge",
         "title": "Floor glute bridge"
-      }
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=HkF61M6StlY"
     },
     {
       "id": "5535b57a-8686-5a59-95a8-c950089708f0",
@@ -14447,11 +14460,18 @@
         "Slowly bring back the arms to the starting position.",
         "Repeat for the recommended amount of repetitions."
       ],
-      "images": [],
+      "images": [
+        "High_Cable_Curls/replacement-0.jpg",
+        "High_Cable_Curls/replacement-1.jpg"
+      ],
       "techniqueUnavailable": false,
-      "imagesUnavailable": true,
+      "imagesUnavailable": false,
       "generatedMedia": null,
       "translationAutomatic": false,
+      "variantGroup": {
+        "id": "high-cable-curl",
+        "title": "High cable curl"
+      },
       "techniqueVideoURL": "https://www.youtube.com/watch?v=7N4Xga9Yo5s"
     },
     {
@@ -21780,7 +21800,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "high-cable-curl",
+        "title": "High cable curl"
+      }
     },
     {
       "id": "ce586256-5e54-5480-8446-3e6d2a64ccd2",
@@ -25477,9 +25501,12 @@
         "Press the bar overhead while keeping your torso steady.",
         "Lower the bar under control to the front of your shoulders."
       ],
-      "images": [],
+      "images": [
+        "Seated_Barbell_Military_Press/replacement-0.jpg",
+        "Seated_Barbell_Military_Press/replacement-1.jpg"
+      ],
       "techniqueUnavailable": false,
-      "imagesUnavailable": true,
+      "imagesUnavailable": false,
       "generatedMedia": null,
       "translationAutomatic": false,
       "variantGroup": {

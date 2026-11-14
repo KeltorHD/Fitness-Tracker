@@ -1002,5 +1002,13 @@
       "Step-up_with_Knee_Raise",
       "Single-Leg_High_Box_Squat"
     ]
+  },
+  "high-cable-curl": {
+    "ru": "Сгибание рук на двух верхних блоках",
+    "en": "High cable curl",
+    "members": [
+      "High_Cable_Curls",
+      "Overhead_Cable_Curl"
+    ]
   }
 }

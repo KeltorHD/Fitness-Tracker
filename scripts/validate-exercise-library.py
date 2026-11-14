@@ -50,7 +50,8 @@ for ru, en in zip(document['entries'], english['entries']):
 assert len(manifest['images']) == 1746
 unavailable = {
     source_id for source_id, item in source.items()
-    if not item['images'] or reviewed.get(source_id, {}).get('excludeSourceImages', False)
+    if (not item['images'] or reviewed.get(source_id, {}).get('excludeSourceImages', False))
+    and not reviewed.get(source_id, {}).get('replacementImageSourceID')
 }
 assert {entry['sourceID'] for entry in document['entries'] if entry['imagesUnavailable']} == unavailable
 assert not any(entry['techniqueUnavailable'] for entry in document['entries'])
@@ -59,7 +60,12 @@ generated_provenance = json.loads((root / 'Data/ExerciseLibrary/generated-media.
 generated_files = {item['path'] for entry in generated_provenance['entries'] for item in entry['files']}
 expected = {image for item in source.values() for image in item['images']}
 assert expected == {item['path'] for item in manifest['images']}
-assert expected | {p for p in generated_files if p.endswith('.jpg')} == {str(p.relative_to(root / 'Resources/ExerciseMedia')) for p in (root / 'Resources/ExerciseMedia').rglob('*.jpg')}
+replacements = {
+    f'{source_id}/replacement-{index}.jpg'
+    for source_id, review in reviewed.items() if review.get('replacementImageSourceID')
+    for index in range(2)
+}
+assert expected | replacements | {p for p in generated_files if p.endswith('.jpg')} == {str(p.relative_to(root / 'Resources/ExerciseMedia')) for p in (root / 'Resources/ExerciseMedia').rglob('*.jpg')}
 assert {p for p in generated_files if p.endswith('.gif')} == {str(p.relative_to(root / 'Resources/ExerciseMedia')) for p in (root / 'Resources/ExerciseMedia').rglob('*.gif')}
 for entry in generated_provenance['entries']:
     assert entry['generator'] == 'built-in image_gen' and entry['prompt']
@@ -90,8 +96,19 @@ for index, entry in enumerate(document['entries']):
     review = reviewed.get(entry['sourceID'], {})
     if review.get('excludeSourceImages', False):
         assert review.get('imageExclusionReason', '').strip()
-        assert source[entry['sourceID']]['images'] and entry['images'] == []
+        assert source[entry['sourceID']]['images']
+        donor_id = review.get('replacementImageSourceID')
+        if donor_id:
+            assert donor_id in source and donor_id != entry['sourceID']
+            assert review.get('replacementImageReason', '').strip()
+            assert not reviewed.get(donor_id, {}).get('excludeSourceImages', False)
+            assert entry['images'] == [f"{entry['sourceID']}/replacement-{index}.jpg" for index in range(2)]
+            for replacement, donor in zip(entry['images'], source[donor_id]['images']):
+                assert (root / 'Resources/ExerciseMedia' / replacement).read_bytes() == (root / 'Resources/ExerciseMedia' / donor).read_bytes()
+        else:
+            assert entry['images'] == []
     else:
+        assert not review.get('replacementImageSourceID')
         assert entry['images'] == source[entry['sourceID']]['images']
     assert entry['englishName'] == review.get('englishName', source[entry['sourceID']]['name'])
     assert re.search('[А-Яа-яЁё]', entry['name'])

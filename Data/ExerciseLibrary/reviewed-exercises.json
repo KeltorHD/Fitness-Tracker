@@ -755,7 +755,9 @@
   "Rocket_Jump": {},
   "Rocking_Standing_Calf_Raise": {},
   "Rocky_Pull-Ups_Pulldowns": {},
-  "Romanian_Deadlift": {},
+  "Romanian_Deadlift": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=1srqEAPcUCc"
+  },
   "Romanian_Deadlift_from_Deficit": {
     "techniqueVideoURL": "https://www.youtube.com/watch?v=XLCOasfz1uI"
   },
@@ -1141,11 +1143,17 @@
   "Bent_Over_Barbell_Row": {
     "techniqueVideoURL": "https://www.youtube.com/watch?v=bm0_q9bR_HA"
   },
-  "Standing_Military_Press": {},
+  "Standing_Military_Press": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=3VpI0V_9D0Y"
+  },
   "Pullups": {},
-  "Dumbbell_Bicep_Curl": {},
+  "Dumbbell_Bicep_Curl": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=QaXCjUMCp90"
+  },
   "Crunches": {},
-  "Bodyweight_Squat": {},
+  "Bodyweight_Squat": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=P-yaD24bUE8"
+  },
   "Front_Barbell_Squat": {
     "englishSteps": [
       "Rest the bar across the fronts of your shoulders and hold it with crossed arms.",
@@ -1153,7 +1161,8 @@
       "Extend your legs and return to standing."
     ],
     "instructionSourceURL": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4262933/",
-    "instructionCorrectionReason": "The upstream text asserts that any knee travel beyond the toes is necessarily harmful; that blanket claim is unsupported."
+    "instructionCorrectionReason": "The upstream text asserts that any knee travel beyond the toes is necessarily harmful; that blanket claim is unsupported.",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=7nDvE3LdiAc"
   },
   "Goblet_Squat": {
     "techniqueVideoURL": "https://www.youtube.com/watch?v=MWHIs0zxkCU"
@@ -1192,23 +1201,38 @@
       "Push through your front foot to return to standing, then repeat on the other side."
     ],
     "instructionSourceURL": "https://synergysportsmedicine.com/should-we-squat-and-lunge-with-our-knees-over-our-toes/",
-    "instructionCorrectionReason": "The upstream text asserts that any knee travel beyond the toes is necessarily harmful; that blanket claim is unsupported."
+    "instructionCorrectionReason": "The upstream text asserts that any knee travel beyond the toes is necessarily harmful; that blanket claim is unsupported.",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=jklUSipBe28"
   },
   "Split_Squat_with_Dumbbells": {},
-  "Dumbbell_Step_Ups": {},
+  "Dumbbell_Step_Ups": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=hgkk12L_Umk"
+  },
   "Leg_Press": {},
-  "Leg_Extensions": {},
+  "Leg_Extensions": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=Cy9TJ_jhEBs"
+  },
   "Lying_Leg_Curls": {
     "techniqueVideoURL": "https://www.youtube.com/watch?v=lUH80pneL5w"
   },
-  "Seated_Leg_Curl": {},
-  "Sumo_Deadlift": {},
-  "Stiff-Legged_Dumbbell_Deadlift": {},
+  "Seated_Leg_Curl": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=EqCsK_vlnfE"
+  },
+  "Sumo_Deadlift": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=qy75WDhRTsw"
+  },
+  "Stiff-Legged_Dumbbell_Deadlift": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=jVyvO0LlMFs"
+  },
   "Barbell_Hip_Thrust": {
     "techniqueVideoURL": "https://www.youtube.com/watch?v=4hYRM_60BD4"
   },
-  "Butt_Lift_Bridge": {},
-  "Single_Leg_Glute_Bridge": {},
+  "Butt_Lift_Bridge": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=eFrJy6keSSE"
+  },
+  "Single_Leg_Glute_Bridge": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=HkF61M6StlY"
+  },
   "Thigh_Abductor": {},
   "Thigh_Adductor": {},
   "Standing_Calf_Raises": {},
@@ -1641,7 +1665,9 @@
   "High_Cable_Curls": {
     "excludeSourceImages": true,
     "imageExclusionReason": "The source photos show a lying cable triceps extension, while the source name and instructions describe standing curls with two high pulleys.",
-    "techniqueVideoURL": "https://www.youtube.com/watch?v=7N4Xga9Yo5s"
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=7N4Xga9Yo5s",
+    "replacementImageSourceID": "Overhead_Cable_Curl",
+    "replacementImageReason": "The source photos of Overhead Cable Curl show the same standing high-pulley curl described in this card."
   },
   "Elbow_to_Knee": {
     "englishSteps": [
@@ -1758,7 +1784,9 @@
     "instructionCorrectionReason": "The source name and later instruction describe a front press, but the initial instruction and source photos place the bar behind the head.",
     "excludeSourceImages": true,
     "imageExclusionReason": "The source photos show a behind-the-neck press rather than the named seated military press to the front.",
-    "techniqueVideoURL": "https://www.youtube.com/watch?v=0igVSywXKK8"
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=0igVSywXKK8",
+    "replacementImageSourceID": "Barbell_Shoulder_Press",
+    "replacementImageReason": "The source photos of Barbell Shoulder Press show a seated barbell press in front of the head."
   },
   "Seated_Close-Grip_Concentration_Barbell_Curl": {
     "englishSteps": [

@@ -118,8 +118,8 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
       "Kettlebell_Overhead_Triceps_Extension", "Power_Partials",
       "Decline_EZ_Bar_Triceps_Extension", "Wide-Grip_Decline_Barbell_Pullover",
       "FitLife_Triceps_Pushdown_EZ_Bar", "FitLife_Triceps_Pushdown_One_Arm_Overhand",
-      "High_Cable_Curls", "Gironda_Sternum_Chins", "One_Arm_Chin-Up",
-      "Iliotibial_Tract-SMR", "Elevated_Cable_Rows", "Seated_Barbell_Military_Press",
+      "Gironda_Sternum_Chins", "One_Arm_Chin-Up",
+      "Iliotibial_Tract-SMR", "Elevated_Cable_Rows",
       "FitLife_Single_Leg_Squat_To_High_Box",
     ])
   #expect(ExerciseLibrary.entries.allSatisfy { $0.techniqueUnavailable == false })
@@ -1139,13 +1139,17 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   }
 }
 
-@Test func highCableCurlsDoNotShowLyingTricepsPhotos() throws {
+@Test func highCableCurlsUseMatchingReplacementPhotos() throws {
   for language in [AppLanguage.russian, .english] {
     let entry = try #require(
       ExerciseLibrary.entries(language: language).first { $0.sourceID == "High_Cable_Curls" })
     #expect(entry.primaryMuscleIDs == [.biceps])
-    #expect(entry.imagesUnavailable == true)
-    #expect(entry.images.isEmpty)
+    let variants = ExerciseLibrary.variants(for: entry.id, language: language)
+    #expect(Set(variants.map(\.sourceID)) == ["High_Cable_Curls", "Overhead_Cable_Curl"])
+    #expect(Set(variants.map(\.id)).count == 2)
+    #expect(entry.imagesUnavailable == false)
+    #expect(
+      entry.images == ["High_Cable_Curls/replacement-0.jpg", "High_Cable_Curls/replacement-1.jpg"])
   }
 }
 
@@ -1211,5 +1215,20 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
       ExerciseLibrary.variants(for: stepUp.id, language: language).contains {
         $0.sourceID == "Dumbbell_Step_Ups"
       })
+  }
+}
+
+@Test func seatedMilitaryPressUsesMatchingSourcePhotos() throws {
+  for language in [AppLanguage.russian, .english] {
+    let entry = try #require(
+      ExerciseLibrary.entries(language: language).first {
+        $0.sourceID == "Seated_Barbell_Military_Press"
+      })
+    #expect(entry.imagesUnavailable == false)
+    #expect(
+      entry.images == [
+        "Seated_Barbell_Military_Press/replacement-0.jpg",
+        "Seated_Barbell_Military_Press/replacement-1.jpg",
+      ])
   }
 }
