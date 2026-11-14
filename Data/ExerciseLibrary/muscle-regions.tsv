@@ -121,6 +121,7 @@ Dumbbell_Side_Bend	obliques
 Dumbbell_Tricep_Extension_-Pronated_Grip	tricepsLong;tricepsLateral;tricepsMedial
 EZ-Bar_Curl	bicepsLong;bicepsShort
 EZ-Bar_Skullcrusher	tricepsLong;tricepsLateral;tricepsMedial
+Elbow_to_Knee	obliques
 Exercise_Ball_Crunch	rectusAbdominisUpper;rectusAbdominisLower
 Exercise_Ball_Pull-In	rectusAbdominisUpper;rectusAbdominisLower
 Extended_Range_One-Arm_Kettlebell_Floor_Press	chestMiddle

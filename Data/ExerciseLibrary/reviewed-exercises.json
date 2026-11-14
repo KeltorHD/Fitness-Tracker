@@ -1610,5 +1610,59 @@
       "quadriceps"
     ],
     "techniqueVideoURL": "https://www.youtube.com/watch?v=WEb0pHYhfBY"
+  },
+  "Dumbbell_Lying_Pronation": {
+    "englishSteps": [
+      "Lie on your side on a flat bench with your working arm supported and elbow bent. Hold a light end-loaded dumbbell.",
+      "Turn your forearm so your palm moves from facing up toward facing down.",
+      "Return slowly and repeat with the other arm."
+    ],
+    "instructionSourceURL": "https://weighttraining.guide/exercises/lying-dumbbell-pronation/",
+    "instructionCorrectionReason": "The source name and photos describe forearm pronation; the source instructions describe shoulder rotation."
+  },
+  "Dumbbell_Lying_Supination": {
+    "englishSteps": [
+      "Lie on your side on a flat bench with your working arm supported and elbow bent. Hold a light end-loaded dumbbell.",
+      "Turn your forearm so your palm moves from facing down toward facing up.",
+      "Return slowly and repeat with the other arm."
+    ],
+    "instructionSourceURL": "https://www.fullphysio.com/en/exercises/supinationpronation-strengthening-with-dumbbell",
+    "instructionCorrectionReason": "The source name and photos describe forearm supination; the source instructions describe shoulder rotation."
+  },
+  "Cable_Rope_Rear-Delt_Rows": {
+    "englishSteps": [
+      "Attach a rope to a cable around shoulder height, grasp its ends and stand facing the machine.",
+      "Keeping your elbows high and out, pull the rope toward your upper chest.",
+      "Slowly extend your arms and return to the starting position."
+    ],
+    "instructionSourceURL": "https://weighttraining.guide/exercises/standing-cable-rear-delt-row-with-rope/",
+    "instructionCorrectionReason": "The source photos show the standing rope row, while the source instructions describe a seated row."
+  },
+  "High_Cable_Curls": {
+    "excludeSourceImages": true,
+    "imageExclusionReason": "The source photos show a lying cable triceps extension, while the source name and instructions describe standing curls with two high pulleys.",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=7N4Xga9Yo5s"
+  },
+  "Elbow_to_Knee": {
+    "englishSteps": [
+      "Lie on your back with your hands lightly supporting your head and your knees raised.",
+      "Rotate your torso toward one knee while extending the other leg.",
+      "Switch sides in a controlled alternating motion."
+    ],
+    "instructionSourceURL": "https://www.fittr.com/exercise-video/bicycle-crunch-187/",
+    "instructionCorrectionReason": "The generic source title and photos show alternating bicycle crunches; the source instructions describe a fixed crossed-leg crunch.",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=wpRI3xBhJmo"
+  },
+  "Lying_Triceps_Press": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=ea4fGqPJicA"
+  },
+  "Seated_Flat_Bench_Leg_Pull-In": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=54q250IUEAc"
+  },
+  "Seated_Leg_Tucks": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=54q250IUEAc"
+  },
+  "Incline_Dumbbell_Bench_With_Palms_Facing_In": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=rq2fUEabPOk"
   }
 }

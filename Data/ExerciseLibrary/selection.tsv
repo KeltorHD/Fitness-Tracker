@@ -200,7 +200,7 @@ Cable_One_Arm_Tricep_Extension	Разгибание одной руки на в�
 Cable_Preacher_Curl	Сгибание рук на скамье Скотта с прямой рукоятью нижнего блока	Сгибание рук на бицепс на скамье Скотта на нижнем блоке;Cable Preacher Curl
 Cable_Rear_Delt_Fly	Разведение рук на задние дельты стоя в кроссовере	Разведение рук на верхних блоках;Cable Rear Delt Fly
 Cable_Reverse_Crunch	Обратные скручивания лёжа с нижним блоком	Обратные скручивания с нижним блоком;Cable Reverse Crunch
-Cable_Rope_Rear-Delt_Rows	Тяга задних дельт со скакалкой	Силовые упражнения;strength
+Cable_Rope_Rear-Delt_Rows	Тяга каната верхнего блока к груди стоя с разведёнными локтями	Тяга каната к груди на задние дельты стоя;Cable Rope Rear-Delt Rows;Силовые упражнения;strength
 Cable_Russian_Twists	Русские скручивания на фитболе с блоком	Повороты корпуса на фитболе с блоком;Cable Russian Twists
 Cable_Seated_Crunch	Скручивания сидя с канатом верхнего блока	Скручивания на скамье с канатной рукоятью;Cable Seated Crunch
 Cable_Seated_Lateral_Raise	Разведение рук в наклоне сидя на нижних блоках	Разведение рук на задние дельты сидя в кроссовере;Cable Seated Lateral Raise
@@ -289,9 +289,9 @@ Dumbbell_Clean	Взятие двух гантелей на грудь в сед	
 Dumbbell_Floor_Press	Жим гантелей лёжа на полу	Жим гантелей с пола;Dumbbell Floor Press
 Dumbbell_Incline_Shoulder_Raise	Подъём плеч с гантелями лёжа на наклонной скамье	Подъём лопаток с гантелями на наклонной скамье;Dumbbell Incline Shoulder Raise
 Dumbbell_Lying_One-Arm_Rear_Lateral_Raise	Разведение одной рукой с гантелью лёжа грудью на наклонной скамье	Разведение гантели на заднюю дельту с опорой грудью;Dumbbell Lying One-Arm Rear Lateral Raise
-Dumbbell_Lying_Pronation	Пронация с гантелью лёжа	Силовые упражнения;strength
+Dumbbell_Lying_Pronation	Пронация предплечья с гантелью лёжа на боку	Поворот предплечья ладонью вниз с гантелью лёжа;Dumbbell Lying Pronation;Силовые упражнения;strength
 Dumbbell_Lying_Rear_Lateral_Raise	Разведение рук с гантелями лёжа грудью на наклонной скамье	Разведение гантелей на задние дельты с опорой грудью;Dumbbell Lying Rear Lateral Raise
-Dumbbell_Lying_Supination	Супинация с гантелью лёжа	Силовые упражнения;strength
+Dumbbell_Lying_Supination	Супинация предплечья с гантелью лёжа на боку	Поворот предплечья ладонью вверх с гантелью лёжа;Dumbbell Lying Supination;Силовые упражнения;strength
 Dumbbell_One-Arm_Shoulder_Press	Жим одной гантели над головой стоя	Жим гантели одной рукой стоя;Dumbbell One-Arm Shoulder Press
 Dumbbell_One-Arm_Triceps_Extension	Разгибание одной руки с гантелью из-за головы стоя	Французский жим одной гантели одной рукой стоя;Dumbbell One-Arm Triceps Extension
 Dumbbell_One-Arm_Upright_Row	Тяга одной гантели к подбородку стоя	Протяжка гантели одной рукой стоя;Dumbbell One-Arm Upright Row
@@ -305,7 +305,7 @@ Dumbbell_Tricep_Extension_-Pronated_Grip	Французский жим гант�
 Dynamic_Back_Stretch	Динамическая растяжка спины с подъёмом рук стоя	Махи прямыми руками вперёд и вверх;Dynamic Back Stretch
 Dynamic_Chest_Stretch	Динамическая растяжка груди с разведением рук стоя	Разведение и сведение прямых рук перед грудью;Dynamic Chest Stretch
 Elbow_Circles	Круговые движения локтями с руками на плечах	Вращение локтями стоя или сидя;Elbow Circles
-Elbow_to_Knee	От локтя до колена	Силовые упражнения;strength
+Elbow_to_Knee	Велосипед с поворотом локтя к колену	Скручивания локоть к противоположному колену лёжа;Elbow to Knee;Силовые упражнения;strength
 Elbows_Back	Растяжка груди стоя с отведением локтей назад	Сведение локтей за спиной стоя;Elbows Back
 Elevated_Back_Lunge	Обратные выпады со штангой с передней ногой на возвышении	Выпад назад со штангой с платформы;Elevated Back Lunge
 Elevated_Cable_Rows	Тяга нижнего блока сидя на возвышении	Силовые упражнения;strength
@@ -366,7 +366,7 @@ Hanging_Bar_Good_Morning	Гудморнинг с подвешенной штан
 Hanging_Pike	Подъём ног к перекладине в висе	Подъём ног к турнику из виса;Hanging Pike
 Heaving_Snatch_Balance	Баланс в рывке	Тяжёлая атлетика;olympic weightlifting
 Heavy_Bag_Thrust	Толчок боксёрского мешка одной рукой стоя	Толчок мешка с поворотом корпуса;Heavy Bag Thrust
-High_Cable_Curls	Сгибания рук на бицепс с верхних блоков	Силовые упражнения;strength
+High_Cable_Curls	Сгибание рук на бицепс с двух верхних блоков стоя	Сгибание рук на бицепс с верхних блоков;High Cable Curls;Силовые упражнения;strength
 Hip_Circles_prone	Круговые движения согнутой ногой на четвереньках	Круги коленом на четвереньках;Hip Circles Prone
 Hip_Extension_with_Bands	Отведение прямой ноги назад стоя с резиновой лентой	Разгибание бедра стоя с эспандером;Hip Extension with Bands
 Hip_Flexion_with_Band	Подъём колена стоя с эспандером на голеностопе	Сгибание бедра с эластичной лентой;Hip Flexion with Band;Силовые упражнения;strength
@@ -382,7 +382,7 @@ Incline_Barbell_Triceps_Extension	Французский жим штанги л�
 Incline_Bench_Pull	Тяга штанги лёжа грудью на наклонной скамье с разведёнными локтями	Тяга штанги с опорой грудью на наклонную скамью;Incline Bench Pull
 Incline_Cable_Chest_Press	Жим рукоятей блоков лёжа на наклонной скамье	Жим на наклонной скамье в кроссовере;Incline Cable Chest Press
 Incline_Cable_Flye	Сведение рук на нижних блоках лёжа на наклонной скамье	Разведение рук в кроссовере на наклонной скамье;Incline Cable Flye
-Incline_Dumbbell_Bench_With_Palms_Facing_In	Наклонная скамья с гантелями ладонями внутрь	Силовые упражнения;strength
+Incline_Dumbbell_Bench_With_Palms_Facing_In	Жим гантелей лёжа на наклонной скамье ладонями друг к другу	Жим гантелей на наклонной скамье нейтральным хватом;Incline Dumbbell Bench With Palms Facing In;Силовые упражнения;strength
 Incline_Dumbbell_Flyes_-_With_A_Twist	Разведение гантелей с поворотом кистей лёжа на наклонной скамье	Разводка гантелей с вращением кистей на наклонной скамье;Incline Dumbbell Flyes With A Twist
 Incline_Hammer_Curls	Молотковые сгибания рук с гантелями сидя на наклонной скамье	Молоток с гантелями с опорой спиной на наклонную скамью;Incline Hammer Curls
 Incline_Inner_Biceps_Curl	Сгибание рук с гантелями в стороны сидя на наклонной скамье	Подъём гантелей на бицепс в стороны с опорой спиной;Incline Inner Biceps Curl
@@ -493,7 +493,7 @@ Lying_Prone_Quadriceps	Растяжка квадрицепса лёжа на ж�
 Lying_Rear_Delt_Raise	Разведение гантелей лёжа грудью на плоской скамье	Разведение рук на задние дельты с опорой грудью;Lying Rear Delt Raise
 Lying_Supine_Dumbbell_Curl	Сгибание рук с гантелями лёжа на спине на плоской скамье	Подъём гантелей на бицепс лёжа с поворотом кистей;Lying Supine Dumbbell Curl
 Lying_T-Bar_Row	Тяга Т-грифа с опорой грудью в тренажёре	Тяга Т-грифа лёжа в тренажёре;Lying T-Bar Row
-Lying_Triceps_Press	Жим на трицепс лежа	Силовые упражнения;strength
+Lying_Triceps_Press	Французский жим с EZ-грифом ко лбу лёжа на плоской скамье	Разгибание рук с EZ-штангой лёжа на плоской скамье;Lying Triceps Press;Силовые упражнения;strength
 Machine_Bench_Press	Жим от груди сидя в тренажёре	Жим в тренажёре;Машинный жим лежа;Силовые упражнения;strength
 Machine_Bicep_Curl	Сгибание рук на бицепс в тренажёре с поднятыми плечами	Сгибания на бицепс в тренажёре;Сгибание бицепса в машине;Силовые упражнения;strength
 Machine_Preacher_Curls	Сгибание рук на бицепс в тренажёре с опорой для плеч	Сгибание рук на скамье Скотта в тренажёре;Сгибания рук в тренажёре на скамье Скотта;Силовые упражнения;strength
@@ -661,7 +661,7 @@ Seated_Dumbbell_Inner_Biceps_Curl	Сгибание рук с гантелями 
 Seated_Dumbbell_Palms-Down_Wrist_Curl	Разгибание кистей с гантелями хватом сверху сидя	Разгибание запястий с гантелями сидя;Сгибание запястий с гантелью сидя, ладонями вниз;Силовые упражнения;strength
 Seated_Dumbbell_Palms-Up_Wrist_Curl	Сгибание кистей с гантелями хватом снизу сидя	Сгибание запястий с гантелями сидя;Сгибание запястий с гантелью сидя ладонями вверх;Силовые упражнения;strength
 Seated_Dumbbell_Press	Жим гантелей от плеч сидя	Жим гантелей сидя;Seated dumbbell shoulder press;Силовые упражнения;strength
-Seated_Flat_Bench_Leg_Pull-In	Подтягивание ног на плоской скамье сидя	Силовые упражнения;strength
+Seated_Flat_Bench_Leg_Pull-In	Подтягивание коленей к груди сидя на плоской скамье	Подтягивание ног на плоской скамье сидя;Seated Flat Bench Leg Pull-In;Силовые упражнения;strength
 Seated_Floor_Hamstring_Stretch	Растяжка задней поверхности бедра сидя с одной прямой ногой	Растяжка бицепса бедра сидя;Растяжка подколенных сухожилий на полу сидя;Растяжка;stretching
 Seated_Front_Deltoid	Растяжка передней части плеч сидя с партнёром	Растяжка передних дельт с партнёром;Передние дельты сидя;Растяжка;stretching
 Seated_Glute	Растяжка ягодицы сидя с партнёром	Растяжка ягодичных мышц сидя;Сидящая ягодица;Растяжка;stretching
@@ -669,7 +669,7 @@ Seated_Good_Mornings	Гудморнинг со штангой сидя	Накл�
 Seated_Hamstring	Растяжка задней поверхности бедра сидя с партнёром	Растяжка бицепса бедра с партнёром сидя;Подколенное сухожилие сидя;Растяжка;stretching
 Seated_Hamstring_and_Calf_Stretch	Растяжка задней поверхности бедра и икры сидя с ремнём	Растяжка ноги сидя с лентой;Растяжка подколенных сухожилий и икр сидя;Растяжка;stretching
 Seated_Head_Harness_Neck_Resistance	Разгибание шеи сидя с головной лямкой	Разгибание шеи с отягощением и головной лямкой;Ремень безопасности для головы в положении сидя Сопротивление шеи;Силовые упражнения;strength
-Seated_Leg_Tucks	Подтягивания ног сидя	Силовые упражнения;strength
+Seated_Leg_Tucks	Подтягивание ног к корпусу сидя на скамье	Подтягивания ног сидя;Seated Leg Tucks;Силовые упражнения;strength
 Seated_One-Arm_Dumbbell_Palms-Down_Wrist_Curl	Разгибание кисти с гантелью хватом сверху сидя	Разгибание запястья с гантелью одной рукой сидя;Сгибание запястий с гантелью на одной руке сидя, ладонями вниз;Силовые упражнения;strength
 Seated_One-Arm_Dumbbell_Palms-Up_Wrist_Curl	Сгибание кисти с гантелью хватом снизу сидя	Сгибание запястья с гантелью одной рукой сидя;Сгибание запястья с гантелью на одной руке сидя;Силовые упражнения;strength
 Seated_One-arm_Cable_Pulley_Rows	Тяга нижнего блока одной рукой сидя	Горизонтальная тяга блока одной рукой;Seated one-arm cable row;Тяга на блоке сидя одной рукой;Силовые упражнения;strength

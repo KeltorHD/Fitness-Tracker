@@ -118,6 +118,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
       "Kettlebell_Overhead_Triceps_Extension", "Power_Partials",
       "Decline_EZ_Bar_Triceps_Extension", "Wide-Grip_Decline_Barbell_Pullover",
       "FitLife_Triceps_Pushdown_EZ_Bar", "FitLife_Triceps_Pushdown_One_Arm_Overhand",
+      "High_Cable_Curls",
     ])
   #expect(ExerciseLibrary.entries.allSatisfy { $0.techniqueUnavailable == false })
 }
@@ -937,8 +938,9 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   #expect(
     Set(variants.map(\.sourceID)) == [
       "Incline_Dumbbell_Press", "Hammer_Grip_Incline_DB_Bench_Press",
+      "Incline_Dumbbell_Bench_With_Palms_Facing_In",
     ])
-  #expect(Set(variants.map(\.id)).count == 2)
+  #expect(Set(variants.map(\.id)).count == 3)
   #expect(
     ExerciseLibrary.search("Жим гантелей на наклонной скамье").contains {
       $0.id == entry.id
@@ -1073,8 +1075,9 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
       "One_Arm_Pronated_Dumbbell_Triceps_Extension",
       "One_Arm_Supinated_Dumbbell_Triceps_Extension",
       "EZ-Bar_Skullcrusher", "Lying_Close-Grip_Barbell_Triceps_Press_To_Chin",
+      "Lying_Triceps_Press",
     ])
-  #expect(Set(variants.map(\.id)).count == 6)
+  #expect(Set(variants.map(\.id)).count == 7)
 }
 
 @Test func multipleEquipmentFiltersUseUnionAndIntersectWithMuscleAndSearch() {
@@ -1114,5 +1117,38 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     #expect(Set(variants.map(\.id)).count == 7)
     #expect(entry.steps.count >= 3)
     #expect(entry.images.count == 2)
+  }
+}
+
+@Test func forearmRotationsAndBenchKneeTucksKeepDistinctHistories() throws {
+  for expected in [
+    ["Dumbbell_Lying_Pronation", "Dumbbell_Lying_Supination"],
+    ["Seated_Flat_Bench_Leg_Pull-In", "Seated_Leg_Tucks"], ["Air_Bike", "Elbow_to_Knee"],
+  ] {
+    for language in [AppLanguage.russian, .english] {
+      let entry = try #require(
+        ExerciseLibrary.entries(language: language).first { $0.sourceID == expected[0] })
+      let variants = ExerciseLibrary.variants(for: entry.id, language: language)
+      #expect(Set(variants.map(\.sourceID)) == Set(expected))
+      #expect(Set(variants.map(\.id)).count == 2)
+    }
+  }
+}
+
+@Test func highCableCurlsDoNotShowLyingTricepsPhotos() throws {
+  for language in [AppLanguage.russian, .english] {
+    let entry = try #require(
+      ExerciseLibrary.entries(language: language).first { $0.sourceID == "High_Cable_Curls" })
+    #expect(entry.primaryMuscleIDs == [.biceps])
+    #expect(entry.imagesUnavailable == true)
+    #expect(entry.images.isEmpty)
+  }
+}
+
+@Test func elbowToKneeTracksTheObliquesInBothLanguages() throws {
+  for language in [AppLanguage.russian, .english] {
+    let entry = try #require(
+      ExerciseLibrary.entries(language: language).first { $0.sourceID == "Elbow_to_Knee" })
+    #expect(entry.muscleRegions.contains(.obliques))
   }
 }

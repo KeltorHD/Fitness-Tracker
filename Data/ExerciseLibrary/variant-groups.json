@@ -268,7 +268,8 @@
     "en": "Incline dumbbell bench press",
     "members": [
       "Incline_Dumbbell_Press",
-      "Hammer_Grip_Incline_DB_Bench_Press"
+      "Hammer_Grip_Incline_DB_Bench_Press",
+      "Incline_Dumbbell_Bench_With_Palms_Facing_In"
     ]
   },
   "bench-cable-fly": {
@@ -365,7 +366,8 @@
       "One_Arm_Pronated_Dumbbell_Triceps_Extension",
       "One_Arm_Supinated_Dumbbell_Triceps_Extension",
       "EZ-Bar_Skullcrusher",
-      "Lying_Close-Grip_Barbell_Triceps_Press_To_Chin"
+      "Lying_Close-Grip_Barbell_Triceps_Press_To_Chin",
+      "Lying_Triceps_Press"
     ]
   },
   "hack-squat": {
@@ -892,6 +894,30 @@
       "Calf_Raise_On_A_Dumbbell",
       "Calf_Raises_-_With_Bands",
       "Donkey_Calf_Raises"
+    ]
+  },
+  "forearm-pronation-supination": {
+    "ru": "Повороты предплечья с гантелью лёжа",
+    "en": "Lying dumbbell forearm rotation",
+    "members": [
+      "Dumbbell_Lying_Pronation",
+      "Dumbbell_Lying_Supination"
+    ]
+  },
+  "bench-knee-tuck": {
+    "ru": "Подтягивание коленей сидя на скамье",
+    "en": "Seated bench knee tuck",
+    "members": [
+      "Seated_Flat_Bench_Leg_Pull-In",
+      "Seated_Leg_Tucks"
+    ]
+  },
+  "bicycle-crunch": {
+    "ru": "Скручивания «Велосипед»",
+    "en": "Bicycle crunch",
+    "members": [
+      "Air_Bike",
+      "Elbow_to_Knee"
     ]
   }
 }

@@ -3815,7 +3815,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "bicycle-crunch",
+        "title": "Bicycle crunch"
+      }
     },
     {
       "id": "f4c55e35-d616-540e-b21a-98c2d4b68ca7",
@@ -8049,6 +8053,8 @@
       "name": "Cable Rope Rear-Delt Rows",
       "englishName": "Cable Rope Rear-Delt Rows",
       "aliases": [
+        "Тяга каната к груди на задние дельты стоя",
+        "Cable Rope Rear-Delt Rows",
         "Силовые упражнения",
         "strength"
       ],
@@ -8066,12 +8072,9 @@
         "deltoidPosterior"
       ],
       "steps": [
-        "Sit in the same position on a low pulley row station as you would if you were doing seated cable rows for the back.",
-        "Attach a rope to the pulley and grasp it with an overhand grip. Your arms should be extended and parallel to the floor with the elbows flared out.",
-        "Keep your lower back upright and slide your hips back so that your knees are slightly bent. This will be your starting position.",
-        "Pull the cable attachment towards your upper chest, just below the neck, as you keep your elbows up and out to the sides. Continue this motion as you exhale until the elbows travel slightly behind the back. Tip: Keep your upper arms horizontal, perpendicular to the torso and parallel to the floor throughout the motion.",
-        "Go back to the initial position where the arms are extended and the shoulders are stretched forward. Inhale as you perform this portion of the movement.",
-        "Repeat for the recommended amount of repetitions."
+        "Attach a rope to a cable around shoulder height, grasp its ends and stand facing the machine.",
+        "Keeping your elbows high and out, pull the rope toward your upper chest.",
+        "Slowly extend your arms and return to the starting position."
       ],
       "images": [
         "Cable_Rope_Rear-Delt_Rows/0.jpg",
@@ -11422,6 +11425,8 @@
       "name": "Dumbbell Lying Pronation",
       "englishName": "Dumbbell Lying Pronation",
       "aliases": [
+        "Поворот предплечья ладонью вниз с гантелью лёжа",
+        "Dumbbell Lying Pronation",
         "Силовые упражнения",
         "strength"
       ],
@@ -11434,12 +11439,9 @@
       "secondaryMuscles": [],
       "trainingRegions": [],
       "steps": [
-        "Lie on a flat bench face down with one arm holding a dumbbell and the other hand on top of the bench folded so that you can rest your head on it.",
-        "Bend the elbows of the arm holding the dumbbell so that it creates a 90-degree angle between the upper arm and the forearm.",
-        "Now raise the upper arm so that the forearm is perpendicular to the floor and the upper arm is perpendicular to your torso. Tip: The upper arm should be parallel to the floor and also creating a 90-degree angle with your torso. This will be your starting position.",
-        "As you breathe out, externally rotate your forearm so that the dumbbell is lifted forward as you maintain the 90 degree angle bend between the upper arms and the forearm. You will continue this external rotation until the forearm is parallel to the floor. At this point you will hold the contraction for a second.",
-        "As you breathe in, slowly go back to the starting position.",
-        "Repeat for the recommended amount of repetitions."
+        "Lie on your side on a flat bench with your working arm supported and elbow bent. Hold a light end-loaded dumbbell.",
+        "Turn your forearm so your palm moves from facing up toward facing down.",
+        "Return slowly and repeat with the other arm."
       ],
       "images": [
         "Dumbbell_Lying_Pronation/0.jpg",
@@ -11448,7 +11450,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "forearm-pronation-supination",
+        "title": "Lying dumbbell forearm rotation"
+      }
     },
     {
       "id": "faa8d5a3-242e-5ffe-ab8a-6922de5a3862",
@@ -11495,6 +11501,8 @@
       "name": "Dumbbell Lying Supination",
       "englishName": "Dumbbell Lying Supination",
       "aliases": [
+        "Поворот предплечья ладонью вверх с гантелью лёжа",
+        "Dumbbell Lying Supination",
         "Силовые упражнения",
         "strength"
       ],
@@ -11507,12 +11515,9 @@
       "secondaryMuscles": [],
       "trainingRegions": [],
       "steps": [
-        "Lie sideways on a flat bench with one arm holding a dumbbell and the other hand on top of the bench folded so that you can rest your head on it.",
-        "Bend the elbows of the arm holding the dumbbell so that it creates a 90-degree angle between the upper arm and the forearm.",
-        "Now raise the upper arm so that the forearm is parallel to the floor and perpendicular to your torso (Tip: So the forearm will be directly in front of you). The upper arm will be stationary by your torso and should be parallel to the floor (aligned with your torso at all times). This will be your starting position.",
-        "As you breathe out, externally rotate your forearm so that the dumbbell is lifted up in a semicircle motion as you maintain the 90 degree angle bend between the upper arms and the forearm. You will continue this external rotation until the forearm is perpendicular to the floor and the torso pointing towards the ceiling. At this point you will hold the contraction for a second.",
-        "As you breathe in, slowly go back to the starting position.",
-        "Repeat for the recommended amount of repetitions and then switch to the other arm."
+        "Lie on your side on a flat bench with your working arm supported and elbow bent. Hold a light end-loaded dumbbell.",
+        "Turn your forearm so your palm moves from facing down toward facing up.",
+        "Return slowly and repeat with the other arm."
       ],
       "images": [
         "Dumbbell_Lying_Supination/0.jpg",
@@ -11521,7 +11526,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "forearm-pronation-supination",
+        "title": "Lying dumbbell forearm rotation"
+      }
     },
     {
       "id": "141ed0d0-efa3-5e1d-93b0-3bf9cdc255ae",
@@ -12017,6 +12026,8 @@
       "name": "Elbow to Knee",
       "englishName": "Elbow to Knee",
       "aliases": [
+        "Скручивания локоть к противоположному колену лёжа",
+        "Elbow to Knee",
         "Силовые упражнения",
         "strength"
       ],
@@ -12027,11 +12038,13 @@
         "abdominals"
       ],
       "secondaryMuscles": [],
-      "trainingRegions": [],
+      "trainingRegions": [
+        "obliques"
+      ],
       "steps": [
-        "Lie on the floor, crossing your right leg across your bent left knee. Clasp your hands behind your head, beginning with your shoulder blades on the ground. This will be your starting position.",
-        "Perform the motion by flexing the spine and rotating your torso to bring the left elbow to the right knee.",
-        "Return to the starting position and repeat the movement for the desired number of repetitions before switching sides."
+        "Lie on your back with your hands lightly supporting your head and your knees raised.",
+        "Rotate your torso toward one knee while extending the other leg.",
+        "Switch sides in a controlled alternating motion."
       ],
       "images": [
         "Elbow_to_Knee/0.jpg",
@@ -12040,7 +12053,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "bicycle-crunch",
+        "title": "Bicycle crunch"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=wpRI3xBhJmo"
     },
     {
       "id": "353bec84-74df-570b-8e72-c0b6319c3906",
@@ -14333,6 +14351,8 @@
       "name": "High Cable Curls",
       "englishName": "High Cable Curls",
       "aliases": [
+        "Сгибание рук на бицепс с верхних блоков",
+        "High Cable Curls",
         "Силовые упражнения",
         "strength"
       ],
@@ -14350,14 +14370,12 @@
         "Slowly bring back the arms to the starting position.",
         "Repeat for the recommended amount of repetitions."
       ],
-      "images": [
-        "High_Cable_Curls/0.jpg",
-        "High_Cable_Curls/1.jpg"
-      ],
+      "images": [],
       "techniqueUnavailable": false,
-      "imagesUnavailable": false,
+      "imagesUnavailable": true,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=7N4Xga9Yo5s"
     },
     {
       "id": "e21ffdfe-fc5b-5c6d-8cc6-e934b0abc821",
@@ -14908,6 +14926,8 @@
       "name": "Incline Dumbbell Bench With Palms Facing In",
       "englishName": "Incline Dumbbell Bench With Palms Facing In",
       "aliases": [
+        "Жим гантелей на наклонной скамье нейтральным хватом",
+        "Incline Dumbbell Bench With Palms Facing In",
         "Силовые упражнения",
         "strength"
       ],
@@ -14940,7 +14960,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "incline-dumbbell-bench-press",
+        "title": "Incline dumbbell bench press"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=rq2fUEabPOk"
     },
     {
       "id": "c124e9b6-a0f2-529a-99b0-387142b03345",
@@ -19040,6 +19065,8 @@
       "name": "Lying Triceps Press",
       "englishName": "Lying Triceps Press",
       "aliases": [
+        "Разгибание рук с EZ-штангой лёжа на плоской скамье",
+        "Lying Triceps Press",
         "Силовые упражнения",
         "strength"
       ],
@@ -19069,7 +19096,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "lying-dumbbell-triceps-extension",
+        "title": "Flat lying triceps extension"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=ea4fGqPJicA"
     },
     {
       "id": "7f227bd0-6c64-57a2-b253-82862ebcd303",
@@ -25820,6 +25852,8 @@
       "name": "Seated Flat Bench Leg Pull-In",
       "englishName": "Seated Flat Bench Leg Pull-In",
       "aliases": [
+        "Подтягивание ног на плоской скамье сидя",
+        "Seated Flat Bench Leg Pull-In",
         "Силовые упражнения",
         "strength"
       ],
@@ -25847,7 +25881,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "bench-knee-tuck",
+        "title": "Seated bench knee tuck"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=54q250IUEAc"
     },
     {
       "id": "c9d3077e-29a4-5057-926d-caa02f8a3503",
@@ -26105,6 +26144,8 @@
       "name": "Seated Leg Tucks",
       "englishName": "Seated Leg Tucks",
       "aliases": [
+        "Подтягивания ног сидя",
+        "Seated Leg Tucks",
         "Силовые упражнения",
         "strength"
       ],
@@ -26132,7 +26173,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "bench-knee-tuck",
+        "title": "Seated bench knee tuck"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=54q250IUEAc"
     },
     {
       "id": "35fcface-159f-504c-ae5b-4694989f47a3",
