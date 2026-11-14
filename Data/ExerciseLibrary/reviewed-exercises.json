@@ -440,5 +440,18 @@
     ],
     "instructionSourceURL": "https://inhouse.center/zheleznyy-krest/",
     "techniqueVideoURL": "https://www.youtube.com/watch?v=VsGuw0SwSeY"
-  }
+  },
+  "Janda_Sit-Up": {},
+  "Jefferson_Squats": {},
+  "Jerk_Dip_Squat": {},
+  "Jogging_Treadmill": {},
+  "Kettlebell_Arnold_Press": {},
+  "Kettlebell_Dead_Clean": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=6Hjuscd4ab4"
+  },
+  "Kettlebell_Figure_8": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=CIJrBjSxlyQ"
+  },
+  "Kettlebell_One-Legged_Deadlift": {},
+  "Kettlebell_Overhead_Triceps_Extension": {}
 }

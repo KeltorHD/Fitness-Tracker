@@ -479,6 +479,18 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   }
 }
 
+@Test func kettlebellExtensionUsesGeneratedMediaAndKeepsItsIdentity() throws {
+  let entry = try #require(
+    ExerciseLibrary.entries.first { $0.sourceID == "Kettlebell_Overhead_Triceps_Extension" })
+  let variants = ExerciseLibrary.variants(for: entry.id, language: .russian)
+  #expect(entry.imagesUnavailable == true)
+  #expect(entry.generatedMedia != nil)
+  #expect(Set(variants.map(\.sourceID)) == [
+    "Kettlebell_Overhead_Triceps_Extension", "Dumbbell_One-Arm_Triceps_Extension",
+  ])
+  #expect(Set(variants.map(\.id)).count == 2)
+}
+
 @Test func multipleEquipmentFiltersUseUnionAndIntersectWithMuscleAndSearch() {
   let equipment: Set<ExerciseEquipment> = [.barbell, .dumbbell]
   let combined = ExerciseLibrary.search(equipment: equipment)

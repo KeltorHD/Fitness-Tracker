@@ -250,5 +250,13 @@
       "Cable_Internal_Rotation",
       "Internal_Rotation_with_Band"
     ]
+  },
+  "standing-overhead-triceps-extension": {
+    "ru": "Разгибание рук из-за головы стоя",
+    "en": "Standing overhead triceps extension",
+    "members": [
+      "Dumbbell_One-Arm_Triceps_Extension",
+      "Kettlebell_Overhead_Triceps_Extension"
+    ]
   }
 }

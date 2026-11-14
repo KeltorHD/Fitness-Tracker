@@ -11043,7 +11043,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-overhead-triceps-extension",
+        "title": "Standing overhead triceps extension"
+      }
     },
     {
       "id": "6ab721c5-ca41-5708-99d2-fe577196a2f0",
@@ -15119,8 +15123,8 @@
       "name": "Janda Sit-Up",
       "englishName": "Janda Sit-Up",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подъём корпуса лёжа с напряжением ягодиц и задней поверхности бедра",
+        "Janda Sit-Up"
       ],
       "group": "core",
       "equipment": "body only",
@@ -15154,8 +15158,8 @@
       "name": "Jefferson Squats",
       "englishName": "Jefferson Squats",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Приседания со штангой между ног",
+        "Jefferson Squats"
       ],
       "group": "legs",
       "equipment": "barbell",
@@ -15231,8 +15235,8 @@
       "name": "Jerk Dip Squat",
       "englishName": "Jerk Dip Squat",
       "aliases": [
-        "Тяжёлая атлетика",
-        "olympic weightlifting"
+        "Неглубокий подсед под толчок со штангой",
+        "Jerk Dip Squat"
       ],
       "group": "legs",
       "equipment": "barbell",
@@ -15264,8 +15268,8 @@
       "name": "Jogging, Treadmill",
       "englishName": "Jogging, Treadmill",
       "aliases": [
-        "Кардио",
-        "cardio"
+        "Джоггинг на беговой дорожке",
+        "Jogging Treadmill"
       ],
       "group": "legs",
       "equipment": "machine",
@@ -15340,8 +15344,8 @@
       "name": "Kettlebell Arnold Press",
       "englishName": "Kettlebell Arnold Press",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Жим гири над головой с поворотом кисти",
+        "Kettlebell Arnold Press"
       ],
       "group": "shoulders",
       "equipment": "kettlebells",
@@ -15376,8 +15380,8 @@
       "name": "Kettlebell Dead Clean",
       "englishName": "Kettlebell Dead Clean",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подъём гири с пола к плечу",
+        "Kettlebell Dead Clean"
       ],
       "group": "legs",
       "equipment": "kettlebells",
@@ -15405,7 +15409,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=6Hjuscd4ab4"
     },
     {
       "id": "942a7280-5836-51e1-9487-103086df3282",
@@ -15413,8 +15418,8 @@
       "name": "Kettlebell Figure 8",
       "englishName": "Kettlebell Figure 8",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Передача гири вокруг ног по траектории восьмёрки",
+        "Kettlebell Figure 8"
       ],
       "group": "core",
       "equipment": "kettlebells",
@@ -15438,7 +15443,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=CIJrBjSxlyQ"
     },
     {
       "id": "0cbe44b8-e50c-52ec-b51b-7336124301b6",
@@ -15582,8 +15588,8 @@
       "name": "Kettlebell One-Legged Deadlift",
       "englishName": "Kettlebell One-Legged Deadlift",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Наклон с гирей стоя на одной ноге",
+        "Kettlebell One-Legged Deadlift"
       ],
       "group": "legs",
       "equipment": "kettlebells",
@@ -15616,8 +15622,8 @@
       "name": "Kettlebell Overhead Triceps Extension",
       "englishName": "Kettlebell Overhead Triceps Extension",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Французский жим гири двумя руками стоя",
+        "Kettlebell Overhead Triceps Extension"
       ],
       "group": "arms",
       "equipment": "kettlebells",
@@ -15659,7 +15665,11 @@
         ],
         "frameDuration": 0.25
       },
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-overhead-triceps-extension",
+        "title": "Standing overhead triceps extension"
+      }
     },
     {
       "id": "1b1c0df0-f9e5-5f91-b9b0-1fd089d4baac",
