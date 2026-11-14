@@ -781,5 +781,20 @@
   "Seated_Calf_Stretch": {},
   "Seated_Dumbbell_Curl": {},
   "Seated_Dumbbell_Inner_Biceps_Curl": {},
-  "Seated_Dumbbell_Palms-Down_Wrist_Curl": {}
+  "Seated_Dumbbell_Palms-Down_Wrist_Curl": {},
+  "Seated_Dumbbell_Palms-Up_Wrist_Curl": {},
+  "Seated_Dumbbell_Press": {},
+  "Seated_Floor_Hamstring_Stretch": {},
+  "Seated_Front_Deltoid": {},
+  "Seated_Glute": {},
+  "Seated_Good_Mornings": {},
+  "Seated_Hamstring": {},
+  "Seated_Hamstring_and_Calf_Stretch": {},
+  "Seated_Head_Harness_Neck_Resistance": {},
+  "Seated_One-Arm_Dumbbell_Palms-Down_Wrist_Curl": {},
+  "Seated_One-Arm_Dumbbell_Palms-Up_Wrist_Curl": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=Q7dTbE4kRUY"
+  },
+  "Seated_One-arm_Cable_Pulley_Rows": {},
+  "Seated_Overhead_Stretch": {}
 }

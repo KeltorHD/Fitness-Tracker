@@ -24999,7 +24999,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "seated-dumbbell-wrist-curl",
+        "title": "Seated dumbbell wrist curl and extension"
+      }
     },
     {
       "id": "da33468f-a4ef-5b7c-b871-d3b80303285a",
@@ -25007,6 +25011,8 @@
       "name": "Seated Dumbbell Palms-Up Wrist Curl",
       "englishName": "Seated Dumbbell Palms-Up Wrist Curl",
       "aliases": [
+        "Сгибание запястий с гантелями сидя",
+        "Сгибание запястий с гантелью сидя ладонями вверх",
         "Силовые упражнения",
         "strength"
       ],
@@ -25034,7 +25040,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "seated-dumbbell-wrist-curl",
+        "title": "Seated dumbbell wrist curl and extension"
+      }
     },
     {
       "id": "9f156c3e-7ab5-5b52-bf31-44455b252145",
@@ -25042,6 +25052,8 @@
       "name": "Seated Dumbbell Press",
       "englishName": "Seated Dumbbell Press",
       "aliases": [
+        "Жим гантелей сидя",
+        "Seated dumbbell shoulder press",
         "Силовые упражнения",
         "strength"
       ],
@@ -25116,6 +25128,8 @@
       "name": "Seated Floor Hamstring Stretch",
       "englishName": "Seated Floor Hamstring Stretch",
       "aliases": [
+        "Растяжка бицепса бедра сидя",
+        "Растяжка подколенных сухожилий на полу сидя",
         "Растяжка",
         "stretching"
       ],
@@ -25148,6 +25162,8 @@
       "name": "Seated Front Deltoid",
       "englishName": "Seated Front Deltoid",
       "aliases": [
+        "Растяжка передних дельт с партнёром",
+        "Передние дельты сидя",
         "Растяжка",
         "stretching"
       ],
@@ -25181,6 +25197,8 @@
       "name": "Seated Glute",
       "englishName": "Seated Glute",
       "aliases": [
+        "Растяжка ягодичных мышц сидя",
+        "Сидящая ягодица",
         "Растяжка",
         "stretching"
       ],
@@ -25214,6 +25232,9 @@
       "name": "Seated Good Mornings",
       "englishName": "Seated Good Mornings",
       "aliases": [
+        "Наклоны со штангой на плечах сидя",
+        "Seated good morning",
+        "Сидячее доброе утро",
         "Пауэрлифтинг",
         "powerlifting"
       ],
@@ -25240,7 +25261,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "band-good-morning",
+        "title": "Good morning"
+      }
     },
     {
       "id": "d88418d8-c5da-5ae8-a34e-d49a77585833",
@@ -25248,6 +25273,8 @@
       "name": "Seated Hamstring",
       "englishName": "Seated Hamstring",
       "aliases": [
+        "Растяжка бицепса бедра с партнёром сидя",
+        "Подколенное сухожилие сидя",
         "Растяжка",
         "stretching"
       ],
@@ -25281,6 +25308,8 @@
       "name": "Seated Hamstring and Calf Stretch",
       "englishName": "Seated Hamstring and Calf Stretch",
       "aliases": [
+        "Растяжка ноги сидя с лентой",
+        "Растяжка подколенных сухожилий и икр сидя",
         "Растяжка",
         "stretching"
       ],
@@ -25313,6 +25342,8 @@
       "name": "Seated Head Harness Neck Resistance",
       "englishName": "Seated Head Harness Neck Resistance",
       "aliases": [
+        "Разгибание шеи с отягощением и головной лямкой",
+        "Ремень безопасности для головы в положении сидя Сопротивление шеи",
         "Силовые упражнения",
         "strength"
       ],
@@ -25382,6 +25413,8 @@
       "name": "Seated One-Arm Dumbbell Palms-Down Wrist Curl",
       "englishName": "Seated One-Arm Dumbbell Palms-Down Wrist Curl",
       "aliases": [
+        "Разгибание запястья с гантелью одной рукой сидя",
+        "Сгибание запястий с гантелью на одной руке сидя, ладонями вниз",
         "Силовые упражнения",
         "strength"
       ],
@@ -25408,7 +25441,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "seated-dumbbell-wrist-curl",
+        "title": "Seated dumbbell wrist curl and extension"
+      }
     },
     {
       "id": "924367d3-9ec0-558a-89f2-d638064fa426",
@@ -25416,6 +25453,8 @@
       "name": "Seated One-Arm Dumbbell Palms-Up Wrist Curl",
       "englishName": "Seated One-Arm Dumbbell Palms-Up Wrist Curl",
       "aliases": [
+        "Сгибание запястья с гантелью одной рукой сидя",
+        "Сгибание запястья с гантелью на одной руке сидя",
         "Силовые упражнения",
         "strength"
       ],
@@ -25442,7 +25481,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "seated-dumbbell-wrist-curl",
+        "title": "Seated dumbbell wrist curl and extension"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=Q7dTbE4kRUY"
     },
     {
       "id": "23f8030e-5ed0-5f42-a3df-f0e8a0839b0b",
@@ -25450,6 +25494,9 @@
       "name": "Seated One-arm Cable Pulley Rows",
       "englishName": "Seated One-arm Cable Pulley Rows",
       "aliases": [
+        "Горизонтальная тяга блока одной рукой",
+        "Seated one-arm cable row",
+        "Тяга на блоке сидя одной рукой",
         "Силовые упражнения",
         "strength"
       ],
@@ -25490,6 +25537,8 @@
       "name": "Seated Overhead Stretch",
       "englishName": "Seated Overhead Stretch",
       "aliases": [
+        "Боковой наклон сидя с рукой за головой",
+        "Растяжка над головой сидя",
         "Растяжка",
         "stretching"
       ],

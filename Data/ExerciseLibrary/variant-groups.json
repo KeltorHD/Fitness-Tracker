@@ -41,7 +41,8 @@
       "Band_Good_Morning_Pull_Through",
       "Good_Morning",
       "Good_Morning_off_Pins",
-      "Hanging_Bar_Good_Morning"
+      "Hanging_Bar_Good_Morning",
+      "Seated_Good_Mornings"
     ]
   },
   "long-bar-row": {
@@ -426,6 +427,16 @@
     "members": [
       "Seated_Dumbbell_Curl",
       "Seated_Dumbbell_Inner_Biceps_Curl"
+    ]
+  },
+  "seated-dumbbell-wrist-curl": {
+    "ru": "Сгибание и разгибание кистей с гантелями сидя",
+    "en": "Seated dumbbell wrist curl and extension",
+    "members": [
+      "Seated_Dumbbell_Palms-Down_Wrist_Curl",
+      "Seated_Dumbbell_Palms-Up_Wrist_Curl",
+      "Seated_One-Arm_Dumbbell_Palms-Down_Wrist_Curl",
+      "Seated_One-Arm_Dumbbell_Palms-Up_Wrist_Curl"
     ]
   }
 }

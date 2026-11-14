@@ -462,9 +462,9 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   let variants = ExerciseLibrary.variants(for: entry.id, language: .russian)
   #expect(Set(variants.map(\.sourceID)) == [
     "Good_Morning", "Good_Morning_off_Pins", "Band_Good_Morning",
-    "Band_Good_Morning_Pull_Through", "Hanging_Bar_Good_Morning",
+    "Band_Good_Morning_Pull_Through", "Hanging_Bar_Good_Morning", "Seated_Good_Mornings",
   ])
-  #expect(Set(variants.map(\.id)).count == 5)
+  #expect(Set(variants.map(\.id)).count == 6)
   #expect(Set(variants.map(\.equipment)) == [.barbell, .bands])
 }
 
@@ -534,6 +534,11 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
       "Seated_Bent-Over_Two-Arm_Dumbbell_Triceps_Extension",
     ],
     ["Seated_Dumbbell_Curl", "Seated_Dumbbell_Inner_Biceps_Curl"],
+    [
+      "Seated_Dumbbell_Palms-Down_Wrist_Curl", "Seated_Dumbbell_Palms-Up_Wrist_Curl",
+      "Seated_One-Arm_Dumbbell_Palms-Down_Wrist_Curl",
+      "Seated_One-Arm_Dumbbell_Palms-Up_Wrist_Curl",
+    ],
   ] {
     for language in [AppLanguage.russian, .english] {
       let entry = try #require(

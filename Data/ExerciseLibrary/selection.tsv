@@ -659,21 +659,21 @@ Seated_Close-Grip_Concentration_Barbell_Curl	Концентрированное 
 Seated_Dumbbell_Curl	Сгибание рук с гантелями сидя с поворотом кистей	Сгибание рук на бицепс с супинацией сидя;Seated dumbbell curl;Сгибание рук с гантелями сидя;Силовые упражнения;strength
 Seated_Dumbbell_Inner_Biceps_Curl	Сгибание рук с гантелями сидя с отведением предплечий	Сгибание рук на бицепс сидя в стороны;Seated inner biceps curl;Сгибание внутреннего бицепса с гантелью сидя;Силовые упражнения;strength
 Seated_Dumbbell_Palms-Down_Wrist_Curl	Разгибание кистей с гантелями хватом сверху сидя	Разгибание запястий с гантелями сидя;Сгибание запястий с гантелью сидя, ладонями вниз;Силовые упражнения;strength
-Seated_Dumbbell_Palms-Up_Wrist_Curl	Сгибание запястий с гантелью сидя ладонями вверх	Силовые упражнения;strength
-Seated_Dumbbell_Press	Жим гантелей сидя	Силовые упражнения;strength
+Seated_Dumbbell_Palms-Up_Wrist_Curl	Сгибание кистей с гантелями хватом снизу сидя	Сгибание запястий с гантелями сидя;Сгибание запястий с гантелью сидя ладонями вверх;Силовые упражнения;strength
+Seated_Dumbbell_Press	Жим гантелей от плеч сидя	Жим гантелей сидя;Seated dumbbell shoulder press;Силовые упражнения;strength
 Seated_Flat_Bench_Leg_Pull-In	Подтягивание ног на плоской скамье сидя	Силовые упражнения;strength
-Seated_Floor_Hamstring_Stretch	Растяжка подколенных сухожилий на полу сидя	Растяжка;stretching
-Seated_Front_Deltoid	Передние дельты сидя	Растяжка;stretching
-Seated_Glute	Сидящая ягодица	Растяжка;stretching
-Seated_Good_Mornings	Сидячее доброе утро	Пауэрлифтинг;powerlifting
-Seated_Hamstring	Подколенное сухожилие сидя	Растяжка;stretching
-Seated_Hamstring_and_Calf_Stretch	Растяжка подколенных сухожилий и икр сидя	Растяжка;stretching
-Seated_Head_Harness_Neck_Resistance	Ремень безопасности для головы в положении сидя Сопротивление шеи	Силовые упражнения;strength
+Seated_Floor_Hamstring_Stretch	Растяжка задней поверхности бедра сидя с одной прямой ногой	Растяжка бицепса бедра сидя;Растяжка подколенных сухожилий на полу сидя;Растяжка;stretching
+Seated_Front_Deltoid	Растяжка передней части плеч сидя с партнёром	Растяжка передних дельт с партнёром;Передние дельты сидя;Растяжка;stretching
+Seated_Glute	Растяжка ягодицы сидя с партнёром	Растяжка ягодичных мышц сидя;Сидящая ягодица;Растяжка;stretching
+Seated_Good_Mornings	Гудморнинг со штангой сидя	Наклоны со штангой на плечах сидя;Seated good morning;Сидячее доброе утро;Пауэрлифтинг;powerlifting
+Seated_Hamstring	Растяжка задней поверхности бедра сидя с партнёром	Растяжка бицепса бедра с партнёром сидя;Подколенное сухожилие сидя;Растяжка;stretching
+Seated_Hamstring_and_Calf_Stretch	Растяжка задней поверхности бедра и икры сидя с ремнём	Растяжка ноги сидя с лентой;Растяжка подколенных сухожилий и икр сидя;Растяжка;stretching
+Seated_Head_Harness_Neck_Resistance	Разгибание шеи сидя с головной лямкой	Разгибание шеи с отягощением и головной лямкой;Ремень безопасности для головы в положении сидя Сопротивление шеи;Силовые упражнения;strength
 Seated_Leg_Tucks	Подтягивания ног сидя	Силовые упражнения;strength
-Seated_One-Arm_Dumbbell_Palms-Down_Wrist_Curl	Сгибание запястий с гантелью на одной руке сидя, ладонями вниз	Силовые упражнения;strength
-Seated_One-Arm_Dumbbell_Palms-Up_Wrist_Curl	Сгибание запястья с гантелью на одной руке сидя	Силовые упражнения;strength
-Seated_One-arm_Cable_Pulley_Rows	Тяга на блоке сидя одной рукой	Силовые упражнения;strength
-Seated_Overhead_Stretch	Растяжка над головой сидя	Растяжка;stretching
+Seated_One-Arm_Dumbbell_Palms-Down_Wrist_Curl	Разгибание кисти с гантелью хватом сверху сидя	Разгибание запястья с гантелью одной рукой сидя;Сгибание запястий с гантелью на одной руке сидя, ладонями вниз;Силовые упражнения;strength
+Seated_One-Arm_Dumbbell_Palms-Up_Wrist_Curl	Сгибание кисти с гантелью хватом снизу сидя	Сгибание запястья с гантелью одной рукой сидя;Сгибание запястья с гантелью на одной руке сидя;Силовые упражнения;strength
+Seated_One-arm_Cable_Pulley_Rows	Тяга нижнего блока одной рукой сидя	Горизонтальная тяга блока одной рукой;Seated one-arm cable row;Тяга на блоке сидя одной рукой;Силовые упражнения;strength
+Seated_Overhead_Stretch	Растяжка боковой поверхности корпуса сидя	Боковой наклон сидя с рукой за головой;Растяжка над головой сидя;Растяжка;stretching
 Seated_Two-Arm_Palms-Up_Low-Pulley_Wrist_Curl	Сгибание запястий двумя руками вверх с низким блоком сидя	Силовые упражнения;strength
 See-Saw_Press_Alternating_Side_Press	See-Saw Press (попеременный боковой пресс)	Силовые упражнения;strength
 Shotgun_Row	Дробовик Роу	Силовые упражнения;strength
