@@ -408,8 +408,9 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     "Close-Grip_EZ_Bar_Curl", "Close-Grip_Standing_Barbell_Curl",
     "Barbell_Curl", "EZ-Bar_Curl", "Reverse_Barbell_Curl", "Wide-Grip_Standing_Barbell_Curl",
     "Standing_Biceps_Cable_Curl", "Reverse_Cable_Curl", "Standing_One-Arm_Cable_Curl",
+    "Close-Grip_EZ-Bar_Curl_with_Band",
   ])
-  #expect(Set(variants.map(\.id)).count == 9)
+  #expect(Set(variants.map(\.id)).count == 10)
   #expect(Set(variants.map(\.equipment)) == [.ezBar, .barbell, .cable])
 }
 

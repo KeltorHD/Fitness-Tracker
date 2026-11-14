@@ -9578,8 +9578,8 @@
       "name": "Close-Grip EZ-Bar Curl with Band",
       "englishName": "Close-Grip EZ-Bar Curl with Band",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Сгибание рук стоя с EZ-грифом и резиновой лентой",
+        "Close-Grip EZ-Bar Curl with Band"
       ],
       "group": "arms",
       "equipment": "e-z curl bar",
@@ -9608,7 +9608,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-close-grip-curl",
+        "title": "Standing barbell and cable curl"
+      }
     },
     {
       "id": "db02abd4-331e-50f9-9119-2a87b3a7ef59",
@@ -10110,8 +10114,8 @@
       "name": "Cuban Press",
       "englishName": "Cuban Press",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Поворот плеч с гантелями и жим над головой",
+        "Cuban Press"
       ],
       "group": "shoulders",
       "equipment": "dumbbell",
@@ -10139,7 +10143,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=19Q1-2ExnE0"
     },
     {
       "id": "629915a2-9325-58c2-af62-0a316281d56c",
@@ -11185,8 +11190,8 @@
       "name": "Dumbbell Clean",
       "englishName": "Dumbbell Clean",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подъём гантелей с пола к плечам с подседом",
+        "Dumbbell Clean"
       ],
       "group": "legs",
       "equipment": "dumbbell",
@@ -12417,8 +12422,8 @@
       "name": "Finger Curls",
       "englishName": "Finger Curls",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Удержание и перекатывание грифа пальцами",
+        "Finger Curls"
       ],
       "group": "arms",
       "equipment": "barbell",
