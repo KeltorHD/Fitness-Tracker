@@ -191,5 +191,22 @@
   },
   "Calf-Machine_Shoulder_Shrug": {
     "techniqueVideoURL": "https://www.youtube.com/watch?v=B2pVOQwM4es"
+  },
+  "Calf_Press": {},
+  "Calf_Stretch_Elbows_Against_Wall": {},
+  "Calf_Stretch_Hands_Against_Wall": {},
+  "Calves-SMR": {},
+  "Car_Deadlift": {},
+  "Car_Drivers": {
+    "equipment": "other"
+  },
+  "Carioca_Quick_Step": {},
+  "Cat_Stretch": {},
+  "Chain_Handle_Extension": {},
+  "Chain_Press": {},
+  "Chair_Leg_Extended_Stretch": {},
+  "Chair_Lower_Back_Stretch": {},
+  "Chair_Squat": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=7IQov02SVx8"
   }
 }

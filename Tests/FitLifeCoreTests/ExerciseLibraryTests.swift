@@ -315,6 +315,17 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   #expect(Set(variants.map(\.id)).count == 2)
 }
 
+@Test func plateSteeringExerciseDoesNotAppearAsBarbellEquipment() throws {
+  for language in [AppLanguage.russian, .english] {
+    let entry = try #require(
+      ExerciseLibrary.entries(language: language).first { $0.sourceID == "Car_Drivers" })
+    #expect(entry.equipment == .other)
+    #expect(!ExerciseLibrary.search(equipment: [.barbell], language: language).contains {
+      $0.id == entry.id
+    })
+  }
+}
+
 @Test func multipleEquipmentFiltersUseUnionAndIntersectWithMuscleAndSearch() {
   let equipment: Set<ExerciseEquipment> = [.barbell, .dumbbell]
   let combined = ExerciseLibrary.search(equipment: equipment)

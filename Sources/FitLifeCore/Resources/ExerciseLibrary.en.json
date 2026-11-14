@@ -7823,8 +7823,8 @@
       "name": "Calf Press",
       "englishName": "Calf Press",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подъём на носки в тренажёре для жима ногами",
+        "Calf Press"
       ],
       "group": "legs",
       "equipment": "machine",
@@ -7927,8 +7927,8 @@
       "name": "Calf Stretch Elbows Against Wall",
       "englishName": "Calf Stretch Elbows Against Wall",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Растяжка икроножных мышц у стены",
+        "Calf Stretch Elbows Against Wall"
       ],
       "group": "legs",
       "equipment": "unspecified",
@@ -7958,8 +7958,8 @@
       "name": "Calf Stretch Hands Against Wall",
       "englishName": "Calf Stretch Hands Against Wall",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Растяжка икроножной мышцы у стены",
+        "Calf Stretch Hands Against Wall"
       ],
       "group": "legs",
       "equipment": "unspecified",
@@ -7989,8 +7989,8 @@
       "name": "Calves-SMR",
       "englishName": "Calves-SMR",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Прокатывание икроножных мышц на ролике",
+        "Calves SMR"
       ],
       "group": "legs",
       "equipment": "foam roll",
@@ -8019,8 +8019,8 @@
       "name": "Car Deadlift",
       "englishName": "Car Deadlift",
       "aliases": [
-        "Силовой экстрим",
-        "strongman"
+        "Становая тяга с автомобилем",
+        "Car Deadlift"
       ],
       "group": "legs",
       "equipment": "other",
@@ -8057,11 +8057,12 @@
       "name": "Car Drivers",
       "englishName": "Car Drivers",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Вращение диска перед собой",
+        "Водитель автобуса с блином",
+        "Car Drivers"
       ],
       "group": "shoulders",
-      "equipment": "barbell",
+      "equipment": "other",
       "level": "beginner",
       "primaryMuscles": [
         "shoulders"
@@ -8093,8 +8094,8 @@
       "name": "Carioca Quick Step",
       "englishName": "Carioca Quick Step",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Кариока быстрые шаги",
+        "Carioca Quick Step"
       ],
       "group": "legs",
       "equipment": "unspecified",
@@ -8131,8 +8132,8 @@
       "name": "Cat Stretch",
       "englishName": "Cat Stretch",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Округление спины на четвереньках",
+        "Cat Stretch"
       ],
       "group": "back",
       "equipment": "unspecified",
@@ -8200,8 +8201,8 @@
       "name": "Chain Handle Extension",
       "englishName": "Chain Handle Extension",
       "aliases": [
-        "Пауэрлифтинг",
-        "powerlifting"
+        "Французский жим с цепями лёжа",
+        "Chain Handle Extension"
       ],
       "group": "arms",
       "equipment": "other",
@@ -8235,8 +8236,8 @@
       "name": "Chain Press",
       "englishName": "Chain Press",
       "aliases": [
-        "Пауэрлифтинг",
-        "powerlifting"
+        "Жим рукоятей с цепями лёжа",
+        "Chain Press"
       ],
       "group": "chest",
       "equipment": "other",
@@ -8269,8 +8270,8 @@
       "name": "Chair Leg Extended Stretch",
       "englishName": "Chair Leg Extended Stretch",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Растяжка задней поверхности бедра сидя на стуле",
+        "Chair Leg Extended Stretch"
       ],
       "group": "legs",
       "equipment": "other",
@@ -8303,8 +8304,8 @@
       "name": "Chair Lower Back Stretch",
       "englishName": "Chair Lower Back Stretch",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Наклон в сторону сидя на стуле",
+        "Chair Lower Back Stretch"
       ],
       "group": "back",
       "equipment": "unspecified",
@@ -8336,8 +8337,9 @@
       "name": "Chair Squat",
       "englishName": "Chair Squat",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Приседания стул в тренажёре Смита",
+        "Chair Squat",
+        "Smith Chair Squat"
       ],
       "group": "legs",
       "equipment": "machine",
@@ -8366,7 +8368,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=7IQov02SVx8"
     },
     {
       "id": "71aa0e45-5928-54be-9c76-1ebef5009a5f",
