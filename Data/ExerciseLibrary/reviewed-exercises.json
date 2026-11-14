@@ -593,5 +593,22 @@
   "Middle_Back_Stretch": {},
   "Mixed_Grip_Chin": {},
   "Monster_Walk": {},
-  "Mountain_Climbers": {}
+  "Mountain_Climbers": {},
+  "Muscle_Up": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=SPlFapG3KEE"
+  },
+  "Narrow_Stance_Hack_Squats": {},
+  "Narrow_Stance_Leg_Press": {},
+  "Narrow_Stance_Squats": {},
+  "Natural_Glute_Ham_Raise": {},
+  "Neck-SMR": {},
+  "Neck_Press": {},
+  "Oblique_Crunches": {},
+  "Oblique_Crunches_-_On_The_Floor": {},
+  "Olympic_Squat": {},
+  "On-Your-Back_Quad_Stretch": {},
+  "On_Your_Side_Quad_Stretch": {},
+  "One-Arm_Flat_Bench_Dumbbell_Flye": {},
+  "One-Arm_High-Pulley_Cable_Side_Bends": {},
+  "One-Arm_Incline_Lateral_Raise": {}
 }

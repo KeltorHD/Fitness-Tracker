@@ -190,7 +190,8 @@
     "en": "Glute-ham raise",
     "members": [
       "Floor_Glute-Ham_Raise",
-      "Glute_Ham_Raise"
+      "Glute_Ham_Raise",
+      "Natural_Glute_Ham_Raise"
     ]
   },
   "hammer-curl": {
@@ -310,6 +311,14 @@
     "members": [
       "Lying_Dumbbell_Tricep_Extension",
       "Dumbbell_Tricep_Extension_-Pronated_Grip"
+    ]
+  },
+  "hack-squat": {
+    "ru": "Гакк-приседания в тренажёре",
+    "en": "Machine hack squat",
+    "members": [
+      "Hack_Squat",
+      "Narrow_Stance_Hack_Squats"
     ]
   }
 }

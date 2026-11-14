@@ -509,21 +509,21 @@ Monster_Walk	Шаги монстра с резинками вперёд и на�
 Mountain_Climbers	Скалолаз	Поочерёдное подтягивание коленей к груди в упоре лёжа;Mountain climbers;Альпинисты;Плиометрика;plyometrics
 Moving_Claw_Series	Серия движущихся когтей	Плиометрика;plyometrics
 Muscle_Snatch	рывок мышц	Тяжёлая атлетика;olympic weightlifting
-Muscle_Up	мышцы вверх	Силовые упражнения;strength
-Narrow_Stance_Hack_Squats	Гакк-приседания с узкой позицией	Силовые упражнения;strength
-Narrow_Stance_Leg_Press	Жим ногами в узкой стойке	Силовые упражнения;strength
-Narrow_Stance_Squats	Приседания с узкой стойкой	Силовые упражнения;strength
-Natural_Glute_Ham_Raise	Натуральный рейз с ветчиной для ягодиц	Силовые упражнения;strength
-Neck-SMR	Шея-SMR	Растяжка;stretching
-Neck_Press	Пресс для шеи	Силовые упражнения;strength
-Oblique_Crunches	Косые скручивания	Силовые упражнения;strength
-Oblique_Crunches_-_On_The_Floor	Косые скручивания — на полу	Силовые упражнения;strength
-Olympic_Squat	Олимпийские приседания	Тяжёлая атлетика;olympic weightlifting
-On-Your-Back_Quad_Stretch	Растяжка квадрицепсов на спине	Растяжка;stretching
-On_Your_Side_Quad_Stretch	Растяжка квадрицепсов на боку	Растяжка;stretching
-One-Arm_Flat_Bench_Dumbbell_Flye	Гантель на плоской скамье на одной руке	Силовые упражнения;strength
-One-Arm_High-Pulley_Cable_Side_Bends	Боковые изгибы троса с одним рычагом и высоким шкивом	Силовые упражнения;strength
-One-Arm_Incline_Lateral_Raise	Подъём одной руки вбок на наклоне	Силовые упражнения;strength
+Muscle_Up	Выход силой на кольцах	Масл-ап на кольцах;Muscle up;мышцы вверх;Силовые упражнения;strength
+Narrow_Stance_Hack_Squats	Гакк-приседания в тренажёре с узкой постановкой ног	Гакк-приседания узкой постановкой;Гакк-приседания с узкой позицией;Силовые упражнения;strength
+Narrow_Stance_Leg_Press	Жим ногами в тренажёре с узкой постановкой стоп	Жим платформы узкой постановкой;Жим ногами в узкой стойке;Силовые упражнения;strength
+Narrow_Stance_Squats	Приседания со штангой на спине с узкой постановкой ног	Приседания со штангой узкой постановкой;Приседания с узкой стойкой;Силовые упражнения;strength
+Natural_Glute_Ham_Raise	Нордические сгибания ног с фиксацией стоп в тренажёре	Natural glute ham raise;Опускание корпуса с колен с фиксацией стоп;Натуральный рейз с ветчиной для ягодиц;Силовые упражнения;strength
+Neck-SMR	Самомассаж мышц шеи роликом	Прокатывание мышц шеи роликом;Neck SMR;Шея-SMR;Растяжка;stretching
+Neck_Press	Жим штанги к шее лёжа на плоской скамье	Жим «гильотина»;Guillotine press;Neck press;Пресс для шеи;Силовые упражнения;strength
+Oblique_Crunches	Косые скручивания лёжа с ногами на скамье	Косые скручивания с поднятыми ногами;Косые скручивания;Силовые упражнения;strength
+Oblique_Crunches_-_On_The_Floor	Косые скручивания лёжа на боку	Боковые скручивания на полу;Косые скручивания — на полу;Силовые упражнения;strength
+Olympic_Squat	Олимпийские приседания со штангой на спине	Олимпийский присед;Olympic squat;Олимпийские приседания;Тяжёлая атлетика;olympic weightlifting
+On-Your-Back_Quad_Stretch	Растяжка передней поверхности бедра лёжа на спине на скамье	Растяжка квадрицепса на скамье;Растяжка квадрицепсов на спине;Растяжка;stretching
+On_Your_Side_Quad_Stretch	Растяжка передней поверхности бедра лёжа на боку	Растяжка квадрицепса на боку;Растяжка квадрицепсов на боку;Растяжка;stretching
+One-Arm_Flat_Bench_Dumbbell_Flye	Разведение гантели одной рукой лёжа на плоской скамье	Сведение-разведение гантели одной рукой лёжа;One-arm flat bench dumbbell fly;Гантель на плоской скамье на одной руке;Силовые упражнения;strength
+One-Arm_High-Pulley_Cable_Side_Bends	Наклоны в сторону с верхним блоком одной рукой	Боковые наклоны с верхним блоком;Боковые изгибы троса с одним рычагом и высоким шкивом;Силовые упражнения;strength
+One-Arm_Incline_Lateral_Raise	Подъём гантели в сторону одной рукой лёжа боком на наклонной скамье	Разведение гантели одной рукой на наклонной скамье;Подъём одной руки вбок на наклоне;Силовые упражнения;strength
 One-Arm_Kettlebell_Clean	Подъём гири одной рукой	Силовые упражнения;strength
 One-Arm_Kettlebell_Clean_and_Jerk	Гиря на одной руке в толчке	Силовые упражнения;strength
 One-Arm_Kettlebell_Floor_Press	Жим гири с пола одной рукой	Силовые упражнения;strength

@@ -13248,7 +13248,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "hack-squat",
+        "title": "Machine hack squat"
+      }
     },
     {
       "id": "35854e4e-dd4b-5e9c-bf6b-ab3481638d44",
@@ -19010,6 +19014,9 @@
       "name": "Muscle Up",
       "englishName": "Muscle Up",
       "aliases": [
+        "Масл-ап на кольцах",
+        "Muscle up",
+        "мышцы вверх",
         "Силовые упражнения",
         "strength"
       ],
@@ -19042,7 +19049,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=SPlFapG3KEE"
     },
     {
       "id": "e198bc0b-ff9e-56bf-a875-ffbe6d453b77",
@@ -19050,6 +19058,8 @@
       "name": "Narrow Stance Hack Squats",
       "englishName": "Narrow Stance Hack Squats",
       "aliases": [
+        "Гакк-приседания узкой постановкой",
+        "Гакк-приседания с узкой позицией",
         "Силовые упражнения",
         "strength"
       ],
@@ -19081,7 +19091,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "hack-squat",
+        "title": "Machine hack squat"
+      }
     },
     {
       "id": "c6bca7b0-6758-5199-a0e4-97796e2d3734",
@@ -19089,6 +19103,8 @@
       "name": "Narrow Stance Leg Press",
       "englishName": "Narrow Stance Leg Press",
       "aliases": [
+        "Жим платформы узкой постановкой",
+        "Жим ногами в узкой стойке",
         "Силовые упражнения",
         "strength"
       ],
@@ -19126,6 +19142,8 @@
       "name": "Narrow Stance Squats",
       "englishName": "Narrow Stance Squats",
       "aliases": [
+        "Приседания со штангой узкой постановкой",
+        "Приседания с узкой стойкой",
         "Силовые упражнения",
         "strength"
       ],
@@ -19165,6 +19183,9 @@
       "name": "Natural Glute Ham Raise",
       "englishName": "Natural Glute Ham Raise",
       "aliases": [
+        "Natural glute ham raise",
+        "Опускание корпуса с колен с фиксацией стоп",
+        "Натуральный рейз с ветчиной для ягодиц",
         "Силовые упражнения",
         "strength"
       ],
@@ -19193,7 +19214,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "glute-ham-raise",
+        "title": "Glute-ham raise"
+      }
     },
     {
       "id": "5a3d7027-c853-52fd-af33-0af9d7fcb3a8",
@@ -19201,6 +19226,9 @@
       "name": "Neck-SMR",
       "englishName": "Neck-SMR",
       "aliases": [
+        "Прокатывание мышц шеи роликом",
+        "Neck SMR",
+        "Шея-SMR",
         "Растяжка",
         "stretching"
       ],
@@ -19231,6 +19259,10 @@
       "name": "Neck Press",
       "englishName": "Neck Press",
       "aliases": [
+        "Жим «гильотина»",
+        "Guillotine press",
+        "Neck press",
+        "Пресс для шеи",
         "Силовые упражнения",
         "strength"
       ],
@@ -19267,6 +19299,8 @@
       "name": "Oblique Crunches",
       "englishName": "Oblique Crunches",
       "aliases": [
+        "Косые скручивания с поднятыми ногами",
+        "Косые скручивания",
         "Силовые упражнения",
         "strength"
       ],
@@ -19304,6 +19338,8 @@
       "name": "Oblique Crunches - On The Floor",
       "englishName": "Oblique Crunches - On The Floor",
       "aliases": [
+        "Боковые скручивания на полу",
+        "Косые скручивания — на полу",
         "Силовые упражнения",
         "strength"
       ],
@@ -19339,6 +19375,9 @@
       "name": "Olympic Squat",
       "englishName": "Olympic Squat",
       "aliases": [
+        "Олимпийский присед",
+        "Olympic squat",
+        "Олимпийские приседания",
         "Тяжёлая атлетика",
         "olympic weightlifting"
       ],
@@ -19374,6 +19413,8 @@
       "name": "On-Your-Back Quad Stretch",
       "englishName": "On-Your-Back Quad Stretch",
       "aliases": [
+        "Растяжка квадрицепса на скамье",
+        "Растяжка квадрицепсов на спине",
         "Растяжка",
         "stretching"
       ],
@@ -19406,6 +19447,8 @@
       "name": "On Your Side Quad Stretch",
       "englishName": "On Your Side Quad Stretch",
       "aliases": [
+        "Растяжка квадрицепса на боку",
+        "Растяжка квадрицепсов на боку",
         "Растяжка",
         "stretching"
       ],
@@ -19436,6 +19479,9 @@
       "name": "One-Arm Flat Bench Dumbbell Flye",
       "englishName": "One-Arm Flat Bench Dumbbell Flye",
       "aliases": [
+        "Сведение-разведение гантели одной рукой лёжа",
+        "One-arm flat bench dumbbell fly",
+        "Гантель на плоской скамье на одной руке",
         "Силовые упражнения",
         "strength"
       ],
@@ -19472,6 +19518,8 @@
       "name": "One-Arm High-Pulley Cable Side Bends",
       "englishName": "One-Arm High-Pulley Cable Side Bends",
       "aliases": [
+        "Боковые наклоны с верхним блоком",
+        "Боковые изгибы троса с одним рычагом и высоким шкивом",
         "Силовые упражнения",
         "strength"
       ],
@@ -19510,6 +19558,8 @@
       "name": "One-Arm Incline Lateral Raise",
       "englishName": "One-Arm Incline Lateral Raise",
       "aliases": [
+        "Разведение гантели одной рукой на наклонной скамье",
+        "Подъём одной руки вбок на наклоне",
         "Силовые упражнения",
         "strength"
       ],
