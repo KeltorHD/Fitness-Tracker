@@ -117,6 +117,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
       "Kettlebell_Halo", "Kettlebell_Halo_With_Overhead_Extension",
       "Kettlebell_Overhead_Triceps_Extension", "Power_Partials",
       "Seated_Palm-Up_Barbell_Wrist_Curl", "Seated_Palms-Down_Barbell_Wrist_Curl",
+      "Decline_EZ_Bar_Triceps_Extension", "Wide-Grip_Decline_Barbell_Pullover",
     ])
   #expect(ExerciseLibrary.entries.allSatisfy { $0.techniqueUnavailable == false })
 }
@@ -140,6 +141,22 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
       #expect(entry.imagesUnavailable == true)
       #expect(entry.images.isEmpty)
     }
+  }
+}
+
+@Test func declineExtensionsKeepEquipmentAndSeparateHistories() throws {
+  for language in [AppLanguage.russian, .english] {
+    let entry = try #require(
+      ExerciseLibrary.entries(language: language).first {
+        $0.sourceID == "Decline_EZ_Bar_Triceps_Extension"
+      })
+    let variants = ExerciseLibrary.variants(for: entry.id, language: language)
+    #expect(entry.equipment == .ezBar)
+    #expect(entry.images.isEmpty && entry.imagesUnavailable == true)
+    #expect(Set(variants.map(\.sourceID)) == [
+      "Decline_Dumbbell_Triceps_Extension", "Decline_EZ_Bar_Triceps_Extension",
+    ])
+    #expect(Set(variants.map(\.id)).count == 2)
   }
 }
 
@@ -1004,9 +1021,9 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     "Lying_Dumbbell_Tricep_Extension", "Dumbbell_Tricep_Extension_-Pronated_Grip",
     "One_Arm_Pronated_Dumbbell_Triceps_Extension",
     "One_Arm_Supinated_Dumbbell_Triceps_Extension",
-    "EZ-Bar_Skullcrusher",
+    "EZ-Bar_Skullcrusher", "Lying_Close-Grip_Barbell_Triceps_Press_To_Chin",
   ])
-  #expect(Set(variants.map(\.id)).count == 5)
+  #expect(Set(variants.map(\.id)).count == 6)
 }
 
 @Test func multipleEquipmentFiltersUseUnionAndIntersectWithMuscleAndSearch() {

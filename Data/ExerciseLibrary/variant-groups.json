@@ -360,7 +360,8 @@
       "Dumbbell_Tricep_Extension_-Pronated_Grip",
       "One_Arm_Pronated_Dumbbell_Triceps_Extension",
       "One_Arm_Supinated_Dumbbell_Triceps_Extension",
-      "EZ-Bar_Skullcrusher"
+      "EZ-Bar_Skullcrusher",
+      "Lying_Close-Grip_Barbell_Triceps_Press_To_Chin"
     ]
   },
   "hack-squat": {
@@ -863,6 +864,14 @@
       "One-Arm_Kettlebell_Military_Press_To_The_Side",
       "Two-Arm_Kettlebell_Military_Press",
       "One-Arm_Kettlebell_Para_Press"
+    ]
+  },
+  "decline-triceps-extension": {
+    "ru": "Французский жим на скамье с наклоном вниз",
+    "en": "Decline lying triceps extension",
+    "members": [
+      "Decline_Dumbbell_Triceps_Extension",
+      "Decline_EZ_Bar_Triceps_Extension"
     ]
   }
 }

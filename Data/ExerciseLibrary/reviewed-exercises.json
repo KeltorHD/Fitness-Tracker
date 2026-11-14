@@ -1538,5 +1538,22 @@
     "excludeSourceImages": true,
     "imageExclusionReason": "The original exercise name and instructions specify a barbell, but the original photographs show dumbbells.",
     "techniqueVideoURL": "https://www.youtube.com/watch?v=dhtQp111x7U"
+  },
+  "Decline_Close-Grip_Bench_To_Skull_Crusher": {},
+  "Decline_EZ_Bar_Triceps_Extension": {
+    "excludeSourceImages": true,
+    "imageExclusionReason": "The original exercise specifies an EZ curl bar, whereas the photographs show a straight fixed-weight bar.",
+    "equipment": "e-z curl bar",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=53hk6U9K13I"
+  },
+  "Lying_Close-Grip_Barbell_Triceps_Press_To_Chin": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=mauSRcRf7-g"
+  },
+  "Wide-Grip_Decline_Barbell_Pullover": {
+    "excludeSourceImages": true,
+    "imageExclusionReason": "The original exercise specifies a wide grip, but the photographs show a narrow grip on a short bar."
+  },
+  "Weighted_Sit-Ups_-_With_Bands": {
+    "equipment": "bands"
   }
 }

@@ -10279,8 +10279,8 @@
       "name": "Decline Close-Grip Bench To Skull Crusher",
       "englishName": "Decline Close-Grip Bench To Skull Crusher",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Жим штанги и французский жим на скамье с наклоном вниз",
+        "Decline Close-Grip Bench To Skull Crusher"
       ],
       "group": "arms",
       "equipment": "barbell",
@@ -10423,6 +10423,10 @@
       "imagesUnavailable": false,
       "generatedMedia": null,
       "translationAutomatic": false,
+      "variantGroup": {
+        "id": "decline-triceps-extension",
+        "title": "Decline lying triceps extension"
+      },
       "techniqueVideoURL": "https://www.youtube.com/watch?v=HTqpP_Th49Q"
     },
     {
@@ -10431,11 +10435,11 @@
       "name": "Decline EZ Bar Triceps Extension",
       "englishName": "Decline EZ Bar Triceps Extension",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Разгибание рук с EZ-грифом на скамье с наклоном вниз",
+        "Decline EZ Bar Triceps Extension"
       ],
       "group": "arms",
-      "equipment": "barbell",
+      "equipment": "e-z curl bar",
       "level": "beginner",
       "primaryMuscles": [
         "triceps"
@@ -10453,14 +10457,16 @@
         "Lift the bar back to the starting position by contracting the triceps and exhaling.",
         "Repeat until the recommended amount of repetitions is performed."
       ],
-      "images": [
-        "Decline_EZ_Bar_Triceps_Extension/0.jpg",
-        "Decline_EZ_Bar_Triceps_Extension/1.jpg"
-      ],
+      "images": [],
       "techniqueUnavailable": false,
-      "imagesUnavailable": false,
+      "imagesUnavailable": true,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "decline-triceps-extension",
+        "title": "Decline lying triceps extension"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=53hk6U9K13I"
     },
     {
       "id": "b4c34b9e-566d-5874-935d-f3365fb5745a",
@@ -18468,8 +18474,8 @@
       "name": "Lying Close-Grip Barbell Triceps Press To Chin",
       "englishName": "Lying Close-Grip Barbell Triceps Press To Chin",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Французский жим EZ-штанги к подбородку на плоской скамье",
+        "Lying Close-Grip Barbell Triceps Press To Chin"
       ],
       "group": "arms",
       "equipment": "e-z curl bar",
@@ -18497,7 +18503,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "lying-dumbbell-triceps-extension",
+        "title": "Flat lying triceps extension"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=mauSRcRf7-g"
     },
     {
       "id": "5428df66-efb5-5f61-9679-ee9f9b51c09a",
@@ -33428,11 +33439,11 @@
       "name": "Weighted Sit-Ups - With Bands",
       "englishName": "Weighted Sit-Ups - With Bands",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Ситап на отрицательной скамье с лентами",
+        "Weighted Sit-Ups With Bands"
       ],
       "group": "core",
-      "equipment": "other",
+      "equipment": "bands",
       "level": "intermediate",
       "primaryMuscles": [
         "abdominals"
@@ -33587,8 +33598,8 @@
       "name": "Wide-Grip Decline Barbell Pullover",
       "englishName": "Wide-Grip Decline Barbell Pullover",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Пуловер со штангой лёжа на отрицательной скамье широким хватом",
+        "Wide-Grip Decline Barbell Pullover"
       ],
       "group": "chest",
       "equipment": "barbell",
@@ -33611,12 +33622,9 @@
         "Repeat the movement for the prescribed amount of repetitions of your training program.",
         "When finished with your set, slowly lower the barbell back down until it is level with your head and release it."
       ],
-      "images": [
-        "Wide-Grip_Decline_Barbell_Pullover/0.jpg",
-        "Wide-Grip_Decline_Barbell_Pullover/1.jpg"
-      ],
+      "images": [],
       "techniqueUnavailable": false,
-      "imagesUnavailable": false,
+      "imagesUnavailable": true,
       "generatedMedia": null,
       "translationAutomatic": false
     },

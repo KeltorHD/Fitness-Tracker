@@ -261,11 +261,11 @@ Cuban_Press	Кубинский жим с гантелями стоя	Повор�
 Dancers_Stretch	Растяжка танцора сидя с поворотом корпуса	Растяжка спины сидя с поворотом;Dancers Stretch
 Deadlift_with_Bands	Классическая становая тяга со штангой и резиновыми петлями	Становая тяга с лентами;Deadlift with Bands
 Deadlift_with_Chains	Классическая становая тяга со штангой и цепями	Становая тяга с цепями;Deadlift with Chains
-Decline_Close-Grip_Bench_To_Skull_Crusher	Отклонить жим узким хватом на Skull Crusher	Силовые упражнения;strength
+Decline_Close-Grip_Bench_To_Skull_Crusher	Жим штанги узким хватом и разгибание рук на скамье с наклоном вниз	Жим штанги и французский жим на скамье с наклоном вниз;Decline Close-Grip Bench To Skull Crusher
 Decline_Crunch	Скручивания на скамье с наклоном вниз	Скручивания на отрицательной скамье;Decline Crunch
 Decline_Dumbbell_Flyes	Разведение гантелей лёжа на скамье с наклоном вниз	Разводка гантелей на отрицательной скамье;Decline Dumbbell Flyes
 Decline_Dumbbell_Triceps_Extension	Французский жим гантелей лёжа на скамье с наклоном вниз	Разгибание рук с гантелями на отрицательной скамье;Decline Dumbbell Triceps Extension
-Decline_EZ_Bar_Triceps_Extension	Разгибание трицепса на наклонной штанге EZ	Силовые упражнения;strength
+Decline_EZ_Bar_Triceps_Extension	Французский жим EZ-штанги лёжа на скамье с наклоном вниз	Разгибание рук с EZ-грифом на скамье с наклоном вниз;Decline EZ Bar Triceps Extension
 Decline_Oblique_Crunch	Косые скручивания на скамье с наклоном вниз	Скручивания с поворотом на отрицательной скамье;Decline Oblique Crunch
 Decline_Push-Up	Отжимания от пола с ногами на возвышении	Отжимания с ногами на скамье;Decline Push-Up
 Decline_Reverse_Crunch	Обратные скручивания на скамье с наклоном вниз	Подтягивание коленей с подкручиванием таза на отрицательной скамье;Decline Reverse Crunch
@@ -479,7 +479,7 @@ Lying_Cable_Curl	Сгибание рук с нижним блоком лёжа �
 Lying_Cambered_Barbell_Row	Тяга изогнутого грифа лёжа грудью на плоской скамье	Тяга EZ-грифа с опорой грудью на скамью;Lying Cambered Barbell Row
 Lying_Close-Grip_Bar_Curl_On_High_Pulley	Сгибание рук на грифе лежа узким хватом на верхнем блоке	Силовые упражнения;strength
 Lying_Close-Grip_Barbell_Triceps_Extension_Behind_The_Head	Разгибание рук со штангой за головой лёжа на плоской скамье	Французский жим штанги за головой лёжа;Lying Close-Grip Barbell Triceps Extension Behind The Head
-Lying_Close-Grip_Barbell_Triceps_Press_To_Chin	Жим штанги на трицепс лежа узким хватом к подбородку	Силовые упражнения;strength
+Lying_Close-Grip_Barbell_Triceps_Press_To_Chin	Разгибание рук с EZ-штангой к подбородку лёжа узким хватом	Французский жим EZ-штанги к подбородку на плоской скамье;Lying Close-Grip Barbell Triceps Press To Chin
 Lying_Crossover	Растяжка ягодиц лёжа с поворотом ноги и партнёром	Растяжка с приведением согнутой ноги через корпус с партнёром;Lying Crossover
 Lying_Dumbbell_Tricep_Extension	Разгибание рук с гантелями лёжа на плоской скамье нейтральным хватом	Французский жим гантелей лёжа ладонями друг к другу;Lying Dumbbell Tricep Extension
 Lying_Face_Down_Plate_Neck_Resistance	Разгибание шеи лёжа на животе с диском	Подъём головы с диском на затылке лёжа;Lying Face Down Plate Neck Resistance
@@ -854,11 +854,11 @@ Weighted_Crunches	Скручивания лёжа с блином	Скручив
 Weighted_Jump_Squat	Прыжковые приседания со штангой на спине	Приседания с выпрыгиванием со штангой;Weighted jump squat;Приседания с прыжком с весом;Силовые упражнения;strength
 Weighted_Pull_Ups	Подтягивания с дополнительным весом хватом сверху	Подтягивания с отягощением;Weighted pull-up;Подтягивания с весом;Силовые упражнения;strength
 Weighted_Sissy_Squat	Сисси-приседания с блином у груди	Приседания на носках с блином и опорой;Weighted sissy squat;Приседания сисси с утяжелением;Силовые упражнения;strength
-Weighted_Sit-Ups_-_With_Bands	Приседания с отягощением — с лентами	Силовые упражнения;strength
+Weighted_Sit-Ups_-_With_Bands	Подъём корпуса на скамье с наклоном вниз с резиновыми лентами	Ситап на отрицательной скамье с лентами;Weighted Sit-Ups With Bands
 Weighted_Squat	Приседания с отягощением на поясе	Белт-скват между скамьями;Belt squat;Приседания с весом;Силовые упражнения;strength
 Wide-Grip_Barbell_Bench_Press	Жим штанги лёжа широким хватом	Жим штанги лежа широким хватом
 Wide-Grip_Decline_Barbell_Bench_Press	Жим штанги лёжа на скамье с отрицательным наклоном широким хватом	Жим штанги вниз головой широким хватом;Wide-grip decline bench press;Жим штанги лежа широким хватом на наклонной скамье;Силовые упражнения;strength
-Wide-Grip_Decline_Barbell_Pullover	Пуловер со штангой со спуском и широким хватом	Силовые упражнения;strength
+Wide-Grip_Decline_Barbell_Pullover	Пуловер со штангой широким хватом на скамье с наклоном вниз	Пуловер со штангой лёжа на отрицательной скамье широким хватом;Wide-Grip Decline Barbell Pullover
 Wide-Grip_Pulldown_Behind_The_Neck	Тяга верхнего блока за голову широким хватом	Вертикальная тяга за голову широким хватом;Тяга вниз широким хватом из-за шеи;Силовые упражнения;strength
 Wide-Grip_Rear_Pull-Up	Подтягивания за голову широким хватом	Подтягивания широким хватом к затылку;Wide-grip rear pull-up;Задние подтягивания широким хватом;Силовые упражнения;strength
 Wide-Grip_Standing_Barbell_Curl	Сгибание рук со штангой широким хватом стоя	Подъём штанги на бицепс широким хватом стоя;Сгибание рук со штангой стоя широким хватом;Силовые упражнения;strength
