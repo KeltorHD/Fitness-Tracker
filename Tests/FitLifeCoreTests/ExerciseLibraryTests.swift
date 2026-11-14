@@ -72,6 +72,7 @@ import Testing
 
 @Test(arguments: [
   "locale", "duplicate", "image", "steps", "version", "animationPath", "animationDuration",
+  "videoURL",
 ])
 func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   let document: ExerciseLibraryDocument = try #require(ExerciseLibrary.document)
@@ -91,6 +92,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     var media = try #require(entries[0]["generatedMedia"] as? [String: Any])
     media["frameDuration"] = 0
     entries[0]["generatedMedia"] = media
+  case "videoURL": entries[0]["techniqueVideoURL"] = "https://example.com/video"
   default: object["schemaVersion"] = 999
   }
   object["entries"] = entries
@@ -127,6 +129,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   for index in entries.indices {
     for key in [
       "techniqueUnavailable", "imagesUnavailable", "generatedMedia", "translationAutomatic",
+      "techniqueVideoURL",
     ] {
       entries[index].removeValue(forKey: key)
     }
@@ -135,6 +138,30 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   let decoded = try ExerciseLibrary.decode(JSONSerialization.data(withJSONObject: object))
   #expect(decoded.entries.count == 100)
   #expect(decoded.entries.allSatisfy { $0.generatedMedia == nil && $0.translationAutomatic == nil })
+}
+
+@Test func benchPressVariationsKeepTheirIdentityAndCanBeFoundByOldNames() throws {
+  let cases: [(String, String, String)] = [
+    ("Barbell_Bench_Press_-_Medium_Grip", "Жим штанги лёжа обычным хватом", "Жим лёжа"),
+    ("Close-Grip_Barbell_Bench_Press", "Жим штанги лёжа узким хватом", "Жим штанги узким хватом"),
+    (
+      "Wide-Grip_Barbell_Bench_Press", "Жим штанги лёжа широким хватом",
+      "Жим штанги лежа широким хватом"
+    ),
+    ("Dumbbell_Bench_Press", "Жим гантелей лёжа на плоской скамье", "Жим гантелей лёжа"),
+    ("Butterfly", "Бабочка", "Сведение рук в тренажёре"),
+  ]
+  for (sourceID, name, oldName) in cases {
+    let entry = try #require(ExerciseLibrary.entries.first { $0.sourceID == sourceID })
+    #expect(entry.name == name)
+    #expect(ExerciseLibrary.search(oldName).contains { $0.id == entry.id })
+    #expect(entry.images.count == 2)
+    #expect(!entry.primaryMuscleIDs.isEmpty)
+    #expect(entry.steps.count >= 3)
+  }
+  let wide = try #require(
+    ExerciseLibrary.entries.first { $0.sourceID == "Wide-Grip_Barbell_Bench_Press" })
+  #expect(wide.translationAutomatic == false)
 }
 
 @Test func multipleEquipmentFiltersUseUnionAndIntersectWithMuscleAndSearch() {

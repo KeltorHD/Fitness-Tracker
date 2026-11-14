@@ -52,7 +52,9 @@ preserved = json.loads((root / 'Data/ExerciseLibrary/preserved-identities.json')
 by_id = {entry['sourceID']: entry for entry in document['entries']}
 assert len(preserved) == 100
 for previous in preserved:
-    assert all(by_id[previous['sourceID']][key] == previous[key] for key in ['sourceID', 'id', 'name'])
+    entry = by_id[previous['sourceID']]
+    assert entry['id'] == previous['id']
+    assert previous['name'] == entry['name'] or previous['name'] in entry['aliases']
 for image in manifest['images']:
     path = image['path']
     assert '..' not in path and not path.startswith('/')

@@ -62,11 +62,13 @@
     {
       "id": "10000000-0000-0000-0000-000000000002",
       "sourceID": "Barbell_Bench_Press_-_Medium_Grip",
-      "name": "Жим лёжа",
+      "name": "Жим штанги лёжа обычным хватом",
       "englishName": "Barbell Bench Press - Medium Grip",
       "aliases": [
+        "Жим лёжа",
         "Жим штанги лёжа",
-        "Жим лежа"
+        "Жим лежа",
+        "Жим штанги лёжа средним хватом"
       ],
       "group": "chest",
       "equipment": "barbell",
@@ -107,7 +109,8 @@
         ],
         "frameDuration": 0.25
       },
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=CayG6UYqL8g"
     },
     {
       "id": "10000000-0000-0000-0000-000000000003",
@@ -1701,10 +1704,12 @@
     {
       "id": "df15f938-2c8b-505f-9bd4-e45783def49b",
       "sourceID": "Dumbbell_Bench_Press",
-      "name": "Жим гантелей лёжа",
+      "name": "Жим гантелей лёжа на плоской скамье",
       "englishName": "Dumbbell Bench Press",
       "aliases": [
-        "Жим гантелей лежа"
+        "Жим гантелей лёжа",
+        "Жим гантелей лежа",
+        "Жим гантелей на горизонтальной скамье"
       ],
       "group": "chest",
       "equipment": "dumbbell",
@@ -1731,7 +1736,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=4_QuyfOCI5U"
     },
     {
       "id": "afd0d1c7-849d-5faa-85e7-765757ad8759",
@@ -1976,11 +1982,12 @@
     {
       "id": "facb412b-7748-553d-9b54-5f61185a3cc6",
       "sourceID": "Butterfly",
-      "name": "Сведение рук в тренажёре",
+      "name": "Бабочка",
       "englishName": "Butterfly",
       "aliases": [
-        "Бабочка",
-        "Пек-дек"
+        "Сведение рук в тренажёре",
+        "Пек-дек",
+        "Сведение рук сидя в тренажёре"
       ],
       "group": "chest",
       "equipment": "machine",
@@ -2785,9 +2792,10 @@
     {
       "id": "523c01f8-5df1-52f1-b9de-5bda5638709c",
       "sourceID": "Close-Grip_Barbell_Bench_Press",
-      "name": "Жим штанги узким хватом",
+      "name": "Жим штанги лёжа узким хватом",
       "englishName": "Close-Grip Barbell Bench Press",
       "aliases": [
+        "Жим штанги узким хватом",
         "Узкий жим на трицепс"
       ],
       "group": "arms",
@@ -2813,7 +2821,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=LJeqLAmJLfs"
     },
     {
       "id": "7c8dcb45-8f9a-5835-bad3-c9f6fcbbc01b",
@@ -31051,11 +31060,10 @@
     {
       "id": "27a19a5d-016e-5d28-8fd9-b8244f3784d5",
       "sourceID": "Wide-Grip_Barbell_Bench_Press",
-      "name": "Жим штанги лежа широким хватом",
+      "name": "Жим штанги лёжа широким хватом",
       "englishName": "Wide-Grip Barbell Bench Press",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Жим штанги лежа широким хватом"
       ],
       "group": "chest",
       "equipment": "barbell",
@@ -31071,10 +31079,9 @@
         "chestMiddle"
       ],
       "steps": [
-        "Лягте на ровную скамью, твердо поставив ноги на пол. Используя широкий пронированный хват (ладонями вперед) на расстоянии около 3 дюймов от ширины плеч (для каждой руки), поднимите штангу со стойки и держите ее прямо над собой, сцепив руки. Штанга будет перпендикулярна туловищу и полу. Это будет ваша исходная позиция.",
-        "На вдохе медленно опускайтесь вниз, пока не почувствуете перекладину на средней части груди.",
-        "После второй паузы верните штангу в исходное положение на выдохе и толкните штангу мышцами груди. Сомкните руки и сожмите грудь в сокращенном положении, задержитесь на секунду, а затем снова начните медленно опускаться. Совет: спуск должен занимать как минимум вдвое больше времени, чем подъем.",
-        "Повторите движение заданное количество повторений."
+        "Лягте на горизонтальную скамью, устойчиво поставьте стопы на пол и возьмите гриф хватом шире плеч.",
+        "Снимите штангу со стоек и плавно опустите гриф к средней части груди, сохраняя контроль движения.",
+        "Выжмите штангу вверх без рывка. По окончании подхода верните гриф на стойки; при необходимости используйте страховку."
       ],
       "images": [
         "Wide-Grip_Barbell_Bench_Press/0.jpg",
@@ -31083,7 +31090,7 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false
     },
     {
       "id": "80a20b1e-9d4e-57cf-8c78-4bebe15a2cd4",

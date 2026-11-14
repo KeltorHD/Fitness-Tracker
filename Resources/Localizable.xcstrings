@@ -24055,6 +24055,22 @@
           }
         }
       }
+    },
+    "Видео техники на YouTube": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exercise technique on YouTube"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Видео техники на YouTube"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

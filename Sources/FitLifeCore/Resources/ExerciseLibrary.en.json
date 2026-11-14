@@ -68,8 +68,10 @@
       "name": "Barbell Bench Press - Medium Grip",
       "englishName": "Barbell Bench Press - Medium Grip",
       "aliases": [
+        "Жим лёжа",
         "Жим штанги лёжа",
-        "Жим лежа"
+        "Жим лежа",
+        "Жим штанги лёжа средним хватом"
       ],
       "group": "chest",
       "equipment": "barbell",
@@ -112,7 +114,8 @@
         ],
         "frameDuration": 0.25
       },
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=CayG6UYqL8g"
     },
     {
       "id": "10000000-0000-0000-0000-000000000003",
@@ -1781,7 +1784,9 @@
       "name": "Dumbbell Bench Press",
       "englishName": "Dumbbell Bench Press",
       "aliases": [
-        "Жим гантелей лежа"
+        "Жим гантелей лёжа",
+        "Жим гантелей лежа",
+        "Жим гантелей на горизонтальной скамье"
       ],
       "group": "chest",
       "equipment": "dumbbell",
@@ -1810,7 +1815,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=4_QuyfOCI5U"
     },
     {
       "id": "afd0d1c7-849d-5faa-85e7-765757ad8759",
@@ -2077,8 +2083,9 @@
       "name": "Butterfly",
       "englishName": "Butterfly",
       "aliases": [
-        "Бабочка",
-        "Пек-дек"
+        "Сведение рук в тренажёре",
+        "Пек-дек",
+        "Сведение рук сидя в тренажёре"
       ],
       "group": "chest",
       "equipment": "machine",
@@ -2922,6 +2929,7 @@
       "name": "Close-Grip Barbell Bench Press",
       "englishName": "Close-Grip Barbell Bench Press",
       "aliases": [
+        "Жим штанги узким хватом",
         "Узкий жим на трицепс"
       ],
       "group": "arms",
@@ -2949,7 +2957,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=LJeqLAmJLfs"
     },
     {
       "id": "7c8dcb45-8f9a-5835-bad3-c9f6fcbbc01b",
@@ -30967,8 +30976,7 @@
       "name": "Wide-Grip Barbell Bench Press",
       "englishName": "Wide-Grip Barbell Bench Press",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Жим штанги лежа широким хватом"
       ],
       "group": "chest",
       "equipment": "barbell",

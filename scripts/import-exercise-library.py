@@ -95,6 +95,9 @@ def generate():
     generated = json.loads(generated_path.read_text()) if generated_path.exists() else {}
     translation_path = ROOT / 'Data/ExerciseLibrary/translation-provenance.json'
     automatic = set(json.loads(translation_path.read_text()).get('automaticSourceIDs', [])) if translation_path.exists() else set()
+    reviewed_path = ROOT / 'Data/ExerciseLibrary/reviewed-exercises.json'
+    reviewed = json.loads(reviewed_path.read_text())
+    assert set(reviewed) <= set(source)
     translations = {}
     for line in (ROOT / 'Data/ExerciseLibrary/instructions.ru.tsv').read_text().splitlines():
         fields = line.split('\t')
@@ -120,7 +123,9 @@ def generate():
                         'techniqueUnavailable': not bool(item['instructions']),
                         'imagesUnavailable': not bool(item['images']),
                         'generatedMedia': generated.get(source_id),
-                        'translationAutomatic': source_id in automatic})
+                        'translationAutomatic': source_id in automatic and source_id not in reviewed,
+                        **({'techniqueVideoURL': reviewed[source_id]['techniqueVideoURL']}
+                           if reviewed.get(source_id, {}).get('techniqueVideoURL') else {})})
     write_json(RESOURCE, {'schemaVersion': 1, 'locale': 'ru',
                          'source': {'name': 'free-exercise-db',
                                     'repositoryURL': 'https://github.com/yuhonas/free-exercise-db',

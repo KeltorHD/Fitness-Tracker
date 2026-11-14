@@ -141,7 +141,8 @@ struct ExerciseDetailView: View {
         if let entry {
           if let generated = entry.generatedMedia {
             ExerciseAnimation(media: generated)
-          } else if !entry.images.isEmpty {
+          }
+          if !entry.images.isEmpty {
             VStack(spacing: 8) {
               TabView(selection: $photo) {
                 ForEach(Array(entry.images.enumerated()), id: \.offset) { index, path in
@@ -174,7 +175,7 @@ struct ExerciseDetailView: View {
                 .labelStyle(.iconOnly).disabled(photo == entry.images.count - 1)
               }.buttonStyle(.glass)
             }
-          } else {
+          } else if entry.generatedMedia == nil {
             Text(L10n.text("В исходном каталоге нет изображений этого упражнения.", locale: locale))
               .foregroundStyle(.secondary)
           }
@@ -218,6 +219,13 @@ struct ExerciseDetailView: View {
                   colorTheme.accent.opacity(0.12), in: .circle)
               Text(text).frame(maxWidth: .infinity, alignment: .leading)
             }.accessibilityElement(children: .combine)
+          }
+          if let address = entry.techniqueVideoURL, let url = URL(string: address) {
+            Link(destination: url) {
+              Label(
+                L10n.text("Видео техники на YouTube", locale: locale),
+                systemImage: "play.rectangle")
+            }
           }
           Text(
             L10n.text(

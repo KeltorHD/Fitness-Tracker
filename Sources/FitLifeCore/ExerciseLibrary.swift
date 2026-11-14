@@ -77,6 +77,7 @@ public struct ExerciseLibraryEntry: Identifiable, Codable, Hashable, Sendable {
   public let imagesUnavailable: Bool?
   public let generatedMedia: ExerciseGeneratedMedia?
   public let translationAutomatic: Bool?
+  public let techniqueVideoURL: String?
 
   public var exercise: Exercise {
     Exercise(id: id, name: name, muscle: group, instructions: steps.joined(separator: "\n"))
@@ -181,6 +182,12 @@ public enum ExerciseLibrary {
             $0.hasPrefix(entry.sourceID + "/ai-") && !$0.contains("..") && !$0.contains("\\")
               && $0.split(separator: "/").count == 2
           })
+        else { throw ExerciseLibraryError.invalidDocument }
+      }
+      if let video = entry.techniqueVideoURL {
+        guard video.range(
+          of: #"^https://www\.youtube\.com/watch\?v=[A-Za-z0-9_-]{11}$"#,
+          options: .regularExpression) != nil
         else { throw ExerciseLibraryError.invalidDocument }
       }
     }
