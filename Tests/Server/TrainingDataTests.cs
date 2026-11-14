@@ -56,6 +56,7 @@ public sealed class TrainingDataTests
     [Theory]
     [InlineData("tibialis anterior")]
     [InlineData("hip flexors")]
+    [InlineData("feet")]
     public async Task DetailedMuscleSelectionRoundTripsThroughTrainingSyncAsync(string muscle)
     {
         using var factory = new BackendFactory();

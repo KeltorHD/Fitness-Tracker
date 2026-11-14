@@ -183,7 +183,7 @@ Box_Skip	Прыжки с одной ноги через ряд тумб	Прыж
 Box_Squat	Приседания со штангой на ящик	Приседания на ящик;Box Squat
 Box_Squat_with_Bands	Приседания со штангой на ящик с резиновыми петлями	Приседания на ящик со штангой и резинками;Box Squat with Bands
 Box_Squat_with_Chains	Приседания со штангой на ящик с цепями	Приседания на ящик со штангой и цепями;Box Squat with Chains
-Brachialis-SMR	Брахиалис-СМР	Растяжка;stretching
+Brachialis-SMR	Самомассаж плечевой мышцы на ролике лёжа на боку	Миофасциальный релиз плечевой мышцы;Brachialis SMR;Брахиалис
 Bradford_Rocky_Presses	Жим Брэдфорда сидя	Жим штанги сидя с переносом перед и за голову;Bradford Rocky Press;Силовые упражнения;strength
 Butt-Ups	Подъём таза из планки на предплечьях	Складка в планке на предплечьях;Butt-Ups
 Cable_Chest_Press	Жим рукоятей блоков от груди сидя	Жим от груди в кроссовере сидя;Cable Chest Press
@@ -326,7 +326,7 @@ Floor_Glute-Ham_Raise	Нордические сгибания ног	Опуск�
 Floor_Press	Жим штанги лёжа на полу	Жим штанги с пола;Floor Press
 Floor_Press_with_Chains	Жим штанги с цепями лёжа на полу	Жим штанги с пола с цепями;Floor Press with Chains
 Flutter_Kicks	Попеременные подъёмы прямых ног лёжа животом на скамье	Махи ногами лёжа на скамье;Flutter Kicks
-Foot-SMR	Фут-SMR	Растяжка;stretching
+Foot-SMR	Самомассаж стопы на ролике сидя	Миофасциальный релиз стопы;Foot SMR
 Forward_Drag_with_Press	Тяга саней вперёд с жимом рукоятей	Ходьба с санями и жимом вперёд;Forward Drag with Press
 Frankenstein_Squat	Приседания Франкенштейна	Фронтальные приседания со штангой на плечах и вытянутыми руками;Frankenstein Squat
 Freehand_Jump_Squat	Приседания с выпрыгиванием и руками на груди	Выпрыгивания из приседа без отягощения;Freehand Jump Squat
@@ -376,7 +376,7 @@ Hug_Knees_To_Chest	Растяжка спины лёжа с подтягиван�
 Hurdle_Hops	Прыжки на двух ногах через барьеры	Последовательные прыжки через барьеры;Hurdle Hops
 Hyperextensions_With_No_Hyperextension_Bench	Гиперэкстензия на плоской скамье с фиксацией ног	Разгибание корпуса лёжа на плоской скамье с партнёром;Hyperextensions With No Hyperextension Bench
 IT_Band_and_Glute_Stretch	Растяжка наружной поверхности бедра и ягодиц лёжа с ремнём	Растяжка подвздошно-большеберцового тракта лёжа;IT Band and Glute Stretch
-Iliotibial_Tract-SMR	Илиотибиальный тракт-SMR	Растяжка;stretching
+Iliotibial_Tract-SMR	Самомассаж наружной поверхности бедра на ролике	Миофасциальный релиз подвздошно-большеберцового тракта;Iliotibial Tract SMR
 Inchworm	Гусеница	Ходьба руками в планку с подшагиванием ног;Inchworm
 Incline_Barbell_Triceps_Extension	Французский жим штанги лёжа на наклонной скамье	Разгибание рук со штангой за головой на наклонной скамье;Incline Barbell Triceps Extension
 Incline_Bench_Pull	Тяга штанги лёжа грудью на наклонной скамье с разведёнными локтями	Тяга штанги с опорой грудью на наклонную скамью;Incline Bench Pull
@@ -430,7 +430,7 @@ Kettlebell_Turkish_Get-Up_Squat_style	Турецкий подъём с гире�
 Kettlebell_Windmill	Мельница с гирей	Наклон с гирей над головой и касанием пола свободной рукой;Kettlebell Windmill
 Kipping_Muscle_Up	Выход силой на кольцах с киппингом	Выход силой на кольцах с раскачиванием;Kipping Ring Muscle Up;Силовые упражнения;strength
 Knee_Across_The_Body	Растяжка ягодиц лёжа с приведением колена через корпус	Поворот таза лёжа с согнутой ногой;Knee Across The Body
-Knee_Circles	Коленные круги	Растяжка;stretching
+Knee_Circles	Круговые движения коленями стоя	Вращения коленями;Knee Circles
 Knee_Hip_Raise_On_Parallel_Bars	Подъём коленей с опорой на предплечья в тренажёре	Подъём согнутых ног в упоре на брусьях;Knee Hip Raise On Parallel Bars
 Knee_Tuck_Jump	Прыжок с подтягиванием коленей к груди	Прыжок с группировкой;Knee Tuck Jump
 Kneeling_Arm_Drill	Движения руками как при беге стоя на одном колене	Имитация работы рук при беге в выпаде на колене;Kneeling Arm Drill

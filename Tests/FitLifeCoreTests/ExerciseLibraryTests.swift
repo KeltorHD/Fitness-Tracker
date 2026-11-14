@@ -119,6 +119,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
       "Decline_EZ_Bar_Triceps_Extension", "Wide-Grip_Decline_Barbell_Pullover",
       "FitLife_Triceps_Pushdown_EZ_Bar", "FitLife_Triceps_Pushdown_One_Arm_Overhand",
       "High_Cable_Curls", "Gironda_Sternum_Chins", "One_Arm_Chin-Up",
+      "Iliotibial_Tract-SMR",
     ])
   #expect(ExerciseLibrary.entries.allSatisfy { $0.techniqueUnavailable == false })
 }

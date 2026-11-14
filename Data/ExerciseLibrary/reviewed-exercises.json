@@ -1709,5 +1709,25 @@
   "Kipping_Muscle_Up": {
     "techniqueVideoURL": "https://www.youtube.com/watch?v=5XCv9gUrz9I"
   },
-  "Press_Sit-Up": {}
+  "Press_Sit-Up": {},
+  "Brachialis-SMR": {},
+  "Foot-SMR": {
+    "primaryMuscles": [
+      "feet"
+    ]
+  },
+  "Iliotibial_Tract-SMR": {
+    "excludeSourceImages": true,
+    "imageExclusionReason": "The source photos show the inner thigh facing the foam roller rather than the outer thigh described by the iliotibial tract exercise.",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=eI9qLfSlCuI"
+  },
+  "Knee_Circles": {
+    "primaryMuscles": [
+      "quadriceps"
+    ],
+    "secondaryMuscles": [
+      "hamstrings",
+      "calves"
+    ]
+  }
 }

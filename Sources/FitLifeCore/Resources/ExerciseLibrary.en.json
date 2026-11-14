@@ -7417,8 +7417,9 @@
       "name": "Brachialis-SMR",
       "englishName": "Brachialis-SMR",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Миофасциальный релиз плечевой мышцы",
+        "Brachialis SMR",
+        "Брахиалис"
       ],
       "group": "arms",
       "equipment": "foam roll",
@@ -12827,14 +12828,14 @@
       "name": "Foot-SMR",
       "englishName": "Foot-SMR",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Миофасциальный релиз стопы",
+        "Foot SMR"
       ],
       "group": "legs",
       "equipment": "other",
       "level": "intermediate",
       "primaryMuscles": [
-        "calves"
+        "feet"
       ],
       "secondaryMuscles": [],
       "trainingRegions": [],
@@ -14719,8 +14720,8 @@
       "name": "Iliotibial Tract-SMR",
       "englishName": "Iliotibial Tract-SMR",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Миофасциальный релиз подвздошно-большеберцового тракта",
+        "Iliotibial Tract SMR"
       ],
       "group": "legs",
       "equipment": "foam roll",
@@ -14735,14 +14736,12 @@
         "Place as much of your weight as is tolerable onto your bottom leg; there is no need to keep your bottom leg in contact with the ground. Be sure to relax the muscles of the leg you are stretching.",
         "Roll your leg over the foam from you hip to your knee, pausing for 10-30 seconds at points of tension. Repeat with the opposite leg."
       ],
-      "images": [
-        "Iliotibial_Tract-SMR/0.jpg",
-        "Iliotibial_Tract-SMR/1.jpg"
-      ],
+      "images": [],
       "techniqueUnavailable": false,
-      "imagesUnavailable": false,
+      "imagesUnavailable": true,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=eI9qLfSlCuI"
     },
     {
       "id": "dcf9928f-ca33-5d7d-a16f-ec4b2c403e23",
@@ -16793,18 +16792,18 @@
       "name": "Knee Circles",
       "englishName": "Knee Circles",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Вращения коленями",
+        "Knee Circles"
       ],
       "group": "legs",
       "equipment": "body only",
       "level": "beginner",
       "primaryMuscles": [
-        "calves"
+        "quadriceps"
       ],
       "secondaryMuscles": [
         "hamstrings",
-        "quadriceps"
+        "calves"
       ],
       "trainingRegions": [],
       "steps": [

@@ -7161,11 +7161,12 @@
     {
       "id": "7a29c536-a41d-571f-86a7-a2f00a5d5590",
       "sourceID": "Brachialis-SMR",
-      "name": "Брахиалис-СМР",
+      "name": "Самомассаж плечевой мышцы на ролике лёжа на боку",
       "englishName": "Brachialis-SMR",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Миофасциальный релиз плечевой мышцы",
+        "Brachialis SMR",
+        "Брахиалис"
       ],
       "group": "arms",
       "equipment": "foam roll",
@@ -7176,10 +7177,9 @@
       "secondaryMuscles": [],
       "trainingRegions": [],
       "steps": [
-        "Лягте на бок, положив плечо на пенопластовый валик.",
-        "Плечо должно быть более или менее выровнено с вашим телом, а внешняя часть бицепса прижата к пенопластовому валику.",
-        "Поднимите бедра от пола, перенеся вес на руку и ноги.",
-        "Удерживайте положение 10–30 секунд, а затем поменяйте сторону."
+        "Лягте на бок, расположив наружную поверхность плеча на массажном ролике.",
+        "Перенесите на ролик комфортную часть веса, опираясь ногами на пол.",
+        "Удерживайте положение, затем повторите на другой стороне."
       ],
       "images": [
         "Brachialis-SMR/0.jpg",
@@ -7188,7 +7188,7 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false
     },
     {
       "id": "756357e6-ee2d-51d3-ae6d-f19c89379744",
@@ -12407,27 +12407,24 @@
     {
       "id": "253fdb10-bd5b-586b-952d-5ec2f8c92cfe",
       "sourceID": "Foot-SMR",
-      "name": "Фут-SMR",
+      "name": "Самомассаж стопы на ролике сидя",
       "englishName": "Foot-SMR",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Миофасциальный релиз стопы",
+        "Foot SMR"
       ],
       "group": "legs",
       "equipment": "other",
       "level": "intermediate",
       "primaryMuscles": [
-        "Икроножные мышцы"
+        "Мышцы стопы"
       ],
       "secondaryMuscles": [],
       "trainingRegions": [],
       "steps": [
-        "Это упражнение растягивает фасции мышц стоп.",
-        "Начните сидя, сняв обувь.",
-        "Используя валик для ног или аналогичный предмет, например небольшой кусок трубы из ПВХ, поместите ногу на валик поперек свода стопы.",
-        "Это будет ваша исходная позиция.",
-        "Сильно надавите, перекатываясь по своду стопы.",
-        "Удерживайте положение 10–30 секунд, а затем поменяйте ногу."
+        "Сядьте на стул и поместите небольшой ролик под свод стопы.",
+        "Плавно перекатывайте стопу по ролику, регулируя давление.",
+        "Повторите другой стопой."
       ],
       "images": [
         "Foot-SMR/0.jpg",
@@ -12436,7 +12433,7 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false
     },
     {
       "id": "3f8b29af-e534-55db-bff5-aba6eef2ac9c",
@@ -14258,11 +14255,11 @@
     {
       "id": "7e863595-9716-50f5-aadb-bab3ef5563f7",
       "sourceID": "Iliotibial_Tract-SMR",
-      "name": "Илиотибиальный тракт-SMR",
+      "name": "Самомассаж наружной поверхности бедра на ролике",
       "englishName": "Iliotibial Tract-SMR",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Миофасциальный релиз подвздошно-большеберцового тракта",
+        "Iliotibial Tract SMR"
       ],
       "group": "legs",
       "equipment": "foam roll",
@@ -14273,18 +14270,16 @@
       "secondaryMuscles": [],
       "trainingRegions": [],
       "steps": [
-        "Лягте на бок, положив нижнюю ногу на пенопластовый валик между бедром и коленом. Вторую ногу можно скрестить перед собой.",
-        "Перенесите на нижнюю ногу как можно большую часть своего веса; нет необходимости держать нижнюю ногу в контакте с землей. Обязательно расслабьте мышцы ноги, которую вы растягиваете.",
-        "Перекатывайте ногу по пенопласту от бедра до колена, делая паузу на 10–30 секунд в точках напряжения. Повторите с противоположной ногой."
+        "Лягте на бок и расположите ролик под наружной поверхностью бедра.",
+        "Опираясь на руки и другую ногу, медленно перекатывайте бедро от области таза к колену, не наезжая на суставы.",
+        "Повторите на другой стороне."
       ],
-      "images": [
-        "Iliotibial_Tract-SMR/0.jpg",
-        "Iliotibial_Tract-SMR/1.jpg"
-      ],
+      "images": [],
       "techniqueUnavailable": false,
-      "imagesUnavailable": false,
+      "imagesUnavailable": true,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=eI9qLfSlCuI"
     },
     {
       "id": "dcf9928f-ca33-5d7d-a16f-ec4b2c403e23",
@@ -16284,27 +16279,27 @@
     {
       "id": "7102bd3c-40be-5d52-aecc-742c0193a944",
       "sourceID": "Knee_Circles",
-      "name": "Коленные круги",
+      "name": "Круговые движения коленями стоя",
       "englishName": "Knee Circles",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Вращения коленями",
+        "Knee Circles"
       ],
       "group": "legs",
       "equipment": "body only",
       "level": "beginner",
       "primaryMuscles": [
-        "Икроножные мышцы"
+        "Квадрицепс"
       ],
       "secondaryMuscles": [
         "Задняя поверхность бедра",
-        "Квадрицепс"
+        "Икроножные мышцы"
       ],
       "trainingRegions": [],
       "steps": [
-        "Встаньте, ноги вместе, руки на талии.",
-        "Теперь совершайте круговые движения коленями, дышите нормально.",
-        "Повторите рекомендованное количество повторений."
+        "Встаньте, поставив стопы рядом, и положите руки на пояс.",
+        "Слегка согните колени и выполните плавные круговые движения.",
+        "Поменяйте направление движения."
       ],
       "images": [
         "Knee_Circles/0.jpg",
@@ -16313,7 +16308,7 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false
     },
     {
       "id": "62527634-85f6-59b4-8310-48f939bcb2d4",

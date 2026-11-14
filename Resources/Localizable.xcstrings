@@ -9759,6 +9759,23 @@
         }
       }
     },
+    "Мышцы стопы": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Мышцы стопы"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Foot muscles"
+          }
+        }
+      }
+    },
     "Мышцы шеи": {
       "extractionState": "manual",
       "localizations": {
