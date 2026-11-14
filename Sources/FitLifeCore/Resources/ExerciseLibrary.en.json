@@ -1013,7 +1013,9 @@
       "name": "Barbell Glute Bridge",
       "englishName": "Barbell Glute Bridge",
       "aliases": [
-        "Мост для ягодиц"
+        "Ягодичный мост со штангой",
+        "Мост для ягодиц",
+        "Barbell Glute Bridge"
       ],
       "group": "legs",
       "equipment": "barbell",
@@ -1040,7 +1042,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "glute-bridge",
+        "title": "Floor glute bridge"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=3Rsib0Ralo4"
     },
     {
       "id": "fbf2f80a-ad4d-554e-80f4-75fa60e708ff",
@@ -12988,7 +12995,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "hip-extension",
+        "title": "Hip extension"
+      }
     },
     {
       "id": "74608fe3-dee1-508b-aa7e-c99b3dc7e589",
@@ -13552,8 +13563,8 @@
       "name": "Hanging Bar Good Morning",
       "englishName": "Hanging Bar Good Morning",
       "aliases": [
-        "Пауэрлифтинг",
-        "powerlifting"
+        "Наклоны со штангой на плечах с подвесов",
+        "Hanging Bar Good Morning"
       ],
       "group": "legs",
       "equipment": "barbell",
@@ -13580,7 +13591,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "band-good-morning",
+        "title": "Good morning"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=wp4lOBIKQh4"
     },
     {
       "id": "58111729-bd5e-5330-a5ac-67f50c7e676e",
@@ -13588,8 +13604,8 @@
       "name": "Hanging Pike",
       "englishName": "Hanging Pike",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подъём ног к турнику из виса",
+        "Hanging Pike"
       ],
       "group": "core",
       "equipment": "body only",
@@ -13662,8 +13678,8 @@
       "name": "Heavy Bag Thrust",
       "englishName": "Heavy Bag Thrust",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Толчок мешка с поворотом корпуса",
+        "Heavy Bag Thrust"
       ],
       "group": "chest",
       "equipment": "other",
@@ -13729,8 +13745,8 @@
       "name": "Hip Circles (prone)",
       "englishName": "Hip Circles (prone)",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Круги коленом на четвереньках",
+        "Hip Circles Prone"
       ],
       "group": "legs",
       "equipment": "body only",
@@ -13762,8 +13778,8 @@
       "name": "Hip Extension with Bands",
       "englishName": "Hip Extension with Bands",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Разгибание бедра стоя с эспандером",
+        "Hip Extension with Bands"
       ],
       "group": "legs",
       "equipment": "bands",
@@ -13790,7 +13806,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "hip-extension",
+        "title": "Hip extension"
+      }
     },
     {
       "id": "0191761b-3b4a-5c6d-8b76-9a5cf9707599",
@@ -13830,8 +13850,8 @@
       "name": "Hip Lift with Band",
       "englishName": "Hip Lift with Band",
       "aliases": [
-        "Пауэрлифтинг",
-        "powerlifting"
+        "Подъём таза лёжа с закреплённой резиновой лентой",
+        "Hip Lift with Band"
       ],
       "group": "legs",
       "equipment": "bands",
@@ -13859,7 +13879,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "glute-bridge",
+        "title": "Floor glute bridge"
+      }
     },
     {
       "id": "1bba7e1e-d035-518f-97f2-204f3ba14113",
@@ -13867,8 +13891,8 @@
       "name": "Hug A Ball",
       "englishName": "Hug A Ball",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Обхват фитбола руками сидя",
+        "Hug A Ball"
       ],
       "group": "back",
       "equipment": "exercise ball",
@@ -13901,11 +13925,11 @@
       "name": "Hug Knees To Chest",
       "englishName": "Hug Knees To Chest",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Обхват коленей лёжа на спине",
+        "Hug Knees To Chest"
       ],
       "group": "back",
-      "equipment": "unspecified",
+      "equipment": "body only",
       "level": "beginner",
       "primaryMuscles": [
         "lower back"
@@ -13934,8 +13958,8 @@
       "name": "Hurdle Hops",
       "englishName": "Hurdle Hops",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Последовательные прыжки через барьеры",
+        "Hurdle Hops"
       ],
       "group": "legs",
       "equipment": "other",
@@ -13947,8 +13971,7 @@
         "abductors",
         "adductors",
         "calves",
-        "glutes",
-        "hamstrings"
+        "glutes"
       ],
       "trainingRegions": [],
       "steps": [

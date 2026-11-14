@@ -38,7 +38,8 @@
       "Band_Good_Morning",
       "Band_Good_Morning_Pull_Through",
       "Good_Morning",
-      "Good_Morning_off_Pins"
+      "Good_Morning_off_Pins",
+      "Hanging_Bar_Good_Morning"
     ]
   },
   "long-bar-row": {
@@ -197,6 +198,22 @@
       "Hammer_Curls",
       "Cross_Body_Hammer_Curl",
       "Cable_Hammer_Curls_-_Rope_Attachment"
+    ]
+  },
+  "hip-extension": {
+    "ru": "Отведение ноги назад",
+    "en": "Hip extension",
+    "members": [
+      "Glute_Kickback",
+      "Hip_Extension_with_Bands"
+    ]
+  },
+  "glute-bridge": {
+    "ru": "Ягодичный мост лёжа на полу",
+    "en": "Floor glute bridge",
+    "members": [
+      "Barbell_Glute_Bridge",
+      "Hip_Lift_with_Band"
     ]
   }
 }

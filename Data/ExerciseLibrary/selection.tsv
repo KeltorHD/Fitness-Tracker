@@ -22,7 +22,7 @@ Seated_Leg_Curl	Сгибание ног сидя	Тренажёр для зад�
 Barbell_Deadlift	Классическая становая тяга со штангой	Становая тяга;Классическая становая тяга;Barbell Deadlift
 Sumo_Deadlift	Становая тяга сумо	Тяга сумо
 Stiff-Legged_Dumbbell_Deadlift	Тяга с гантелями на прямых ногах	Румынская тяга с гантелями
-Barbell_Glute_Bridge	Ягодичный мост со штангой	Мост для ягодиц
+Barbell_Glute_Bridge	Ягодичный мост со штангой лёжа на полу	Ягодичный мост со штангой;Мост для ягодиц;Barbell Glute Bridge
 Barbell_Hip_Thrust	Подъём таза со штангой с опорой на скамью	Хип-траст
 Butt_Lift_Bridge	Ягодичный мост	Мост без отягощения
 Single_Leg_Glute_Bridge	Ягодичный мост на одной ноге	Одноногий мост
@@ -362,18 +362,18 @@ Hang_Clean	Повесьте чистоту	Тяжёлая атлетика;olymp
 Hang_Clean_-_Below_the_Knees	Вис на чистоте – ниже колен	Тяжёлая атлетика;olympic weightlifting
 Hang_Snatch	Повесить рывок	Тяжёлая атлетика;olympic weightlifting
 Hang_Snatch_-_Below_Knees	Рывок в подвешенном состоянии – ниже колен	Тяжёлая атлетика;olympic weightlifting
-Hanging_Bar_Good_Morning	Подвесной бар «Доброе утро»	Пауэрлифтинг;powerlifting
-Hanging_Pike	Подъём прямых ног к перекладине в висе	Силовые упражнения;strength
+Hanging_Bar_Good_Morning	Гудморнинг с подвешенной штангой в силовой раме	Наклоны со штангой на плечах с подвесов;Hanging Bar Good Morning
+Hanging_Pike	Подъём ног к перекладине в висе	Подъём ног к турнику из виса;Hanging Pike
 Heaving_Snatch_Balance	Баланс в рывке	Тяжёлая атлетика;olympic weightlifting
-Heavy_Bag_Thrust	Упор тяжелой сумки	Плиометрика;plyometrics
+Heavy_Bag_Thrust	Толчок боксёрского мешка одной рукой стоя	Толчок мешка с поворотом корпуса;Heavy Bag Thrust
 High_Cable_Curls	Сгибания рук на бицепс с верхних блоков	Силовые упражнения;strength
-Hip_Circles_prone	Круговые движения бедрами (лежа)	Растяжка;stretching
-Hip_Extension_with_Bands	Разгибание бедер с помощью лент	Силовые упражнения;strength
+Hip_Circles_prone	Круговые движения согнутой ногой на четвереньках	Круги коленом на четвереньках;Hip Circles Prone
+Hip_Extension_with_Bands	Отведение прямой ноги назад стоя с резиновой лентой	Разгибание бедра стоя с эспандером;Hip Extension with Bands
 Hip_Flexion_with_Band	Сгибание бедра с помощью бандажа	Силовые упражнения;strength
-Hip_Lift_with_Band	Подтяжка бедер с лентой	Пауэрлифтинг;powerlifting
-Hug_A_Ball	Обнять мяч	Растяжка;stretching
-Hug_Knees_To_Chest	Прижать колени к груди	Растяжка;stretching
-Hurdle_Hops	барьерный хмель	Плиометрика;plyometrics
+Hip_Lift_with_Band	Ягодичный мост с резиновой петлёй над тазом	Подъём таза лёжа с закреплённой резиновой лентой;Hip Lift with Band
+Hug_A_Ball	Растяжка спины сидя с фитболом	Обхват фитбола руками сидя;Hug A Ball
+Hug_Knees_To_Chest	Растяжка спины лёжа с подтягиванием коленей к груди	Обхват коленей лёжа на спине;Hug Knees To Chest
+Hurdle_Hops	Прыжки на двух ногах через барьеры	Последовательные прыжки через барьеры;Hurdle Hops
 Hyperextensions_With_No_Hyperextension_Bench	Гиперэкстензии без скамьи для гиперэкстензии	Силовые упражнения;strength
 IT_Band_and_Glute_Stretch	IT Band и растяжка ягодиц	Растяжка;stretching
 Iliotibial_Tract-SMR	Илиотибиальный тракт-SMR	Растяжка;stretching

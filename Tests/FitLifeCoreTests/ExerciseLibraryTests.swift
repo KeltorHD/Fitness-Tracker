@@ -409,10 +409,29 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   let variants = ExerciseLibrary.variants(for: entry.id, language: .russian)
   #expect(Set(variants.map(\.sourceID)) == [
     "Good_Morning", "Good_Morning_off_Pins", "Band_Good_Morning",
-    "Band_Good_Morning_Pull_Through",
+    "Band_Good_Morning_Pull_Through", "Hanging_Bar_Good_Morning",
   ])
-  #expect(Set(variants.map(\.id)).count == 4)
+  #expect(Set(variants.map(\.id)).count == 5)
   #expect(Set(variants.map(\.equipment)) == [.barbell, .bands])
+}
+
+@Test func gluteBridgeVariantsKeepLegacySearchAndDifferentEquipment() throws {
+  let entry = try #require(
+    ExerciseLibrary.entries.first { $0.sourceID == "Barbell_Glute_Bridge" })
+  let variants = ExerciseLibrary.variants(for: entry.id, language: .russian)
+  #expect(Set(variants.map(\.sourceID)) == ["Barbell_Glute_Bridge", "Hip_Lift_with_Band"])
+  #expect(Set(variants.map(\.equipment)) == [.barbell, .bands])
+  #expect(Set(variants.map(\.id)).count == 2)
+  #expect(ExerciseLibrary.search("Ягодичный мост со штангой").contains { $0.id == entry.id })
+}
+
+@Test func hurdleHopsDoNotRepeatThePrimaryMuscleAsSecondary() throws {
+  for language in [AppLanguage.russian, .english] {
+    let entry = try #require(
+      ExerciseLibrary.entries(language: language).first { $0.sourceID == "Hurdle_Hops" })
+    #expect(entry.primaryMuscleIDs == [.hamstrings])
+    #expect(!entry.secondaryMuscleIDs.contains(.hamstrings))
+  }
 }
 
 @Test func multipleEquipmentFiltersUseUnionAndIntersectWithMuscleAndSearch() {

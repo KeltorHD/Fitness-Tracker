@@ -364,5 +364,28 @@
   "Hamstring_Stretch": {
     "equipment": "other"
   },
-  "Handstand_Push-Ups": {}
+  "Handstand_Push-Ups": {},
+  "Hanging_Bar_Good_Morning": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=wp4lOBIKQh4"
+  },
+  "Hanging_Pike": {},
+  "Heavy_Bag_Thrust": {},
+  "Hip_Circles_prone": {},
+  "Hip_Extension_with_Bands": {},
+  "Hip_Lift_with_Band": {},
+  "Barbell_Glute_Bridge": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=3Rsib0Ralo4"
+  },
+  "Hug_A_Ball": {},
+  "Hug_Knees_To_Chest": {
+    "equipment": "body only"
+  },
+  "Hurdle_Hops": {
+    "secondaryMuscles": [
+      "abductors",
+      "adductors",
+      "calves",
+      "glutes"
+    ]
+  }
 }
