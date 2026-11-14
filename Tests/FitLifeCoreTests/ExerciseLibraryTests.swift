@@ -495,6 +495,25 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   }
 }
 
+@Test func pallofAndBenchWristVariantsKeepSeparateIdentities() throws {
+  for expected in [
+    ["Pallof_Press", "Pallof_Press_With_Rotation"],
+    [
+      "Palms-Down_Dumbbell_Wrist_Curl_Over_A_Bench", "Palms-Down_Wrist_Curl_Over_A_Bench",
+      "Palms-Up_Barbell_Wrist_Curl_Over_A_Bench", "Palms-Up_Dumbbell_Wrist_Curl_Over_A_Bench",
+    ],
+    ["Overhead_Squat", "One-Arm_Overhead_Kettlebell_Squats"],
+  ] {
+    for language in [AppLanguage.russian, .english] {
+      let entry = try #require(
+        ExerciseLibrary.entries(language: language).first { $0.sourceID == expected[0] })
+      let variants = ExerciseLibrary.variants(for: entry.id, language: language)
+      #expect(Set(variants.map(\.sourceID)) == Set(expected))
+      #expect(Set(variants.map(\.id)).count == expected.count)
+    }
+  }
+}
+
 @Test func inclineDumbbellPressGripVariantsKeepSeparateIDs() throws {
   let entry = try #require(
     ExerciseLibrary.entries.first { $0.sourceID == "Incline_Dumbbell_Press" })

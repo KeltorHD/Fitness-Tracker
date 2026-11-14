@@ -646,5 +646,23 @@
   "One_Arm_Supinated_Dumbbell_Triceps_Extension": {},
   "One_Half_Locust": {},
   "One_Handed_Hang": {},
-  "One_Knee_To_Chest": {}
+  "One_Knee_To_Chest": {},
+  "One_Leg_Barbell_Squat": {},
+  "Otis-Up": {},
+  "Overhead_Cable_Curl": {},
+  "Overhead_Lat": {},
+  "Overhead_Slam": {},
+  "Overhead_Squat": {},
+  "Overhead_Stretch": {},
+  "Overhead_Triceps": {},
+  "Pallof_Press": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=YxIGl7JQ_sE"
+  },
+  "Pallof_Press_With_Rotation": {},
+  "Palms-Down_Dumbbell_Wrist_Curl_Over_A_Bench": {},
+  "Palms-Down_Wrist_Curl_Over_A_Bench": {},
+  "Palms-Up_Barbell_Wrist_Curl_Over_A_Bench": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=dQtMZ3ZEGwU"
+  },
+  "Palms-Up_Dumbbell_Wrist_Curl_Over_A_Bench": {}
 }

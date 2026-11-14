@@ -20198,7 +20198,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "overhead-squat",
+        "title": "Overhead squat"
+      }
     },
     {
       "id": "a6d4167b-d779-5dc1-af28-0356b5512c44",
@@ -20771,6 +20775,9 @@
       "name": "One Leg Barbell Squat",
       "englishName": "One Leg Barbell Squat",
       "aliases": [
+        "Приседания со штангой с задней ногой на скамье",
+        "One-leg barbell squat",
+        "Приседания со штангой на одной ноге",
         "Силовые упражнения",
         "strength"
       ],
@@ -20846,6 +20853,10 @@
       "name": "Otis-Up",
       "englishName": "Otis-Up",
       "aliases": [
+        "Отис-ап",
+        "Otis-up",
+        "Подъём корпуса с блином",
+        "Отис-Ап",
         "Силовые упражнения",
         "strength"
       ],
@@ -20882,6 +20893,9 @@
       "name": "Overhead Cable Curl",
       "englishName": "Overhead Cable Curl",
       "aliases": [
+        "Сгибание рук в кроссовере над головой",
+        "Overhead cable curl",
+        "Сгибания рук с верхних блоков над головой",
         "Силовые упражнения",
         "strength"
       ],
@@ -20919,6 +20933,8 @@
       "name": "Overhead Lat",
       "englishName": "Overhead Lat",
       "aliases": [
+        "Растяжка широчайшей мышцы с партнёром",
+        "Над головой широчайшие",
         "Растяжка",
         "stretching"
       ],
@@ -20952,6 +20968,9 @@
       "name": "Overhead Slam",
       "englishName": "Overhead Slam",
       "aliases": [
+        "Удар медболом в пол",
+        "Overhead slam",
+        "Удар над головой",
         "Плиометрика",
         "plyometrics"
       ],
@@ -20984,6 +21003,9 @@
       "name": "Overhead Squat",
       "englishName": "Overhead Squat",
       "aliases": [
+        "Оверхед-присед",
+        "Overhead squat",
+        "Приседания над головой",
         "Тяжёлая атлетика",
         "olympic weightlifting"
       ],
@@ -21018,7 +21040,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "overhead-squat",
+        "title": "Overhead squat"
+      }
     },
     {
       "id": "9ced3732-a082-5beb-9bc5-647f89fd98bb",
@@ -21026,6 +21052,8 @@
       "name": "Overhead Stretch",
       "englishName": "Overhead Stretch",
       "aliases": [
+        "Потягивание вверх стоя",
+        "Растяжка над головой",
         "Растяжка",
         "stretching"
       ],
@@ -21061,6 +21089,8 @@
       "name": "Overhead Triceps",
       "englishName": "Overhead Triceps",
       "aliases": [
+        "Растяжка трицепса с партнёром",
+        "Трицепс над головой",
         "Растяжка",
         "stretching"
       ],
@@ -21094,6 +21124,9 @@
       "name": "Pallof Press",
       "englishName": "Pallof Press",
       "aliases": [
+        "Выпрямление рук перед собой стоя боком к блоку",
+        "Pallof press",
+        "Паллоф Пресс",
         "Силовые упражнения",
         "strength"
       ],
@@ -21126,7 +21159,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "pallof-press",
+        "title": "Cable Pallof press"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=YxIGl7JQ_sE"
     },
     {
       "id": "75408c1f-25f7-5104-8363-9202a24e80fc",
@@ -21134,6 +21172,9 @@
       "name": "Pallof Press With Rotation",
       "englishName": "Pallof Press With Rotation",
       "aliases": [
+        "Выпрямление рук и поворот корпуса стоя боком к блоку",
+        "Pallof press with rotation",
+        "Пресс Паллофа с вращением",
         "Силовые упражнения",
         "strength"
       ],
@@ -21170,7 +21211,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "pallof-press",
+        "title": "Cable Pallof press"
+      }
     },
     {
       "id": "4e248319-c222-52a1-bb93-3d64970fcedb",
@@ -21178,6 +21223,8 @@
       "name": "Palms-Down Dumbbell Wrist Curl Over A Bench",
       "englishName": "Palms-Down Dumbbell Wrist Curl Over A Bench",
       "aliases": [
+        "Разгибание запястий с гантелями на скамье",
+        "Сгибание запястий с гантелью ладонями вниз над скамьей",
         "Силовые упражнения",
         "strength"
       ],
@@ -21205,7 +21252,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "bench-wrist-curl",
+        "title": "Bench-supported wrist curl and extension"
+      }
     },
     {
       "id": "0ea5b080-a5b2-59f4-bd0b-117e52582ae0",
@@ -21213,6 +21264,8 @@
       "name": "Palms-Down Wrist Curl Over A Bench",
       "englishName": "Palms-Down Wrist Curl Over A Bench",
       "aliases": [
+        "Разгибание запястий со штангой на скамье",
+        "Сгибание запястий ладонями вниз над скамейкой",
         "Силовые упражнения",
         "strength"
       ],
@@ -21240,7 +21293,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "bench-wrist-curl",
+        "title": "Bench-supported wrist curl and extension"
+      }
     },
     {
       "id": "f523ce6f-ceab-5a2a-9736-dc6bfbefedb6",
@@ -21248,6 +21305,8 @@
       "name": "Palms-Up Barbell Wrist Curl Over A Bench",
       "englishName": "Palms-Up Barbell Wrist Curl Over A Bench",
       "aliases": [
+        "Сгибание запястий со штангой на скамье",
+        "Сгибание запястий со штангой ладонями вверх над скамьей",
         "Силовые упражнения",
         "strength"
       ],
@@ -21275,7 +21334,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "bench-wrist-curl",
+        "title": "Bench-supported wrist curl and extension"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=dQtMZ3ZEGwU"
     },
     {
       "id": "441875fb-9199-5f0d-ae5a-3174e087e263",
@@ -21283,6 +21347,8 @@
       "name": "Palms-Up Dumbbell Wrist Curl Over A Bench",
       "englishName": "Palms-Up Dumbbell Wrist Curl Over A Bench",
       "aliases": [
+        "Сгибание запястий с гантелями на скамье",
+        "Сгибание запястий с гантелью ладонями вверх над скамьей",
         "Силовые упражнения",
         "strength"
       ],
@@ -21310,7 +21376,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "bench-wrist-curl",
+        "title": "Bench-supported wrist curl and extension"
+      }
     },
     {
       "id": "4f19e373-0ade-5267-92f5-7fc8b2f3757b",
