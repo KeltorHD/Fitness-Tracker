@@ -289,6 +289,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     "Wide-Grip_Barbell_Bench_Press", "Bench_Press_-_Powerlifting",
     "Bench_Press_with_Chains", "Board_Press", "Reverse_Band_Bench_Press",
     "Reverse_Triceps_Bench_Press", "Smith_Machine_Bench_Press",
+    "Smith_Machine_Close-Grip_Bench_Press",
   ])
 }
 
@@ -551,6 +552,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     ["Parallel_Bar_Dip", "Ring_Dips"],
     ["Romanian_Deadlift", "Romanian_Deadlift_from_Deficit"],
     ["Sled_Push", "Prowler_Sprint"],
+    ["Smith_Machine_Upright_Row", "Smith_Machine_One-Arm_Upright_Row"],
     [
       "Seated_Bent-Over_One-Arm_Dumbbell_Triceps_Extension",
       "Seated_Bent-Over_Two-Arm_Dumbbell_Triceps_Extension",
@@ -591,6 +593,16 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
       })
     #expect(entry.equipment == .machine)
   }
+}
+
+@Test func smithSplitSquatOmitsUnsupportedKneePositionClaim() throws {
+  let entry = try #require(
+    ExerciseLibrary.entries(language: .english).first {
+      $0.sourceID == "Smith_Single-Leg_Split_Squat"
+    })
+  #expect(entry.steps.count >= 3)
+  #expect(!entry.steps.joined().contains("knee is past"))
+  #expect(entry.equipment == .machine)
 }
 
 @Test func inclineDumbbellPressGripVariantsKeepSeparateIDs() throws {

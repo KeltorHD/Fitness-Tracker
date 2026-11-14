@@ -719,21 +719,21 @@ Smith_Incline_Shoulder_Raise	Подъём плеч с грифом Смита л
 Smith_Machine_Behind_the_Back_Shrug	Шраги в тренажёре Смита с грифом за спиной	Подъём плеч в Смите с грифом сзади;Smith behind-the-back shrug;Шраги за спиной в машине Смита;Силовые упражнения;strength
 Smith_Machine_Bench_Press	Жим в тренажёре Смита лёжа на плоской скамье	Жим штанги в Смите лёжа;Smith machine bench press;Жим лежа в машине Смита;Силовые упражнения;strength
 Smith_Machine_Bent_Over_Row	Тяга грифа Смита к поясу в наклоне	Тяга в наклоне в тренажёре Смита;Smith machine bent-over row;Тяга в наклоне в тренажере Смита;Силовые упражнения;strength
-Smith_Machine_Calf_Raise	Подъем на носки в машине Смита	Силовые упражнения;strength
-Smith_Machine_Close-Grip_Bench_Press	Жим лежа узким хватом в машине Смита	Силовые упражнения;strength
-Smith_Machine_Decline_Press	Жим наклона машины Смита	Силовые упражнения;strength
-Smith_Machine_Hang_Power_Clean	Подвес в тренажере Смита Power Clean	Силовые упражнения;strength
-Smith_Machine_Hip_Raise	Подъем бедра в машине Смита	Силовые упражнения;strength
-Smith_Machine_Incline_Bench_Press	Жим лежа на наклонной скамье в машине Смита	Силовые упражнения;strength
-Smith_Machine_Leg_Press	Жим ногами в машине Смита	Силовые упражнения;strength
-Smith_Machine_One-Arm_Upright_Row	Тяга одной рукой вертикально в тренажере Смита	Силовые упражнения;strength
-Smith_Machine_Overhead_Shoulder_Press	Жим от плеч в машине Смита над головой	Силовые упражнения;strength
-Smith_Machine_Pistol_Squat	Приседания с пистолетом в машине Смита	Силовые упражнения;strength
+Smith_Machine_Calf_Raise	Подъём на носки стоя в тренажёре Смита	Подъём на икры в Смите стоя;Smith calf raise;Подъем на носки в машине Смита;Силовые упражнения;strength
+Smith_Machine_Close-Grip_Bench_Press	Жим в тренажёре Смита лёжа узким хватом	Жим в Смите узким хватом;Smith close-grip bench press;Жим лежа узким хватом в машине Смита;Силовые упражнения;strength
+Smith_Machine_Decline_Press	Жим в тренажёре Смита на скамье с отрицательным наклоном	Жим в Смите вниз головой;Smith decline press;Жим наклона машины Смита;Силовые упражнения;strength
+Smith_Machine_Hang_Power_Clean	Взятие грифа Смита на грудь в стойку с виса	Взятие на грудь с виса в Смите;Smith hang power clean;Подвес в тренажере Смита Power Clean;Силовые упражнения;strength
+Smith_Machine_Hip_Raise	Обратные скручивания с опорой стопами на гриф Смита	Подъём таза лёжа со стопами на грифе Смита;Smith machine hip raise;Подъем бедра в машине Смита;Силовые упражнения;strength
+Smith_Machine_Incline_Bench_Press	Жим в тренажёре Смита на наклонной скамье	Жим в Смите на наклонной скамье;Smith incline bench press;Жим лежа на наклонной скамье в машине Смита;Силовые упражнения;strength
+Smith_Machine_Leg_Press	Жим ногами лёжа в тренажёре Смита	Вертикальный жим ногами в Смите;Smith machine leg press;Жим ногами в машине Смита;Силовые упражнения;strength
+Smith_Machine_One-Arm_Upright_Row	Тяга грифа Смита к подбородку одной рукой	Тяга к подбородку одной рукой в Смите;Smith one-arm upright row;Тяга одной рукой вертикально в тренажере Смита;Силовые упражнения;strength
+Smith_Machine_Overhead_Shoulder_Press	Жим от плеч сидя в тренажёре Смита	Жим в Смите сидя;Smith overhead shoulder press;Жим от плеч в машине Смита над головой;Силовые упражнения;strength
+Smith_Machine_Pistol_Squat	Приседания на одной ноге в тренажёре Смита	Пистолетик в Смите;Smith pistol squat;Приседания с пистолетом в машине Смита;Силовые упражнения;strength
 Smith_Machine_Reverse_Calf_Raises	Подъемы на носки обратным ходом в машине Смита	Силовые упражнения;strength
-Smith_Machine_Squat	Приседания в машине Смита	Силовые упражнения;strength
-Smith_Machine_Stiff-Legged_Deadlift	Становая тяга на прямых ногах в машине Смита	Силовые упражнения;strength
-Smith_Machine_Upright_Row	Тяга вертикальных тяг в машине Смита	Силовые упражнения;strength
-Smith_Single-Leg_Split_Squat	Приседания Смита на одной ноге со шпагатом	Силовые упражнения;strength
+Smith_Machine_Squat	Приседания в тренажёре Смита	Приседания со штангой в Смите;Smith machine squat;Приседания в машине Смита;Силовые упражнения;strength
+Smith_Machine_Stiff-Legged_Deadlift	Тяга на прямых ногах в тренажёре Смита	Становая тяга на прямых ногах в Смите;Smith stiff-legged deadlift;Становая тяга на прямых ногах в машине Смита;Силовые упражнения;strength
+Smith_Machine_Upright_Row	Тяга грифа Смита к подбородку двумя руками	Тяга к подбородку в Смите;Smith upright row;Тяга вертикальных тяг в машине Смита;Силовые упражнения;strength
+Smith_Single-Leg_Split_Squat	Болгарские сплит-приседания в тренажёре Смита	Сплит-приседания в Смите с задней ногой на скамье;Smith Bulgarian split squat;Приседания Смита на одной ноге со шпагатом;Силовые упражнения;strength
 Snatch	урвать	Тяжёлая атлетика;olympic weightlifting
 Snatch_Balance	Рывок баланса	Тяжёлая атлетика;olympic weightlifting
 Snatch_Deadlift	Становая тяга в рывке	Тяжёлая атлетика;olympic weightlifting

@@ -27291,6 +27291,9 @@
       "name": "Smith Machine Calf Raise",
       "englishName": "Smith Machine Calf Raise",
       "aliases": [
+        "Подъём на икры в Смите стоя",
+        "Smith calf raise",
+        "Подъем на носки в машине Смита",
         "Силовые упражнения",
         "strength"
       ],
@@ -27327,6 +27330,9 @@
       "name": "Smith Machine Close-Grip Bench Press",
       "englishName": "Smith Machine Close-Grip Bench Press",
       "aliases": [
+        "Жим в Смите узким хватом",
+        "Smith close-grip bench press",
+        "Жим лежа узким хватом в машине Смита",
         "Силовые упражнения",
         "strength"
       ],
@@ -27355,7 +27361,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-flat-bench-press",
+        "title": "Barbell bench press"
+      }
     },
     {
       "id": "e59a9202-bade-577b-9dc5-90d34290b454",
@@ -27363,6 +27373,9 @@
       "name": "Smith Machine Decline Press",
       "englishName": "Smith Machine Decline Press",
       "aliases": [
+        "Жим в Смите вниз головой",
+        "Smith decline press",
+        "Жим наклона машины Смита",
         "Силовые упражнения",
         "strength"
       ],
@@ -27401,6 +27414,9 @@
       "name": "Smith Machine Hang Power Clean",
       "englishName": "Smith Machine Hang Power Clean",
       "aliases": [
+        "Взятие на грудь с виса в Смите",
+        "Smith hang power clean",
+        "Подвес в тренажере Смита Power Clean",
         "Силовые упражнения",
         "strength"
       ],
@@ -27441,6 +27457,9 @@
       "name": "Smith Machine Hip Raise",
       "englishName": "Smith Machine Hip Raise",
       "aliases": [
+        "Подъём таза лёжа со стопами на грифе Смита",
+        "Smith machine hip raise",
+        "Подъем бедра в машине Смита",
         "Силовые упражнения",
         "strength"
       ],
@@ -27476,6 +27495,9 @@
       "name": "Smith Machine Incline Bench Press",
       "englishName": "Smith Machine Incline Bench Press",
       "aliases": [
+        "Жим в Смите на наклонной скамье",
+        "Smith incline bench press",
+        "Жим лежа на наклонной скамье в машине Смита",
         "Силовые упражнения",
         "strength"
       ],
@@ -27514,6 +27536,9 @@
       "name": "Smith Machine Leg Press",
       "englishName": "Smith Machine Leg Press",
       "aliases": [
+        "Вертикальный жим ногами в Смите",
+        "Smith machine leg press",
+        "Жим ногами в машине Смита",
         "Силовые упражнения",
         "strength"
       ],
@@ -27549,6 +27574,9 @@
       "name": "Smith Machine One-Arm Upright Row",
       "englishName": "Smith Machine One-Arm Upright Row",
       "aliases": [
+        "Тяга к подбородку одной рукой в Смите",
+        "Smith one-arm upright row",
+        "Тяга одной рукой вертикально в тренажере Смита",
         "Силовые упражнения",
         "strength"
       ],
@@ -27579,7 +27607,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "smith-upright-row",
+        "title": "Smith machine upright row"
+      }
     },
     {
       "id": "da90ef6a-e295-5a75-802a-496e4030ca04",
@@ -27587,6 +27619,9 @@
       "name": "Smith Machine Overhead Shoulder Press",
       "englishName": "Smith Machine Overhead Shoulder Press",
       "aliases": [
+        "Жим в Смите сидя",
+        "Smith overhead shoulder press",
+        "Жим от плеч в машине Смита над головой",
         "Силовые упражнения",
         "strength"
       ],
@@ -27625,6 +27660,9 @@
       "name": "Smith Machine Pistol Squat",
       "englishName": "Smith Machine Pistol Squat",
       "aliases": [
+        "Пистолетик в Смите",
+        "Smith pistol squat",
+        "Приседания с пистолетом в машине Смита",
         "Силовые упражнения",
         "strength"
       ],
@@ -27699,6 +27737,9 @@
       "name": "Smith Machine Squat",
       "englishName": "Smith Machine Squat",
       "aliases": [
+        "Приседания со штангой в Смите",
+        "Smith machine squat",
+        "Приседания в машине Смита",
         "Силовые упражнения",
         "strength"
       ],
@@ -27738,6 +27779,9 @@
       "name": "Smith Machine Stiff-Legged Deadlift",
       "englishName": "Smith Machine Stiff-Legged Deadlift",
       "aliases": [
+        "Становая тяга на прямых ногах в Смите",
+        "Smith stiff-legged deadlift",
+        "Становая тяга на прямых ногах в машине Смита",
         "Силовые упражнения",
         "strength"
       ],
@@ -27774,6 +27818,9 @@
       "name": "Smith Machine Upright Row",
       "englishName": "Smith Machine Upright Row",
       "aliases": [
+        "Тяга к подбородку в Смите",
+        "Smith upright row",
+        "Тяга вертикальных тяг в машине Смита",
         "Силовые упражнения",
         "strength"
       ],
@@ -27803,7 +27850,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "smith-upright-row",
+        "title": "Smith machine upright row"
+      }
     },
     {
       "id": "8e434004-45b5-5b12-885b-b86b36164f07",
@@ -27811,6 +27862,9 @@
       "name": "Smith Single-Leg Split Squat",
       "englishName": "Smith Single-Leg Split Squat",
       "aliases": [
+        "Сплит-приседания в Смите с задней ногой на скамье",
+        "Smith Bulgarian split squat",
+        "Приседания Смита на одной ноге со шпагатом",
         "Силовые упражнения",
         "strength"
       ],
@@ -27827,13 +27881,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "To begin, place a flat bench 2-3 feet behind the smith machine. Then, set the bar on the height that best matches your height. Once the correct height is chosen and the bar is loaded, step under the bar and place the back of your shoulders (slightly below the neck) across it.",
-        "Hold on to the bar using both arms at each side (palms facing forward), unlock it and lift it off the rack by first pushing with your legs and at the same time straightening your torso.",
-        "Position your legs by placing one foot slightly forward under the bar and extending your other leg back and place the top of your foot on the bench. This will be your starting position",
-        "Begin to slowly lower the bar by bending the knee as you maintain a straight posture with the head up. Continue down until the angle between the upper leg and the calf becomes slightly less than 90-degrees (which is the point in which the upper legs are below parallel to the floor). Inhale as you perform this portion of the movement. Tip: If you performed the exercise correctly, the front of the knee should make an imaginary straight line with the toes that is perpendicular to the front. If your knee is past that imaginary line (if it is past your toes) then you are placing undue stress on the knee and the exercise has been performed incorrectly.",
-        "Begin to raise the bar as you exhale by pushing the floor with the heel of your foot mainly as you straighten your leg again and go back to the starting position.",
-        "Repeat for the recommended amount of repetitions.",
-        "Switch legs and repeat the movement."
+        "Place a bench behind the Smith machine and position the bar across your upper back.",
+        "Unrack the bar, place one foot forward and rest the other foot on the bench behind you.",
+        "Bend the front knee and lower under control, then stand up and repeat on the other side."
       ],
       "images": [
         "Smith_Single-Leg_Split_Squat/0.jpg",

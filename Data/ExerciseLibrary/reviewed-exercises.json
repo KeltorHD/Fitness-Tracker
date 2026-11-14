@@ -876,5 +876,27 @@
   "Smith_Machine_Bench_Press": {
     "techniqueVideoURL": "https://www.youtube.com/watch?v=7FyJdsXeta8"
   },
-  "Smith_Machine_Bent_Over_Row": {}
+  "Smith_Machine_Bent_Over_Row": {},
+  "Smith_Machine_Calf_Raise": {},
+  "Smith_Machine_Close-Grip_Bench_Press": {},
+  "Smith_Machine_Decline_Press": {},
+  "Smith_Machine_Hang_Power_Clean": {},
+  "Smith_Machine_Hip_Raise": {},
+  "Smith_Machine_Incline_Bench_Press": {},
+  "Smith_Machine_Leg_Press": {},
+  "Smith_Machine_One-Arm_Upright_Row": {},
+  "Smith_Machine_Overhead_Shoulder_Press": {},
+  "Smith_Machine_Pistol_Squat": {},
+  "Smith_Machine_Squat": {},
+  "Smith_Machine_Stiff-Legged_Deadlift": {},
+  "Smith_Machine_Upright_Row": {},
+  "Smith_Single-Leg_Split_Squat": {
+    "englishSteps": [
+      "Place a bench behind the Smith machine and position the bar across your upper back.",
+      "Unrack the bar, place one foot forward and rest the other foot on the bench behind you.",
+      "Bend the front knee and lower under control, then stand up and repeat on the other side."
+    ],
+    "instructionSourceURL": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4262933/",
+    "instructionCorrectionReason": "The source asserts that any knee movement beyond the toes is incorrect and harmful; this blanket claim is unsupported."
+  }
 }

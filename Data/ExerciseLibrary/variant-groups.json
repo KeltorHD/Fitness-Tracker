@@ -22,7 +22,8 @@
       "Board_Press",
       "Reverse_Band_Bench_Press",
       "Reverse_Triceps_Bench_Press",
-      "Smith_Machine_Bench_Press"
+      "Smith_Machine_Bench_Press",
+      "Smith_Machine_Close-Grip_Bench_Press"
     ]
   },
   "barbell-ab-rollout": {
@@ -448,6 +449,14 @@
     "members": [
       "Sled_Push",
       "Prowler_Sprint"
+    ]
+  },
+  "smith-upright-row": {
+    "ru": "Тяга грифа Смита к подбородку",
+    "en": "Smith machine upright row",
+    "members": [
+      "Smith_Machine_Upright_Row",
+      "Smith_Machine_One-Arm_Upright_Row"
     ]
   }
 }
