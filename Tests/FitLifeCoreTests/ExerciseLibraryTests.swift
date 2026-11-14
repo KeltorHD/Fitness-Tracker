@@ -559,7 +559,10 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
       "Upright_Cable_Row", "Upright_Row_-_With_Bands",
     ],
     ["Standing_Cable_Lift", "Standing_Cable_Wood_Chop"],
-    ["Stiff-Legged_Barbell_Deadlift", "Smith_Machine_Stiff-Legged_Deadlift"],
+    [
+      "Stiff-Legged_Barbell_Deadlift", "Smith_Machine_Stiff-Legged_Deadlift",
+      "Wide_Stance_Stiff_Legs",
+    ],
     ["Sumo_Deadlift_with_Bands", "Reverse_Band_Sumo_Deadlift", "Sumo_Deadlift_with_Chains"],
     ["Supine_One-Arm_Overhead_Throw", "Supine_Two-Arm_Overhead_Throw"],
     ["One-Arm_Kettlebell_Row", "Two-Arm_Kettlebell_Row"],
@@ -569,7 +572,11 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     ],
     [
       "Barbell_Squat", "Narrow_Stance_Squats", "Speed_Squats", "Squat_with_Bands",
-      "Squat_with_Chains",
+      "Squat_with_Chains", "Wide_Stance_Barbell_Squat",
+    ],
+    [
+      "Decline_Barbell_Bench_Press", "Wide-Grip_Decline_Barbell_Bench_Press",
+      "Decline_Smith_Press", "Smith_Machine_Decline_Press",
     ],
     [
       "Standing_Bent-Over_One-Arm_Dumbbell_Triceps_Extension",

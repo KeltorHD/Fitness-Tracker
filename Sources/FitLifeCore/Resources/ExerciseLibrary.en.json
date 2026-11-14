@@ -1937,6 +1937,7 @@
       "name": "Decline Barbell Bench Press",
       "englishName": "Decline Barbell Bench Press",
       "aliases": [
+        "Жим штанги на скамье с наклоном вниз",
         "Жим вниз головой"
       ],
       "group": "chest",
@@ -1967,7 +1968,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "decline-bench-press",
+        "title": "Decline bench press"
+      }
     },
     {
       "id": "211142bc-4f62-5a01-b894-0609979a67e7",
@@ -10148,7 +10153,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "decline-bench-press",
+        "title": "Decline bench press"
+      }
     },
     {
       "id": "0cb50a0f-d253-5daf-b8aa-525782b6d4c2",
@@ -27421,7 +27430,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "decline-bench-press",
+        "title": "Decline bench press"
+      }
     },
     {
       "id": "d000ca6a-9261-5727-9027-451e338cef0b",
@@ -32745,6 +32758,9 @@
       "name": "Weighted Squat",
       "englishName": "Weighted Squat",
       "aliases": [
+        "Белт-скват между скамьями",
+        "Belt squat",
+        "Приседания с весом",
         "Силовые упражнения",
         "strength"
       ],
@@ -32822,6 +32838,9 @@
       "name": "Wide-Grip Decline Barbell Bench Press",
       "englishName": "Wide-Grip Decline Barbell Bench Press",
       "aliases": [
+        "Жим штанги вниз головой широким хватом",
+        "Wide-grip decline bench press",
+        "Жим штанги лежа широким хватом на наклонной скамье",
         "Силовые упражнения",
         "strength"
       ],
@@ -32851,7 +32870,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "decline-bench-press",
+        "title": "Decline bench press"
+      }
     },
     {
       "id": "591497b4-f2fb-53f6-8ab8-6a3d72f798d8",
@@ -32898,6 +32921,8 @@
       "name": "Wide-Grip Pulldown Behind The Neck",
       "englishName": "Wide-Grip Pulldown Behind The Neck",
       "aliases": [
+        "Вертикальная тяга за голову широким хватом",
+        "Тяга вниз широким хватом из-за шеи",
         "Силовые упражнения",
         "strength"
       ],
@@ -32936,6 +32961,9 @@
       "name": "Wide-Grip Rear Pull-Up",
       "englishName": "Wide-Grip Rear Pull-Up",
       "aliases": [
+        "Подтягивания широким хватом к затылку",
+        "Wide-grip rear pull-up",
+        "Задние подтягивания широким хватом",
         "Силовые упражнения",
         "strength"
       ],
@@ -32973,6 +33001,8 @@
       "name": "Wide-Grip Standing Barbell Curl",
       "englishName": "Wide-Grip Standing Barbell Curl",
       "aliases": [
+        "Подъём штанги на бицепс широким хватом стоя",
+        "Сгибание рук со штангой стоя широким хватом",
         "Силовые упражнения",
         "strength"
       ],
@@ -33009,6 +33039,9 @@
       "name": "Wide Stance Barbell Squat",
       "englishName": "Wide Stance Barbell Squat",
       "aliases": [
+        "Приседания со штангой широкой постановкой",
+        "Wide-stance barbell squat",
+        "Приседания со штангой в широкой стойке",
         "Силовые упражнения",
         "strength"
       ],
@@ -33026,12 +33059,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "This exercise is best performed inside a squat rack for safety purposes. To begin, first set the bar on a rack that best matches your height. Once the correct height is chosen and the bar is loaded, step under the bar and place the back of your shoulders (slightly below the neck) across it.",
-        "Hold on to the bar using both arms at each side and lift it off the rack by first pushing with your legs and at the same time straightening your torso.",
-        "Step away from the rack and position your legs using a wider-than-shoulder-width stance with the toes slightly pointed out. Keep your head up at all times as looking down will get you off balance, and also maintain a straight back. This will be your starting position.",
-        "Begin to slowly lower the bar by bending the knees as you maintain a straight posture with the head up. Continue down until the angle between the upper leg and the calves becomes slightly less than 90-degrees (which is the point in which the upper legs are below parallel to the floor). Inhale as you perform this portion of the movement. Tip: If you performed the exercise correctly, the front of the knees should make an imaginary straight line with the toes that is perpendicular to the front. If your knees are past that imaginary line (if they are past your toes) then you are placing undue stress on the knee and the exercise has been performed incorrectly.",
-        "Begin to raise the bar as you exhale by pushing the floor with the heel of your foot as you straighten the legs again and go back to the starting position.",
-        "Repeat for the recommended amount of repetitions."
+        "Position the bar across your upper back and lift it from the rack.",
+        "Set your feet wider than shoulder width and descend into a controlled squat.",
+        "Drive through your feet and extend your legs to stand up."
       ],
       "images": [
         "Wide_Stance_Barbell_Squat/0.jpg",
@@ -33040,7 +33070,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-back-squat",
+        "title": "Barbell back squat"
+      }
     },
     {
       "id": "67159f64-2a56-568f-bc97-a4d77d61455b",
@@ -33048,6 +33082,9 @@
       "name": "Wide Stance Stiff Legs",
       "englishName": "Wide Stance Stiff Legs",
       "aliases": [
+        "Тяга с широкой постановкой почти прямых ног",
+        "Wide-stance stiff-leg deadlift",
+        "Широкая стойка, жесткие ноги",
         "Тяжёлая атлетика",
         "olympic weightlifting"
       ],
@@ -33074,7 +33111,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "stiff-leg-deadlift",
+        "title": "Stiff-legged deadlift"
+      }
     },
     {
       "id": "1b7d565d-a0cf-591e-9b6b-ac8a407d4007",
@@ -33082,6 +33123,9 @@
       "name": "Wind Sprints",
       "englishName": "Wind Sprints",
       "aliases": [
+        "Бег коленями в висе",
+        "Hanging wind sprints",
+        "Ветровые спринты",
         "Силовые упражнения",
         "strength"
       ],
@@ -33114,6 +33158,9 @@
       "name": "Windmills",
       "englishName": "Windmills",
       "aliases": [
+        "Повороты прямой ноги к противоположной руке лёжа",
+        "Lying windmills",
+        "Ветряные мельницы",
         "Растяжка",
         "stretching"
       ],
@@ -33149,6 +33196,9 @@
       "name": "World's Greatest Stretch",
       "englishName": "World's Greatest Stretch",
       "aliases": [
+        "Выпад с опорой на руки и растяжкой задней поверхности бедра",
+        "World’s greatest stretch",
+        "Величайшая растяжка в мире",
         "Растяжка",
         "stretching"
       ],
@@ -33184,6 +33234,9 @@
       "name": "Wrist Circles",
       "englishName": "Wrist Circles",
       "aliases": [
+        "Вращение запястий",
+        "Wrist circles",
+        "Круги на запястьях",
         "Растяжка",
         "stretching"
       ],
@@ -33215,6 +33268,9 @@
       "name": "Wrist Roller",
       "englishName": "Wrist Roller",
       "aliases": [
+        "Наматывание веса на роллер для предплечий",
+        "Wrist roller",
+        "Наручный ролик",
         "Силовые упражнения",
         "strength"
       ],

@@ -1104,5 +1104,26 @@
   "Weighted_Pull_Ups": {},
   "Weighted_Sissy_Squat": {
     "equipment": "other"
-  }
+  },
+  "Weighted_Squat": {},
+  "Decline_Barbell_Bench_Press": {},
+  "Wide-Grip_Decline_Barbell_Bench_Press": {},
+  "Wide-Grip_Pulldown_Behind_The_Neck": {},
+  "Wide-Grip_Rear_Pull-Up": {},
+  "Wide-Grip_Standing_Barbell_Curl": {},
+  "Wide_Stance_Barbell_Squat": {
+    "englishSteps": [
+      "Position the bar across your upper back and lift it from the rack.",
+      "Set your feet wider than shoulder width and descend into a controlled squat.",
+      "Drive through your feet and extend your legs to stand up."
+    ],
+    "instructionSourceURL": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4262933/",
+    "instructionCorrectionReason": "The source incorrectly claims that knee travel beyond the toes always makes the squat harmful."
+  },
+  "Wide_Stance_Stiff_Legs": {},
+  "Wind_Sprints": {},
+  "Windmills": {},
+  "Worlds_Greatest_Stretch": {},
+  "Wrist_Circles": {},
+  "Wrist_Roller": {}
 }

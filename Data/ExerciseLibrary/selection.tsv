@@ -47,7 +47,7 @@ Dumbbell_Shrug	Шраги с гантелями	Подъём плеч с ган�
 Dumbbell_Bench_Press	Жим гантелей лёжа на плоской скамье	Жим гантелей лёжа;Жим гантелей лежа;Жим гантелей на горизонтальной скамье
 Barbell_Incline_Bench_Press_-_Medium_Grip	Жим штанги на наклонной скамье	Наклонный жим штанги
 Incline_Dumbbell_Press	Жим гантелей лёжа на наклонной скамье	Жим гантелей на наклонной скамье;Наклонный жим гантелей;Incline Dumbbell Press
-Decline_Barbell_Bench_Press	Жим штанги на скамье с наклоном вниз	Жим вниз головой
+Decline_Barbell_Bench_Press	Жим штанги лёжа на скамье с отрицательным наклоном обычным хватом	Жим штанги на скамье с наклоном вниз;Жим вниз головой
 Decline_Dumbbell_Bench_Press	Жим гантелей на скамье с наклоном вниз	Нижний жим гантелей
 Dumbbell_Flyes	Разведение гантелей лёжа	Разводка гантелей
 Incline_Dumbbell_Flyes	Разведение гантелей на наклонной скамье	Наклонная разводка
@@ -855,20 +855,20 @@ Weighted_Jump_Squat	Прыжковые приседания со штангой 
 Weighted_Pull_Ups	Подтягивания с дополнительным весом хватом сверху	Подтягивания с отягощением;Weighted pull-up;Подтягивания с весом;Силовые упражнения;strength
 Weighted_Sissy_Squat	Сисси-приседания с блином у груди	Приседания на носках с блином и опорой;Weighted sissy squat;Приседания сисси с утяжелением;Силовые упражнения;strength
 Weighted_Sit-Ups_-_With_Bands	Приседания с отягощением — с лентами	Силовые упражнения;strength
-Weighted_Squat	Приседания с весом	Силовые упражнения;strength
+Weighted_Squat	Приседания с отягощением на поясе	Белт-скват между скамьями;Belt squat;Приседания с весом;Силовые упражнения;strength
 Wide-Grip_Barbell_Bench_Press	Жим штанги лёжа широким хватом	Жим штанги лежа широким хватом
-Wide-Grip_Decline_Barbell_Bench_Press	Жим штанги лежа широким хватом на наклонной скамье	Силовые упражнения;strength
+Wide-Grip_Decline_Barbell_Bench_Press	Жим штанги лёжа на скамье с отрицательным наклоном широким хватом	Жим штанги вниз головой широким хватом;Wide-grip decline bench press;Жим штанги лежа широким хватом на наклонной скамье;Силовые упражнения;strength
 Wide-Grip_Decline_Barbell_Pullover	Пуловер со штангой со спуском и широким хватом	Силовые упражнения;strength
-Wide-Grip_Pulldown_Behind_The_Neck	Тяга вниз широким хватом из-за шеи	Силовые упражнения;strength
-Wide-Grip_Rear_Pull-Up	Задние подтягивания широким хватом	Силовые упражнения;strength
-Wide-Grip_Standing_Barbell_Curl	Сгибание рук со штангой стоя широким хватом	Силовые упражнения;strength
-Wide_Stance_Barbell_Squat	Приседания со штангой в широкой стойке	Силовые упражнения;strength
-Wide_Stance_Stiff_Legs	Широкая стойка, жесткие ноги	Тяжёлая атлетика;olympic weightlifting
-Wind_Sprints	Ветровые спринты	Силовые упражнения;strength
-Windmills	Ветряные мельницы	Растяжка;stretching
-Worlds_Greatest_Stretch	Величайшая растяжка в мире	Растяжка;stretching
-Wrist_Circles	Круги на запястьях	Растяжка;stretching
-Wrist_Roller	Наручный ролик	Силовые упражнения;strength
+Wide-Grip_Pulldown_Behind_The_Neck	Тяга верхнего блока за голову широким хватом	Вертикальная тяга за голову широким хватом;Тяга вниз широким хватом из-за шеи;Силовые упражнения;strength
+Wide-Grip_Rear_Pull-Up	Подтягивания за голову широким хватом	Подтягивания широким хватом к затылку;Wide-grip rear pull-up;Задние подтягивания широким хватом;Силовые упражнения;strength
+Wide-Grip_Standing_Barbell_Curl	Сгибание рук со штангой широким хватом стоя	Подъём штанги на бицепс широким хватом стоя;Сгибание рук со штангой стоя широким хватом;Силовые упражнения;strength
+Wide_Stance_Barbell_Squat	Приседания со штангой на спине с широкой постановкой ног	Приседания со штангой широкой постановкой;Wide-stance barbell squat;Приседания со штангой в широкой стойке;Силовые упражнения;strength
+Wide_Stance_Stiff_Legs	Тяга штанги на прямых ногах с широкой постановкой	Тяга с широкой постановкой почти прямых ног;Wide-stance stiff-leg deadlift;Широкая стойка, жесткие ноги;Тяжёлая атлетика;olympic weightlifting
+Wind_Sprints	Попеременный подъём коленей в висе на перекладине	Бег коленями в висе;Hanging wind sprints;Ветровые спринты;Силовые упражнения;strength
+Windmills	Мельница лёжа на спине	Повороты прямой ноги к противоположной руке лёжа;Lying windmills;Ветряные мельницы;Растяжка;stretching
+Worlds_Greatest_Stretch	Лучшая растяжка в мире	Выпад с опорой на руки и растяжкой задней поверхности бедра;World’s greatest stretch;Величайшая растяжка в мире;Растяжка;stretching
+Wrist_Circles	Круговые движения кистями стоя	Вращение запястий;Wrist circles;Круги на запястьях;Растяжка;stretching
+Wrist_Roller	Подъём отягощения кистевым роллером	Наматывание веса на роллер для предплечий;Wrist roller;Наручный ролик;Силовые упражнения;strength
 Wrist_Rotations_with_Straight_Bar	Вращения запястьями с прямой перекладиной	Силовые упражнения;strength
 Yoke_Walk	Хомут Прогулка	Силовой экстрим;strongman
 Zercher_Squats	Приседания Зерхера	Силовые упражнения;strength

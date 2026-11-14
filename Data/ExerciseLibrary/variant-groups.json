@@ -484,7 +484,8 @@
       "Narrow_Stance_Squats",
       "Speed_Squats",
       "Squat_with_Bands",
-      "Squat_with_Chains"
+      "Squat_with_Chains",
+      "Wide_Stance_Barbell_Squat"
     ]
   },
   "standing-dumbbell-kickback": {
@@ -517,7 +518,8 @@
     "en": "Stiff-legged deadlift",
     "members": [
       "Stiff-Legged_Barbell_Deadlift",
-      "Smith_Machine_Stiff-Legged_Deadlift"
+      "Smith_Machine_Stiff-Legged_Deadlift",
+      "Wide_Stance_Stiff_Legs"
     ]
   },
   "sumo-deadlift": {
@@ -543,6 +545,16 @@
     "members": [
       "One-Arm_Kettlebell_Row",
       "Two-Arm_Kettlebell_Row"
+    ]
+  },
+  "decline-bench-press": {
+    "ru": "Жим лёжа на скамье с отрицательным наклоном",
+    "en": "Decline bench press",
+    "members": [
+      "Decline_Barbell_Bench_Press",
+      "Wide-Grip_Decline_Barbell_Bench_Press",
+      "Decline_Smith_Press",
+      "Smith_Machine_Decline_Press"
     ]
   }
 }
