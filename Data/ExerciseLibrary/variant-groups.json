@@ -288,7 +288,8 @@
       "Incline_Push-Up_Close-Grip",
       "Incline_Push-Up_Reverse_Grip",
       "Incline_Push-Up_Wide",
-      "Incline_Push-Up"
+      "Incline_Push-Up",
+      "Close-Grip_Push-Up_off_of_a_Dumbbell"
     ]
   },
   "internal-shoulder-rotation": {
@@ -422,7 +423,8 @@
       "Pushups_Close_and_Wide_Hand_Positions",
       "Single-Arm_Push-Up",
       "Pushups",
-      "Push-Ups_With_Feet_Elevated"
+      "Push-Ups_With_Feet_Elevated",
+      "Clock_Push-Up"
     ]
   },
   "barbell-push-press": {
@@ -672,7 +674,8 @@
     "en": "Seated cable row",
     "members": [
       "Seated_Cable_Rows",
-      "Seated_One-arm_Cable_Pulley_Rows"
+      "Seated_One-arm_Cable_Pulley_Rows",
+      "Elevated_Cable_Rows"
     ]
   },
   "straight-arm-pulldown": {
@@ -936,6 +939,36 @@
     "members": [
       "Depth_Jump_Leap",
       "Linear_Depth_Jump"
+    ]
+  },
+  "incline-dumbbell-curl": {
+    "ru": "Сгибание рук с гантелями на наклонной скамье",
+    "en": "Incline dumbbell curl",
+    "members": [
+      "Incline_Dumbbell_Curl",
+      "Alternate_Incline_Dumbbell_Curl",
+      "Incline_Inner_Biceps_Curl",
+      "Flexor_Incline_Dumbbell_Curls"
+    ]
+  },
+  "barbell-overhead-press": {
+    "ru": "Жим штанги над головой",
+    "en": "Barbell overhead press",
+    "members": [
+      "Standing_Military_Press",
+      "Barbell_Shoulder_Press",
+      "Seated_Barbell_Military_Press",
+      "Standing_Barbell_Press_Behind_Neck",
+      "Bradford_Rocky_Presses",
+      "Standing_Bradford_Press"
+    ]
+  },
+  "kneeling-cable-crunch": {
+    "ru": "Скручивания на верхнем блоке стоя на коленях",
+    "en": "Kneeling cable crunch",
+    "members": [
+      "Cable_Crunch",
+      "Kneeling_Cable_Crunch_With_Alternating_Oblique_Twists"
     ]
   }
 }

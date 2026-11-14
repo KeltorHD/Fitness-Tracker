@@ -119,7 +119,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
       "Decline_EZ_Bar_Triceps_Extension", "Wide-Grip_Decline_Barbell_Pullover",
       "FitLife_Triceps_Pushdown_EZ_Bar", "FitLife_Triceps_Pushdown_One_Arm_Overhand",
       "High_Cable_Curls", "Gironda_Sternum_Chins", "One_Arm_Chin-Up",
-      "Iliotibial_Tract-SMR",
+      "Iliotibial_Tract-SMR", "Elevated_Cable_Rows", "Seated_Barbell_Military_Press",
     ])
   #expect(ExerciseLibrary.entries.allSatisfy { $0.techniqueUnavailable == false })
 }
@@ -576,6 +576,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     [
       "Incline_Push-Up", "Incline_Push-Up_Medium", "Incline_Push-Up_Close-Grip",
       "Incline_Push-Up_Reverse_Grip", "Incline_Push-Up_Wide",
+      "Close-Grip_Push-Up_off_of_a_Dumbbell",
     ],
     [
       "Side_Lateral_Raise", "Seated_Side_Lateral_Raise", "One-Arm_Side_Laterals",
@@ -760,7 +761,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     [
       "Push-Up_Wide", "Push-Ups_-_Close_Triceps_Position", "Push-Ups_With_Feet_On_An_Exercise_Ball",
       "Pushups_Close_and_Wide_Hand_Positions", "Single-Arm_Push-Up",
-      "Pushups", "Push-Ups_With_Feet_Elevated",
+      "Pushups", "Push-Ups_With_Feet_Elevated", "Clock_Push-Up",
     ],
     ["Push_Press", "Push_Press_-_Behind_the_Neck"],
     ["Rack_Pulls", "Rack_Pull_with_Bands"],
@@ -819,7 +820,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
       "Wide-Grip_Lat_Pulldown", "Close-Grip_Front_Lat_Pulldown", "Underhand_Cable_Pulldowns",
       "V-Bar_Pulldown", "Wide-Grip_Pulldown_Behind_The_Neck",
     ],
-    ["Seated_Cable_Rows", "Seated_One-arm_Cable_Pulley_Rows"],
+    ["Seated_Cable_Rows", "Seated_One-arm_Cable_Pulley_Rows", "Elevated_Cable_Rows"],
     ["Straight-Arm_Pulldown", "Rope_Straight-Arm_Pulldown"],
     [
       "Dumbbell_Flyes", "One-Arm_Flat_Bench_Dumbbell_Flye", "Incline_Dumbbell_Flyes",
@@ -1163,6 +1164,27 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
       let variants = ExerciseLibrary.variants(for: entry.id, language: language)
       #expect(Set(variants.map(\.sourceID)) == Set(expected))
       #expect(Set(variants.map(\.id)).count == 2)
+    }
+  }
+}
+
+@Test func overheadPressAndCableCrunchVariantsHaveDistinctHistories() throws {
+  for expected in [
+    [
+      "Standing_Military_Press", "Barbell_Shoulder_Press", "Seated_Barbell_Military_Press",
+      "Standing_Barbell_Press_Behind_Neck", "Bradford_Rocky_Presses", "Standing_Bradford_Press",
+    ], ["Cable_Crunch", "Kneeling_Cable_Crunch_With_Alternating_Oblique_Twists"],
+    [
+      "Incline_Dumbbell_Curl", "Alternate_Incline_Dumbbell_Curl", "Incline_Inner_Biceps_Curl",
+      "Flexor_Incline_Dumbbell_Curls",
+    ],
+  ] {
+    for language in [AppLanguage.russian, .english] {
+      let entry = try #require(
+        ExerciseLibrary.entries(language: language).first { $0.sourceID == expected[0] })
+      let variants = ExerciseLibrary.variants(for: entry.id, language: language)
+      #expect(Set(variants.map(\.sourceID)) == Set(expected))
+      #expect(Set(variants.map(\.id)).count == expected.count)
     }
   }
 }

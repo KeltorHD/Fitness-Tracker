@@ -233,7 +233,11 @@
         ],
         "frameDuration": 0.25
       },
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-overhead-press",
+        "title": "Barbell overhead press"
+      }
     },
     {
       "id": "10000000-0000-0000-0000-000000000005",
@@ -3166,7 +3170,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "incline-dumbbell-curl",
+        "title": "Incline dumbbell curl"
+      }
     },
     {
       "id": "691675fe-2053-5df4-809a-f84f044940ec",
@@ -3970,6 +3978,10 @@
       "imagesUnavailable": false,
       "generatedMedia": null,
       "translationAutomatic": false,
+      "variantGroup": {
+        "id": "kneeling-cable-crunch",
+        "title": "Kneeling cable crunch"
+      },
       "techniqueVideoURL": "https://www.youtube.com/watch?v=NJQROeaBiVE"
     },
     {
@@ -4491,6 +4503,10 @@
       "imagesUnavailable": false,
       "generatedMedia": null,
       "translationAutomatic": false,
+      "variantGroup": {
+        "id": "incline-dumbbell-curl",
+        "title": "Incline dumbbell curl"
+      },
       "techniqueVideoURL": "https://www.youtube.com/watch?v=B4HGtMhGI2s"
     },
     {
@@ -5948,6 +5964,10 @@
       "imagesUnavailable": false,
       "generatedMedia": null,
       "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-overhead-press",
+        "title": "Barbell overhead press"
+      },
       "techniqueVideoURL": "https://www.youtube.com/watch?v=lPFwcHl0a2c"
     },
     {
@@ -7476,6 +7496,10 @@
       "imagesUnavailable": false,
       "generatedMedia": null,
       "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-overhead-press",
+        "title": "Barbell overhead press"
+      },
       "techniqueVideoURL": "https://www.youtube.com/watch?v=cKyh38FOx9E"
     },
     {
@@ -9571,6 +9595,8 @@
       "name": "Clock Push-Up",
       "englishName": "Clock Push-Up",
       "aliases": [
+        "Взрывные отжимания с поворотом по кругу",
+        "Clock Push-Up",
         "Силовые упражнения",
         "strength"
       ],
@@ -9602,7 +9628,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "floor-push-up",
+        "title": "Floor push-up"
+      }
     },
     {
       "id": "32d20fff-1fe4-5d0e-9a74-c036119d1de2",
@@ -9768,11 +9798,13 @@
       "name": "Close-Grip Push-Up off of a Dumbbell",
       "englishName": "Close-Grip Push-Up off of a Dumbbell",
       "aliases": [
-        "Отжимания от вертикальной гантели",
-        "Close-Grip Push-Up off of a Dumbbell"
+        "Отжимания с узкой постановкой рук на гантели",
+        "Close-Grip Push-Up off of a Dumbbell",
+        "Силовые упражнения",
+        "strength"
       ],
       "group": "arms",
-      "equipment": "body only",
+      "equipment": "dumbbell",
       "level": "intermediate",
       "primaryMuscles": [
         "triceps"
@@ -9796,7 +9828,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "elevated-hands-push-up",
+        "title": "Incline push-up"
+      }
     },
     {
       "id": "f725591a-71b3-5e3c-84f6-17c054bab06d",
@@ -11090,6 +11126,8 @@
       "name": "Downward Facing Balance",
       "englishName": "Downward Facing Balance",
       "aliases": [
+        "Удержание ног лёжа животом на фитболе",
+        "Downward Facing Balance",
         "Силовые упражнения",
         "strength"
       ],
@@ -12142,6 +12180,8 @@
       "name": "Elevated Cable Rows",
       "englishName": "Elevated Cable Rows",
       "aliases": [
+        "Тяга нижнего блока сидя на возвышении",
+        "Elevated Cable Rows",
         "Силовые упражнения",
         "strength"
       ],
@@ -12165,14 +12205,15 @@
         "Keeping the torso stationary, pull the handles back towards your torso while keeping the arms close to it until you touch the abdominals. Breathe out as you perform that movement. At that point you should be squeezing your back muscles hard. Hold that contraction for a second and slowly go back to the original position while breathing in.",
         "Repeat for the recommended amount of repetitions."
       ],
-      "images": [
-        "Elevated_Cable_Rows/0.jpg",
-        "Elevated_Cable_Rows/1.jpg"
-      ],
+      "images": [],
       "techniqueUnavailable": false,
-      "imagesUnavailable": false,
+      "imagesUnavailable": true,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "seated-cable-row",
+        "title": "Seated cable row"
+      }
     },
     {
       "id": "3f9d5020-1967-5b11-aaa9-b67af4f45bbf",
@@ -12632,6 +12673,8 @@
       "name": "Flexor Incline Dumbbell Curls",
       "englishName": "Flexor Incline Dumbbell Curls",
       "aliases": [
+        "Сгибание рук с гантелями на наклонной скамье с отклонёнными кистями",
+        "Flexor Incline Dumbbell Curls",
         "Силовые упражнения",
         "strength"
       ],
@@ -12641,7 +12684,9 @@
       "primaryMuscles": [
         "biceps"
       ],
-      "secondaryMuscles": [],
+      "secondaryMuscles": [
+        "forearms"
+      ],
       "trainingRegions": [
         "bicepsLong",
         "bicepsShort"
@@ -12661,7 +12706,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "incline-dumbbell-curl",
+        "title": "Incline dumbbell curl"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=cjnaJSYbG3g"
     },
     {
       "id": "2283ec2f-8b6e-59f9-a594-2532f6f080cf",
@@ -15091,7 +15141,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "incline-dumbbell-curl",
+        "title": "Incline dumbbell curl"
+      }
     },
     {
       "id": "969e9eac-acd0-5e17-bcec-ee70f4230ab1",
@@ -16932,6 +16986,8 @@
       "name": "Kneeling Cable Crunch With Alternating Oblique Twists",
       "englishName": "Kneeling Cable Crunch With Alternating Oblique Twists",
       "aliases": [
+        "Молитва с поворотами корпуса",
+        "Kneeling Cable Crunch With Alternating Oblique Twists",
         "Силовые упражнения",
         "strength"
       ],
@@ -16963,7 +17019,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "kneeling-cable-crunch",
+        "title": "Kneeling cable crunch"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=9zWWTq4YtmI"
     },
     {
       "id": "17500b43-2cf6-5bf6-a515-6feba433f870",
@@ -25351,8 +25412,9 @@
       "name": "Seated Barbell Military Press",
       "englishName": "Seated Barbell Military Press",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Жим штанги от плеч сидя",
+        "Seated Barbell Military Press",
+        "Военный жим штанги сидя"
       ],
       "group": "shoulders",
       "equipment": "barbell",
@@ -25368,20 +25430,20 @@
         "deltoidLateral"
       ],
       "steps": [
-        "Sit on a Military Press Bench with a bar behind your head and either have a spotter give you the bar (better on the rotator cuff this way) or pick it up yourself carefully with a pronated grip (palms facing forward). Tip: Your grip should be wider than shoulder width and it should create a 90-degree angle between the forearm and the upper arm as the barbell goes down.",
-        "Once you pick up the barbell with the correct grip length, lift the bar up over your head by locking your arms. Hold at about shoulder level and slightly in front of your head. This is your starting position.",
-        "Lower the bar down to the collarbone slowly as you inhale.",
-        "Lift the bar back up to the starting position as you exhale.",
-        "Repeat for the recommended amount of repetitions."
+        "Sit upright and hold the barbell in front of your shoulders with an overhand grip.",
+        "Press the bar overhead while keeping your torso steady.",
+        "Lower the bar under control to the front of your shoulders."
       ],
-      "images": [
-        "Seated_Barbell_Military_Press/0.jpg",
-        "Seated_Barbell_Military_Press/1.jpg"
-      ],
+      "images": [],
       "techniqueUnavailable": false,
-      "imagesUnavailable": false,
+      "imagesUnavailable": true,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-overhead-press",
+        "title": "Barbell overhead press"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=0igVSywXKK8"
     },
     {
       "id": "5f3d9392-5296-56f8-8a6e-04d13bd9cab9",
@@ -25632,6 +25694,8 @@
       "name": "Seated Close-Grip Concentration Barbell Curl",
       "englishName": "Seated Close-Grip Concentration Barbell Curl",
       "aliases": [
+        "Сгибание рук со штангой с опорой на бёдра",
+        "Seated Close-Grip Concentration Barbell Curl",
         "Силовые упражнения",
         "strength"
       ],
@@ -25647,11 +25711,9 @@
         "bicepsShort"
       ],
       "steps": [
-        "Sit down on a flat bench with a barbell or E-Z Bar in front of you in between your legs. Your legs should be spread with the knees bent and the feet on the floor.",
-        "Use your arms to pick the barbell up and place the back of your upper arms on top of your inner thighs (around three and a half inches away from the front of the knee). A supinated grip closer than shoulder width is needed to perform this exercise. Tip: Your arm should be extended at arms length and the barbell should be above the floor. This will be your starting position.",
-        "While holding the upper arms stationary, curl the weights forward while contracting the biceps as you breathe out. Only the forearms should move. Continue the movement until your biceps are fully contracted and the dumbbells are at shoulder level. Hold the contracted position for a second as you squeeze the biceps.",
-        "Slowly begin to bring the barbell back to starting position as your breathe in. Tip: Avoid swinging motions at any time.",
-        "Repeat for the recommended amount of repetitions."
+        "Sit on a bench with your feet apart and hold a barbell using a close underhand grip.",
+        "Rest the backs of your upper arms against your inner thighs and curl the bar.",
+        "Lower the bar under control while keeping your upper arms supported."
       ],
       "images": [
         "Seated_Close-Grip_Concentration_Barbell_Curl/0.jpg",
@@ -25660,7 +25722,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=iynnTu_mPw8"
     },
     {
       "id": "e70f46b1-b5f0-5350-8b9f-f1bfc4541f94",
@@ -29877,7 +29940,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-overhead-press",
+        "title": "Barbell overhead press"
+      }
     },
     {
       "id": "fb12de2d-d8c0-5bc8-bda4-98e7ec9fd8fb",
@@ -30041,7 +30108,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-overhead-press",
+        "title": "Barbell overhead press"
+      }
     },
     {
       "id": "3362dbc8-b20c-57da-8c96-cf2c9390aea9",

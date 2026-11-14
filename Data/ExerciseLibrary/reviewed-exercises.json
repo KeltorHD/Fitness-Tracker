@@ -1729,5 +1729,45 @@
       "hamstrings",
       "calves"
     ]
+  },
+  "Clock_Push-Up": {},
+  "Close-Grip_Push-Up_off_of_a_Dumbbell": {
+    "equipment": "dumbbell"
+  },
+  "Downward_Facing_Balance": {},
+  "Elevated_Cable_Rows": {
+    "excludeSourceImages": true,
+    "imageExclusionReason": "The source photos show a normal seated cable row without the raised seating platform specified by the name and instructions."
+  },
+  "Flexor_Incline_Dumbbell_Curls": {
+    "secondaryMuscles": [
+      "forearms"
+    ],
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=cjnaJSYbG3g"
+  },
+  "Kneeling_Cable_Crunch_With_Alternating_Oblique_Twists": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=9zWWTq4YtmI"
+  },
+  "Seated_Barbell_Military_Press": {
+    "englishSteps": [
+      "Sit upright and hold the barbell in front of your shoulders with an overhand grip.",
+      "Press the bar overhead while keeping your torso steady.",
+      "Lower the bar under control to the front of your shoulders."
+    ],
+    "instructionSourceURL": "https://fitloop.app/exercises/seated-barbell-military-press",
+    "instructionCorrectionReason": "The source name and later instruction describe a front press, but the initial instruction and source photos place the bar behind the head.",
+    "excludeSourceImages": true,
+    "imageExclusionReason": "The source photos show a behind-the-neck press rather than the named seated military press to the front.",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=0igVSywXKK8"
+  },
+  "Seated_Close-Grip_Concentration_Barbell_Curl": {
+    "englishSteps": [
+      "Sit on a bench with your feet apart and hold a barbell using a close underhand grip.",
+      "Rest the backs of your upper arms against your inner thighs and curl the bar.",
+      "Lower the bar under control while keeping your upper arms supported."
+    ],
+    "instructionSourceURL": "https://whatmuscle.com/exercises/seated-close-grip-concentration-barbell-curl",
+    "instructionCorrectionReason": "The source instructions mistakenly refer to dumbbells despite the source name and photos specifying a barbell.",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=iynnTu_mPw8"
   }
 }

@@ -241,12 +241,12 @@ Clean_Shrug	Шраги со штангой толчковым хватом	То�
 Clean_and_Jerk	Толчок штанги	Взятие штанги на грудь в сед и толчок в ножницы;Clean and Jerk
 Clean_and_Press	Взятие штанги на грудь и жим стоя	Силовые упражнения;strength
 Clean_from_Blocks	Взятие штанги на грудь в сед с плинтов	Тяжёлая атлетика;olympic weightlifting
-Clock_Push-Up	Отжимания на часах	Силовые упражнения;strength
+Clock_Push-Up	Отжимания с прыжком по кругу	Взрывные отжимания с поворотом по кругу;Clock Push-Up;Силовые упражнения;strength
 Close-Grip_Dumbbell_Press	Жим одной гантели двумя руками лёжа поперёк скамьи	Жим гантели узким хватом поперёк скамьи;Close-Grip Dumbbell Press
 Close-Grip_EZ-Bar_Curl_with_Band	Сгибание рук с EZ-штангой и лентой узким хватом	Сгибание рук стоя с EZ-грифом и резиновой лентой;Close-Grip EZ-Bar Curl with Band
 Close-Grip_EZ-Bar_Press	Жим EZ-грифа лёжа на плоской скамье узким хватом	Жим EZ-штанги узким хватом;Close-Grip EZ-Bar Press
 Close-Grip_EZ_Bar_Curl	Сгибание рук с EZ-грифом стоя узким хватом	Подъём EZ-грифа на бицепс узким хватом;Close-Grip EZ Bar Curl
-Close-Grip_Push-Up_off_of_a_Dumbbell	Отжимания узким хватом с опорой на гантель	Отжимания от вертикальной гантели;Close-Grip Push-Up off of a Dumbbell
+Close-Grip_Push-Up_off_of_a_Dumbbell	Отжимания узким хватом с опорой на гантель	Отжимания с узкой постановкой рук на гантели;Close-Grip Push-Up off of a Dumbbell;Силовые упражнения;strength
 Close-Grip_Standing_Barbell_Curl	Сгибание рук со штангой стоя узким хватом	Подъём штанги на бицепс узким хватом;Close-Grip Standing Barbell Curl
 Cocoons	Кокон	Скручивания с одновременным подтягиванием коленей лёжа;Cocoons
 Conans_Wheel	Колесо Конана	Ходьба по кругу с балкой в локтевых сгибах;Conan’s Wheel
@@ -280,7 +280,7 @@ Double_Kettlebell_Push_Press	Жимовой швунг двух гирь от п
 Double_Kettlebell_Snatch	Рывок двух гирь с виса	Одновременный рывок двух гирь;Double Kettlebell Snatch
 Double_Kettlebell_Windmill	Мельница с двумя гирями	Наклон с одной гирей над головой и подъёмом второй с пола;Double Kettlebell Windmill
 Double_Leg_Butt_Kick	Прыжок с захлёстом обеих голеней	Прыжок с подтягиванием пяток к ягодицам;Double-Leg Butt Kick
-Downward_Facing_Balance	Баланс лицом вниз	Силовые упражнения;strength
+Downward_Facing_Balance	Баланс лёжа животом на фитболе с поднятыми ногами	Удержание ног лёжа животом на фитболе;Downward Facing Balance;Силовые упражнения;strength
 Drag_Curl	Сгибание рук со штангой с отведением локтей назад	Подъём Жиронды;Подъём штанги на бицепс с протяжкой вдоль корпуса;Drag Curl
 Drop_Push	Отжимание со спрыгиванием рук с опор	Спрыгивание руками с платформ в упор лёжа;Drop Push
 Dumbbell_Alternate_Bicep_Curl	Попеременное сгибание рук с гантелями стоя с супинацией	Попеременный подъём гантелей на бицепс с поворотом кисти;Dumbbell Alternate Bicep Curl
@@ -308,7 +308,7 @@ Elbow_Circles	Круговые движения локтями с руками �
 Elbow_to_Knee	Велосипед с поворотом локтя к колену	Скручивания локоть к противоположному колену лёжа;Elbow to Knee;Силовые упражнения;strength
 Elbows_Back	Растяжка груди стоя с отведением локтей назад	Сведение локтей за спиной стоя;Elbows Back
 Elevated_Back_Lunge	Обратные выпады со штангой с передней ногой на возвышении	Выпад назад со штангой с платформы;Elevated Back Lunge
-Elevated_Cable_Rows	Тяга нижнего блока сидя на возвышении	Силовые упражнения;strength
+Elevated_Cable_Rows	Тяга нижнего блока к животу сидя на возвышении	Тяга нижнего блока сидя на возвышении;Elevated Cable Rows;Силовые упражнения;strength
 Elliptical_Trainer	Ходьба на эллиптическом тренажёре	Эллиптический тренажёр;Elliptical Trainer
 Exercise_Ball_Crunch	Скручивания лёжа спиной на фитболе	Скручивания на фитболе;Exercise Ball Crunch
 Exercise_Ball_Pull-In	Подтягивание коленей к груди в упоре с ногами на фитболе	Подтягивание фитбола коленями в планке;Exercise Ball Pull-In
@@ -321,7 +321,7 @@ Fast_Skipping	Быстрые подскоки с попеременной сме
 Finger_Curls	Сгибание пальцев со штангой сидя	Удержание и перекатывание грифа пальцами;Finger Curls
 Flat_Bench_Cable_Flyes	Сведение рук на нижних блоках лёжа на плоской скамье	Разведение рук с блоками на горизонтальной скамье;Flat Bench Cable Flyes
 Flat_Bench_Leg_Pull-In	Подтягивание коленей лёжа на плоской скамье	Подтягивание ног к груди лёжа на скамье;Flat Bench Leg Pull-In
-Flexor_Incline_Dumbbell_Curls	Сгибания гантелей на наклоне сгибателями	Силовые упражнения;strength
+Flexor_Incline_Dumbbell_Curls	Сгибание рук с гантелями на наклонной скамье с разогнутыми кистями	Сгибание рук с гантелями на наклонной скамье с отклонёнными кистями;Flexor Incline Dumbbell Curls;Силовые упражнения;strength
 Floor_Glute-Ham_Raise	Нордические сгибания ног	Опускание корпуса с колен с фиксацией стоп;Floor Glute-Ham Raise;Nordic Hamstring Curl
 Floor_Press	Жим штанги лёжа на полу	Жим штанги с пола;Floor Press
 Floor_Press_with_Chains	Жим штанги с цепями лёжа на полу	Жим штанги с пола с цепями;Floor Press with Chains
@@ -434,7 +434,7 @@ Knee_Circles	Круговые движения коленями стоя	Вра�
 Knee_Hip_Raise_On_Parallel_Bars	Подъём коленей с опорой на предплечья в тренажёре	Подъём согнутых ног в упоре на брусьях;Knee Hip Raise On Parallel Bars
 Knee_Tuck_Jump	Прыжок с подтягиванием коленей к груди	Прыжок с группировкой;Knee Tuck Jump
 Kneeling_Arm_Drill	Движения руками как при беге стоя на одном колене	Имитация работы рук при беге в выпаде на колене;Kneeling Arm Drill
-Kneeling_Cable_Crunch_With_Alternating_Oblique_Twists	Скручивания на тросе на коленях с попеременными наклонными скручиваниями	Силовые упражнения;strength
+Kneeling_Cable_Crunch_With_Alternating_Oblique_Twists	Скручивания на верхнем блоке на коленях с поворотами корпуса	Молитва с поворотами корпуса;Kneeling Cable Crunch With Alternating Oblique Twists;Силовые упражнения;strength
 Kneeling_Cable_Triceps_Extension	Разгибание рук с верхним блоком стоя на коленях с опорой на скамью	Французский жим блока на коленях с опорой локтями;Kneeling Cable Triceps Extension
 Kneeling_Forearm_Stretch	Растяжка предплечий на четвереньках ладонями к коленям	Растяжка запястий с опорой на ладони;Kneeling Forearm Stretch
 Kneeling_High_Pulley_Row	Тяга канатной рукояти верхнего блока к груди стоя на коленях	Тяга каната верхнего блока к груди на коленях;Kneeling High Pulley Row
@@ -648,14 +648,14 @@ Scapular_Pull-Up	Подтягивания лопатками в висе на п
 Scissor_Kick	Ножницы ногами лёжа	Поочерёдные вертикальные махи ногами лёжа;Scissor kick;ножничный удар;Растяжка;stretching
 Scissors_Jump	Прыжки с чередованием ног в выпаде	Прыжки ножницами в выпаде;Scissors jump;Ножницы Прыжок;Плиометрика;plyometrics
 Seated_Band_Hamstring_Curl	Сгибание ног с резинкой сидя	Сгибание ног сидя с эспандером;Seated band hamstring curl;Сгибание подколенных сухожилий с лентой сидя;Силовые упражнения;strength
-Seated_Barbell_Military_Press	Военный жим штанги сидя	Силовые упражнения;strength
+Seated_Barbell_Military_Press	Армейский жим штанги сидя перед головой	Жим штанги от плеч сидя;Seated Barbell Military Press;Военный жим штанги сидя
 Seated_Barbell_Twist	Повороты корпуса со штангой сидя	Повороты со штангой на плечах сидя;Seated barbell twist;Поворот штанги сидя;Силовые упражнения;strength
 Seated_Bent-Over_One-Arm_Dumbbell_Triceps_Extension	Разгибание руки с гантелью в наклоне сидя	Кикбэк с гантелью одной рукой сидя;Seated one-arm dumbbell kickback;Разгибание одной руки с гантелью на трицепс в наклоне сидя;Силовые упражнения;strength
 Seated_Bent-Over_Two-Arm_Dumbbell_Triceps_Extension	Разгибание рук с гантелями в наклоне сидя	Кикбэк с двумя гантелями сидя;Seated two-arm dumbbell kickback;Разгибание трицепса с гантелью двумя руками в наклоне сидя;Силовые упражнения;strength
 Seated_Biceps	Растяжка бицепсов сидя с партнёром	Растяжка рук назад сидя с партнёром;Бицепс сидя;Растяжка;stretching
 Seated_Cable_Shoulder_Press	Жим от плеч на блоках сидя	Жим на блоках вверх сидя;Seated cable shoulder press;Жим от плеч сидя на тросе;Силовые упражнения;strength
 Seated_Calf_Stretch	Растяжка икры сидя с прямой ногой	Растяжка икроножной мышцы сидя;Растяжка икр сидя;Растяжка;stretching
-Seated_Close-Grip_Concentration_Barbell_Curl	Концентрированное сгибание штанги узким хватом сидя	Силовые упражнения;strength
+Seated_Close-Grip_Concentration_Barbell_Curl	Концентрированное сгибание рук со штангой сидя узким хватом	Сгибание рук со штангой с опорой на бёдра;Seated Close-Grip Concentration Barbell Curl;Силовые упражнения;strength
 Seated_Dumbbell_Curl	Сгибание рук с гантелями сидя с поворотом кистей	Сгибание рук на бицепс с супинацией сидя;Seated dumbbell curl;Сгибание рук с гантелями сидя;Силовые упражнения;strength
 Seated_Dumbbell_Inner_Biceps_Curl	Сгибание рук с гантелями сидя с отведением предплечий	Сгибание рук на бицепс сидя в стороны;Seated inner biceps curl;Сгибание внутреннего бицепса с гантелью сидя;Силовые упражнения;strength
 Seated_Dumbbell_Palms-Down_Wrist_Curl	Разгибание кистей с гантелями хватом сверху сидя	Разгибание запястий с гантелями сидя;Сгибание запястий с гантелью сидя, ладонями вниз;Силовые упражнения;strength
