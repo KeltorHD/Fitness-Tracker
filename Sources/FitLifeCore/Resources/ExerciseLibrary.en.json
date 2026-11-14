@@ -24413,11 +24413,14 @@
       "name": "Scapular Pull-Up",
       "englishName": "Scapular Pull-Up",
       "aliases": [
+        "Лопаточные подтягивания",
+        "Scapular pull-up",
+        "Подтягивания лопаток",
         "Силовые упражнения",
         "strength"
       ],
       "group": "back",
-      "equipment": "unspecified",
+      "equipment": "other",
       "level": "beginner",
       "primaryMuscles": [
         "traps"
@@ -24441,7 +24444,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=ZKO2-MM5ydE"
     },
     {
       "id": "141f909f-f2be-5e22-8b98-f3a0d2bb35c2",
@@ -24449,6 +24453,9 @@
       "name": "Scissor Kick",
       "englishName": "Scissor Kick",
       "aliases": [
+        "Поочерёдные вертикальные махи ногами лёжа",
+        "Scissor kick",
+        "ножничный удар",
         "Растяжка",
         "stretching"
       ],
@@ -24482,6 +24489,9 @@
       "name": "Scissors Jump",
       "englishName": "Scissors Jump",
       "aliases": [
+        "Прыжки ножницами в выпаде",
+        "Scissors jump",
+        "Ножницы Прыжок",
         "Плиометрика",
         "plyometrics"
       ],
@@ -24517,11 +24527,14 @@
       "name": "Seated Band Hamstring Curl",
       "englishName": "Seated Band Hamstring Curl",
       "aliases": [
+        "Сгибание ног сидя с эспандером",
+        "Seated band hamstring curl",
+        "Сгибание подколенных сухожилий с лентой сидя",
         "Силовые упражнения",
         "strength"
       ],
       "group": "legs",
-      "equipment": "other",
+      "equipment": "bands",
       "level": "beginner",
       "primaryMuscles": [
         "hamstrings"
@@ -24591,6 +24604,9 @@
       "name": "Seated Barbell Twist",
       "englishName": "Seated Barbell Twist",
       "aliases": [
+        "Повороты со штангой на плечах сидя",
+        "Seated barbell twist",
+        "Поворот штанги сидя",
         "Силовые упражнения",
         "strength"
       ],
@@ -24627,6 +24643,9 @@
       "name": "Seated Bent-Over One-Arm Dumbbell Triceps Extension",
       "englishName": "Seated Bent-Over One-Arm Dumbbell Triceps Extension",
       "aliases": [
+        "Кикбэк с гантелью одной рукой сидя",
+        "Seated one-arm dumbbell kickback",
+        "Разгибание одной руки с гантелью на трицепс в наклоне сидя",
         "Силовые упражнения",
         "strength"
       ],
@@ -24658,7 +24677,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "seated-dumbbell-kickback",
+        "title": "Seated bent-over dumbbell triceps kickback"
+      }
     },
     {
       "id": "403093aa-71d1-5e15-8d9b-cfd11780b7ac",
@@ -24666,6 +24689,9 @@
       "name": "Seated Bent-Over Two-Arm Dumbbell Triceps Extension",
       "englishName": "Seated Bent-Over Two-Arm Dumbbell Triceps Extension",
       "aliases": [
+        "Кикбэк с двумя гантелями сидя",
+        "Seated two-arm dumbbell kickback",
+        "Разгибание трицепса с гантелью двумя руками в наклоне сидя",
         "Силовые упражнения",
         "strength"
       ],
@@ -24696,7 +24722,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "seated-dumbbell-kickback",
+        "title": "Seated bent-over dumbbell triceps kickback"
+      }
     },
     {
       "id": "751b7051-4e70-5bc7-ba93-35a75ee5ca3a",
@@ -24704,6 +24734,8 @@
       "name": "Seated Biceps",
       "englishName": "Seated Biceps",
       "aliases": [
+        "Растяжка рук назад сидя с партнёром",
+        "Бицепс сидя",
         "Растяжка",
         "stretching"
       ],
@@ -24738,6 +24770,9 @@
       "name": "Seated Cable Shoulder Press",
       "englishName": "Seated Cable Shoulder Press",
       "aliases": [
+        "Жим на блоках вверх сидя",
+        "Seated cable shoulder press",
+        "Жим от плеч сидя на тросе",
         "Силовые упражнения",
         "strength"
       ],
@@ -24775,6 +24810,8 @@
       "name": "Seated Calf Stretch",
       "englishName": "Seated Calf Stretch",
       "aliases": [
+        "Растяжка икроножной мышцы сидя",
+        "Растяжка икр сидя",
         "Растяжка",
         "stretching"
       ],
@@ -24846,6 +24883,9 @@
       "name": "Seated Dumbbell Curl",
       "englishName": "Seated Dumbbell Curl",
       "aliases": [
+        "Сгибание рук на бицепс с супинацией сидя",
+        "Seated dumbbell curl",
+        "Сгибание рук с гантелями сидя",
         "Силовые упражнения",
         "strength"
       ],
@@ -24874,7 +24914,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "seated-dumbbell-curl",
+        "title": "Seated dumbbell curl"
+      }
     },
     {
       "id": "90d10dae-20b4-599d-b57d-b8e04d558692",
@@ -24882,6 +24926,9 @@
       "name": "Seated Dumbbell Inner Biceps Curl",
       "englishName": "Seated Dumbbell Inner Biceps Curl",
       "aliases": [
+        "Сгибание рук на бицепс сидя в стороны",
+        "Seated inner biceps curl",
+        "Сгибание внутреннего бицепса с гантелью сидя",
         "Силовые упражнения",
         "strength"
       ],
@@ -24911,7 +24958,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "seated-dumbbell-curl",
+        "title": "Seated dumbbell curl"
+      }
     },
     {
       "id": "72d01652-62a1-531a-a069-fd442d06f964",
@@ -24919,6 +24970,8 @@
       "name": "Seated Dumbbell Palms-Down Wrist Curl",
       "englishName": "Seated Dumbbell Palms-Down Wrist Curl",
       "aliases": [
+        "Разгибание запястий с гантелями сидя",
+        "Сгибание запястий с гантелью сидя, ладонями вниз",
         "Силовые упражнения",
         "strength"
       ],

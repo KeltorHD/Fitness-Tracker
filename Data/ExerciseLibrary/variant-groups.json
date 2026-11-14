@@ -411,5 +411,21 @@
       "Romanian_Deadlift",
       "Romanian_Deadlift_from_Deficit"
     ]
+  },
+  "seated-dumbbell-kickback": {
+    "ru": "Разгибание рук с гантелями в наклоне сидя",
+    "en": "Seated bent-over dumbbell triceps kickback",
+    "members": [
+      "Seated_Bent-Over_One-Arm_Dumbbell_Triceps_Extension",
+      "Seated_Bent-Over_Two-Arm_Dumbbell_Triceps_Extension"
+    ]
+  },
+  "seated-dumbbell-curl": {
+    "ru": "Сгибание рук с гантелями сидя",
+    "en": "Seated dumbbell curl",
+    "members": [
+      "Seated_Dumbbell_Curl",
+      "Seated_Dumbbell_Inner_Biceps_Curl"
+    ]
   }
 }

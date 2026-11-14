@@ -126,3 +126,5 @@ python3 scripts/import-exercise-library.py --download-only
 `Reverse_Flyes` и `Dumbbell_Lying_Rear_Lateral_Raise` описывают очень похожее разведение с опорой на наклонную скамью; обе карточки и их идентификаторы сохранены до отдельного решения о возможном объединении истории.
 
 Название и последовательность подтягиваний Рокки сверены с [описанием упражнения](https://musqle.com/rocky-pull-ups-pulldowns). Видео румынской тяги с возвышения найдено по названию и описанию без просмотра.
+
+Для упражнений сидя сверены [сгибание ног с резинкой](https://www.vumc.org/sports-medicine/sites/vumc.org.sports-medicine/files/public_files/documents/Knee_OA_ex_%20hamstring.pdf) и [разгибание рук с гантелями в наклоне](https://weighttraining.guide/exercises/seated-bent-over-two-arm-dumbbell-kickback/). Видео лопаточных подтягиваний найдено по названию и описанию без просмотра.

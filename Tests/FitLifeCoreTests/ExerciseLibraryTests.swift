@@ -529,6 +529,11 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     ["Rack_Pulls", "Rack_Pull_with_Bands"],
     ["Parallel_Bar_Dip", "Ring_Dips"],
     ["Romanian_Deadlift", "Romanian_Deadlift_from_Deficit"],
+    [
+      "Seated_Bent-Over_One-Arm_Dumbbell_Triceps_Extension",
+      "Seated_Bent-Over_Two-Arm_Dumbbell_Triceps_Extension",
+    ],
+    ["Seated_Dumbbell_Curl", "Seated_Dumbbell_Inner_Biceps_Curl"],
   ] {
     for language in [AppLanguage.russian, .english] {
       let entry = try #require(
@@ -537,6 +542,17 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
       #expect(Set(variants.map(\.sourceID)) == Set(expected))
       #expect(Set(variants.map(\.id)).count == expected.count)
     }
+  }
+}
+
+@Test func seatedBandLegCurlUsesBandsInBothLanguages() throws {
+  for language in [AppLanguage.russian, .english] {
+    let entry = try #require(
+      ExerciseLibrary.entries(language: language).first {
+        $0.sourceID == "Seated_Band_Hamstring_Curl"
+      })
+    #expect(entry.equipment == .bands)
+    #expect(entry.primaryMuscleIDs == [.hamstrings])
   }
 }
 

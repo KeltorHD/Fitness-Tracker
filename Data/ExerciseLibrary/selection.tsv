@@ -644,21 +644,21 @@ Rowing_Stationary	Гребля на гребном тренажёре	Гребн
 Runners_Stretch	Растяжка задней поверхности бедра в стойке бегуна	Растяжка бегуна;Runner’s stretch;Растяжка;stretching
 Running_Treadmill	Бег на беговой дорожке	Беговая дорожка;Treadmill running;Бег, Беговая дорожка;Кардио;cardio
 Sandbag_Load	Подъём и перенос мешка с песком на платформу	Загрузка мешка с песком;Sandbag load;Загрузка мешков с песком;Силовой экстрим;strongman
-Scapular_Pull-Up	Подтягивания лопаток	Силовые упражнения;strength
-Scissor_Kick	ножничный удар	Растяжка;stretching
-Scissors_Jump	Ножницы Прыжок	Плиометрика;plyometrics
-Seated_Band_Hamstring_Curl	Сгибание подколенных сухожилий с лентой сидя	Силовые упражнения;strength
+Scapular_Pull-Up	Подтягивания лопатками в висе на перекладине	Лопаточные подтягивания;Scapular pull-up;Подтягивания лопаток;Силовые упражнения;strength
+Scissor_Kick	Ножницы ногами лёжа	Поочерёдные вертикальные махи ногами лёжа;Scissor kick;ножничный удар;Растяжка;stretching
+Scissors_Jump	Прыжки с чередованием ног в выпаде	Прыжки ножницами в выпаде;Scissors jump;Ножницы Прыжок;Плиометрика;plyometrics
+Seated_Band_Hamstring_Curl	Сгибание ног с резинкой сидя	Сгибание ног сидя с эспандером;Seated band hamstring curl;Сгибание подколенных сухожилий с лентой сидя;Силовые упражнения;strength
 Seated_Barbell_Military_Press	Военный жим штанги сидя	Силовые упражнения;strength
-Seated_Barbell_Twist	Поворот штанги сидя	Силовые упражнения;strength
-Seated_Bent-Over_One-Arm_Dumbbell_Triceps_Extension	Разгибание одной руки с гантелью на трицепс в наклоне сидя	Силовые упражнения;strength
-Seated_Bent-Over_Two-Arm_Dumbbell_Triceps_Extension	Разгибание трицепса с гантелью двумя руками в наклоне сидя	Силовые упражнения;strength
-Seated_Biceps	Бицепс сидя	Растяжка;stretching
-Seated_Cable_Shoulder_Press	Жим от плеч сидя на тросе	Силовые упражнения;strength
-Seated_Calf_Stretch	Растяжка икр сидя	Растяжка;stretching
+Seated_Barbell_Twist	Повороты корпуса со штангой сидя	Повороты со штангой на плечах сидя;Seated barbell twist;Поворот штанги сидя;Силовые упражнения;strength
+Seated_Bent-Over_One-Arm_Dumbbell_Triceps_Extension	Разгибание руки с гантелью в наклоне сидя	Кикбэк с гантелью одной рукой сидя;Seated one-arm dumbbell kickback;Разгибание одной руки с гантелью на трицепс в наклоне сидя;Силовые упражнения;strength
+Seated_Bent-Over_Two-Arm_Dumbbell_Triceps_Extension	Разгибание рук с гантелями в наклоне сидя	Кикбэк с двумя гантелями сидя;Seated two-arm dumbbell kickback;Разгибание трицепса с гантелью двумя руками в наклоне сидя;Силовые упражнения;strength
+Seated_Biceps	Растяжка бицепсов сидя с партнёром	Растяжка рук назад сидя с партнёром;Бицепс сидя;Растяжка;stretching
+Seated_Cable_Shoulder_Press	Жим от плеч на блоках сидя	Жим на блоках вверх сидя;Seated cable shoulder press;Жим от плеч сидя на тросе;Силовые упражнения;strength
+Seated_Calf_Stretch	Растяжка икры сидя с прямой ногой	Растяжка икроножной мышцы сидя;Растяжка икр сидя;Растяжка;stretching
 Seated_Close-Grip_Concentration_Barbell_Curl	Концентрированное сгибание штанги узким хватом сидя	Силовые упражнения;strength
-Seated_Dumbbell_Curl	Сгибание рук с гантелями сидя	Силовые упражнения;strength
-Seated_Dumbbell_Inner_Biceps_Curl	Сгибание внутреннего бицепса с гантелью сидя	Силовые упражнения;strength
-Seated_Dumbbell_Palms-Down_Wrist_Curl	Сгибание запястий с гантелью сидя, ладонями вниз	Силовые упражнения;strength
+Seated_Dumbbell_Curl	Сгибание рук с гантелями сидя с поворотом кистей	Сгибание рук на бицепс с супинацией сидя;Seated dumbbell curl;Сгибание рук с гантелями сидя;Силовые упражнения;strength
+Seated_Dumbbell_Inner_Biceps_Curl	Сгибание рук с гантелями сидя с отведением предплечий	Сгибание рук на бицепс сидя в стороны;Seated inner biceps curl;Сгибание внутреннего бицепса с гантелью сидя;Силовые упражнения;strength
+Seated_Dumbbell_Palms-Down_Wrist_Curl	Разгибание кистей с гантелями хватом сверху сидя	Разгибание запястий с гантелями сидя;Сгибание запястий с гантелью сидя, ладонями вниз;Силовые упражнения;strength
 Seated_Dumbbell_Palms-Up_Wrist_Curl	Сгибание запястий с гантелью сидя ладонями вверх	Силовые упражнения;strength
 Seated_Dumbbell_Press	Жим гантелей сидя	Силовые упражнения;strength
 Seated_Flat_Bench_Leg_Pull-In	Подтягивание ног на плоской скамье сидя	Силовые упражнения;strength

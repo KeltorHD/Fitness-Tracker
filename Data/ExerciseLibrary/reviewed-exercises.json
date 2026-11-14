@@ -763,5 +763,23 @@
     "equipment": "body only"
   },
   "Running_Treadmill": {},
-  "Sandbag_Load": {}
+  "Sandbag_Load": {},
+  "Scapular_Pull-Up": {
+    "equipment": "other",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=ZKO2-MM5ydE"
+  },
+  "Scissor_Kick": {},
+  "Scissors_Jump": {},
+  "Seated_Band_Hamstring_Curl": {
+    "equipment": "bands"
+  },
+  "Seated_Barbell_Twist": {},
+  "Seated_Bent-Over_One-Arm_Dumbbell_Triceps_Extension": {},
+  "Seated_Bent-Over_Two-Arm_Dumbbell_Triceps_Extension": {},
+  "Seated_Biceps": {},
+  "Seated_Cable_Shoulder_Press": {},
+  "Seated_Calf_Stretch": {},
+  "Seated_Dumbbell_Curl": {},
+  "Seated_Dumbbell_Inner_Biceps_Curl": {},
+  "Seated_Dumbbell_Palms-Down_Wrist_Curl": {}
 }
