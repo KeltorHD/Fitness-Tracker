@@ -469,13 +469,15 @@
     ]
   },
   "seated-dumbbell-wrist-curl": {
-    "ru": "Сгибание и разгибание кистей с гантелями сидя",
-    "en": "Seated dumbbell wrist curl and extension",
+    "ru": "Сгибание и разгибание кистей сидя",
+    "en": "Seated wrist curl and extension",
     "members": [
       "Seated_Dumbbell_Palms-Down_Wrist_Curl",
       "Seated_Dumbbell_Palms-Up_Wrist_Curl",
       "Seated_One-Arm_Dumbbell_Palms-Down_Wrist_Curl",
-      "Seated_One-Arm_Dumbbell_Palms-Up_Wrist_Curl"
+      "Seated_One-Arm_Dumbbell_Palms-Up_Wrist_Curl",
+      "Seated_Palm-Up_Barbell_Wrist_Curl",
+      "Seated_Palms-Down_Barbell_Wrist_Curl"
     ]
   },
   "sled-push": {

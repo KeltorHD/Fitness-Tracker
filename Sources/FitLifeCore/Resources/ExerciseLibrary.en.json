@@ -3678,7 +3678,8 @@
       "name": "Seated Palm-Up Barbell Wrist Curl",
       "englishName": "Seated Palm-Up Barbell Wrist Curl",
       "aliases": [
-        "Предплечья ладонями вверх"
+        "Сгибание кистей со штангой",
+        "Seated Palm-Up Barbell Wrist Curl"
       ],
       "group": "arms",
       "equipment": "barbell",
@@ -3695,14 +3696,15 @@
         "Lower the bar as far as possible while inhaling and keeping a tight grip.",
         "Now curl bar up as high as possible while flexing the forearms and exhaling. Hold the contraction at the top for a second and Tip: Only the wrist should move."
       ],
-      "images": [
-        "Seated_Palm-Up_Barbell_Wrist_Curl/0.jpg",
-        "Seated_Palm-Up_Barbell_Wrist_Curl/1.jpg"
-      ],
+      "images": [],
       "techniqueUnavailable": false,
-      "imagesUnavailable": false,
+      "imagesUnavailable": true,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "seated-dumbbell-wrist-curl",
+        "title": "Seated wrist curl and extension"
+      }
     },
     {
       "id": "7ca34fb6-135c-5e98-9e22-0603dd4c9243",
@@ -3710,7 +3712,8 @@
       "name": "Seated Palms-Down Barbell Wrist Curl",
       "englishName": "Seated Palms-Down Barbell Wrist Curl",
       "aliases": [
-        "Предплечья ладонями вниз"
+        "Разгибание кистей со штангой",
+        "Seated Palms-Down Barbell Wrist Curl"
       ],
       "group": "arms",
       "equipment": "barbell",
@@ -3727,14 +3730,16 @@
         "Lower the bar as far as possible while inhaling and keeping a tight grip.",
         "Now curl bar up as high as possible while flexing the forearms and exhaling. Hold the contraction at the top for a second and Tip: Only the wrist should move."
       ],
-      "images": [
-        "Seated_Palms-Down_Barbell_Wrist_Curl/0.jpg",
-        "Seated_Palms-Down_Barbell_Wrist_Curl/1.jpg"
-      ],
+      "images": [],
       "techniqueUnavailable": false,
-      "imagesUnavailable": false,
+      "imagesUnavailable": true,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "seated-dumbbell-wrist-curl",
+        "title": "Seated wrist curl and extension"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=dhtQp111x7U"
     },
     {
       "id": "a3e9e78d-38f3-5144-9066-3af46cf7627f",
@@ -25646,7 +25651,7 @@
       "translationAutomatic": false,
       "variantGroup": {
         "id": "seated-dumbbell-wrist-curl",
-        "title": "Seated dumbbell wrist curl and extension"
+        "title": "Seated wrist curl and extension"
       }
     },
     {
@@ -25687,7 +25692,7 @@
       "translationAutomatic": false,
       "variantGroup": {
         "id": "seated-dumbbell-wrist-curl",
-        "title": "Seated dumbbell wrist curl and extension"
+        "title": "Seated wrist curl and extension"
       }
     },
     {
@@ -26092,7 +26097,7 @@
       "translationAutomatic": false,
       "variantGroup": {
         "id": "seated-dumbbell-wrist-curl",
-        "title": "Seated dumbbell wrist curl and extension"
+        "title": "Seated wrist curl and extension"
       }
     },
     {
@@ -26132,7 +26137,7 @@
       "translationAutomatic": false,
       "variantGroup": {
         "id": "seated-dumbbell-wrist-curl",
-        "title": "Seated dumbbell wrist curl and extension"
+        "title": "Seated wrist curl and extension"
       },
       "techniqueVideoURL": "https://www.youtube.com/watch?v=Q7dTbE4kRUY"
     },

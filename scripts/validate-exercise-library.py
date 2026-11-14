@@ -37,7 +37,7 @@ for ru, en in zip(document['entries'], english['entries']):
         if original['instructions']:
             assert reviewed[en['sourceID']].get('instructionCorrectionReason', '').strip()
 assert len(manifest['images']) == 1746
-assert len([entry for entry in document['entries'] if entry['imagesUnavailable']]) == 4
+assert len([entry for entry in document['entries'] if entry['imagesUnavailable']]) == 6
 assert not any(entry['techniqueUnavailable'] for entry in document['entries'])
 generated = json.loads((root / 'Data/ExerciseLibrary/generated-media.json').read_text())
 generated_provenance = json.loads((root / 'Data/ExerciseLibrary/generated-media.provenance.json').read_text())

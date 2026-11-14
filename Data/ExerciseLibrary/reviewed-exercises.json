@@ -1529,5 +1529,14 @@
     "instructionCorrectionReason": "The user selected the partial-range variant; the original instructions describe a full shoulder-height lateral raise.",
     "excludeSourceImages": true,
     "imageExclusionReason": "The original photos show a full lateral raise to shoulder height rather than the user-selected partial-range movement."
+  },
+  "Seated_Palm-Up_Barbell_Wrist_Curl": {
+    "excludeSourceImages": true,
+    "imageExclusionReason": "The original exercise name and instructions specify a barbell, but the original photographs show dumbbells."
+  },
+  "Seated_Palms-Down_Barbell_Wrist_Curl": {
+    "excludeSourceImages": true,
+    "imageExclusionReason": "The original exercise name and instructions specify a barbell, but the original photographs show dumbbells.",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=dhtQp111x7U"
   }
 }

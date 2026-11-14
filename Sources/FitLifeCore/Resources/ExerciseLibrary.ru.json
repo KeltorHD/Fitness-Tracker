@@ -3539,10 +3539,11 @@
     {
       "id": "fd0fa3a9-0ca0-5524-ab18-323d3a3829f5",
       "sourceID": "Seated_Palm-Up_Barbell_Wrist_Curl",
-      "name": "Сгибание кистей со штангой",
+      "name": "Сгибание кистей со штангой сидя ладонями вверх",
       "englishName": "Seated Palm-Up Barbell Wrist Curl",
       "aliases": [
-        "Предплечья ладонями вверх"
+        "Сгибание кистей со штангой",
+        "Seated Palm-Up Barbell Wrist Curl"
       ],
       "group": "arms",
       "equipment": "barbell",
@@ -3553,26 +3554,28 @@
       "secondaryMuscles": [],
       "trainingRegions": [],
       "steps": [
-        "Сядьте, возьмите штангу ладонями вверх и положите предплечья на бёдра так, чтобы кисти оставались свободными.",
-        "Удерживая гриф, плавно опустите кисти вниз, не двигая предплечьями и локтями.",
-        "Согните кисти вверх, ненадолго задержитесь и снова контролируемо опустите гриф."
+        "Сядьте на скамью и возьмите штангу ладонями вверх.",
+        "Положите предплечья на бёдра, оставив кисти за коленями.",
+        "Плавно опустите штангу движением кистей, затем согните кисти вверх."
       ],
-      "images": [
-        "Seated_Palm-Up_Barbell_Wrist_Curl/0.jpg",
-        "Seated_Palm-Up_Barbell_Wrist_Curl/1.jpg"
-      ],
+      "images": [],
       "techniqueUnavailable": false,
-      "imagesUnavailable": false,
+      "imagesUnavailable": true,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "seated-dumbbell-wrist-curl",
+        "title": "Сгибание и разгибание кистей сидя"
+      }
     },
     {
       "id": "7ca34fb6-135c-5e98-9e22-0603dd4c9243",
       "sourceID": "Seated_Palms-Down_Barbell_Wrist_Curl",
-      "name": "Разгибание кистей со штангой",
+      "name": "Разгибание кистей со штангой сидя ладонями вниз",
       "englishName": "Seated Palms-Down Barbell Wrist Curl",
       "aliases": [
-        "Предплечья ладонями вниз"
+        "Разгибание кистей со штангой",
+        "Seated Palms-Down Barbell Wrist Curl"
       ],
       "group": "arms",
       "equipment": "barbell",
@@ -3583,18 +3586,20 @@
       "secondaryMuscles": [],
       "trainingRegions": [],
       "steps": [
-        "Сядьте, возьмите штангу ладонями вниз и обоприте предплечья о бёдра, оставив кисти свободными.",
-        "Плавно опустите кисти, сохраняя хват и неподвижное положение предплечий.",
-        "Разогните кисти вверх, коротко задержитесь и медленно вернитесь в исходное положение."
+        "Сядьте на скамью и возьмите штангу ладонями вниз.",
+        "Положите предплечья на бёдра, оставив кисти за коленями.",
+        "Поднимите штангу разгибанием кистей и плавно опустите её."
       ],
-      "images": [
-        "Seated_Palms-Down_Barbell_Wrist_Curl/0.jpg",
-        "Seated_Palms-Down_Barbell_Wrist_Curl/1.jpg"
-      ],
+      "images": [],
       "techniqueUnavailable": false,
-      "imagesUnavailable": false,
+      "imagesUnavailable": true,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "seated-dumbbell-wrist-curl",
+        "title": "Сгибание и разгибание кистей сидя"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=dhtQp111x7U"
     },
     {
       "id": "a3e9e78d-38f3-5144-9066-3af46cf7627f",
@@ -24898,7 +24903,7 @@
       "translationAutomatic": false,
       "variantGroup": {
         "id": "seated-dumbbell-wrist-curl",
-        "title": "Сгибание и разгибание кистей с гантелями сидя"
+        "title": "Сгибание и разгибание кистей сидя"
       }
     },
     {
@@ -24935,7 +24940,7 @@
       "translationAutomatic": false,
       "variantGroup": {
         "id": "seated-dumbbell-wrist-curl",
-        "title": "Сгибание и разгибание кистей с гантелями сидя"
+        "title": "Сгибание и разгибание кистей сидя"
       }
     },
     {
@@ -25332,7 +25337,7 @@
       "translationAutomatic": false,
       "variantGroup": {
         "id": "seated-dumbbell-wrist-curl",
-        "title": "Сгибание и разгибание кистей с гантелями сидя"
+        "title": "Сгибание и разгибание кистей сидя"
       }
     },
     {
@@ -25369,7 +25374,7 @@
       "translationAutomatic": false,
       "variantGroup": {
         "id": "seated-dumbbell-wrist-curl",
-        "title": "Сгибание и разгибание кистей с гантелями сидя"
+        "title": "Сгибание и разгибание кистей сидя"
       },
       "techniqueVideoURL": "https://www.youtube.com/watch?v=Q7dTbE4kRUY"
     },

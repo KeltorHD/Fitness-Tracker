@@ -116,6 +116,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     Set(ExerciseLibrary.entries.filter { $0.imagesUnavailable == true }.map(\.sourceID)) == [
       "Kettlebell_Halo", "Kettlebell_Halo_With_Overhead_Extension",
       "Kettlebell_Overhead_Triceps_Extension", "Power_Partials",
+      "Seated_Palm-Up_Barbell_Wrist_Curl", "Seated_Palms-Down_Barbell_Wrist_Curl",
     ])
   #expect(ExerciseLibrary.entries.allSatisfy { $0.techniqueUnavailable == false })
 }
@@ -127,6 +128,18 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     #expect(entry.imagesUnavailable == true)
     #expect(entry.images.isEmpty)
     #expect(entry.steps.count >= 3)
+  }
+}
+
+@Test func barbellWristCurlsDoNotShowDumbbellSourcePhotos() throws {
+  for language in [AppLanguage.russian, .english] {
+    for sourceID in ["Seated_Palm-Up_Barbell_Wrist_Curl", "Seated_Palms-Down_Barbell_Wrist_Curl"] {
+      let entry = try #require(
+        ExerciseLibrary.entries(language: language).first { $0.sourceID == sourceID })
+      #expect(entry.equipment == .barbell)
+      #expect(entry.imagesUnavailable == true)
+      #expect(entry.images.isEmpty)
+    }
   }
 }
 
@@ -764,6 +777,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
       "Seated_Dumbbell_Palms-Down_Wrist_Curl", "Seated_Dumbbell_Palms-Up_Wrist_Curl",
       "Seated_One-Arm_Dumbbell_Palms-Down_Wrist_Curl",
       "Seated_One-Arm_Dumbbell_Palms-Up_Wrist_Curl",
+      "Seated_Palm-Up_Barbell_Wrist_Curl", "Seated_Palms-Down_Barbell_Wrist_Curl",
     ],
   ] {
     for language in [AppLanguage.russian, .english] {
