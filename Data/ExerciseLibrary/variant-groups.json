@@ -16,7 +16,10 @@
     "members": [
       "Barbell_Bench_Press_-_Medium_Grip",
       "Close-Grip_Barbell_Bench_Press",
-      "Wide-Grip_Barbell_Bench_Press"
+      "Wide-Grip_Barbell_Bench_Press",
+      "Bench_Press_-_Powerlifting",
+      "Bench_Press_with_Chains",
+      "Board_Press"
     ]
   },
   "barbell-ab-rollout": {
@@ -34,6 +37,14 @@
     "members": [
       "Band_Good_Morning",
       "Band_Good_Morning_Pull_Through"
+    ]
+  },
+  "long-bar-row": {
+    "ru": "Тяга конца штанги в наклоне",
+    "en": "Bent-over long bar row",
+    "members": [
+      "Bent_Over_One-Arm_Long_Bar_Row",
+      "Bent_Over_Two-Arm_Long_Bar_Row"
     ]
   }
 }

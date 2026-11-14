@@ -102,5 +102,39 @@
     ]
   },
   "Barbell_Walking_Lunge": {},
-  "Battling_Ropes": {}
+  "Battling_Ropes": {},
+  "Bear_Crawl_Sled_Drags": {},
+  "Behind_Head_Chest_Stretch": {},
+  "Bench_Jump": {},
+  "Bench_Press_-_Powerlifting": {},
+  "Bench_Press_-_With_Bands": {},
+  "Bench_Press_with_Chains": {},
+  "Bench_Sprint": {},
+  "Bent-Arm_Barbell_Pullover": {
+    "secondaryMuscles": [
+      "chest",
+      "shoulders",
+      "triceps"
+    ],
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=sgiOWa0qyeg"
+  },
+  "Bent-Arm_Dumbbell_Pullover": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=4B-BrBH17uM"
+  },
+  "Bent-Knee_Hip_Raise": {},
+  "Bent_Over_Dumbbell_Rear_Delt_Raise_With_Head_On_Bench": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=yVdMZVia504"
+  },
+  "Bent_Over_Low-Pulley_Side_Lateral": {},
+  "Bent_Over_One-Arm_Long_Bar_Row": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=6e-RoYjC6UQ"
+  },
+  "Bent_Over_Two-Arm_Long_Bar_Row": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=O2V58mCnmQc"
+  },
+  "Bent_Over_Two-Dumbbell_Row_With_Palms_In": {},
+  "Bent_Press": {},
+  "Bicycling_Stationary": {},
+  "Board_Press": {},
+  "Body-Up": {}
 }

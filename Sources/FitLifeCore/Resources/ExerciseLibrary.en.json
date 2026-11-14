@@ -5665,8 +5665,8 @@
       "name": "Bear Crawl Sled Drags",
       "englishName": "Bear Crawl Sled Drags",
       "aliases": [
-        "Силовой экстрим",
-        "strongman"
+        "Медвежья проходка с санями",
+        "Bear Crawl Sled Drags"
       ],
       "group": "legs",
       "equipment": "other",
@@ -5699,8 +5699,8 @@
       "name": "Behind Head Chest Stretch",
       "englishName": "Behind Head Chest Stretch",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Растяжка груди с руками за головой",
+        "Behind Head Chest Stretch"
       ],
       "group": "chest",
       "equipment": "other",
@@ -5733,8 +5733,8 @@
       "name": "Bench Jump",
       "englishName": "Bench Jump",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Перепрыгивания через скамью",
+        "Bench Jump"
       ],
       "group": "legs",
       "equipment": "body only",
@@ -5770,8 +5770,8 @@
       "name": "Bench Press - Powerlifting",
       "englishName": "Bench Press - Powerlifting",
       "aliases": [
-        "Пауэрлифтинг",
-        "powerlifting"
+        "Пауэрлифтерский жим лёжа",
+        "Bench Press Powerlifting"
       ],
       "group": "arms",
       "equipment": "barbell",
@@ -5799,7 +5799,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-flat-bench-press",
+        "title": "Barbell bench press"
+      }
     },
     {
       "id": "10e28113-eefe-5536-8fe8-83a647805b5d",
@@ -5807,8 +5811,8 @@
       "name": "Bench Press - With Bands",
       "englishName": "Bench Press - With Bands",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Жим резиновых лент лёжа",
+        "Bench Press With Bands"
       ],
       "group": "chest",
       "equipment": "bands",
@@ -5847,8 +5851,8 @@
       "name": "Bench Press with Chains",
       "englishName": "Bench Press with Chains",
       "aliases": [
-        "Пауэрлифтинг",
-        "powerlifting"
+        "Жим штанги с цепями на плоской скамье",
+        "Bench Press with Chains"
       ],
       "group": "arms",
       "equipment": "barbell",
@@ -5875,7 +5879,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-flat-bench-press",
+        "title": "Barbell bench press"
+      }
     },
     {
       "id": "8aa5958a-309b-52c3-a81d-4b1044d1c6da",
@@ -5883,8 +5891,8 @@
       "name": "Bench Sprint",
       "englishName": "Bench Sprint",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Спринт на скамье",
+        "Bench Sprint"
       ],
       "group": "legs",
       "equipment": "other",
@@ -5919,8 +5927,8 @@
       "name": "Bent-Arm Barbell Pullover",
       "englishName": "Bent-Arm Barbell Pullover",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Пуловер со штангой лёжа на плоской скамье с согнутыми руками",
+        "Bent Arm Barbell Pullover"
       ],
       "group": "back",
       "equipment": "barbell",
@@ -5930,7 +5938,6 @@
       ],
       "secondaryMuscles": [
         "chest",
-        "lats",
         "shoulders",
         "triceps"
       ],
@@ -5949,7 +5956,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=sgiOWa0qyeg"
     },
     {
       "id": "4dc5bb30-0fc6-579d-92d9-ea21555581a3",
@@ -5957,8 +5965,8 @@
       "name": "Bent-Arm Dumbbell Pullover",
       "englishName": "Bent-Arm Dumbbell Pullover",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Пуловер с гантелью поперёк плоской скамьи с согнутыми руками",
+        "Bent Arm Dumbbell Pullover"
       ],
       "group": "chest",
       "equipment": "dumbbell",
@@ -5987,7 +5995,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=4B-BrBH17uM"
     },
     {
       "id": "0df74bf0-03cf-5929-9004-d042d4ce466a",
@@ -5995,8 +6004,8 @@
       "name": "Bent-Knee Hip Raise",
       "englishName": "Bent-Knee Hip Raise",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подъём таза лёжа с согнутыми ногами",
+        "Bent Knee Hip Raise"
       ],
       "group": "core",
       "equipment": "body only",
@@ -6031,8 +6040,8 @@
       "name": "Bent Over Dumbbell Rear Delt Raise With Head On Bench",
       "englishName": "Bent Over Dumbbell Rear Delt Raise With Head On Bench",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Разведение гантелей на задние дельты с опорой головы",
+        "Bent Over Dumbbell Rear Delt Raise With Head On Bench"
       ],
       "group": "shoulders",
       "equipment": "dumbbell",
@@ -6058,7 +6067,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=yVdMZVia504"
     },
     {
       "id": "98dfa6a3-c1de-5800-af29-432e2d595014",
@@ -6066,8 +6076,8 @@
       "name": "Bent Over Low-Pulley Side Lateral",
       "englishName": "Bent Over Low-Pulley Side Lateral",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Разведение одной руки в наклоне на блоке",
+        "Bent Over Low Pulley Side Lateral"
       ],
       "group": "shoulders",
       "equipment": "cable",
@@ -6105,8 +6115,8 @@
       "name": "Bent Over One-Arm Long Bar Row",
       "englishName": "Bent Over One-Arm Long Bar Row",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Тяга конца грифа к поясу одной рукой",
+        "Bent Over One Arm Long Bar Row"
       ],
       "group": "back",
       "equipment": "barbell",
@@ -6138,7 +6148,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "long-bar-row",
+        "title": "Bent-over long bar row"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=6e-RoYjC6UQ"
     },
     {
       "id": "2ebd01a2-3e76-5854-a766-e35c21fad299",
@@ -6146,8 +6161,8 @@
       "name": "Bent Over Two-Arm Long Bar Row",
       "englishName": "Bent Over Two-Arm Long Bar Row",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Тяга конца грифа к поясу двумя руками",
+        "Bent Over Two Arm Long Bar Row"
       ],
       "group": "back",
       "equipment": "barbell",
@@ -6177,7 +6192,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "long-bar-row",
+        "title": "Bent-over long bar row"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=O2V58mCnmQc"
     },
     {
       "id": "65fcb19e-70d8-59af-9801-36ee2907cf90",
@@ -6185,8 +6205,8 @@
       "name": "Bent Over Two-Dumbbell Row With Palms In",
       "englishName": "Bent Over Two-Dumbbell Row With Palms In",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Тяга двух гантелей в наклоне ладонями внутрь",
+        "Bent Over Two Dumbbell Row With Palms In"
       ],
       "group": "back",
       "equipment": "dumbbell",
@@ -6222,8 +6242,8 @@
       "name": "Bent Press",
       "englishName": "Bent Press",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Жим гири с боковым наклоном стоя",
+        "Bent Press"
       ],
       "group": "core",
       "equipment": "kettlebells",
@@ -6293,8 +6313,8 @@
       "name": "Bicycling, Stationary",
       "englishName": "Bicycling, Stationary",
       "aliases": [
-        "Кардио",
-        "cardio"
+        "Стационарный велосипед",
+        "Bicycling Stationary"
       ],
       "group": "legs",
       "equipment": "machine",
@@ -6327,8 +6347,8 @@
       "name": "Board Press",
       "englishName": "Board Press",
       "aliases": [
-        "Пауэрлифтинг",
-        "powerlifting"
+        "Жим штанги лёжа до доски",
+        "Board Press"
       ],
       "group": "arms",
       "equipment": "barbell",
@@ -6356,7 +6376,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-flat-bench-press",
+        "title": "Barbell bench press"
+      }
     },
     {
       "id": "2d2e98ff-1741-5ae6-bece-999d67c27946",
@@ -6364,8 +6388,8 @@
       "name": "Body-Up",
       "englishName": "Body-Up",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Разгибание рук из планки на предплечьях",
+        "Body Up"
       ],
       "group": "arms",
       "equipment": "body only",

@@ -219,8 +219,28 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   let variants = ExerciseLibrary.variants(for: bench.id, language: .russian)
   #expect(Set(variants.map(\.sourceID)) == [
     "Barbell_Bench_Press_-_Medium_Grip", "Close-Grip_Barbell_Bench_Press",
-    "Wide-Grip_Barbell_Bench_Press",
+    "Wide-Grip_Barbell_Bench_Press", "Bench_Press_-_Powerlifting",
+    "Bench_Press_with_Chains", "Board_Press",
   ])
+}
+
+@Test func bandBenchPressDoesNotBecomeABarbellExercise() throws {
+  let band = try #require(
+    ExerciseLibrary.entries.first { $0.sourceID == "Bench_Press_-_With_Bands" })
+  #expect(band.equipment == .bands)
+  #expect(band.name == "Жим эспандера лёжа на плоской скамье")
+  #expect(band.variantGroup == nil)
+}
+
+@Test func pulloverDoesNotRepeatItsPrimaryMuscleAsSecondary() throws {
+  for language in [AppLanguage.russian, .english] {
+    let entry = try #require(
+      ExerciseLibrary.entries(language: language).first {
+        $0.sourceID == "Bent-Arm_Barbell_Pullover"
+      })
+    #expect(entry.primaryMuscleIDs == [.lats])
+    #expect(!entry.secondaryMuscleIDs.contains(.lats))
+  }
 }
 
 @Test func bandHipAdductionMatchesTheOriginalNameAndPhotos() throws {
