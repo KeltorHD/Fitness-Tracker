@@ -88,5 +88,14 @@
       "Close-Grip_Standing_Barbell_Curl",
       "Close-Grip_EZ_Bar_Curl"
     ]
+  },
+  "conventional-barbell-deadlift": {
+    "ru": "Классическая становая тяга со штангой",
+    "en": "Conventional barbell deadlift",
+    "members": [
+      "Barbell_Deadlift",
+      "Deadlift_with_Bands",
+      "Deadlift_with_Chains"
+    ]
   }
 }

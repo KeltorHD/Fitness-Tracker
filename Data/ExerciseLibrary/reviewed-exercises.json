@@ -233,5 +233,27 @@
   "Cross_Over_-_With_Bands": {},
   "Crossover_Reverse_Lunge": {
     "equipment": "body only"
-  }
+  },
+  "Barbell_Deadlift": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=Z6gcRfPNcZo"
+  },
+  "Crucifix": {},
+  "Crunch_-_Hands_Overhead": {},
+  "Crunch_-_Legs_On_Exercise_Ball": {
+    "equipment": "exercise ball"
+  },
+  "Dancers_Stretch": {},
+  "Deadlift_with_Bands": {},
+  "Deadlift_with_Chains": {},
+  "Decline_Crunch": {},
+  "Decline_Dumbbell_Flyes": {},
+  "Decline_Dumbbell_Triceps_Extension": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=HTqpP_Th49Q"
+  },
+  "Decline_Oblique_Crunch": {},
+  "Decline_Push-Up": {
+    "equipment": "body only",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=DBz85WuXqMk"
+  },
+  "Decline_Reverse_Crunch": {}
 }

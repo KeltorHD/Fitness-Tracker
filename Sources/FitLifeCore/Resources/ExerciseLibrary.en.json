@@ -891,7 +891,9 @@
       "name": "Barbell Deadlift",
       "englishName": "Barbell Deadlift",
       "aliases": [
-        "Классическая становая тяга"
+        "Становая тяга",
+        "Классическая становая тяга",
+        "Barbell Deadlift"
       ],
       "group": "back",
       "equipment": "barbell",
@@ -924,7 +926,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "conventional-barbell-deadlift",
+        "title": "Conventional barbell deadlift"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=Z6gcRfPNcZo"
     },
     {
       "id": "ad946ce7-1a7d-55a8-83d9-91b593c1991a",
@@ -9494,8 +9501,8 @@
       "name": "Crucifix",
       "englishName": "Crucifix",
       "aliases": [
-        "Силовой экстрим",
-        "strongman"
+        "Удержание отягощений в разведённых руках",
+        "Crucifix"
       ],
       "group": "shoulders",
       "equipment": "other",
@@ -9526,8 +9533,8 @@
       "name": "Crunch - Hands Overhead",
       "englishName": "Crunch - Hands Overhead",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Скручивания с вытянутыми руками",
+        "Crunch Hands Overhead"
       ],
       "group": "core",
       "equipment": "body only",
@@ -9562,11 +9569,11 @@
       "name": "Crunch - Legs On Exercise Ball",
       "englishName": "Crunch - Legs On Exercise Ball",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Скручивания с опорой ног на мяч",
+        "Crunch Legs On Exercise Ball"
       ],
       "group": "core",
-      "equipment": "body only",
+      "equipment": "exercise ball",
       "level": "beginner",
       "primaryMuscles": [
         "abdominals"
@@ -9637,8 +9644,8 @@
       "name": "Dancer's Stretch",
       "englishName": "Dancer's Stretch",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Растяжка спины сидя с поворотом",
+        "Dancers Stretch"
       ],
       "group": "back",
       "equipment": "unspecified",
@@ -9672,8 +9679,8 @@
       "name": "Deadlift with Bands",
       "englishName": "Deadlift with Bands",
       "aliases": [
-        "Пауэрлифтинг",
-        "powerlifting"
+        "Становая тяга с лентами",
+        "Deadlift with Bands"
       ],
       "group": "back",
       "equipment": "barbell",
@@ -9702,7 +9709,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "conventional-barbell-deadlift",
+        "title": "Conventional barbell deadlift"
+      }
     },
     {
       "id": "44dc23db-f93f-5e9d-b7b2-44353bb56279",
@@ -9710,8 +9721,8 @@
       "name": "Deadlift with Chains",
       "englishName": "Deadlift with Chains",
       "aliases": [
-        "Пауэрлифтинг",
-        "powerlifting"
+        "Становая тяга с цепями",
+        "Deadlift with Chains"
       ],
       "group": "back",
       "equipment": "barbell",
@@ -9741,7 +9752,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "conventional-barbell-deadlift",
+        "title": "Conventional barbell deadlift"
+      }
     },
     {
       "id": "8dfaf685-5425-5139-a084-c5b603e84fc8",
@@ -9787,8 +9802,8 @@
       "name": "Decline Crunch",
       "englishName": "Decline Crunch",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Скручивания на отрицательной скамье",
+        "Decline Crunch"
       ],
       "group": "core",
       "equipment": "body only",
@@ -9824,8 +9839,8 @@
       "name": "Decline Dumbbell Flyes",
       "englishName": "Decline Dumbbell Flyes",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Разводка гантелей на отрицательной скамье",
+        "Decline Dumbbell Flyes"
       ],
       "group": "chest",
       "equipment": "dumbbell",
@@ -9859,8 +9874,8 @@
       "name": "Decline Dumbbell Triceps Extension",
       "englishName": "Decline Dumbbell Triceps Extension",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Разгибание рук с гантелями на отрицательной скамье",
+        "Decline Dumbbell Triceps Extension"
       ],
       "group": "arms",
       "equipment": "dumbbell",
@@ -9888,7 +9903,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=HTqpP_Th49Q"
     },
     {
       "id": "9dcc3ad1-4bc2-5cbc-9e10-2c440dbc40df",
@@ -9933,8 +9949,8 @@
       "name": "Decline Oblique Crunch",
       "englishName": "Decline Oblique Crunch",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Скручивания с поворотом на отрицательной скамье",
+        "Decline Oblique Crunch"
       ],
       "group": "core",
       "equipment": "body only",
@@ -9969,11 +9985,11 @@
       "name": "Decline Push-Up",
       "englishName": "Decline Push-Up",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Отжимания с ногами на скамье",
+        "Decline Push-Up"
       ],
       "group": "chest",
-      "equipment": "unspecified",
+      "equipment": "body only",
       "level": "beginner",
       "primaryMuscles": [
         "chest"
@@ -9998,7 +10014,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=DBz85WuXqMk"
     },
     {
       "id": "77ebca3d-3169-58e7-99cf-a129489a038e",
@@ -10006,8 +10023,8 @@
       "name": "Decline Reverse Crunch",
       "englishName": "Decline Reverse Crunch",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подтягивание коленей с подкручиванием таза на отрицательной скамье",
+        "Decline Reverse Crunch"
       ],
       "group": "core",
       "equipment": "body only",

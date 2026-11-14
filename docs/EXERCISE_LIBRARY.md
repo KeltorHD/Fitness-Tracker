@@ -62,6 +62,8 @@ python3 scripts/import-exercise-library.py --download-only
 
 Сверены девять карточек от `Close-Grip_Dumbbell_Press` до `Crossover_Reverse_Lunge`. Для сгибания с EZ-грифом исправлен ошибочный вид оборудования в обеих локализациях; оно объединено с вариантом с прямым грифом, сохраняя отдельный UUID. [Название и техника сгибания](https://www.muscleandstrength.com/exercises/close-grip-ez-bar-curl.html) и [молоткового сгибания через корпус](https://cdn.muscleandstrength.com/exercises/hammer-curl-across-the-body.html) дополнительно сверены. Ролики подобраны по названиям и текстовым описаниям без отдельного просмотра. Для `Close-Grip_Push-Up_off_of_a_Dumbbell` уточнены название и инструкция, но фотография показывает две гантели вместо одной и требует замены; запись пока не отмечена проверенной.
 
+Уточнены 12 карточек от `Crucifix` до `Decline_Reverse_Crunch` и классическая становая тяга. Её варианты с петлями и цепями объединены в группу; исходный UUID классической тяги и её прежнее название в поиске сохранены. Отжимания с ногами на возвышении и скручивания с ногами на фитболе получили правильный вид оборудования. Техника сверена с [описанием становой тяги](https://www.nasm.org/resource-center/exercise-library/barbell-deadlift) и [отжиманий](https://www.nasm.org/resource-center/exercise-library/decline-push-up); видео найдены по названиям и описаниям без просмотра. У `Decline_EZ_Bar_Triceps_Extension` и `Decline_Close-Grip_Bench_To_Skull_Crusher` исходные фотографии показывают гантели вместо указанного в инструкции грифа; карточки оставлены для исправления фотографий. Фото `Cuban_Press` не показывает финальный жим над головой.
+
 ## Проверки и статусы
 
 - **Implemented:** библиотека RU/EN, локальные фотографии, поиск, фильтры и SwiftUI-карточки.

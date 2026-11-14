@@ -19,7 +19,7 @@ Leg_Press	Жим ногами	Жим платформы ногами
 Leg_Extensions	Разгибание ног в тренажёре	Разгибания ног сидя
 Lying_Leg_Curls	Сгибание ног лёжа	Сгибания ног лежа
 Seated_Leg_Curl	Сгибание ног сидя	Тренажёр для задней поверхности бедра
-Barbell_Deadlift	Становая тяга	Классическая становая тяга
+Barbell_Deadlift	Классическая становая тяга со штангой	Становая тяга;Классическая становая тяга;Barbell Deadlift
 Sumo_Deadlift	Становая тяга сумо	Тяга сумо
 Stiff-Legged_Dumbbell_Deadlift	Тяга с гантелями на прямых ногах	Румынская тяга с гантелями
 Barbell_Glute_Bridge	Ягодичный мост со штангой	Мост для ягодиц
@@ -254,21 +254,21 @@ Cross-Body_Crunch	Перекрёстные скручивания лёжа	Ск�
 Cross_Body_Hammer_Curl	Молотковые сгибания гантелей через корпус стоя	Попеременный молоток к противоположному плечу;Cross Body Hammer Curl;Pinwheel Curl
 Cross_Over_-_With_Bands	Сведение рук стоя с эспандером за спиной	Сведение рук с резиновой лентой стоя;Band Crossover;Cross Over With Bands
 Crossover_Reverse_Lunge	Обратный выпад с поворотом корпуса	Выпад назад с вращением корпуса;Crossover Reverse Lunge
-Crucifix	Распятие	Силовой экстрим;strongman
-Crunch_-_Hands_Overhead	Кранч – руки над головой	Силовые упражнения;strength
-Crunch_-_Legs_On_Exercise_Ball	Кранч – ноги на мяче для упражнений	Силовые упражнения;strength
+Crucifix	Крест с отягощениями стоя	Удержание отягощений в разведённых руках;Crucifix
+Crunch_-_Hands_Overhead	Скручивания лёжа с руками за головой	Скручивания с вытянутыми руками;Crunch Hands Overhead
+Crunch_-_Legs_On_Exercise_Ball	Скручивания лёжа с ногами на фитболе	Скручивания с опорой ног на мяч;Crunch Legs On Exercise Ball
 Cuban_Press	Кубинская пресса	Силовые упражнения;strength
-Dancers_Stretch	Растяжка танцора	Растяжка;stretching
-Deadlift_with_Bands	Становая тяга с лентами	Пауэрлифтинг;powerlifting
-Deadlift_with_Chains	Становая тяга с цепями	Пауэрлифтинг;powerlifting
+Dancers_Stretch	Растяжка танцора сидя с поворотом корпуса	Растяжка спины сидя с поворотом;Dancers Stretch
+Deadlift_with_Bands	Классическая становая тяга со штангой и резиновыми петлями	Становая тяга с лентами;Deadlift with Bands
+Deadlift_with_Chains	Классическая становая тяга со штангой и цепями	Становая тяга с цепями;Deadlift with Chains
 Decline_Close-Grip_Bench_To_Skull_Crusher	Отклонить жим узким хватом на Skull Crusher	Силовые упражнения;strength
-Decline_Crunch	Снижение кранча	Силовые упражнения;strength
-Decline_Dumbbell_Flyes	Разведение гантелей на наклоне	Силовые упражнения;strength
-Decline_Dumbbell_Triceps_Extension	Разгибание трицепса с гантелью на наклоне	Силовые упражнения;strength
+Decline_Crunch	Скручивания на скамье с наклоном вниз	Скручивания на отрицательной скамье;Decline Crunch
+Decline_Dumbbell_Flyes	Разведение гантелей лёжа на скамье с наклоном вниз	Разводка гантелей на отрицательной скамье;Decline Dumbbell Flyes
+Decline_Dumbbell_Triceps_Extension	Французский жим гантелей лёжа на скамье с наклоном вниз	Разгибание рук с гантелями на отрицательной скамье;Decline Dumbbell Triceps Extension
 Decline_EZ_Bar_Triceps_Extension	Разгибание трицепса на наклонной штанге EZ	Силовые упражнения;strength
-Decline_Oblique_Crunch	Косое скручивание на наклоне	Силовые упражнения;strength
-Decline_Push-Up	Отказ от отжиманий	Силовые упражнения;strength
-Decline_Reverse_Crunch	Снижение обратного кранча	Силовые упражнения;strength
+Decline_Oblique_Crunch	Косые скручивания на скамье с наклоном вниз	Скручивания с поворотом на отрицательной скамье;Decline Oblique Crunch
+Decline_Push-Up	Отжимания от пола с ногами на возвышении	Отжимания с ногами на скамье;Decline Push-Up
+Decline_Reverse_Crunch	Обратные скручивания на скамье с наклоном вниз	Подтягивание коленей с подкручиванием таза на отрицательной скамье;Decline Reverse Crunch
 Decline_Smith_Press	Отказ Смит Пресс	Силовые упражнения;strength
 Deficit_Deadlift	Дефицит становой тяги	Пауэрлифтинг;powerlifting
 Depth_Jump_Leap	Прыжок в глубину	Плиометрика;plyometrics
