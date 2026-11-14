@@ -734,21 +734,21 @@ Smith_Machine_Squat	Приседания в тренажёре Смита	При
 Smith_Machine_Stiff-Legged_Deadlift	Тяга на прямых ногах в тренажёре Смита	Становая тяга на прямых ногах в Смите;Smith stiff-legged deadlift;Становая тяга на прямых ногах в машине Смита;Силовые упражнения;strength
 Smith_Machine_Upright_Row	Тяга грифа Смита к подбородку двумя руками	Тяга к подбородку в Смите;Smith upright row;Тяга вертикальных тяг в машине Смита;Силовые упражнения;strength
 Smith_Single-Leg_Split_Squat	Болгарские сплит-приседания в тренажёре Смита	Сплит-приседания в Смите с задней ногой на скамье;Smith Bulgarian split squat;Приседания Смита на одной ноге со шпагатом;Силовые упражнения;strength
-Snatch	урвать	Тяжёлая атлетика;olympic weightlifting
-Snatch_Balance	Рывок баланса	Тяжёлая атлетика;olympic weightlifting
-Snatch_Deadlift	Становая тяга в рывке	Тяжёлая атлетика;olympic weightlifting
-Snatch_Pull	Рывок, тяга	Силовые упражнения;strength
-Snatch_Shrug	Пожать плечами	Тяжёлая атлетика;olympic weightlifting
+Snatch	Рывок штанги с пола в сед	Классический рывок штанги;Barbell snatch;урвать;Тяжёлая атлетика;olympic weightlifting
+Snatch_Balance	Рывковый баланс со штангой	Уход в сед со штангой из-за головы;Snatch balance;Рывок баланса;Тяжёлая атлетика;olympic weightlifting
+Snatch_Deadlift	Становая тяга штанги рывковым хватом	Рывковая становая тяга;Snatch deadlift;Становая тяга в рывке;Тяжёлая атлетика;olympic weightlifting
+Snatch_Pull	Рывковая тяга штанги с пола	Тяга рывковым хватом с пола;Snatch pull;Рывок, тяга;Силовые упражнения;strength
+Snatch_Shrug	Шраги со штангой рывковым хватом	Подъём плеч со штангой широким хватом;Snatch shrug;Пожать плечами;Тяжёлая атлетика;olympic weightlifting
 Snatch_from_Blocks	Вырвать из блоков	Тяжёлая атлетика;olympic weightlifting
-Speed_Band_Overhead_Triceps	Скоростной диапазон на трицепс над головой	Силовые упражнения;strength
-Speed_Box_Squat	Приседания на скоростной ящик	Пауэрлифтинг;powerlifting
-Speed_Squats	Скоростные приседания	Силовые упражнения;strength
-Spell_Caster	Заклинатель	Силовые упражнения;strength
-Spider_Crawl	Паучье ползание	Силовые упражнения;strength
-Spider_Curl	Паучьи сгибания рук	Силовые упражнения;strength
-Spinal_Stretch	Растяжка позвоночника	Растяжка;stretching
-Split_Clean	Взятие штанги на грудь в разножку	Тяжёлая атлетика;olympic weightlifting
-Split_Jerk	Сплит-рывок	Тяжёлая атлетика;olympic weightlifting
+Speed_Band_Overhead_Triceps	Быстрое разгибание рук с резинкой из-за головы стоя	Скоростное разгибание рук с эспандером;Speed band overhead triceps;Скоростной диапазон на трицепс над головой;Силовые упражнения;strength
+Speed_Box_Squat	Скоростные приседания со штангой к опоре с резинками	Скоростные приседания на ящик с резинками;Speed box squat;Приседания на скоростной ящик;Пауэрлифтинг;powerlifting
+Speed_Squats	Скоростные приседания со штангой на спине	Быстрые приседания со штангой;Speed squats;Скоростные приседания;Силовые упражнения;strength
+Spell_Caster	Повороты корпуса с двумя гантелями стоя	Заклинатель;Spell caster;Силовые упражнения;strength
+Spider_Crawl	Ползание паука в низком упоре	Ползание паука;Spider crawl;Паучье ползание;Силовые упражнения;strength
+Spider_Curl	Паучьи сгибания рук с гантелями	Сгибание рук с гантелями с опорой грудью на скамью;Spider curl;Паучьи сгибания рук;Силовые упражнения;strength
+Spinal_Stretch	Растяжка спины с поворотом корпуса сидя	Повороты и наклоны корпуса сидя;Растяжка позвоночника;Растяжка;stretching
+Split_Clean	Взятие штанги на грудь в ножницы	Взятие штанги на грудь в разножку;Split clean;Тяжёлая атлетика;olympic weightlifting
+Split_Jerk	Толчок штанги в ножницы от груди	Толчок штанги в разножку;Split jerk;Сплит-рывок;Тяжёлая атлетика;olympic weightlifting
 Split_Jump	Сплит-прыжок	Плиометрика;plyometrics
 Split_Snatch	Сплит-рывок	Тяжёлая атлетика;olympic weightlifting
 Split_Squats	Сплит-приседания	Растяжка;stretching

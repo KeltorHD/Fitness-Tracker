@@ -605,6 +605,19 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   #expect(entry.equipment == .machine)
 }
 
+@Test func spiderCurlUsesTheDumbbellsShownInItsPhotos() throws {
+  for language in [AppLanguage.russian, .english] {
+    let entry = try #require(
+      ExerciseLibrary.entries(language: language).first { $0.sourceID == "Spider_Curl" })
+    #expect(entry.equipment == .dumbbell)
+    #expect(entry.steps.count >= 3)
+    #expect(entry.imagesUnavailable == false)
+  }
+  let english = try #require(
+    ExerciseLibrary.entries(language: .english).first { $0.sourceID == "Spider_Curl" })
+  #expect(english.steps.contains { $0.contains("dumbbell") })
+}
+
 @Test func inclineDumbbellPressGripVariantsKeepSeparateIDs() throws {
   let entry = try #require(
     ExerciseLibrary.entries.first { $0.sourceID == "Incline_Dumbbell_Press" })
@@ -637,8 +650,9 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   #expect(entry.generatedMedia != nil)
   #expect(Set(variants.map(\.sourceID)) == [
     "Kettlebell_Overhead_Triceps_Extension", "Dumbbell_One-Arm_Triceps_Extension",
+    "Speed_Band_Overhead_Triceps",
   ])
-  #expect(Set(variants.map(\.id)).count == 2)
+  #expect(Set(variants.map(\.id)).count == 3)
 }
 
 @Test func kneeRaiseInstructionsMatchTheSourceNameAndPhotosInBothLanguages() throws {

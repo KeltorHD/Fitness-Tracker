@@ -27900,6 +27900,9 @@
       "name": "Snatch",
       "englishName": "Snatch",
       "aliases": [
+        "Классический рывок штанги",
+        "Barbell snatch",
+        "урвать",
         "Тяжёлая атлетика",
         "olympic weightlifting"
       ],
@@ -27943,6 +27946,9 @@
       "name": "Snatch Balance",
       "englishName": "Snatch Balance",
       "aliases": [
+        "Уход в сед со штангой из-за головы",
+        "Snatch balance",
+        "Рывок баланса",
         "Тяжёлая атлетика",
         "olympic weightlifting"
       ],
@@ -27973,7 +27979,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=8KKQTdnxWso"
     },
     {
       "id": "879ec015-64a1-5001-b943-7c2ee7ec3ca7",
@@ -27981,6 +27988,9 @@
       "name": "Snatch Deadlift",
       "englishName": "Snatch Deadlift",
       "aliases": [
+        "Рывковая становая тяга",
+        "Snatch deadlift",
+        "Становая тяга в рывке",
         "Тяжёлая атлетика",
         "olympic weightlifting"
       ],
@@ -27993,7 +28003,6 @@
       "secondaryMuscles": [
         "forearms",
         "glutes",
-        "hamstrings",
         "lower back",
         "quadriceps",
         "traps"
@@ -28011,7 +28020,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "snatch-grip-pull",
+        "title": "Snatch-grip pull"
+      }
     },
     {
       "id": "449d1cb2-5e0d-5085-8d64-71cd0d010e9c",
@@ -28019,6 +28032,9 @@
       "name": "Snatch Pull",
       "englishName": "Snatch Pull",
       "aliases": [
+        "Тяга рывковым хватом с пола",
+        "Snatch pull",
+        "Рывок, тяга",
         "Силовые упражнения",
         "strength"
       ],
@@ -28049,7 +28065,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "snatch-grip-pull",
+        "title": "Snatch-grip pull"
+      }
     },
     {
       "id": "dbb69582-addc-5967-aeb6-a76e14f591a3",
@@ -28057,6 +28077,9 @@
       "name": "Snatch Shrug",
       "englishName": "Snatch Shrug",
       "aliases": [
+        "Подъём плеч со штангой широким хватом",
+        "Snatch shrug",
+        "Пожать плечами",
         "Тяжёлая атлетика",
         "olympic weightlifting"
       ],
@@ -28134,6 +28157,9 @@
       "name": "Speed Band Overhead Triceps",
       "englishName": "Speed Band Overhead Triceps",
       "aliases": [
+        "Скоростное разгибание рук с эспандером",
+        "Speed band overhead triceps",
+        "Скоростной диапазон на трицепс над головой",
         "Силовые упражнения",
         "strength"
       ],
@@ -28162,7 +28188,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-overhead-triceps-extension",
+        "title": "Standing overhead triceps extension"
+      }
     },
     {
       "id": "3322abaf-e88e-5ee7-8c83-d0161d787fe7",
@@ -28170,6 +28200,9 @@
       "name": "Speed Box Squat",
       "englishName": "Speed Box Squat",
       "aliases": [
+        "Скоростные приседания на ящик с резинками",
+        "Speed box squat",
+        "Приседания на скоростной ящик",
         "Пауэрлифтинг",
         "powerlifting"
       ],
@@ -28199,7 +28232,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-box-squat",
+        "title": "Squat to a box"
+      }
     },
     {
       "id": "3c0ffa80-7bcb-55f0-93ee-4d75269be983",
@@ -28207,6 +28244,9 @@
       "name": "Speed Squats",
       "englishName": "Speed Squats",
       "aliases": [
+        "Быстрые приседания со штангой",
+        "Speed squats",
+        "Скоростные приседания",
         "Силовые упражнения",
         "strength"
       ],
@@ -28246,6 +28286,8 @@
       "name": "Spell Caster",
       "englishName": "Spell Caster",
       "aliases": [
+        "Заклинатель",
+        "Spell caster",
         "Силовые упражнения",
         "strength"
       ],
@@ -28281,6 +28323,9 @@
       "name": "Spider Crawl",
       "englishName": "Spider Crawl",
       "aliases": [
+        "Ползание паука",
+        "Spider crawl",
+        "Паучье ползание",
         "Силовые упражнения",
         "strength"
       ],
@@ -28316,11 +28361,14 @@
       "name": "Spider Curl",
       "englishName": "Spider Curl",
       "aliases": [
+        "Сгибание рук с гантелями с опорой грудью на скамью",
+        "Spider curl",
+        "Паучьи сгибания рук",
         "Силовые упражнения",
         "strength"
       ],
       "group": "arms",
-      "equipment": "e-z curl bar",
+      "equipment": "dumbbell",
       "level": "beginner",
       "primaryMuscles": [
         "biceps"
@@ -28331,13 +28379,9 @@
         "bicepsShort"
       ],
       "steps": [
-        "Start out by setting the bar on the part of the preacher bench that you would normally sit on. Make sure to align the barbell properly so that it is balanced and will not fall off.",
-        "Move to the front side of the preacher bench (the part where the arms usually lay) and position yourself to lay at a 45 degree slant with your torso and stomach pressed against the front side of the preacher bench.",
-        "Make sure that your feet (especially the toes) are well positioned on the floor and place your upper arms on top of the pad located on the inside part of the preacher bench.",
-        "Use your arms to grab the barbell with a supinated grip (palms facing up) at about shoulder width apart or slightly closer from each other.",
-        "Slowly begin to lift the barbell upwards and exhale. Hold the contracted position for a second as you squeeze the biceps.",
-        "Slowly begin to bring the barbell back to the starting position as your breathe in. .",
-        "Repeat for the recommended amount of repetitions."
+        "Lean your chest against the inclined side of a preacher bench and hold a dumbbell in each hand.",
+        "Let your arms hang down, then bend your elbows and curl the dumbbells upward.",
+        "Lower the dumbbells under control, keeping your upper arms steady."
       ],
       "images": [
         "Spider_Curl/0.jpg",
@@ -28346,7 +28390,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=TVjOooXvzO8"
     },
     {
       "id": "bf35cf10-417c-53f9-8849-0e91bec8885c",
@@ -28354,6 +28399,8 @@
       "name": "Spinal Stretch",
       "englishName": "Spinal Stretch",
       "aliases": [
+        "Повороты и наклоны корпуса сидя",
+        "Растяжка позвоночника",
         "Растяжка",
         "stretching"
       ],
@@ -28391,6 +28438,8 @@
       "name": "Split Clean",
       "englishName": "Split Clean",
       "aliases": [
+        "Взятие штанги на грудь в разножку",
+        "Split clean",
         "Тяжёлая атлетика",
         "olympic weightlifting"
       ],
@@ -28433,6 +28482,9 @@
       "name": "Split Jerk",
       "englishName": "Split Jerk",
       "aliases": [
+        "Толчок штанги в разножку",
+        "Split jerk",
+        "Сплит-рывок",
         "Тяжёлая атлетика",
         "olympic weightlifting"
       ],

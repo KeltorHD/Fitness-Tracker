@@ -898,5 +898,39 @@
     ],
     "instructionSourceURL": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4262933/",
     "instructionCorrectionReason": "The source asserts that any knee movement beyond the toes is incorrect and harmful; this blanket claim is unsupported."
-  }
+  },
+  "Snatch": {},
+  "Snatch_Balance": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=8KKQTdnxWso"
+  },
+  "Snatch_Deadlift": {
+    "secondaryMuscles": [
+      "forearms",
+      "glutes",
+      "lower back",
+      "quadriceps",
+      "traps"
+    ]
+  },
+  "Snatch_Pull": {},
+  "Snatch_Shrug": {},
+  "Speed_Band_Overhead_Triceps": {},
+  "Speed_Box_Squat": {},
+  "Speed_Squats": {},
+  "Spell_Caster": {},
+  "Spider_Crawl": {},
+  "Spider_Curl": {
+    "equipment": "dumbbell",
+    "englishSteps": [
+      "Lean your chest against the inclined side of a preacher bench and hold a dumbbell in each hand.",
+      "Let your arms hang down, then bend your elbows and curl the dumbbells upward.",
+      "Lower the dumbbells under control, keeping your upper arms steady."
+    ],
+    "instructionSourceURL": "https://www.catalystathletics.com/exercise/835/Dumbbell-Spider-Curl/",
+    "instructionCorrectionReason": "The source name is generic, while its photos and accompanying exercise video show dumbbells rather than the EZ bar described in the source text.",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=TVjOooXvzO8"
+  },
+  "Spinal_Stretch": {},
+  "Split_Clean": {},
+  "Split_Jerk": {}
 }

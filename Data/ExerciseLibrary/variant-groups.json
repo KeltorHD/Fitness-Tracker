@@ -73,7 +73,8 @@
       "Box_Squat_with_Chains",
       "Dumbbell_Squat_To_A_Bench",
       "Front_Barbell_Squat_To_A_Bench",
-      "Reverse_Band_Box_Squat"
+      "Reverse_Band_Box_Squat",
+      "Speed_Box_Squat"
     ]
   },
   "standing-hip-adduction": {
@@ -277,7 +278,8 @@
     "en": "Standing overhead triceps extension",
     "members": [
       "Dumbbell_One-Arm_Triceps_Extension",
-      "Kettlebell_Overhead_Triceps_Extension"
+      "Kettlebell_Overhead_Triceps_Extension",
+      "Speed_Band_Overhead_Triceps"
     ]
   },
   "kettlebell-windmill": {
@@ -457,6 +459,14 @@
     "members": [
       "Smith_Machine_Upright_Row",
       "Smith_Machine_One-Arm_Upright_Row"
+    ]
+  },
+  "snatch-grip-pull": {
+    "ru": "Тяга штанги рывковым хватом",
+    "en": "Snatch-grip pull",
+    "members": [
+      "Snatch_Deadlift",
+      "Snatch_Pull"
     ]
   }
 }
