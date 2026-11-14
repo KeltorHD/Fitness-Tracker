@@ -164,6 +164,25 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   #expect(wide.translationAutomatic == false)
 }
 
+@Test func sitUpsAreNotMisidentifiedAsSquats() throws {
+  let full = try #require(ExerciseLibrary.entries.first { $0.sourceID == "Sit-Up" })
+  let partial = try #require(ExerciseLibrary.entries.first { $0.sourceID == "3_4_Sit-Up" })
+  #expect(full.name == "Подъём корпуса лёжа на полу")
+  #expect(partial.name == "Подъём корпуса лёжа с неполным опусканием")
+  #expect(!ExerciseLibrary.search("приседания").contains { $0.id == full.id || $0.id == partial.id })
+  #expect(ExerciseLibrary.search("подъём корпуса").contains { $0.id == full.id })
+  #expect(ExerciseLibrary.search("3/4 Sit-Up").contains { $0.id == partial.id })
+}
+
+@Test func reviewedStretchDoesNotRepeatThePrimaryMuscleAsSecondary() throws {
+  for language in [AppLanguage.russian, .english] {
+    let entry = try #require(
+      ExerciseLibrary.entries(language: language).first { $0.sourceID == "All_Fours_Quad_Stretch" })
+    #expect(entry.primaryMuscleIDs == [.quadriceps])
+    #expect(entry.secondaryMuscles.isEmpty)
+  }
+}
+
 @Test func multipleEquipmentFiltersUseUnionAndIntersectWithMuscleAndSearch() {
   let equipment: Set<ExerciseEquipment> = [.barbell, .dumbbell]
   let combined = ExerciseLibrary.search(equipment: equipment)

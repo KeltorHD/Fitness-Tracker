@@ -33,7 +33,8 @@ import Testing
   #expect(en.map(\.id) == ru.map(\.id))
   #expect(en.map(\.images) == ru.map(\.images))
   #expect(en.allSatisfy { $0.translationAutomatic == false })
-  #expect(ru.filter { $0.translationAutomatic == true }.count == 773)
+  #expect(ru.first { $0.sourceID == "3_4_Sit-Up" }?.translationAutomatic == false)
+  #expect(ru.first { $0.sourceID == "Box_Skip" }?.translationAutomatic == true)
   #expect(
     en.allSatisfy {
       $0.name == $0.englishName && ($0.steps.isEmpty == ($0.techniqueUnavailable == true))

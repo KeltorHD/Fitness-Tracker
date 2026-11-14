@@ -107,6 +107,8 @@ def generate():
     entries = []
     for index, (source_id, name, aliases) in enumerate(selection()):
         item = source[source_id]
+        secondary_muscles = reviewed.get(source_id, {}).get('secondaryMuscles', item['secondaryMuscles'])
+        assert all(muscle in MUSCLES for muscle in secondary_muscles), source_id
         assert 0 < len(name) <= 80 and re.search('[А-Яа-яЁё]', name)
         steps = translations[source_id]
         assert bool(steps) == bool(item['instructions']), source_id
@@ -117,7 +119,7 @@ def generate():
                         'englishName': item['name'], 'aliases': aliases.split(';'),
                         'group': GROUPS[item['primaryMuscles'][0]], 'equipment': item['equipment'] or 'unspecified',
                         'level': item['level'], 'primaryMuscles': [MUSCLES[m] for m in item['primaryMuscles']],
-                        'secondaryMuscles': [MUSCLES[m] for m in item['secondaryMuscles']],
+                        'secondaryMuscles': [MUSCLES[m] for m in secondary_muscles],
                         'trainingRegions': regions.get(source_id, []),
                         'steps': steps, 'images': item['images'],
                         'techniqueUnavailable': not bool(item['instructions']),
@@ -135,7 +137,8 @@ def generate():
     for entry in entries:
         item = source[entry['sourceID']]
         english_entries.append({**entry, 'name': item['name'],
-            'primaryMuscles': item['primaryMuscles'], 'secondaryMuscles': item['secondaryMuscles'],
+            'primaryMuscles': item['primaryMuscles'],
+            'secondaryMuscles': reviewed.get(entry['sourceID'], {}).get('secondaryMuscles', item['secondaryMuscles']),
             'steps': [step for step in item['instructions'] if step.strip()],
             'translationAutomatic': False})
     russian = json.loads(RESOURCE.read_text())

@@ -9,5 +9,24 @@
     "techniqueVideoURL": "https://www.youtube.com/watch?v=4_QuyfOCI5U"
   },
   "Wide-Grip_Barbell_Bench_Press": {},
-  "Butterfly": {}
+  "Butterfly": {},
+  "3_4_Sit-Up": {},
+  "90_90_Hamstring": {},
+  "Ab_Crunch_Machine": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=JSBuaT1tHfM"
+  },
+  "Adductor": {},
+  "Adductor_Groin": {},
+  "Advanced_Kettlebell_Windmill": {},
+  "All_Fours_Quad_Stretch": {
+    "secondaryMuscles": []
+  },
+  "Alternate_Incline_Dumbbell_Curl": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=B4HGtMhGI2s"
+  },
+  "Alternate_Leg_Diagonal_Bound": {},
+  "Alternating_Cable_Shoulder_Press": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=RoLdoKk-FkM"
+  },
+  "Sit-Up": {}
 }

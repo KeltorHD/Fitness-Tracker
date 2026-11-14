@@ -98,16 +98,16 @@ Alternate_Heel_Touchers	Касания пяток лёжа	Боковые скр
 Ab_Roller	Выкаты с роликом	Ролик для пресса
 Barbell_Side_Bend	Наклоны в сторону со штангой	Боковые наклоны
 Dumbbell_Side_Bend	Наклоны в сторону с гантелью	Боковые наклоны с гантелью
-3_4_Sit-Up	3/4 приседания	Силовые упражнения;strength
-90_90_Hamstring	90/90 Подколенное сухожилие	Растяжка;stretching
-Ab_Crunch_Machine	Машина для пресса	Силовые упражнения;strength
-Adductor	Аддуктор	Растяжка;stretching
-Adductor_Groin	Аддуктор/Пах	Растяжка;stretching
-Advanced_Kettlebell_Windmill	Мельница с гирей: продвинутый вариант	Силовые упражнения;strength
-All_Fours_Quad_Stretch	Растяжка на четвереньках	Растяжка;stretching
-Alternate_Incline_Dumbbell_Curl	Поочередное сгибание рук с гантелями на наклонной скамье	Силовые упражнения;strength
-Alternate_Leg_Diagonal_Bound	Альтернативная нога по диагонали	Плиометрика;plyometrics
-Alternating_Cable_Shoulder_Press	Попеременный жим от плеч на тросе	Силовые упражнения;strength
+3_4_Sit-Up	Подъём корпуса лёжа с неполным опусканием	Подъём корпуса на 3/4;3/4 Sit-Up
+90_90_Hamstring	Растяжка задней поверхности бедра лёжа 90/90	Растяжка задней поверхности бедра лёжа;90/90 Hamstring
+Ab_Crunch_Machine	Скручивания сидя в тренажёре для пресса	Скручивания в тренажёре;Ab Crunch Machine
+Adductor	Прокатывание внутренней поверхности бедра на ролике	Массаж приводящих мышц на ролике;Adductor foam roll
+Adductor_Groin	Растяжка приводящих мышц лёжа с партнёром	Растяжка внутренней поверхности бедра с партнёром;Adductor Groin
+Advanced_Kettlebell_Windmill	Мельница с гирей над головой, рука за спиной	Мельница с гирей: продвинутый вариант;Наклон с гирей над головой и рукой за спиной;Advanced Kettlebell Windmill
+All_Fours_Quad_Stretch	Растяжка квадрицепса стоя на четвереньках	Растяжка передней поверхности бедра на четвереньках;All Fours Quad Stretch
+Alternate_Incline_Dumbbell_Curl	Попеременное сгибание рук с гантелями сидя на наклонной скамье	Поочередное сгибание рук с гантелями на наклонной скамье;Попеременные сгибания на бицепс на наклонной скамье
+Alternate_Leg_Diagonal_Bound	Диагональные прыжки с ноги на ногу	Попеременные диагональные прыжки;Alternate Leg Diagonal Bound
+Alternating_Cable_Shoulder_Press	Попеременный жим рукоятей нижних блоков над головой стоя	Попеременный жим на блоках стоя;Alternating Cable Shoulder Press
 Alternating_Deltoid_Raise	Попеременный подъем дельтовидных мышц	Силовые упражнения;strength
 Alternating_Floor_Press	Попеременный жим с пола	Силовые упражнения;strength
 Alternating_Hang_Clean	Поочередное подвешивание на чистку	Силовые упражнения;strength
@@ -705,7 +705,7 @@ Single-Leg_Stride_Jump	Прыжок с шагом на одной ноге	Пл�
 Single_Dumbbell_Raise	Одиночный подъем гантели	Силовые упражнения;strength
 Single_Leg_Butt_Kick	Удар ногой одной ногой	Плиометрика;plyometrics
 Single_Leg_Push-off	Отталкивание на одной ноге	Плиометрика;plyometrics
-Sit-Up	Приседания	Силовые упражнения;strength
+Sit-Up	Подъём корпуса лёжа на полу	Подъём туловища лёжа;Sit-Up
 Sit_Squats	Сидячие приседания	Растяжка;stretching
 Skating	Катание на коньках	Кардио;cardio
 Sled_Drag_-_Harness	Sled Drag - Упряжь	Силовой экстрим;strongman
