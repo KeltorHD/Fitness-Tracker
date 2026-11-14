@@ -5368,8 +5368,8 @@
       "name": "Barbell Seated Calf Raise",
       "englishName": "Barbell Seated Calf Raise",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подъём на носки со штангой сидя",
+        "Barbell Seated Calf Raise"
       ],
       "group": "legs",
       "equipment": "barbell",
@@ -5404,8 +5404,8 @@
       "name": "Barbell Shoulder Press",
       "englishName": "Barbell Shoulder Press",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Жим штанги от плеч сидя",
+        "Barbell Shoulder Press"
       ],
       "group": "shoulders",
       "equipment": "barbell",
@@ -5435,7 +5435,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=lPFwcHl0a2c"
     },
     {
       "id": "2db03dbe-6bd3-5910-bf08-104301be0026",
@@ -5443,8 +5444,8 @@
       "name": "Barbell Shrug Behind The Back",
       "englishName": "Barbell Shrug Behind The Back",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подъём плеч со штангой стоя за спиной",
+        "Barbell Shrug Behind The Back"
       ],
       "group": "back",
       "equipment": "barbell",
@@ -5480,8 +5481,8 @@
       "name": "Barbell Side Split Squat",
       "englishName": "Barbell Side Split Squat",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Приседания в сторону со штангой",
+        "Barbell Side Split Squat"
       ],
       "group": "legs",
       "equipment": "barbell",
@@ -5516,8 +5517,8 @@
       "name": "Barbell Squat To A Bench",
       "englishName": "Barbell Squat To A Bench",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Приседания со штангой к скамье",
+        "Barbell Squat To A Bench"
       ],
       "group": "legs",
       "equipment": "barbell",
@@ -5556,8 +5557,8 @@
       "name": "Barbell Step Ups",
       "englishName": "Barbell Step Ups",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Зашагивания со штангой",
+        "Barbell Step Ups"
       ],
       "group": "legs",
       "equipment": "barbell",
@@ -5568,8 +5569,7 @@
       "secondaryMuscles": [
         "calves",
         "glutes",
-        "hamstrings",
-        "quadriceps"
+        "hamstrings"
       ],
       "trainingRegions": [],
       "steps": [
@@ -5593,8 +5593,8 @@
       "name": "Barbell Walking Lunge",
       "englishName": "Barbell Walking Lunge",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Ходьба выпадами со штангой",
+        "Barbell Walking Lunge"
       ],
       "group": "legs",
       "equipment": "barbell",
@@ -5629,8 +5629,9 @@
       "name": "Battling Ropes",
       "englishName": "Battling Ropes",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Боевые канаты",
+        "Попеременные волны канатами",
+        "Battling Ropes"
       ],
       "group": "shoulders",
       "equipment": "other",

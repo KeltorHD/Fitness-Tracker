@@ -86,5 +86,21 @@
   "Barbell_Rear_Delt_Row": {
     "techniqueVideoURL": "https://www.youtube.com/watch?v=rTbb70P8_BI"
   },
-  "Barbell_Rollout_from_Bench": {}
+  "Barbell_Rollout_from_Bench": {},
+  "Barbell_Seated_Calf_Raise": {},
+  "Barbell_Shoulder_Press": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=lPFwcHl0a2c"
+  },
+  "Barbell_Shrug_Behind_The_Back": {},
+  "Barbell_Side_Split_Squat": {},
+  "Barbell_Squat_To_A_Bench": {},
+  "Barbell_Step_Ups": {
+    "secondaryMuscles": [
+      "calves",
+      "glutes",
+      "hamstrings"
+    ]
+  },
+  "Barbell_Walking_Lunge": {},
+  "Battling_Ropes": {}
 }

@@ -249,6 +249,15 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   #expect(ExerciseLibrary.search(equipment: .bands).contains { $0.id == entry.id })
 }
 
+@Test func barbellStepUpDoesNotRepeatQuadricepsAsSecondary() throws {
+  for language in [AppLanguage.russian, .english] {
+    let entry = try #require(
+      ExerciseLibrary.entries(language: language).first { $0.sourceID == "Barbell_Step_Ups" })
+    #expect(entry.primaryMuscleIDs == [.quadriceps])
+    #expect(!entry.secondaryMuscleIDs.contains(.quadriceps))
+  }
+}
+
 @Test func multipleEquipmentFiltersUseUnionAndIntersectWithMuscleAndSearch() {
   let equipment: Set<ExerciseEquipment> = [.barbell, .dumbbell]
   let combined = ExerciseLibrary.search(equipment: equipment)
