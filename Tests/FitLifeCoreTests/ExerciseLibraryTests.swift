@@ -553,7 +553,11 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     ["Parallel_Bar_Dip", "Ring_Dips"],
     ["Romanian_Deadlift", "Romanian_Deadlift_from_Deficit"],
     ["Sled_Push", "Prowler_Sprint"],
-    ["Smith_Machine_Upright_Row", "Smith_Machine_One-Arm_Upright_Row"],
+    [
+      "Dumbbell_Raise", "Dumbbell_One-Arm_Upright_Row", "Standing_Dumbbell_Upright_Row",
+      "Smith_Machine_Upright_Row", "Smith_Machine_One-Arm_Upright_Row", "Upright_Barbell_Row",
+      "Upright_Cable_Row", "Upright_Row_-_With_Bands",
+    ],
     ["Standing_Cable_Lift", "Standing_Cable_Wood_Chop"],
     ["Stiff-Legged_Barbell_Deadlift", "Smith_Machine_Stiff-Legged_Deadlift"],
     ["Sumo_Deadlift_with_Bands", "Reverse_Band_Sumo_Deadlift", "Sumo_Deadlift_with_Chains"],
@@ -619,6 +623,16 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
       ExerciseLibrary.entries(language: language).first { $0.sourceID == "Upper_Back_Stretch" })
     #expect(entry.primaryMuscleIDs == [.middleBack])
     #expect(!entry.secondaryMuscleIDs.contains(.middleBack))
+  }
+}
+
+@Test func plateExercisesUseEquipmentMatchingTheirPhotos() throws {
+  for language in [AppLanguage.russian, .english] {
+    for sourceID in ["Weighted_Crunches", "Weighted_Sissy_Squat"] {
+      let entry = try #require(
+        ExerciseLibrary.entries(language: language).first { $0.sourceID == sourceID })
+      #expect(entry.equipment == .other)
+    }
   }
 }
 

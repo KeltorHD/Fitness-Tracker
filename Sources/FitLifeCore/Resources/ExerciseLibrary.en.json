@@ -11107,7 +11107,7 @@
       "translationAutomatic": false,
       "variantGroup": {
         "id": "standing-dumbbell-upright-row",
-        "title": "Standing dumbbell upright row"
+        "title": "Standing upright row"
       }
     },
     {
@@ -11182,7 +11182,7 @@
       "translationAutomatic": false,
       "variantGroup": {
         "id": "standing-dumbbell-upright-row",
-        "title": "Standing dumbbell upright row"
+        "title": "Standing upright row"
       }
     },
     {
@@ -27624,8 +27624,8 @@
       "generatedMedia": null,
       "translationAutomatic": false,
       "variantGroup": {
-        "id": "smith-upright-row",
-        "title": "Smith machine upright row"
+        "id": "standing-dumbbell-upright-row",
+        "title": "Standing upright row"
       }
     },
     {
@@ -27871,8 +27871,8 @@
       "generatedMedia": null,
       "translationAutomatic": false,
       "variantGroup": {
-        "id": "smith-upright-row",
-        "title": "Smith machine upright row"
+        "id": "standing-dumbbell-upright-row",
+        "title": "Standing upright row"
       }
     },
     {
@@ -29575,7 +29575,7 @@
       "translationAutomatic": false,
       "variantGroup": {
         "id": "standing-dumbbell-upright-row",
-        "title": "Standing dumbbell upright row"
+        "title": "Standing upright row"
       }
     },
     {
@@ -32121,6 +32121,9 @@
       "name": "Upright Barbell Row",
       "englishName": "Upright Barbell Row",
       "aliases": [
+        "Протяжка со штангой стоя",
+        "Barbell upright row",
+        "Тяга штанги вертикально",
         "Силовые упражнения",
         "strength"
       ],
@@ -32149,7 +32152,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-dumbbell-upright-row",
+        "title": "Standing upright row"
+      }
     },
     {
       "id": "64bb3e5a-6b80-582f-8eb3-6c97ee6f1f92",
@@ -32157,6 +32164,9 @@
       "name": "Upright Cable Row",
       "englishName": "Upright Cable Row",
       "aliases": [
+        "Протяжка нижнего блока",
+        "Cable upright row",
+        "Тяга нижнего блока к подбородку",
         "Силовые упражнения",
         "strength"
       ],
@@ -32183,7 +32193,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-dumbbell-upright-row",
+        "title": "Standing upright row"
+      }
     },
     {
       "id": "891d6b0b-02d5-52b4-946d-5fd3fdb120cc",
@@ -32191,6 +32205,9 @@
       "name": "Upright Row - With Bands",
       "englishName": "Upright Row - With Bands",
       "aliases": [
+        "Протяжка с резинкой",
+        "Band upright row",
+        "Тяга эспандера к подбородку",
         "Силовые упражнения",
         "strength"
       ],
@@ -32217,7 +32234,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-dumbbell-upright-row",
+        "title": "Standing upright row"
+      }
     },
     {
       "id": "0142c222-a57e-5120-b49a-bb3689a8e2f9",
@@ -32225,6 +32246,8 @@
       "name": "Upward Stretch",
       "englishName": "Upward Stretch",
       "aliases": [
+        "Растяжка плеч с руками над головой",
+        "Растяжка вверх",
         "Растяжка",
         "stretching"
       ],
@@ -32258,6 +32281,9 @@
       "name": "V-Bar Pulldown",
       "englishName": "V-Bar Pulldown",
       "aliases": [
+        "Вертикальная тяга с V-рукояткой",
+        "V-bar pulldown",
+        "Тяга V-образной перекладины вниз",
         "Силовые упражнения",
         "strength"
       ],
@@ -32288,7 +32314,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=IjoFCmLX7z0"
     },
     {
       "id": "edd7c4fb-f536-5a54-9995-2c20a93e6328",
@@ -32296,6 +32323,9 @@
       "name": "V-Bar Pullup",
       "englishName": "V-Bar Pullup",
       "aliases": [
+        "Подтягивания с V-рукояткой",
+        "V-bar pull-up",
+        "Подтягивания на V-образной перекладине",
         "Силовые упражнения",
         "strength"
       ],
@@ -32333,6 +32363,9 @@
       "name": "Vertical Swing",
       "englishName": "Vertical Swing",
       "aliases": [
+        "Вертикальный мах гантелью",
+        "Vertical dumbbell swing",
+        "Вертикальное качание",
         "Плиометрика",
         "plyometrics"
       ],
@@ -32369,6 +32402,9 @@
       "name": "Walking, Treadmill",
       "englishName": "Walking, Treadmill",
       "aliases": [
+        "Ходьба на дорожке",
+        "Treadmill walking",
+        "Ходьба, Беговая дорожка",
         "Кардио",
         "cardio"
       ],
@@ -32403,6 +32439,8 @@
       "name": "Weighted Ball Hyperextension",
       "englishName": "Weighted Ball Hyperextension",
       "aliases": [
+        "Разгибание корпуса на фитболе с отягощением",
+        "Гиперэкстензия на мяче с отягощением",
         "Силовые упражнения",
         "strength"
       ],
@@ -32439,6 +32477,8 @@
       "name": "Weighted Ball Side Bend",
       "englishName": "Weighted Ball Side Bend",
       "aliases": [
+        "Боковое разгибание корпуса на фитболе с отягощением",
+        "Наклон мяча в сторону с отягощением",
         "Силовые упражнения",
         "strength"
       ],
@@ -32476,6 +32516,9 @@
       "name": "Weighted Bench Dip",
       "englishName": "Weighted Bench Dip",
       "aliases": [
+        "Отжимания от скамьи с отягощением",
+        "Weighted bench dip",
+        "Отжимания на скамье с отягощением",
         "Силовые упражнения",
         "strength"
       ],
@@ -32512,11 +32555,13 @@
       "name": "Weighted Crunches",
       "englishName": "Weighted Crunches",
       "aliases": [
+        "Скручивания с отягощением",
+        "Weighted crunch",
         "Силовые упражнения",
         "strength"
       ],
       "group": "core",
-      "equipment": "medicine ball",
+      "equipment": "other",
       "level": "beginner",
       "primaryMuscles": [
         "abdominals"
@@ -32548,6 +32593,9 @@
       "name": "Weighted Jump Squat",
       "englishName": "Weighted Jump Squat",
       "aliases": [
+        "Приседания с выпрыгиванием со штангой",
+        "Weighted jump squat",
+        "Приседания с прыжком с весом",
         "Силовые упражнения",
         "strength"
       ],
@@ -32585,6 +32633,9 @@
       "name": "Weighted Pull Ups",
       "englishName": "Weighted Pull Ups",
       "aliases": [
+        "Подтягивания с отягощением",
+        "Weighted pull-up",
+        "Подтягивания с весом",
         "Силовые упражнения",
         "strength"
       ],
@@ -32620,11 +32671,14 @@
       "name": "Weighted Sissy Squat",
       "englishName": "Weighted Sissy Squat",
       "aliases": [
+        "Приседания на носках с блином и опорой",
+        "Weighted sissy squat",
+        "Приседания сисси с утяжелением",
         "Силовые упражнения",
         "strength"
       ],
       "group": "legs",
-      "equipment": "barbell",
+      "equipment": "other",
       "level": "expert",
       "primaryMuscles": [
         "quadriceps"

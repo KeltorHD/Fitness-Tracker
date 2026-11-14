@@ -1083,5 +1083,26 @@
   "Upper_Back-Leg_Grab": {},
   "Upper_Back_Stretch": {
     "secondaryMuscles": []
+  },
+  "Upright_Barbell_Row": {},
+  "Upright_Cable_Row": {},
+  "Upright_Row_-_With_Bands": {},
+  "Upward_Stretch": {},
+  "V-Bar_Pulldown": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=IjoFCmLX7z0"
+  },
+  "V-Bar_Pullup": {},
+  "Vertical_Swing": {},
+  "Walking_Treadmill": {},
+  "Weighted_Ball_Hyperextension": {},
+  "Weighted_Ball_Side_Bend": {},
+  "Weighted_Bench_Dip": {},
+  "Weighted_Crunches": {
+    "equipment": "other"
+  },
+  "Weighted_Jump_Squat": {},
+  "Weighted_Pull_Ups": {},
+  "Weighted_Sissy_Squat": {
+    "equipment": "other"
   }
 }
