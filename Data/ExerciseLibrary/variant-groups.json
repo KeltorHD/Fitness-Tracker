@@ -18,5 +18,22 @@
       "Close-Grip_Barbell_Bench_Press",
       "Wide-Grip_Barbell_Bench_Press"
     ]
+  },
+  "barbell-ab-rollout": {
+    "ru": "Выкатывание штанги",
+    "en": "Barbell rollout",
+    "members": [
+      "Barbell_Ab_Rollout",
+      "Barbell_Ab_Rollout_-_On_Knees",
+      "Barbell_Rollout_from_Bench"
+    ]
+  },
+  "band-good-morning": {
+    "ru": "Гудморнинг с резиновой петлёй",
+    "en": "Resistance band good morning",
+    "members": [
+      "Band_Good_Morning",
+      "Band_Good_Morning_Pull_Through"
+    ]
   }
 }

@@ -223,6 +223,32 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   ])
 }
 
+@Test func bandHipAdductionMatchesTheOriginalNameAndPhotos() throws {
+  let entry = try #require(
+    ExerciseLibrary.entries.first { $0.sourceID == "Band_Hip_Adductions" })
+  #expect(entry.name == "Приведение ноги стоя с резиновой петлёй")
+  #expect(entry.primaryMuscleIDs == [.adductors])
+  #expect(entry.steps.contains { $0.contains("к средней линии") })
+  #expect(ExerciseLibrary.search("приведение бедра с эспандером").contains { $0.id == entry.id })
+}
+
+@Test func rolloutVariantsShareOneGroupButKeepSeparateIDs() throws {
+  let entry = try #require(
+    ExerciseLibrary.entries.first { $0.sourceID == "Barbell_Ab_Rollout" })
+  let variants = ExerciseLibrary.variants(for: entry.id, language: .russian)
+  #expect(Set(variants.map(\.sourceID)) == [
+    "Barbell_Ab_Rollout", "Barbell_Ab_Rollout_-_On_Knees", "Barbell_Rollout_from_Bench",
+  ])
+  #expect(Set(variants.map(\.id)).count == 3)
+}
+
+@Test func bandAssistedPullUpsAppearUnderBandEquipment() throws {
+  let entry = try #require(
+    ExerciseLibrary.entries.first { $0.sourceID == "Band_Assisted_Pull-Up" })
+  #expect(entry.equipment == .bands)
+  #expect(ExerciseLibrary.search(equipment: .bands).contains { $0.id == entry.id })
+}
+
 @Test func multipleEquipmentFiltersUseUnionAndIntersectWithMuscleAndSearch() {
   let equipment: Set<ExerciseEquipment> = [.barbell, .dumbbell]
   let combined = ExerciseLibrary.search(equipment: equipment)

@@ -126,7 +126,8 @@ def generate():
         group_id = group_by_member.get(source_id)
         entries.append({'id': stable_id, 'sourceID': source_id, 'name': name,
                         'englishName': item['name'], 'aliases': aliases.split(';'),
-                        'group': GROUPS[item['primaryMuscles'][0]], 'equipment': item['equipment'] or 'unspecified',
+                        'group': GROUPS[item['primaryMuscles'][0]],
+                        'equipment': reviewed.get(source_id, {}).get('equipment', item['equipment'] or 'unspecified'),
                         'level': item['level'], 'primaryMuscles': [MUSCLES[m] for m in item['primaryMuscles']],
                         'secondaryMuscles': [MUSCLES[m] for m in secondary_muscles],
                         'trainingRegions': regions.get(source_id, []),

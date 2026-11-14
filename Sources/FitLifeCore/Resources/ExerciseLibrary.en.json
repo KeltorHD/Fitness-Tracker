@@ -4612,8 +4612,8 @@
       "name": "Back Flyes - With Bands",
       "englishName": "Back Flyes - With Bands",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Обратное разведение рук с эспандером",
+        "Back Flyes With Bands"
       ],
       "group": "shoulders",
       "equipment": "bands",
@@ -4651,8 +4651,8 @@
       "name": "Backward Drag",
       "englishName": "Backward Drag",
       "aliases": [
-        "Силовой экстрим",
-        "strongman"
+        "Перетаскивание саней спиной вперёд",
+        "Backward Drag"
       ],
       "group": "legs",
       "equipment": "other",
@@ -4687,8 +4687,8 @@
       "name": "Backward Medicine Ball Throw",
       "englishName": "Backward Medicine Ball Throw",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Бросок медбола назад",
+        "Backward Medicine Ball Throw"
       ],
       "group": "shoulders",
       "equipment": "medicine ball",
@@ -4711,7 +4711,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=fU1O_5bfFXY"
     },
     {
       "id": "000cee82-e315-5c01-a571-b7bc53b4b837",
@@ -4719,8 +4720,8 @@
       "name": "Balance Board",
       "englishName": "Balance Board",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Баланс на доске",
+        "Balance Board"
       ],
       "group": "legs",
       "equipment": "other",
@@ -4753,8 +4754,9 @@
       "name": "Ball Leg Curl",
       "englishName": "Ball Leg Curl",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Сгибание ног с мячом",
+        "Сгибание ног на фитболе",
+        "Ball Leg Curl"
       ],
       "group": "legs",
       "equipment": "exercise ball",
@@ -4785,7 +4787,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=zkzi1klvHps"
     },
     {
       "id": "227084e6-522c-55e3-a17a-e6eb3f89360a",
@@ -4793,11 +4796,11 @@
       "name": "Band Assisted Pull-Up",
       "englishName": "Band Assisted Pull-Up",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подтягивания с резинкой",
+        "Band Assisted Pull-Up"
       ],
       "group": "back",
-      "equipment": "other",
+      "equipment": "bands",
       "level": "beginner",
       "primaryMuscles": [
         "lats"
@@ -4821,7 +4824,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=B_VkNQS5YLs"
     },
     {
       "id": "d40c966a-d159-5fb2-9f29-03b1c87276b5",
@@ -4829,8 +4833,8 @@
       "name": "Band Good Morning",
       "englishName": "Band Good Morning",
       "aliases": [
-        "Пауэрлифтинг",
-        "powerlifting"
+        "Наклоны вперёд с резиновой петлёй под стопами",
+        "Band Good Morning"
       ],
       "group": "legs",
       "equipment": "bands",
@@ -4855,7 +4859,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "band-good-morning",
+        "title": "Resistance band good morning"
+      }
     },
     {
       "id": "f0995e61-7f25-52a7-ac63-de8bcbba8940",
@@ -4863,8 +4871,8 @@
       "name": "Band Good Morning (Pull Through)",
       "englishName": "Band Good Morning (Pull Through)",
       "aliases": [
-        "Пауэрлифтинг",
-        "powerlifting"
+        "Наклоны вперёд с закреплённой резиновой петлёй",
+        "Band Good Morning Pull Through"
       ],
       "group": "legs",
       "equipment": "bands",
@@ -4889,7 +4897,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "band-good-morning",
+        "title": "Resistance band good morning"
+      }
     },
     {
       "id": "7bcdeb66-6631-5d10-94e9-e69bf7f7a4a3",
@@ -4897,8 +4909,8 @@
       "name": "Band Hip Adductions",
       "englishName": "Band Hip Adductions",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Приведение бедра с эспандером",
+        "Band Hip Adductions"
       ],
       "group": "legs",
       "equipment": "bands",
@@ -4923,7 +4935,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=lUI8App_XdY"
     },
     {
       "id": "70b3b8a7-4587-550b-808e-cdeb21f95fed",
@@ -4931,8 +4944,8 @@
       "name": "Band Pull Apart",
       "englishName": "Band Pull Apart",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Растягивание резинки перед собой",
+        "Band Pull Apart"
       ],
       "group": "shoulders",
       "equipment": "bands",
@@ -4968,8 +4981,8 @@
       "name": "Band Skull Crusher",
       "englishName": "Band Skull Crusher",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Разгибание рук с резинкой лёжа на плоской скамье",
+        "Band Skull Crusher"
       ],
       "group": "arms",
       "equipment": "bands",
@@ -5003,8 +5016,8 @@
       "name": "Barbell Ab Rollout",
       "englishName": "Barbell Ab Rollout",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Выкаты со штангой с опорой на стопы",
+        "Barbell Ab Rollout"
       ],
       "group": "core",
       "equipment": "barbell",
@@ -5034,7 +5047,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-ab-rollout",
+        "title": "Barbell rollout"
+      }
     },
     {
       "id": "ae1b7523-3fdd-5b79-88a3-afb493ead9e4",
@@ -5042,8 +5059,8 @@
       "name": "Barbell Ab Rollout - On Knees",
       "englishName": "Barbell Ab Rollout - On Knees",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Выкаты со штангой с колен",
+        "Barbell Ab Rollout On Knees"
       ],
       "group": "core",
       "equipment": "barbell",
@@ -5073,7 +5090,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-ab-rollout",
+        "title": "Barbell rollout"
+      }
     },
     {
       "id": "06642256-ad40-5e20-aa80-6df150e28621",
@@ -5081,8 +5102,8 @@
       "name": "Barbell Curls Lying Against An Incline",
       "englishName": "Barbell Curls Lying Against An Incline",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Сгибания рук со штангой лёжа на наклонной скамье",
+        "Barbell Curls Lying Against An Incline"
       ],
       "group": "arms",
       "equipment": "barbell",
@@ -5116,8 +5137,8 @@
       "name": "Barbell Full Squat",
       "englishName": "Barbell Full Squat",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Полный присед со штангой",
+        "Barbell Full Squat"
       ],
       "group": "legs",
       "equipment": "barbell",
@@ -5155,8 +5176,8 @@
       "name": "Barbell Guillotine Bench Press",
       "englishName": "Barbell Guillotine Bench Press",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Жим штанги лёжа к шее на плоской скамье",
+        "Barbell Guillotine Bench Press"
       ],
       "group": "chest",
       "equipment": "barbell",
@@ -5193,8 +5214,8 @@
       "name": "Barbell Hack Squat",
       "englishName": "Barbell Hack Squat",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Приседания со штангой за ногами",
+        "Barbell Hack Squat"
       ],
       "group": "legs",
       "equipment": "barbell",
@@ -5229,8 +5250,8 @@
       "name": "Barbell Incline Shoulder Raise",
       "englishName": "Barbell Incline Shoulder Raise",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Протракция лопаток со штангой на наклонной скамье",
+        "Barbell Incline Shoulder Raise"
       ],
       "group": "shoulders",
       "equipment": "barbell",
@@ -5263,8 +5284,8 @@
       "name": "Barbell Rear Delt Row",
       "englishName": "Barbell Rear Delt Row",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Тяга штанги на задние дельты",
+        "Barbell Rear Delt Row"
       ],
       "group": "shoulders",
       "equipment": "barbell",
@@ -5294,7 +5315,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=rTbb70P8_BI"
     },
     {
       "id": "3516a8a7-4233-5416-a429-679c33b99e1a",
@@ -5302,8 +5324,8 @@
       "name": "Barbell Rollout from Bench",
       "englishName": "Barbell Rollout from Bench",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Выкаты со штангой с опорой на скамью",
+        "Barbell Rollout from Bench"
       ],
       "group": "core",
       "equipment": "barbell",
@@ -5334,7 +5356,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-ab-rollout",
+        "title": "Barbell rollout"
+      }
     },
     {
       "id": "8c34089b-50a7-541b-96e1-eca766c51d6f",

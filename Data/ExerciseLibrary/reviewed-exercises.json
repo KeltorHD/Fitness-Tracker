@@ -55,5 +55,36 @@
   "Reverse_Grip_Triceps_Pushdown": {
     "techniqueVideoURL": "https://www.youtube.com/watch?v=ZJG-FlD0M_c"
   },
-  "Cable_One_Arm_Tricep_Extension": {}
+  "Cable_One_Arm_Tricep_Extension": {},
+  "Back_Flyes_-_With_Bands": {},
+  "Backward_Drag": {},
+  "Backward_Medicine_Ball_Throw": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=fU1O_5bfFXY"
+  },
+  "Balance_Board": {},
+  "Ball_Leg_Curl": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=zkzi1klvHps"
+  },
+  "Band_Assisted_Pull-Up": {
+    "equipment": "bands",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=B_VkNQS5YLs"
+  },
+  "Band_Good_Morning": {},
+  "Band_Good_Morning_Pull_Through": {},
+  "Band_Hip_Adductions": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=lUI8App_XdY"
+  },
+  "Band_Pull_Apart": {},
+  "Band_Skull_Crusher": {},
+  "Barbell_Ab_Rollout": {},
+  "Barbell_Ab_Rollout_-_On_Knees": {},
+  "Barbell_Curls_Lying_Against_An_Incline": {},
+  "Barbell_Full_Squat": {},
+  "Barbell_Guillotine_Bench_Press": {},
+  "Barbell_Hack_Squat": {},
+  "Barbell_Incline_Shoulder_Raise": {},
+  "Barbell_Rear_Delt_Row": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=rTbb70P8_BI"
+  },
+  "Barbell_Rollout_from_Bench": {}
 }
