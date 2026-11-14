@@ -16292,8 +16292,8 @@
       "name": "Kneeling Cable Triceps Extension",
       "englishName": "Kneeling Cable Triceps Extension",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Французский жим блока на коленях с опорой локтями",
+        "Kneeling Cable Triceps Extension"
       ],
       "group": "arms",
       "equipment": "cable",
@@ -16323,7 +16323,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=otYqHZLbSTU"
     },
     {
       "id": "cc169b27-7f14-5fee-8153-cd3d6d1d8d18",
@@ -16331,11 +16332,11 @@
       "name": "Kneeling Forearm Stretch",
       "englishName": "Kneeling Forearm Stretch",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Растяжка запястий с опорой на ладони",
+        "Kneeling Forearm Stretch"
       ],
       "group": "arms",
-      "equipment": "unspecified",
+      "equipment": "body only",
       "level": "beginner",
       "primaryMuscles": [
         "forearms"
@@ -16361,8 +16362,8 @@
       "name": "Kneeling High Pulley Row",
       "englishName": "Kneeling High Pulley Row",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Тяга каната верхнего блока к груди на коленях",
+        "Kneeling High Pulley Row"
       ],
       "group": "back",
       "equipment": "cable",
@@ -16387,7 +16388,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "kneeling-high-cable-row",
+        "title": "Kneeling high cable row"
+      }
     },
     {
       "id": "2ff8535e-ad3f-59ca-b1a3-3564b5d2a806",
@@ -16395,18 +16400,16 @@
       "name": "Kneeling Hip Flexor",
       "englishName": "Kneeling Hip Flexor",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Растяжка передней поверхности бедра в выпаде с колена",
+        "Kneeling Hip Flexor"
       ],
       "group": "legs",
-      "equipment": "unspecified",
+      "equipment": "body only",
       "level": "beginner",
       "primaryMuscles": [
         "quadriceps"
       ],
-      "secondaryMuscles": [
-        "quadriceps"
-      ],
+      "secondaryMuscles": [],
       "trainingRegions": [],
       "steps": [
         "Kneel on a mat and bring your right knee up so the bottom of your foot is on the floor and extend your left leg out behind you so the top of your foot is on the floor.",
@@ -16465,8 +16468,8 @@
       "name": "Kneeling Single-Arm High Pulley Row",
       "englishName": "Kneeling Single-Arm High Pulley Row",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Тяга одиночной рукояти верхнего блока на коленях",
+        "Kneeling Single-Arm High Pulley Row"
       ],
       "group": "back",
       "equipment": "cable",
@@ -16492,7 +16495,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "kneeling-high-cable-row",
+        "title": "Kneeling high cable row"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=83BT6B4v7T4"
     },
     {
       "id": "4cc0138f-0c33-593c-ae8e-9a1b2267b2e6",
@@ -16500,8 +16508,8 @@
       "name": "Kneeling Squat",
       "englishName": "Kneeling Squat",
       "aliases": [
-        "Пауэрлифтинг",
-        "powerlifting"
+        "Опускание таза к пяткам со штангой на коленях",
+        "Kneeling Squat"
       ],
       "group": "legs",
       "equipment": "barbell",
@@ -16537,8 +16545,8 @@
       "name": "Landmine 180's",
       "englishName": "Landmine 180's",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Лэндмайн 180 градусов",
+        "Landmine 180s"
       ],
       "group": "core",
       "equipment": "barbell",
@@ -16574,8 +16582,8 @@
       "name": "Landmine Linear Jammer",
       "englishName": "Landmine Linear Jammer",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Взрывной жим лэндмайна с приседанием",
+        "Landmine Linear Jammer"
       ],
       "group": "shoulders",
       "equipment": "barbell",
@@ -16614,8 +16622,8 @@
       "name": "Lateral Bound",
       "englishName": "Lateral Bound",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Прыжки в стороны с приземлением на одну ногу",
+        "Lateral Bound"
       ],
       "group": "legs",
       "equipment": "body only",
@@ -16653,8 +16661,8 @@
       "name": "Lateral Box Jump",
       "englishName": "Lateral Box Jump",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Запрыгивания на тумбу боком",
+        "Lateral Box Jump"
       ],
       "group": "legs",
       "equipment": "other",
@@ -16692,8 +16700,8 @@
       "name": "Lateral Cone Hops",
       "englishName": "Lateral Cone Hops",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Прыжки на двух ногах боком через ряд конусов",
+        "Lateral Cone Hops"
       ],
       "group": "legs",
       "equipment": "other",
@@ -16730,8 +16738,8 @@
       "name": "Lateral Raise - With Bands",
       "englishName": "Lateral Raise - With Bands",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Разведение рук с резиновой лентой стоя",
+        "Lateral Raise With Bands"
       ],
       "group": "shoulders",
       "equipment": "bands",
@@ -16764,8 +16772,8 @@
       "name": "Latissimus Dorsi-SMR",
       "englishName": "Latissimus Dorsi-SMR",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Прокатывание боковой поверхности спины на ролике",
+        "Latissimus Dorsi SMR"
       ],
       "group": "back",
       "equipment": "foam roll",

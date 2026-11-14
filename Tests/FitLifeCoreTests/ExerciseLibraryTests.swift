@@ -519,6 +519,25 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   #expect(Set(variants.map(\.id)).count == 3)
 }
 
+@Test func kneelingHighRowsKeepSeparateAttachmentsAndIDs() throws {
+  let entry = try #require(
+    ExerciseLibrary.entries.first { $0.sourceID == "Kneeling_High_Pulley_Row" })
+  let variants = ExerciseLibrary.variants(for: entry.id, language: .russian)
+  #expect(Set(variants.map(\.sourceID)) == [
+    "Kneeling_High_Pulley_Row", "Kneeling_Single-Arm_High_Pulley_Row",
+  ])
+  #expect(Set(variants.map(\.id)).count == 2)
+}
+
+@Test func kneelingHipFlexorDoesNotRepeatItsPrimaryMuscle() throws {
+  for language in [AppLanguage.russian, .english] {
+    let entry = try #require(
+      ExerciseLibrary.entries(language: language).first { $0.sourceID == "Kneeling_Hip_Flexor" })
+    #expect(entry.primaryMuscleIDs == [.quadriceps])
+    #expect(!entry.secondaryMuscleIDs.contains(.quadriceps))
+  }
+}
+
 @Test func multipleEquipmentFiltersUseUnionAndIntersectWithMuscleAndSearch() {
   let equipment: Set<ExerciseEquipment> = [.barbell, .dumbbell]
   let combined = ExerciseLibrary.search(equipment: equipment)

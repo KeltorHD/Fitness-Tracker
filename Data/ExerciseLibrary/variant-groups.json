@@ -267,5 +267,13 @@
       "Double_Kettlebell_Windmill",
       "Advanced_Kettlebell_Windmill"
     ]
+  },
+  "kneeling-high-cable-row": {
+    "ru": "Тяга верхнего блока стоя на коленях",
+    "en": "Kneeling high cable row",
+    "members": [
+      "Kneeling_High_Pulley_Row",
+      "Kneeling_Single-Arm_High_Pulley_Row"
+    ]
   }
 }

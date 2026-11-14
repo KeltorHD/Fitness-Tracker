@@ -483,5 +483,27 @@
   },
   "Kneeling_Arm_Drill": {
     "equipment": "body only"
-  }
+  },
+  "Kneeling_Cable_Triceps_Extension": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=otYqHZLbSTU"
+  },
+  "Kneeling_Forearm_Stretch": {
+    "equipment": "body only"
+  },
+  "Kneeling_High_Pulley_Row": {},
+  "Kneeling_Hip_Flexor": {
+    "equipment": "body only",
+    "secondaryMuscles": []
+  },
+  "Kneeling_Single-Arm_High_Pulley_Row": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=83BT6B4v7T4"
+  },
+  "Kneeling_Squat": {},
+  "Landmine_180s": {},
+  "Landmine_Linear_Jammer": {},
+  "Lateral_Bound": {},
+  "Lateral_Box_Jump": {},
+  "Lateral_Cone_Hops": {},
+  "Lateral_Raise_-_With_Bands": {},
+  "Latissimus_Dorsi-SMR": {}
 }
