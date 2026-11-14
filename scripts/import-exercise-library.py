@@ -27,9 +27,11 @@ MUSCLES = {
     'hamstrings': 'Задняя поверхность бедра', 'lats': 'Широчайшие мышцы спины',
     'lower back': 'Разгибатели спины', 'middle back': 'Средняя часть спины',
     'quadriceps': 'Квадрицепс', 'shoulders': 'Дельтовидные мышцы',
-    'traps': 'Трапециевидные мышцы', 'triceps': 'Трицепс', 'neck': 'Мышцы шеи'
+    'traps': 'Трапециевидные мышцы', 'triceps': 'Трицепс', 'neck': 'Мышцы шеи',
+    'tibialis anterior': 'Передняя большеберцовая мышца'
 }
-GROUPS = {**dict.fromkeys(['abductors', 'adductors', 'calves', 'glutes', 'hamstrings', 'quadriceps'], 'legs'),
+GROUPS = {**dict.fromkeys(['abductors', 'adductors', 'calves', 'glutes', 'hamstrings', 'quadriceps',
+                           'tibialis anterior'], 'legs'),
           **dict.fromkeys(['lats', 'lower back', 'middle back', 'traps'], 'back'),
           **dict.fromkeys(['biceps', 'forearms', 'triceps'], 'arms'),
           'abdominals': 'core', 'chest': 'chest', 'shoulders': 'shoulders', 'neck': 'shoulders'}

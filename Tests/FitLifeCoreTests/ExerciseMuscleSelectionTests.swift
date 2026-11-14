@@ -6,7 +6,7 @@ import Testing
 @Test func detailedMusclesCoverEveryBundledSourceLabelInBothLanguages() throws {
   let russian = try ExerciseLibrary.entries(language: .russian)
   let english = try ExerciseLibrary.entries(language: .english)
-  #expect(ExerciseMuscle.allCases.count == 17)
+  #expect(ExerciseMuscle.allCases.count == 18)
   #expect(Set(english.flatMap(\.primaryMuscles)) == Set(ExerciseMuscle.allCases.map(\.rawValue)))
   let englishByID = Dictionary(uniqueKeysWithValues: english.map { ($0.id, $0) })
   for entry in russian {
@@ -19,6 +19,22 @@ import Testing
   }
   #expect(Set(ExerciseMuscle.inGroup(.arms)) == [.biceps, .triceps, .forearms])
   #expect(Set(ExerciseMuscle.inGroup(.shoulders)) == [.shoulders, .neck])
+}
+
+@Test func tibialisExercisesAreDistinguishedFromCalfRaisesInBothLanguages() throws {
+  let selection = ExerciseMuscleSelection(muscles: [.tibialisAnterior])
+  #expect(ExerciseMuscle(libraryName: "Мышцы голени") == .calves)
+  #expect(ExerciseMuscle.calves.title == "Икроножные мышцы")
+  for language in [AppLanguage.russian, .english] {
+    let entries = try ExerciseLibrary.entries(language: language)
+    for sourceID in ["Anterior_Tibialis-SMR", "Smith_Machine_Reverse_Calf_Raises"] {
+      let entry = try #require(entries.first { $0.sourceID == sourceID })
+      #expect(entry.primaryMuscleIDs == [.tibialisAnterior])
+      #expect(selection.matches(entry))
+      #expect(!ExerciseMuscleSelection(muscles: [.calves]).matches(entry))
+      #expect(ExerciseMuscleSelection(groups: [.legs]).matches(entry))
+    }
+  }
 }
 
 @Test func deselectingOneMuscleFromWholeGroupRetainsItsSiblingsAndOtherGroups() {

@@ -1456,5 +1456,23 @@
   },
   "Front_Cone_Hops_or_hurdle_hops": {},
   "Kneeling_Jump_Squat": {},
-  "Drop_Push": {}
+  "Drop_Push": {},
+  "Anterior_Tibialis-SMR": {
+    "primaryMuscles": [
+      "tibialis anterior"
+    ]
+  },
+  "Smith_Machine_Reverse_Calf_Raises": {
+    "primaryMuscles": [
+      "tibialis anterior"
+    ],
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=y_HYoKh7LJA",
+    "englishSteps": [
+      "Place the Smith machine bar across your shoulders and position your heels on a stable platform with the forefeet extending beyond its edge.",
+      "Raise the forefeet while keeping the heels supported and the knees still.",
+      "Lower the forefeet under control and repeat."
+    ],
+    "instructionSourceURL": "https://www.ncbi.nlm.nih.gov/books/NBK513304/",
+    "instructionCorrectionReason": "The original instructions incorrectly describe the calf as the contracting muscle during ankle dorsiflexion."
+  }
 }

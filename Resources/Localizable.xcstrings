@@ -14689,6 +14689,23 @@
         }
       }
     },
+    "Передняя большеберцовая мышца": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Передняя большеберцовая мышца"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tibialis anterior"
+          }
+        }
+      }
+    },
     "Передняя дельта": {
       "extractionState": "manual",
       "localizations": {

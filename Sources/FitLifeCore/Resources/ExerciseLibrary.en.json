@@ -4813,14 +4813,14 @@
       "name": "Anterior Tibialis-SMR",
       "englishName": "Anterior Tibialis-SMR",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Самомассаж передней большеберцовой мышцы",
+        "Anterior Tibialis SMR"
       ],
       "group": "legs",
       "equipment": "other",
       "level": "intermediate",
       "primaryMuscles": [
-        "calves"
+        "tibialis anterior"
       ],
       "secondaryMuscles": [],
       "trainingRegions": [],
@@ -28355,14 +28355,14 @@
       "name": "Smith Machine Reverse Calf Raises",
       "englishName": "Smith Machine Reverse Calf Raises",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Обратные подъёмы на голень в тренажёре Смита",
+        "Smith Machine Reverse Calf Raises"
       ],
       "group": "legs",
       "equipment": "machine",
       "level": "beginner",
       "primaryMuscles": [
-        "calves"
+        "tibialis anterior"
       ],
       "secondaryMuscles": [],
       "trainingRegions": [
@@ -28370,12 +28370,9 @@
         "soleus"
       ],
       "steps": [
-        "Adjust the barbell on the smith machine to fit your height and align a raised platform right under the bar.",
-        "Stand on the platform with the heels of your feet secured on top of it with the balls of your feet extending off it. Position your toes facing forward with a shoulder width stance.",
-        "Now, place your shoulders under the barbell while maintaining the foot positioning described and push the barbell up by extending your hips and knees until your torso is standing erect. The knees should be kept with a slight bend; never locked. This will be your starting position. Tip: The barbell on your back is only for balance purposes.",
-        "Raise the balls of your feet as you breathe out by extending your toes as high as possible and flexing your calf. Ensure that the knee is kept stationary at all times. There should be no bending at any time. Hold the contracted position for a second before you start to go back down.",
-        "Slowly go back down to the starting position as you breathe in by lowering the balls of your feet and toes.",
-        "Repeat for the recommended amount of repetitions."
+        "Place the Smith machine bar across your shoulders and position your heels on a stable platform with the forefeet extending beyond its edge.",
+        "Raise the forefeet while keeping the heels supported and the knees still.",
+        "Lower the forefeet under control and repeat."
       ],
       "images": [
         "Smith_Machine_Reverse_Calf_Raises/0.jpg",
@@ -28384,7 +28381,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=y_HYoKh7LJA"
     },
     {
       "id": "60f42c31-d8b9-5445-8090-c2d7a14eb580",
