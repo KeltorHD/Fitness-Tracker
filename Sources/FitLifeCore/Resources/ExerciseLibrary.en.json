@@ -7375,6 +7375,7 @@
       "name": "Cable Lying Triceps Extension",
       "englishName": "Cable Lying Triceps Extension",
       "aliases": [
+        "Разгибание рук на нижнем блоке лёжа на плоской скамье",
         "Французский жим на нижнем блоке лёжа",
         "Cable Lying Triceps Extension"
       ],
@@ -7405,6 +7406,10 @@
       "imagesUnavailable": false,
       "generatedMedia": null,
       "translationAutomatic": false,
+      "variantGroup": {
+        "id": "lying-cable-triceps-extension",
+        "title": "Lying low cable triceps extension"
+      },
       "techniqueVideoURL": "https://www.youtube.com/watch?v=xeA2l-CP6wU"
     },
     {
@@ -17439,11 +17444,11 @@
       "name": "Looking At Ceiling",
       "englishName": "Looking At Ceiling",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Растяжка передней поверхности тела с опорой на пятки",
+        "Looking At Ceiling"
       ],
       "group": "legs",
-      "equipment": "unspecified",
+      "equipment": "body only",
       "level": "beginner",
       "primaryMuscles": [
         "quadriceps"
@@ -17469,8 +17474,8 @@
       "name": "Low Cable Crossover",
       "englishName": "Low Cable Crossover",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Сведение рук с нижних блоков в кроссовере",
+        "Low Cable Crossover"
       ],
       "group": "chest",
       "equipment": "cable",
@@ -17497,7 +17502,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=erTwf-R8xRY"
     },
     {
       "id": "1a766936-f0fa-5559-a0b5-8bccfce6d0d9",
@@ -17505,8 +17511,8 @@
       "name": "Low Cable Triceps Extension",
       "englishName": "Low Cable Triceps Extension",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Французский жим с канатной рукоятью нижнего блока лёжа",
+        "Low Cable Triceps Extension"
       ],
       "group": "arms",
       "equipment": "cable",
@@ -17535,7 +17541,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "lying-cable-triceps-extension",
+        "title": "Lying low cable triceps extension"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=fCvAFnB1TuY"
     },
     {
       "id": "e444b64e-4b41-5cd4-95d5-8b4cd6ea4542",
@@ -17543,8 +17554,8 @@
       "name": "Low Pulley Row To Neck",
       "englishName": "Low Pulley Row To Neck",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Тяга канатной рукояти к лицу сидя",
+        "Low Pulley Row To Neck"
       ],
       "group": "shoulders",
       "equipment": "cable",
@@ -17580,8 +17591,8 @@
       "name": "Lower Back-SMR",
       "englishName": "Lower Back-SMR",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Прокатывание мышц нижней части спины на ролике",
+        "Lower Back SMR"
       ],
       "group": "back",
       "equipment": "foam roll",
@@ -17610,14 +17621,14 @@
       "name": "Lower Back Curl",
       "englishName": "Lower Back Curl",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Подъём груди от пола лёжа на животе",
+        "Lower Back Curl"
       ],
-      "group": "core",
+      "group": "back",
       "equipment": "body only",
       "level": "beginner",
       "primaryMuscles": [
-        "abdominals"
+        "lower back"
       ],
       "secondaryMuscles": [],
       "trainingRegions": [],
@@ -17640,8 +17651,8 @@
       "name": "Lunge Pass Through",
       "englishName": "Lunge Pass Through",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Выпад с передачей гири из руки в руку",
+        "Lunge Pass Through"
       ],
       "group": "legs",
       "equipment": "kettlebells",
@@ -17713,8 +17724,8 @@
       "name": "Lying Bent Leg Groin",
       "englishName": "Lying Bent Leg Groin",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Растяжка в положении бабочки лёжа с помощью партнёра",
+        "Lying Bent Leg Groin"
       ],
       "group": "legs",
       "equipment": "other",
@@ -17744,8 +17755,8 @@
       "name": "Lying Cable Curl",
       "englishName": "Lying Cable Curl",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подъём рукояти нижнего блока на бицепс лёжа",
+        "Lying Cable Curl"
       ],
       "group": "arms",
       "equipment": "cable",
@@ -17781,11 +17792,11 @@
       "name": "Lying Cambered Barbell Row",
       "englishName": "Lying Cambered Barbell Row",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Тяга EZ-грифа с опорой грудью на скамью",
+        "Lying Cambered Barbell Row"
       ],
       "group": "back",
-      "equipment": "barbell",
+      "equipment": "e-z curl bar",
       "level": "beginner",
       "primaryMuscles": [
         "middle back"
@@ -17857,8 +17868,8 @@
       "name": "Lying Close-Grip Barbell Triceps Extension Behind The Head",
       "englishName": "Lying Close-Grip Barbell Triceps Extension Behind The Head",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Французский жим штанги за головой лёжа",
+        "Lying Close-Grip Barbell Triceps Extension Behind The Head"
       ],
       "group": "arms",
       "equipment": "barbell",

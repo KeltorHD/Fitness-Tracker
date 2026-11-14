@@ -542,5 +542,28 @@
   "Leverage_Shrug": {},
   "Linear_Acceleration_Wall_Drill": {
     "equipment": "body only"
-  }
+  },
+  "Looking_At_Ceiling": {
+    "equipment": "body only"
+  },
+  "Low_Cable_Crossover": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=erTwf-R8xRY"
+  },
+  "Low_Cable_Triceps_Extension": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=fCvAFnB1TuY"
+  },
+  "Low_Pulley_Row_To_Neck": {},
+  "Lower_Back-SMR": {},
+  "Lower_Back_Curl": {
+    "primaryMuscles": [
+      "lower back"
+    ]
+  },
+  "Lunge_Pass_Through": {},
+  "Lying_Bent_Leg_Groin": {},
+  "Lying_Cable_Curl": {},
+  "Lying_Cambered_Barbell_Row": {
+    "equipment": "e-z curl bar"
+  },
+  "Lying_Close-Grip_Barbell_Triceps_Extension_Behind_The_Head": {}
 }

@@ -294,5 +294,13 @@
       "Leverage_High_Row",
       "Leverage_Iso_Row"
     ]
+  },
+  "lying-cable-triceps-extension": {
+    "ru": "Разгибание рук с нижним блоком лёжа",
+    "en": "Lying low cable triceps extension",
+    "members": [
+      "Cable_Lying_Triceps_Extension",
+      "Low_Cable_Triceps_Extension"
+    ]
   }
 }

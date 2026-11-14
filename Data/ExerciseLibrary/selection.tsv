@@ -195,7 +195,7 @@ Cable_Incline_Triceps_Extension	Разгибание рук на верхнем 
 Cable_Internal_Rotation	Внутренняя ротация плеча на нижнем блоке сидя	Внутреннее вращение плеча с блоком;Cable Internal Rotation
 Cable_Iron_Cross	Железный крест на верхних блоках	Опускание прямых рук через стороны на верхних блоках;Cable Iron Cross
 Cable_Judo_Flip	Повороты корпуса с тягой блока через плечо	Силовые упражнения;strength
-Cable_Lying_Triceps_Extension	Разгибание рук на нижнем блоке лёжа на плоской скамье	Французский жим на нижнем блоке лёжа;Cable Lying Triceps Extension
+Cable_Lying_Triceps_Extension	Разгибание рук с прямой рукоятью нижнего блока лёжа на плоской скамье	Разгибание рук на нижнем блоке лёжа на плоской скамье;Французский жим на нижнем блоке лёжа;Cable Lying Triceps Extension
 Cable_One_Arm_Tricep_Extension	Разгибание одной руки на верхнем блоке обратным хватом	Разгибание одной руки в кроссовере;Cable One Arm Tricep Extension
 Cable_Preacher_Curl	Сгибание рук с блоком на скамье Скотта	Силовые упражнения;strength
 Cable_Rear_Delt_Fly	Разведение рук на задние дельты стоя в кроссовере	Разведение рук на верхних блоках;Cable Rear Delt Fly
@@ -466,19 +466,19 @@ Linear_Acceleration_Wall_Drill	Попеременный подъём колен�
 Linear_Depth_Jump	Линейный прыжок в глубину	Плиометрика;plyometrics
 Log_Lift	Бревенчатый подъемник	Силовой экстрим;strongman
 London_Bridges	Лондонские мосты	Силовые упражнения;strength
-Looking_At_Ceiling	Глядя на потолок	Растяжка;stretching
-Low_Cable_Crossover	Сведение рук с нижних блоков в кроссовере	Силовые упражнения;strength
-Low_Cable_Triceps_Extension	Разгибание трицепса на низком тросе	Силовые упражнения;strength
-Low_Pulley_Row_To_Neck	Тяга на низком блоке к шее	Силовые упражнения;strength
-Lower_Back-SMR	Нижняя часть спины-SMR	Растяжка;stretching
-Lower_Back_Curl	Сгибание нижней части спины	Растяжка;stretching
-Lunge_Pass_Through	Выпад, проход насквозь	Силовые упражнения;strength
+Looking_At_Ceiling	Прогиб назад на коленях с опорой руками на пятки	Растяжка передней поверхности тела с опорой на пятки;Looking At Ceiling
+Low_Cable_Crossover	Сведение рук снизу вверх в кроссовере стоя	Сведение рук с нижних блоков в кроссовере;Low Cable Crossover
+Low_Cable_Triceps_Extension	Разгибание рук с канатом нижнего блока лёжа на плоской скамье	Французский жим с канатной рукоятью нижнего блока лёжа;Low Cable Triceps Extension
+Low_Pulley_Row_To_Neck	Тяга каната нижнего блока к шее сидя	Тяга канатной рукояти к лицу сидя;Low Pulley Row To Neck
+Lower_Back-SMR	Миофасциальный массаж мышц поясницы на ролике	Прокатывание мышц нижней части спины на ролике;Lower Back SMR
+Lower_Back_Curl	Разгибание корпуса лёжа на животе	Подъём груди от пола лёжа на животе;Lower Back Curl
+Lunge_Pass_Through	Выпады вперёд с передачей гири под ногой	Выпад с передачей гири из руки в руку;Lunge Pass Through
 Lunge_Sprint	Выпад-спринт	Силовые упражнения;strength
-Lying_Bent_Leg_Groin	Лежа, согнутая нога в паху	Растяжка;stretching
-Lying_Cable_Curl	Сгибания рук на бицепс с блоком лёжа	Силовые упражнения;strength
-Lying_Cambered_Barbell_Row	Тяга штанги лежа с прогибом	Силовые упражнения;strength
+Lying_Bent_Leg_Groin	Растяжка приводящих мышц лёжа с партнёром	Растяжка в положении бабочки лёжа с помощью партнёра;Lying Bent Leg Groin
+Lying_Cable_Curl	Сгибание рук с нижним блоком лёжа на полу	Подъём рукояти нижнего блока на бицепс лёжа;Lying Cable Curl
+Lying_Cambered_Barbell_Row	Тяга изогнутого грифа лёжа грудью на плоской скамье	Тяга EZ-грифа с опорой грудью на скамью;Lying Cambered Barbell Row
 Lying_Close-Grip_Bar_Curl_On_High_Pulley	Сгибание рук на грифе лежа узким хватом на верхнем блоке	Силовые упражнения;strength
-Lying_Close-Grip_Barbell_Triceps_Extension_Behind_The_Head	Разгибание трицепса лежа узким хватом за головой	Силовые упражнения;strength
+Lying_Close-Grip_Barbell_Triceps_Extension_Behind_The_Head	Разгибание рук со штангой за головой лёжа на плоской скамье	Французский жим штанги за головой лёжа;Lying Close-Grip Barbell Triceps Extension Behind The Head
 Lying_Close-Grip_Barbell_Triceps_Press_To_Chin	Жим штанги на трицепс лежа узким хватом к подбородку	Силовые упражнения;strength
 Lying_Crossover	Лежащий кроссовер	Растяжка;stretching
 Lying_Dumbbell_Tricep_Extension	Разгибание трицепса с гантелью лёжа	Силовые упражнения;strength
