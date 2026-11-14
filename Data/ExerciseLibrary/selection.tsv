@@ -2,7 +2,7 @@ Barbell_Squat	Приседания	Присед со штангой;Присед
 Barbell_Bench_Press_-_Medium_Grip	Жим штанги лёжа обычным хватом	Жим лёжа;Жим штанги лёжа;Жим лежа;Жим штанги лёжа средним хватом
 Bent_Over_Barbell_Row	Тяга в наклоне	Тяга штанги к поясу
 Standing_Military_Press	Жим над головой	Армейский жим;Жим штанги стоя
-Romanian_Deadlift	Румынская тяга	Тяга на прямых ногах
+Romanian_Deadlift	Румынская тяга со штангой	Румынская тяга;Тяга на прямых ногах;Romanian deadlift
 Pullups	Подтягивания	Подтягивания прямым хватом
 Dumbbell_Bicep_Curl	Сгибания на бицепс	Сгибания рук с гантелями
 Crunches	Скручивания	Скручивания на пресс
@@ -629,21 +629,21 @@ Reverse_Plate_Curls	Сгибание рук с блином хватом све�
 Reverse_Triceps_Bench_Press	Жим штанги лёжа на плоской скамье узким хватом снизу	Жим штанги лёжа обратным хватом на трицепс;Reverse-grip triceps bench press;Обратный жим на трицепс лежа;Силовые упражнения;strength
 Rhomboids-SMR	Самомассаж верхней части спины роликом	Прокатывание ромбовидных мышц;Rhomboids SMR;Ромбоиды-СМР;Растяжка;stretching
 Rickshaw_Carry	Переноска рамы рикши	Ходьба с рамой рикши;Rickshaw carry;Рикша Керри;Силовой экстрим;strongman
-Rickshaw_Deadlift	Становая тяга на рикше	Силовой экстрим;strongman
-Ring_Dips	Кольцевые провалы	Силовые упражнения;strength
-Rocket_Jump	Ракетный прыжок	Плиометрика;plyometrics
-Rocking_Standing_Calf_Raise	Раскачивание, подъем на носки стоя	Силовые упражнения;strength
-Rocky_Pull-Ups_Pulldowns	Рокки-подтягивания/тяги вниз	Силовые упражнения;strength
-Romanian_Deadlift_from_Deficit	Румынская становая тяга от дефицита	Тяжёлая атлетика;olympic weightlifting
-Rope_Climb	Подъем по веревке	Силовые упражнения;strength
-Rope_Crunch	Хруст веревки	Силовые упражнения;strength
-Rope_Jumping	Прыжки со скакалкой	Кардио;cardio
-Rope_Straight-Arm_Pulldown	Тяга вниз на прямых руках со скакалкой	Силовые упражнения;strength
-Round_The_World_Shoulder_Stretch	Растяжка плеч вокруг света	Растяжка;stretching
-Rowing_Stationary	Гребля, Стационарный	Кардио;cardio
-Runners_Stretch	Растяжка бегуна	Растяжка;stretching
-Running_Treadmill	Бег, Беговая дорожка	Кардио;cardio
-Sandbag_Load	Загрузка мешков с песком	Силовой экстрим;strongman
+Rickshaw_Deadlift	Становая тяга с рамой рикши	Тяга рамы рикши;Rickshaw deadlift;Становая тяга на рикше;Силовой экстрим;strongman
+Ring_Dips	Отжимания на гимнастических кольцах	Отжимания на кольцах;Ring dips;Кольцевые провалы;Силовые упражнения;strength
+Rocket_Jump	Прыжок вверх из полуприседа с вытягиванием рук	Прыжок «ракета»;Rocket jump;Ракетный прыжок;Плиометрика;plyometrics
+Rocking_Standing_Calf_Raise	Подъём на носки и пятки стоя со штангой	Перекаты с пяток на носки со штангой;Раскачивание, подъем на носки стоя;Силовые упражнения;strength
+Rocky_Pull-Ups_Pulldowns	Подтягивания Рокки	Подтягивания с чередованием к груди и за голову;Rocky pull-ups;Рокки-подтягивания/тяги вниз;Силовые упражнения;strength
+Romanian_Deadlift_from_Deficit	Румынская тяга со штангой с возвышения	Румынская тяга с дефицитом;Deficit Romanian deadlift;Румынская становая тяга от дефицита;Тяжёлая атлетика;olympic weightlifting
+Rope_Climb	Лазание по канату с помощью ног	Подъём по канату;Rope climb;Подъем по веревке;Силовые упражнения;strength
+Rope_Crunch	Скручивания на верхнем блоке с канатной рукояткой стоя на коленях	Молитва на блоке;Скручивания с канатом;Rope crunch;Хруст веревки;Силовые упражнения;strength
+Rope_Jumping	Прыжки со скакалкой	Прыжки через скакалку;Rope jumping;Прыжки со скакалкой;Кардио;cardio
+Rope_Straight-Arm_Pulldown	Тяга верхнего блока прямыми руками с канатной рукояткой	Пуловер на блоке с канатом;Rope straight-arm pulldown;Тяга вниз на прямых руках со скакалкой;Силовые упражнения;strength
+Round_The_World_Shoulder_Stretch	Растяжка плеч с палкой за спиной	Круговая растяжка плеч с палкой;Round the world shoulder stretch;Растяжка плеч вокруг света;Растяжка;stretching
+Rowing_Stationary	Гребля на гребном тренажёре	Гребной тренажёр;Stationary rowing;Гребля, Стационарный;Кардио;cardio
+Runners_Stretch	Растяжка задней поверхности бедра в стойке бегуна	Растяжка бегуна;Runner’s stretch;Растяжка;stretching
+Running_Treadmill	Бег на беговой дорожке	Беговая дорожка;Treadmill running;Бег, Беговая дорожка;Кардио;cardio
+Sandbag_Load	Подъём и перенос мешка с песком на платформу	Загрузка мешка с песком;Sandbag load;Загрузка мешков с песком;Силовой экстрим;strongman
 Scapular_Pull-Up	Подтягивания лопаток	Силовые упражнения;strength
 Scissor_Kick	ножничный удар	Растяжка;stretching
 Scissors_Jump	Ножницы Прыжок	Плиометрика;plyometrics

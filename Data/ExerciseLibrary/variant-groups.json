@@ -395,5 +395,21 @@
       "Rack_Pulls",
       "Rack_Pull_with_Bands"
     ]
+  },
+  "dips": {
+    "ru": "Отжимания в упоре",
+    "en": "Dips",
+    "members": [
+      "Parallel_Bar_Dip",
+      "Ring_Dips"
+    ]
+  },
+  "romanian-deadlift": {
+    "ru": "Румынская тяга со штангой",
+    "en": "Barbell Romanian deadlift",
+    "members": [
+      "Romanian_Deadlift",
+      "Romanian_Deadlift_from_Deficit"
+    ]
   }
 }

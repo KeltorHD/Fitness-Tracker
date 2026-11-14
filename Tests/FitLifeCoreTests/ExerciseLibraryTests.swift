@@ -527,6 +527,8 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     ],
     ["Push_Press", "Push_Press_-_Behind_the_Neck"],
     ["Rack_Pulls", "Rack_Pull_with_Bands"],
+    ["Parallel_Bar_Dip", "Ring_Dips"],
+    ["Romanian_Deadlift", "Romanian_Deadlift_from_Deficit"],
   ] {
     for language in [AppLanguage.russian, .english] {
       let entry = try #require(

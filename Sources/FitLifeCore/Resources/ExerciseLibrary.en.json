@@ -231,7 +231,9 @@
       "name": "Romanian Deadlift",
       "englishName": "Romanian Deadlift",
       "aliases": [
-        "Тяга на прямых ногах"
+        "Румынская тяга",
+        "Тяга на прямых ногах",
+        "Romanian deadlift"
       ],
       "group": "legs",
       "equipment": "barbell",
@@ -273,7 +275,11 @@
         ],
         "frameDuration": 0.25
       },
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "romanian-deadlift",
+        "title": "Barbell Romanian deadlift"
+      }
     },
     {
       "id": "10000000-0000-0000-0000-000000000006",
@@ -21418,7 +21424,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "dips",
+        "title": "Dips"
+      }
     },
     {
       "id": "6bf67bcd-bb2f-5102-a92b-07e43a823972",
@@ -23810,6 +23820,9 @@
       "name": "Rickshaw Deadlift",
       "englishName": "Rickshaw Deadlift",
       "aliases": [
+        "Тяга рамы рикши",
+        "Rickshaw deadlift",
+        "Становая тяга на рикше",
         "Силовой экстрим",
         "strongman"
       ],
@@ -23847,6 +23860,9 @@
       "name": "Ring Dips",
       "englishName": "Ring Dips",
       "aliases": [
+        "Отжимания на кольцах",
+        "Ring dips",
+        "Кольцевые провалы",
         "Силовые упражнения",
         "strength"
       ],
@@ -23874,7 +23890,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "dips",
+        "title": "Dips"
+      }
     },
     {
       "id": "a2f837bc-8393-5b76-82e6-827347f11763",
@@ -23882,6 +23902,9 @@
       "name": "Rocket Jump",
       "englishName": "Rocket Jump",
       "aliases": [
+        "Прыжок «ракета»",
+        "Rocket jump",
+        "Ракетный прыжок",
         "Плиометрика",
         "plyometrics"
       ],
@@ -23916,6 +23939,8 @@
       "name": "Rocking Standing Calf Raise",
       "englishName": "Rocking Standing Calf Raise",
       "aliases": [
+        "Перекаты с пяток на носки со штангой",
+        "Раскачивание, подъем на носки стоя",
         "Силовые упражнения",
         "strength"
       ],
@@ -23955,6 +23980,9 @@
       "name": "Rocky Pull-Ups/Pulldowns",
       "englishName": "Rocky Pull-Ups/Pulldowns",
       "aliases": [
+        "Подтягивания с чередованием к груди и за голову",
+        "Rocky pull-ups",
+        "Рокки-подтягивания/тяги вниз",
         "Силовые упражнения",
         "strength"
       ],
@@ -23993,6 +24021,9 @@
       "name": "Romanian Deadlift from Deficit",
       "englishName": "Romanian Deadlift from Deficit",
       "aliases": [
+        "Румынская тяга с дефицитом",
+        "Deficit Romanian deadlift",
+        "Румынская становая тяга от дефицита",
         "Тяжёлая атлетика",
         "olympic weightlifting"
       ],
@@ -24021,7 +24052,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "romanian-deadlift",
+        "title": "Barbell Romanian deadlift"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=XLCOasfz1uI"
     },
     {
       "id": "6737c291-d883-5488-8c95-193b18c8a3ae",
@@ -24029,6 +24065,9 @@
       "name": "Rope Climb",
       "englishName": "Rope Climb",
       "aliases": [
+        "Подъём по канату",
+        "Rope climb",
+        "Подъем по веревке",
         "Силовые упражнения",
         "strength"
       ],
@@ -24067,6 +24106,10 @@
       "name": "Rope Crunch",
       "englishName": "Rope Crunch",
       "aliases": [
+        "Молитва на блоке",
+        "Скручивания с канатом",
+        "Rope crunch",
+        "Хруст веревки",
         "Силовые упражнения",
         "strength"
       ],
@@ -24103,6 +24146,9 @@
       "name": "Rope Jumping",
       "englishName": "Rope Jumping",
       "aliases": [
+        "Прыжки через скакалку",
+        "Rope jumping",
+        "Прыжки со скакалкой",
         "Кардио",
         "cardio"
       ],
@@ -24136,6 +24182,9 @@
       "name": "Rope Straight-Arm Pulldown",
       "englishName": "Rope Straight-Arm Pulldown",
       "aliases": [
+        "Пуловер на блоке с канатом",
+        "Rope straight-arm pulldown",
+        "Тяга вниз на прямых руках со скакалкой",
         "Силовые упражнения",
         "strength"
       ],
@@ -24168,6 +24217,9 @@
       "name": "Round The World Shoulder Stretch",
       "englishName": "Round The World Shoulder Stretch",
       "aliases": [
+        "Круговая растяжка плеч с палкой",
+        "Round the world shoulder stretch",
+        "Растяжка плеч вокруг света",
         "Растяжка",
         "stretching"
       ],
@@ -24202,6 +24254,9 @@
       "name": "Rowing, Stationary",
       "englishName": "Rowing, Stationary",
       "aliases": [
+        "Гребной тренажёр",
+        "Stationary rowing",
+        "Гребля, Стационарный",
         "Кардио",
         "cardio"
       ],
@@ -24240,11 +24295,13 @@
       "name": "Runner's Stretch",
       "englishName": "Runner's Stretch",
       "aliases": [
+        "Растяжка бегуна",
+        "Runner’s stretch",
         "Растяжка",
         "stretching"
       ],
       "group": "legs",
-      "equipment": "unspecified",
+      "equipment": "body only",
       "level": "beginner",
       "primaryMuscles": [
         "hamstrings"
@@ -24273,6 +24330,9 @@
       "name": "Running, Treadmill",
       "englishName": "Running, Treadmill",
       "aliases": [
+        "Беговая дорожка",
+        "Treadmill running",
+        "Бег, Беговая дорожка",
         "Кардио",
         "cardio"
       ],
@@ -24307,6 +24367,9 @@
       "name": "Sandbag Load",
       "englishName": "Sandbag Load",
       "aliases": [
+        "Загрузка мешка с песком",
+        "Sandbag load",
+        "Загрузка мешков с песком",
         "Силовой экстрим",
         "strongman"
       ],

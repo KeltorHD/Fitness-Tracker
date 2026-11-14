@@ -743,5 +743,25 @@
   "Reverse_Plate_Curls": {},
   "Reverse_Triceps_Bench_Press": {},
   "Rhomboids-SMR": {},
-  "Rickshaw_Carry": {}
+  "Rickshaw_Carry": {},
+  "Rickshaw_Deadlift": {},
+  "Ring_Dips": {},
+  "Rocket_Jump": {},
+  "Rocking_Standing_Calf_Raise": {},
+  "Rocky_Pull-Ups_Pulldowns": {},
+  "Romanian_Deadlift": {},
+  "Romanian_Deadlift_from_Deficit": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=XLCOasfz1uI"
+  },
+  "Rope_Climb": {},
+  "Rope_Crunch": {},
+  "Rope_Jumping": {},
+  "Rope_Straight-Arm_Pulldown": {},
+  "Round_The_World_Shoulder_Stretch": {},
+  "Rowing_Stationary": {},
+  "Runners_Stretch": {
+    "equipment": "body only"
+  },
+  "Running_Treadmill": {},
+  "Sandbag_Load": {}
 }
