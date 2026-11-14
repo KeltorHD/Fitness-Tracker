@@ -16802,8 +16802,8 @@
       "name": "Leg-Over Floor Press",
       "englishName": "Leg-Over Floor Press",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Жим гири с пола с поворотом корпуса и ногой поперёк",
+        "Leg-Over Floor Press"
       ],
       "group": "chest",
       "equipment": "kettlebells",
@@ -16830,7 +16830,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "floor-press",
+        "title": "Floor press"
+      }
     },
     {
       "id": "92bc0709-967e-51a9-9eb0-20f2e63bbc75",
@@ -16838,11 +16842,11 @@
       "name": "Leg-Up Hamstring Stretch",
       "englishName": "Leg-Up Hamstring Stretch",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Растяжка прямой ноги лёжа на спине",
+        "Leg-Up Hamstring Stretch"
       ],
       "group": "legs",
-      "equipment": "unspecified",
+      "equipment": "body only",
       "level": "beginner",
       "primaryMuscles": [
         "hamstrings"
@@ -16869,8 +16873,8 @@
       "name": "Leg Lift",
       "englishName": "Leg Lift",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подъём ноги назад стоя у опоры",
+        "Leg Lift"
       ],
       "group": "legs",
       "equipment": "body only",
@@ -16885,11 +16889,9 @@
         "gluteusMaximus"
       ],
       "steps": [
-        "While standing up straight with both feet next to each other at around shoulder width, grab a sturdy surface such as the sides of a squat rack or the top of a chair to brace yourself and keep balance.",
-        "With or without an ankle weight, lift one leg behind you as if performing a leg curl but standing up while keeping the other leg straight. Breathe out as you perform this movement.",
-        "Slowly bring the raised leg back to the floor as you breathe in.",
-        "Repeat for the recommended amount of repetitions.",
-        "Repeat the movement with the opposite leg."
+        "Stand upright and hold a stable support with both hands.",
+        "Lift one straight leg behind you while keeping your torso steady.",
+        "Lower the leg under control and repeat on the other side."
       ],
       "images": [
         "Leg_Lift/0.jpg",
@@ -16898,7 +16900,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "hip-extension",
+        "title": "Hip extension"
+      }
     },
     {
       "id": "a954f804-c83d-511e-b529-dc588d76c49b",
@@ -16906,8 +16912,8 @@
       "name": "Leg Pull-In",
       "englishName": "Leg Pull-In",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Сгибание ног к корпусу лёжа",
+        "Leg Pull-In"
       ],
       "group": "core",
       "equipment": "body only",
@@ -16941,8 +16947,8 @@
       "name": "Leverage Chest Press",
       "englishName": "Leverage Chest Press",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Жим рукоятей от груди в тренажёре",
+        "Leverage Chest Press"
       ],
       "group": "chest",
       "equipment": "machine",
@@ -16970,7 +16976,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "leverage-chest-press",
+        "title": "Leverage chest press"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=-YiqDRTu8ag"
     },
     {
       "id": "5dd652b8-6bc5-547a-817b-3fbf418200e8",
@@ -16978,8 +16989,8 @@
       "name": "Leverage Deadlift",
       "englishName": "Leverage Deadlift",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подъём рычагов тренажёра стоя",
+        "Leverage Deadlift"
       ],
       "group": "legs",
       "equipment": "machine",
@@ -16993,8 +17004,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "Load the pins to an appropriate weight. Position yourself directly between the handles. Grasp the bottom handles with a comfortable grip, and then lower your hips as you take a breath. Look forward with your head and keep your chest up. This will be your starting position.",
-        "Return the weight to the starting position."
+        "Stand between the handles of the leverage machine, bend your knees and grip the lower handles.",
+        "Extend your knees and hips to stand, keeping your arms straight.",
+        "Bend your knees and hips to lower the handles under control."
       ],
       "images": [
         "Leverage_Deadlift/0.jpg",
@@ -17011,8 +17023,8 @@
       "name": "Leverage Decline Chest Press",
       "englishName": "Leverage Decline Chest Press",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Жим от груди вниз в рычажном тренажёре",
+        "Leverage Decline Chest Press"
       ],
       "group": "chest",
       "equipment": "machine",
@@ -17039,7 +17051,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "leverage-chest-press",
+        "title": "Leverage chest press"
+      }
     },
     {
       "id": "d8fd465c-ee48-511a-80af-1d31e864af79",
@@ -17047,8 +17063,8 @@
       "name": "Leverage High Row",
       "englishName": "Leverage High Row",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Верхняя тяга в рычажном тренажёре",
+        "Leverage High Row"
       ],
       "group": "back",
       "equipment": "machine",
@@ -17075,7 +17091,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "leverage-row",
+        "title": "Seated leverage row"
+      }
     },
     {
       "id": "3e803a9e-5ddb-56e1-b100-21242072a419",
@@ -17083,8 +17103,8 @@
       "name": "Leverage Incline Chest Press",
       "englishName": "Leverage Incline Chest Press",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Наклонный жим от груди в рычажном тренажёре",
+        "Leverage Incline Chest Press"
       ],
       "group": "chest",
       "equipment": "machine",
@@ -17111,7 +17131,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "leverage-chest-press",
+        "title": "Leverage chest press"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=imgwuFidFGE"
     },
     {
       "id": "ecf1f357-adbd-59a6-9313-2342f052c799",
@@ -17119,8 +17144,8 @@
       "name": "Leverage Iso Row",
       "englishName": "Leverage Iso Row",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Тяга рукоятей рычажного тренажёра к корпусу",
+        "Leverage Iso Row"
       ],
       "group": "back",
       "equipment": "machine",
@@ -17145,7 +17170,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "leverage-row",
+        "title": "Seated leverage row"
+      }
     },
     {
       "id": "b9dfe54c-dc5c-50d3-9d76-01b27b4bc0d6",
@@ -17153,8 +17182,8 @@
       "name": "Leverage Shoulder Press",
       "englishName": "Leverage Shoulder Press",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Жим плечами в рычажном тренажёре",
+        "Leverage Shoulder Press"
       ],
       "group": "shoulders",
       "equipment": "machine",
@@ -17189,8 +17218,8 @@
       "name": "Leverage Shrug",
       "englishName": "Leverage Shrug",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подъём плеч в рычажном тренажёре",
+        "Leverage Shrug"
       ],
       "group": "back",
       "equipment": "machine",
@@ -17261,11 +17290,11 @@
       "name": "Linear Acceleration Wall Drill",
       "englishName": "Linear Acceleration Wall Drill",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Имитация ускорения у стены",
+        "Linear Acceleration Wall Drill"
       ],
       "group": "legs",
-      "equipment": "unspecified",
+      "equipment": "body only",
       "level": "beginner",
       "primaryMuscles": [
         "hamstrings"

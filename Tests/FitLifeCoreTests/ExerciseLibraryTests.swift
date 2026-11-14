@@ -538,6 +538,27 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   }
 }
 
+@Test func leverageDeadliftInstructionsIncludeTheLiftInBothLanguages() throws {
+  let russian = try #require(
+    ExerciseLibrary.entries(language: .russian).first { $0.sourceID == "Leverage_Deadlift" })
+  let english = try #require(
+    ExerciseLibrary.entries(language: .english).first { $0.sourceID == "Leverage_Deadlift" })
+  #expect(russian.steps.contains { $0.contains("Выпрямите ноги") })
+  #expect(english.steps.contains { $0.contains("Extend your knees and hips") })
+  #expect(russian.id == english.id)
+}
+
+@Test func leverageChestPressVariantsKeepTheirOwnIdentity() throws {
+  let entry = try #require(
+    ExerciseLibrary.entries.first { $0.sourceID == "Leverage_Chest_Press" })
+  let variants = ExerciseLibrary.variants(for: entry.id, language: .russian)
+  #expect(Set(variants.map(\.sourceID)) == [
+    "Leverage_Chest_Press", "Leverage_Decline_Chest_Press", "Leverage_Incline_Chest_Press",
+  ])
+  #expect(Set(variants.map(\.id)).count == 3)
+  #expect(variants.allSatisfy { $0.equipment == .machine })
+}
+
 @Test func multipleEquipmentFiltersUseUnionAndIntersectWithMuscleAndSearch() {
   let equipment: Set<ExerciseEquipment> = [.barbell, .dumbbell]
   let combined = ExerciseLibrary.search(equipment: equipment)

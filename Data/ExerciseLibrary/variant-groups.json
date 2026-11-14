@@ -160,7 +160,8 @@
       "Floor_Press",
       "Floor_Press_with_Chains",
       "Dumbbell_Floor_Press",
-      "Extended_Range_One-Arm_Kettlebell_Floor_Press"
+      "Extended_Range_One-Arm_Kettlebell_Floor_Press",
+      "Leg-Over_Floor_Press"
     ]
   },
   "front-raise": {
@@ -206,7 +207,8 @@
     "en": "Hip extension",
     "members": [
       "Glute_Kickback",
-      "Hip_Extension_with_Bands"
+      "Hip_Extension_with_Bands",
+      "Leg_Lift"
     ]
   },
   "glute-bridge": {
@@ -274,6 +276,23 @@
     "members": [
       "Kneeling_High_Pulley_Row",
       "Kneeling_Single-Arm_High_Pulley_Row"
+    ]
+  },
+  "leverage-chest-press": {
+    "ru": "Жим от груди в рычажном тренажёре",
+    "en": "Leverage chest press",
+    "members": [
+      "Leverage_Chest_Press",
+      "Leverage_Decline_Chest_Press",
+      "Leverage_Incline_Chest_Press"
+    ]
+  },
+  "leverage-row": {
+    "ru": "Тяга в рычажном тренажёре сидя",
+    "en": "Seated leverage row",
+    "members": [
+      "Leverage_High_Row",
+      "Leverage_Iso_Row"
     ]
   }
 }

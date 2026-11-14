@@ -505,5 +505,42 @@
   "Lateral_Box_Jump": {},
   "Lateral_Cone_Hops": {},
   "Lateral_Raise_-_With_Bands": {},
-  "Latissimus_Dorsi-SMR": {}
+  "Latissimus_Dorsi-SMR": {},
+  "Leg-Over_Floor_Press": {},
+  "Leg-Up_Hamstring_Stretch": {
+    "equipment": "body only"
+  },
+  "Leg_Lift": {
+    "englishSteps": [
+      "Stand upright and hold a stable support with both hands.",
+      "Lift one straight leg behind you while keeping your torso steady.",
+      "Lower the leg under control and repeat on the other side."
+    ],
+    "instructionSourceURL": "https://www.fargoparks.com/sites/default/files/2025-02/SAIL%20Class%20Exercise%20Guide_0.pdf",
+    "instructionCorrectionReason": "Source photos show straight-leg hip extension, while its text compares the movement to a leg curl."
+  },
+  "Leg_Pull-In": {},
+  "Leverage_Chest_Press": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=-YiqDRTu8ag"
+  },
+  "Leverage_Deadlift": {
+    "englishSteps": [
+      "Stand between the handles of the leverage machine, bend your knees and grip the lower handles.",
+      "Extend your knees and hips to stand, keeping your arms straight.",
+      "Bend your knees and hips to lower the handles under control."
+    ],
+    "instructionSourceURL": "https://fitnesstracker.ca/resources/exercises/leverage-deadlift/",
+    "instructionCorrectionReason": "Source instructions omit the lifting phase shown in the original photos."
+  },
+  "Leverage_Decline_Chest_Press": {},
+  "Leverage_High_Row": {},
+  "Leverage_Incline_Chest_Press": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=imgwuFidFGE"
+  },
+  "Leverage_Iso_Row": {},
+  "Leverage_Shoulder_Press": {},
+  "Leverage_Shrug": {},
+  "Linear_Acceleration_Wall_Drill": {
+    "equipment": "body only"
+  }
 }
