@@ -1450,5 +1450,11 @@
   "Chest_Push_from_3_point_stance": {},
   "Chest_Push_multiple_response": {},
   "Chest_Push_single_response": {},
-  "Chest_Push_with_Run_Release": {}
+  "Chest_Push_with_Run_Release": {},
+  "Dumbbell_Seated_Box_Jump": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=NVQLEHdJlAw"
+  },
+  "Front_Cone_Hops_or_hurdle_hops": {},
+  "Kneeling_Jump_Squat": {},
+  "Drop_Push": {}
 }

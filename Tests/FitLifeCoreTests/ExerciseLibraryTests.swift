@@ -516,7 +516,8 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
 @Test func horizontalRowsAndBoxJumpsKeepDistinctVariants() throws {
   for expected in [
     ["Inverted_Row", "Inverted_Row_with_Straps"],
-    ["Front_Box_Jump", "Box_Jump_Multiple_Response"],
+    ["Front_Box_Jump", "Box_Jump_Multiple_Response", "Dumbbell_Seated_Box_Jump"],
+    ["Hurdle_Hops", "Front_Cone_Hops_or_hurdle_hops"],
   ] {
     for language in [AppLanguage.russian, .english] {
       let entry = try #require(

@@ -282,7 +282,7 @@ Double_Kettlebell_Windmill	Мельница с двумя гирями	Накл�
 Double_Leg_Butt_Kick	Прыжок с захлёстом обеих голеней	Прыжок с подтягиванием пяток к ягодицам;Double-Leg Butt Kick
 Downward_Facing_Balance	Баланс лицом вниз	Силовые упражнения;strength
 Drag_Curl	Сгибание рук со штангой с отведением локтей назад	Подъём Жиронды;Подъём штанги на бицепс с протяжкой вдоль корпуса;Drag Curl
-Drop_Push	падение толчок	Плиометрика;plyometrics
+Drop_Push	Отжимание со спрыгиванием рук с опор	Спрыгивание руками с платформ в упор лёжа;Drop Push
 Dumbbell_Alternate_Bicep_Curl	Попеременное сгибание рук с гантелями стоя с супинацией	Попеременный подъём гантелей на бицепс с поворотом кисти;Dumbbell Alternate Bicep Curl
 Dumbbell_Bench_Press_with_Neutral_Grip	Жим гантелей лёжа на плоской скамье нейтральным хватом	Жим гантелей лёжа ладонями друг к другу;Dumbbell Bench Press with Neutral Grip
 Dumbbell_Clean	Гантели чистые	Силовые упражнения;strength
@@ -298,7 +298,7 @@ Dumbbell_One-Arm_Upright_Row	Тяга одной гантели к подбор�
 Dumbbell_Prone_Incline_Curl	Сгибание рук с гантелями лёжа грудью на наклонной скамье	Подъём гантелей на бицепс с опорой грудью;Dumbbell Prone Incline Curl
 Dumbbell_Raise	Тяга двух гантелей к подбородку стоя	Протяжка гантелей стоя;Dumbbell Raise
 Dumbbell_Scaption	Подъём гантелей в плоскости лопаток стоя	Скапция с гантелями;Подъём гантелей вперёд под углом;Dumbbell Scaption
-Dumbbell_Seated_Box_Jump	Прыжок на коробку с гантелями сидя	Плиометрика;plyometrics
+Dumbbell_Seated_Box_Jump	Запрыгивание на тумбу с гантелью из положения сидя	Прыжок с гантелью на тумбу со скамьи;Dumbbell Seated Box Jump
 Dumbbell_Seated_One-Leg_Calf_Raise	Подъём на носок одной ногой сидя с гантелью	Подъём на носок сидя с гантелью на колене;Dumbbell Seated One-Leg Calf Raise
 Dumbbell_Squat_To_A_Bench	Приседания с гантелями до касания скамьи	Приседания с гантелями к опоре;Dumbbell Squat To A Bench
 Dumbbell_Tricep_Extension_-Pronated_Grip	Французский жим гантелей лёжа на плоской скамье прямым хватом	Разгибание рук с гантелями лёжа ладонями вперёд;Dumbbell Tricep Extension Pronated Grip
@@ -335,7 +335,7 @@ Frog_Sit-Ups	Скручивания «лягушка» лёжа	Скручива
 Front_Barbell_Squat_To_A_Bench	Фронтальные приседания со штангой до касания скамьи	Приседания со штангой на груди к скамье;Front Barbell Squat To A Bench
 Front_Box_Jump	Запрыгивание на тумбу с двух ног	Прыжок на тумбу вперёд;Front Box Jump
 Front_Cable_Raise	Подъём одной руки перед собой с нижним блоком стоя	Мах одной рукой вперёд на нижнем блоке;Front Cable Raise
-Front_Cone_Hops_or_hurdle_hops	Передний конусный хмель (или прыжки с препятствиями)	Плиометрика;plyometrics
+Front_Cone_Hops_or_hurdle_hops	Прыжки через конусы с двух ног	Прыжки вперёд через низкие препятствия;Front Cone Hops or Hurdle Hops
 Front_Incline_Dumbbell_Raise	Подъём гантелей перед собой сидя на наклонной скамье	Фронтальные махи гантелями сидя с опорой спиной;Front Incline Dumbbell Raise
 Front_Leg_Raises	Махи прямой ногой вперёд и назад стоя	Динамическая растяжка задней поверхности бедра с опорой;Front Leg Raises
 Front_Plate_Raise	Подъём диска перед собой стоя	Мах блином перед собой;Front Plate Raise
@@ -439,7 +439,7 @@ Kneeling_Cable_Triceps_Extension	Разгибание рук с верхним �
 Kneeling_Forearm_Stretch	Растяжка предплечий на четвереньках ладонями к коленям	Растяжка запястий с опорой на ладони;Kneeling Forearm Stretch
 Kneeling_High_Pulley_Row	Тяга канатной рукояти верхнего блока к груди стоя на коленях	Тяга каната верхнего блока к груди на коленях;Kneeling High Pulley Row
 Kneeling_Hip_Flexor	Растяжка сгибателей бедра в выпаде на колене	Растяжка передней поверхности бедра в выпаде с колена;Kneeling Hip Flexor
-Kneeling_Jump_Squat	Приседания с прыжком на коленях	Тяжёлая атлетика;olympic weightlifting
+Kneeling_Jump_Squat	Выпрыгивание с колен в присед со штангой	Прыжок с колен на стопы со штангой;Kneeling Jump Squat
 Kneeling_Single-Arm_High_Pulley_Row	Тяга одной рукой верхнего блока к корпусу стоя на коленях	Тяга одиночной рукояти верхнего блока на коленях;Kneeling Single-Arm High Pulley Row
 Kneeling_Squat	Приседания на коленях со штангой на плечах	Опускание таза к пяткам со штангой на коленях;Kneeling Squat
 Landmine_180s	Повороты корпуса с концом штанги стоя	Лэндмайн 180 градусов;Landmine 180s

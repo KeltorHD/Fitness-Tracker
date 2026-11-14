@@ -11065,8 +11065,8 @@
       "name": "Drop Push",
       "englishName": "Drop Push",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Спрыгивание руками с платформ в упор лёжа",
+        "Drop Push"
       ],
       "group": "chest",
       "equipment": "other",
@@ -11678,8 +11678,8 @@
       "name": "Dumbbell Seated Box Jump",
       "englishName": "Dumbbell Seated Box Jump",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Прыжок с гантелью на тумбу со скамьи",
+        "Dumbbell Seated Box Jump"
       ],
       "group": "legs",
       "equipment": "dumbbell",
@@ -11706,7 +11706,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "box-jump",
+        "title": "Box jump"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=NVQLEHdJlAw"
     },
     {
       "id": "5e613b1c-bbe7-59d7-87f6-1169705c2cda",
@@ -13054,8 +13059,8 @@
       "name": "Front Cone Hops (or hurdle hops)",
       "englishName": "Front Cone Hops (or hurdle hops)",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Прыжки вперёд через низкие препятствия",
+        "Front Cone Hops or Hurdle Hops"
       ],
       "group": "legs",
       "equipment": "other",
@@ -13085,7 +13090,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "hurdle-hop",
+        "title": "Two-foot hurdle hops"
+      }
     },
     {
       "id": "85c8c6a8-1305-5e91-89e4-a5399104b1a3",
@@ -14513,7 +14522,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "hurdle-hop",
+        "title": "Two-foot hurdle hops"
+      }
     },
     {
       "id": "1184e59c-43a3-51b0-b0f9-f59308215ea3",
@@ -16968,8 +16981,8 @@
       "name": "Kneeling Jump Squat",
       "englishName": "Kneeling Jump Squat",
       "aliases": [
-        "Тяжёлая атлетика",
-        "olympic weightlifting"
+        "Прыжок с колен на стопы со штангой",
+        "Kneeling Jump Squat"
       ],
       "group": "legs",
       "equipment": "barbell",

@@ -785,7 +785,8 @@
     "en": "Box jump",
     "members": [
       "Front_Box_Jump",
-      "Box_Jump_Multiple_Response"
+      "Box_Jump_Multiple_Response",
+      "Dumbbell_Seated_Box_Jump"
     ]
   },
   "kettlebell-halo": {
@@ -841,6 +842,14 @@
       "Chest_Push_multiple_response",
       "Chest_Push_single_response",
       "Chest_Push_with_Run_Release"
+    ]
+  },
+  "hurdle-hop": {
+    "ru": "Прыжки через препятствия с двух ног",
+    "en": "Two-foot hurdle hops",
+    "members": [
+      "Hurdle_Hops",
+      "Front_Cone_Hops_or_hurdle_hops"
     ]
   }
 }
