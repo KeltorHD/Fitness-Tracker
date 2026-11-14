@@ -2501,10 +2501,12 @@
     {
       "id": "4d261748-ded9-5bb1-b2ef-0ee8c1f6b6c9",
       "sourceID": "Dumbbell_Shoulder_Press",
-      "name": "Жим гантелей сидя",
+      "name": "Жим гантелей сидя с опорой спины",
       "englishName": "Dumbbell Shoulder Press",
       "aliases": [
-        "Жим гантелей на плечи"
+        "Жим гантелей сидя",
+        "Жим гантелей на плечи",
+        "Dumbbell Shoulder Press"
       ],
       "group": "shoulders",
       "equipment": "dumbbell",
@@ -2531,7 +2533,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "seated-dumbbell-shoulder-press",
+        "title": "Жим гантелей от плеч сидя"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=rO_iEImwHyo"
     },
     {
       "id": "a53d6212-fcba-5d19-ad1d-1b56e34a8396",
@@ -2578,10 +2585,12 @@
     {
       "id": "451e9781-7faa-52a4-af90-cc64f957ddec",
       "sourceID": "Standing_Dumbbell_Press",
-      "name": "Жим гантелей стоя",
+      "name": "Жим гантелей от плеч стоя",
       "englishName": "Standing Dumbbell Press",
       "aliases": [
-        "Жим над головой с гантелями"
+        "Жим гантелей стоя",
+        "Жим над головой с гантелями",
+        "Standing Dumbbell Press"
       ],
       "group": "shoulders",
       "equipment": "dumbbell",
@@ -2608,7 +2617,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-dumbbell-shoulder-press",
+        "title": "Жим гантелей от плеч стоя"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=bmy7tIopNt4"
     },
     {
       "id": "18506dde-bb5a-5a3d-869e-64052b31aa57",
@@ -3395,10 +3409,12 @@
     {
       "id": "18876255-6141-5510-8664-cc21e78464b8",
       "sourceID": "Cable_Rope_Overhead_Triceps_Extension",
-      "name": "Разгибание рук с канатом из-за головы",
+      "name": "Разгибание рук из-за головы с канатом нижнего блока стоя",
       "englishName": "Cable Rope Overhead Triceps Extension",
       "aliases": [
-        "Французский жим на блоке"
+        "Разгибание рук с канатом из-за головы",
+        "Французский жим на блоке",
+        "Cable Rope Overhead Triceps Extension"
       ],
       "group": "arms",
       "equipment": "cable",
@@ -3424,7 +3440,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-overhead-triceps-extension",
+        "title": "Разгибание рук из-за головы стоя"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=xqm4cRFwZEo"
     },
     {
       "id": "e8e181c4-2ab6-5b73-9bd3-46507b15aa7b",
@@ -3688,10 +3709,12 @@
     {
       "id": "cdada155-858a-5678-bf19-ead8fb8849e3",
       "sourceID": "Hanging_Leg_Raise",
-      "name": "Подъём ног в висе",
+      "name": "Подъём согнутых ног в висе на перекладине",
       "englishName": "Hanging Leg Raise",
       "aliases": [
-        "Пресс на перекладине"
+        "Подъём ног в висе",
+        "Пресс на перекладине",
+        "Hanging Leg Raise"
       ],
       "group": "core",
       "equipment": "body only",
@@ -3705,9 +3728,9 @@
         "rectusAbdominisLower"
       ],
       "steps": [
-        "Возьмитесь за перекладину и примите устойчивое положение в висе с опущенными ногами.",
-        "Не раскачиваясь, поднимите ноги перед собой примерно до прямого угла с корпусом.",
-        "Коротко задержитесь и медленно опустите ноги в исходное положение, сохраняя контроль таза."
+        "Возьмитесь за перекладину и повисните на прямых руках, опустив ноги.",
+        "Без раскачивания согните колени и поднимите бёдра примерно до параллели с полом.",
+        "Плавно опустите ноги в исходное положение."
       ],
       "images": [
         "Hanging_Leg_Raise/0.jpg",
@@ -3716,7 +3739,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=iC_fu-XjNPo"
     },
     {
       "id": "411d38b7-9823-50fc-a29f-b49b77afe2f1",
@@ -3757,10 +3781,12 @@
     {
       "id": "91dd1c45-b68a-5360-8e1a-9e7730544d7f",
       "sourceID": "Cable_Crunch",
-      "name": "Скручивания на верхнем блоке",
+      "name": "Молитва",
       "englishName": "Cable Crunch",
       "aliases": [
-        "Молитва на пресс"
+        "Скручивания на верхнем блоке с канатной рукоятью стоя на коленях",
+        "Скручивания на верхнем блоке",
+        "Cable Crunch"
       ],
       "group": "core",
       "equipment": "cable",
@@ -3785,7 +3811,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=NJQROeaBiVE"
     },
     {
       "id": "bd4bebd1-e58e-5f90-8126-a24884067711",
@@ -29910,11 +29937,11 @@
     {
       "id": "a35c0049-55b4-5722-9969-49df05c61119",
       "sourceID": "Standing_One-Arm_Dumbbell_Triceps_Extension",
-      "name": "Разгибание трицепса с гантелью на одной руке стоя",
+      "name": "Разгибание руки с гантелью из-за головы стоя",
       "englishName": "Standing One-Arm Dumbbell Triceps Extension",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Разгибание трицепса с гантелью на одной руке стоя",
+        "Standing One-Arm Dumbbell Triceps Extension"
       ],
       "group": "arms",
       "equipment": "dumbbell",
@@ -29922,22 +29949,16 @@
       "primaryMuscles": [
         "Трицепс"
       ],
-      "secondaryMuscles": [
-        "Грудные мышцы",
-        "Дельтовидные мышцы"
-      ],
+      "secondaryMuscles": [],
       "trainingRegions": [
         "tricepsLong",
         "tricepsLateral",
         "tricepsMedial"
       ],
       "steps": [
-        "Для начала встаньте, держа в одной руке гантель. Ваши ступни должны находиться примерно на ширине плеч друг от друга. Теперь полностью вытяните руку с гантелью над головой. Совет: мизинец вашей руки должен быть обращен к потолку, а ладонь — вперед. Гантель должна находиться над головой.",
-        "Это будет ваша исходная позиция.",
-        "Удерживая плечо близко к голове (локти внутрь) и перпендикулярно полу, опускайте сопротивление полукруговыми движениями за головой, пока предплечье не коснется бицепса. Совет: плечо должно оставаться неподвижным, двигаться должно только предплечье. Вдохните, выполняя этот шаг.",
-        "Вернитесь в исходное положение, подняв гантель с помощью трицепса. Выдохните, выполняя этот шаг.",
-        "Повторите рекомендуемое количество повторений.",
-        "Поменяйте руки и повторите упражнение."
+        "Встаньте, возьмите гантель одной рукой и поднимите её над головой.",
+        "Удерживая плечо рядом с головой, согните локоть и плавно опустите гантель за голову.",
+        "Разогните руку, поднимая гантель над головой, затем повторите другой рукой."
       ],
       "images": [
         "Standing_One-Arm_Dumbbell_Triceps_Extension/0.jpg",
@@ -29946,7 +29967,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-overhead-triceps-extension",
+        "title": "Разгибание рук из-за головы стоя"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=GdiRJesto9U"
     },
     {
       "id": "8bfbcc3e-6325-5c56-9f5d-01c6609c2189",

@@ -789,7 +789,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     ["One-Arm_Kettlebell_Row", "Two-Arm_Kettlebell_Row"],
     ["Zottman_Curl", "Zottman_Preacher_Curl"],
     ["Cable_Crossover", "Single-Arm_Cable_Crossover"],
-    ["Seated_Dumbbell_Press", "Arnold_Dumbbell_Press"],
+    ["Seated_Dumbbell_Press", "Arnold_Dumbbell_Press", "Dumbbell_Shoulder_Press"],
     ["Bench_Dips", "Weighted_Bench_Dip"],
     ["Russian_Twist", "Plate_Twist"],
     ["Barbell_Side_Bend", "Dumbbell_Side_Bend", "One-Arm_High-Pulley_Cable_Side_Bends"],
@@ -802,7 +802,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     ],
     [
       "Standing_Alternating_Dumbbell_Press", "Standing_Palm-In_One-Arm_Dumbbell_Press",
-      "Standing_Palms-In_Dumbbell_Press",
+      "Standing_Palms-In_Dumbbell_Press", "Standing_Dumbbell_Press",
     ],
     [
       "Barbell_Squat", "Narrow_Stance_Squats", "Speed_Squats", "Squat_with_Bands",
@@ -969,9 +969,10 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
       "Standing_Low-Pulley_One-Arm_Triceps_Extension",
       "Standing_Overhead_Barbell_Triceps_Extension",
       "Standing_Towel_Triceps_Extension",
-      "Triceps_Overhead_Extension_with_Rope",
+      "Triceps_Overhead_Extension_with_Rope", "Cable_Rope_Overhead_Triceps_Extension",
+      "Standing_One-Arm_Dumbbell_Triceps_Extension",
     ])
-  #expect(Set(variants.map(\.id)).count == 8)
+  #expect(Set(variants.map(\.id)).count == 10)
 }
 
 @Test func kneeRaiseInstructionsMatchTheSourceNameAndPhotosInBothLanguages() throws {
