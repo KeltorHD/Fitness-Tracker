@@ -18444,6 +18444,8 @@
       "name": "Machine Bench Press",
       "englishName": "Machine Bench Press",
       "aliases": [
+        "Жим в тренажёре",
+        "Машинный жим лежа",
         "Силовые упражнения",
         "strength"
       ],
@@ -18484,6 +18486,8 @@
       "name": "Machine Bicep Curl",
       "englishName": "Machine Bicep Curl",
       "aliases": [
+        "Сгибания на бицепс в тренажёре",
+        "Сгибание бицепса в машине",
         "Силовые упражнения",
         "strength"
       ],
@@ -18519,6 +18523,8 @@
       "name": "Machine Preacher Curls",
       "englishName": "Machine Preacher Curls",
       "aliases": [
+        "Сгибание рук на скамье Скотта в тренажёре",
+        "Сгибания рук в тренажёре на скамье Скотта",
         "Силовые упражнения",
         "strength"
       ],
@@ -18555,6 +18561,9 @@
       "name": "Machine Shoulder (Military) Press",
       "englishName": "Machine Shoulder (Military) Press",
       "aliases": [
+        "Жим плечами в тренажёре",
+        "Жим в тренажёре вверх",
+        "Жим от плеч на тренажере (военный)",
         "Силовые упражнения",
         "strength"
       ],
@@ -18593,6 +18602,8 @@
       "name": "Machine Triceps Extension",
       "englishName": "Machine Triceps Extension",
       "aliases": [
+        "Разгибания рук в тренажёре",
+        "Разгибание трицепса в тренажере",
         "Силовые упражнения",
         "strength"
       ],
@@ -18629,6 +18640,9 @@
       "name": "Medicine Ball Chest Pass",
       "englishName": "Medicine Ball Chest Pass",
       "aliases": [
+        "Передача медбола от груди",
+        "Medicine ball chest pass",
+        "Пас на грудь с медболом",
         "Плиометрика",
         "plyometrics"
       ],
@@ -18657,7 +18671,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=upEOUUXso2Q"
     },
     {
       "id": "a4219185-40ad-59db-9916-0b62190f6a69",
@@ -18665,6 +18680,8 @@
       "name": "Medicine Ball Full Twist",
       "englishName": "Medicine Ball Full Twist",
       "aliases": [
+        "Повороты с медболом с партнёром",
+        "Медбол, полный поворот",
         "Плиометрика",
         "plyometrics"
       ],
@@ -18701,6 +18718,9 @@
       "name": "Medicine Ball Scoop Throw",
       "englishName": "Medicine Ball Scoop Throw",
       "aliases": [
+        "Бросок медбола назад",
+        "Medicine ball scoop throw",
+        "Бросок набивного мяча",
         "Плиометрика",
         "plyometrics"
       ],
@@ -18736,6 +18756,9 @@
       "name": "Middle Back Shrug",
       "englishName": "Middle Back Shrug",
       "aliases": [
+        "Шраги на наклонной скамье",
+        "Middle back shrug",
+        "Пожимание плечами средней части спины",
         "Силовые упражнения",
         "strength"
       ],
@@ -18768,6 +18791,7 @@
       "name": "Middle Back Stretch",
       "englishName": "Middle Back Stretch",
       "aliases": [
+        "Растяжка средней части спины",
         "Растяжка",
         "stretching"
       ],
@@ -18802,6 +18826,9 @@
       "name": "Mixed Grip Chin",
       "englishName": "Mixed Grip Chin",
       "aliases": [
+        "Подтягивания смешанным хватом",
+        "Mixed grip chin",
+        "Подбородок смешанным хватом",
         "Силовые упражнения",
         "strength"
       ],
@@ -18838,6 +18865,9 @@
       "name": "Monster Walk",
       "englishName": "Monster Walk",
       "aliases": [
+        "Монстр-ходьба",
+        "Monster walk",
+        "Прогулка монстров",
         "Силовые упражнения",
         "strength"
       ],
@@ -18872,6 +18902,9 @@
       "name": "Mountain Climbers",
       "englishName": "Mountain Climbers",
       "aliases": [
+        "Поочерёдное подтягивание коленей к груди в упоре лёжа",
+        "Mountain climbers",
+        "Альпинисты",
         "Плиометрика",
         "plyometrics"
       ],

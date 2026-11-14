@@ -578,5 +578,20 @@
   "Lying_Supine_Dumbbell_Curl": {},
   "Lying_T-Bar_Row": {
     "techniqueVideoURL": "https://www.youtube.com/watch?v=w0KnlQ-b7jw"
-  }
+  },
+  "Machine_Bench_Press": {},
+  "Machine_Bicep_Curl": {},
+  "Machine_Preacher_Curls": {},
+  "Machine_Shoulder_Military_Press": {},
+  "Machine_Triceps_Extension": {},
+  "Medicine_Ball_Chest_Pass": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=upEOUUXso2Q"
+  },
+  "Medicine_Ball_Full_Twist": {},
+  "Medicine_Ball_Scoop_Throw": {},
+  "Middle_Back_Shrug": {},
+  "Middle_Back_Stretch": {},
+  "Mixed_Grip_Chin": {},
+  "Monster_Walk": {},
+  "Mountain_Climbers": {}
 }

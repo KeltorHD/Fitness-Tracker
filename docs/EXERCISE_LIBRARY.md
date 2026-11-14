@@ -104,3 +104,5 @@ python3 scripts/import-exercise-library.py --download-only
 - **Requires Apple Developer configuration:** отдельные ресурсы разработчика не нужны; обычный signing приложения.
 
 Новые UI-тесты не запускались на Linux. Иллюстративные макеты: [previews](previews/README.md). Полная атрибуция: [NOTICE.ru.md](../ThirdParty/free-exercise-db/NOTICE.ru.md).
+
+При проверке упражнений с медболом и резинками сверены [бросок медбола назад через голову](https://us.humankinetics.com/blogs/excerpt/medicine-ball-blob-throw-between-legs-over-back), [шаги монстра вперёд и назад](https://www.bu.edu/fitrec/files/2015/03/TOTAL-BODY-CONDITIONING-WORKOUT.pdf) и [сгибание рук в тренажёре с опорой для плеч](https://griptapp.com/exercises/preacher-curl-machine). Ссылка на видео броска медбола от груди найдена по названию и описанию; видео показывает вариант у стены, а не передачу партнёру.

@@ -494,19 +494,19 @@ Lying_Rear_Delt_Raise	Разведение гантелей лёжа грудь�
 Lying_Supine_Dumbbell_Curl	Сгибание рук с гантелями лёжа на спине на плоской скамье	Подъём гантелей на бицепс лёжа с поворотом кистей;Lying Supine Dumbbell Curl
 Lying_T-Bar_Row	Тяга Т-грифа с опорой грудью в тренажёре	Тяга Т-грифа лёжа в тренажёре;Lying T-Bar Row
 Lying_Triceps_Press	Жим на трицепс лежа	Силовые упражнения;strength
-Machine_Bench_Press	Машинный жим лежа	Силовые упражнения;strength
-Machine_Bicep_Curl	Сгибание бицепса в машине	Силовые упражнения;strength
-Machine_Preacher_Curls	Сгибания рук в тренажёре на скамье Скотта	Силовые упражнения;strength
-Machine_Shoulder_Military_Press	Жим от плеч на тренажере (военный)	Силовые упражнения;strength
-Machine_Triceps_Extension	Разгибание трицепса в тренажере	Силовые упражнения;strength
-Medicine_Ball_Chest_Pass	Пас на грудь с медболом	Плиометрика;plyometrics
-Medicine_Ball_Full_Twist	Медбол, полный поворот	Плиометрика;plyometrics
-Medicine_Ball_Scoop_Throw	Бросок набивного мяча	Плиометрика;plyometrics
-Middle_Back_Shrug	Пожимание плечами средней части спины	Силовые упражнения;strength
-Middle_Back_Stretch	Растяжка средней части спины	Растяжка;stretching
-Mixed_Grip_Chin	Подбородок смешанным хватом	Силовые упражнения;strength
-Monster_Walk	Прогулка монстров	Силовые упражнения;strength
-Mountain_Climbers	Альпинисты	Плиометрика;plyometrics
+Machine_Bench_Press	Жим от груди сидя в тренажёре	Жим в тренажёре;Машинный жим лежа;Силовые упражнения;strength
+Machine_Bicep_Curl	Сгибание рук на бицепс в тренажёре с поднятыми плечами	Сгибания на бицепс в тренажёре;Сгибание бицепса в машине;Силовые упражнения;strength
+Machine_Preacher_Curls	Сгибание рук на бицепс в тренажёре с опорой для плеч	Сгибание рук на скамье Скотта в тренажёре;Сгибания рук в тренажёре на скамье Скотта;Силовые упражнения;strength
+Machine_Shoulder_Military_Press	Жим от плеч сидя в тренажёре	Жим плечами в тренажёре;Жим в тренажёре вверх;Жим от плеч на тренажере (военный);Силовые упражнения;strength
+Machine_Triceps_Extension	Разгибание рук на трицепс в тренажёре с поднятыми плечами	Разгибания рук в тренажёре;Разгибание трицепса в тренажере;Силовые упражнения;strength
+Medicine_Ball_Chest_Pass	Бросок медбола от груди партнёру	Передача медбола от груди;Medicine ball chest pass;Пас на грудь с медболом;Плиометрика;plyometrics
+Medicine_Ball_Full_Twist	Передача медбола с поворотом корпуса стоя спиной к партнёру	Повороты с медболом с партнёром;Медбол, полный поворот;Плиометрика;plyometrics
+Medicine_Ball_Scoop_Throw	Бросок медбола назад через голову из полуприседа	Бросок медбола назад;Medicine ball scoop throw;Бросок набивного мяча;Плиометрика;plyometrics
+Middle_Back_Shrug	Сведение лопаток с гантелями лёжа на наклонной скамье	Шраги на наклонной скамье;Middle back shrug;Пожимание плечами средней части спины;Силовые упражнения;strength
+Middle_Back_Stretch	Повороты корпуса стоя для растяжки спины	Растяжка средней части спины;Растяжка;stretching
+Mixed_Grip_Chin	Подтягивания разнохватом	Подтягивания смешанным хватом;Mixed grip chin;Подбородок смешанным хватом;Силовые упражнения;strength
+Monster_Walk	Шаги монстра с резинками вперёд и назад	Монстр-ходьба;Monster walk;Прогулка монстров;Силовые упражнения;strength
+Mountain_Climbers	Скалолаз	Поочерёдное подтягивание коленей к груди в упоре лёжа;Mountain climbers;Альпинисты;Плиометрика;plyometrics
 Moving_Claw_Series	Серия движущихся когтей	Плиометрика;plyometrics
 Muscle_Snatch	рывок мышц	Тяжёлая атлетика;olympic weightlifting
 Muscle_Up	мышцы вверх	Силовые упражнения;strength
