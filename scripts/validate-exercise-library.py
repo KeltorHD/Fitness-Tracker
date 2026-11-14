@@ -36,7 +36,11 @@ for ru, en in zip(document['entries'], english['entries']):
     assert ru['trainingRegions'] == en['trainingRegions']
     assert (ru.get('variantGroup') or {}).get('id') == (en.get('variantGroup') or {}).get('id')
     authored = reviewed.get(en['sourceID'], {}).get('englishSteps')
-    assert en['name'] == original['name']
+    english_name = reviewed.get(en['sourceID'], {}).get('englishName', original['name'])
+    assert en['name'] == english_name
+    if english_name != original['name']:
+        assert reviewed[en['sourceID']].get('englishNameCorrectionReason', '').strip()
+        assert original['name'] in ru['aliases']
     assert en['steps'] == (authored if authored is not None else [s for s in original['instructions'] if s.strip()])
     if authored is not None:
         assert len(authored) >= 3
@@ -89,7 +93,7 @@ for index, entry in enumerate(document['entries']):
         assert source[entry['sourceID']]['images'] and entry['images'] == []
     else:
         assert entry['images'] == source[entry['sourceID']]['images']
-    assert entry['englishName'] == source[entry['sourceID']]['name']
+    assert entry['englishName'] == review.get('englishName', source[entry['sourceID']]['name'])
     assert re.search('[А-Яа-яЁё]', entry['name'])
     assert bool(entry['steps']) == bool(source[entry['sourceID']]['instructions'] or reviewed.get(entry['sourceID'], {}).get('englishSteps'))
     assert entry['techniqueUnavailable'] == (not bool(entry['steps']))

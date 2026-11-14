@@ -1769,5 +1769,58 @@
     "instructionSourceURL": "https://whatmuscle.com/exercises/seated-close-grip-concentration-barbell-curl",
     "instructionCorrectionReason": "The source instructions mistakenly refer to dumbbells despite the source name and photos specifying a barbell.",
     "techniqueVideoURL": "https://www.youtube.com/watch?v=iynnTu_mPw8"
+  },
+  "Bottoms-Up_Clean_From_The_Hang_Position": {
+    "englishSteps": [
+      "Stand with a kettlebell hanging from one hand.",
+      "Swing the bell back, then extend your hips and guide it up to shoulder height with its bottom pointing upward.",
+      "Keep a firm grip and lower the bell under control, then repeat with the other hand."
+    ],
+    "instructionSourceURL": "https://fitnesstracker.ca/resources/exercises/bottoms-up-clean-from-the-hang-position/",
+    "instructionCorrectionReason": "The source instructions omit the bottoms-up position specified in the exercise name.",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=GM0QG8H5aA4"
+  },
+  "Heaving_Snatch_Balance": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=xoXwoXoJo_Y"
+  },
+  "Jerk_Balance": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=VWU_0OwXoPQ"
+  },
+  "Linear_3-Part_Start_Technique": {
+    "equipment": "body only",
+    "englishSteps": [
+      "Stand at a line with one foot ahead of the other and place the opposite hand on the line.",
+      "Bend your knees and lean forward, extending your free arm behind you.",
+      "Drive through the front leg and accelerate forward."
+    ],
+    "instructionSourceURL": "https://bikkel.app/exercises/linear-3-part-start-technique",
+    "instructionCorrectionReason": "The source description contains typographical errors and conflicting foot placement; the steps clarify the named three-point sprint start."
+  },
+  "London_Bridges": {
+    "englishSteps": [
+      "Secure a rope above a stable bar and stand on the bar while holding the rope.",
+      "Keep your body straight and lean backward while moving your hands down the rope one at a time.",
+      "Move your hands up the rope to return to the starting position."
+    ],
+    "instructionSourceURL": "https://getwrkout.com/exercises/london-bridges/",
+    "instructionCorrectionReason": "The source text describes the lowered position as perpendicular to the ground although the movement lowers the body backward."
+  },
+  "Lunge_Sprint": {},
+  "Lying_Close-Grip_Bar_Curl_On_High_Pulley": {},
+  "Muscle_Snatch": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=nJmtGVutszE"
+  },
+  "One-Arm_Open_Palm_Kettlebell_Clean": {},
+  "Open_Palm_Kettlebell_Clean": {},
+  "Single-Leg_High_Box_Squat": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=_OwMpiC0oLE",
+    "englishName": "Band-Assisted High Box Step-Up",
+    "englishNameCorrectionReason": "The user selected the source photos and instructions as a band-assisted step-up and requested a separate squat-to-box exercise; the ambiguous original name remains an alias."
+  },
+  "Single-Leg_Stride_Jump": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=cX1j823o6A0"
+  },
+  "FitLife_Single_Leg_Squat_To_High_Box": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=7sMCw2CGMz0"
   }
 }

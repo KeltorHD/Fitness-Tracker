@@ -176,7 +176,7 @@ Bodyweight_Flyes	Разведение рук в упоре лёжа на дву�
 Bodyweight_Mid_Row	Тяга корпуса к перекладине в перевёрнутом висе	Горизонтальная тяга в перевёрнутом висе;Bodyweight Mid Row
 Bodyweight_Walking_Lunge	Выпады в ходьбе с собственным весом	Ходьба выпадами без отягощения;Bodyweight Walking Lunge
 Bosu_Ball_Cable_Crunch_With_Side_Bends	Скручивания на BOSU с блоками и боковыми наклонами	Скручивания с блоками и наклоны на полусфере;Bosu Ball Cable Crunch With Side Bends
-Bottoms-Up_Clean_From_The_Hang_Position	Подъём снизу вверх из виса	Силовые упражнения;strength
+Bottoms-Up_Clean_From_The_Hang_Position	Взятие гири на грудь дном вверх с виса	Подъём гири к плечу дном вверх из виса;Bottoms-Up Clean From The Hang Position
 Bottoms_Up	Подъём таза и ног лёжа с подтягиванием коленей	Подъём таза лёжа с разгибанием ног;Bottoms Up
 Box_Jump_Multiple_Response	Повторные прыжки на тумбу с двух ног	Серийные запрыгивания на тумбу;Box Jump Multiple Response
 Box_Skip	Прыжки с одной ноги через ряд тумб	Прыжки с отталкиванием от тумбы;Box Skip
@@ -364,7 +364,7 @@ Hang_Snatch	Рывок штанги с виса от таза	Тяжёлая а�
 Hang_Snatch_-_Below_Knees	Рывок штанги с виса ниже колен	Тяжёлая атлетика;olympic weightlifting
 Hanging_Bar_Good_Morning	Гудморнинг с подвешенной штангой в силовой раме	Наклоны со штангой на плечах с подвесов;Hanging Bar Good Morning
 Hanging_Pike	Подъём ног к перекладине в висе	Подъём ног к турнику из виса;Hanging Pike
-Heaving_Snatch_Balance	Баланс в рывке	Тяжёлая атлетика;olympic weightlifting
+Heaving_Snatch_Balance	Уход в рывковый сед со штангой с подбивом	Пружинящий уход в сед со штангой из-за головы;Heaving Snatch Balance
 Heavy_Bag_Thrust	Толчок боксёрского мешка одной рукой стоя	Толчок мешка с поворотом корпуса;Heavy Bag Thrust
 High_Cable_Curls	Сгибание рук на бицепс с двух верхних блоков стоя	Сгибание рук на бицепс с верхних блоков;High Cable Curls;Силовые упражнения;strength
 Hip_Circles_prone	Круговые движения согнутой ногой на четвереньках	Круги коленом на четвереньках;Hip Circles Prone
@@ -406,7 +406,7 @@ JM_Press	Жим JM со штангой лёжа на плоской скамье
 Jackknife_Sit-Up	Складка лёжа	Одновременный подъём корпуса и прямых ног лёжа;Jackknife Sit-Up
 Janda_Sit-Up	Подъём корпуса по методу Янды	Подъём корпуса лёжа с напряжением ягодиц и задней поверхности бедра;Janda Sit-Up
 Jefferson_Squats	Приседания Джефферсона	Приседания со штангой между ног;Jefferson Squats
-Jerk_Balance	Рывок на баланс	Тяжёлая атлетика;olympic weightlifting
+Jerk_Balance	Толчковый баланс со штангой в ножницы	Отработка толчка штанги в ножницы с шагом передней ногой;Jerk Balance
 Jerk_Dip_Squat	Подсед со штангой на груди для толчка	Неглубокий подсед под толчок со штангой;Jerk Dip Squat
 Jogging_Treadmill	Бег трусцой на беговой дорожке	Джоггинг на беговой дорожке;Jogging Treadmill
 Keg_Load	Перенос бочки и подъём на платформу	Подъём бочки на платформу после переноса;Keg Load
@@ -461,11 +461,11 @@ Leverage_Incline_Chest_Press	Жим вверх от груди в рычажно
 Leverage_Iso_Row	Горизонтальная тяга рычажного тренажёра сидя	Тяга рукоятей рычажного тренажёра к корпусу;Leverage Iso Row
 Leverage_Shoulder_Press	Жим над головой в рычажном тренажёре сидя	Жим плечами в рычажном тренажёре;Leverage Shoulder Press
 Leverage_Shrug	Шраги в рычажном тренажёре стоя	Подъём плеч в рычажном тренажёре;Leverage Shrug
-Linear_3-Part_Start_Technique	Техника линейного старта из трех частей	Плиометрика;plyometrics
+Linear_3-Part_Start_Technique	Старт в спринте с опорой на одну руку	Техника трёхопорного старта;Linear 3-Part Start Technique
 Linear_Acceleration_Wall_Drill	Попеременный подъём коленей с опорой на стену	Имитация ускорения у стены;Linear Acceleration Wall Drill
 Linear_Depth_Jump	Прыжок в глубину вперёд с запрыгиванием на тумбу	Спрыгивание и прыжок вперёд на тумбу;Linear Depth Jump;Силовые упражнения;strength
 Log_Lift	Лог-лифт	Взятие бревна на грудь и жим над головой;Log Lift
-London_Bridges	Лондонские мосты	Силовые упражнения;strength
+London_Bridges	Подтягивание по канату с опорой ногами	Лондонские мосты;London Bridges
 Looking_At_Ceiling	Прогиб назад на коленях с опорой руками на пятки	Растяжка передней поверхности тела с опорой на пятки;Looking At Ceiling
 Low_Cable_Crossover	Сведение рук снизу вверх в кроссовере стоя	Сведение рук с нижних блоков в кроссовере;Low Cable Crossover
 Low_Cable_Triceps_Extension	Разгибание рук с канатом нижнего блока лёжа на плоской скамье	Французский жим с канатной рукоятью нижнего блока лёжа;Low Cable Triceps Extension
@@ -473,11 +473,11 @@ Low_Pulley_Row_To_Neck	Тяга каната нижнего блока к шее
 Lower_Back-SMR	Миофасциальный массаж мышц поясницы на ролике	Прокатывание мышц нижней части спины на ролике;Lower Back SMR
 Lower_Back_Curl	Разгибание корпуса лёжа на животе	Подъём груди от пола лёжа на животе;Lower Back Curl
 Lunge_Pass_Through	Выпады вперёд с передачей гири под ногой	Выпад с передачей гири из руки в руку;Lunge Pass Through
-Lunge_Sprint	Выпад-спринт	Силовые упражнения;strength
+Lunge_Sprint	Выпрыгивание со сменой ног в выпаде в тренажёре Смита	Прыжковые выпады в тренажёре Смита;Lunge Sprint
 Lying_Bent_Leg_Groin	Растяжка приводящих мышц лёжа с партнёром	Растяжка в положении бабочки лёжа с помощью партнёра;Lying Bent Leg Groin
 Lying_Cable_Curl	Сгибание рук с нижним блоком лёжа на полу	Подъём рукояти нижнего блока на бицепс лёжа;Lying Cable Curl
 Lying_Cambered_Barbell_Row	Тяга изогнутого грифа лёжа грудью на плоской скамье	Тяга EZ-грифа с опорой грудью на скамью;Lying Cambered Barbell Row
-Lying_Close-Grip_Bar_Curl_On_High_Pulley	Сгибание рук на грифе лежа узким хватом на верхнем блоке	Силовые упражнения;strength
+Lying_Close-Grip_Bar_Curl_On_High_Pulley	Сгибание рук с прямой рукоятью верхнего блока лёжа узким хватом	Сгибание рук на бицепс лёжа у верхнего блока;Lying Close-Grip Bar Curl On High Pulley
 Lying_Close-Grip_Barbell_Triceps_Extension_Behind_The_Head	Разгибание рук со штангой за головой лёжа на плоской скамье	Французский жим штанги за головой лёжа;Lying Close-Grip Barbell Triceps Extension Behind The Head
 Lying_Close-Grip_Barbell_Triceps_Press_To_Chin	Разгибание рук с EZ-штангой к подбородку лёжа узким хватом	Французский жим EZ-штанги к подбородку на плоской скамье;Lying Close-Grip Barbell Triceps Press To Chin
 Lying_Crossover	Растяжка ягодиц лёжа с поворотом ноги и партнёром	Растяжка с приведением согнутой ноги через корпус с партнёром;Lying Crossover
@@ -508,7 +508,7 @@ Mixed_Grip_Chin	Подтягивания разнохватом	Подтягив
 Monster_Walk	Шаги монстра с резинками вперёд и назад	Монстр-ходьба;Monster walk;Прогулка монстров;Силовые упражнения;strength
 Mountain_Climbers	Скалолаз	Поочерёдное подтягивание коленей к груди в упоре лёжа;Mountain climbers;Альпинисты;Плиометрика;plyometrics
 Moving_Claw_Series	Беговое упражнение с загребанием стопы	Бег с активным выносом ноги и постановкой стопы;Moving Claw Series
-Muscle_Snatch	рывок мышц	Тяжёлая атлетика;olympic weightlifting
+Muscle_Snatch	Силовой рывок штанги с виса без подседа	Рывковая протяжка до фиксации над головой;Muscle Snatch
 Muscle_Up	Выход силой на кольцах	Масл-ап на кольцах;Muscle up;мышцы вверх;Силовые упражнения;strength
 Narrow_Stance_Hack_Squats	Гакк-приседания в тренажёре с узкой постановкой ног	Гакк-приседания узкой постановкой;Гакк-приседания с узкой позицией;Силовые упражнения;strength
 Narrow_Stance_Leg_Press	Жим ногами в тренажёре с узкой постановкой стоп	Жим платформы узкой постановкой;Жим ногами в узкой стойке;Силовые упражнения;strength
@@ -538,7 +538,7 @@ One-Arm_Kettlebell_Split_Snatch	Рывок гири одной рукой в н�
 One-Arm_Kettlebell_Swings	Махи гирей одной рукой	Одноручные махи гирей;One-arm kettlebell swing;Махи гири одной рукой;Силовые упражнения;strength
 One-Arm_Long_Bar_Row	Тяга конца штанги одной рукой в наклоне	Тяга Т-грифа одной рукой;One-arm long bar row;Тяга штанги на одной руке;Силовые упражнения;strength
 One-Arm_Medicine_Ball_Slam	Бросок медбола одной рукой в пол	Удар медболом в пол одной рукой;One-arm medicine ball slam;Удар набивным мячом одной рукой;Силовые упражнения;strength
-One-Arm_Open_Palm_Kettlebell_Clean	Подъём гири одной рукой с открытой ладонью	Силовые упражнения;strength
+One-Arm_Open_Palm_Kettlebell_Clean	Подброс гири на раскрытую ладонь одной рукой	Взятие гири на открытую ладонь одной рукой;One-Arm Open Palm Kettlebell Clean
 One-Arm_Overhead_Kettlebell_Squats	Приседания с гирей над головой в одной руке	One-arm overhead kettlebell squat;Приседания с гирей на одной руке над головой;Силовые упражнения;strength
 One-Arm_Side_Deadlift	Чемоданная тяга штанги одной рукой	Становая тяга штанги сбоку одной рукой;Suitcase deadlift;Становая тяга на одной руке;Силовые упражнения;strength
 One-Arm_Side_Laterals	Подъём гантели в сторону одной рукой с опорой	Мах гантелью в сторону одной рукой;Боковые упражнения на одной руке;Силовые упражнения;strength
@@ -555,7 +555,7 @@ One_Half_Locust	Половинная поза саранчи с захватом
 One_Handed_Hang	Вис на одной руке с опорой ногами	Вис на перекладине одной рукой с поддержкой ног;Вис одной рукой;Растяжка;stretching
 One_Knee_To_Chest	Подтягивание одного колена к груди лёжа	Растяжка ягодиц с подтягиванием колена к груди;Одно колено к груди;Растяжка;stretching
 One_Leg_Barbell_Squat	Болгарские сплит-приседания со штангой	Приседания со штангой с задней ногой на скамье;One-leg barbell squat;Приседания со штангой на одной ноге;Силовые упражнения;strength
-Open_Palm_Kettlebell_Clean	Очистка гири открытой ладонью	Силовые упражнения;strength
+Open_Palm_Kettlebell_Clean	Подброс гири на раскрытые ладони двумя руками	Взятие гири на открытые ладони двумя руками;Open Palm Kettlebell Clean
 Otis-Up	Подъём корпуса с жимом отягощения вверх	Отис-ап;Otis-up;Подъём корпуса с блином;Отис-Ап;Силовые упражнения;strength
 Overhead_Cable_Curl	Сгибание рук на бицепс с верхними блоками стоя	Сгибание рук в кроссовере над головой;Overhead cable curl;Сгибания рук с верхних блоков над головой;Силовые упражнения;strength
 Overhead_Lat	Растяжка широчайшей мышцы из-за головы с партнёром	Растяжка широчайшей мышцы с партнёром;Над головой широчайшие;Растяжка;stretching
@@ -697,11 +697,11 @@ Single-Arm_Cable_Crossover	Попеременное сведение рук на
 Single-Arm_Linear_Jammer	Жим конца штанги одной рукой от плеча стоя	Жим лендмайн одной рукой;Single-arm landmine press;Однорычажный линейный глушитель;Силовые упражнения;strength
 Single-Arm_Push-Up	Отжимания от пола на одной руке	Одноручные отжимания;One-arm push-up;Отжимания на одной руке;Силовые упражнения;strength
 Single-Cone_Sprint_Drill	Быстрые шаги вокруг одного конуса	Спринтерское упражнение вокруг конуса;Single-cone sprint drill;Одноконусное спринтерское упражнение;Плиометрика;plyometrics
-Single-Leg_High_Box_Squat	Приседания на ящик на одной ноге	Силовые упражнения;strength
+Single-Leg_High_Box_Squat	Зашагивание на высокую тумбу с поддержкой за ленту	Зашагивание на высокую тумбу с опорой на ленту;Single-Leg High Box Squat;Band-Assisted Step-Up
 Single-Leg_Hop_Progression	Прыжки на одной ноге вперёд через конусы	Последовательные прыжки на одной ноге;Single-leg hop progression;Прогрессия прыжков на одной ноге;Плиометрика;plyometrics
 Single-Leg_Lateral_Hop	Боковые прыжки на одной ноге через препятствие	Прыжки в сторону на одной ноге;Single-leg lateral hop;Боковой прыжок на одной ноге;Плиометрика;plyometrics
 Single-Leg_Leg_Extension	Разгибание одной ноги в тренажёре сидя	Одностороннее разгибание ног в тренажёре;Single-leg leg extension;Разгибание ног на одной ноге;Силовые упражнения;strength
-Single-Leg_Stride_Jump	Прыжок с шагом на одной ноге	Плиометрика;plyometrics
+Single-Leg_Stride_Jump	Прыжок с опорой одной ногой на тумбу и выносом колена	Высокий прыжок на одной ноге с опорой на тумбу;Single-Leg Stride Jump
 Single_Dumbbell_Raise	Подъём одной гантели перед собой двумя руками	Фронтальный подъём одной гантели;Single dumbbell front raise;Одиночный подъем гантели;Силовые упражнения;strength
 Single_Leg_Butt_Kick	Прыжки на одной ноге с захлёстом голени	Прыжок с пяткой к ягодице на одной ноге;Single-leg butt kick;Удар ногой одной ногой;Плиометрика;plyometrics
 Single_Leg_Push-off	Прыжок вверх с отталкиванием одной ногой от платформы	Отталкивание от платформы одной ногой;Single-leg push-off;Отталкивание на одной ноге;Плиометрика;plyometrics
@@ -876,3 +876,4 @@ Zottman_Curl	Сгибания Зоттмана стоя	Сгибание рук 
 Zottman_Preacher_Curl	Сгибания Зоттмана на скамье Скотта	Сгибание рук с гантелями с поворотом кистей на скамье Скотта;Зоттман Проповедник Керл;Силовые упражнения;strength
 FitLife_Triceps_Pushdown_EZ_Bar	Разгибание рук на верхнем блоке с EZ-рукоятью	Разгибание рук на блоке с изогнутой рукоятью;EZ Bar Triceps Pushdown
 FitLife_Triceps_Pushdown_One_Arm_Overhand	Разгибание одной руки на верхнем блоке прямым хватом	Разгибание руки с D-рукоятью хватом сверху;One-Arm Cable Triceps Pushdown Overhand
+FitLife_Single_Leg_Squat_To_High_Box	Приседание на одной ноге до касания высокого ящика	Приседание на одной ноге к высокой опоре;Single-Leg Squat to a High Box

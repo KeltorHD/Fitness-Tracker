@@ -789,7 +789,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "step-up",
+        "title": "Зашагивание на платформу"
+      }
     },
     {
       "id": "69e24aea-c818-5ce4-ba9f-9c4adb7d2798",
@@ -5915,7 +5919,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "step-up",
+        "title": "Зашагивание на платформу"
+      }
     },
     {
       "id": "157bcaf2-1fa8-54c1-a643-176a89bb609a",
@@ -6913,11 +6921,11 @@
     {
       "id": "72ebe493-2975-5dbd-a9da-a2d6f2e48fe5",
       "sourceID": "Bottoms-Up_Clean_From_The_Hang_Position",
-      "name": "Подъём снизу вверх из виса",
+      "name": "Взятие гири на грудь дном вверх с виса",
       "englishName": "Bottoms-Up Clean From The Hang Position",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подъём гири к плечу дном вверх из виса",
+        "Bottoms-Up Clean From The Hang Position"
       ],
       "group": "arms",
       "equipment": "kettlebells",
@@ -6931,9 +6939,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "Начните упражнение, встав прямо с гирей в одной руке.",
-        "С силой верните гирю назад, а затем с силой поменяйте направление движения.",
-        "Сожмите рукоятку гири как можно сильнее и поднимите гирю к плечу."
+        "Встаньте с гирей в одной руке, опущенной вдоль тела.",
+        "Слегка отведите гирю назад и, разгибая таз, поднимите её к плечу, удерживая дном вверх.",
+        "Крепко держите рукоять и плавно опустите гирю, затем повторите другой рукой."
       ],
       "images": [
         "Bottoms-Up_Clean_From_The_Hang_Position/0.jpg",
@@ -6942,7 +6950,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "kettlebell-clean",
+        "title": "Взятие гири на грудь"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=GM0QG8H5aA4"
     },
     {
       "id": "e180a37a-efbf-59ab-ac59-9c453ee146fd",
@@ -13871,11 +13884,11 @@
     {
       "id": "05ccf225-7795-58e4-b19c-7e1ad6b2e8d5",
       "sourceID": "Heaving_Snatch_Balance",
-      "name": "Баланс в рывке",
+      "name": "Уход в рывковый сед со штангой с подбивом",
       "englishName": "Heaving Snatch Balance",
       "aliases": [
-        "Тяжёлая атлетика",
-        "olympic weightlifting"
+        "Пружинящий уход в сед со штангой из-за головы",
+        "Heaving Snatch Balance"
       ],
       "group": "legs",
       "equipment": "barbell",
@@ -13893,9 +13906,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "Это упражнение поможет вам освоить рывок. Начните с того, что удерживайте легкий вес на задней части плеч. Ваши ступни должны быть немного шире, чем ширина бедер, ступни развернуты в ту же позицию, в которой вы выполняете приседания.",
-        "Начните с небольшого опускания коленей и подъема обратно, чтобы ненадолго разгрузить штангу. Пройдите под штангу, поднимая ее над головой и опускаясь в полный присед.",
-        "Вернитесь в положение стоя."
+        "Положите штангу на верх спины, возьмите её рывковым хватом и поставьте стопы в положение приседа.",
+        "Слегка согните и быстро разогните ноги, затем уйдите под штангу в глубокий присед, выпрямляя руки.",
+        "Удерживая штангу над головой, встаньте из приседа."
       ],
       "images": [
         "Heaving_Snatch_Balance/0.jpg",
@@ -13904,7 +13917,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=xoXwoXoJo_Y"
     },
     {
       "id": "a9585997-b2b8-5c24-8176-1965e83d01b6",
@@ -15388,11 +15402,11 @@
     {
       "id": "c3929fbb-472d-5183-9b69-9e746f41a335",
       "sourceID": "Jerk_Balance",
-      "name": "Рывок на баланс",
+      "name": "Толчковый баланс со штангой в ножницы",
       "englishName": "Jerk Balance",
       "aliases": [
-        "Тяжёлая атлетика",
-        "olympic weightlifting"
+        "Отработка толчка штанги в ножницы с шагом передней ногой",
+        "Jerk Balance"
       ],
       "group": "shoulders",
       "equipment": "barbell",
@@ -15408,9 +15422,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "Это упражнение помогает научиться опускаться достаточно низко во время рывка и корректирует движения назад во время движения. Начните со стойки штанги в положении толчка, плечи вперед, туловище в вертикальном положении, ступни слегка разведены в стороны.",
-        "Начните движение, как при обычном рывке, опускаясь в коленях, сохраняя при этом туловище вертикальным, и с силой поднимаясь назад, используя инерцию, а не руки, чтобы поднять вес.",
-        "Держите заднюю ногу на месте, используя ее для движения тела вперед в полный шпагат во время рывка веса. Для восстановления встаньте с весом над головой."
+        "Удерживайте штангу перед плечами и поставьте ноги в неглубокие ножницы.",
+        "Слегка подсядьте и вытолкните штангу, одновременно шагая передней ногой вперёд в глубокие ножницы.",
+        "Зафиксируйте штангу над головой и сведите ноги."
       ],
       "images": [
         "Jerk_Balance/0.jpg",
@@ -15419,7 +15433,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=VWU_0OwXoPQ"
     },
     {
       "id": "4a851f34-f948-5612-b6f0-309dac8046d8",
@@ -15603,6 +15618,10 @@
       "imagesUnavailable": false,
       "generatedMedia": null,
       "translationAutomatic": false,
+      "variantGroup": {
+        "id": "kettlebell-clean",
+        "title": "Взятие гири на грудь"
+      },
       "techniqueVideoURL": "https://www.youtube.com/watch?v=6Hjuscd4ab4"
     },
     {
@@ -15780,6 +15799,10 @@
       "imagesUnavailable": false,
       "generatedMedia": null,
       "translationAutomatic": false,
+      "variantGroup": {
+        "id": "kettlebell-clean",
+        "title": "Взятие гири на грудь"
+      },
       "techniqueVideoURL": "https://www.youtube.com/watch?v=lliRf_d6MDc"
     },
     {
@@ -17447,14 +17470,14 @@
     {
       "id": "fc261a25-78f0-5c6c-9152-005b9f52dfbe",
       "sourceID": "Linear_3-Part_Start_Technique",
-      "name": "Техника линейного старта из трех частей",
+      "name": "Старт в спринте с опорой на одну руку",
       "englishName": "Linear 3-Part Start Technique",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Техника трёхопорного старта",
+        "Linear 3-Part Start Technique"
       ],
       "group": "legs",
-      "equipment": "unspecified",
+      "equipment": "body only",
       "level": "beginner",
       "primaryMuscles": [
         "Задняя поверхность бедра"
@@ -17465,10 +17488,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "Это упражнение поможет вам как можно быстрее ускориться и перейти в спринт с полной остановки. Это помогает использовать линию для начала. Начните с двух ног на линии. Поместите левую ногу носком рядом с правой лодыжкой. Поместите правую ногу на 4-6 дюймов позади левой.",
-        "Положите правую руку на линию и поднесите нос к левому колену.",
-        "Присядьте, наклонившись вперед, голова должна быть ниже бедер, а вес перенесен на левую ногу. Это будет ваша исходная позиция.",
-        "Поднимите левую руку так, чтобы она была параллельна земле, направлена ​​назад, и взорвитесь, когда будете готовы."
+        "Встаньте у линии, поставив одну стопу впереди другой, и опустите противоположную руку к линии.",
+        "Согните ноги и наклонитесь вперёд, оставив свободную руку направленной назад.",
+        "Оттолкнитесь передней ногой и начните ускорение вперёд."
       ],
       "images": [
         "Linear_3-Part_Start_Technique/0.jpg",
@@ -17477,7 +17499,7 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false
     },
     {
       "id": "68d900db-c67a-5f73-935f-24bb9aeeebe7",
@@ -17600,11 +17622,11 @@
     {
       "id": "29753eb6-77e0-5cdc-b3fa-ed02d1ad5315",
       "sourceID": "London_Bridges",
-      "name": "Лондонские мосты",
+      "name": "Подтягивание по канату с опорой ногами",
       "englishName": "London Bridges",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Лондонские мосты",
+        "London Bridges"
       ],
       "group": "back",
       "equipment": "other",
@@ -17619,10 +17641,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "Прикрепите альпинистскую веревку к дальнему лучу или поперечине. Под ним убедитесь, что стержень машины Смита зафиксирован на месте с помощью предохранителей и не может двигаться. В качестве альтернативы можно также использовать безопасный ящик.",
-        "Встаньте на перекладину, используя веревку, чтобы балансировать. Это будет ваша исходная позиция.",
-        "Удерживая тело прямо, откиньтесь назад и опустите тело, медленно перебирая веревку руками. Продолжайте, пока не окажетесь перпендикулярно земле.",
-        "Сохраняя тело прямым, выполните обратное движение, возвращаясь, передавая руки, в исходное положение."
+        "Закрепите канат над устойчивой перекладиной и встаньте на неё ногами, удерживая канат руками.",
+        "Сохраняя тело прямым, отклоняйтесь назад, поочерёдно перебирая канат руками вниз.",
+        "Перебирая канат руками вверх, вернитесь в исходное положение."
       ],
       "images": [
         "London_Bridges/0.jpg",
@@ -17631,7 +17652,7 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false
     },
     {
       "id": "3e0741dc-04fa-5572-9172-b81d62f19b01",
@@ -17875,11 +17896,11 @@
     {
       "id": "75344fa9-0a3e-52af-9474-9521ff8c0721",
       "sourceID": "Lunge_Sprint",
-      "name": "Выпад-спринт",
+      "name": "Выпрыгивание со сменой ног в выпаде в тренажёре Смита",
       "englishName": "Lunge Sprint",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Прыжковые выпады в тренажёре Смита",
+        "Lunge Sprint"
       ],
       "group": "legs",
       "equipment": "machine",
@@ -17894,10 +17915,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "Отрегулируйте штангу в машине Смита на подходящую высоту. Встаньте под штангу, положив ее на плечи сзади. Снимите перекладину, а затем разделите ноги, перемещая одну ногу вперед, а другую назад. Это будет ваша исходная позиция.",
-        "Опустите заднее колено почти до земли, сгибая колени и опуская при этом бедра.",
-        "В нижней части спуска немедленно поменяйте направление. Взрывно нанесите удар пяткой передней ноги, слегка надавив задней ногой. Подпрыгните и поменяйте положение ног.",
-        "Повторите рекомендуемое количество повторений."
+        "Установите гриф тренажёра Смита на плечи и примите положение выпада.",
+        "Согните ноги и опуститесь в выпад, затем взрывным движением оттолкнитесь передней ногой.",
+        "В прыжке поменяйте положение ног, мягко приземлитесь и продолжайте попеременно."
       ],
       "images": [
         "Lunge_Sprint/0.jpg",
@@ -17906,7 +17926,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "split-jump",
+        "title": "Прыжки из выпада"
+      }
     },
     {
       "id": "220a5592-3818-5fbf-81a0-585749394caa",
@@ -18013,11 +18037,11 @@
     {
       "id": "344bd624-bccd-5e7f-a76f-794049cbaf5c",
       "sourceID": "Lying_Close-Grip_Bar_Curl_On_High_Pulley",
-      "name": "Сгибание рук на грифе лежа узким хватом на верхнем блоке",
+      "name": "Сгибание рук с прямой рукоятью верхнего блока лёжа узким хватом",
       "englishName": "Lying Close-Grip Bar Curl On High Pulley",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Сгибание рук на бицепс лёжа у верхнего блока",
+        "Lying Close-Grip Bar Curl On High Pulley"
       ],
       "group": "arms",
       "equipment": "cable",
@@ -18031,13 +18055,9 @@
         "bicepsShort"
       ],
       "steps": [
-        "Поместите плоскую скамью перед тренажером с высоким блоком или тренажером для тяги широчайших мышц.",
-        "Держите прямую перекладину хватом снизу (ладонями вверх) примерно на ширине плеч.",
-        "Лягте на спину, положив голову на край скамьи.",
-        "Теперь вытяните руки прямо над плечами. Ваше туловище и руки должны составлять угол 90 градусов, а локти должны быть согнуты. Это будет ваше исходное положение.",
-        "На выдохе согните штангу полукруглыми движениями, пока она не коснется подбородка. Сожмите бицепс на секунду в верхней сокращенной позиции. Совет: при выполнении этого движения должны двигаться только предплечья. Ни в коем случае плечи вообще не должны двигаться. Они должны оставаться перпендикулярными на протяжении всего движения.",
-        "Медленно вернитесь в исходное положение.",
-        "Повторите рекомендуемое количество повторений."
+        "Установите плоскую скамью перед верхним блоком и возьмите прямую рукоять узким хватом снизу.",
+        "Лягте на скамью головой к блоку и вытяните руки над плечами.",
+        "Не смещая плечи, согните руки, подтянув рукоять к подбородку, затем плавно выпрямите их."
       ],
       "images": [
         "Lying_Close-Grip_Bar_Curl_On_High_Pulley/0.jpg",
@@ -18046,7 +18066,7 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false
     },
     {
       "id": "bc0a9d1c-6d53-5f9e-87e7-b43ed7b69c46",
@@ -19142,11 +19162,11 @@
     {
       "id": "d1e22f69-63f3-5cae-ad64-84c5eb1a49a1",
       "sourceID": "Muscle_Snatch",
-      "name": "рывок мышц",
+      "name": "Силовой рывок штанги с виса без подседа",
       "englishName": "Muscle Snatch",
       "aliases": [
-        "Тяжёлая атлетика",
-        "olympic weightlifting"
+        "Рывковая протяжка до фиксации над головой",
+        "Muscle Snatch"
       ],
       "group": "legs",
       "equipment": "barbell",
@@ -19163,9 +19183,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "Начните с нагруженной штанги, удерживая ее широким хватом на уровне середины бедра. Ступни должны находиться прямо под бедрами, ступни развернуты по мере необходимости. Опустите бедра, грудь вверх, голова смотрит вперед. Плечи должны находиться прямо перед штангой. Это будет исходная позиция.",
-        "Начните тягу с движения передней части пяток, поднимая штангу. Переходите ко второй тяге, вытягивая бедра, колени и лодыжки, поднимая штангу как можно быстрее. Штанга должна находиться близко к телу.",
-        "Продолжайте поднимать штангу в положение над головой, не сгибая колени."
+        "Удерживайте штангу рывковым хватом у середины бёдер.",
+        "Разогните ноги и таз, ведя штангу близко к телу.",
+        "Поднимите и зафиксируйте штангу над головой без повторного подседа, затем опустите под контролем."
       ],
       "images": [
         "Muscle_Snatch/0.jpg",
@@ -19174,7 +19194,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-snatch-variations",
+        "title": "Рывок штанги"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=nJmtGVutszE"
     },
     {
       "id": "54ef6eec-f41d-5df0-a181-f7349be34f08",
@@ -19790,7 +19815,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "kettlebell-clean",
+        "title": "Взятие гири на грудь"
+      }
     },
     {
       "id": "d5a9e34c-72f3-52c6-9166-6b3770f256c6",
@@ -20304,11 +20333,11 @@
     {
       "id": "c8e1cfe2-b651-5800-9183-78435fc65fb7",
       "sourceID": "One-Arm_Open_Palm_Kettlebell_Clean",
-      "name": "Подъём гири одной рукой с открытой ладонью",
+      "name": "Подброс гири на раскрытую ладонь одной рукой",
       "englishName": "One-Arm Open Palm Kettlebell Clean",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Взятие гири на открытую ладонь одной рукой",
+        "One-Arm Open Palm Kettlebell Clean"
       ],
       "group": "legs",
       "equipment": "kettlebells",
@@ -20325,10 +20354,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "Поместите одну гирю между ног.",
-        "Возьмитесь за ручку одной рукой и быстро поднимите гирю, позвольте ей перевернуться так, чтобы шарик гири приземлился на вашу ладонь.",
-        "Бросьте гирю перед собой и возьмитесь за рукоятку одной рукой.",
-        "Опустите гирю на пол и повторите. Обязательно работайте обеими руками."
+        "Поставьте гирю между стопами и возьмите её одной рукой за рукоять.",
+        "Поднимите гирю, отпустите рукоять и поймайте корпус гири раскрытой ладонью.",
+        "Подбросьте гирю перед собой, поймайте рукоять и опустите на пол; повторите другой рукой."
       ],
       "images": [
         "One-Arm_Open_Palm_Kettlebell_Clean/0.jpg",
@@ -20337,7 +20365,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "open-palm-kettlebell-clean",
+        "title": "Подброс гири на раскрытые ладони"
+      }
     },
     {
       "id": "8bc64c01-8aec-5852-94bb-1cd117a4164e",
@@ -20973,11 +21005,11 @@
     {
       "id": "03911a51-e032-55c8-b3a4-133329e234f0",
       "sourceID": "Open_Palm_Kettlebell_Clean",
-      "name": "Очистка гири открытой ладонью",
+      "name": "Подброс гири на раскрытые ладони двумя руками",
       "englishName": "Open Palm Kettlebell Clean",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Взятие гири на открытые ладони двумя руками",
+        "Open Palm Kettlebell Clean"
       ],
       "group": "legs",
       "equipment": "kettlebells",
@@ -20993,9 +21025,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "Поместите одну гирю между ног. Очистите гирю, вытягивая ее через ноги и бедра, поднимая гирю к плечам.",
-        "Отпустите гирю, когда она поднимается, и позвольте ей перевернуться так, чтобы шарик гири приземлился в ваших ладонях.",
-        "Выпустите гирю перед собой и возьмитесь за рукоятку обеими руками. Опустите гирю в исходное положение и повторите."
+        "Поставьте гирю между стопами и возьмите рукоять двумя руками.",
+        "Поднимите гирю, отпустите рукоять и поймайте корпус гири раскрытыми ладонями.",
+        "Подбросьте гирю перед собой, поймайте рукоять обеими руками и опустите на пол."
       ],
       "images": [
         "Open_Palm_Kettlebell_Clean/0.jpg",
@@ -21004,7 +21036,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "open-palm-kettlebell-clean",
+        "title": "Подброс гири на раскрытые ладони"
+      }
     },
     {
       "id": "54a5726c-1437-510a-af68-df0e83045e62",
@@ -26481,11 +26517,12 @@
     {
       "id": "3ad9f70d-7329-5313-bfe6-ab4b7eaf74c3",
       "sourceID": "Single-Leg_High_Box_Squat",
-      "name": "Приседания на ящик на одной ноге",
-      "englishName": "Single-Leg High Box Squat",
+      "name": "Зашагивание на высокую тумбу с поддержкой за ленту",
+      "englishName": "Band-Assisted High Box Step-Up",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Зашагивание на высокую тумбу с опорой на ленту",
+        "Single-Leg High Box Squat",
+        "Band-Assisted Step-Up"
       ],
       "group": "legs",
       "equipment": "other",
@@ -26499,9 +26536,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "Поместите коробку на стойку. Закрепите ленту или веревку над коробкой.",
-        "Стоя перед ним, встаньте на ящик в положение полной стоя, оставляя другую ногу без опоры. Держитесь за ремешок для баланса",
-        ". Продолжайте шагать вверх и вниз по одной и той же ноге, прежде чем переключиться на противоположную сторону."
+        "Закрепите ленту над высокой устойчивой тумбой и встаньте перед ней, держась за ленту.",
+        "Поставьте одну ногу на тумбу и поднимитесь на неё, сохраняя равновесие.",
+        "Плавно опуститесь и повторите другой ногой."
       ],
       "images": [
         "Single-Leg_High_Box_Squat/0.jpg",
@@ -26510,7 +26547,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "step-up",
+        "title": "Зашагивание на платформу"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=_OwMpiC0oLE"
     },
     {
       "id": "bad83835-dc8d-5b82-b605-6e70c3e47f66",
@@ -26636,11 +26678,11 @@
     {
       "id": "a4ee4ea5-9763-5353-af9e-3384a04edb4e",
       "sourceID": "Single-Leg_Stride_Jump",
-      "name": "Прыжок с шагом на одной ноге",
+      "name": "Прыжок с опорой одной ногой на тумбу и выносом колена",
       "englishName": "Single-Leg Stride Jump",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Высокий прыжок на одной ноге с опорой на тумбу",
+        "Single-Leg Stride Jump"
       ],
       "group": "legs",
       "equipment": "other",
@@ -26656,9 +26698,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "Встаньте сбоку от коробки, поставив внутреннюю ногу на нее, близко к краю.",
-        "Начните с маха руками вверх, одновременно толкая верхнюю ногу, подпрыгивая вверх как можно выше. Попытайтесь поднять противоположное колено вверх.",
-        "Приземлитесь в том же положении, в котором вы начали, используя внутреннюю ногу, чтобы замедлить удар."
+        "Встаньте рядом с тумбой, поставив одну ногу на её край.",
+        "Оттолкнитесь ногой на тумбе, одновременно подняв противоположное колено и руки.",
+        "Мягко приземлитесь в исходное положение и повторите."
       ],
       "images": [
         "Single-Leg_Stride_Jump/0.jpg",
@@ -26667,7 +26709,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=cX1j823o6A0"
     },
     {
       "id": "b498ada6-823d-5436-a1cf-78b3117b3f5f",
@@ -30581,7 +30624,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "step-up",
+        "title": "Зашагивание на платформу"
+      }
     },
     {
       "id": "3cd185d7-c777-59eb-9ebb-af5eaf6a7874",
@@ -31876,6 +31923,10 @@
       "imagesUnavailable": false,
       "generatedMedia": null,
       "translationAutomatic": false,
+      "variantGroup": {
+        "id": "kettlebell-clean",
+        "title": "Взятие гири на грудь"
+      },
       "techniqueVideoURL": "https://www.youtube.com/watch?v=Yaelrl1VN20"
     },
     {
@@ -33502,6 +33553,42 @@
         "title": "Разгибание рук на верхнем блоке"
       },
       "techniqueVideoURL": "https://www.youtube.com/watch?v=g_s1BHCR3qc"
+    },
+    {
+      "id": "e82b092c-4c80-5d3c-896b-67c687ed5486",
+      "sourceID": "FitLife_Single_Leg_Squat_To_High_Box",
+      "name": "Приседание на одной ноге до касания высокого ящика",
+      "englishName": "Single-Leg Squat to a High Box",
+      "aliases": [
+        "Приседание на одной ноге к высокой опоре",
+        "Single-Leg Squat to a High Box"
+      ],
+      "group": "legs",
+      "equipment": "body only",
+      "level": "intermediate",
+      "primaryMuscles": [
+        "Квадрицепс"
+      ],
+      "secondaryMuscles": [
+        "Ягодичные мышцы",
+        "Задняя поверхность бедра"
+      ],
+      "trainingRegions": [],
+      "steps": [
+        "Встаньте спиной к устойчивому высокому ящику и поднимите одну ногу над полом.",
+        "Согните опорную ногу и опуститесь до лёгкого касания ящика тазом.",
+        "Оттолкнитесь опорной ногой, встаньте и повторите другой ногой."
+      ],
+      "images": [],
+      "techniqueUnavailable": false,
+      "imagesUnavailable": true,
+      "generatedMedia": null,
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-box-squat",
+        "title": "Приседания к опоре"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=7sMCw2CGMz0"
     }
   ]
 }

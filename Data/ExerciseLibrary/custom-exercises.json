@@ -32,5 +32,25 @@
     ],
     "images": [],
     "referenceURL": "https://www.bodytrainer.tv/en/exercise/cable_triceps_pushdown_one_arm"
+  },
+  {
+    "id": "FitLife_Single_Leg_Squat_To_High_Box",
+    "name": "Single-Leg Squat to a High Box",
+    "equipment": "body only",
+    "level": "intermediate",
+    "primaryMuscles": [
+      "quadriceps"
+    ],
+    "secondaryMuscles": [
+      "glutes",
+      "hamstrings"
+    ],
+    "instructions": [
+      "Stand in front of a stable high box with your back to it and lift one foot off the floor.",
+      "Bend your supporting knee and hip to lower until your hips lightly touch the box.",
+      "Press through the supporting foot to stand, then repeat on the other side."
+    ],
+    "images": [],
+    "referenceURL": "https://whatmuscle.com/exercises/single-leg-high-box-squat"
   }
 ]

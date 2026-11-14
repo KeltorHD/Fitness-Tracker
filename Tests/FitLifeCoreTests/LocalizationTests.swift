@@ -29,7 +29,7 @@ import Testing
 @Test func englishAndRussianLibrariesShareIdentityAndMediaWithoutChangingStoredWorkouts() throws {
   let ru = try ExerciseLibrary.entries(language: .russian)
   let en = try ExerciseLibrary.entries(language: .english)
-  #expect(en.count == 878)
+  #expect(en.count == 879)
   #expect(en.map(\.id) == ru.map(\.id))
   #expect(en.map(\.images) == ru.map(\.images))
   #expect(en.allSatisfy { $0.translationAutomatic == false })

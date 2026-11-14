@@ -805,7 +805,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "step-up",
+        "title": "Step-up"
+      }
     },
     {
       "id": "69e24aea-c818-5ce4-ba9f-9c4adb7d2798",
@@ -6121,7 +6125,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "step-up",
+        "title": "Step-up"
+      }
     },
     {
       "id": "157bcaf2-1fa8-54c1-a643-176a89bb609a",
@@ -7164,8 +7172,8 @@
       "name": "Bottoms-Up Clean From The Hang Position",
       "englishName": "Bottoms-Up Clean From The Hang Position",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подъём гири к плечу дном вверх из виса",
+        "Bottoms-Up Clean From The Hang Position"
       ],
       "group": "arms",
       "equipment": "kettlebells",
@@ -7179,8 +7187,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "Initiate the exercise by standing upright with a kettlebell in one hand.",
-        "Swing the kettlebell back forcefully and then reverse the motion forcefully. Crush the kettlebell handle as hard as possible and raise the kettlebell to your shoulder."
+        "Stand with a kettlebell hanging from one hand.",
+        "Swing the bell back, then extend your hips and guide it up to shoulder height with its bottom pointing upward.",
+        "Keep a firm grip and lower the bell under control, then repeat with the other hand."
       ],
       "images": [
         "Bottoms-Up_Clean_From_The_Hang_Position/0.jpg",
@@ -7189,7 +7198,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "kettlebell-clean",
+        "title": "Kettlebell clean"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=GM0QG8H5aA4"
     },
     {
       "id": "e180a37a-efbf-59ab-ac59-9c453ee146fd",
@@ -14340,8 +14354,8 @@
       "name": "Heaving Snatch Balance",
       "englishName": "Heaving Snatch Balance",
       "aliases": [
-        "Тяжёлая атлетика",
-        "olympic weightlifting"
+        "Пружинящий уход в сед со штангой из-за головы",
+        "Heaving Snatch Balance"
       ],
       "group": "legs",
       "equipment": "barbell",
@@ -14370,7 +14384,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=xoXwoXoJo_Y"
     },
     {
       "id": "a9585997-b2b8-5c24-8176-1965e83d01b6",
@@ -15907,8 +15922,8 @@
       "name": "Jerk Balance",
       "englishName": "Jerk Balance",
       "aliases": [
-        "Тяжёлая атлетика",
-        "olympic weightlifting"
+        "Отработка толчка штанги в ножницы с шагом передней ногой",
+        "Jerk Balance"
       ],
       "group": "shoulders",
       "equipment": "barbell",
@@ -15935,7 +15950,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=VWU_0OwXoPQ"
     },
     {
       "id": "4a851f34-f948-5612-b6f0-309dac8046d8",
@@ -16118,6 +16134,10 @@
       "imagesUnavailable": false,
       "generatedMedia": null,
       "translationAutomatic": false,
+      "variantGroup": {
+        "id": "kettlebell-clean",
+        "title": "Kettlebell clean"
+      },
       "techniqueVideoURL": "https://www.youtube.com/watch?v=6Hjuscd4ab4"
     },
     {
@@ -16298,6 +16318,10 @@
       "imagesUnavailable": false,
       "generatedMedia": null,
       "translationAutomatic": false,
+      "variantGroup": {
+        "id": "kettlebell-clean",
+        "title": "Kettlebell clean"
+      },
       "techniqueVideoURL": "https://www.youtube.com/watch?v=lliRf_d6MDc"
     },
     {
@@ -17995,11 +18019,11 @@
       "name": "Linear 3-Part Start Technique",
       "englishName": "Linear 3-Part Start Technique",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Техника трёхопорного старта",
+        "Linear 3-Part Start Technique"
       ],
       "group": "legs",
-      "equipment": "unspecified",
+      "equipment": "body only",
       "level": "beginner",
       "primaryMuscles": [
         "hamstrings"
@@ -18010,10 +18034,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "This drill helps you accelerate as quickly as possible into a sprint from a dead stop. It helps to use a line to start from. Begin with two feet on the line. Place your left foot with the toe next to your right ankle. Place your right foot 4-6 inches behind the left.",
-        "Place your right hand onto the line, and thing bring your nose close to your left knee.",
-        "Squat down as you lean foward, your head being lower than your hips and your weight loaded onto the left leg. This will be your starting position.",
-        "Take your left hand up so that it is parallel to the ground, pointing behind you, and explode out when ready."
+        "Stand at a line with one foot ahead of the other and place the opposite hand on the line.",
+        "Bend your knees and lean forward, extending your free arm behind you.",
+        "Drive through the front leg and accelerate forward."
       ],
       "images": [
         "Linear_3-Part_Start_Technique/0.jpg",
@@ -18150,8 +18173,8 @@
       "name": "London Bridges",
       "englishName": "London Bridges",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Лондонские мосты",
+        "London Bridges"
       ],
       "group": "back",
       "equipment": "other",
@@ -18166,10 +18189,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "Attach a climbing rope to a high beam or cross member. Below it, ensure that the smith machine bar is locked in place with the safeties and cannot move. Alternatively, a secure box could also be utilized.",
-        "Stand on the bar, using the rope to balance yourself. This will be your starting position.",
-        "Keeping your body straight, lean back and lower your body by slowly going hand over hand with the rope. Continue until you are perpendicular to the ground.",
-        "Keeping your body straight, reverse the motion, going hand over hand back to the starting position."
+        "Secure a rope above a stable bar and stand on the bar while holding the rope.",
+        "Keep your body straight and lean backward while moving your hands down the rope one at a time.",
+        "Move your hands up the rope to return to the starting position."
       ],
       "images": [
         "London_Bridges/0.jpg",
@@ -18430,8 +18452,8 @@
       "name": "Lunge Sprint",
       "englishName": "Lunge Sprint",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Прыжковые выпады в тренажёре Смита",
+        "Lunge Sprint"
       ],
       "group": "legs",
       "equipment": "machine",
@@ -18458,7 +18480,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "split-jump",
+        "title": "Split squat jump"
+      }
     },
     {
       "id": "220a5592-3818-5fbf-81a0-585749394caa",
@@ -18572,8 +18598,8 @@
       "name": "Lying Close-Grip Bar Curl On High Pulley",
       "englishName": "Lying Close-Grip Bar Curl On High Pulley",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Сгибание рук на бицепс лёжа у верхнего блока",
+        "Lying Close-Grip Bar Curl On High Pulley"
       ],
       "group": "arms",
       "equipment": "cable",
@@ -19731,8 +19757,8 @@
       "name": "Muscle Snatch",
       "englishName": "Muscle Snatch",
       "aliases": [
-        "Тяжёлая атлетика",
-        "olympic weightlifting"
+        "Рывковая протяжка до фиксации над головой",
+        "Muscle Snatch"
       ],
       "group": "legs",
       "equipment": "barbell",
@@ -19760,7 +19786,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-snatch-variations",
+        "title": "Barbell snatch"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=nJmtGVutszE"
     },
     {
       "id": "54ef6eec-f41d-5df0-a181-f7349be34f08",
@@ -20405,7 +20436,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "kettlebell-clean",
+        "title": "Kettlebell clean"
+      }
     },
     {
       "id": "d5a9e34c-72f3-52c6-9166-6b3770f256c6",
@@ -20930,8 +20965,8 @@
       "name": "One-Arm Open Palm Kettlebell Clean",
       "englishName": "One-Arm Open Palm Kettlebell Clean",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Взятие гири на открытую ладонь одной рукой",
+        "One-Arm Open Palm Kettlebell Clean"
       ],
       "group": "legs",
       "equipment": "kettlebells",
@@ -20960,7 +20995,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "open-palm-kettlebell-clean",
+        "title": "Open-palm kettlebell clean"
+      }
     },
     {
       "id": "8bc64c01-8aec-5852-94bb-1cd117a4164e",
@@ -21629,8 +21668,8 @@
       "name": "Open Palm Kettlebell Clean",
       "englishName": "Open Palm Kettlebell Clean",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Взятие гири на открытые ладони двумя руками",
+        "Open Palm Kettlebell Clean"
       ],
       "group": "legs",
       "equipment": "kettlebells",
@@ -21657,7 +21696,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "open-palm-kettlebell-clean",
+        "title": "Open-palm kettlebell clean"
+      }
     },
     {
       "id": "54a5726c-1437-510a-af68-df0e83045e62",
@@ -27302,11 +27345,12 @@
     {
       "id": "3ad9f70d-7329-5313-bfe6-ab4b7eaf74c3",
       "sourceID": "Single-Leg_High_Box_Squat",
-      "name": "Single-Leg High Box Squat",
-      "englishName": "Single-Leg High Box Squat",
+      "name": "Band-Assisted High Box Step-Up",
+      "englishName": "Band-Assisted High Box Step-Up",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Зашагивание на высокую тумбу с опорой на ленту",
+        "Single-Leg High Box Squat",
+        "Band-Assisted Step-Up"
       ],
       "group": "legs",
       "equipment": "other",
@@ -27331,7 +27375,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "step-up",
+        "title": "Step-up"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=_OwMpiC0oLE"
     },
     {
       "id": "bad83835-dc8d-5b82-b605-6e70c3e47f66",
@@ -27463,8 +27512,8 @@
       "name": "Single-Leg Stride Jump",
       "englishName": "Single-Leg Stride Jump",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Высокий прыжок на одной ноге с опорой на тумбу",
+        "Single-Leg Stride Jump"
       ],
       "group": "legs",
       "equipment": "other",
@@ -27491,7 +27540,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=cX1j823o6A0"
     },
     {
       "id": "b498ada6-823d-5436-a1cf-78b3117b3f5f",
@@ -31543,7 +31593,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "step-up",
+        "title": "Step-up"
+      }
     },
     {
       "id": "3cd185d7-c777-59eb-9ebb-af5eaf6a7874",
@@ -32864,6 +32918,10 @@
       "imagesUnavailable": false,
       "generatedMedia": null,
       "translationAutomatic": false,
+      "variantGroup": {
+        "id": "kettlebell-clean",
+        "title": "Kettlebell clean"
+      },
       "techniqueVideoURL": "https://www.youtube.com/watch?v=Yaelrl1VN20"
     },
     {
@@ -34527,6 +34585,42 @@
         "title": "Cable triceps pushdown"
       },
       "techniqueVideoURL": "https://www.youtube.com/watch?v=g_s1BHCR3qc"
+    },
+    {
+      "id": "e82b092c-4c80-5d3c-896b-67c687ed5486",
+      "sourceID": "FitLife_Single_Leg_Squat_To_High_Box",
+      "name": "Single-Leg Squat to a High Box",
+      "englishName": "Single-Leg Squat to a High Box",
+      "aliases": [
+        "Приседание на одной ноге к высокой опоре",
+        "Single-Leg Squat to a High Box"
+      ],
+      "group": "legs",
+      "equipment": "body only",
+      "level": "intermediate",
+      "primaryMuscles": [
+        "quadriceps"
+      ],
+      "secondaryMuscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "trainingRegions": [],
+      "steps": [
+        "Stand in front of a stable high box with your back to it and lift one foot off the floor.",
+        "Bend your supporting knee and hip to lower until your hips lightly touch the box.",
+        "Press through the supporting foot to stand, then repeat on the other side."
+      ],
+      "images": [],
+      "techniqueUnavailable": false,
+      "imagesUnavailable": true,
+      "generatedMedia": null,
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-box-squat",
+        "title": "Squat to a box"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=7sMCw2CGMz0"
     }
   ]
 }

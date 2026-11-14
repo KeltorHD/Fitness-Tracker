@@ -131,6 +131,11 @@ def generate():
     entries = []
     for index, (source_id, name, aliases) in enumerate(selection()):
         item = source[source_id]
+        review = reviewed.get(source_id, {})
+        english_name = review.get('englishName', item['name'])
+        if english_name != item['name']:
+            assert review.get('englishNameCorrectionReason', '').strip(), source_id
+            assert item['name'] in aliases.split(';'), source_id
         primary_muscles = reviewed.get(source_id, {}).get('primaryMuscles', item['primaryMuscles'])
         secondary_muscles = reviewed.get(source_id, {}).get('secondaryMuscles', item['secondaryMuscles'])
         excluded_images = reviewed.get(source_id, {}).get('excludeSourceImages', False)
@@ -157,7 +162,7 @@ def generate():
         stable_id = LEGACY_IDS.get(source_id) or str(uuid.uuid5(uuid.NAMESPACE_URL, identity))
         group_id = group_by_member.get(source_id)
         entries.append({'id': stable_id, 'sourceID': source_id, 'name': name,
-                        'englishName': item['name'], 'aliases': aliases.split(';'),
+                        'englishName': english_name, 'aliases': aliases.split(';'),
                         'group': GROUPS[primary_muscles[0]],
                         'equipment': reviewed.get(source_id, {}).get('equipment', item['equipment'] or 'unspecified'),
                         'level': item['level'], 'primaryMuscles': [MUSCLES[m] for m in primary_muscles],
@@ -180,7 +185,7 @@ def generate():
     english_entries = []
     for entry in entries:
         item = source[entry['sourceID']]
-        english_entries.append({**entry, 'name': item['name'],
+        english_entries.append({**entry, 'name': entry['englishName'],
             'primaryMuscles': reviewed.get(entry['sourceID'], {}).get('primaryMuscles', item['primaryMuscles']),
             'secondaryMuscles': reviewed.get(entry['sourceID'], {}).get('secondaryMuscles', item['secondaryMuscles']),
             **({'variantGroup': {'id': group_by_member[entry['sourceID']],

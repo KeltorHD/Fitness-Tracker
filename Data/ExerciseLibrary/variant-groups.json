@@ -77,7 +77,8 @@
       "Dumbbell_Squat_To_A_Bench",
       "Front_Barbell_Squat_To_A_Bench",
       "Reverse_Band_Box_Squat",
-      "Speed_Box_Squat"
+      "Speed_Box_Squat",
+      "FitLife_Single_Leg_Squat_To_High_Box"
     ]
   },
   "standing-hip-adduction": {
@@ -787,7 +788,8 @@
       "Hang_Snatch",
       "Hang_Snatch_-_Below_Knees",
       "Snatch_from_Blocks",
-      "Power_Snatch_from_Blocks"
+      "Power_Snatch_from_Blocks",
+      "Muscle_Snatch"
     ]
   },
   "inverted-row": {
@@ -850,7 +852,8 @@
     "en": "Split squat jump",
     "members": [
       "Split_Squats",
-      "Split_Jump"
+      "Split_Jump",
+      "Lunge_Sprint"
     ]
   },
   "medicine-ball-chest-throw": {
@@ -969,6 +972,35 @@
     "members": [
       "Cable_Crunch",
       "Kneeling_Cable_Crunch_With_Alternating_Oblique_Twists"
+    ]
+  },
+  "kettlebell-clean": {
+    "ru": "Взятие гири на грудь",
+    "en": "Kettlebell clean",
+    "members": [
+      "Kettlebell_Dead_Clean",
+      "Kettlebell_Hang_Clean",
+      "One-Arm_Kettlebell_Clean",
+      "Two-Arm_Kettlebell_Clean",
+      "Bottoms-Up_Clean_From_The_Hang_Position"
+    ]
+  },
+  "open-palm-kettlebell-clean": {
+    "ru": "Подброс гири на раскрытые ладони",
+    "en": "Open-palm kettlebell clean",
+    "members": [
+      "One-Arm_Open_Palm_Kettlebell_Clean",
+      "Open_Palm_Kettlebell_Clean"
+    ]
+  },
+  "step-up": {
+    "ru": "Зашагивание на платформу",
+    "en": "Step-up",
+    "members": [
+      "Dumbbell_Step_Ups",
+      "Barbell_Step_Ups",
+      "Step-up_with_Knee_Raise",
+      "Single-Leg_High_Box_Squat"
     ]
   }
 }

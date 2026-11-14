@@ -6,7 +6,7 @@ import Testing
 @Test func bundledLibraryLoadsAndHasRussianContent() throws {
   #expect(ExerciseLibrary.loadingError == nil)
   let document = try #require(ExerciseLibrary.document)
-  #expect(document.entries.count == 878)
+  #expect(document.entries.count == 879)
   #expect(document.locale == "ru")
   #expect(document.source.licenseName == "Unlicense")
   #expect(document.source.revision.count == 40)
@@ -24,8 +24,8 @@ import Testing
 }
 
 @Test func expandedCatalogPreservesLegacyIDsAndTemplateExercises() {
-  #expect(ExerciseCatalog.all.count == 878)
-  #expect(Set(ExerciseCatalog.all.map(\.id)).count == 878)
+  #expect(ExerciseCatalog.all.count == 879)
+  #expect(Set(ExerciseCatalog.all.map(\.id)).count == 879)
   let expected = (1...8).map {
     UUID(uuidString: String(format: "10000000-0000-0000-0000-%012d", $0))!
   }
@@ -57,7 +57,7 @@ import Testing
   let cableLegs = ExerciseLibrary.search(group: .legs, equipment: .cable)
   #expect(cableLegs.contains { $0.sourceID == "Cable_Hip_Adduction" })
   #expect(cableLegs.allSatisfy { $0.group == .legs && $0.equipment == .cable })
-  #expect(ExerciseLibrary.search("  ").count == 878)
+  #expect(ExerciseLibrary.search("  ").count == 879)
 }
 
 @Test func everyLibraryMetadataLabelIsLocalized() {
@@ -120,6 +120,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
       "FitLife_Triceps_Pushdown_EZ_Bar", "FitLife_Triceps_Pushdown_One_Arm_Overhand",
       "High_Cable_Curls", "Gironda_Sternum_Chins", "One_Arm_Chin-Up",
       "Iliotibial_Tract-SMR", "Elevated_Cable_Rows", "Seated_Barbell_Military_Press",
+      "FitLife_Single_Leg_Squat_To_High_Box",
     ])
   #expect(ExerciseLibrary.entries.allSatisfy { $0.techniqueUnavailable == false })
 }
@@ -557,7 +558,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     ],
     [
       "Hang_Snatch", "Hang_Snatch_-_Below_Knees", "Snatch_from_Blocks",
-      "Power_Snatch_from_Blocks",
+      "Power_Snatch_from_Blocks", "Muscle_Snatch",
     ],
   ] {
     for language in [AppLanguage.russian, .english] {
@@ -635,7 +636,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
       "Cable_Preacher_Curl", "Machine_Preacher_Curls", "One_Arm_Dumbbell_Preacher_Curl",
       "Two-Arm_Dumbbell_Preacher_Curl", "Reverse_Barbell_Preacher_Curls", "Preacher_Curl",
     ],
-    ["Split_Squats", "Split_Jump"],
+    ["Split_Squats", "Split_Jump", "Lunge_Sprint"],
   ] {
     for language in [AppLanguage.russian, .english] {
       let entry = try #require(
@@ -1186,5 +1187,29 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
       #expect(Set(variants.map(\.sourceID)) == Set(expected))
       #expect(Set(variants.map(\.id)).count == expected.count)
     }
+  }
+}
+
+@Test func highBoxStepUpAndSingleLegSquatRemainDifferentExercises() throws {
+  for language in [AppLanguage.russian, .english] {
+    let entries = try ExerciseLibrary.entries(language: language)
+    let stepUp = try #require(entries.first { $0.sourceID == "Single-Leg_High_Box_Squat" })
+    let squat = try #require(
+      entries.first { $0.sourceID == "FitLife_Single_Leg_Squat_To_High_Box" })
+    #expect(stepUp.englishName == "Band-Assisted High Box Step-Up")
+    #expect(stepUp.aliases.contains("Single-Leg High Box Squat"))
+    #expect(stepUp.id != squat.id)
+    #expect(squat.id == UUID(uuidString: "e82b092c-4c80-5d3c-896b-67c687ed5486"))
+    #expect(stepUp.images.count == 2)
+    #expect(squat.imagesUnavailable == true)
+    #expect(stepUp.variantGroup?.id != squat.variantGroup?.id)
+    #expect(
+      ExerciseLibrary.variants(for: squat.id, language: language).contains {
+        $0.sourceID == "Box_Squat"
+      })
+    #expect(
+      ExerciseLibrary.variants(for: stepUp.id, language: language).contains {
+        $0.sourceID == "Dumbbell_Step_Ups"
+      })
   }
 }
