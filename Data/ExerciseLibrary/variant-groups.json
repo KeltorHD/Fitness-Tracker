@@ -60,7 +60,17 @@
     "en": "Barbell squat to a box",
     "members": [
       "Box_Squat",
-      "Barbell_Squat_To_A_Bench"
+      "Barbell_Squat_To_A_Bench",
+      "Box_Squat_with_Bands",
+      "Box_Squat_with_Chains"
+    ]
+  },
+  "standing-hip-adduction": {
+    "ru": "Приведение ноги стоя",
+    "en": "Standing hip adduction",
+    "members": [
+      "Band_Hip_Adductions",
+      "Cable_Hip_Adduction"
     ]
   }
 }

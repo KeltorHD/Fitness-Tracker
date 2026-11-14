@@ -4936,6 +4936,10 @@
       "imagesUnavailable": false,
       "generatedMedia": null,
       "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-hip-adduction",
+        "title": "Standing hip adduction"
+      },
       "techniqueVideoURL": "https://www.youtube.com/watch?v=lUI8App_XdY"
     },
     {
@@ -6812,8 +6816,8 @@
       "name": "Box Squat with Bands",
       "englishName": "Box Squat with Bands",
       "aliases": [
-        "Пауэрлифтинг",
-        "powerlifting"
+        "Приседания на ящик со штангой и резинками",
+        "Box Squat with Bands"
       ],
       "group": "legs",
       "equipment": "barbell",
@@ -6843,7 +6847,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-box-squat",
+        "title": "Barbell squat to a box"
+      }
     },
     {
       "id": "1167a0a2-436c-5568-a914-de2089986d08",
@@ -6851,8 +6859,8 @@
       "name": "Box Squat with Chains",
       "englishName": "Box Squat with Chains",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Приседания на ящик со штангой и цепями",
+        "Box Squat with Chains"
       ],
       "group": "legs",
       "equipment": "barbell",
@@ -6883,7 +6891,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-box-squat",
+        "title": "Barbell squat to a box"
+      }
     },
     {
       "id": "7a29c536-a41d-571f-86a7-a2f00a5d5590",
@@ -6957,8 +6969,8 @@
       "name": "Butt-Ups",
       "englishName": "Butt-Ups",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Складка в планке на предплечьях",
+        "Butt-Ups"
       ],
       "group": "core",
       "equipment": "body only",
@@ -6993,8 +7005,8 @@
       "name": "Cable Chest Press",
       "englishName": "Cable Chest Press",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Жим от груди в кроссовере сидя",
+        "Cable Chest Press"
       ],
       "group": "chest",
       "equipment": "cable",
@@ -7030,8 +7042,8 @@
       "name": "Cable Deadlifts",
       "englishName": "Cable Deadlifts",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Становая тяга с нижним блоком",
+        "Cable Deadlifts"
       ],
       "group": "legs",
       "equipment": "cable",
@@ -7067,8 +7079,8 @@
       "name": "Cable Hammer Curls - Rope Attachment",
       "englishName": "Cable Hammer Curls - Rope Attachment",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Сгибания рук с канатной рукоятью нейтральным хватом",
+        "Cable Hammer Curls Rope Attachment"
       ],
       "group": "arms",
       "equipment": "cable",
@@ -7096,7 +7108,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=BJYlyoGZtdk"
     },
     {
       "id": "99825c6b-8f2f-57db-93b2-62b6551809f4",
@@ -7104,22 +7117,17 @@
       "name": "Cable Hip Adduction",
       "englishName": "Cable Hip Adduction",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Приведение бедра с нижним блоком",
+        "Cable Hip Adduction"
       ],
       "group": "legs",
       "equipment": "cable",
       "level": "beginner",
       "primaryMuscles": [
-        "quadriceps"
+        "adductors"
       ],
       "secondaryMuscles": [],
-      "trainingRegions": [
-        "rectusFemoris",
-        "vastusLateralis",
-        "vastusMedialis",
-        "vastusIntermedius"
-      ],
+      "trainingRegions": [],
       "steps": [
         "Stand in front of a low pulley facing forward with one leg next to the pulley and the other one away.",
         "Attach the ankle cuff to the cable and also to the ankle of the leg that is next to the pulley.",
@@ -7136,7 +7144,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-hip-adduction",
+        "title": "Standing hip adduction"
+      }
     },
     {
       "id": "4c09f837-1a63-595d-bcce-0820cca7e996",
@@ -7144,8 +7156,8 @@
       "name": "Cable Incline Pushdown",
       "englishName": "Cable Incline Pushdown",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Тяга блока прямыми руками на наклонной скамье",
+        "Cable Incline Pushdown"
       ],
       "group": "back",
       "equipment": "cable",
@@ -7177,8 +7189,8 @@
       "name": "Cable Incline Triceps Extension",
       "englishName": "Cable Incline Triceps Extension",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Разгибание трицепса на тросе на наклонной скамье",
+        "Cable Incline Triceps Extension"
       ],
       "group": "arms",
       "equipment": "cable",
@@ -7214,8 +7226,8 @@
       "name": "Cable Internal Rotation",
       "englishName": "Cable Internal Rotation",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Внутреннее вращение плеча с блоком",
+        "Cable Internal Rotation"
       ],
       "group": "shoulders",
       "equipment": "cable",
@@ -7249,8 +7261,8 @@
       "name": "Cable Iron Cross",
       "englishName": "Cable Iron Cross",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Опускание прямых рук через стороны на верхних блоках",
+        "Cable Iron Cross"
       ],
       "group": "chest",
       "equipment": "cable",
@@ -7315,8 +7327,8 @@
       "name": "Cable Lying Triceps Extension",
       "englishName": "Cable Lying Triceps Extension",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Французский жим на нижнем блоке лёжа",
+        "Cable Lying Triceps Extension"
       ],
       "group": "arms",
       "equipment": "cable",
@@ -7344,7 +7356,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=xeA2l-CP6wU"
     },
     {
       "id": "2dbedcb8-3475-52f6-bf09-50032dd3b41d",

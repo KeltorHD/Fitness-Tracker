@@ -181,21 +181,21 @@ Bottoms_Up	Подъём таза и ног лёжа с подтягивание�
 Box_Jump_Multiple_Response	Повторные прыжки на тумбу с двух ног	Серийные запрыгивания на тумбу;Box Jump Multiple Response
 Box_Skip	Прыжки с одной ноги через ряд тумб	Прыжки с отталкиванием от тумбы;Box Skip
 Box_Squat	Приседания со штангой на ящик	Приседания на ящик;Box Squat
-Box_Squat_with_Bands	Приседания на ящик с лентами	Пауэрлифтинг;powerlifting
-Box_Squat_with_Chains	Приседания на ящик с цепями	Силовые упражнения;strength
+Box_Squat_with_Bands	Приседания со штангой на ящик с резиновыми петлями	Приседания на ящик со штангой и резинками;Box Squat with Bands
+Box_Squat_with_Chains	Приседания со штангой на ящик с цепями	Приседания на ящик со штангой и цепями;Box Squat with Chains
 Brachialis-SMR	Брахиалис-СМР	Растяжка;stretching
 Bradford_Rocky_Presses	Брэдфорд / Рокки Прессс	Силовые упражнения;strength
-Butt-Ups	Попки	Силовые упражнения;strength
-Cable_Chest_Press	Жим от груди в кроссовере	Силовые упражнения;strength
-Cable_Deadlifts	Становая тяга с нижним блоком	Силовые упражнения;strength
-Cable_Hammer_Curls_-_Rope_Attachment	Сгибания троса с молотком – крепление веревки	Силовые упражнения;strength
-Cable_Hip_Adduction	Приведение бедра с нижним блоком	Силовые упражнения;strength
-Cable_Incline_Pushdown	Наклон троса при опускании	Силовые упражнения;strength
-Cable_Incline_Triceps_Extension	Разгибание трицепса на тросе на наклонной скамье	Силовые упражнения;strength
-Cable_Internal_Rotation	Внутреннее вращение плеча с блоком	Силовые упражнения;strength
-Cable_Iron_Cross	Железный крест в кроссовере	Силовые упражнения;strength
+Butt-Ups	Подъём таза из планки на предплечьях	Складка в планке на предплечьях;Butt-Ups
+Cable_Chest_Press	Жим рукоятей блоков от груди сидя	Жим от груди в кроссовере сидя;Cable Chest Press
+Cable_Deadlifts	Становая тяга с двух нижних блоков	Становая тяга с нижним блоком;Cable Deadlifts
+Cable_Hammer_Curls_-_Rope_Attachment	Молотковые сгибания рук на нижнем блоке с канатом	Сгибания рук с канатной рукоятью нейтральным хватом;Cable Hammer Curls Rope Attachment
+Cable_Hip_Adduction	Приведение ноги стоя на нижнем блоке	Приведение бедра с нижним блоком;Cable Hip Adduction
+Cable_Incline_Pushdown	Пуловер на верхнем блоке лёжа на наклонной скамье	Тяга блока прямыми руками на наклонной скамье;Cable Incline Pushdown
+Cable_Incline_Triceps_Extension	Разгибание рук на верхнем блоке лёжа на наклонной скамье	Разгибание трицепса на тросе на наклонной скамье;Cable Incline Triceps Extension
+Cable_Internal_Rotation	Внутренняя ротация плеча на нижнем блоке сидя	Внутреннее вращение плеча с блоком;Cable Internal Rotation
+Cable_Iron_Cross	Железный крест на верхних блоках	Опускание прямых рук через стороны на верхних блоках;Cable Iron Cross
 Cable_Judo_Flip	Повороты корпуса с тягой блока через плечо	Силовые упражнения;strength
-Cable_Lying_Triceps_Extension	Разгибание рук на трицепс с блоком лёжа	Силовые упражнения;strength
+Cable_Lying_Triceps_Extension	Разгибание рук на нижнем блоке лёжа на плоской скамье	Французский жим на нижнем блоке лёжа;Cable Lying Triceps Extension
 Cable_One_Arm_Tricep_Extension	Разгибание одной руки на верхнем блоке обратным хватом	Разгибание одной руки в кроссовере;Cable One Arm Tricep Extension
 Cable_Preacher_Curl	Сгибание рук с блоком на скамье Скотта	Силовые упражнения;strength
 Cable_Rear_Delt_Fly	Разведение задних дельт на тросе	Силовые упражнения;strength

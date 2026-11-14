@@ -288,6 +288,23 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   #expect(Set(variants.map(\.id)).count == 2)
 }
 
+@Test func cableHipAdductionUsesAdductorsInBothLanguages() throws {
+  for language in [AppLanguage.russian, .english] {
+    let entry = try #require(
+      ExerciseLibrary.entries(language: language).first { $0.sourceID == "Cable_Hip_Adduction" })
+    #expect(entry.primaryMuscleIDs == [.adductors])
+    #expect(entry.muscleRegions.isEmpty)
+    #expect(
+      ExerciseLibrary.search(
+        muscleSelection: ExerciseMuscleSelection(muscles: [.adductors]), language: language
+      ).contains { $0.id == entry.id })
+    #expect(
+      !ExerciseLibrary.search(
+        muscleSelection: ExerciseMuscleSelection(muscles: [.quadriceps]), language: language
+      ).contains { $0.id == entry.id })
+  }
+}
+
 @Test func multipleEquipmentFiltersUseUnionAndIntersectWithMuscleAndSearch() {
   let equipment: Set<ExerciseEquipment> = [.barbell, .dumbbell]
   let combined = ExerciseLibrary.search(equipment: equipment)

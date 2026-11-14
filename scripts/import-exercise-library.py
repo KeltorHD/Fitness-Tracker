@@ -115,7 +115,9 @@ def generate():
     entries = []
     for index, (source_id, name, aliases) in enumerate(selection()):
         item = source[source_id]
+        primary_muscles = reviewed.get(source_id, {}).get('primaryMuscles', item['primaryMuscles'])
         secondary_muscles = reviewed.get(source_id, {}).get('secondaryMuscles', item['secondaryMuscles'])
+        assert primary_muscles and all(muscle in MUSCLES for muscle in primary_muscles), source_id
         assert all(muscle in MUSCLES for muscle in secondary_muscles), source_id
         assert 0 < len(name) <= 80 and re.search('[А-Яа-яЁё]', name)
         steps = translations[source_id]
@@ -126,9 +128,9 @@ def generate():
         group_id = group_by_member.get(source_id)
         entries.append({'id': stable_id, 'sourceID': source_id, 'name': name,
                         'englishName': item['name'], 'aliases': aliases.split(';'),
-                        'group': GROUPS[item['primaryMuscles'][0]],
+                        'group': GROUPS[primary_muscles[0]],
                         'equipment': reviewed.get(source_id, {}).get('equipment', item['equipment'] or 'unspecified'),
-                        'level': item['level'], 'primaryMuscles': [MUSCLES[m] for m in item['primaryMuscles']],
+                        'level': item['level'], 'primaryMuscles': [MUSCLES[m] for m in primary_muscles],
                         'secondaryMuscles': [MUSCLES[m] for m in secondary_muscles],
                         'trainingRegions': regions.get(source_id, []),
                         'steps': steps, 'images': item['images'],
@@ -149,7 +151,7 @@ def generate():
     for entry in entries:
         item = source[entry['sourceID']]
         english_entries.append({**entry, 'name': item['name'],
-            'primaryMuscles': item['primaryMuscles'],
+            'primaryMuscles': reviewed.get(entry['sourceID'], {}).get('primaryMuscles', item['primaryMuscles']),
             'secondaryMuscles': reviewed.get(entry['sourceID'], {}).get('secondaryMuscles', item['secondaryMuscles']),
             **({'variantGroup': {'id': group_by_member[entry['sourceID']],
                                  'title': variant_groups[group_by_member[entry['sourceID']]]['en']}}

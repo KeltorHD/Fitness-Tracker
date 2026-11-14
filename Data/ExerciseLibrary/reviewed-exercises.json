@@ -152,5 +152,25 @@
   "Bottoms_Up": {},
   "Box_Jump_Multiple_Response": {},
   "Box_Skip": {},
-  "Box_Squat": {}
+  "Box_Squat": {},
+  "Box_Squat_with_Bands": {},
+  "Box_Squat_with_Chains": {},
+  "Butt-Ups": {},
+  "Cable_Chest_Press": {},
+  "Cable_Deadlifts": {},
+  "Cable_Hammer_Curls_-_Rope_Attachment": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=BJYlyoGZtdk"
+  },
+  "Cable_Hip_Adduction": {
+    "primaryMuscles": [
+      "adductors"
+    ]
+  },
+  "Cable_Incline_Pushdown": {},
+  "Cable_Incline_Triceps_Extension": {},
+  "Cable_Internal_Rotation": {},
+  "Cable_Iron_Cross": {},
+  "Cable_Lying_Triceps_Extension": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=xeA2l-CP6wU"
+  }
 }
