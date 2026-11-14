@@ -32,11 +32,13 @@
     ]
   },
   "band-good-morning": {
-    "ru": "Гудморнинг с резиновой петлёй",
-    "en": "Resistance band good morning",
+    "ru": "Наклоны «гудморнинг»",
+    "en": "Good morning",
     "members": [
       "Band_Good_Morning",
-      "Band_Good_Morning_Pull_Through"
+      "Band_Good_Morning_Pull_Through",
+      "Good_Morning",
+      "Good_Morning_off_Pins"
     ]
   },
   "long-bar-row": {
@@ -178,6 +180,23 @@
       "Front_Squat_Clean_Grip",
       "Front_Squats_With_Two_Kettlebells",
       "Frankenstein_Squat"
+    ]
+  },
+  "glute-ham-raise": {
+    "ru": "Сгибание ног с фиксацией стоп",
+    "en": "Glute-ham raise",
+    "members": [
+      "Floor_Glute-Ham_Raise",
+      "Glute_Ham_Raise"
+    ]
+  },
+  "hammer-curl": {
+    "ru": "Молотковые сгибания рук",
+    "en": "Hammer curl",
+    "members": [
+      "Hammer_Curls",
+      "Cross_Body_Hammer_Curl",
+      "Cable_Hammer_Curls_-_Rope_Attachment"
     ]
   }
 }

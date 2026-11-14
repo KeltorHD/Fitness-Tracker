@@ -343,5 +343,26 @@
   "Front_Squats_With_Two_Kettlebells": {},
   "Front_Two-Dumbbell_Raise": {},
   "Front_Dumbbell_Raise": {},
-  "Full_Range-Of-Motion_Lat_Pulldown": {}
+  "Full_Range-Of-Motion_Lat_Pulldown": {},
+  "Glute_Ham_Raise": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=w_7UaXfsbaw"
+  },
+  "Glute_Kickback": {},
+  "Good_Morning": {},
+  "Good_Morning_off_Pins": {},
+  "Gorilla_Chin_Crunch": {},
+  "Groin_and_Back_Stretch": {
+    "equipment": "body only"
+  },
+  "Groiners": {},
+  "Hack_Squat": {},
+  "Hammer_Curls": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=zC3nLlEvin4"
+  },
+  "Hammer_Grip_Incline_DB_Bench_Press": {},
+  "Hamstring-SMR": {},
+  "Hamstring_Stretch": {
+    "equipment": "other"
+  },
+  "Handstand_Push-Ups": {}
 }

@@ -4888,7 +4888,7 @@
       "translationAutomatic": false,
       "variantGroup": {
         "id": "band-good-morning",
-        "title": "Resistance band good morning"
+        "title": "Good morning"
       }
     },
     {
@@ -4926,7 +4926,7 @@
       "translationAutomatic": false,
       "variantGroup": {
         "id": "band-good-morning",
-        "title": "Resistance band good morning"
+        "title": "Good morning"
       }
     },
     {
@@ -7135,6 +7135,10 @@
       "imagesUnavailable": false,
       "generatedMedia": null,
       "translationAutomatic": false,
+      "variantGroup": {
+        "id": "hammer-curl",
+        "title": "Hammer curl"
+      },
       "techniqueVideoURL": "https://www.youtube.com/watch?v=BJYlyoGZtdk"
     },
     {
@@ -9433,6 +9437,10 @@
       "imagesUnavailable": false,
       "generatedMedia": null,
       "translationAutomatic": false,
+      "variantGroup": {
+        "id": "hammer-curl",
+        "title": "Hammer curl"
+      },
       "techniqueVideoURL": "https://www.youtube.com/watch?v=buP9fSqWcw4"
     },
     {
@@ -12078,7 +12086,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "glute-ham-raise",
+        "title": "Glute-ham raise"
+      }
     },
     {
       "id": "ac668222-3d2c-582b-b71c-aa9193b05dd7",
@@ -12909,8 +12921,8 @@
       "name": "Glute Ham Raise",
       "englishName": "Glute Ham Raise",
       "aliases": [
-        "Пауэрлифтинг",
-        "powerlifting"
+        "Сгибание ног с опорой бёдрами в тренажёре GHD",
+        "Glute Ham Raise"
       ],
       "group": "legs",
       "equipment": "machine",
@@ -12935,7 +12947,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "glute-ham-raise",
+        "title": "Glute-ham raise"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=w_7UaXfsbaw"
     },
     {
       "id": "253f1c45-fd4c-560e-8b05-60676c6f57d3",
@@ -12943,8 +12960,8 @@
       "name": "Glute Kickback",
       "englishName": "Glute Kickback",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подъём ноги на ягодицы стоя на четвереньках",
+        "Glute Kickback"
       ],
       "group": "legs",
       "equipment": "body only",
@@ -12979,8 +12996,8 @@
       "name": "Good Morning",
       "englishName": "Good Morning",
       "aliases": [
-        "Пауэрлифтинг",
-        "powerlifting"
+        "Наклоны со штангой на плечах",
+        "Good Morning"
       ],
       "group": "legs",
       "equipment": "barbell",
@@ -13006,7 +13023,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "band-good-morning",
+        "title": "Good morning"
+      }
     },
     {
       "id": "f5c3b693-a08c-515c-ba44-9abd900e65be",
@@ -13014,8 +13035,8 @@
       "name": "Good Morning off Pins",
       "englishName": "Good Morning off Pins",
       "aliases": [
-        "Пауэрлифтинг",
-        "powerlifting"
+        "Наклоны со штангой на плечах с опорой на страховочные штыри",
+        "Good Morning off Pins"
       ],
       "group": "legs",
       "equipment": "barbell",
@@ -13040,7 +13061,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "band-good-morning",
+        "title": "Good morning"
+      }
     },
     {
       "id": "1225d96e-9981-5672-a30c-012754fcabab",
@@ -13048,8 +13073,8 @@
       "name": "Gorilla Chin/Crunch",
       "englishName": "Gorilla Chin/Crunch",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подтягивание обратным хватом с подъёмом коленей в висе",
+        "Gorilla Chin Crunch"
       ],
       "group": "core",
       "equipment": "body only",
@@ -13087,11 +13112,11 @@
       "name": "Groin and Back Stretch",
       "englishName": "Groin and Back Stretch",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Наклоны в положении бабочки с руками за головой",
+        "Groin and Back Stretch"
       ],
       "group": "legs",
-      "equipment": "unspecified",
+      "equipment": "body only",
       "level": "intermediate",
       "primaryMuscles": [
         "adductors"
@@ -13118,8 +13143,8 @@
       "name": "Groiners",
       "englishName": "Groiners",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Прыжковое подтягивание стоп к ладоням из упора лёжа",
+        "Groiners"
       ],
       "group": "legs",
       "equipment": "body only",
@@ -13149,8 +13174,8 @@
       "name": "Hack Squat",
       "englishName": "Hack Squat",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Приседания в гакк-машине",
+        "Hack Squat"
       ],
       "group": "legs",
       "equipment": "machine",
@@ -13188,8 +13213,8 @@
       "name": "Hammer Curls",
       "englishName": "Hammer Curls",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Молоток с гантелями стоя",
+        "Hammer Curls"
       ],
       "group": "arms",
       "equipment": "dumbbell",
@@ -13216,7 +13241,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "hammer-curl",
+        "title": "Hammer curl"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=zC3nLlEvin4"
     },
     {
       "id": "bcd4fb82-77cd-5c29-84ab-cefafe8f1505",
@@ -13224,8 +13254,8 @@
       "name": "Hammer Grip Incline DB Bench Press",
       "englishName": "Hammer Grip Incline DB Bench Press",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Жим гантелей лёжа на наклонной скамье ладонями друг к другу",
+        "Hammer Grip Incline DB Bench Press"
       ],
       "group": "chest",
       "equipment": "dumbbell",
@@ -13264,8 +13294,8 @@
       "name": "Hamstring-SMR",
       "englishName": "Hamstring-SMR",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Прокатывание задней поверхности бедра на массажном ролике",
+        "Hamstring SMR"
       ],
       "group": "legs",
       "equipment": "foam roll",
@@ -13295,11 +13325,11 @@
       "name": "Hamstring Stretch",
       "englishName": "Hamstring Stretch",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Растяжка прямой ноги лёжа с лентой",
+        "Hamstring Stretch"
       ],
       "group": "legs",
-      "equipment": "unspecified",
+      "equipment": "other",
       "level": "beginner",
       "primaryMuscles": [
         "hamstrings"
@@ -13326,8 +13356,8 @@
       "name": "Handstand Push-Ups",
       "englishName": "Handstand Push-Ups",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Отжимания в стойке на руках у стены",
+        "Handstand Push-Ups"
       ],
       "group": "shoulders",
       "equipment": "body only",
