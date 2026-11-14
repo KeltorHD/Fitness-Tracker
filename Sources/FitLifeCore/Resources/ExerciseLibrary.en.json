@@ -1384,7 +1384,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-calf-raise",
+        "title": "Standing calf raise"
+      }
     },
     {
       "id": "4c0bcab5-3c05-5181-b003-cdff750e36f1",
@@ -8377,6 +8381,8 @@
       "name": "Calf Raise On A Dumbbell",
       "englishName": "Calf Raise On A Dumbbell",
       "aliases": [
+        "Подъём на носки с опорой на гантель",
+        "Calf Raise On A Dumbbell",
         "Силовые упражнения",
         "strength"
       ],
@@ -8405,7 +8411,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-calf-raise",
+        "title": "Standing calf raise"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=TW13pFWnEs0"
     },
     {
       "id": "a3fb4675-41fa-515e-9335-e395dd2778d1",
@@ -8413,6 +8424,8 @@
       "name": "Calf Raises - With Bands",
       "englishName": "Calf Raises - With Bands",
       "aliases": [
+        "Подъём на носки с резиновой лентой",
+        "Calf Raises With Bands",
         "Силовые упражнения",
         "strength"
       ],
@@ -8441,7 +8454,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-calf-raise",
+        "title": "Standing calf raise"
+      }
     },
     {
       "id": "84fb7484-5f2a-5fc1-ab41-9cdf39e6a31f",
@@ -10783,6 +10800,8 @@
       "name": "Donkey Calf Raises",
       "englishName": "Donkey Calf Raises",
       "aliases": [
+        "Подъём на носки в наклоне с партнёром",
+        "Donkey Calf Raises",
         "Силовые упражнения",
         "strength"
       ],
@@ -10798,11 +10817,9 @@
         "soleus"
       ],
       "steps": [
-        "For this exercise you will need access to a donkey calf raise machine. Start by positioning your lower back and hips under the padded lever provided. The tailbone area should be the one making contact with the pad.",
-        "Place both of your arms on the side handles and place the balls of your feet on the calf block with the heels extending off. Align the toes forward, inward or outward, depending on the area you wish to target, and straighten the knees without locking them. This will be your starting position.",
-        "Raise your heels as you breathe out by extending your ankles as high as possible and flexing your calf. Ensure that the knee is kept stationary at all times. There should be no bending at any time. Hold the contracted position by a second before you start to go back down.",
-        "Go back slowly to the starting position as you breathe in by lowering your heels as you bend the ankles until calves are stretched.",
-        "Repeat for the recommended amount of repetitions."
+        "Lean forward and hold a stable support. Have a partner sit securely over your hips.",
+        "Keep your knees nearly straight and raise your heels under control.",
+        "Lower your heels slowly and repeat."
       ],
       "images": [
         "Donkey_Calf_Raises/0.jpg",
@@ -10811,7 +10828,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-calf-raise",
+        "title": "Standing calf raise"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=SbKjS4_iDyk"
     },
     {
       "id": "0d2fd702-d250-57c9-90a1-42cae0d5ef69",
@@ -14416,6 +14438,8 @@
       "name": "Hip Flexion with Band",
       "englishName": "Hip Flexion with Band",
       "aliases": [
+        "Сгибание бедра с эластичной лентой",
+        "Hip Flexion with Band",
         "Силовые упражнения",
         "strength"
       ],
@@ -14423,9 +14447,11 @@
       "equipment": "bands",
       "level": "beginner",
       "primaryMuscles": [
+        "hip flexors"
+      ],
+      "secondaryMuscles": [
         "quadriceps"
       ],
-      "secondaryMuscles": [],
       "trainingRegions": [],
       "steps": [
         "Secure one end of the band to the lower portion of a post and attach the other to one ankle.",
@@ -14440,7 +14466,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=VqIcPRE66Cc"
     },
     {
       "id": "016d5c7b-9118-5fcd-8106-05f28de25b2e",
@@ -28038,7 +28065,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-calf-raise",
+        "title": "Standing calf raise"
+      }
     },
     {
       "id": "87f6996b-28eb-5b87-833f-3b88fcb5da98",
@@ -29724,7 +29755,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-calf-raise",
+        "title": "Standing calf raise"
+      }
     },
     {
       "id": "06997a74-fa5d-5094-a2e0-f967ec1e7122",
@@ -30139,7 +30174,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-calf-raise",
+        "title": "Standing calf raise"
+      }
     },
     {
       "id": "97085fc2-d7a3-55ee-b9f1-c2de599c0ea9",
@@ -30493,16 +30532,19 @@
       "name": "Standing Hip Flexors",
       "englishName": "Standing Hip Flexors",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Растяжка сгибателей бедра стоя",
+        "Standing Hip Flexors",
+        "Сгибатели бедра стоя"
       ],
       "group": "legs",
-      "equipment": "unspecified",
+      "equipment": "body only",
       "level": "beginner",
       "primaryMuscles": [
+        "hip flexors"
+      ],
+      "secondaryMuscles": [
         "quadriceps"
       ],
-      "secondaryMuscles": [],
       "trainingRegions": [],
       "steps": [
         "Stand up straight with the spine vertical, the left foot slightly in front of the right.",
@@ -30515,7 +30557,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=WEb0pHYhfBY"
     },
     {
       "id": "a9960fac-fb85-5151-8d46-25baa90de51d",

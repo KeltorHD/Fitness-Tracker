@@ -19024,6 +19024,23 @@
         }
       }
     },
+    "Сгибатели бедра": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сгибатели бедра"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hip flexors"
+          }
+        }
+      }
+    },
     "Сделать дропсетом": {
       "extractionState": "manual",
       "localizations": {

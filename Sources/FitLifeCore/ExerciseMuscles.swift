@@ -9,6 +9,7 @@ public enum ExerciseMuscle: String, Codable, CaseIterable, Sendable {
   case traps
   case quadriceps, hamstrings, glutes, calves, abductors, adductors
   case tibialisAnterior = "tibialis anterior"
+  case hipFlexors = "hip flexors"
   case shoulders, neck, biceps, triceps, forearms, abdominals
 
   public var title: String {
@@ -23,6 +24,7 @@ public enum ExerciseMuscle: String, Codable, CaseIterable, Sendable {
     case .glutes: "Ягодичные мышцы"
     case .calves: "Икроножные мышцы"
     case .tibialisAnterior: "Передняя большеберцовая мышца"
+    case .hipFlexors: "Сгибатели бедра"
     case .abductors: "Отводящие мышцы бедра"
     case .adductors: "Приводящие мышцы бедра"
     case .shoulders: "Мышцы плечевого сустава"
@@ -38,7 +40,8 @@ public enum ExerciseMuscle: String, Codable, CaseIterable, Sendable {
     switch self {
     case .chest: .chest
     case .lats, .middleBack, .lowerBack, .traps: .back
-    case .quadriceps, .hamstrings, .glutes, .calves, .tibialisAnterior, .abductors, .adductors:
+    case .quadriceps, .hamstrings, .glutes, .calves, .tibialisAnterior, .hipFlexors, .abductors,
+      .adductors:
       .legs
     case .shoulders, .neck: .shoulders
     case .biceps, .triceps, .forearms: .arms

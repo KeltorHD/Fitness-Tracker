@@ -7,7 +7,7 @@ namespace FitLife.Backend;
 internal static class TrainingValidation
 {
     private static readonly HashSet<string> _groups = ["chest", "back", "legs", "shoulders", "arms", "core", "fullBody"];
-    private static readonly HashSet<string> _muscles = ["chest", "lats", "middle back", "lower back", "traps", "quadriceps", "hamstrings", "glutes", "calves", "tibialis anterior", "abductors", "adductors", "shoulders", "neck", "biceps", "triceps", "forearms", "abdominals"];
+    private static readonly HashSet<string> _muscles = ["chest", "lats", "middle back", "lower back", "traps", "quadriceps", "hamstrings", "glutes", "calves", "tibialis anterior", "hip flexors", "abductors", "adductors", "shoulders", "neck", "biceps", "triceps", "forearms", "abdominals"];
     private static readonly HashSet<string> _regions = ["chestUpper", "chestMiddle", "chestLower", "deltoidAnterior", "deltoidLateral", "deltoidPosterior", "rotatorCuff", "trapeziusUpper", "trapeziusMiddle", "trapeziusLower", "rectusAbdominisUpper", "rectusAbdominisLower", "obliques", "transversusAbdominis", "bicepsLong", "bicepsShort", "tricepsLong", "tricepsLateral", "tricepsMedial", "rectusFemoris", "vastusLateralis", "vastusMedialis", "vastusIntermedius", "bicepsFemoris", "semitendinosus", "semimembranosus", "gluteusMaximus", "gluteusMedius", "gluteusMinimus", "gastrocnemius", "soleus"];
 
     /// <summary>Валидирует полный DTO по правилам Core и возвращает каноническое значение для хеша и записи.</summary>

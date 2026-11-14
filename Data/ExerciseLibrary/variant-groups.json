@@ -880,5 +880,18 @@
       "Decline_Dumbbell_Triceps_Extension",
       "Decline_EZ_Bar_Triceps_Extension"
     ]
+  },
+  "standing-calf-raise": {
+    "ru": "Подъём на носки стоя",
+    "en": "Standing calf raise",
+    "members": [
+      "Standing_Calf_Raises",
+      "Standing_Barbell_Calf_Raise",
+      "Standing_Dumbbell_Calf_Raise",
+      "Smith_Machine_Calf_Raise",
+      "Calf_Raise_On_A_Dumbbell",
+      "Calf_Raises_-_With_Bands",
+      "Donkey_Calf_Raises"
+    ]
   }
 }

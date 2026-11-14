@@ -53,23 +53,25 @@ internal static class TrainingFixture
 public sealed class TrainingDataTests
 {
     /// <summary>Сохраняет и возвращает новую мышцу в синхронизируемом шаблоне.</summary>
-    [Fact]
-    public async Task TibialisAnteriorSelectionRoundTripsThroughTrainingSyncAsync()
+    [Theory]
+    [InlineData("tibialis anterior")]
+    [InlineData("hip flexors")]
+    public async Task DetailedMuscleSelectionRoundTripsThroughTrainingSyncAsync(string muscle)
     {
         using var factory = new BackendFactory();
         using var client = factory.Client(Guid.NewGuid().ToString());
         var initial = TrainingFixture.Mutations().Single(x => x.Kind == TrainingKinds.Template);
         var value = JsonNode.Parse(initial.Value!.Value.GetRawText())!.AsObject();
-        value["muscles"] = new JsonArray("tibialis anterior");
+        value["muscles"] = new JsonArray(muscle);
         var mutation = initial with { Value = JsonSerializer.SerializeToElement(value, TrainingJson.Options) };
 
         var saved = await SendAsync(client, mutation);
-        Assert.Equal("tibialis anterior", saved.Value!.Value.GetProperty("muscles")[0].GetString());
+        Assert.Equal(muscle, saved.Value!.Value.GetProperty("muscles")[0].GetString());
         using var response = await client.GetAsync("/v1/training/changes?after=0&limit=100");
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var page = await response.Content.ReadFromJsonAsync<TrainingPage>(TrainingJson.Options);
         var restored = Assert.Single(Assert.IsType<TrainingPage>(page).Changes);
-        Assert.Equal("tibialis anterior", restored.Value!.Value.GetProperty("muscles")[0].GetString());
+        Assert.Equal(muscle, restored.Value!.Value.GetProperty("muscles")[0].GetString());
     }
 
     /// <summary>Отклоняет запись, чей канонический ответ вырос за 30 MiB после добавления необязательных null-полей.</summary>

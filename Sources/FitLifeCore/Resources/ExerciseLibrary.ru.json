@@ -1352,7 +1352,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-calf-raise",
+        "title": "Подъём на носки стоя"
+      }
     },
     {
       "id": "4c0bcab5-3c05-5181-b003-cdff750e36f1",
@@ -8072,9 +8076,11 @@
     {
       "id": "3a5700e2-49dd-5a5c-bbeb-c2ea27c628a6",
       "sourceID": "Calf_Raise_On_A_Dumbbell",
-      "name": "Подъем на носки с гантелью",
+      "name": "Подъём на носок одной ногой на рукоятке гантели",
       "englishName": "Calf Raise On A Dumbbell",
       "aliases": [
+        "Подъём на носки с опорой на гантель",
+        "Calf Raise On A Dumbbell",
         "Силовые упражнения",
         "strength"
       ],
@@ -8090,11 +8096,9 @@
         "soleus"
       ],
       "steps": [
-        "Держитесь за прочный предмет для равновесия и встаньте на ручку гантели, желательно с круглыми пластинами, чтобы она катилась, поскольку в этом случае вам придется приложить больше усилий, чтобы стабилизировать себя; тем самым увеличивая эффективность упражнения.",
-        "Теперь слегка перекатите ногу вперед, чтобы можно было хорошо растянуть икру. Это будет ваша исходная позиция.",
-        "Поднимите икру, перекатывая ногу через верхнюю часть рукоятки, чтобы получить полное выпрямление. Выдохните во время выполнения этого движения. Сильно напрягите икры в верхней точке и задержитесь на секунду. Совет: при подъеме перекатывайте гантель немного назад.",
-        "Теперь на вдохе перекатывайте гантель немного вперед, опускаясь, чтобы лучше растянуться.",
-        "Повторите рекомендуемое количество повторений."
+        "Держась за устойчивую опору, поставьте переднюю часть стопы на рукоятку лежащей гантели.",
+        "Плавно поднимите пятку, контролируя равновесие и движение гантели.",
+        "Опустите пятку и повторите другой ногой."
       ],
       "images": [
         "Calf_Raise_On_A_Dumbbell/0.jpg",
@@ -8103,14 +8107,21 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-calf-raise",
+        "title": "Подъём на носки стоя"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=TW13pFWnEs0"
     },
     {
       "id": "a3fb4675-41fa-515e-9335-e395dd2778d1",
       "sourceID": "Calf_Raises_-_With_Bands",
-      "name": "Подъемы на носки – с лентами",
+      "name": "Подъём на носки стоя с эспандером",
       "englishName": "Calf Raises - With Bands",
       "aliases": [
+        "Подъём на носки с резиновой лентой",
+        "Calf Raises With Bands",
         "Силовые упражнения",
         "strength"
       ],
@@ -8126,11 +8137,9 @@
         "soleus"
       ],
       "steps": [
-        "Возьмите эластичную ленту и встаньте на нее пальцами ног, следя за тем, чтобы длина ленты между ступней и руками была одинаковой с обеих сторон.",
-        "Держась за ручки ленты, поднимите руки в стороны от головы, как будто вы готовитесь выполнить жим от плеч. Ладони должны быть направлены вперед, локти согнуты и разведены в стороны. Это движение создаст напряжение в ленте. Это будет ваша исходная позиция.",
-        "Держа руки у плеч, встаньте на носки на выдохе и сильно напрягите икры в верхней части движения.",
-        "После секундного сокращения медленно вернитесь в исходное положение.",
-        "Повторите рекомендуемое количество повторений."
+        "Встаньте передней частью стоп на эспандер и возьмите его рукоятки у плеч, натянув ленту.",
+        "Поднимитесь на носки, удерживая руки неподвижно.",
+        "Плавно опустите пятки и повторите."
       ],
       "images": [
         "Calf_Raises_-_With_Bands/0.jpg",
@@ -8139,7 +8148,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-calf-raise",
+        "title": "Подъём на носки стоя"
+      }
     },
     {
       "id": "84fb7484-5f2a-5fc1-ab41-9cdf39e6a31f",
@@ -10421,9 +10434,11 @@
     {
       "id": "d87c1567-069f-5555-b126-71bd3547c898",
       "sourceID": "Donkey_Calf_Raises",
-      "name": "Подъемы на носки осла",
+      "name": "Ослик",
       "englishName": "Donkey Calf Raises",
       "aliases": [
+        "Подъём на носки в наклоне с партнёром",
+        "Donkey Calf Raises",
         "Силовые упражнения",
         "strength"
       ],
@@ -10439,11 +10454,9 @@
         "soleus"
       ],
       "steps": [
-        "Для этого упражнения вам понадобится машина для подъема икр осла. Начните с размещения поясницы и бедер под прилагаемым мягким рычагом. Область копчика должна соприкасаться с подушечкой.",
-        "Положите обе руки на боковые ручки и поместите подушечки ног на блок для икр, пятки отведите в сторону. Выровняйте пальцы ног вперед, внутрь или наружу, в зависимости от области, на которую вы хотите воздействовать, и выпрямите колени, не сгибая их. Это будет ваша исходная позиция.",
-        "На выдохе поднимите пятки, вытягивая лодыжки как можно выше и сгибая икры. Следите за тем, чтобы колено всегда оставалось неподвижным. Никогда не должно быть никаких изгибов. Задержитесь в сокращенном положении на секунду, прежде чем начать опускаться вниз.",
-        "Медленно вернитесь в исходное положение, вдыхая, опуская пятки и сгибая лодыжки, пока икры не растянутся.",
-        "Повторите рекомендуемое количество повторений."
+        "Наклонитесь вперёд и упритесь руками в устойчивую опору. Партнёр располагается на тазу.",
+        "Сохраняя колени почти прямыми, плавно поднимите пятки.",
+        "Опустите пятки под контролем и повторите."
       ],
       "images": [
         "Donkey_Calf_Raises/0.jpg",
@@ -10452,7 +10465,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-calf-raise",
+        "title": "Подъём на носки стоя"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=SbKjS4_iDyk"
     },
     {
       "id": "0d2fd702-d250-57c9-90a1-42cae0d5ef69",
@@ -13968,9 +13986,11 @@
     {
       "id": "0191761b-3b4a-5c6d-8b76-9a5cf9707599",
       "sourceID": "Hip_Flexion_with_Band",
-      "name": "Сгибание бедра с помощью бандажа",
+      "name": "Подъём колена стоя с эспандером на голеностопе",
       "englishName": "Hip Flexion with Band",
       "aliases": [
+        "Сгибание бедра с эластичной лентой",
+        "Hip Flexion with Band",
         "Силовые упражнения",
         "strength"
       ],
@@ -13978,15 +13998,16 @@
       "equipment": "bands",
       "level": "beginner",
       "primaryMuscles": [
+        "Сгибатели бедра"
+      ],
+      "secondaryMuscles": [
         "Квадрицепс"
       ],
-      "secondaryMuscles": [],
       "trainingRegions": [],
       "steps": [
-        "Закрепите один конец ленты к нижней части стойки, а другой прикрепите к одной лодыжке.",
-        "Отвернитесь от точки крепления ремешка.",
-        "Удерживая голову и грудь поднятыми, поднимите колено на 90 градусов и сделайте паузу.",
-        "Верните ногу в исходное положение."
+        "Закрепите эспандер низко позади себя и наденьте петлю на голеностоп.",
+        "Стоя ровно, поднимите колено перед собой примерно до уровня таза.",
+        "Плавно опустите ногу и повторите другой стороной."
       ],
       "images": [
         "Hip_Flexion_with_Band/0.jpg",
@@ -13995,7 +14016,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=VqIcPRE66Cc"
     },
     {
       "id": "016d5c7b-9118-5fcd-8106-05f28de25b2e",
@@ -27240,7 +27262,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-calf-raise",
+        "title": "Подъём на носки стоя"
+      }
     },
     {
       "id": "87f6996b-28eb-5b87-833f-3b88fcb5da98",
@@ -28864,7 +28890,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-calf-raise",
+        "title": "Подъём на носки стоя"
+      }
     },
     {
       "id": "06997a74-fa5d-5094-a2e0-f967ec1e7122",
@@ -29257,7 +29287,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-calf-raise",
+        "title": "Подъём на носки стоя"
+      }
     },
     {
       "id": "97085fc2-d7a3-55ee-b9f1-c2de599c0ea9",
@@ -29599,25 +29633,27 @@
     {
       "id": "5e03a1cf-1fd2-55a1-8b0d-79681c900783",
       "sourceID": "Standing_Hip_Flexors",
-      "name": "Сгибатели бедра стоя",
+      "name": "Растяжка сгибателей бедра стоя в выпаде",
       "englishName": "Standing Hip Flexors",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Растяжка сгибателей бедра стоя",
+        "Standing Hip Flexors",
+        "Сгибатели бедра стоя"
       ],
       "group": "legs",
-      "equipment": "unspecified",
+      "equipment": "body only",
       "level": "beginner",
       "primaryMuscles": [
+        "Сгибатели бедра"
+      ],
+      "secondaryMuscles": [
         "Квадрицепс"
       ],
-      "secondaryMuscles": [],
       "trainingRegions": [],
       "steps": [
-        "Встаньте прямо, позвоночник вертикальный, левая нога немного впереди правой.",
-        "Согните оба колена и поднимите заднюю пятку от пола, одновременно толкая правое бедро вперед.",
-        "Однако в этом положении вы не сможете добиться полной и глубокой растяжки, потому что трудно одновременно расслабить сгибатель бедра и стоять на нем.",
-        "Поменяйте стороны."
+        "Встаньте в небольшой выпад, поставив одну ногу впереди другой.",
+        "Слегка согните колени и перенесите таз вперёд, сохраняя корпус вертикальным.",
+        "Задержитесь в комфортном положении, затем смените ногу."
       ],
       "images": [
         "Standing_Hip_Flexors/0.jpg",
@@ -29626,7 +29662,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=WEb0pHYhfBY"
     },
     {
       "id": "a9960fac-fb85-5151-8d46-25baa90de51d",

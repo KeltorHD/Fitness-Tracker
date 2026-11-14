@@ -1099,3 +1099,20 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     ExerciseLibrary.search("жим", groups: groups, equipment: [])
       == ExerciseLibrary.search("жим", groups: groups))
 }
+
+@Test func standingCalfRaiseVariantsPreserveDistinctIdentities() throws {
+  for language in [AppLanguage.russian, .english] {
+    let entry = try #require(
+      ExerciseLibrary.entries(language: language).first { $0.sourceID == "Donkey_Calf_Raises" })
+    let variants = ExerciseLibrary.variants(for: entry.id, language: language)
+    #expect(
+      Set(variants.map(\.sourceID)) == [
+        "Standing_Calf_Raises", "Standing_Barbell_Calf_Raise", "Standing_Dumbbell_Calf_Raise",
+        "Smith_Machine_Calf_Raise", "Calf_Raise_On_A_Dumbbell", "Calf_Raises_-_With_Bands",
+        "Donkey_Calf_Raises",
+      ])
+    #expect(Set(variants.map(\.id)).count == 7)
+    #expect(entry.steps.count >= 3)
+    #expect(entry.images.count == 2)
+  }
+}

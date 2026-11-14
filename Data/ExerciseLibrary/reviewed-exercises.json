@@ -1577,5 +1577,38 @@
   "Standing_One-Arm_Dumbbell_Triceps_Extension": {
     "secondaryMuscles": [],
     "techniqueVideoURL": "https://www.youtube.com/watch?v=GdiRJesto9U"
+  },
+  "Calf_Raise_On_A_Dumbbell": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=TW13pFWnEs0"
+  },
+  "Calf_Raises_-_With_Bands": {},
+  "Donkey_Calf_Raises": {
+    "englishSteps": [
+      "Lean forward and hold a stable support. Have a partner sit securely over your hips.",
+      "Keep your knees nearly straight and raise your heels under control.",
+      "Lower your heels slowly and repeat."
+    ],
+    "instructionSourceURL": "https://tviky.com/en/exercises/donkey-calf-raise-partner/",
+    "instructionCorrectionReason": "The source photos show a partner providing resistance, while the source instructions describe a machine.",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=SbKjS4_iDyk"
+  },
+  "Hip_Flexion_with_Band": {
+    "primaryMuscles": [
+      "hip flexors"
+    ],
+    "secondaryMuscles": [
+      "quadriceps"
+    ],
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=VqIcPRE66Cc"
+  },
+  "Standing_Hip_Flexors": {
+    "equipment": "body only",
+    "primaryMuscles": [
+      "hip flexors"
+    ],
+    "secondaryMuscles": [
+      "quadriceps"
+    ],
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=WEb0pHYhfBY"
   }
 }
