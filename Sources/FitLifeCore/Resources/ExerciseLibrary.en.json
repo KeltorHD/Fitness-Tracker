@@ -28938,7 +28938,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-dumbbell-shoulder-press",
+        "title": "Standing dumbbell shoulder press"
+      }
     },
     {
       "id": "9bf48a5b-f347-5975-8a53-dd52779013e8",
@@ -29777,6 +29781,9 @@
       "name": "Standing Inner-Biceps Curl",
       "englishName": "Standing Inner-Biceps Curl",
       "aliases": [
+        "Сгибание рук на бицепс стоя в стороны",
+        "Standing inner biceps curl",
+        "Сгибание внутренних мышц бицепса стоя",
         "Силовые упражнения",
         "strength"
       ],
@@ -29815,6 +29822,8 @@
       "name": "Standing Lateral Stretch",
       "englishName": "Standing Lateral Stretch",
       "aliases": [
+        "Боковой наклон стоя с рукой за головой",
+        "Боковая растяжка стоя",
         "Растяжка",
         "stretching"
       ],
@@ -29847,6 +29856,9 @@
       "name": "Standing Leg Curl",
       "englishName": "Standing Leg Curl",
       "aliases": [
+        "Одностороннее сгибание ноги в тренажёре стоя",
+        "Standing machine leg curl",
+        "Сгибание ног стоя",
         "Силовые упражнения",
         "strength"
       ],
@@ -29884,6 +29896,8 @@
       "name": "Standing Long Jump",
       "englishName": "Standing Long Jump",
       "aliases": [
+        "Прыжок в длину с места",
+        "Standing broad jump",
         "Плиометрика",
         "plyometrics"
       ],
@@ -29920,6 +29934,8 @@
       "name": "Standing Low-Pulley One-Arm Triceps Extension",
       "englishName": "Standing Low-Pulley One-Arm Triceps Extension",
       "aliases": [
+        "Французский жим на нижнем блоке одной рукой стоя",
+        "Разгибание одной руки на трицепс стоя с низким блоком",
         "Силовые упражнения",
         "strength"
       ],
@@ -29952,7 +29968,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-overhead-triceps-extension",
+        "title": "Standing overhead triceps extension"
+      }
     },
     {
       "id": "c5e11bc9-d389-5d73-9b98-793d1a543521",
@@ -29960,6 +29980,9 @@
       "name": "Standing Olympic Plate Hand Squeeze",
       "englishName": "Standing Olympic Plate Hand Squeeze",
       "aliases": [
+        "Сжатие краёв блинов для хвата",
+        "Standing plate hand squeeze",
+        "Сжимание руками олимпийского блина стоя",
         "Силовые упражнения",
         "strength"
       ],
@@ -29994,6 +30017,9 @@
       "name": "Standing One-Arm Cable Curl",
       "englishName": "Standing One-Arm Cable Curl",
       "aliases": [
+        "Сгибание руки на бицепс с одиночной рукояткой",
+        "Standing one-arm cable curl",
+        "Сгибание рук на тросе стоя",
         "Силовые упражнения",
         "strength"
       ],
@@ -30031,6 +30057,8 @@
       "name": "Standing One-Arm Dumbbell Curl Over Incline Bench",
       "englishName": "Standing One-Arm Dumbbell Curl Over Incline Bench",
       "aliases": [
+        "Сгибание на бицепс одной рукой с опорой на скамью",
+        "Сгибание гантели одной рукой на наклонной скамье стоя",
         "Силовые упражнения",
         "strength"
       ],
@@ -30109,6 +30137,9 @@
       "name": "Standing Overhead Barbell Triceps Extension",
       "englishName": "Standing Overhead Barbell Triceps Extension",
       "aliases": [
+        "Французский жим штанги стоя",
+        "Standing overhead barbell triceps extension",
+        "Разгибание трицепса со штангой над головой стоя",
         "Силовые упражнения",
         "strength"
       ],
@@ -30140,7 +30171,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-overhead-triceps-extension",
+        "title": "Standing overhead triceps extension"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=qkZBtEHUjfw"
     },
     {
       "id": "f78a4bed-6891-59f5-b948-b14f9f115a9e",
@@ -30148,6 +30184,8 @@
       "name": "Standing Palm-In One-Arm Dumbbell Press",
       "englishName": "Standing Palm-In One-Arm Dumbbell Press",
       "aliases": [
+        "Жим гантели от плеча одной рукой ладонью внутрь",
+        "Жим гантели одной рукой стоя, ладонь внутрь",
         "Силовые упражнения",
         "strength"
       ],
@@ -30180,7 +30218,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-dumbbell-shoulder-press",
+        "title": "Standing dumbbell shoulder press"
+      }
     },
     {
       "id": "336265b2-4ca4-5e8b-9071-5644319dce96",
@@ -30188,6 +30230,8 @@
       "name": "Standing Palms-In Dumbbell Press",
       "englishName": "Standing Palms-In Dumbbell Press",
       "aliases": [
+        "Жим гантелей от плеч стоя ладонями внутрь",
+        "Жим гантелей стоя на ладонях стоя",
         "Силовые упражнения",
         "strength"
       ],
@@ -30217,7 +30261,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-dumbbell-shoulder-press",
+        "title": "Standing dumbbell shoulder press"
+      }
     },
     {
       "id": "3b56ed5e-4a5d-5fb5-81b1-3035a72c931f",
@@ -30225,6 +30273,9 @@
       "name": "Standing Palms-Up Barbell Behind The Back Wrist Curl",
       "englishName": "Standing Palms-Up Barbell Behind The Back Wrist Curl",
       "aliases": [
+        "Сгибание запястий со штангой за спиной",
+        "Behind-the-back wrist curl",
+        "Сгибание запястий со штангой стоя за спиной",
         "Силовые упражнения",
         "strength"
       ],
@@ -30259,11 +30310,14 @@
       "name": "Standing Pelvic Tilt",
       "englishName": "Standing Pelvic Tilt",
       "aliases": [
+        "Наклоны таза стоя",
+        "Standing pelvic tilt",
+        "Наклон таза стоя",
         "Растяжка",
         "stretching"
       ],
       "group": "back",
-      "equipment": "unspecified",
+      "equipment": "body only",
       "level": "beginner",
       "primaryMuscles": [
         "lower back"

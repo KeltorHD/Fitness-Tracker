@@ -283,7 +283,9 @@
       "Dumbbell_One-Arm_Triceps_Extension",
       "Kettlebell_Overhead_Triceps_Extension",
       "Speed_Band_Overhead_Triceps",
-      "Standing_Dumbbell_Triceps_Extension"
+      "Standing_Dumbbell_Triceps_Extension",
+      "Standing_Low-Pulley_One-Arm_Triceps_Extension",
+      "Standing_Overhead_Barbell_Triceps_Extension"
     ]
   },
   "kettlebell-windmill": {
@@ -498,6 +500,15 @@
     "members": [
       "Standing_Cable_Lift",
       "Standing_Cable_Wood_Chop"
+    ]
+  },
+  "standing-dumbbell-shoulder-press": {
+    "ru": "Жим гантелей от плеч стоя",
+    "en": "Standing dumbbell shoulder press",
+    "members": [
+      "Standing_Alternating_Dumbbell_Press",
+      "Standing_Palm-In_One-Arm_Dumbbell_Press",
+      "Standing_Palms-In_Dumbbell_Press"
     ]
   }
 }

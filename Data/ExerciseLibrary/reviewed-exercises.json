@@ -991,5 +991,22 @@
   "Standing_Front_Barbell_Raise_Over_Head": {},
   "Standing_Gastrocnemius_Calf_Stretch": {},
   "Standing_Hamstring_and_Calf_Stretch": {},
-  "Standing_Hip_Circles": {}
+  "Standing_Hip_Circles": {},
+  "Standing_Inner-Biceps_Curl": {},
+  "Standing_Lateral_Stretch": {},
+  "Standing_Leg_Curl": {},
+  "Standing_Long_Jump": {},
+  "Standing_Low-Pulley_One-Arm_Triceps_Extension": {},
+  "Standing_Olympic_Plate_Hand_Squeeze": {},
+  "Standing_One-Arm_Cable_Curl": {},
+  "Standing_One-Arm_Dumbbell_Curl_Over_Incline_Bench": {},
+  "Standing_Overhead_Barbell_Triceps_Extension": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=qkZBtEHUjfw"
+  },
+  "Standing_Palm-In_One-Arm_Dumbbell_Press": {},
+  "Standing_Palms-In_Dumbbell_Press": {},
+  "Standing_Palms-Up_Barbell_Behind_The_Back_Wrist_Curl": {},
+  "Standing_Pelvic_Tilt": {
+    "equipment": "body only"
+  }
 }
