@@ -1234,5 +1234,26 @@
   "Barbell_Incline_Bench_Press_-_Medium_Grip": {},
   "Decline_Dumbbell_Bench_Press": {},
   "Dumbbell_Flyes": {},
-  "Incline_Dumbbell_Flyes": {}
+  "Incline_Dumbbell_Flyes": {},
+  "Cable_Crossover": {},
+  "Pushups": {},
+  "Push-Ups_With_Feet_Elevated": {},
+  "Dips_-_Chest_Version": {},
+  "Straight-Arm_Dumbbell_Pullover": {},
+  "Arnold_Dumbbell_Press": {},
+  "Side_Lateral_Raise": {},
+  "Seated_Side_Lateral_Raise": {},
+  "Seated_Bent-Over_Rear_Delt_Raise": {},
+  "Reverse_Machine_Flyes": {},
+  "Face_Pull": {
+    "englishSteps": [
+      "Attach a rope to a high pulley and stand facing the cable machine.",
+      "Pull the rope toward your face, separating your hands and directing your elbows outward.",
+      "Extend your arms under control to return the rope forward."
+    ],
+    "instructionSourceURL": "https://www.nasm.org/resource-center/exercise-library/face-pull",
+    "instructionCorrectionReason": "The source contains a single abbreviated instruction; the revision adds setup and controlled return.",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=eTCBSFlCJ_s"
+  },
+  "Standing_Low-Pulley_Deltoid_Raise": {}
 }

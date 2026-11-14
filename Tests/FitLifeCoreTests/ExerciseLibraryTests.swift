@@ -548,10 +548,11 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     [
       "Push-Up_Wide", "Push-Ups_-_Close_Triceps_Position", "Push-Ups_With_Feet_On_An_Exercise_Ball",
       "Pushups_Close_and_Wide_Hand_Positions", "Single-Arm_Push-Up",
+      "Pushups", "Push-Ups_With_Feet_Elevated",
     ],
     ["Push_Press", "Push_Press_-_Behind_the_Neck"],
     ["Rack_Pulls", "Rack_Pull_with_Bands"],
-    ["Parallel_Bar_Dip", "Ring_Dips"],
+    ["Parallel_Bar_Dip", "Ring_Dips", "Dips_-_Chest_Version"],
     ["Romanian_Deadlift", "Romanian_Deadlift_from_Deficit"],
     ["Sled_Push", "Prowler_Sprint"],
     [
@@ -577,6 +578,8 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     ["Supine_One-Arm_Overhead_Throw", "Supine_Two-Arm_Overhead_Throw"],
     ["One-Arm_Kettlebell_Row", "Two-Arm_Kettlebell_Row"],
     ["Zottman_Curl", "Zottman_Preacher_Curl"],
+    ["Cable_Crossover", "Single-Arm_Cable_Crossover"],
+    ["Seated_Dumbbell_Press", "Arnold_Dumbbell_Press"],
     ["Leg_Press", "Narrow_Stance_Leg_Press", "Smith_Machine_Leg_Press"],
     ["Barbell_Lunge", "Dumbbell_Lunges", "Dumbbell_Rear_Lunge"],
     ["Split_Squat_with_Dumbbells", "One_Leg_Barbell_Squat", "Smith_Single-Leg_Split_Squat"],

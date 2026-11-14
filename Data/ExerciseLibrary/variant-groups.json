@@ -402,7 +402,9 @@
       "Push-Ups_-_Close_Triceps_Position",
       "Push-Ups_With_Feet_On_An_Exercise_Ball",
       "Pushups_Close_and_Wide_Hand_Positions",
-      "Single-Arm_Push-Up"
+      "Single-Arm_Push-Up",
+      "Pushups",
+      "Push-Ups_With_Feet_Elevated"
     ]
   },
   "barbell-push-press": {
@@ -426,7 +428,8 @@
     "en": "Dips",
     "members": [
       "Parallel_Bar_Dip",
-      "Ring_Dips"
+      "Ring_Dips",
+      "Dips_-_Chest_Version"
     ]
   },
   "romanian-deadlift": {
@@ -682,6 +685,33 @@
       "Barbell_Shrug",
       "Dumbbell_Shrug",
       "Smith_Machine_Behind_the_Back_Shrug"
+    ]
+  },
+  "cable-crossover": {
+    "ru": "Сведение рук на верхних блоках стоя",
+    "en": "Standing high cable crossover",
+    "members": [
+      "Cable_Crossover",
+      "Single-Arm_Cable_Crossover"
+    ]
+  },
+  "seated-dumbbell-shoulder-press": {
+    "ru": "Жим гантелей от плеч сидя",
+    "en": "Seated dumbbell shoulder press",
+    "members": [
+      "Seated_Dumbbell_Press",
+      "Arnold_Dumbbell_Press"
+    ]
+  },
+  "lateral-raise": {
+    "ru": "Подъём рук через стороны",
+    "en": "Lateral raise",
+    "members": [
+      "Side_Lateral_Raise",
+      "Seated_Side_Lateral_Raise",
+      "One-Arm_Side_Laterals",
+      "One-Arm_Incline_Lateral_Raise",
+      "Standing_Low-Pulley_Deltoid_Raise"
     ]
   }
 }
