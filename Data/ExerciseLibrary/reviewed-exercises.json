@@ -1198,5 +1198,24 @@
   },
   "Split_Squat_with_Dumbbells": {},
   "Dumbbell_Step_Ups": {},
-  "Leg_Press": {}
+  "Leg_Press": {},
+  "Leg_Extensions": {},
+  "Lying_Leg_Curls": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=lUH80pneL5w"
+  },
+  "Seated_Leg_Curl": {},
+  "Sumo_Deadlift": {},
+  "Stiff-Legged_Dumbbell_Deadlift": {},
+  "Barbell_Hip_Thrust": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=4hYRM_60BD4"
+  },
+  "Butt_Lift_Bridge": {},
+  "Single_Leg_Glute_Bridge": {},
+  "Thigh_Abductor": {},
+  "Thigh_Adductor": {},
+  "Standing_Calf_Raises": {},
+  "Seated_Calf_Raise": {},
+  "Calf_Press_On_The_Leg_Press_Machine": {},
+  "Chin-Up": {},
+  "Wide-Grip_Lat_Pulldown": {}
 }

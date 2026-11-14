@@ -497,9 +497,10 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   let variants = ExerciseLibrary.variants(for: entry.id, language: .russian)
   #expect(Set(variants.map(\.sourceID)) == [
     "Barbell_Glute_Bridge", "Hip_Lift_with_Band", "Pelvic_Tilt_Into_Bridge",
+    "Butt_Lift_Bridge", "Single_Leg_Glute_Bridge",
   ])
   #expect(Set(variants.map(\.equipment)) == [.barbell, .bands, .bodyWeight])
-  #expect(Set(variants.map(\.id)).count == 3)
+  #expect(Set(variants.map(\.id)).count == 5)
   #expect(ExerciseLibrary.search("Ягодичный мост со штангой").contains { $0.id == entry.id })
 }
 
@@ -561,9 +562,18 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     ["Standing_Cable_Lift", "Standing_Cable_Wood_Chop"],
     [
       "Stiff-Legged_Barbell_Deadlift", "Smith_Machine_Stiff-Legged_Deadlift",
-      "Wide_Stance_Stiff_Legs",
+      "Wide_Stance_Stiff_Legs", "Stiff-Legged_Dumbbell_Deadlift",
     ],
-    ["Sumo_Deadlift_with_Bands", "Reverse_Band_Sumo_Deadlift", "Sumo_Deadlift_with_Chains"],
+    [
+      "Sumo_Deadlift_with_Bands", "Reverse_Band_Sumo_Deadlift", "Sumo_Deadlift_with_Chains",
+      "Sumo_Deadlift",
+    ],
+    ["Lying_Leg_Curls", "Seated_Leg_Curl", "Standing_Leg_Curl"],
+    ["Leg_Extensions", "Single-Leg_Leg_Extension"],
+    [
+      "Pullups", "Chin-Up", "Mixed_Grip_Chin", "Wide-Grip_Rear_Pull-Up", "Weighted_Pull_Ups",
+      "V-Bar_Pullup", "Side_To_Side_Chins", "Rocky_Pull-Ups_Pulldowns",
+    ],
     ["Supine_One-Arm_Overhead_Throw", "Supine_Two-Arm_Overhead_Throw"],
     ["One-Arm_Kettlebell_Row", "Two-Arm_Kettlebell_Row"],
     ["Zottman_Curl", "Zottman_Preacher_Curl"],

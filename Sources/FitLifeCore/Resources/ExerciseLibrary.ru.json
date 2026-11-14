@@ -330,7 +330,11 @@
         ],
         "frameDuration": 0.25
       },
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "pull-up",
+        "title": "Подтягивания на перекладине"
+      }
     },
     {
       "id": "10000000-0000-0000-0000-000000000007",
@@ -826,9 +830,12 @@
     {
       "id": "2f498ecf-4776-5b8f-99e2-438726bda696",
       "sourceID": "Leg_Extensions",
-      "name": "Разгибание ног в тренажёре",
+      "name": "Разгибание ног в тренажёре сидя",
       "englishName": "Leg Extensions",
       "aliases": [
+        "Разгибания ног",
+        "Leg extension",
+        "Разгибание ног в тренажёре",
         "Разгибания ног сидя"
       ],
       "group": "legs",
@@ -845,9 +852,9 @@
         "vastusIntermedius"
       ],
       "steps": [
-        "Настройте сиденье и валик над стопами. Сядьте, прижмите спину к опоре и возьмитесь за рукояти.",
-        "Разгибайте ноги в коленях, поднимая валик; остальную часть тела удерживайте неподвижно.",
-        "Коротко задержитесь наверху и плавно опустите вес в исходное положение без удара плит."
+        "Сядьте в тренажёр и настройте валик над стопами.",
+        "Разогните ноги в коленях, поднимая валик.",
+        "Плавно согните ноги и верните валик в исходное положение."
       ],
       "images": [
         "Leg_Extensions/0.jpg",
@@ -856,14 +863,21 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "machine-leg-extension",
+        "title": "Разгибание ног в тренажёре"
+      }
     },
     {
       "id": "5e911f6c-3710-5b1a-843d-86373e826908",
       "sourceID": "Lying_Leg_Curls",
-      "name": "Сгибание ног лёжа",
+      "name": "Сгибание ног в тренажёре лёжа на животе",
       "englishName": "Lying Leg Curls",
       "aliases": [
+        "Сгибания ног лёжа",
+        "Lying leg curl",
+        "Сгибание ног лёжа",
         "Сгибания ног лежа"
       ],
       "group": "legs",
@@ -879,9 +893,9 @@
         "semimembranosus"
       ],
       "steps": [
-        "Отрегулируйте тренажёр и лягте на живот так, чтобы валик находился над пятками. Держитесь за рукояти.",
-        "Сгибайте ноги, направляя пятки к ягодицам и не отрывая таз и бёдра от скамьи.",
-        "После короткой паузы медленно разогните ноги, сохраняя контроль над весом."
+        "Лягте на живот в тренажёр и настройте валик за нижней частью голеней.",
+        "Согните ноги в коленях, поднимая валик к ягодицам.",
+        "Плавно разогните ноги, удерживая таз на опоре."
       ],
       "images": [
         "Lying_Leg_Curls/0.jpg",
@@ -890,14 +904,22 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "machine-leg-curl",
+        "title": "Сгибание ног в тренажёре"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=lUH80pneL5w"
     },
     {
       "id": "5f33d757-dd11-5715-9929-c8d8391a86ba",
       "sourceID": "Seated_Leg_Curl",
-      "name": "Сгибание ног сидя",
+      "name": "Сгибание ног в тренажёре сидя",
       "englishName": "Seated Leg Curl",
       "aliases": [
+        "Сгибания ног сидя",
+        "Seated leg curl",
+        "Сгибание ног сидя",
         "Тренажёр для задней поверхности бедра"
       ],
       "group": "legs",
@@ -913,9 +935,9 @@
         "semimembranosus"
       ],
       "steps": [
-        "Сядьте в тренажёр, установите нижний валик под голенями и зафиксируйте бёдра верхней подушкой.",
-        "Сгибайте ноги в коленях, подтягивая валик под сиденье; корпус и бёдра оставляйте неподвижными.",
-        "Задержитесь в согнутом положении и плавно верните голени в исходную позицию."
+        "Сядьте в тренажёр, прижмите спину к спинке и настройте валики под голенями и над бёдрами.",
+        "Согните ноги, направляя нижний валик назад и вниз.",
+        "Плавно выпрямите ноги, возвращая валик в исходное положение."
       ],
       "images": [
         "Seated_Leg_Curl/0.jpg",
@@ -924,7 +946,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "machine-leg-curl",
+        "title": "Сгибание ног в тренажёре"
+      }
     },
     {
       "id": "60a5a10a-940e-57a3-b83b-9d8d51dc4bf3",
@@ -975,10 +1001,12 @@
     {
       "id": "ad946ce7-1a7d-55a8-83d9-91b593c1991a",
       "sourceID": "Sumo_Deadlift",
-      "name": "Становая тяга сумо",
+      "name": "Становая тяга сумо со штангой",
       "englishName": "Sumo Deadlift",
       "aliases": [
-        "Тяга сумо"
+        "Тяга сумо",
+        "Становая тяга сумо",
+        "Sumo deadlift"
       ],
       "group": "legs",
       "equipment": "barbell",
@@ -997,9 +1025,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "Встаньте перед штангой с широкой постановкой стоп. Возьмите гриф руками между ногами.",
-        "Сохраняя устойчивый корпус, оттолкнитесь стопами от пола и разогните колени и таз.",
-        "Верните штангу на пол, отводя таз назад и сгибая ноги. Не бросайте вес и не переразгибайте спину."
+        "Встаньте широко перед штангой, разверните носки наружу и возьмитесь за гриф руками между ногами.",
+        "Разогните ноги и таз, поднимая штангу вдоль тела.",
+        "Плавно опустите штангу на пол и повторите."
       ],
       "images": [
         "Sumo_Deadlift/0.jpg",
@@ -1008,14 +1036,20 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "sumo-deadlift",
+        "title": "Становая тяга сумо со штангой"
+      }
     },
     {
       "id": "5e3e91da-a533-5fd2-bfd1-ea1f2e76b88a",
       "sourceID": "Stiff-Legged_Dumbbell_Deadlift",
-      "name": "Тяга с гантелями на прямых ногах",
+      "name": "Становая тяга с гантелями на прямых ногах",
       "englishName": "Stiff-Legged Dumbbell Deadlift",
       "aliases": [
+        "Тяга с гантелями на прямых ногах",
+        "Stiff-legged dumbbell deadlift",
         "Румынская тяга с гантелями"
       ],
       "group": "legs",
@@ -1030,9 +1064,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "Встаньте с гантелями в руках, стопы поставьте на ширине плеч, колени оставьте слегка согнутыми.",
-        "Наклоняйтесь за счёт движения таза назад, опуская гантели вдоль ног с ровной спиной.",
-        "При ощутимом натяжении задней поверхности бедра разверните движение и плавно выпрямитесь."
+        "Встаньте прямо с гантелями в опущенных руках.",
+        "Слегка согнув колени, отведите таз назад и опустите гантели вдоль ног с ровной спиной.",
+        "Разогните тазобедренные суставы и вернитесь в положение стоя."
       ],
       "images": [
         "Stiff-Legged_Dumbbell_Deadlift/0.jpg",
@@ -1041,7 +1075,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "stiff-leg-deadlift",
+        "title": "Становая тяга на прямых ногах"
+      }
     },
     {
       "id": "d81e0a08-b853-524c-b049-6b4bc7eb2908",
@@ -1088,9 +1126,12 @@
     {
       "id": "fbf2f80a-ad4d-554e-80f4-75fa60e708ff",
       "sourceID": "Barbell_Hip_Thrust",
-      "name": "Подъём таза со штангой с опорой на скамью",
+      "name": "Ягодичный мост со штангой с опорой спиной на скамью",
       "englishName": "Barbell Hip Thrust",
       "aliases": [
+        "Хип-траст со штангой",
+        "Barbell hip thrust",
+        "Подъём таза со штангой с опорой на скамью",
         "Хип-траст"
       ],
       "group": "legs",
@@ -1107,9 +1148,9 @@
         "gluteusMaximus"
       ],
       "steps": [
-        "Сядьте перед устойчивой скамьёй. Обоприте верх спины на её край, штангу с накладкой разместите над тазом.",
-        "Упираясь стопами в пол, поднимите таз, сохраняя штангу под контролем рук.",
-        "Ненадолго сократите ягодичные мышцы и плавно опустите таз в исходное положение."
+        "Сядьте перед скамьёй, расположите штангу на тазу и обопритесь верхней частью спины на скамью.",
+        "Поставьте стопы на пол и поднимите таз, разгибая тазобедренные суставы.",
+        "Плавно опустите таз и повторите."
       ],
       "images": [
         "Barbell_Hip_Thrust/0.jpg",
@@ -1118,14 +1159,18 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=4hYRM_60BD4"
     },
     {
       "id": "c36ea3c1-1fc4-5c88-a87b-8c1c9c072fdc",
       "sourceID": "Butt_Lift_Bridge",
-      "name": "Ягодичный мост",
+      "name": "Ягодичный мост лёжа на полу",
       "englishName": "Butt Lift (Bridge)",
       "aliases": [
+        "Подъём таза лёжа",
+        "Ягодичный мост",
+        "Glute bridge",
         "Мост без отягощения"
       ],
       "group": "legs",
@@ -1141,9 +1186,9 @@
         "gluteusMaximus"
       ],
       "steps": [
-        "Лягте на спину, согните колени и поставьте стопы примерно на ширине плеч. Руки положите вдоль тела.",
-        "Опираясь на стопы, поднимите таз, напрягая ягодичные мышцы и удерживая корпус устойчивым.",
-        "Коротко задержитесь наверху и плавно опустите таз обратно на пол."
+        "Лягте на спину, согните ноги и поставьте стопы на пол.",
+        "Поднимите таз, разгибая тазобедренные суставы и опираясь стопами.",
+        "Плавно опустите таз на пол и повторите."
       ],
       "images": [
         "Butt_Lift_Bridge/0.jpg",
@@ -1152,14 +1197,21 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "glute-bridge",
+        "title": "Ягодичный мост лёжа на полу"
+      }
     },
     {
       "id": "31527337-22cf-5a8a-8602-c36cde9b3fc0",
       "sourceID": "Single_Leg_Glute_Bridge",
-      "name": "Ягодичный мост на одной ноге",
+      "name": "Ягодичный мост на одной ноге лёжа на полу",
       "englishName": "Single Leg Glute Bridge",
       "aliases": [
+        "Подъём таза лёжа на одной ноге",
+        "Single-leg glute bridge",
+        "Ягодичный мост на одной ноге",
         "Одноногий мост"
       ],
       "group": "legs",
@@ -1175,9 +1227,9 @@
         "gluteusMaximus"
       ],
       "steps": [
-        "Лягте на спину и согните колени. Подтяните одну ногу к груди, оставив вторую стопу на полу.",
-        "Опираясь на оставшуюся стопу, поднимите таз и сохраняйте его ровное положение.",
-        "После короткой паузы опустите таз. Выполните повторения и смените опорную ногу."
+        "Лягте на спину, согните ноги и поставьте стопы на пол.",
+        "Подтяните одно колено к груди и поднимите таз, опираясь на другую стопу.",
+        "Плавно опустите таз и повторите другой ногой."
       ],
       "images": [
         "Single_Leg_Glute_Bridge/0.jpg",
@@ -1186,14 +1238,21 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "glute-bridge",
+        "title": "Ягодичный мост лёжа на полу"
+      }
     },
     {
       "id": "5535b57a-8686-5a59-95a8-c950089708f0",
       "sourceID": "Thigh_Abductor",
-      "name": "Разведение ног в тренажёре",
+      "name": "Разведение ног в тренажёре сидя",
       "englishName": "Thigh Abductor",
       "aliases": [
+        "Отведение бёдер в тренажёре",
+        "Hip abduction machine",
+        "Разведение ног в тренажёре",
         "Отведение бёдер"
       ],
       "group": "legs",
@@ -1210,9 +1269,9 @@
         "gluteusMinimus"
       ],
       "steps": [
-        "Настройте тренажёр для разведения ног и сядьте с ровным корпусом. Удерживайте боковые рукояти.",
-        "Плавно разводите бёдра, преодолевая сопротивление подушек, не помогая движению корпусом.",
-        "Коротко задержитесь и контролируемо сведите ноги в исходное положение."
+        "Сядьте в тренажёр и расположите ноги у валиков.",
+        "Разведите бёдра против сопротивления, удерживая корпус неподвижным.",
+        "Плавно сведите ноги в исходное положение."
       ],
       "images": [
         "Thigh_Abductor/0.jpg",
@@ -1226,9 +1285,12 @@
     {
       "id": "d8cf4152-006b-53c1-a0a7-299a2cc39c70",
       "sourceID": "Thigh_Adductor",
-      "name": "Сведение ног в тренажёре",
+      "name": "Сведение ног в тренажёре сидя",
       "englishName": "Thigh Adductor",
       "aliases": [
+        "Приведение бёдер в тренажёре",
+        "Hip adduction machine",
+        "Сведение ног в тренажёре",
         "Приведение бёдер"
       ],
       "group": "legs",
@@ -1243,9 +1305,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "Сядьте в тренажёр для сведения ног и расположите бёдра на подушках. Удерживайте рукояти.",
-        "Плавно сведите ноги, сохраняя спину на опоре и не раскачивая верхнюю часть тела.",
-        "Задержитесь в сведённом положении и медленно разведите ноги обратно под контролем веса."
+        "Сядьте в тренажёр и расположите ноги у валиков.",
+        "Сведите бёдра против сопротивления, удерживая корпус неподвижным.",
+        "Плавно разведите ноги в исходное положение."
       ],
       "images": [
         "Thigh_Adductor/0.jpg",
@@ -1259,9 +1321,12 @@
     {
       "id": "5d7df1f0-31a1-55bf-85fe-fd59c2060c3c",
       "sourceID": "Standing_Calf_Raises",
-      "name": "Подъёмы на носки стоя",
+      "name": "Подъём на носки стоя в тренажёре",
       "englishName": "Standing Calf Raises",
       "aliases": [
+        "Подъём на икры стоя в тренажёре",
+        "Standing machine calf raise",
+        "Подъёмы на носки стоя",
         "Икры стоя"
       ],
       "group": "legs",
@@ -1276,9 +1341,9 @@
         "soleus"
       ],
       "steps": [
-        "Отрегулируйте плечевые подушки и встаньте передней частью стоп на платформу, оставив пятки свободными.",
-        "Поднимите пятки, разгибая голеностопы. Сохраняйте положение коленей и устойчивый корпус.",
-        "После короткой паузы медленно опустите пятки в доступную амплитуду без пружинящих движений."
+        "Настройте тренажёр и встаньте передней частью стоп на платформу, расположив плечи под валиками.",
+        "Поднимитесь на носки, сохраняя устойчивое положение корпуса.",
+        "Плавно опустите пятки."
       ],
       "images": [
         "Standing_Calf_Raises/0.jpg",
@@ -1292,9 +1357,12 @@
     {
       "id": "4c0bcab5-3c05-5181-b003-cdff750e36f1",
       "sourceID": "Seated_Calf_Raise",
-      "name": "Подъёмы на носки сидя",
+      "name": "Подъём на носки сидя в тренажёре",
       "englishName": "Seated Calf Raise",
       "aliases": [
+        "Подъём на икры сидя в тренажёре",
+        "Seated calf raise",
+        "Подъёмы на носки сидя",
         "Икры сидя"
       ],
       "group": "legs",
@@ -1308,9 +1376,9 @@
         "soleus"
       ],
       "steps": [
-        "Сядьте в тренажёр, поставьте переднюю часть стоп на платформу и разместите бёдра под валиком.",
-        "Немного поднимите пятки и уберите фиксатор. Плавно опустите пятки, затем поднимитесь на носки.",
-        "Повторяйте движение за счёт голеностопов, удерживая колени под валиком; в конце верните фиксатор."
+        "Сядьте в тренажёр, расположите бёдра под валиками и поставьте переднюю часть стоп на платформу.",
+        "Поднимите пятки, поднимаясь на носки.",
+        "Плавно опустите пятки и повторите."
       ],
       "images": [
         "Seated_Calf_Raise/0.jpg",
@@ -1324,9 +1392,12 @@
     {
       "id": "435c922b-38b6-502f-b2b1-83f3101e9e5f",
       "sourceID": "Calf_Press_On_The_Leg_Press_Machine",
-      "name": "Подъёмы на носки в жиме ногами",
+      "name": "Подъём на носки в тренажёре для жима ногами",
       "englishName": "Calf Press On The Leg Press Machine",
       "aliases": [
+        "Жим платформы носками",
+        "Calf press on leg press machine",
+        "Подъёмы на носки в жиме ногами",
         "Икры на платформе"
       ],
       "group": "legs",
@@ -1338,9 +1409,9 @@
       "secondaryMuscles": [],
       "trainingRegions": [],
       "steps": [
-        "Сядьте в жим ногами и установите переднюю часть стоп на нижний край платформы, оставив пятки свободными.",
-        "Сохраняя положение коленей, разгибайте голеностопы и выталкивайте платформу носками.",
-        "Медленно опускайте пятки в доступную амплитуду. Сохраняйте надёжную опору стоп и используйте ограничители."
+        "Сядьте в тренажёр для жима ногами и поставьте переднюю часть стоп на край платформы.",
+        "Выжмите платформу носками, удерживая колени слегка согнутыми и неподвижными.",
+        "Плавно верните платформу движением в голеностопах."
       ],
       "images": [
         "Calf_Press_On_The_Leg_Press_Machine/0.jpg",
@@ -1354,9 +1425,11 @@
     {
       "id": "4925d85c-1a3f-5c48-a177-3dff5b1de9a9",
       "sourceID": "Chin-Up",
-      "name": "Подтягивания обратным хватом",
+      "name": "Подтягивания на перекладине хватом снизу",
       "englishName": "Chin-Up",
       "aliases": [
+        "Подтягивания обратным хватом",
+        "Chin-up",
         "Подтягивания на бицепс"
       ],
       "group": "back",
@@ -1372,9 +1445,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "Возьмитесь за перекладину обратным хватом, ладонями к себе, и примите положение в висе.",
-        "Сгибая руки и направляя локти вниз, плавно подтяните корпус к перекладине без раскачивания.",
-        "После короткой паузы контролируемо опуститесь до исходного положения."
+        "Возьмитесь за перекладину хватом снизу и повисните на прямых руках.",
+        "Подтянитесь к перекладине, направляя локти вниз.",
+        "Плавно опуститесь в исходный вис."
       ],
       "images": [
         "Chin-Up/0.jpg",
@@ -1383,14 +1456,21 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "pull-up",
+        "title": "Подтягивания на перекладине"
+      }
     },
     {
       "id": "9737759b-d324-5076-9931-a7dba7779f2f",
       "sourceID": "Wide-Grip_Lat_Pulldown",
-      "name": "Тяга верхнего блока широким хватом",
+      "name": "Тяга верхнего блока к груди широким хватом",
       "englishName": "Wide-Grip Lat Pulldown",
       "aliases": [
+        "Вертикальная тяга широким хватом",
+        "Wide-grip lat pulldown",
+        "Тяга верхнего блока широким хватом",
         "Вертикальная тяга"
       ],
       "group": "back",
@@ -1406,9 +1486,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "Сядьте у верхнего блока, зафиксируйте бёдра валиком и возьмитесь за рукоять широким прямым хватом.",
-        "Слегка отклоните корпус и тяните рукоять к верхней части груди, направляя локти вниз.",
-        "Коротко задержитесь и плавно разогните руки, не отрываясь от сиденья и не раскачиваясь."
+        "Сядьте в тренажёр верхнего блока и закрепите бёдра под упорами.",
+        "Возьмитесь за широкую рукоятку хватом сверху и потяните её к верхней части груди.",
+        "Плавно выпрямите руки, возвращая рукоятку вверх."
       ],
       "images": [
         "Wide-Grip_Lat_Pulldown/0.jpg",
@@ -18437,7 +18517,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "pull-up",
+        "title": "Подтягивания на перекладине"
+      }
     },
     {
       "id": "2807d2ea-84a2-59b6-b382-253ded81690a",
@@ -23436,7 +23520,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "pull-up",
+        "title": "Подтягивания на перекладине"
+      }
     },
     {
       "id": "14b3997c-4abd-59fc-baaf-b8c00198b6ec",
@@ -25555,7 +25643,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "pull-up",
+        "title": "Подтягивания на перекладине"
+      }
     },
     {
       "id": "fde9538e-ead8-5e5f-b235-afea9dbef232",
@@ -25936,7 +26028,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "machine-leg-extension",
+        "title": "Разгибание ног в тренажёре"
+      }
     },
     {
       "id": "a4ee4ea5-9763-5353-af9e-3384a04edb4e",
@@ -29148,7 +29244,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "machine-leg-curl",
+        "title": "Сгибание ног в тренажёре"
+      }
     },
     {
       "id": "e67edfc2-9c06-5b91-9a29-0bd6ed5d5db7",
@@ -31557,7 +31657,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "pull-up",
+        "title": "Подтягивания на перекладине"
+      }
     },
     {
       "id": "a070d419-68f0-59ed-8f16-4378a48d46b5",
@@ -31854,7 +31958,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "pull-up",
+        "title": "Подтягивания на перекладине"
+      }
     },
     {
       "id": "648f693d-7a8c-5f5b-b51e-6ff47c6f1520",
@@ -32161,7 +32269,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "pull-up",
+        "title": "Подтягивания на перекладине"
+      }
     },
     {
       "id": "12c28cf6-52ef-5fcf-869e-69bffc8c3b4e",

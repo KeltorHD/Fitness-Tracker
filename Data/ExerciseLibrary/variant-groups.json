@@ -247,7 +247,9 @@
     "members": [
       "Barbell_Glute_Bridge",
       "Hip_Lift_with_Band",
-      "Pelvic_Tilt_Into_Bridge"
+      "Pelvic_Tilt_Into_Bridge",
+      "Butt_Lift_Bridge",
+      "Single_Leg_Glute_Bridge"
     ]
   },
   "incline-dumbbell-bench-press": {
@@ -520,7 +522,8 @@
     "members": [
       "Stiff-Legged_Barbell_Deadlift",
       "Smith_Machine_Stiff-Legged_Deadlift",
-      "Wide_Stance_Stiff_Legs"
+      "Wide_Stance_Stiff_Legs",
+      "Stiff-Legged_Dumbbell_Deadlift"
     ]
   },
   "sumo-deadlift": {
@@ -529,7 +532,8 @@
     "members": [
       "Sumo_Deadlift_with_Bands",
       "Reverse_Band_Sumo_Deadlift",
-      "Sumo_Deadlift_with_Chains"
+      "Sumo_Deadlift_with_Chains",
+      "Sumo_Deadlift"
     ]
   },
   "supine-overhead-medicine-ball-throw": {
@@ -591,6 +595,37 @@
       "Split_Squat_with_Dumbbells",
       "One_Leg_Barbell_Squat",
       "Smith_Single-Leg_Split_Squat"
+    ]
+  },
+  "machine-leg-curl": {
+    "ru": "Сгибание ног в тренажёре",
+    "en": "Machine leg curl",
+    "members": [
+      "Lying_Leg_Curls",
+      "Seated_Leg_Curl",
+      "Standing_Leg_Curl"
+    ]
+  },
+  "machine-leg-extension": {
+    "ru": "Разгибание ног в тренажёре",
+    "en": "Machine leg extension",
+    "members": [
+      "Leg_Extensions",
+      "Single-Leg_Leg_Extension"
+    ]
+  },
+  "pull-up": {
+    "ru": "Подтягивания на перекладине",
+    "en": "Pull-up",
+    "members": [
+      "Pullups",
+      "Chin-Up",
+      "Mixed_Grip_Chin",
+      "Wide-Grip_Rear_Pull-Up",
+      "Weighted_Pull_Ups",
+      "V-Bar_Pullup",
+      "Side_To_Side_Chins",
+      "Rocky_Pull-Ups_Pulldowns"
     ]
   }
 }

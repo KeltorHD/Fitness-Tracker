@@ -340,7 +340,11 @@
         ],
         "frameDuration": 0.25
       },
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "pull-up",
+        "title": "Pull-up"
+      }
     },
     {
       "id": "10000000-0000-0000-0000-000000000007",
@@ -847,6 +851,9 @@
       "name": "Leg Extensions",
       "englishName": "Leg Extensions",
       "aliases": [
+        "Разгибания ног",
+        "Leg extension",
+        "Разгибание ног в тренажёре",
         "Разгибания ног сидя"
       ],
       "group": "legs",
@@ -875,7 +882,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "machine-leg-extension",
+        "title": "Machine leg extension"
+      }
     },
     {
       "id": "5e911f6c-3710-5b1a-843d-86373e826908",
@@ -883,6 +894,9 @@
       "name": "Lying Leg Curls",
       "englishName": "Lying Leg Curls",
       "aliases": [
+        "Сгибания ног лёжа",
+        "Lying leg curl",
+        "Сгибание ног лёжа",
         "Сгибания ног лежа"
       ],
       "group": "legs",
@@ -910,7 +924,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "machine-leg-curl",
+        "title": "Machine leg curl"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=lUH80pneL5w"
     },
     {
       "id": "5f33d757-dd11-5715-9929-c8d8391a86ba",
@@ -918,6 +937,9 @@
       "name": "Seated Leg Curl",
       "englishName": "Seated Leg Curl",
       "aliases": [
+        "Сгибания ног сидя",
+        "Seated leg curl",
+        "Сгибание ног сидя",
         "Тренажёр для задней поверхности бедра"
       ],
       "group": "legs",
@@ -946,7 +968,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "machine-leg-curl",
+        "title": "Machine leg curl"
+      }
     },
     {
       "id": "60a5a10a-940e-57a3-b83b-9d8d51dc4bf3",
@@ -1002,7 +1028,9 @@
       "name": "Sumo Deadlift",
       "englishName": "Sumo Deadlift",
       "aliases": [
-        "Тяга сумо"
+        "Тяга сумо",
+        "Становая тяга сумо",
+        "Sumo deadlift"
       ],
       "group": "legs",
       "equipment": "barbell",
@@ -1033,7 +1061,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "sumo-deadlift",
+        "title": "Barbell sumo deadlift"
+      }
     },
     {
       "id": "5e3e91da-a533-5fd2-bfd1-ea1f2e76b88a",
@@ -1041,6 +1073,8 @@
       "name": "Stiff-Legged Dumbbell Deadlift",
       "englishName": "Stiff-Legged Dumbbell Deadlift",
       "aliases": [
+        "Тяга с гантелями на прямых ногах",
+        "Stiff-legged dumbbell deadlift",
         "Румынская тяга с гантелями"
       ],
       "group": "legs",
@@ -1068,7 +1102,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "stiff-leg-deadlift",
+        "title": "Stiff-legged deadlift"
+      }
     },
     {
       "id": "d81e0a08-b853-524c-b049-6b4bc7eb2908",
@@ -1118,6 +1156,9 @@
       "name": "Barbell Hip Thrust",
       "englishName": "Barbell Hip Thrust",
       "aliases": [
+        "Хип-траст со штангой",
+        "Barbell hip thrust",
+        "Подъём таза со штангой с опорой на скамью",
         "Хип-траст"
       ],
       "group": "legs",
@@ -1145,7 +1186,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=4hYRM_60BD4"
     },
     {
       "id": "c36ea3c1-1fc4-5c88-a87b-8c1c9c072fdc",
@@ -1153,6 +1195,9 @@
       "name": "Butt Lift (Bridge)",
       "englishName": "Butt Lift (Bridge)",
       "aliases": [
+        "Подъём таза лёжа",
+        "Ягодичный мост",
+        "Glute bridge",
         "Мост без отягощения"
       ],
       "group": "legs",
@@ -1179,7 +1224,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "glute-bridge",
+        "title": "Floor glute bridge"
+      }
     },
     {
       "id": "31527337-22cf-5a8a-8602-c36cde9b3fc0",
@@ -1187,6 +1236,9 @@
       "name": "Single Leg Glute Bridge",
       "englishName": "Single Leg Glute Bridge",
       "aliases": [
+        "Подъём таза лёжа на одной ноге",
+        "Single-leg glute bridge",
+        "Ягодичный мост на одной ноге",
         "Одноногий мост"
       ],
       "group": "legs",
@@ -1214,7 +1266,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "glute-bridge",
+        "title": "Floor glute bridge"
+      }
     },
     {
       "id": "5535b57a-8686-5a59-95a8-c950089708f0",
@@ -1222,6 +1278,9 @@
       "name": "Thigh Abductor",
       "englishName": "Thigh Abductor",
       "aliases": [
+        "Отведение бёдер в тренажёре",
+        "Hip abduction machine",
+        "Разведение ног в тренажёре",
         "Отведение бёдер"
       ],
       "group": "legs",
@@ -1258,6 +1317,9 @@
       "name": "Thigh Adductor",
       "englishName": "Thigh Adductor",
       "aliases": [
+        "Приведение бёдер в тренажёре",
+        "Hip adduction machine",
+        "Сведение ног в тренажёре",
         "Приведение бёдер"
       ],
       "group": "legs",
@@ -1292,6 +1354,9 @@
       "name": "Standing Calf Raises",
       "englishName": "Standing Calf Raises",
       "aliases": [
+        "Подъём на икры стоя в тренажёре",
+        "Standing machine calf raise",
+        "Подъёмы на носки стоя",
         "Икры стоя"
       ],
       "group": "legs",
@@ -1327,6 +1392,9 @@
       "name": "Seated Calf Raise",
       "englishName": "Seated Calf Raise",
       "aliases": [
+        "Подъём на икры сидя в тренажёре",
+        "Seated calf raise",
+        "Подъёмы на носки сидя",
         "Икры сидя"
       ],
       "group": "legs",
@@ -1362,6 +1430,9 @@
       "name": "Calf Press On The Leg Press Machine",
       "englishName": "Calf Press On The Leg Press Machine",
       "aliases": [
+        "Жим платформы носками",
+        "Calf press on leg press machine",
+        "Подъёмы на носки в жиме ногами",
         "Икры на платформе"
       ],
       "group": "legs",
@@ -1394,6 +1465,8 @@
       "name": "Chin-Up",
       "englishName": "Chin-Up",
       "aliases": [
+        "Подтягивания обратным хватом",
+        "Chin-up",
         "Подтягивания на бицепс"
       ],
       "group": "back",
@@ -1422,7 +1495,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "pull-up",
+        "title": "Pull-up"
+      }
     },
     {
       "id": "9737759b-d324-5076-9931-a7dba7779f2f",
@@ -1430,6 +1507,9 @@
       "name": "Wide-Grip Lat Pulldown",
       "englishName": "Wide-Grip Lat Pulldown",
       "aliases": [
+        "Вертикальная тяга широким хватом",
+        "Wide-grip lat pulldown",
+        "Тяга верхнего блока широким хватом",
         "Вертикальная тяга"
       ],
       "group": "back",
@@ -18933,7 +19013,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "pull-up",
+        "title": "Pull-up"
+      }
     },
     {
       "id": "2807d2ea-84a2-59b6-b382-253ded81690a",
@@ -24103,7 +24187,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "pull-up",
+        "title": "Pull-up"
+      }
     },
     {
       "id": "14b3997c-4abd-59fc-baaf-b8c00198b6ec",
@@ -26276,7 +26364,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "pull-up",
+        "title": "Pull-up"
+      }
     },
     {
       "id": "fde9538e-ead8-5e5f-b235-afea9dbef232",
@@ -26663,7 +26755,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "machine-leg-extension",
+        "title": "Machine leg extension"
+      }
     },
     {
       "id": "a4ee4ea5-9763-5353-af9e-3384a04edb4e",
@@ -29983,7 +30079,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "machine-leg-curl",
+        "title": "Machine leg curl"
+      }
     },
     {
       "id": "e67edfc2-9c06-5b91-9a29-0bd6ed5d5db7",
@@ -32438,7 +32538,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "pull-up",
+        "title": "Pull-up"
+      }
     },
     {
       "id": "a070d419-68f0-59ed-8f16-4378a48d46b5",
@@ -32746,7 +32850,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "pull-up",
+        "title": "Pull-up"
+      }
     },
     {
       "id": "648f693d-7a8c-5f5b-b51e-6ff47c6f1520",
@@ -33063,7 +33171,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "pull-up",
+        "title": "Pull-up"
+      }
     },
     {
       "id": "12c28cf6-52ef-5fcf-869e-69bffc8c3b4e",
