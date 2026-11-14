@@ -19899,7 +19899,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "kettlebell-row",
+        "title": "Bent-over kettlebell row"
+      }
     },
     {
       "id": "7bd0acdb-139a-527a-aee9-26c153914cd3",
@@ -31557,6 +31561,9 @@
       "name": "Torso Rotation",
       "englishName": "Torso Rotation",
       "aliases": [
+        "Вращение корпуса с фитболом",
+        "Exercise ball torso rotation",
+        "Вращение туловища",
         "Растяжка",
         "stretching"
       ],
@@ -31587,11 +31594,14 @@
       "name": "Trail Running/Walking",
       "englishName": "Trail Running/Walking",
       "aliases": [
+        "Трейлраннинг",
+        "Trail running and walking",
+        "Бег по пересеченной местности/ходьба",
         "Кардио",
         "cardio"
       ],
       "group": "legs",
-      "equipment": "unspecified",
+      "equipment": "body only",
       "level": "beginner",
       "primaryMuscles": [
         "quadriceps"
@@ -31621,6 +31631,9 @@
       "name": "Trap Bar Deadlift",
       "englishName": "Trap Bar Deadlift",
       "aliases": [
+        "Тяга с гексагональным грифом",
+        "Trap bar deadlift",
+        "Становая тяга с трэп-штангой",
         "Силовые упражнения",
         "strength"
       ],
@@ -31648,7 +31661,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=sNmGkfMhma0"
     },
     {
       "id": "8cadfc76-1816-5406-ae92-bcc7a39377dd",
@@ -31656,6 +31670,8 @@
       "name": "Tricep Side Stretch",
       "englishName": "Tricep Side Stretch",
       "aliases": [
+        "Боковая растяжка трицепса",
+        "Triceps side stretch",
         "Растяжка",
         "stretching"
       ],
@@ -31687,6 +31703,8 @@
       "name": "Triceps Overhead Extension with Rope",
       "englishName": "Triceps Overhead Extension with Rope",
       "aliases": [
+        "Французский жим на нижнем блоке с канатной рукояткой стоя",
+        "Разгибание над головой на трицепс со скакалкой",
         "Силовые упражнения",
         "strength"
       ],
@@ -31715,7 +31733,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-overhead-triceps-extension",
+        "title": "Standing overhead triceps extension"
+      }
     },
     {
       "id": "f41d9694-2bd8-5f4c-b23b-a0d2cc92d12d",
@@ -31765,6 +31787,8 @@
       "name": "Triceps Stretch",
       "englishName": "Triceps Stretch",
       "aliases": [
+        "Растяжка трицепса из-за головы",
+        "Растяжка трицепса",
         "Растяжка",
         "stretching"
       ],
@@ -31796,6 +31820,9 @@
       "name": "Tuck Crunch",
       "englishName": "Tuck Crunch",
       "aliases": [
+        "Скручивания с коленями над тазом",
+        "Tuck crunch",
+        "Так хруст",
         "Силовые упражнения",
         "strength"
       ],
@@ -31833,6 +31860,8 @@
       "name": "Two-Arm Dumbbell Preacher Curl",
       "englishName": "Two-Arm Dumbbell Preacher Curl",
       "aliases": [
+        "Подъём двух гантелей на бицепс на скамье Скотта",
+        "Сгибания рук с двумя гантелями на скамье Скотта",
         "Силовые упражнения",
         "strength"
       ],
@@ -31868,6 +31897,9 @@
       "name": "Two-Arm Kettlebell Clean",
       "englishName": "Two-Arm Kettlebell Clean",
       "aliases": [
+        "Подъём двух гирь на грудь",
+        "Double kettlebell clean",
+        "Подъём гири двумя руками",
         "Силовые упражнения",
         "strength"
       ],
@@ -31897,7 +31929,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=Yaelrl1VN20"
     },
     {
       "id": "beb6b25c-5b9f-52a6-81a7-f0401e729ee9",
@@ -31905,6 +31938,9 @@
       "name": "Two-Arm Kettlebell Jerk",
       "englishName": "Two-Arm Kettlebell Jerk",
       "aliases": [
+        "Толчок двух гирь над головой",
+        "Double kettlebell jerk",
+        "Толчок гири двумя руками",
         "Силовые упражнения",
         "strength"
       ],
@@ -31938,6 +31974,9 @@
       "name": "Two-Arm Kettlebell Military Press",
       "englishName": "Two-Arm Kettlebell Military Press",
       "aliases": [
+        "Жим двух гирь над головой стоя",
+        "Double kettlebell military press",
+        "Армейский жим гири двумя руками",
         "Силовые упражнения",
         "strength"
       ],
@@ -31973,6 +32012,9 @@
       "name": "Two-Arm Kettlebell Row",
       "englishName": "Two-Arm Kettlebell Row",
       "aliases": [
+        "Тяга двух гирь в наклоне",
+        "Double kettlebell row",
+        "Тяга гири двумя руками",
         "Силовые упражнения",
         "strength"
       ],
@@ -32000,7 +32042,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "kettlebell-row",
+        "title": "Bent-over kettlebell row"
+      }
     },
     {
       "id": "9a7eb607-4f0c-5836-9a21-53a375c3a270",
@@ -32008,6 +32054,8 @@
       "name": "Upper Back-Leg Grab",
       "englishName": "Upper Back-Leg Grab",
       "aliases": [
+        "Наклон сидя с захватом ног",
+        "Захват верхней части задней ноги",
         "Растяжка",
         "stretching"
       ],
@@ -32041,6 +32089,9 @@
       "name": "Upper Back Stretch",
       "englishName": "Upper Back Stretch",
       "aliases": [
+        "Растяжка между лопатками",
+        "Upper back stretch",
+        "Растяжка верхней части спины",
         "Растяжка",
         "stretching"
       ],
@@ -32050,9 +32101,7 @@
       "primaryMuscles": [
         "middle back"
       ],
-      "secondaryMuscles": [
-        "middle back"
-      ],
+      "secondaryMuscles": [],
       "trainingRegions": [],
       "steps": [
         "Clasp fingers together with your thumbs pointing down, round your shoulders as you reach your hands forward."

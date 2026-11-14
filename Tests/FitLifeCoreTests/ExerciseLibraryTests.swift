@@ -558,6 +558,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     ["Stiff-Legged_Barbell_Deadlift", "Smith_Machine_Stiff-Legged_Deadlift"],
     ["Sumo_Deadlift_with_Bands", "Reverse_Band_Sumo_Deadlift", "Sumo_Deadlift_with_Chains"],
     ["Supine_One-Arm_Overhead_Throw", "Supine_Two-Arm_Overhead_Throw"],
+    ["One-Arm_Kettlebell_Row", "Two-Arm_Kettlebell_Row"],
     [
       "Standing_Alternating_Dumbbell_Press", "Standing_Palm-In_One-Arm_Dumbbell_Press",
       "Standing_Palms-In_Dumbbell_Press",
@@ -609,6 +610,15 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
         $0.sourceID == "Smith_Incline_Shoulder_Raise"
       })
     #expect(entry.equipment == .machine)
+  }
+}
+
+@Test func upperBackStretchDoesNotRepeatItsPrimaryMuscle() throws {
+  for language in [AppLanguage.russian, .english] {
+    let entry = try #require(
+      ExerciseLibrary.entries(language: language).first { $0.sourceID == "Upper_Back_Stretch" })
+    #expect(entry.primaryMuscleIDs == [.middleBack])
+    #expect(!entry.secondaryMuscleIDs.contains(.middleBack))
   }
 }
 
@@ -689,8 +699,9 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     "Speed_Band_Overhead_Triceps", "Standing_Dumbbell_Triceps_Extension",
     "Standing_Low-Pulley_One-Arm_Triceps_Extension", "Standing_Overhead_Barbell_Triceps_Extension",
     "Standing_Towel_Triceps_Extension",
+    "Triceps_Overhead_Extension_with_Rope",
   ])
-  #expect(Set(variants.map(\.id)).count == 7)
+  #expect(Set(variants.map(\.id)).count == 8)
 }
 
 @Test func kneeRaiseInstructionsMatchTheSourceNameAndPhotosInBothLanguages() throws {

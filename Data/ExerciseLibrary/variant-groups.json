@@ -288,7 +288,8 @@
       "Standing_Dumbbell_Triceps_Extension",
       "Standing_Low-Pulley_One-Arm_Triceps_Extension",
       "Standing_Overhead_Barbell_Triceps_Extension",
-      "Standing_Towel_Triceps_Extension"
+      "Standing_Towel_Triceps_Extension",
+      "Triceps_Overhead_Extension_with_Rope"
     ]
   },
   "kettlebell-windmill": {
@@ -537,6 +538,14 @@
     "members": [
       "Supine_One-Arm_Overhead_Throw",
       "Supine_Two-Arm_Overhead_Throw"
+    ]
+  },
+  "kettlebell-row": {
+    "ru": "Тяга гири к поясу в наклоне",
+    "en": "Bent-over kettlebell row",
+    "members": [
+      "One-Arm_Kettlebell_Row",
+      "Two-Arm_Kettlebell_Row"
     ]
   }
 }

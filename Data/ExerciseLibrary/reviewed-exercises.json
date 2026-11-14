@@ -1061,5 +1061,27 @@
   },
   "The_Straddle": {},
   "Tire_Flip": {},
-  "Toe_Touchers": {}
+  "Toe_Touchers": {},
+  "Torso_Rotation": {},
+  "Trail_Running_Walking": {
+    "equipment": "body only"
+  },
+  "Trap_Bar_Deadlift": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=sNmGkfMhma0"
+  },
+  "Tricep_Side_Stretch": {},
+  "Triceps_Overhead_Extension_with_Rope": {},
+  "Triceps_Stretch": {},
+  "Tuck_Crunch": {},
+  "Two-Arm_Dumbbell_Preacher_Curl": {},
+  "Two-Arm_Kettlebell_Clean": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=Yaelrl1VN20"
+  },
+  "Two-Arm_Kettlebell_Jerk": {},
+  "Two-Arm_Kettlebell_Military_Press": {},
+  "Two-Arm_Kettlebell_Row": {},
+  "Upper_Back-Leg_Grab": {},
+  "Upper_Back_Stretch": {
+    "secondaryMuscles": []
+  }
 }
