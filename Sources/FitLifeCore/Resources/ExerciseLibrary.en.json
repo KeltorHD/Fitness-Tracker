@@ -9175,8 +9175,8 @@
       "name": "Circus Bell",
       "englishName": "Circus Bell",
       "aliases": [
-        "Силовой экстрим",
-        "strongman"
+        "Взятие на плечо и жим гигантской гантели",
+        "Circus Bell"
       ],
       "group": "shoulders",
       "equipment": "other",
@@ -9206,7 +9206,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=o3CQ9ExKESg"
     },
     {
       "id": "c8740797-2b13-5511-90cf-6b17933f0614",
@@ -9807,8 +9808,8 @@
       "name": "Conan's Wheel",
       "englishName": "Conan's Wheel",
       "aliases": [
-        "Силовой экстрим",
-        "strongman"
+        "Ходьба по кругу с балкой в локтевых сгибах",
+        "Conan’s Wheel"
       ],
       "group": "legs",
       "equipment": "other",
@@ -9837,7 +9838,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=oEsyO1PVDNY"
     },
     {
       "id": "0505b22b-1376-5559-89cb-88ab964ab11a",
@@ -15837,8 +15839,8 @@
       "name": "Keg Load",
       "englishName": "Keg Load",
       "aliases": [
-        "Силовой экстрим",
-        "strongman"
+        "Подъём бочки на платформу после переноса",
+        "Keg Load"
       ],
       "group": "back",
       "equipment": "other",
@@ -17916,8 +17918,8 @@
       "name": "Log Lift",
       "englishName": "Log Lift",
       "aliases": [
-        "Силовой экстрим",
-        "strongman"
+        "Взятие бревна на грудь и жим над головой",
+        "Log Lift"
       ],
       "group": "shoulders",
       "equipment": "other",
