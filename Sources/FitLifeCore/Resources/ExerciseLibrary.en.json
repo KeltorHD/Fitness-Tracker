@@ -9190,8 +9190,8 @@
       "name": "Clean",
       "englishName": "Clean",
       "aliases": [
-        "Тяжёлая атлетика",
-        "olympic weightlifting"
+        "Взятие штанги на грудь с пола",
+        "Clean"
       ],
       "group": "legs",
       "equipment": "barbell",
@@ -9223,7 +9223,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-clean-variations",
+        "title": "Barbell clean"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=oQIaWLrB318"
     },
     {
       "id": "660364d3-d3de-5529-9869-4e24033fa13f",
@@ -9231,8 +9236,8 @@
       "name": "Clean Deadlift",
       "englishName": "Clean Deadlift",
       "aliases": [
-        "Тяжёлая атлетика",
-        "olympic weightlifting"
+        "Тяга штанги с пола хватом для взятия на грудь",
+        "Clean Deadlift"
       ],
       "group": "legs",
       "equipment": "barbell",
@@ -9269,8 +9274,8 @@
       "name": "Clean Pull",
       "englishName": "Clean Pull",
       "aliases": [
-        "Тяжёлая атлетика",
-        "olympic weightlifting"
+        "Толчковая тяга с подрывом",
+        "Clean Pull"
       ],
       "group": "legs",
       "equipment": "barbell",
@@ -9298,7 +9303,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=xx8WkFrST2Y"
     },
     {
       "id": "1ec3f9e1-6d86-5aff-a080-8f51e6f7776a",
@@ -9341,8 +9347,8 @@
       "name": "Clean and Jerk",
       "englishName": "Clean and Jerk",
       "aliases": [
-        "Тяжёлая атлетика",
-        "olympic weightlifting"
+        "Взятие штанги на грудь в сед и толчок в ножницы",
+        "Clean and Jerk"
       ],
       "group": "shoulders",
       "equipment": "barbell",
@@ -10772,8 +10778,8 @@
       "name": "Double Kettlebell Jerk",
       "englishName": "Double Kettlebell Jerk",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Толчок двух гирь с разножкой",
+        "Double Kettlebell Jerk"
       ],
       "group": "shoulders",
       "equipment": "kettlebells",
@@ -10803,7 +10809,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "kettlebell-jerk",
+        "title": "Kettlebell jerk"
+      }
     },
     {
       "id": "c6104a18-5b2e-5664-bc8c-28c681d89b7b",
@@ -10811,8 +10821,8 @@
       "name": "Double Kettlebell Push Press",
       "englishName": "Double Kettlebell Push Press",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Швунг двух гирь стоя",
+        "Double Kettlebell Push Press"
       ],
       "group": "shoulders",
       "equipment": "kettlebells",
@@ -10846,8 +10856,8 @@
       "name": "Double Kettlebell Snatch",
       "englishName": "Double Kettlebell Snatch",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Одновременный рывок двух гирь",
+        "Double Kettlebell Snatch"
       ],
       "group": "shoulders",
       "equipment": "kettlebells",
@@ -20259,7 +20269,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "kettlebell-jerk",
+        "title": "Kettlebell jerk"
+      }
     },
     {
       "id": "e17f50ee-7449-5690-b8c1-5dd8560b991f",
@@ -20487,7 +20501,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "kettlebell-jerk",
+        "title": "Kettlebell jerk"
+      }
     },
     {
       "id": "bc25e812-9e45-5d34-8390-ff29f35ca2e7",
@@ -32558,7 +32576,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "kettlebell-jerk",
+        "title": "Kettlebell jerk"
+      }
     },
     {
       "id": "b7e0b05a-8e75-502b-be88-230740ffde20",

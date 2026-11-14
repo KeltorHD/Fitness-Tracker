@@ -472,7 +472,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
 @Test func weightliftingVariationsKeepSeparateIdentities() throws {
   for expected in [
     [
-      "Hang_Clean", "Hang_Clean_-_Below_the_Knees", "Clean_from_Blocks",
+      "Clean", "Hang_Clean", "Hang_Clean_-_Below_the_Knees", "Clean_from_Blocks",
       "Power_Clean_from_Blocks",
     ],
     [
@@ -532,6 +532,10 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   for expected in [
     ["Kettlebell_Halo", "Kettlebell_Halo_With_Overhead_Extension"],
     ["Kettlebell_Turkish_Get-Up_Lunge_style", "Kettlebell_Turkish_Get-Up_Squat_style"],
+    [
+      "One-Arm_Kettlebell_Jerk", "One-Arm_Kettlebell_Split_Jerk",
+      "Two-Arm_Kettlebell_Jerk", "Double_Kettlebell_Jerk",
+    ],
   ] {
     for language in [AppLanguage.russian, .english] {
       let entry = try #require(

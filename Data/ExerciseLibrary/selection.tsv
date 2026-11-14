@@ -234,11 +234,11 @@ Chest_Stretch_on_Stability_Ball	Растяжка грудных мышц с оп
 Childs_Pose	Поза ребёнка	Баласана;Растяжка спины на коленях с опусканием на пятки;Child’s Pose;Child's Pose
 Chin_To_Chest_Stretch	Растяжка задней поверхности шеи сидя	Наклон головы к груди сидя;Chin To Chest Stretch
 Circus_Bell	Цирковой колокол	Силовой экстрим;strongman
-Clean	Взятие штанги на грудь в сед	Тяжёлая атлетика;olympic weightlifting
-Clean_Deadlift	Становая тяга толчковым хватом	Тяжёлая атлетика;olympic weightlifting
-Clean_Pull	Толчковая тяга	Тяжёлая атлетика;olympic weightlifting
+Clean	Взятие штанги на грудь в сед	Взятие штанги на грудь с пола;Clean
+Clean_Deadlift	Становая тяга штанги толчковым хватом	Тяга штанги с пола хватом для взятия на грудь;Clean Deadlift
+Clean_Pull	Тяга штанги толчковым хватом с подрывом	Толчковая тяга с подрывом;Clean Pull
 Clean_Shrug	Шраги со штангой толчковым хватом	Толчковые шраги со штангой;Clean Shrug
-Clean_and_Jerk	Взятие штанги на грудь и толчок	Тяжёлая атлетика;olympic weightlifting
+Clean_and_Jerk	Толчок штанги	Взятие штанги на грудь в сед и толчок в ножницы;Clean and Jerk
 Clean_and_Press	Взятие штанги на грудь и жим стоя	Силовые упражнения;strength
 Clean_from_Blocks	Взятие штанги на грудь в сед с плинтов	Тяжёлая атлетика;olympic weightlifting
 Clock_Push-Up	Отжимания на часах	Силовые упражнения;strength
@@ -275,9 +275,9 @@ Depth_Jump_Leap	Прыжок в глубину	Плиометрика;plyometric
 Dip_Machine	Отжимания в тренажёре сидя	Разгибание рук в тренажёре для отжиманий;Dip Machine
 Donkey_Calf_Raises	Подъемы на носки осла	Силовые упражнения;strength
 Double_Kettlebell_Alternating_Hang_Clean	Попеременное взятие двух гирь на грудь с одновременной сменой рук	Взятие двух гирь на грудь из виса со сменой рук;Double Kettlebell Alternating Hang Clean
-Double_Kettlebell_Jerk	Двойной толчок гири	Силовые упражнения;strength
-Double_Kettlebell_Push_Press	Жим двойной гири	Силовые упражнения;strength
-Double_Kettlebell_Snatch	Рывок двойной гири	Силовые упражнения;strength
+Double_Kettlebell_Jerk	Толчок двух гирь в ножницы от плеч	Толчок двух гирь с разножкой;Double Kettlebell Jerk
+Double_Kettlebell_Push_Press	Жимовой швунг двух гирь от плеч	Швунг двух гирь стоя;Double Kettlebell Push Press
+Double_Kettlebell_Snatch	Рывок двух гирь с виса	Одновременный рывок двух гирь;Double Kettlebell Snatch
 Double_Kettlebell_Windmill	Мельница с двумя гирями	Наклон с одной гирей над головой и подъёмом второй с пола;Double Kettlebell Windmill
 Double_Leg_Butt_Kick	Прыжок с захлёстом обеих голеней	Прыжок с подтягиванием пяток к ягодицам;Double-Leg Butt Kick
 Downward_Facing_Balance	Баланс лицом вниз	Силовые упражнения;strength

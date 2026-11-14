@@ -755,6 +755,7 @@
     "ru": "Взятие штанги на грудь",
     "en": "Barbell clean",
     "members": [
+      "Clean",
       "Hang_Clean",
       "Hang_Clean_-_Below_the_Knees",
       "Clean_from_Blocks",
@@ -801,6 +802,16 @@
     "members": [
       "Kettlebell_Turkish_Get-Up_Lunge_style",
       "Kettlebell_Turkish_Get-Up_Squat_style"
+    ]
+  },
+  "kettlebell-jerk": {
+    "ru": "Толчок гири от плеча",
+    "en": "Kettlebell jerk",
+    "members": [
+      "One-Arm_Kettlebell_Jerk",
+      "One-Arm_Kettlebell_Split_Jerk",
+      "Two-Arm_Kettlebell_Jerk",
+      "Double_Kettlebell_Jerk"
     ]
   }
 }
