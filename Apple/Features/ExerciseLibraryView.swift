@@ -261,14 +261,13 @@ struct ExerciseDetailView: View {
                 systemImage: "play.rectangle")
             }
           }
-          Text(
-            L10n.text(
-              entry.generatedMedia == nil
-                ? "Техника из free-exercise-db. Показаны фотографии отдельных положений, а не видеозапись движения."
-                : "Техника из free-exercise-db. Иллюстрация движения создана ИИ.",
-              locale: locale)
-          )
-          .font(.caption).foregroundStyle(.secondary)
+          if entry.generatedMedia != nil {
+            Text(L10n.text("Иллюстрация движения создана ИИ.", locale: locale))
+              .font(.caption).foregroundStyle(.secondary)
+          } else if !entry.images.isEmpty {
+            Text(L10n.text("Фотографии показывают отдельные положения упражнения.", locale: locale))
+              .font(.caption).foregroundStyle(.secondary)
+          }
           NavigationLink {
             ExerciseCreditsView()
           } label: {
@@ -312,7 +311,7 @@ struct ExerciseCreditsView: View {
             String(ExerciseLibrary.document?.entries.count ?? 0), locale: locale))
         Text(
           L10n.text(
-            "Каталог переведён на русский язык. Новые описания преимущественно переведены автоматически; такие карточки отмечены.",
+            "Русские и английские названия и инструкции прошли первичную редакционную проверку.",
             locale: locale)
         )
       }
@@ -321,7 +320,7 @@ struct ExerciseCreditsView: View {
           if let url = URL(string: source.repositoryURL) { Link(source.name, destination: url) }
           Text(
             L10n.text(
-              "Исходная база: yuhonas/free-exercise-db; первоначальные данные — Ollie Jennings / exercises.json.",
+              "Большинство упражнений и фотографии взяты из yuhonas/free-exercise-db; часть описаний подготовлена FitLife.",
               locale: locale)
           )
           LabeledContent(L10n.text("Лицензия", locale: locale), value: source.licenseName)

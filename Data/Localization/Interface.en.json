@@ -1420,5 +1420,9 @@
   "Упражнений в каталоге: %@. Доступные фотографии встроены в приложение.": "%@ exercises are in the catalog. Available photos are included in the app.",
   "Фотографии пока недоступны.": "Photos are not available yet.",
   "Сгибатели бедра": "Hip flexors",
-  "Мышцы стопы": "Foot muscles"
+  "Мышцы стопы": "Foot muscles",
+  "Иллюстрация движения создана ИИ.": "Movement illustration generated with AI.",
+  "Фотографии показывают отдельные положения упражнения.": "Photos show individual positions of the exercise.",
+  "Русские и английские названия и инструкции прошли первичную редакционную проверку.": "Russian and English names and instructions have undergone an initial editorial review.",
+  "Большинство упражнений и фотографии взяты из yuhonas/free-exercise-db; часть описаний подготовлена FitLife.": "Most exercises and photos come from yuhonas/free-exercise-db; some descriptions were prepared by FitLife."
 }

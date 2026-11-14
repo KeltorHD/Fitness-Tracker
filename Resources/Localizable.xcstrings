@@ -1990,6 +1990,23 @@
         }
       }
     },
+    "Большинство упражнений и фотографии взяты из yuhonas/free-exercise-db; часть описаний подготовлена FitLife.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Большинство упражнений и фотографии взяты из yuhonas/free-exercise-db; часть описаний подготовлена FitLife."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Most exercises and photos come from yuhonas/free-exercise-db; some descriptions were prepared by FitLife."
+          }
+        }
+      }
+    },
     "Будет удалено только это упражнение из текущей тренировки.": {
       "extractionState": "manual",
       "localizations": {
@@ -8089,6 +8106,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Calves"
+          }
+        }
+      }
+    },
+    "Иллюстрация движения создана ИИ.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Иллюстрация движения создана ИИ."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Movement illustration generated with AI."
           }
         }
       }
@@ -18633,6 +18667,23 @@
         }
       }
     },
+    "Русские и английские названия и инструкции прошли первичную редакционную проверку.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Русские и английские названия и инструкции прошли первичную редакционную проверку."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Russian and English names and instructions have undergone an initial editorial review."
+          }
+        }
+      }
+    },
     "Русский": {
       "extractionState": "manual",
       "localizations": {
@@ -22998,6 +23049,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Photos are not available yet."
+          }
+        }
+      }
+    },
+    "Фотографии показывают отдельные положения упражнения.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Фотографии показывают отдельные положения упражнения."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photos show individual positions of the exercise."
           }
         }
       }
