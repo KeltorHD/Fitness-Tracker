@@ -3559,7 +3559,9 @@
       "name": "Tricep Dumbbell Kickback",
       "englishName": "Tricep Dumbbell Kickback",
       "aliases": [
-        "Кикбэк на трицепс"
+        "Кикбэк с гантелью одной рукой",
+        "Tricep Dumbbell Kickback",
+        "Разгибание руки с гантелью в наклоне"
       ],
       "group": "arms",
       "equipment": "dumbbell",
@@ -3574,10 +3576,10 @@
         "tricepsMedial"
       ],
       "steps": [
-        "Start with a dumbbell in each hand and your palms facing your torso. Keep your back straight with a slight bend in the knees and bend forward at the waist. Your torso should be almost parallel to the floor. Make sure to keep your head up. Your upper arms should be close to your torso and parallel to the floor. Your forearms should be pointed towards the floor as you hold the weights. There should be a 90-degree angle formed between your forearm and upper arm. This is your starting position.",
-        "Now, while keeping your upper arms stationary, exhale and use your triceps to lift the weights until the arm is fully extended. Focus on moving the forearm.",
-        "After a brief pause at the top contraction, inhale and slowly lower the dumbbells back down to the starting position.",
-        "Repeat the movement for the prescribed amount of repetitions."
+        "Support yourself on a bench with one hand and the knee on the same side, and hold a dumbbell in the other hand.",
+        "Bring the working upper arm alongside the torso with the elbow bent.",
+        "Keep the upper arm still, straighten the elbow behind you and lower the forearm under control.",
+        "Repeat with the other arm."
       ],
       "images": [
         "Tricep_Dumbbell_Kickback/0.jpg",
@@ -3586,7 +3588,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=kGaKNszNcBI"
     },
     {
       "id": "a8d345bd-29c4-5f39-a443-cfc03e438453",
@@ -20320,8 +20323,8 @@
       "name": "One-Arm Kettlebell Military Press To The Side",
       "englishName": "One-Arm Kettlebell Military Press To The Side",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Армейский жим гири одной рукой в сторону",
+        "One-Arm Kettlebell Military Press To The Side"
       ],
       "group": "shoulders",
       "equipment": "kettlebells",
@@ -20348,7 +20351,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-kettlebell-press",
+        "title": "Standing kettlebell shoulder press"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=QQBZuMOqgEw"
     },
     {
       "id": "a99d7227-4ffe-5baf-aeaf-976f015323c8",
@@ -20356,8 +20364,8 @@
       "name": "One-Arm Kettlebell Para Press",
       "englishName": "One-Arm Kettlebell Para Press",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Пара-жим гири одной рукой",
+        "One-Arm Kettlebell Para Press"
       ],
       "group": "shoulders",
       "equipment": "kettlebells",
@@ -20381,7 +20389,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-kettlebell-press",
+        "title": "Standing kettlebell shoulder press"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=iwO_F8dokMU"
     },
     {
       "id": "98187636-d3d7-5ec6-8e95-d2e827d80427",
@@ -32676,7 +32689,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-kettlebell-press",
+        "title": "Standing kettlebell shoulder press"
+      }
     },
     {
       "id": "a15e5801-ee1a-5264-89f5-48ff87c4da33",

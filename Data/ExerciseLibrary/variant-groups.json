@@ -851,5 +851,14 @@
       "Hurdle_Hops",
       "Front_Cone_Hops_or_hurdle_hops"
     ]
+  },
+  "standing-kettlebell-press": {
+    "ru": "Жим гири от плеча стоя",
+    "en": "Standing kettlebell shoulder press",
+    "members": [
+      "One-Arm_Kettlebell_Military_Press_To_The_Side",
+      "Two-Arm_Kettlebell_Military_Press",
+      "One-Arm_Kettlebell_Para_Press"
+    ]
   }
 }

@@ -82,7 +82,7 @@ Seated_Triceps_Press	Разгибание рук с одной гантелью 
 Triceps_Pushdown	Разгибание рук на верхнем блоке с прямой рукоятью	Разгибание рук на верхнем блоке;Трицепс на блоке;Разгибание рук в кроссовере с прямой рукоятью
 Triceps_Pushdown_-_Rope_Attachment	Разгибание рук на верхнем блоке с канатной рукоятью	Разгибание рук с канатом на блоке;Трицепс с канатной рукоятью;Разгибание рук в кроссовере с канатом
 Cable_Rope_Overhead_Triceps_Extension	Разгибание рук с канатом из-за головы	Французский жим на блоке
-Tricep_Dumbbell_Kickback	Разгибание руки с гантелью в наклоне	Кикбэк на трицепс
+Tricep_Dumbbell_Kickback	Разгибание руки с гантелью назад с опорой на скамью	Кикбэк с гантелью одной рукой;Tricep Dumbbell Kickback;Разгибание руки с гантелью в наклоне
 Dips_-_Triceps_Version	Отжимания на брусьях с вертикальным корпусом	Отжимания на брусьях на трицепс;Triceps dips;Брусья с прямым корпусом
 Bench_Dips	Обратные отжимания от скамьи	Отжимания от скамьи с руками за спиной;Bench dips;Обратные отжимания от скамьи;Трицепс от скамьи
 Seated_Palm-Up_Barbell_Wrist_Curl	Сгибание кистей со штангой	Предплечья ладонями вверх
@@ -528,8 +528,8 @@ One-Arm_Kettlebell_Clean	Взятие гири на грудь одной рук
 One-Arm_Kettlebell_Clean_and_Jerk	Взятие на грудь и толчок гири одной рукой	One-arm kettlebell clean and jerk;Гиря на одной руке в толчке;Силовые упражнения;strength
 One-Arm_Kettlebell_Floor_Press	Жим гири одной рукой лёжа на полу	Жим гири с пола одной рукой;One-arm kettlebell floor press;Силовые упражнения;strength
 One-Arm_Kettlebell_Jerk	Толчок гири одной рукой от плеча	One-arm kettlebell jerk;Толчок гири одной рукой;Силовые упражнения;strength
-One-Arm_Kettlebell_Military_Press_To_The_Side	Армейский жим гири одной рукой в сторону	Силовые упражнения;strength
-One-Arm_Kettlebell_Para_Press	Паралимпийский жим гири одной рукой	Силовые упражнения;strength
+One-Arm_Kettlebell_Military_Press_To_The_Side	Жим гири одной рукой от плеча вверх и в сторону	Армейский жим гири одной рукой в сторону;One-Arm Kettlebell Military Press To The Side
+One-Arm_Kettlebell_Para_Press	Жим гири одной рукой с локтем в сторону	Пара-жим гири одной рукой;One-Arm Kettlebell Para Press
 One-Arm_Kettlebell_Push_Press	Швунг гири одной рукой	Жимовой швунг гири одной рукой;One-arm kettlebell push press;Жим гири одной рукой;Силовые упражнения;strength
 One-Arm_Kettlebell_Row	Тяга гири одной рукой в наклоне	Тяга гири к поясу одной рукой;One-arm kettlebell row;Тяга гири одной рукой;Силовые упражнения;strength
 One-Arm_Kettlebell_Snatch	Рывок гири одной рукой	One-arm kettlebell snatch;Рывок гири одной рукой;Силовые упражнения;strength

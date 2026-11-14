@@ -580,6 +580,21 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   }
 }
 
+@Test func standingKettlebellPressVariantsKeepSeparateIdentities() throws {
+  for language in [AppLanguage.russian, .english] {
+    let entry = try #require(
+      ExerciseLibrary.entries(language: language).first {
+        $0.sourceID == "One-Arm_Kettlebell_Military_Press_To_The_Side"
+      })
+    let variants = ExerciseLibrary.variants(for: entry.id, language: language)
+    #expect(Set(variants.map(\.sourceID)) == [
+      "One-Arm_Kettlebell_Military_Press_To_The_Side", "Two-Arm_Kettlebell_Military_Press",
+      "One-Arm_Kettlebell_Para_Press",
+    ])
+    #expect(Set(variants.map(\.id)).count == 3)
+  }
+}
+
 @Test func alternatingAndSimultaneousFrontRaisesAreSeparateVariants() throws {
   let alternating = try #require(
     ExerciseLibrary.entries.first { $0.sourceID == "Front_Dumbbell_Raise" })

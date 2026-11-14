@@ -1474,5 +1474,22 @@
     ],
     "instructionSourceURL": "https://www.ncbi.nlm.nih.gov/books/NBK513304/",
     "instructionCorrectionReason": "The original instructions incorrectly describe the calf as the contracting muscle during ankle dorsiflexion."
+  },
+  "Tricep_Dumbbell_Kickback": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=kGaKNszNcBI",
+    "englishSteps": [
+      "Support yourself on a bench with one hand and the knee on the same side, and hold a dumbbell in the other hand.",
+      "Bring the working upper arm alongside the torso with the elbow bent.",
+      "Keep the upper arm still, straighten the elbow behind you and lower the forearm under control.",
+      "Repeat with the other arm."
+    ],
+    "instructionSourceURL": "https://resources.t-fitness.com/pdf/bowflex/Bedienungsanleitung/Kraft/Englisch/manual-Bowflex-dumbbell%20BF1090-ENG-1.pdf",
+    "instructionCorrectionReason": "The generic original name and photographs show a one-arm bench-supported kickback, while the original instructions describe two dumbbells without support."
+  },
+  "One-Arm_Kettlebell_Military_Press_To_The_Side": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=QQBZuMOqgEw"
+  },
+  "One-Arm_Kettlebell_Para_Press": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=iwO_F8dokMU"
   }
 }

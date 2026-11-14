@@ -3422,10 +3422,12 @@
     {
       "id": "e8e181c4-2ab6-5b73-9bd3-46507b15aa7b",
       "sourceID": "Tricep_Dumbbell_Kickback",
-      "name": "Разгибание руки с гантелью в наклоне",
+      "name": "Разгибание руки с гантелью назад с опорой на скамью",
       "englishName": "Tricep Dumbbell Kickback",
       "aliases": [
-        "Кикбэк на трицепс"
+        "Кикбэк с гантелью одной рукой",
+        "Tricep Dumbbell Kickback",
+        "Разгибание руки с гантелью в наклоне"
       ],
       "group": "arms",
       "equipment": "dumbbell",
@@ -3440,9 +3442,10 @@
         "tricepsMedial"
       ],
       "steps": [
-        "Возьмите гантели, слегка согните колени и наклоните корпус. Прижмите плечи к бокам и согните локти.",
-        "Удерживая верхние части рук параллельно полу, разогните локти и отведите гантели назад.",
-        "После короткой паузы плавно согните руки, не двигая плечами и не раскачивая корпус."
+        "Упритесь ладонью и коленом одной стороны в скамью, возьмите гантель другой рукой и наклоните корпус.",
+        "Поднимите плечо рабочей руки вдоль корпуса и согните локоть.",
+        "Не двигая плечом, разогните руку с гантелью назад и плавно верните предплечье вниз.",
+        "Повторите другой рукой."
       ],
       "images": [
         "Tricep_Dumbbell_Kickback/0.jpg",
@@ -3451,7 +3454,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=kGaKNszNcBI"
     },
     {
       "id": "a8d345bd-29c4-5f39-a443-cfc03e438453",
@@ -19754,11 +19758,11 @@
     {
       "id": "e17f50ee-7449-5690-b8c1-5dd8560b991f",
       "sourceID": "One-Arm_Kettlebell_Military_Press_To_The_Side",
-      "name": "Армейский жим гири одной рукой в сторону",
+      "name": "Жим гири одной рукой от плеча вверх и в сторону",
       "englishName": "One-Arm Kettlebell Military Press To The Side",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Армейский жим гири одной рукой в сторону",
+        "One-Arm Kettlebell Military Press To The Side"
       ],
       "group": "shoulders",
       "equipment": "kettlebells",
@@ -19774,9 +19778,9 @@
         "deltoidLateral"
       ],
       "steps": [
-        "Поднесите гирю к плечу. Поднесите гирю к плечу, протягивая ее через ноги и бедра и подтягивая гирю к плечу. При этом поверните запястье так, чтобы ладонь была обращена внутрь. Это будет ваша исходная позиция.",
-        "Посмотрите на гирю и поднимите ее вверх и наружу, пока она не зафиксируется над головой.",
-        "Опустите гирю обратно к плечу под контролем и повторите. Обязательно сильно напрягайте широчайшие мышцы спины, ягодицы и живот для дополнительной устойчивости и силы."
+        "Поднимите гирю к плечу одной рукой, развернув ладонь к корпусу.",
+        "Удерживая корпус устойчивым, выжмите гирю вверх и немного в сторону до выпрямления руки.",
+        "Плавно опустите гирю к плечу и повторите другой рукой."
       ],
       "images": [
         "One-Arm_Kettlebell_Military_Press_To_The_Side/0.jpg",
@@ -19785,16 +19789,21 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-kettlebell-press",
+        "title": "Жим гири от плеча стоя"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=QQBZuMOqgEw"
     },
     {
       "id": "a99d7227-4ffe-5baf-aeaf-976f015323c8",
       "sourceID": "One-Arm_Kettlebell_Para_Press",
-      "name": "Паралимпийский жим гири одной рукой",
+      "name": "Жим гири одной рукой с локтем в сторону",
       "englishName": "One-Arm Kettlebell Para Press",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Пара-жим гири одной рукой",
+        "One-Arm Kettlebell Para Press"
       ],
       "group": "shoulders",
       "equipment": "kettlebells",
@@ -19807,9 +19816,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "Поднесите гирю к плечу. Поднесите гирю к плечу, протягивая ее через ноги и бедра и подтягивая гирю к плечу. При этом поверните запястье так, чтобы ладонь была направлена ​​вперед. Это будет ваша исходная позиция.",
-        "Держите гирю, отведя локоть в сторону, и выжимайте ее вверх и наружу, пока она не зафиксируется над головой.",
-        "Опустите гирю обратно к плечу под контролем и повторите. Обязательно сильно напрягайте широчайшие мышцы спины, ягодицы и живот для дополнительной устойчивости и силы."
+        "Поднимите гирю одной рукой к плечу, повернув ладонь вперёд и направив локоть в сторону.",
+        "Удерживая корпус устойчивым, выжмите гирю вверх до выпрямления руки.",
+        "Плавно опустите гирю к плечу и повторите другой рукой."
       ],
       "images": [
         "One-Arm_Kettlebell_Para_Press/0.jpg",
@@ -19818,7 +19827,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-kettlebell-press",
+        "title": "Жим гири от плеча стоя"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=iwO_F8dokMU"
     },
     {
       "id": "98187636-d3d7-5ec6-8e95-d2e827d80427",
@@ -31759,7 +31773,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-kettlebell-press",
+        "title": "Жим гири от плеча стоя"
+      }
     },
     {
       "id": "a15e5801-ee1a-5264-89f5-48ff87c4da33",
