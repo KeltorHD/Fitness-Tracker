@@ -1883,7 +1883,9 @@
       "name": "Incline Dumbbell Press",
       "englishName": "Incline Dumbbell Press",
       "aliases": [
-        "Наклонный жим гантелей"
+        "Жим гантелей на наклонной скамье",
+        "Наклонный жим гантелей",
+        "Incline Dumbbell Press"
       ],
       "group": "chest",
       "equipment": "dumbbell",
@@ -1914,7 +1916,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "incline-dumbbell-bench-press",
+        "title": "Incline dumbbell bench press"
+      }
     },
     {
       "id": "075e9828-6384-53f6-a998-edfffb5b470f",
@@ -11980,7 +11986,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "bench-cable-fly",
+        "title": "Bench cable fly"
+      }
     },
     {
       "id": "761c10ce-3204-53e2-a0c9-fa46b93f772f",
@@ -13297,7 +13307,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "incline-dumbbell-bench-press",
+        "title": "Incline dumbbell bench press"
+      }
     },
     {
       "id": "ee911fc4-cd25-5084-8958-66924322822e",
@@ -13995,8 +14009,8 @@
       "name": "Hyperextensions With No Hyperextension Bench",
       "englishName": "Hyperextensions With No Hyperextension Bench",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Разгибание корпуса лёжа на плоской скамье с партнёром",
+        "Hyperextensions With No Hyperextension Bench"
       ],
       "group": "back",
       "equipment": "body only",
@@ -14031,8 +14045,8 @@
       "name": "IT Band and Glute Stretch",
       "englishName": "IT Band and Glute Stretch",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Растяжка подвздошно-большеберцового тракта лёжа",
+        "IT Band and Glute Stretch"
       ],
       "group": "legs",
       "equipment": "other",
@@ -14125,8 +14139,8 @@
       "name": "Incline Barbell Triceps Extension",
       "englishName": "Incline Barbell Triceps Extension",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Разгибание рук со штангой за головой на наклонной скамье",
+        "Incline Barbell Triceps Extension"
       ],
       "group": "arms",
       "equipment": "barbell",
@@ -14165,11 +14179,11 @@
       "name": "Incline Bench Pull",
       "englishName": "Incline Bench Pull",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Тяга гантелей с опорой грудью на наклонную скамью",
+        "Incline Bench Pull"
       ],
       "group": "back",
-      "equipment": "barbell",
+      "equipment": "dumbbell",
       "level": "beginner",
       "primaryMuscles": [
         "middle back"
@@ -14203,8 +14217,8 @@
       "name": "Incline Cable Chest Press",
       "englishName": "Incline Cable Chest Press",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Жим на наклонной скамье в кроссовере",
+        "Incline Cable Chest Press"
       ],
       "group": "chest",
       "equipment": "cable",
@@ -14239,8 +14253,8 @@
       "name": "Incline Cable Flye",
       "englishName": "Incline Cable Flye",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Разведение рук в кроссовере на наклонной скамье",
+        "Incline Cable Flye"
       ],
       "group": "chest",
       "equipment": "cable",
@@ -14269,7 +14283,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "bench-cable-fly",
+        "title": "Bench cable fly"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=7Z4CZXzluqU"
     },
     {
       "id": "828bfe48-7d81-52dc-94ae-74fa099b7414",
@@ -14317,8 +14336,8 @@
       "name": "Incline Dumbbell Flyes - With A Twist",
       "englishName": "Incline Dumbbell Flyes - With A Twist",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Разводка гантелей с вращением кистей на наклонной скамье",
+        "Incline Dumbbell Flyes With A Twist"
       ],
       "group": "chest",
       "equipment": "dumbbell",
@@ -14355,8 +14374,8 @@
       "name": "Incline Hammer Curls",
       "englishName": "Incline Hammer Curls",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Молоток с гантелями с опорой спиной на наклонную скамью",
+        "Incline Hammer Curls"
       ],
       "group": "arms",
       "equipment": "dumbbell",
@@ -14381,7 +14400,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "hammer-curl",
+        "title": "Hammer curl"
+      }
     },
     {
       "id": "df06094d-e41b-55b9-96f4-914ba4b64df0",
@@ -14389,8 +14412,8 @@
       "name": "Incline Inner Biceps Curl",
       "englishName": "Incline Inner Biceps Curl",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подъём гантелей на бицепс в стороны с опорой спиной",
+        "Incline Inner Biceps Curl"
       ],
       "group": "arms",
       "equipment": "dumbbell",
@@ -14425,8 +14448,8 @@
       "name": "Incline Push-Up Close-Grip",
       "englishName": "Incline Push-Up Close-Grip",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Отжимания узким хватом от грифа в тренажёре Смита",
+        "Incline Push-Up Close-Grip"
       ],
       "group": "arms",
       "equipment": "body only",
@@ -14453,7 +14476,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "elevated-hands-push-up",
+        "title": "Incline push-up"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=qs9saDG4g_o"
     },
     {
       "id": "d7509c72-b0e9-502f-972b-70ca349a69dd",
@@ -14461,8 +14489,8 @@
       "name": "Incline Push-Up Depth Jump",
       "englishName": "Incline Push-Up Depth Jump",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Отжимания с прыжком руками на платформы",
+        "Incline Push-Up Depth Jump"
       ],
       "group": "chest",
       "equipment": "other",
@@ -14498,8 +14526,8 @@
       "name": "Incline Push-Up Medium",
       "englishName": "Incline Push-Up Medium",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Отжимания от грифа в тренажёре Смита хватом на ширине плеч",
+        "Incline Push-Up Medium"
       ],
       "group": "chest",
       "equipment": "body only",
@@ -14529,7 +14557,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "elevated-hands-push-up",
+        "title": "Incline push-up"
+      }
     },
     {
       "id": "a58fb774-565e-5c95-9b4e-f6856dbad3f0",

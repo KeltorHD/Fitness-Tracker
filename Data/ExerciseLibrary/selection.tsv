@@ -46,7 +46,7 @@ Barbell_Shrug	Шраги со штангой	Подъём плеч со штан
 Dumbbell_Shrug	Шраги с гантелями	Подъём плеч с гантелями
 Dumbbell_Bench_Press	Жим гантелей лёжа на плоской скамье	Жим гантелей лёжа;Жим гантелей лежа;Жим гантелей на горизонтальной скамье
 Barbell_Incline_Bench_Press_-_Medium_Grip	Жим штанги на наклонной скамье	Наклонный жим штанги
-Incline_Dumbbell_Press	Жим гантелей на наклонной скамье	Наклонный жим гантелей
+Incline_Dumbbell_Press	Жим гантелей лёжа на наклонной скамье	Жим гантелей на наклонной скамье;Наклонный жим гантелей;Incline Dumbbell Press
 Decline_Barbell_Bench_Press	Жим штанги на скамье с наклоном вниз	Жим вниз головой
 Decline_Dumbbell_Bench_Press	Жим гантелей на скамье с наклоном вниз	Нижний жим гантелей
 Dumbbell_Flyes	Разведение гантелей лёжа	Разводка гантелей
@@ -374,21 +374,21 @@ Hip_Lift_with_Band	Ягодичный мост с резиновой петлё�
 Hug_A_Ball	Растяжка спины сидя с фитболом	Обхват фитбола руками сидя;Hug A Ball
 Hug_Knees_To_Chest	Растяжка спины лёжа с подтягиванием коленей к груди	Обхват коленей лёжа на спине;Hug Knees To Chest
 Hurdle_Hops	Прыжки на двух ногах через барьеры	Последовательные прыжки через барьеры;Hurdle Hops
-Hyperextensions_With_No_Hyperextension_Bench	Гиперэкстензии без скамьи для гиперэкстензии	Силовые упражнения;strength
-IT_Band_and_Glute_Stretch	IT Band и растяжка ягодиц	Растяжка;stretching
+Hyperextensions_With_No_Hyperextension_Bench	Гиперэкстензия на плоской скамье с фиксацией ног	Разгибание корпуса лёжа на плоской скамье с партнёром;Hyperextensions With No Hyperextension Bench
+IT_Band_and_Glute_Stretch	Растяжка наружной поверхности бедра и ягодиц лёжа с ремнём	Растяжка подвздошно-большеберцового тракта лёжа;IT Band and Glute Stretch
 Iliotibial_Tract-SMR	Илиотибиальный тракт-SMR	Растяжка;stretching
 Inchworm	дюймовый червь	Растяжка;stretching
-Incline_Barbell_Triceps_Extension	Разгибание трицепса со штангой на наклоне	Силовые упражнения;strength
-Incline_Bench_Pull	Тяга на наклонной скамье	Силовые упражнения;strength
-Incline_Cable_Chest_Press	Жим от груди с тросом на наклонной скамье	Силовые упражнения;strength
-Incline_Cable_Flye	Сведение рук с блоками на наклонной скамье	Силовые упражнения;strength
+Incline_Barbell_Triceps_Extension	Французский жим штанги лёжа на наклонной скамье	Разгибание рук со штангой за головой на наклонной скамье;Incline Barbell Triceps Extension
+Incline_Bench_Pull	Тяга гантелей лёжа грудью на наклонной скамье с разведёнными локтями	Тяга гантелей с опорой грудью на наклонную скамью;Incline Bench Pull
+Incline_Cable_Chest_Press	Жим рукоятей блоков лёжа на наклонной скамье	Жим на наклонной скамье в кроссовере;Incline Cable Chest Press
+Incline_Cable_Flye	Сведение рук на нижних блоках лёжа на наклонной скамье	Разведение рук в кроссовере на наклонной скамье;Incline Cable Flye
 Incline_Dumbbell_Bench_With_Palms_Facing_In	Наклонная скамья с гантелями ладонями внутрь	Силовые упражнения;strength
-Incline_Dumbbell_Flyes_-_With_A_Twist	Разведение гантелей на наклонной скамье – с поворотом	Силовые упражнения;strength
-Incline_Hammer_Curls	Сгибания молотков на наклоне	Силовые упражнения;strength
-Incline_Inner_Biceps_Curl	Сгибание внутреннего бицепса на наклоне	Силовые упражнения;strength
-Incline_Push-Up_Close-Grip	Отжимания на наклонной скамье узким хватом	Силовые упражнения;strength
-Incline_Push-Up_Depth_Jump	Прыжок в глубину отжиманий на наклонной скамье	Плиометрика;plyometrics
-Incline_Push-Up_Medium	Отжимания на наклонной скамье, средние	Силовые упражнения;strength
+Incline_Dumbbell_Flyes_-_With_A_Twist	Разведение гантелей с поворотом кистей лёжа на наклонной скамье	Разводка гантелей с вращением кистей на наклонной скамье;Incline Dumbbell Flyes With A Twist
+Incline_Hammer_Curls	Молотковые сгибания рук с гантелями сидя на наклонной скамье	Молоток с гантелями с опорой спиной на наклонную скамью;Incline Hammer Curls
+Incline_Inner_Biceps_Curl	Сгибание рук с гантелями в стороны сидя на наклонной скамье	Подъём гантелей на бицепс в стороны с опорой спиной;Incline Inner Biceps Curl
+Incline_Push-Up_Close-Grip	Отжимания от высокой опоры узким хватом	Отжимания узким хватом от грифа в тренажёре Смита;Incline Push-Up Close-Grip
+Incline_Push-Up_Depth_Jump	Плиометрические отжимания с ногами на опоре и переносом рук	Отжимания с прыжком руками на платформы;Incline Push-Up Depth Jump
+Incline_Push-Up_Medium	Отжимания от высокой опоры обычным хватом	Отжимания от грифа в тренажёре Смита хватом на ширине плеч;Incline Push-Up Medium
 Incline_Push-Up_Reverse_Grip	Отжимания на наклоне обратным хватом	Силовые упражнения;strength
 Incline_Push-Up_Wide	Отжимания на наклоне в ширину	Силовые упражнения;strength
 Intermediate_Groin_Stretch	Промежуточная растяжка паха	Растяжка;stretching

@@ -387,5 +387,24 @@
       "calves",
       "glutes"
     ]
-  }
+  },
+  "Hyperextensions_With_No_Hyperextension_Bench": {},
+  "IT_Band_and_Glute_Stretch": {},
+  "Incline_Barbell_Triceps_Extension": {},
+  "Incline_Bench_Pull": {
+    "equipment": "dumbbell"
+  },
+  "Incline_Cable_Chest_Press": {},
+  "Incline_Cable_Flye": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=7Z4CZXzluqU"
+  },
+  "Incline_Dumbbell_Press": {},
+  "Incline_Dumbbell_Flyes_-_With_A_Twist": {},
+  "Incline_Hammer_Curls": {},
+  "Incline_Inner_Biceps_Curl": {},
+  "Incline_Push-Up_Close-Grip": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=qs9saDG4g_o"
+  },
+  "Incline_Push-Up_Depth_Jump": {},
+  "Incline_Push-Up_Medium": {}
 }

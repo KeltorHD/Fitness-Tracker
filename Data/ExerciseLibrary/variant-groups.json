@@ -197,7 +197,8 @@
     "members": [
       "Hammer_Curls",
       "Cross_Body_Hammer_Curl",
-      "Cable_Hammer_Curls_-_Rope_Attachment"
+      "Cable_Hammer_Curls_-_Rope_Attachment",
+      "Incline_Hammer_Curls"
     ]
   },
   "hip-extension": {
@@ -214,6 +215,30 @@
     "members": [
       "Barbell_Glute_Bridge",
       "Hip_Lift_with_Band"
+    ]
+  },
+  "incline-dumbbell-bench-press": {
+    "ru": "Жим гантелей лёжа на наклонной скамье",
+    "en": "Incline dumbbell bench press",
+    "members": [
+      "Incline_Dumbbell_Press",
+      "Hammer_Grip_Incline_DB_Bench_Press"
+    ]
+  },
+  "bench-cable-fly": {
+    "ru": "Сведение рук на блоках лёжа на скамье",
+    "en": "Bench cable fly",
+    "members": [
+      "Flat_Bench_Cable_Flyes",
+      "Incline_Cable_Flye"
+    ]
+  },
+  "elevated-hands-push-up": {
+    "ru": "Отжимания от высокой опоры",
+    "en": "Incline push-up",
+    "members": [
+      "Incline_Push-Up_Medium",
+      "Incline_Push-Up_Close-Grip"
     ]
   }
 }

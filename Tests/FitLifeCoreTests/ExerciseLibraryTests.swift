@@ -434,6 +434,27 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   }
 }
 
+@Test func inclineBenchPullUsesDumbbellsInBothLanguages() throws {
+  for language in [AppLanguage.russian, .english] {
+    let entry = try #require(
+      ExerciseLibrary.entries(language: language).first { $0.sourceID == "Incline_Bench_Pull" })
+    #expect(entry.equipment == .dumbbell)
+  }
+}
+
+@Test func inclineDumbbellPressGripVariantsKeepSeparateIDs() throws {
+  let entry = try #require(
+    ExerciseLibrary.entries.first { $0.sourceID == "Incline_Dumbbell_Press" })
+  let variants = ExerciseLibrary.variants(for: entry.id, language: .russian)
+  #expect(Set(variants.map(\.sourceID)) == [
+    "Incline_Dumbbell_Press", "Hammer_Grip_Incline_DB_Bench_Press",
+  ])
+  #expect(Set(variants.map(\.id)).count == 2)
+  #expect(ExerciseLibrary.search("Жим гантелей на наклонной скамье").contains {
+    $0.id == entry.id
+  })
+}
+
 @Test func multipleEquipmentFiltersUseUnionAndIntersectWithMuscleAndSearch() {
   let equipment: Set<ExerciseEquipment> = [.barbell, .dumbbell]
   let combined = ExerciseLibrary.search(equipment: equipment)
