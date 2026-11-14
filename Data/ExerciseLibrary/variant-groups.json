@@ -283,7 +283,8 @@
       "Incline_Push-Up_Medium",
       "Incline_Push-Up_Close-Grip",
       "Incline_Push-Up_Reverse_Grip",
-      "Incline_Push-Up_Wide"
+      "Incline_Push-Up_Wide",
+      "Incline_Push-Up"
     ]
   },
   "internal-shoulder-rotation": {
@@ -721,7 +722,8 @@
       "Seated_Side_Lateral_Raise",
       "One-Arm_Side_Laterals",
       "One-Arm_Incline_Lateral_Raise",
-      "Standing_Low-Pulley_Deltoid_Raise"
+      "Standing_Low-Pulley_Deltoid_Raise",
+      "Lying_One-Arm_Lateral_Raise"
     ]
   },
   "bench-dip": {

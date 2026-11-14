@@ -55,7 +55,7 @@ Cable_Crossover	Кроссовер на верхних блоках	Сведен
 Butterfly	Бабочка	Сведение рук в тренажёре;Пек-дек;Сведение рук сидя в тренажёре
 Pushups	Отжимания от пола	Отжимания;Классические отжимания;Push-ups;Отжимания от пола
 Push-Ups_With_Feet_Elevated	Отжимания от пола с ногами на скамье	Отжимания с ногами на возвышении;Decline push-up;Отжимания с ногами на скамье
-Incline_Push-Up	Отжимания с руками на возвышении	Отжимания от опоры
+Incline_Push-Up	Отжимания от тумбы или скамьи	Отжимания от опоры;Отжимания с руками на возвышении
 Dips_-_Chest_Version	Отжимания на брусьях с наклоном корпуса вперёд	Отжимания на брусьях на грудные мышцы;Chest dips;Отжимания на брусьях на грудь;Брусья с наклоном корпуса
 Straight-Arm_Dumbbell_Pullover	Пуловер с гантелью лёжа поперёк плоской скамьи	Пуловер с гантелью;Dumbbell pullover;Пуловер лёжа
 Dumbbell_Shoulder_Press	Жим гантелей сидя	Жим гантелей на плечи
@@ -194,7 +194,7 @@ Cable_Incline_Pushdown	Пуловер на верхнем блоке лёжа н
 Cable_Incline_Triceps_Extension	Разгибание рук на верхнем блоке лёжа на наклонной скамье	Разгибание трицепса на тросе на наклонной скамье;Cable Incline Triceps Extension
 Cable_Internal_Rotation	Внутренняя ротация плеча на нижнем блоке сидя	Внутреннее вращение плеча с блоком;Cable Internal Rotation
 Cable_Iron_Cross	Железный крест на верхних блоках	Опускание прямых рук через стороны на верхних блоках;Cable Iron Cross
-Cable_Judo_Flip	Повороты корпуса с тягой блока через плечо	Силовые упражнения;strength
+Cable_Judo_Flip	Скручивание корпуса с нижним блоком через плечо	Силовые упражнения;strength;Дзюдо-бросок на блоке
 Cable_Lying_Triceps_Extension	Разгибание рук с прямой рукоятью нижнего блока лёжа на плоской скамье	Разгибание рук на нижнем блоке лёжа на плоской скамье;Французский жим на нижнем блоке лёжа;Cable Lying Triceps Extension
 Cable_One_Arm_Tricep_Extension	Разгибание одной руки на верхнем блоке обратным хватом	Разгибание одной руки в кроссовере;Cable One Arm Tricep Extension
 Cable_Preacher_Curl	Сгибание рук с блоком на скамье Скотта	Силовые упражнения;strength
@@ -225,7 +225,7 @@ Chair_Leg_Extended_Stretch	Растяжка ноги с отведением с�
 Chair_Lower_Back_Stretch	Боковая растяжка спины сидя на стуле	Наклон в сторону сидя на стуле;Chair Lower Back Stretch
 Chair_Squat	Приседания в тренажёре Смита с ногами впереди	Приседания стул в тренажёре Смита;Chair Squat;Smith Chair Squat
 Chair_Upper_Body_Stretch	Растяжка плеч и груди сидя на стуле	Растяжка верхней части тела сидя на стуле;Chair Upper Body Stretch
-Chest_And_Front_Of_Shoulder_Stretch	Растяжка груди и передней части плеч	Растяжка;stretching
+Chest_And_Front_Of_Shoulder_Stretch	Растяжка груди и плеч с гимнастической палкой	Растяжка;stretching
 Chest_Push_from_3_point_stance	Толчок грудью из трехточечной позиции	Плиометрика;plyometrics
 Chest_Push_multiple_response	Толчок от груди (множественный ответ)	Плиометрика;plyometrics
 Chest_Push_single_response	Толчок от груди (один ответ)	Плиометрика;plyometrics
@@ -388,7 +388,7 @@ Incline_Hammer_Curls	Молотковые сгибания рук с ганте�
 Incline_Inner_Biceps_Curl	Сгибание рук с гантелями в стороны сидя на наклонной скамье	Подъём гантелей на бицепс в стороны с опорой спиной;Incline Inner Biceps Curl
 Incline_Push-Up_Close-Grip	Отжимания от высокой опоры узким хватом	Отжимания узким хватом от грифа в тренажёре Смита;Incline Push-Up Close-Grip
 Incline_Push-Up_Depth_Jump	Плиометрические отжимания с ногами на опоре и переносом рук	Отжимания с прыжком руками на платформы;Incline Push-Up Depth Jump
-Incline_Push-Up_Medium	Отжимания от высокой опоры обычным хватом	Отжимания от грифа в тренажёре Смита хватом на ширине плеч;Incline Push-Up Medium
+Incline_Push-Up_Medium	Отжимания от грифа в тренажёре Смита обычным хватом	Отжимания от грифа в тренажёре Смита хватом на ширине плеч;Incline Push-Up Medium;Отжимания от высокой опоры обычным хватом
 Incline_Push-Up_Reverse_Grip	Отжимания от высокой опоры обратным хватом	Отжимания от грифа в тренажёре Смита обратным хватом;Incline Push-Up Reverse Grip
 Incline_Push-Up_Wide	Отжимания от высокой опоры широким хватом	Отжимания от грифа в тренажёре Смита широким хватом;Incline Push-Up Wide
 Intermediate_Groin_Stretch	Растяжка приводящих мышц лёжа с отведением ноги и ремнём	Растяжка внутренней поверхности бедра лёжа с ремнём;Intermediate Groin Stretch
@@ -487,8 +487,8 @@ Lying_Face_Up_Plate_Neck_Resistance	Сгибание шеи лёжа на спи
 Lying_Glute	Растяжка ягодиц лёжа с партнёром	Растяжка ягодичной мышцы с согнутой ногой и помощью партнёра;Lying Glute
 Lying_Hamstring	Растяжка задней поверхности бедра лёжа с партнёром	Растяжка поднятой ноги лёжа с помощью партнёра;Lying Hamstring
 Lying_High_Bench_Barbell_Curl	Сгибание рук со штангой лёжа грудью на высокой скамье	Подъём штанги на бицепс с опорой грудью на скамью;Lying High Bench Barbell Curl
-Lying_Machine_Squat	Приседания в машине лежа	Силовые упражнения;strength
-Lying_One-Arm_Lateral_Raise	Подъем одной руки в стороны лежа	Силовые упражнения;strength
+Lying_Machine_Squat	Приседания в тренажёре лёжа	Силовые упражнения;strength
+Lying_One-Arm_Lateral_Raise	Подъём гантели через сторону лёжа на боку	Силовые упражнения;strength
 Lying_Prone_Quadriceps	Растяжка квадрицепса лёжа на животе с партнёром	Растяжка передней поверхности бедра с помощью партнёра;Lying Prone Quadriceps
 Lying_Rear_Delt_Raise	Разведение гантелей лёжа грудью на плоской скамье	Разведение рук на задние дельты с опорой грудью;Lying Rear Delt Raise
 Lying_Supine_Dumbbell_Curl	Сгибание рук с гантелями лёжа на спине на плоской скамье	Подъём гантелей на бицепс лёжа с поворотом кистей;Lying Supine Dumbbell Curl

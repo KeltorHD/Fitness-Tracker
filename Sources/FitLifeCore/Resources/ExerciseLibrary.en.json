@@ -2476,7 +2476,8 @@
       "name": "Incline Push-Up",
       "englishName": "Incline Push-Up",
       "aliases": [
-        "Отжимания от опоры"
+        "Отжимания от опоры",
+        "Отжимания с руками на возвышении"
       ],
       "group": "chest",
       "equipment": "body only",
@@ -2503,7 +2504,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "elevated-hands-push-up",
+        "title": "Incline push-up"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=PewU12kHcDA"
     },
     {
       "id": "b1918380-05ba-5b28-b917-eba3ba751a0e",
@@ -7749,7 +7755,8 @@
       "englishName": "Cable Judo Flip",
       "aliases": [
         "Силовые упражнения",
-        "strength"
+        "strength",
+        "Дзюдо-бросок на блоке"
       ],
       "group": "core",
       "equipment": "cable",
@@ -7773,7 +7780,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=dfB2MPXzjYc"
     },
     {
       "id": "54755505-f4d4-52c2-a24b-fc193d5d4770",
@@ -14995,7 +15003,8 @@
       "englishName": "Incline Push-Up Medium",
       "aliases": [
         "Отжимания от грифа в тренажёре Смита хватом на ширине плеч",
-        "Incline Push-Up Medium"
+        "Incline Push-Up Medium",
+        "Отжимания от высокой опоры обычным хватом"
       ],
       "group": "chest",
       "equipment": "body only",
@@ -18649,12 +18658,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "Adjust the leg machine to a height that will allow you to get inside it with your knees bent and the thighs slightly below parallel.",
-        "Once you select the weight, position yourself inside the machine face up with the knees bent and thighs slightly below parallel to the platform. Make sure that the knees do not go past the toes. The angle created between the hamstrings and the calves should be one that is slightly less than 90 degrees (since your starting position requires you to start slightly below parallel). Your back and your head should be resting on the machine while your shoulders are pressed under the shoulder pads.",
-        "Place your hands by the handles and position your feet slightly pointing out at a shoulder width position. This will be your starting position.",
-        "While pressing with the balls of the feet as you breathe out, make your whole body erect as you squeeze the quads. Hold the contracted position for a second. Tip: Since you are starting below parallel, you can opt to use your hands to help you up by pressing on your thighs only on the first repetition.",
-        "Slowly squat down as you inhale but instead of going all the way down to the starting position, just stop once your thighs are parallel to the platform. The angle between your hamstrings and calves should be a 90-degree angle.",
-        "Repeat for the recommended amount of repetitions."
+        "Adjust the squat machine, lie back against the pad and place your shoulders under the supports.",
+        "Place your feet about shoulder-width apart on the platform and hold the handles.",
+        "Press through the whole foot to extend the legs, then bend the knees and return slowly to a comfortable depth."
       ],
       "images": [
         "Lying_Machine_Squat/0.jpg",
@@ -18685,11 +18691,10 @@
         "deltoidLateral"
       ],
       "steps": [
-        "While holding a dumbbell in one hand, lay with your chest down on a flat bench. The other hand can be used to hold to the leg of the bench for stability.",
-        "Position the palm of the hand that is holding the dumbbell in a neutral manner (palms facing your torso) as you keep the arm extended with the elbow slightly bent. This will be your starting position.",
-        "Now raise the arm with the dumbbell to the side until your elbow is at shoulder height and your arm is roughly parallel to the floor as you exhale. Tip: Maintain your arm perpendicular to the torso while keeping your arm extended throughout the movement. Also, keep the contraction at the top for a second.",
-        "Slowly lower the dumbbell to the starting position as you inhale.",
-        "Repeat for the recommended amount of repetitions."
+        "Lie on your side on a flat bench with a dumbbell in your upper hand.",
+        "Lower the arm in front of your torso with a slight bend in the elbow.",
+        "Raise the dumbbell in an arc toward the ceiling, then lower it under control.",
+        "Repeat on the other side."
       ],
       "images": [
         "Lying_One-Arm_Lateral_Raise/0.jpg",
@@ -18698,7 +18703,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "lateral-raise",
+        "title": "Lateral raise"
+      }
     },
     {
       "id": "df442616-00a7-5da7-9bbf-ced317f8ddb9",
