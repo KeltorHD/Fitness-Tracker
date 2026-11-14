@@ -46,5 +46,14 @@
   "Around_The_Worlds": {},
   "Atlas_Stone_Trainer": {},
   "Atlas_Stones": {},
-  "Axle_Deadlift": {}
+  "Axle_Deadlift": {},
+  "Triceps_Pushdown": {},
+  "Triceps_Pushdown_-_Rope_Attachment": {},
+  "Triceps_Pushdown_-_V-Bar_Attachment": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=OnVieK1-sEE"
+  },
+  "Reverse_Grip_Triceps_Pushdown": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=ZJG-FlD0M_c"
+  },
+  "Cable_One_Arm_Tricep_Extension": {}
 }

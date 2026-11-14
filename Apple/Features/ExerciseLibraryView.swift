@@ -82,25 +82,18 @@ struct ExerciseLibraryView: View {
         }
       }
       ForEach(model.results) { entry in
-        NavigationLink {
-          ExerciseDetailView(exercise: entry.exercise, onSelect: onSelect)
-        } label: {
-          HStack(spacing: 12) {
-            if let path = entry.generatedMedia?.poster ?? entry.images.first {
-              ExercisePhoto(path: path).frame(width: 76, height: 60)
-                .clipShape(.rect(cornerRadius: 12)).accessibilityHidden(true)
-            } else {
-              Image(systemName: "dumbbell").frame(width: 76, height: 60).foregroundStyle(.secondary)
-                .accessibilityHidden(true)
+        if let group = entry.variantGroup {
+          let members = model.results.filter { $0.variantGroup?.id == group.id }
+          if members.first?.id == entry.id {
+            DisclosureGroup(group.title) {
+              ForEach(members) { member in
+                exerciseLink(member)
+              }
             }
-            VStack(alignment: .leading, spacing: 5) {
-              Text(entry.name).font(.headline).foregroundStyle(.primary)
-              Text(
-                "\(entry.primaryMuscles.joined(separator: ", ")) · \(L10n.text(entry.equipment.title, locale: locale))"
-              )
-              .font(.caption).foregroundStyle(.secondary)
-            }
-          }.padding(.vertical, 4)
+            .accessibilityIdentifier("exerciseVariantGroup_\(group.id)")
+          }
+        } else {
+          exerciseLink(entry)
         }
       }
       Section {
@@ -119,6 +112,29 @@ struct ExerciseLibraryView: View {
     .accessibilityIdentifier("exerciseLibrary")
     .onChange(of: locale, initial: true) {
       model.language = AppLanguage.system.resolved(preferredLanguages: [locale.identifier])
+    }
+  }
+
+  private func exerciseLink(_ entry: ExerciseLibraryEntry) -> some View {
+    NavigationLink {
+      ExerciseDetailView(exercise: entry.exercise, onSelect: onSelect)
+    } label: {
+      HStack(spacing: 12) {
+        if let path = entry.generatedMedia?.poster ?? entry.images.first {
+          ExercisePhoto(path: path).frame(width: 76, height: 60)
+            .clipShape(.rect(cornerRadius: 12)).accessibilityHidden(true)
+        } else {
+          Image(systemName: "dumbbell").frame(width: 76, height: 60).foregroundStyle(.secondary)
+            .accessibilityHidden(true)
+        }
+        VStack(alignment: .leading, spacing: 5) {
+          Text(entry.name).font(.headline).foregroundStyle(.primary)
+          Text(
+            "\(entry.primaryMuscles.joined(separator: ", ")) · \(L10n.text(entry.equipment.title, locale: locale))"
+          )
+          .font(.caption).foregroundStyle(.secondary)
+        }
+      }.padding(.vertical, 4)
     }
   }
 }
@@ -197,6 +213,24 @@ struct ExerciseDetailView: View {
               )
               .font(.subheadline).foregroundStyle(.secondary)
             }
+          }
+          let variants = ExerciseLibrary.variants(
+            for: entry.id,
+            language: AppLanguage.system.resolved(preferredLanguages: [locale.identifier]))
+          if variants.count > 1 {
+            VStack(alignment: .leading, spacing: 8) {
+              Text(L10n.text("Другие варианты", locale: locale)).font(.title2.bold())
+              ForEach(variants.filter { $0.id != entry.id }) { variant in
+                NavigationLink(variant.name) {
+                  ExerciseDetailView(exercise: variant.exercise, onSelect: onSelect)
+                }
+              }
+            }
+          }
+          NavigationLink {
+            ExerciseProgressScreen(exercise: entry.exercise)
+          } label: {
+            Label(L10n.text("История и графики", locale: locale), systemImage: "chart.xyaxis.line")
           }
           Text(L10n.text("Техника выполнения", locale: locale)).font(.title2.bold())
           if entry.translationAutomatic == true && !entry.steps.isEmpty {

@@ -98,6 +98,14 @@ def generate():
     reviewed_path = ROOT / 'Data/ExerciseLibrary/reviewed-exercises.json'
     reviewed = json.loads(reviewed_path.read_text())
     assert set(reviewed) <= set(source)
+    variant_groups = json.loads((ROOT / 'Data/ExerciseLibrary/variant-groups.json').read_text())
+    group_by_member = {}
+    for group_id, group in variant_groups.items():
+        assert re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*', group_id)
+        assert group['ru'] and group['en'] and len(group['members']) >= 2
+        for member in group['members']:
+            assert member in source and member not in group_by_member, member
+            group_by_member[member] = group_id
     translations = {}
     for line in (ROOT / 'Data/ExerciseLibrary/instructions.ru.tsv').read_text().splitlines():
         fields = line.split('\t')
@@ -115,6 +123,7 @@ def generate():
         assert not steps or len(steps) >= 3, source_id
         assert all(len(s) >= 5 and re.search('[А-Яа-яЁё]', s) for s in steps), source_id
         stable_id = LEGACY_IDS.get(source_id) or str(uuid.uuid5(uuid.NAMESPACE_URL, 'https://github.com/yuhonas/free-exercise-db/' + source_id))
+        group_id = group_by_member.get(source_id)
         entries.append({'id': stable_id, 'sourceID': source_id, 'name': name,
                         'englishName': item['name'], 'aliases': aliases.split(';'),
                         'group': GROUPS[item['primaryMuscles'][0]], 'equipment': item['equipment'] or 'unspecified',
@@ -126,6 +135,8 @@ def generate():
                         'imagesUnavailable': not bool(item['images']),
                         'generatedMedia': generated.get(source_id),
                         'translationAutomatic': source_id in automatic and source_id not in reviewed,
+                        **({'variantGroup': {'id': group_id, 'title': variant_groups[group_id]['ru']}}
+                           if group_id else {}),
                         **({'techniqueVideoURL': reviewed[source_id]['techniqueVideoURL']}
                            if reviewed.get(source_id, {}).get('techniqueVideoURL') else {})})
     write_json(RESOURCE, {'schemaVersion': 1, 'locale': 'ru',
@@ -139,6 +150,9 @@ def generate():
         english_entries.append({**entry, 'name': item['name'],
             'primaryMuscles': item['primaryMuscles'],
             'secondaryMuscles': reviewed.get(entry['sourceID'], {}).get('secondaryMuscles', item['secondaryMuscles']),
+            **({'variantGroup': {'id': group_by_member[entry['sourceID']],
+                                 'title': variant_groups[group_by_member[entry['sourceID']]]['en']}}
+               if entry['sourceID'] in group_by_member else {}),
             'steps': [step for step in item['instructions'] if step.strip()],
             'translationAutomatic': False})
     russian = json.loads(RESOURCE.read_text())

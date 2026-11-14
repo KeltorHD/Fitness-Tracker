@@ -56,6 +56,11 @@ public struct ExerciseGeneratedMedia: Codable, Hashable, Sendable {
   public let frameDuration: Double
 }
 
+public struct ExerciseVariantGroup: Codable, Hashable, Sendable {
+  public let id: String
+  public let title: String
+}
+
 public struct ExerciseLibraryEntry: Identifiable, Codable, Hashable, Sendable {
   public let id: UUID
   public let sourceID: String
@@ -78,6 +83,7 @@ public struct ExerciseLibraryEntry: Identifiable, Codable, Hashable, Sendable {
   public let generatedMedia: ExerciseGeneratedMedia?
   public let translationAutomatic: Bool?
   public let techniqueVideoURL: String?
+  public let variantGroup: ExerciseVariantGroup?
 
   public var exercise: Exercise {
     Exercise(id: id, name: name, muscle: group, instructions: steps.joined(separator: "\n"))
@@ -190,8 +196,22 @@ public enum ExerciseLibrary {
           options: .regularExpression) != nil
         else { throw ExerciseLibraryError.invalidDocument }
       }
+      if let group = entry.variantGroup {
+        guard !group.id.isEmpty, !group.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        else { throw ExerciseLibraryError.invalidDocument }
+      }
     }
+    let grouped = Dictionary(grouping: value.entries.compactMap(\.variantGroup), by: \.id)
+    guard grouped.values.allSatisfy({ $0.count >= 2 && Set($0.map(\.title)).count == 1 })
+    else { throw ExerciseLibraryError.invalidDocument }
     return value
+  }
+
+  public static func variants(for id: UUID, language: AppLanguage) -> [ExerciseLibraryEntry] {
+    guard let document = try? document(language: language),
+      let group = document.entries.first(where: { $0.id == id })?.variantGroup
+    else { return [] }
+    return document.entries.filter { $0.variantGroup?.id == group.id }
   }
 
   public static func entry(for id: UUID) -> ExerciseLibraryEntry? {

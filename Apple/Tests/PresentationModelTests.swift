@@ -29,6 +29,32 @@ import XCTest
 }
 
 @MainActor final class PresentationModelTests: XCTestCase {
+  func testExerciseProgressSwitchesVariantsWithoutMergingTheirResults() throws {
+    let straight = try XCTUnwrap(
+      ExerciseLibrary.entries.first { $0.sourceID == "Triceps_Pushdown" })
+    let rope = try XCTUnwrap(
+      ExerciseLibrary.entries.first { $0.sourceID == "Triceps_Pushdown_-_Rope_Attachment" })
+    let date = Date(timeIntervalSince1970: 1_794_480_000)
+    var workout = Workout(
+      name: "Тренировка", startedAt: date,
+      exercises: [
+        WorkoutExercise(
+          exercise: straight.exercise,
+          sets: [WorkoutSet(repetitions: 8, weightKG: 40, completedAt: date)]),
+        WorkoutExercise(
+          exercise: rope.exercise,
+          sets: [WorkoutSet(repetitions: 10, weightKG: 20, completedAt: date)]),
+      ])
+    try WorkoutEngine.finish(&workout, at: date.addingTimeInterval(60))
+    let model = ExerciseProgressViewModel(
+      exerciseID: straight.id, period: .allTime, now: { date.addingTimeInterval(120) })
+    model.refresh(workouts: [workout], calendar: .current)
+    XCTAssertEqual(model.points.first?.volume, 320)
+    model.selectedExerciseID = rope.id
+    XCTAssertEqual(model.points.first?.volume, 200)
+    XCTAssertEqual(model.historyEntries.first?.rows.first?.name, rope.name)
+  }
+
   func testMuscleSummaryLabelsRegionParentsAndKeepsRelatedEntriesTogether() {
     let selection = ExerciseMuscleSelection(
       muscles: [.triceps], regions: [.bicepsLong, .chestUpper])

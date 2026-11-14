@@ -72,7 +72,7 @@ import Testing
 
 @Test(arguments: [
   "locale", "duplicate", "image", "steps", "version", "animationPath", "animationDuration",
-  "videoURL",
+  "videoURL", "variantGroup",
 ])
 func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   let document: ExerciseLibraryDocument = try #require(ExerciseLibrary.document)
@@ -93,6 +93,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     media["frameDuration"] = 0
     entries[0]["generatedMedia"] = media
   case "videoURL": entries[0]["techniqueVideoURL"] = "https://example.com/video"
+  case "variantGroup": entries[0]["variantGroup"] = ["id": "invalid", "title": ""]
   default: object["schemaVersion"] = 999
   }
   object["entries"] = entries
@@ -129,7 +130,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   for index in entries.indices {
     for key in [
       "techniqueUnavailable", "imagesUnavailable", "generatedMedia", "translationAutomatic",
-      "techniqueVideoURL",
+      "techniqueVideoURL", "variantGroup",
     ] {
       entries[index].removeValue(forKey: key)
     }
@@ -190,6 +191,36 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   #expect(row.equipment == .kettlebell)
   #expect(ExerciseLibrary.search("тяга гирь в планке").contains { $0.id == row.id })
   #expect(!ExerciseLibrary.search("тяга гантелей в упоре лёжа").contains { $0.id == row.id })
+}
+
+@Test func cablePushdownVariantsShareAGroupWithoutSharingIdentity() throws {
+  let original = try #require(
+    ExerciseLibrary.entries.first { $0.sourceID == "Triceps_Pushdown" })
+  let russian = ExerciseLibrary.variants(for: original.id, language: .russian)
+  let english = ExerciseLibrary.variants(for: original.id, language: .english)
+  let expected: Set<String> = [
+    "Triceps_Pushdown", "Triceps_Pushdown_-_Rope_Attachment",
+    "Triceps_Pushdown_-_V-Bar_Attachment", "Reverse_Grip_Triceps_Pushdown",
+    "Cable_One_Arm_Tricep_Extension",
+  ]
+  #expect(Set(russian.map(\.sourceID)) == expected)
+  #expect(Set(russian.map(\.id)).count == expected.count)
+  #expect(russian.map(\.id) == english.map(\.id))
+  #expect(russian.allSatisfy { $0.variantGroup?.title == "Разгибание рук на верхнем блоке" })
+  #expect(english.allSatisfy { $0.variantGroup?.title == "Cable triceps pushdown" })
+  #expect(russian.allSatisfy { $0.equipment == .cable && $0.images.count == 2 })
+  #expect(russian.allSatisfy { ExerciseLibrary.variants(for: $0.id, language: .russian) == russian })
+  #expect(ExerciseLibrary.variants(for: UUID(), language: .russian).isEmpty)
+}
+
+@Test func benchPressGripVariantsAreGrouped() throws {
+  let bench = try #require(
+    ExerciseLibrary.entries.first { $0.sourceID == "Barbell_Bench_Press_-_Medium_Grip" })
+  let variants = ExerciseLibrary.variants(for: bench.id, language: .russian)
+  #expect(Set(variants.map(\.sourceID)) == [
+    "Barbell_Bench_Press_-_Medium_Grip", "Close-Grip_Barbell_Bench_Press",
+    "Wide-Grip_Barbell_Bench_Press",
+  ])
 }
 
 @Test func multipleEquipmentFiltersUseUnionAndIntersectWithMuscleAndSearch() {

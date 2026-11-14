@@ -1,0 +1,22 @@
+{
+  "cable-triceps-pushdown": {
+    "ru": "Разгибание рук на верхнем блоке",
+    "en": "Cable triceps pushdown",
+    "members": [
+      "Triceps_Pushdown",
+      "Triceps_Pushdown_-_Rope_Attachment",
+      "Triceps_Pushdown_-_V-Bar_Attachment",
+      "Reverse_Grip_Triceps_Pushdown",
+      "Cable_One_Arm_Tricep_Extension"
+    ]
+  },
+  "barbell-flat-bench-press": {
+    "ru": "Жим штанги лёжа",
+    "en": "Barbell bench press",
+    "members": [
+      "Barbell_Bench_Press_-_Medium_Grip",
+      "Close-Grip_Barbell_Bench_Press",
+      "Wide-Grip_Barbell_Bench_Press"
+    ]
+  }
+}

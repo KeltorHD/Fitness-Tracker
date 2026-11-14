@@ -110,6 +110,10 @@
         "frameDuration": 0.25
       },
       "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-flat-bench-press",
+        "title": "Жим штанги лёжа"
+      },
       "techniqueVideoURL": "https://www.youtube.com/watch?v=CayG6UYqL8g"
     },
     {
@@ -2822,6 +2826,10 @@
       "imagesUnavailable": false,
       "generatedMedia": null,
       "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-flat-bench-press",
+        "title": "Жим штанги лёжа"
+      },
       "techniqueVideoURL": "https://www.youtube.com/watch?v=LJeqLAmJLfs"
     },
     {
@@ -2897,10 +2905,12 @@
     {
       "id": "fab97bee-59c5-5466-9042-a521f43f3845",
       "sourceID": "Triceps_Pushdown",
-      "name": "Разгибание рук на верхнем блоке",
+      "name": "Разгибание рук на верхнем блоке с прямой рукоятью",
       "englishName": "Triceps Pushdown",
       "aliases": [
-        "Трицепс на блоке"
+        "Разгибание рук на верхнем блоке",
+        "Трицепс на блоке",
+        "Разгибание рук в кроссовере с прямой рукоятью"
       ],
       "group": "arms",
       "equipment": "cable",
@@ -2926,15 +2936,21 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "cable-triceps-pushdown",
+        "title": "Разгибание рук на верхнем блоке"
+      }
     },
     {
       "id": "5bb15a5e-ff03-5b25-a9c4-a1b69e3bde99",
       "sourceID": "Triceps_Pushdown_-_Rope_Attachment",
-      "name": "Разгибание рук с канатом на блоке",
+      "name": "Разгибание рук на верхнем блоке с канатной рукоятью",
       "englishName": "Triceps Pushdown - Rope Attachment",
       "aliases": [
-        "Трицепс с канатной рукоятью"
+        "Разгибание рук с канатом на блоке",
+        "Трицепс с канатной рукоятью",
+        "Разгибание рук в кроссовере с канатом"
       ],
       "group": "arms",
       "equipment": "cable",
@@ -2960,7 +2976,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "cable-triceps-pushdown",
+        "title": "Разгибание рук на верхнем блоке"
+      }
     },
     {
       "id": "18876255-6141-5510-8664-cc21e78464b8",
@@ -7086,11 +7106,11 @@
     {
       "id": "2dbedcb8-3475-52f6-bf09-50032dd3b41d",
       "sourceID": "Cable_One_Arm_Tricep_Extension",
-      "name": "Разгибание трицепса одной руки на тросе",
+      "name": "Разгибание одной руки на верхнем блоке обратным хватом",
       "englishName": "Cable One Arm Tricep Extension",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Разгибание одной руки в кроссовере",
+        "Cable One Arm Tricep Extension"
       ],
       "group": "arms",
       "equipment": "cable",
@@ -7105,12 +7125,9 @@
         "tricepsMedial"
       ],
       "steps": [
-        "Правой рукой возьмитесь за одну ручку, прикрепленную к верхнему шкиву троса, супинированным хватом (нижняя рука, ладони вверх). Вы должны стоять прямо перед весовым стеком.",
-        "Теперь потяните ручку вниз так, чтобы плечо и локоть были зафиксированы сбоку от тела. Плечо и предплечье должны образовывать острый угол (менее 90 градусов). Вы можете держать другую руку за талию, одну ногу можно держать перед собой, а другую назад для лучшего баланса. Это будет ваша исходная позиция.",
-        "Сокращая трицепс, перемещайте одинарную рукоятку вниз в сторону, пока рука не выпрямится. Выдохните, выполняя это движение. Совет: Двигаться должны только предплечья. Ваши плечи всегда должны оставаться неподвижными.",
-        "Сожмите трицепсы и задержитесь на секунду в этом сокращенном положении.",
-        "Медленно верните рукоятку в исходное положение.",
-        "Повторите рекомендуемое количество повторений, а затем выполните то же движение другой рукой."
+        "Прикрепите одиночную рукоять к верхнему блоку и возьмите её одной рукой ладонью вверх.",
+        "Удерживая локоть у корпуса, разогните руку и опустите рукоять к бедру.",
+        "Медленно верните рукоять вверх и повторите движение другой рукой."
       ],
       "images": [
         "Cable_One_Arm_Tricep_Extension/0.jpg",
@@ -7119,7 +7136,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "cable-triceps-pushdown",
+        "title": "Разгибание рук на верхнем блоке"
+      }
     },
     {
       "id": "d78d2b30-d762-53db-b173-b79b7705a10f",
@@ -22598,11 +22619,11 @@
     {
       "id": "2201d15f-53fe-55e7-af56-2977e56d4c1a",
       "sourceID": "Reverse_Grip_Triceps_Pushdown",
-      "name": "Отжимание на трицепс обратным хватом",
+      "name": "Разгибание рук на верхнем блоке обратным хватом",
       "englishName": "Reverse Grip Triceps Pushdown",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Разгибание рук в кроссовере обратным хватом",
+        "Reverse Grip Triceps Pushdown"
       ],
       "group": "arms",
       "equipment": "cable",
@@ -22617,11 +22638,9 @@
         "tricepsMedial"
       ],
       "steps": [
-        "Начните с установки крепления штанги (прямого или E-Z) на машине с высоким шкивом.",
-        "Повернувшись лицом к перекладине, возьмите ее ладонями вверх (супинированный хват) на ширине плеч. Опускайте штангу, используя широчайшие, пока руки полностью не выпрямятся по бокам. Совет: локти должны быть по бокам, а ступни должны быть на ширине плеч друг от друга. Это исходная позиция.",
-        "На вдохе медленно поднимите перекладину вверх, чтобы она оказалась на одной линии с грудью. Двигаться должны только предплечья, а локти/плечи всегда должны быть неподвижны.",
-        "Затем начните опускать штангу обратно в исходное положение, выдыхая и сильно сокращая трицепсы.",
-        "Повторите рекомендуемое количество повторений."
+        "Прикрепите прямую или изогнутую рукоять к верхнему блоку и возьмитесь за неё ладонями вверх.",
+        "Прижмите локти к корпусу и разогните руки, опуская рукоять к бёдрам.",
+        "Плавно верните рукоять вверх, сохраняя положение плеч и локтей."
       ],
       "images": [
         "Reverse_Grip_Triceps_Pushdown/0.jpg",
@@ -22630,7 +22649,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "cable-triceps-pushdown",
+        "title": "Разгибание рук на верхнем блоке"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=ZJG-FlD0M_c"
     },
     {
       "id": "41904ce7-8503-528f-b810-8d2d84024fdb",
@@ -30073,11 +30097,11 @@
     {
       "id": "f41d9694-2bd8-5f4c-b23b-a0d2cc92d12d",
       "sourceID": "Triceps_Pushdown_-_V-Bar_Attachment",
-      "name": "Отжимание на трицепс вниз – приспособление для V-образной перекладины",
+      "name": "Разгибание рук на верхнем блоке с V-образной рукоятью",
       "englishName": "Triceps Pushdown - V-Bar Attachment",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Разгибание рук в кроссовере с V-рукоятью",
+        "Triceps Pushdown V-Bar"
       ],
       "group": "arms",
       "equipment": "cable",
@@ -30092,11 +30116,9 @@
         "tricepsMedial"
       ],
       "steps": [
-        "Прикрепите V-образную перекладину к высокому блоку и возьмите ее хватом сверху (ладонями вниз) на ширине плеч.",
-        "Стоя прямо, с прямым туловищем и очень небольшим наклоном вперед, поднесите плечи близко к телу и перпендикулярно полу. Предплечья должны быть направлены вверх в сторону блока, когда они удерживают штангу. Большие пальцы должны быть выше мизинца. Это ваша исходная позиция.",
-        "Используя трицепс, опускайте штангу вниз до тех пор, пока она не коснется передней части бедер, а руки не будут полностью выпрямлены перпендикулярно полу. Плечи рук всегда должны оставаться неподвижными рядом с туловищем, и только предплечья должны двигаться. Выдохните, выполняя это движение.",
-        "После второго удержания в сокращенном положении медленно поднимите V-образную штангу в исходную точку. Вдохните, выполняя этот шаг.",
-        "Повторите рекомендуемое количество повторений."
+        "Прикрепите V-образную рукоять к верхнему блоку, возьмитесь за неё и встаньте устойчиво лицом к тренажёру.",
+        "Удерживая локти возле корпуса, разогните руки и опустите рукоять к бёдрам.",
+        "Плавно согните локти и верните рукоять вверх, не раскачивая корпус."
       ],
       "images": [
         "Triceps_Pushdown_-_V-Bar_Attachment/0.jpg",
@@ -30105,7 +30127,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "cable-triceps-pushdown",
+        "title": "Разгибание рук на верхнем блоке"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=OnVieK1-sEE"
     },
     {
       "id": "0541fa42-fde0-5122-8cbc-c663fd61ed99",
@@ -31079,7 +31106,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-flat-bench-press",
+        "title": "Жим штанги лёжа"
+      }
     },
     {
       "id": "80a20b1e-9d4e-57cf-8c78-4bebe15a2cd4",
