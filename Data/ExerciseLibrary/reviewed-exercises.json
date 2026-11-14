@@ -664,5 +664,24 @@
   "Palms-Up_Barbell_Wrist_Curl_Over_A_Bench": {
     "techniqueVideoURL": "https://www.youtube.com/watch?v=dQtMZ3ZEGwU"
   },
-  "Palms-Up_Dumbbell_Wrist_Curl_Over_A_Bench": {}
+  "Palms-Up_Dumbbell_Wrist_Curl_Over_A_Bench": {},
+  "Parallel_Bar_Dip": {},
+  "Pelvic_Tilt_Into_Bridge": {
+    "equipment": "body only"
+  },
+  "Peroneals-SMR": {},
+  "Peroneals_Stretch": {},
+  "Physioball_Hip_Bridge": {},
+  "Pin_Presses": {},
+  "Piriformis-SMR": {},
+  "Plank": {},
+  "Plate_Pinch": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=aW0GOG8XSHk"
+  },
+  "Plate_Twist": {},
+  "Platform_Hamstring_Slides": {},
+  "Plie_Dumbbell_Squat": {},
+  "Plyo_Kettlebell_Pushups": {},
+  "Plyo_Push-up": {},
+  "Posterior_Tibialis_Stretch": {}
 }

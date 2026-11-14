@@ -222,7 +222,8 @@
     "en": "Floor glute bridge",
     "members": [
       "Barbell_Glute_Bridge",
-      "Hip_Lift_with_Band"
+      "Hip_Lift_with_Band",
+      "Pelvic_Tilt_Into_Bridge"
     ]
   },
   "incline-dumbbell-bench-press": {
@@ -351,6 +352,14 @@
     "members": [
       "Overhead_Squat",
       "One-Arm_Overhead_Kettlebell_Squats"
+    ]
+  },
+  "plyometric-push-up": {
+    "ru": "Плиометрические отжимания",
+    "en": "Plyometric push-up",
+    "members": [
+      "Plyo_Push-up",
+      "Plyo_Kettlebell_Pushups"
     ]
   }
 }

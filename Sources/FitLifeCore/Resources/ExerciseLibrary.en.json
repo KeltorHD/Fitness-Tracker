@@ -21388,6 +21388,9 @@
       "name": "Parallel Bar Dip",
       "englishName": "Parallel Bar Dip",
       "aliases": [
+        "Отжимания на брусьях",
+        "Parallel bar dip",
+        "Отжимание на параллельной перекладине",
         "Силовые упражнения",
         "strength"
       ],
@@ -21423,11 +21426,13 @@
       "name": "Pelvic Tilt Into Bridge",
       "englishName": "Pelvic Tilt Into Bridge",
       "aliases": [
+        "Подъём таза лёжа с подкручиванием",
+        "Наклон таза в мост",
         "Растяжка",
         "stretching"
       ],
       "group": "back",
-      "equipment": "unspecified",
+      "equipment": "body only",
       "level": "intermediate",
       "primaryMuscles": [
         "lower back"
@@ -21446,7 +21451,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "glute-bridge",
+        "title": "Floor glute bridge"
+      }
     },
     {
       "id": "9dc932c6-20c8-5cc1-8a4c-230795ab662d",
@@ -21454,6 +21463,9 @@
       "name": "Peroneals-SMR",
       "englishName": "Peroneals-SMR",
       "aliases": [
+        "Прокатывание малоберцовых мышц",
+        "Peroneals SMR",
+        "Перонеалс-СМР",
         "Растяжка",
         "stretching"
       ],
@@ -21484,6 +21496,8 @@
       "name": "Peroneals Stretch",
       "englishName": "Peroneals Stretch",
       "aliases": [
+        "Растяжка наружной поверхности голени",
+        "Растяжка перонеалов",
         "Растяжка",
         "stretching"
       ],
@@ -21514,6 +21528,9 @@
       "name": "Physioball Hip Bridge",
       "englishName": "Physioball Hip Bridge",
       "aliases": [
+        "Подъём таза с опорой на фитбол",
+        "Physioball hip bridge",
+        "Тазобедренный мост с физиоболом",
         "Силовые упражнения",
         "strength"
       ],
@@ -21549,6 +21566,9 @@
       "name": "Pin Presses",
       "englishName": "Pin Presses",
       "aliases": [
+        "Жим с упоров",
+        "Pin press",
+        "Прессы для штифтов",
         "Пауэрлифтинг",
         "powerlifting"
       ],
@@ -21589,6 +21609,9 @@
       "name": "Piriformis-SMR",
       "englishName": "Piriformis-SMR",
       "aliases": [
+        "Прокатывание ягодицы роликом",
+        "Piriformis SMR",
+        "Пириформис-СМР",
         "Растяжка",
         "stretching"
       ],
@@ -21619,6 +21642,8 @@
       "name": "Plank",
       "englishName": "Plank",
       "aliases": [
+        "Планка",
+        "Plank",
         "Силовые упражнения",
         "strength"
       ],
@@ -21653,6 +21678,9 @@
       "name": "Plate Pinch",
       "englishName": "Plate Pinch",
       "aliases": [
+        "Щипковый хват блинов",
+        "Plate pinch",
+        "Тарелка Пинч",
         "Силовые упражнения",
         "strength"
       ],
@@ -21678,7 +21706,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=aW0GOG8XSHk"
     },
     {
       "id": "2a16bfec-cc86-5043-95d1-12080d534e64",
@@ -21686,6 +21715,10 @@
       "name": "Plate Twist",
       "englishName": "Plate Twist",
       "aliases": [
+        "Повороты корпуса с блином сидя",
+        "Plate twist",
+        "Russian twist",
+        "Пластина Твист",
         "Силовые упражнения",
         "strength"
       ],
@@ -21721,6 +21754,9 @@
       "name": "Platform Hamstring Slides",
       "englishName": "Platform Hamstring Slides",
       "aliases": [
+        "Скольжение пяткой лёжа",
+        "Hamstring slide",
+        "Слайды на платформе для подколенных сухожилий",
         "Силовые упражнения",
         "strength"
       ],
@@ -21759,6 +21795,9 @@
       "name": "Plie Dumbbell Squat",
       "englishName": "Plie Dumbbell Squat",
       "aliases": [
+        "Приседания с гантелью широкой постановкой",
+        "Dumbbell plié squat",
+        "Приседания с гантелями в стиле плие",
         "Силовые упражнения",
         "strength"
       ],
@@ -21797,6 +21836,8 @@
       "name": "Plyo Kettlebell Pushups",
       "englishName": "Plyo Kettlebell Pushups",
       "aliases": [
+        "Взрывные отжимания с гирей",
+        "Плио отжимания с гирями",
         "Силовые упражнения",
         "strength"
       ],
@@ -21825,7 +21866,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "plyometric-push-up",
+        "title": "Plyometric push-up"
+      }
     },
     {
       "id": "b0bc53c4-5711-5907-8bd2-d79d2303cb25",
@@ -21833,6 +21878,9 @@
       "name": "Plyo Push-up",
       "englishName": "Plyo Push-up",
       "aliases": [
+        "Взрывные отжимания",
+        "Plyometric push-up",
+        "Плио отжимания",
         "Плиометрика",
         "plyometrics"
       ],
@@ -21864,7 +21912,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "plyometric-push-up",
+        "title": "Plyometric push-up"
+      }
     },
     {
       "id": "39923088-6b83-57f1-b886-d3a44b149fd8",
@@ -21872,6 +21924,8 @@
       "name": "Posterior Tibialis Stretch",
       "englishName": "Posterior Tibialis Stretch",
       "aliases": [
+        "Растяжка внутренней поверхности голени",
+        "Растяжка задней большеберцовой мышцы",
         "Растяжка",
         "stretching"
       ],

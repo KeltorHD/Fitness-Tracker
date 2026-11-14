@@ -457,9 +457,11 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   let entry = try #require(
     ExerciseLibrary.entries.first { $0.sourceID == "Barbell_Glute_Bridge" })
   let variants = ExerciseLibrary.variants(for: entry.id, language: .russian)
-  #expect(Set(variants.map(\.sourceID)) == ["Barbell_Glute_Bridge", "Hip_Lift_with_Band"])
-  #expect(Set(variants.map(\.equipment)) == [.barbell, .bands])
-  #expect(Set(variants.map(\.id)).count == 2)
+  #expect(Set(variants.map(\.sourceID)) == [
+    "Barbell_Glute_Bridge", "Hip_Lift_with_Band", "Pelvic_Tilt_Into_Bridge",
+  ])
+  #expect(Set(variants.map(\.equipment)) == [.barbell, .bands, .bodyWeight])
+  #expect(Set(variants.map(\.id)).count == 3)
   #expect(ExerciseLibrary.search("Ягодичный мост со штангой").contains { $0.id == entry.id })
 }
 
@@ -503,6 +505,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
       "Palms-Up_Barbell_Wrist_Curl_Over_A_Bench", "Palms-Up_Dumbbell_Wrist_Curl_Over_A_Bench",
     ],
     ["Overhead_Squat", "One-Arm_Overhead_Kettlebell_Squats"],
+    ["Plyo_Push-up", "Plyo_Kettlebell_Pushups"],
   ] {
     for language in [AppLanguage.russian, .english] {
       let entry = try #require(
