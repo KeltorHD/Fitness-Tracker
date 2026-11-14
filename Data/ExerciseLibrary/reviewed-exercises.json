@@ -270,5 +270,22 @@
   },
   "Dumbbell_Alternate_Bicep_Curl": {
     "techniqueVideoURL": "https://www.youtube.com/watch?v=O8QTrvGX3OU"
-  }
+  },
+  "Dumbbell_Bench_Press_with_Neutral_Grip": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=Cp8CixmENnk"
+  },
+  "Dumbbell_Floor_Press": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=9vcKpv45aeE"
+  },
+  "Dumbbell_Incline_Shoulder_Raise": {},
+  "Dumbbell_Lying_One-Arm_Rear_Lateral_Raise": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=WtC-HSDKPHM"
+  },
+  "Dumbbell_Lying_Rear_Lateral_Raise": {},
+  "Dumbbell_One-Arm_Shoulder_Press": {},
+  "Dumbbell_One-Arm_Triceps_Extension": {},
+  "Dumbbell_One-Arm_Upright_Row": {},
+  "Dumbbell_Prone_Incline_Curl": {},
+  "Dumbbell_Raise": {},
+  "Dumbbell_Scaption": {}
 }

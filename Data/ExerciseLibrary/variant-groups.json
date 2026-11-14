@@ -106,5 +106,29 @@
       "Alternating_Hang_Clean",
       "Double_Kettlebell_Alternating_Hang_Clean"
     ]
+  },
+  "flat-dumbbell-bench-press": {
+    "ru": "Жим гантелей лёжа на плоской скамье",
+    "en": "Flat dumbbell bench press",
+    "members": [
+      "Dumbbell_Bench_Press",
+      "Dumbbell_Bench_Press_with_Neutral_Grip"
+    ]
+  },
+  "chest-supported-dumbbell-rear-fly": {
+    "ru": "Разведение гантелей лёжа грудью на наклонной скамье",
+    "en": "Chest-supported incline dumbbell rear fly",
+    "members": [
+      "Dumbbell_Lying_Rear_Lateral_Raise",
+      "Dumbbell_Lying_One-Arm_Rear_Lateral_Raise"
+    ]
+  },
+  "standing-dumbbell-upright-row": {
+    "ru": "Тяга гантелей к подбородку стоя",
+    "en": "Standing dumbbell upright row",
+    "members": [
+      "Dumbbell_Raise",
+      "Dumbbell_One-Arm_Upright_Row"
+    ]
   }
 }

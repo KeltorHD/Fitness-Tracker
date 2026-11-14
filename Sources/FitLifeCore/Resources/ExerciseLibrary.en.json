@@ -1827,6 +1827,10 @@
       "imagesUnavailable": false,
       "generatedMedia": null,
       "translationAutomatic": false,
+      "variantGroup": {
+        "id": "flat-dumbbell-bench-press",
+        "title": "Flat dumbbell bench press"
+      },
       "techniqueVideoURL": "https://www.youtube.com/watch?v=4_QuyfOCI5U"
     },
     {
@@ -10628,8 +10632,8 @@
       "name": "Dumbbell Bench Press with Neutral Grip",
       "englishName": "Dumbbell Bench Press with Neutral Grip",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Жим гантелей лёжа ладонями друг к другу",
+        "Dumbbell Bench Press with Neutral Grip"
       ],
       "group": "chest",
       "equipment": "dumbbell",
@@ -10657,7 +10661,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "flat-dumbbell-bench-press",
+        "title": "Flat dumbbell bench press"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=Cp8CixmENnk"
     },
     {
       "id": "1c505987-08b6-5ba2-8e38-2423dcb5f21f",
@@ -10706,8 +10715,8 @@
       "name": "Dumbbell Floor Press",
       "englishName": "Dumbbell Floor Press",
       "aliases": [
-        "Пауэрлифтинг",
-        "powerlifting"
+        "Жим гантелей с пола",
+        "Dumbbell Floor Press"
       ],
       "group": "arms",
       "equipment": "dumbbell",
@@ -10732,7 +10741,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=9vcKpv45aeE"
     },
     {
       "id": "c0cc211a-ae52-553c-aa67-513607a4d594",
@@ -10740,8 +10750,8 @@
       "name": "Dumbbell Incline Shoulder Raise",
       "englishName": "Dumbbell Incline Shoulder Raise",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подъём лопаток с гантелями на наклонной скамье",
+        "Dumbbell Incline Shoulder Raise"
       ],
       "group": "shoulders",
       "equipment": "dumbbell",
@@ -10775,8 +10785,8 @@
       "name": "Dumbbell Lying One-Arm Rear Lateral Raise",
       "englishName": "Dumbbell Lying One-Arm Rear Lateral Raise",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Разведение гантели на заднюю дельту с опорой грудью",
+        "Dumbbell Lying One-Arm Rear Lateral Raise"
       ],
       "group": "shoulders",
       "equipment": "dumbbell",
@@ -10804,7 +10814,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "chest-supported-dumbbell-rear-fly",
+        "title": "Chest-supported incline dumbbell rear fly"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=WtC-HSDKPHM"
     },
     {
       "id": "45da404a-4715-540c-92ca-e25d49a0b808",
@@ -10846,8 +10861,8 @@
       "name": "Dumbbell Lying Rear Lateral Raise",
       "englishName": "Dumbbell Lying Rear Lateral Raise",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Разведение гантелей на задние дельты с опорой грудью",
+        "Dumbbell Lying Rear Lateral Raise"
       ],
       "group": "shoulders",
       "equipment": "dumbbell",
@@ -10873,7 +10888,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "chest-supported-dumbbell-rear-fly",
+        "title": "Chest-supported incline dumbbell rear fly"
+      }
     },
     {
       "id": "9064ea16-19bb-52e5-8cc8-451c4cdab048",
@@ -10915,8 +10934,8 @@
       "name": "Dumbbell One-Arm Shoulder Press",
       "englishName": "Dumbbell One-Arm Shoulder Press",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Жим гантели одной рукой стоя",
+        "Dumbbell One-Arm Shoulder Press"
       ],
       "group": "shoulders",
       "equipment": "dumbbell",
@@ -10954,8 +10973,8 @@
       "name": "Dumbbell One-Arm Triceps Extension",
       "englishName": "Dumbbell One-Arm Triceps Extension",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Французский жим одной гантели одной рукой стоя",
+        "Dumbbell One-Arm Triceps Extension"
       ],
       "group": "arms",
       "equipment": "dumbbell",
@@ -10992,8 +11011,8 @@
       "name": "Dumbbell One-Arm Upright Row",
       "englishName": "Dumbbell One-Arm Upright Row",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Протяжка гантели одной рукой стоя",
+        "Dumbbell One-Arm Upright Row"
       ],
       "group": "shoulders",
       "equipment": "dumbbell",
@@ -11022,7 +11041,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-dumbbell-upright-row",
+        "title": "Standing dumbbell upright row"
+      }
     },
     {
       "id": "af0637ef-861d-5ce3-ba97-f71086206a44",
@@ -11030,8 +11053,8 @@
       "name": "Dumbbell Prone Incline Curl",
       "englishName": "Dumbbell Prone Incline Curl",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подъём гантелей на бицепс с опорой грудью",
+        "Dumbbell Prone Incline Curl"
       ],
       "group": "arms",
       "equipment": "dumbbell",
@@ -11067,8 +11090,8 @@
       "name": "Dumbbell Raise",
       "englishName": "Dumbbell Raise",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Протяжка гантелей стоя",
+        "Dumbbell Raise"
       ],
       "group": "shoulders",
       "equipment": "dumbbell",
@@ -11093,7 +11116,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-dumbbell-upright-row",
+        "title": "Standing dumbbell upright row"
+      }
     },
     {
       "id": "89fcf800-3646-5a2e-ac75-037b22412622",
@@ -11101,8 +11128,9 @@
       "name": "Dumbbell Scaption",
       "englishName": "Dumbbell Scaption",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Скапция с гантелями",
+        "Подъём гантелей вперёд под углом",
+        "Dumbbell Scaption"
       ],
       "group": "shoulders",
       "equipment": "dumbbell",

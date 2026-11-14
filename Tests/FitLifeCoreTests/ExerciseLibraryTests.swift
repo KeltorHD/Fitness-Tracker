@@ -359,6 +359,17 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   #expect(Set(variants.map(\.id)).count == 2)
 }
 
+@Test func neutralGripDumbbellPressIsGroupedWithFlatDumbbellPress() throws {
+  let entry = try #require(
+    ExerciseLibrary.entries.first { $0.sourceID == "Dumbbell_Bench_Press" })
+  let variants = ExerciseLibrary.variants(for: entry.id, language: .russian)
+  #expect(Set(variants.map(\.sourceID)) == [
+    "Dumbbell_Bench_Press", "Dumbbell_Bench_Press_with_Neutral_Grip",
+  ])
+  #expect(Set(variants.map(\.id)).count == 2)
+  #expect(ExerciseLibrary.search("Жим гантелей лёжа").contains { $0.id == entry.id })
+}
+
 @Test func multipleEquipmentFiltersUseUnionAndIntersectWithMuscleAndSearch() {
   let equipment: Set<ExerciseEquipment> = [.barbell, .dumbbell]
   let combined = ExerciseLibrary.search(equipment: equipment)
