@@ -527,7 +527,16 @@
     "en": "Barbell sumo deadlift",
     "members": [
       "Sumo_Deadlift_with_Bands",
-      "Reverse_Band_Sumo_Deadlift"
+      "Reverse_Band_Sumo_Deadlift",
+      "Sumo_Deadlift_with_Chains"
+    ]
+  },
+  "supine-overhead-medicine-ball-throw": {
+    "ru": "Бросок медбола из-за головы с подъёмом корпуса",
+    "en": "Supine overhead medicine ball throw",
+    "members": [
+      "Supine_One-Arm_Overhead_Throw",
+      "Supine_Two-Arm_Overhead_Throw"
     ]
   }
 }

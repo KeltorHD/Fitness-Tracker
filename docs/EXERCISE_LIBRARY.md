@@ -148,3 +148,5 @@ python3 scripts/import-exercise-library.py --download-only
 Вариант разгибания руки на блоке сверён с [описанием упражнения](https://www.flexxp.com/triceps-videos); видео разгибания рук со штангой найдено по названию и описанию без просмотра. `Standing_One-Arm_Dumbbell_Triceps_Extension` и `Dumbbell_One-Arm_Triceps_Extension` описывают один и тот же стоячий вариант: идентификаторы сохранены до решения о возможном объединении истории.
 
 Разгибание рук с полотенцем сверено с [описанием сопротивления партнёра](https://www.allinahealth.org/healthysetgo/move/partner-exercises-get-in-shape-together). Видео этого упражнения и скручиваний с канатом найдены по названию и описанию без просмотра.
+
+Инструкции `Suspended_Row` и `Suspended_Reverse_Crunch` исправлены на обоих языках по руководствам TRX: при тяге [лопатки сводятся](https://www.trxtraining.com/blogs/news/trx-shoulder-exercises), а при скручивании [колени подтягиваются к корпусу](https://www.trxtraining.com/blogs/news/trx-moves-of-the-week-the-basics). Видео жима Тейта найдено по названию и описанию без просмотра.

@@ -556,7 +556,8 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     ["Smith_Machine_Upright_Row", "Smith_Machine_One-Arm_Upright_Row"],
     ["Standing_Cable_Lift", "Standing_Cable_Wood_Chop"],
     ["Stiff-Legged_Barbell_Deadlift", "Smith_Machine_Stiff-Legged_Deadlift"],
-    ["Sumo_Deadlift_with_Bands", "Reverse_Band_Sumo_Deadlift"],
+    ["Sumo_Deadlift_with_Bands", "Reverse_Band_Sumo_Deadlift", "Sumo_Deadlift_with_Chains"],
+    ["Supine_One-Arm_Overhead_Throw", "Supine_Two-Arm_Overhead_Throw"],
     [
       "Standing_Alternating_Dumbbell_Press", "Standing_Palm-In_One-Arm_Dumbbell_Press",
       "Standing_Palms-In_Dumbbell_Press",
@@ -642,6 +643,15 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   let english = try #require(
     ExerciseLibrary.entries(language: .english).first { $0.sourceID == "Spider_Curl" })
   #expect(english.steps.contains { $0.contains("dumbbell") })
+}
+
+@Test func suspensionInstructionsUseCorrectMovementCues() throws {
+  let row = try #require(
+    ExerciseLibrary.entries(language: .english).first { $0.sourceID == "Suspended_Row" })
+  let crunch = try #require(
+    ExerciseLibrary.entries(language: .english).first { $0.sourceID == "Suspended_Reverse_Crunch" })
+  #expect(row.steps.contains { $0.contains("shoulder blades together") })
+  #expect(!crunch.steps.joined().contains("anteriorly tilt"))
 }
 
 @Test func inclineDumbbellPressGripVariantsKeepSeparateIDs() throws {

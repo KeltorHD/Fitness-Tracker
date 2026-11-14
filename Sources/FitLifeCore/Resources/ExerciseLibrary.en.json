@@ -30946,6 +30946,9 @@
       "name": "Sumo Deadlift with Chains",
       "englishName": "Sumo Deadlift with Chains",
       "aliases": [
+        "Тяга сумо со штангой и цепями",
+        "Sumo deadlift with chains",
+        "Становая тяга сумо с цепями",
         "Пауэрлифтинг",
         "powerlifting"
       ],
@@ -30980,7 +30983,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "sumo-deadlift",
+        "title": "Barbell sumo deadlift"
+      }
     },
     {
       "id": "13b87784-f18c-5447-ba18-283e4456d070",
@@ -30988,6 +30995,9 @@
       "name": "Superman",
       "englishName": "Superman",
       "aliases": [
+        "Подъём рук и ног лёжа на животе",
+        "Superman",
+        "Супермен",
         "Растяжка",
         "stretching"
       ],
@@ -31023,6 +31033,9 @@
       "name": "Supine Chest Throw",
       "englishName": "Supine Chest Throw",
       "aliases": [
+        "Бросок медбола от груди лёжа",
+        "Supine chest throw",
+        "Бросок на грудь лежа на спине",
         "Плиометрика",
         "plyometrics"
       ],
@@ -31058,6 +31071,8 @@
       "name": "Supine One-Arm Overhead Throw",
       "englishName": "Supine One-Arm Overhead Throw",
       "aliases": [
+        "Бросок медбола одной рукой лёжа с подъёмом корпуса",
+        "Бросок одной рукой через голову лежа на спине",
         "Плиометрика",
         "plyometrics"
       ],
@@ -31085,7 +31100,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "supine-overhead-medicine-ball-throw",
+        "title": "Supine overhead medicine ball throw"
+      }
     },
     {
       "id": "73fba227-b57d-5c38-9f38-49ed563c24b6",
@@ -31093,6 +31112,8 @@
       "name": "Supine Two-Arm Overhead Throw",
       "englishName": "Supine Two-Arm Overhead Throw",
       "aliases": [
+        "Бросок медбола двумя руками лёжа с подъёмом корпуса",
+        "Бросок двумя руками через голову лежа на спине",
         "Плиометрика",
         "plyometrics"
       ],
@@ -31121,7 +31142,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "supine-overhead-medicine-ball-throw",
+        "title": "Supine overhead medicine ball throw"
+      }
     },
     {
       "id": "ebcca704-2a7c-5ec7-9db8-d7b33f1534bd",
@@ -31129,6 +31154,9 @@
       "name": "Suspended Fallout",
       "englishName": "Suspended Fallout",
       "aliases": [
+        "Раскатывание в петлях стоя",
+        "Suspension fallout",
+        "Приостановленные последствия",
         "Силовые упражнения",
         "strength"
       ],
@@ -31170,6 +31198,9 @@
       "name": "Suspended Push-Up",
       "englishName": "Suspended Push-Up",
       "aliases": [
+        "Отжимания в петлях",
+        "Suspension push-up",
+        "Отжимания с подвесом",
         "Силовые упражнения",
         "strength"
       ],
@@ -31207,6 +31238,9 @@
       "name": "Suspended Reverse Crunch",
       "englishName": "Suspended Reverse Crunch",
       "aliases": [
+        "Обратные скручивания в петлях",
+        "Suspension reverse crunch",
+        "Обратный кранч с подвесом",
         "Силовые упражнения",
         "strength"
       ],
@@ -31222,10 +31256,9 @@
         "rectusAbdominisLower"
       ],
       "steps": [
-        "Secure a set of suspension straps with the handles hanging about a foot off of the ground. Move yourself into a pushup plank position facing away from the rack.",
-        "Place your feet into the handles. You should maintain a straight posture, not allowing the hips to sag. This will be your starting position.",
-        "Begin the movement by flexing the knees and hips, drawing the knees to your torso. As you do so, anteriorly tilt your pelvis, allowing your spine to flex.",
-        "At the top of the controlled motion, return to the starting position."
+        "Secure the straps low, place your feet in the handles and assume a strong high plank.",
+        "Bend your knees and draw them toward your torso while maintaining shoulder support.",
+        "Slowly extend your legs and return to the plank."
       ],
       "images": [
         "Suspended_Reverse_Crunch/0.jpg",
@@ -31242,6 +31275,9 @@
       "name": "Suspended Row",
       "englishName": "Suspended Row",
       "aliases": [
+        "Горизонтальная тяга в петлях",
+        "Suspension row",
+        "Горизонтальная тяга на подвесных петлях",
         "Силовые упражнения",
         "strength"
       ],
@@ -31259,9 +31295,9 @@
         "trapeziusMiddle"
       ],
       "steps": [
-        "Suspend your straps at around chest height. Take a handle in each hand and lean back. Keep your body erect and your head and chest up. Your arms should be fully extended. This will be your starting position.",
-        "Begin by flexing the elbow to initiate the movement. Protract your shoulder blades as you do so.",
-        "At the completion of the motion pause, and then return to the starting position."
+        "Hold the handles of securely anchored straps and lean back with your arms extended.",
+        "Bend your elbows and draw your shoulder blades together as you pull your chest toward the handles.",
+        "Slowly straighten your arms while keeping your body aligned."
       ],
       "images": [
         "Suspended_Row/0.jpg",
@@ -31278,6 +31314,9 @@
       "name": "Suspended Split Squat",
       "englishName": "Suspended Split Squat",
       "aliases": [
+        "Выпады с задней ногой в петле",
+        "Suspension split squat",
+        "Сплит-приседания с подвесом",
         "Силовые упражнения",
         "strength"
       ],
@@ -31316,6 +31355,9 @@
       "name": "Svend Press",
       "englishName": "Svend Press",
       "aliases": [
+        "Сведение и жим двух блинов перед грудью стоя",
+        "Svend press",
+        "Свенд Пресс",
         "Силовые упражнения",
         "strength"
       ],
@@ -31354,6 +31396,9 @@
       "name": "Tate Press",
       "englishName": "Tate Press",
       "aliases": [
+        "Разгибание рук с гантелями к груди лёжа",
+        "Tate press",
+        "Тейт Пресс",
         "Силовые упражнения",
         "strength"
       ],
@@ -31386,7 +31431,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=cCSxFRaN2Kg"
     },
     {
       "id": "2f57c8c9-30a9-5320-aa3e-a397cd7ad7c5",
@@ -31394,6 +31440,9 @@
       "name": "The Straddle",
       "englishName": "The Straddle",
       "aliases": [
+        "Наклон вперёд сидя с разведёнными ногами",
+        "Seated straddle stretch",
+        "Стрэддл",
         "Растяжка",
         "stretching"
       ],
@@ -31427,6 +31476,9 @@
       "name": "Tire Flip",
       "englishName": "Tire Flip",
       "aliases": [
+        "Переворачивание покрышки",
+        "Tire flip",
+        "Переворот шины",
         "Силовой экстрим",
         "strongman"
       ],
@@ -31468,6 +31520,9 @@
       "name": "Toe Touchers",
       "englishName": "Toe Touchers",
       "aliases": [
+        "Скручивания к поднятым ногам",
+        "Toe touch crunch",
+        "касания пальцев ног",
         "Растяжка",
         "stretching"
       ],

@@ -1028,5 +1028,38 @@
   "Straight_Bar_Bench_Mid_Rows": {},
   "Straight_Raises_on_Incline_Bench": {},
   "Stride_Jump_Crossover": {},
-  "Sumo_Deadlift_with_Bands": {}
+  "Sumo_Deadlift_with_Bands": {},
+  "Sumo_Deadlift_with_Chains": {},
+  "Superman": {},
+  "Supine_Chest_Throw": {},
+  "Supine_One-Arm_Overhead_Throw": {},
+  "Supine_Two-Arm_Overhead_Throw": {},
+  "Suspended_Fallout": {},
+  "Suspended_Push-Up": {},
+  "Suspended_Reverse_Crunch": {
+    "englishSteps": [
+      "Secure the straps low, place your feet in the handles and assume a strong high plank.",
+      "Bend your knees and draw them toward your torso while maintaining shoulder support.",
+      "Slowly extend your legs and return to the plank."
+    ],
+    "instructionSourceURL": "https://www.trxtraining.com/blogs/news/trx-moves-of-the-week-the-basics",
+    "instructionCorrectionReason": "The source asks for anterior pelvic tilt while flexing the spine during the crunch; the revised instructions describe the movement without that conflicting cue."
+  },
+  "Suspended_Row": {
+    "englishSteps": [
+      "Hold the handles of securely anchored straps and lean back with your arms extended.",
+      "Bend your elbows and draw your shoulder blades together as you pull your chest toward the handles.",
+      "Slowly straighten your arms while keeping your body aligned."
+    ],
+    "instructionSourceURL": "https://www.trxtraining.com/blogs/news/trx-shoulder-exercises",
+    "instructionCorrectionReason": "The upstream text incorrectly instructs scapular protraction during the pull; the shoulders retract as the body approaches the handles."
+  },
+  "Suspended_Split_Squat": {},
+  "Svend_Press": {},
+  "Tate_Press": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=cCSxFRaN2Kg"
+  },
+  "The_Straddle": {},
+  "Tire_Flip": {},
+  "Toe_Touchers": {}
 }
