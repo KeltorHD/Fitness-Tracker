@@ -61,6 +61,13 @@ public struct ExerciseVariantGroup: Codable, Hashable, Sendable {
   public let title: String
 }
 
+public struct ExerciseImageCredit: Codable, Hashable, Sendable {
+  public let author: String
+  public let sourceURL: String
+  public let licenseName: String
+  public let licenseURL: String
+}
+
 public struct ExerciseLibraryEntry: Identifiable, Codable, Hashable, Sendable {
   public let id: UUID
   public let sourceID: String
@@ -77,10 +84,13 @@ public struct ExerciseLibraryEntry: Identifiable, Codable, Hashable, Sendable {
   public let steps: [String]
   /// Paths relative to the iOS-only ExerciseMedia folder; no runtime network requests.
   public let images: [String]
+  public let imageCredit: ExerciseImageCredit?
   /// Explicit missing-source metadata, rather than fabricated instructions or broken image paths.
   public let techniqueUnavailable: Bool?
   public let imagesUnavailable: Bool?
   public let generatedMedia: ExerciseGeneratedMedia?
+  /// A static AI illustration, distinct from both original photos and animated media.
+  public let generatedIllustration: String?
   public let translationAutomatic: Bool?
   public let techniqueVideoURL: String?
   public let variantGroup: ExerciseVariantGroup?
@@ -170,7 +180,7 @@ public enum ExerciseLibrary {
         entry.primaryMuscleIDs.count == entry.primaryMuscles.count,
         entry.secondaryMuscleIDs.count == entry.secondaryMuscles.count,
         Set(entry.muscleRegions).count == entry.muscleRegions.count,
-        missingImages ? entry.images.isEmpty : entry.images.count == 2,
+        missingImages ? entry.images.isEmpty : (1...2).contains(entry.images.count),
         Set(entry.images).count == entry.images.count,
         entry.images.allSatisfy({ path in
           !path.contains("..") && !path.contains("\\") && !path.hasPrefix("/")
@@ -178,6 +188,16 @@ public enum ExerciseLibrary {
             && path.split(separator: "/").count == 2
         })
       else { throw ExerciseLibraryError.invalidDocument }
+      if let credit = entry.imageCredit {
+        guard !missingImages,
+          !credit.author.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+          !credit.licenseName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+          [credit.sourceURL, credit.licenseURL].allSatisfy({ value in
+            guard let url = URLComponents(string: value) else { return false }
+            return url.scheme == "https" && !(url.host ?? "").isEmpty
+          })
+        else { throw ExerciseLibraryError.invalidDocument }
+      }
       if let media = entry.generatedMedia {
         let paths = [media.poster, media.gif] + media.frames
         guard (2...24).contains(media.frames.count), media.frameDuration.isFinite,
@@ -188,6 +208,11 @@ public enum ExerciseLibrary {
             $0.hasPrefix(entry.sourceID + "/ai-") && !$0.contains("..") && !$0.contains("\\")
               && $0.split(separator: "/").count == 2
           })
+        else { throw ExerciseLibraryError.invalidDocument }
+      }
+      if let illustration = entry.generatedIllustration {
+        guard entry.generatedMedia == nil, entry.images.isEmpty,
+          illustration == entry.sourceID + "/ai-still.png"
         else { throw ExerciseLibraryError.invalidDocument }
       }
       if let video = entry.techniqueVideoURL {

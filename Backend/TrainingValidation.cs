@@ -16,6 +16,10 @@ internal static class TrainingValidation
         if (TrainingKinds.IsNutrition(kind)) return NutritionValidation.Canonical(kind, id, value);
         switch (kind)
         {
+            case TrainingKinds.ExerciseLink:
+                var link = TrainingJson.Read<ExerciseLinkData>(value);
+                Check(link.Id == id && id != Guid.Empty && link.CatalogID != Guid.Empty && link.CatalogID != id);
+                return TrainingJson.Element(link);
             case TrainingKinds.Workout:
                 var workout = TrainingJson.Read<WorkoutData>(value);
                 Check(workout.Id == id);

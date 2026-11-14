@@ -197,6 +197,11 @@ private struct TrainingValuePreview: View {
       case .nutritionProfile(let value):
         if let goal = value.goal { Text(goal.calories, format: .number) }
         ForEach(value.favorites) { product in Text(product.name) }
+      case .exerciseLink(let value):
+        let language = AppLanguage.system.resolved(preferredLanguages: [locale.identifier])
+        Text(
+          ExerciseLibrary.entry(for: value.catalogID, language: language)?.name
+            ?? L10n.text("Упражнение недоступно", locale: locale))
       case .heartRate(let recording):
         Text(
           L10n.text(

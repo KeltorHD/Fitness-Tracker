@@ -2,7 +2,7 @@ import Foundation
 
 public enum TrainingKind: String, Codable, CaseIterable, Sendable {
   case workout, template, bodyWeight, heartRate, foodEntry, waterEntry, supplementEntry,
-    supplementPlan, nutritionProfile
+    supplementPlan, nutritionProfile, exerciseLink
   public var isNutrition: Bool {
     switch self {
     case .foodEntry, .waterEntry, .supplementEntry, .supplementPlan, .nutritionProfile: true
@@ -31,6 +31,7 @@ public enum TrainingValue: Codable, Equatable, Sendable {
   case supplementEntry(SupplementEntry)
   case supplementPlan(SupplementPlan)
   case nutritionProfile(NutritionProfile)
+  case exerciseLink(ExerciseLink)
 
   public var key: TrainingRecordKey {
     switch self {
@@ -42,6 +43,7 @@ public enum TrainingValue: Codable, Equatable, Sendable {
     case .supplementEntry(let value): TrainingRecordKey(kind: .supplementEntry, id: value.id)
     case .supplementPlan(let value): TrainingRecordKey(kind: .supplementPlan, id: value.id)
     case .nutritionProfile(let value): TrainingRecordKey(kind: .nutritionProfile, id: value.id)
+    case .exerciseLink(let value): TrainingRecordKey(kind: .exerciseLink, id: value.id)
     case .heartRate(let value): TrainingRecordKey(kind: .heartRate, id: value.workoutID)
     }
   }
@@ -55,7 +57,7 @@ public enum TrainingValue: Codable, Equatable, Sendable {
     case .supplementEntry: nil
     case .supplementPlan: nil
     case .nutritionProfile: nil
-    case .bodyWeight, .heartRate: nil
+    case .bodyWeight, .heartRate, .exerciseLink: nil
     }
   }
 
@@ -69,6 +71,7 @@ public enum TrainingValue: Codable, Equatable, Sendable {
     case .supplementEntry(let value): try value.validate()
     case .supplementPlan(let value): try value.validate()
     case .nutritionProfile(let value): try value.validate()
+    case .exerciseLink(let value): try value.validate()
     case .heartRate(let value): try value.validate()
     }
   }
@@ -100,6 +103,7 @@ public enum TrainingValue: Codable, Equatable, Sendable {
     case .supplementEntry: .supplementEntry(try SupplementEntry(from: decoder))
     case .supplementPlan: .supplementPlan(try SupplementPlan(from: decoder))
     case .nutritionProfile: .nutritionProfile(try NutritionProfile(from: decoder))
+    case .exerciseLink: .exerciseLink(try ExerciseLink(from: decoder))
     case .heartRate: .heartRate(try HeartRateRecording(from: decoder))
     }
   }
@@ -113,6 +117,7 @@ public enum TrainingValue: Codable, Equatable, Sendable {
     case .supplementEntry(let value): try value.encode(to: encoder)
     case .supplementPlan(let value): try value.encode(to: encoder)
     case .nutritionProfile(let value): try value.encode(to: encoder)
+    case .exerciseLink(let value): try value.encode(to: encoder)
     case .heartRate(let value): try value.encode(to: encoder)
     case .template(let value):
       var container = encoder.container(keyedBy: TemplateKeys.self)
@@ -241,12 +246,13 @@ public struct TrainingSnapshot: Sendable {
   public let values: [TrainingValue]
   public init(
     workouts: [Workout], templates: [WorkoutTemplate], bodyWeights: [BodyWeightEntry],
-    heartRate: [HeartRateRecording], nutrition: NutritionSnapshot = NutritionSnapshot()
+    heartRate: [HeartRateRecording], nutrition: NutritionSnapshot = NutritionSnapshot(),
+    exerciseLinks: [ExerciseLink] = []
   ) throws {
     values =
       workouts.map(TrainingValue.workout) + templates.map(TrainingValue.template)
       + bodyWeights.map(TrainingValue.bodyWeight) + heartRate.map(TrainingValue.heartRate)
-      + nutrition.values
+      + nutrition.values + exerciseLinks.map(TrainingValue.exerciseLink)
     guard Set(values.map(\.key)).count == values.count,
       Set(heartRate.map(\.workoutID)).isSubset(of: Set(workouts.map(\.id)))
     else { throw TrainingSyncError.invalidData }
@@ -288,20 +294,27 @@ public struct TrainingJournalSnapshot: Equatable, Sendable {
   public var workouts: [Workout]
   public var templates: [WorkoutTemplate]
   public var bodyWeights: [BodyWeightEntry]
-  public init(workouts: [Workout], templates: [WorkoutTemplate], bodyWeights: [BodyWeightEntry]) {
+  public var exerciseLinks: [ExerciseLink]
+  public init(
+    workouts: [Workout], templates: [WorkoutTemplate], bodyWeights: [BodyWeightEntry],
+    exerciseLinks: [ExerciseLink] = []
+  ) {
     self.workouts = workouts
     self.templates = templates
     self.bodyWeights = bodyWeights
+    self.exerciseLinks = exerciseLinks
   }
   public func applying(_ changes: [TrainingChange]) throws -> TrainingJournalSnapshot {
     guard Set(changes.map(\.key)).count == changes.count,
       Set(workouts.map(\.id)).count == workouts.count,
       Set(templates.map(\.id)).count == templates.count,
-      Set(bodyWeights.map(\.id)).count == bodyWeights.count
+      Set(bodyWeights.map(\.id)).count == bodyWeights.count,
+      Set(exerciseLinks.map(\.id)).count == exerciseLinks.count
     else { throw TrainingSyncError.invalidData }
     var workouts = Dictionary(uniqueKeysWithValues: workouts.map { ($0.id, $0) })
     var templates = Dictionary(uniqueKeysWithValues: templates.map { ($0.id, $0) })
     var weights = Dictionary(uniqueKeysWithValues: bodyWeights.map { ($0.id, $0) })
+    var links = Dictionary(uniqueKeysWithValues: exerciseLinks.map { ($0.id, $0) })
     for change in changes {
       try change.value?.validate()
       switch (change.key.kind, change.value) {
@@ -311,6 +324,8 @@ public struct TrainingJournalSnapshot: Equatable, Sendable {
       case (.workout, nil): workouts[change.key.id] = nil
       case (.template, nil): templates[change.key.id] = nil
       case (.bodyWeight, nil): weights[change.key.id] = nil
+      case (.exerciseLink, .exerciseLink(let value)): links[change.key.id] = value
+      case (.exerciseLink, nil): links[change.key.id] = nil
       case (.foodEntry, _), (.waterEntry, _), (.supplementEntry, _),
         (.supplementPlan, _), (.nutritionProfile, _):
         break
@@ -323,7 +338,8 @@ public struct TrainingJournalSnapshot: Equatable, Sendable {
     return TrainingJournalSnapshot(
       workouts: workouts.values.sorted { $0.startedAt > $1.startedAt },
       templates: templates.values.sorted { $0.name < $1.name },
-      bodyWeights: weights.values.sorted { $0.measuredAt > $1.measuredAt })
+      bodyWeights: weights.values.sorted { $0.measuredAt > $1.measuredAt },
+      exerciseLinks: links.values.sorted { $0.id.uuidString < $1.id.uuidString })
   }
 }
 

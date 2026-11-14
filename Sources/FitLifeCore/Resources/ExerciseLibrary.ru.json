@@ -10227,6 +10227,7 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": true,
       "generatedMedia": null,
+      "generatedIllustration": "Decline_EZ_Bar_Triceps_Extension/ai-still.png",
       "translationAutomatic": false,
       "variantGroup": {
         "id": "decline-triceps-extension",
@@ -11829,6 +11830,7 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": true,
       "generatedMedia": null,
+      "generatedIllustration": "Elevated_Cable_Rows/ai-still.png",
       "translationAutomatic": false,
       "variantGroup": {
         "id": "seated-cable-row",
@@ -13163,6 +13165,7 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": true,
       "generatedMedia": null,
+      "generatedIllustration": "Gironda_Sternum_Chins/ai-still.png",
       "translationAutomatic": false,
       "variantGroup": {
         "id": "pull-up",
@@ -14348,10 +14351,18 @@
         "Опираясь на руки и другую ногу, медленно перекатывайте бедро от области таза к колену, не наезжая на суставы.",
         "Повторите на другой стороне."
       ],
-      "images": [],
+      "images": [
+        "Iliotibial_Tract-SMR/wger-625.jpg"
+      ],
       "techniqueUnavailable": false,
-      "imagesUnavailable": true,
+      "imagesUnavailable": false,
       "generatedMedia": null,
+      "imageCredit": {
+        "author": "Davidgj32",
+        "sourceURL": "https://wger.de/en/exercise/1857/view-base",
+        "licenseName": "CC BY-SA 4.0",
+        "licenseURL": "https://creativecommons.org/licenses/by-sa/4.0/"
+      },
       "translationAutomatic": false,
       "techniqueVideoURL": "https://www.youtube.com/watch?v=eI9qLfSlCuI"
     },
@@ -20621,6 +20632,7 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": true,
       "generatedMedia": null,
+      "generatedIllustration": "One_Arm_Chin-Up/ai-still.png",
       "translationAutomatic": false,
       "variantGroup": {
         "id": "pull-up",
@@ -22291,6 +22303,7 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": true,
       "generatedMedia": null,
+      "generatedIllustration": "Power_Partials/ai-still.png",
       "translationAutomatic": false,
       "variantGroup": {
         "id": "lateral-raise",
@@ -32925,6 +32938,7 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": true,
       "generatedMedia": null,
+      "generatedIllustration": "Wide-Grip_Decline_Barbell_Pullover/ai-still.png",
       "translationAutomatic": false
     },
     {
@@ -33541,6 +33555,7 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": true,
       "generatedMedia": null,
+      "generatedIllustration": "FitLife_Triceps_Pushdown_EZ_Bar/ai-still.png",
       "translationAutomatic": false,
       "variantGroup": {
         "id": "cable-triceps-pushdown",
@@ -33574,6 +33589,7 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": true,
       "generatedMedia": null,
+      "generatedIllustration": "FitLife_Triceps_Pushdown_One_Arm_Overhand/ai-still.png",
       "translationAutomatic": false,
       "variantGroup": {
         "id": "cable-triceps-pushdown",
@@ -33610,6 +33626,7 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": true,
       "generatedMedia": null,
+      "generatedIllustration": "FitLife_Single_Leg_Squat_To_High_Box/ai-still.png",
       "translationAutomatic": false,
       "variantGroup": {
         "id": "barbell-box-squat",

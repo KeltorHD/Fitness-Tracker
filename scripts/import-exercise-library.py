@@ -109,6 +109,10 @@ def generate():
         assert len(regions[source_id]) == len(set(regions[source_id])), source_id
     generated_path = ROOT / 'Data/ExerciseLibrary/generated-media.json'
     generated = json.loads(generated_path.read_text()) if generated_path.exists() else {}
+    stills = json.loads((ROOT / 'Data/ExerciseLibrary/generated-stills.json').read_text())
+    assert set(stills) <= set(source) and not set(stills) & set(generated)
+    external = json.loads((ROOT / 'Data/ExerciseLibrary/external-media.json').read_text())
+    assert set(external) <= set(source)
     translation_path = ROOT / 'Data/ExerciseLibrary/translation-provenance.json'
     automatic = set(json.loads(translation_path.read_text()).get('automaticSourceIDs', [])) if translation_path.exists() else set()
     reviewed_path = ROOT / 'Data/ExerciseLibrary/reviewed-exercises.json'
@@ -153,6 +157,27 @@ def generate():
             images = [f'{source_id}/replacement-{index}.jpg' for index in range(2)]
             assert all((MEDIA / path).read_bytes() == (MEDIA / original).read_bytes()
                        for path, original in zip(images, donor_images)), source_id
+        credit = external.get(source_id)
+        if credit:
+            assert not images and not donor_id, source_id
+            assert credit['author'].strip() and credit['licenseName'].strip(), source_id
+            assert all(re.fullmatch(r'https://[^\s]+', credit[key])
+                       for key in ('sourceURL', 'licenseURL')), source_id
+            assert 1 <= len(credit['files']) <= 2, source_id
+            images = [file['path'] for file in credit['files']]
+            for file in credit['files']:
+                assert re.fullmatch(re.escape(source_id) + r'/wger-[0-9]+\.jpg', file['path']), source_id
+                assert re.fullmatch(r'https://[^\s]+', file['originalURL']), source_id
+                data = (MEDIA / file['path']).read_bytes()
+                assert len(data) == file['bytes'] and hashlib.sha256(data).hexdigest() == file['sha256'], source_id
+        still = stills.get(source_id)
+        if still:
+            assert not images and still['generator'] == 'built-in image_gen', source_id
+            assert still['description'].strip(), source_id
+            assert still['path'] == f'{source_id}/ai-still.png', source_id
+            data = (MEDIA / still['path']).read_bytes()
+            assert data.startswith(b'\x89PNG\r\n\x1a\n'), source_id
+            assert len(data) == still['bytes'] and hashlib.sha256(data).hexdigest() == still['sha256'], source_id
         assert primary_muscles and all(muscle in MUSCLES for muscle in primary_muscles), source_id
         assert all(muscle in MUSCLES for muscle in secondary_muscles), source_id
         assert 0 < len(name) <= 80 and re.search('[А-Яа-яЁё]', name)
@@ -182,6 +207,10 @@ def generate():
                         'techniqueUnavailable': not bool(steps),
                         'imagesUnavailable': not bool(images),
                         'generatedMedia': generated.get(source_id),
+                        **({'generatedIllustration': still['path']} if still else {}),
+                        **({'imageCredit': {key: credit[key] for key in
+                                           ('author', 'sourceURL', 'licenseName', 'licenseURL')}}
+                           if credit else {}),
                         'translationAutomatic': source_id in automatic and source_id not in reviewed,
                         **({'variantGroup': {'id': group_id, 'title': variant_groups[group_id]['ru']}}
                            if group_id else {}),

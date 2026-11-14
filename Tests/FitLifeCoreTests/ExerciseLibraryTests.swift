@@ -17,7 +17,7 @@ import Testing
     #expect(
       entry.steps.allSatisfy { $0.range(of: "[А-Яа-яЁё]", options: .regularExpression) != nil })
     #expect(entry.images.isEmpty == (entry.imagesUnavailable == true))
-    #expect(entry.images.isEmpty || entry.images.count == 2)
+    #expect(entry.images.isEmpty || (1...2).contains(entry.images.count))
     try Validation.name(entry.exercise.name)
     #expect(entry.exercise.instructions == entry.steps.joined(separator: "\n"))
   }
@@ -72,7 +72,7 @@ import Testing
 
 @Test(arguments: [
   "locale", "duplicate", "image", "steps", "version", "animationPath", "animationDuration",
-  "videoURL", "variantGroup",
+  "videoURL", "variantGroup", "imageCredit", "illustrationPath",
 ])
 func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   let document: ExerciseLibraryDocument = try #require(ExerciseLibrary.document)
@@ -94,6 +94,12 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     entries[0]["generatedMedia"] = media
   case "videoURL": entries[0]["techniqueVideoURL"] = "https://example.com/video"
   case "variantGroup": entries[0]["variantGroup"] = ["id": "invalid", "title": ""]
+  case "imageCredit":
+    entries[0]["imageCredit"] = [
+      "author": "Photographer", "sourceURL": "http://example.com/photo",
+      "licenseName": "CC BY-SA 4.0", "licenseURL": "https://example.com/license",
+    ]
+  case "illustrationPath": entries[0]["generatedIllustration"] = "../outside.png"
   default: object["schemaVersion"] = 999
   }
   object["entries"] = entries
@@ -119,10 +125,28 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
       "Decline_EZ_Bar_Triceps_Extension", "Wide-Grip_Decline_Barbell_Pullover",
       "FitLife_Triceps_Pushdown_EZ_Bar", "FitLife_Triceps_Pushdown_One_Arm_Overhand",
       "Gironda_Sternum_Chins", "One_Arm_Chin-Up",
-      "Iliotibial_Tract-SMR", "Elevated_Cable_Rows",
+      "Elevated_Cable_Rows",
       "FitLife_Single_Leg_Squat_To_High_Box",
     ])
   #expect(ExerciseLibrary.entries.allSatisfy { $0.techniqueUnavailable == false })
+  let missingPhotos = ExerciseLibrary.entries.filter { $0.imagesUnavailable == true }
+  #expect(missingPhotos.count == 12)
+  #expect(missingPhotos.allSatisfy { $0.generatedMedia != nil || $0.generatedIllustration != nil })
+  #expect(missingPhotos.filter { $0.generatedIllustration != nil }.count == 9)
+}
+
+@Test func iliotibialPhotoKeepsAttributionInBothLanguages() throws {
+  for language in [AppLanguage.russian, .english] {
+    let entry = try #require(
+      ExerciseLibrary.entries(language: language).first { $0.sourceID == "Iliotibial_Tract-SMR" })
+    #expect(entry.images == ["Iliotibial_Tract-SMR/wger-625.jpg"])
+    #expect(entry.imagesUnavailable == false)
+    let credit = try #require(entry.imageCredit)
+    #expect(credit.author == "Davidgj32")
+    #expect(credit.sourceURL == "https://wger.de/en/exercise/1857/view-base")
+    #expect(credit.licenseName == "CC BY-SA 4.0")
+    #expect(credit.licenseURL == "https://creativecommons.org/licenses/by-sa/4.0/")
+  }
 }
 
 @Test func partialLateralRaiseDoesNotShowFullRangeSourcePhotos() throws {

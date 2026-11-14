@@ -10585,6 +10585,7 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": true,
       "generatedMedia": null,
+      "generatedIllustration": "Decline_EZ_Bar_Triceps_Extension/ai-still.png",
       "translationAutomatic": false,
       "variantGroup": {
         "id": "decline-triceps-extension",
@@ -12236,6 +12237,7 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": true,
       "generatedMedia": null,
+      "generatedIllustration": "Elevated_Cable_Rows/ai-still.png",
       "translationAutomatic": false,
       "variantGroup": {
         "id": "seated-cable-row",
@@ -13613,6 +13615,7 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": true,
       "generatedMedia": null,
+      "generatedIllustration": "Gironda_Sternum_Chins/ai-still.png",
       "translationAutomatic": false,
       "variantGroup": {
         "id": "pull-up",
@@ -14821,10 +14824,18 @@
         "Place as much of your weight as is tolerable onto your bottom leg; there is no need to keep your bottom leg in contact with the ground. Be sure to relax the muscles of the leg you are stretching.",
         "Roll your leg over the foam from you hip to your knee, pausing for 10-30 seconds at points of tension. Repeat with the opposite leg."
       ],
-      "images": [],
+      "images": [
+        "Iliotibial_Tract-SMR/wger-625.jpg"
+      ],
       "techniqueUnavailable": false,
-      "imagesUnavailable": true,
+      "imagesUnavailable": false,
       "generatedMedia": null,
+      "imageCredit": {
+        "author": "Davidgj32",
+        "sourceURL": "https://wger.de/en/exercise/1857/view-base",
+        "licenseName": "CC BY-SA 4.0",
+        "licenseURL": "https://creativecommons.org/licenses/by-sa/4.0/"
+      },
       "translationAutomatic": false,
       "techniqueVideoURL": "https://www.youtube.com/watch?v=eI9qLfSlCuI"
     },
@@ -21259,6 +21270,7 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": true,
       "generatedMedia": null,
+      "generatedIllustration": "One_Arm_Chin-Up/ai-still.png",
       "translationAutomatic": false,
       "variantGroup": {
         "id": "pull-up",
@@ -23015,6 +23027,7 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": true,
       "generatedMedia": null,
+      "generatedIllustration": "Power_Partials/ai-still.png",
       "translationAutomatic": false,
       "variantGroup": {
         "id": "lateral-raise",
@@ -33940,6 +33953,7 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": true,
       "generatedMedia": null,
+      "generatedIllustration": "Wide-Grip_Decline_Barbell_Pullover/ai-still.png",
       "translationAutomatic": false
     },
     {
@@ -34573,6 +34587,7 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": true,
       "generatedMedia": null,
+      "generatedIllustration": "FitLife_Triceps_Pushdown_EZ_Bar/ai-still.png",
       "translationAutomatic": false,
       "variantGroup": {
         "id": "cable-triceps-pushdown",
@@ -34606,6 +34621,7 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": true,
       "generatedMedia": null,
+      "generatedIllustration": "FitLife_Triceps_Pushdown_One_Arm_Overhand/ai-still.png",
       "translationAutomatic": false,
       "variantGroup": {
         "id": "cable-triceps-pushdown",
@@ -34642,6 +34658,7 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": true,
       "generatedMedia": null,
+      "generatedIllustration": "FitLife_Single_Leg_Squat_To_High_Box/ai-still.png",
       "translationAutomatic": false,
       "variantGroup": {
         "id": "barbell-box-squat",

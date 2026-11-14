@@ -115,6 +115,7 @@ struct AccountTrainingView: View {
     case .supplementEntry: kind = "Приём добавки"
     case .supplementPlan: kind = "Расписание добавки"
     case .nutritionProfile: kind = "Цели и избранные продукты"
+    case .exerciseLink: kind = "Связь упражнений"
     }
     return L10n.text(kind, locale: locale)
   }

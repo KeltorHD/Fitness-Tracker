@@ -4081,6 +4081,23 @@
         }
       }
     },
+    "Выберите упражнение": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выберите упражнение"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose an exercise"
+          }
+        }
+      }
+    },
     "Выберите файл .fitlife или .json.": {
       "extractionState": "manual",
       "localizations": {
@@ -7753,6 +7770,23 @@
         }
       }
     },
+    "Здесь появятся упражнения из импортированных тренировок и планов.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Здесь появятся упражнения из импортированных тренировок и планов."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exercises from imported workouts and plans will appear here."
+          }
+        }
+      }
+    },
     "Здоровье": {
       "extractionState": "manual",
       "localizations": {
@@ -8004,6 +8038,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Reorder exercises"
+          }
+        }
+      }
+    },
+    "Изменить связь": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Изменить связь"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Change link"
           }
         }
       }
@@ -8361,6 +8412,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "History and charts"
+          }
+        }
+      }
+    },
+    "История и статистика": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "История и статистика"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "History and statistics"
+          }
+        }
+      }
+    },
+    "История и статистика объединятся. Записи тренировок сохранят прежние названия и подходы.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "История и статистика объединятся. Записи тренировок сохранят прежние названия и подходы."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "History and statistics will be combined. Saved workouts will retain their original names and sets."
           }
         }
       }
@@ -9674,6 +9759,23 @@
         }
       }
     },
+    "Мои упражнения": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Мои упражнения"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "My exercises"
+          }
+        }
+      }
+    },
     "Мои шаблоны": {
       "extractionState": "manual",
       "localizations": {
@@ -10898,6 +11000,23 @@
         }
       }
     },
+    "Не связано с каталогом": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не связано с каталогом"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not linked to the catalog"
+          }
+        }
+      }
+    },
     "Не удалось включить пульс. Проверьте разрешения «Здоровья» на часах и повторите с iPhone.": {
       "extractionState": "manual",
       "localizations": {
@@ -11884,6 +12003,23 @@
         }
       }
     },
+    "Не удалось связать упражнения.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось связать упражнения."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not link the exercises."
+          }
+        }
+      }
+    },
     "Не удалось синхронизировать данные.": {
       "extractionState": "manual",
       "localizations": {
@@ -12203,6 +12339,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Could not save the goal. Check the values and try again."
+          }
+        }
+      }
+    },
+    "Не удалось убрать связь упражнений.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось убрать связь упражнений."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not remove the exercise link."
           }
         }
       }
@@ -13057,6 +13210,23 @@
         }
       }
     },
+    "Ничего не найдено": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ничего не найдено"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing found"
+          }
+        }
+      }
+    },
     "Новая тренировка": {
       "extractionState": "manual",
       "localizations": {
@@ -13750,6 +13920,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Primary source for each metric"
+          }
+        }
+      }
+    },
+    "Основной каталог": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Основной каталог"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Main catalog"
           }
         }
       }
@@ -16011,6 +16198,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "No records yet"
+          }
+        }
+      }
+    },
+    "Пока нет своих упражнений": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пока нет своих упражнений"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No personal exercises yet"
           }
         }
       }
@@ -19041,6 +19245,57 @@
         }
       }
     },
+    "Связать": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Связать"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Link"
+          }
+        }
+      }
+    },
+    "Связать с каталогом": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Связать с каталогом"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Link to catalog"
+          }
+        }
+      }
+    },
+    "Связать упражнения?": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Связать упражнения?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Link exercises?"
+          }
+        }
+      }
+    },
     "Связь с пульсометром потеряна. Повторите подключение.": {
       "extractionState": "manual",
       "localizations": {
@@ -19054,6 +19309,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "The heart rate monitor disconnected. Connect again."
+          }
+        }
+      }
+    },
+    "Связь упражнений": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Связь упражнений"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exercise link"
           }
         }
       }
@@ -21727,6 +21999,23 @@
         }
       }
     },
+    "Убрать связь": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Убрать связь"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove link"
+          }
+        }
+      }
+    },
     "Убрать упражнение": {
       "extractionState": "manual",
       "localizations": {
@@ -22522,6 +22811,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Exercise not found."
+          }
+        }
+      }
+    },
+    "Упражнение недоступно": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Упражнение недоступно"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exercise unavailable"
           }
         }
       }

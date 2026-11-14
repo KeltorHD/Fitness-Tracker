@@ -129,19 +129,62 @@ struct ExercisePhoto: View {
   }
 }
 
+struct ExerciseImageCreditView: View {
+  @Environment(\.locale) private var locale
+  let credit: ExerciseImageCredit
+
+  var body: some View {
+    if let sourceURL = URL(string: credit.sourceURL),
+      let licenseURL = URL(string: credit.licenseURL)
+    {
+      HStack {
+        Text(credit.author)
+        Link(L10n.text("Источник", locale: locale), destination: sourceURL)
+        Link(credit.licenseName, destination: licenseURL)
+      }
+      .font(.caption).foregroundStyle(.secondary)
+    }
+  }
+}
+
+struct ExerciseGeneratedIllustration: View {
+  @Environment(\.locale) private var locale
+  let path: String
+  var fillsAvailableSpace = false
+
+  var body: some View {
+    VStack(spacing: 8) {
+      ExercisePhoto(path: path)
+        .frame(height: fillsAvailableSpace ? nil : 270)
+        .frame(maxHeight: fillsAvailableSpace ? .infinity : nil)
+        .frame(maxWidth: .infinity)
+        .background(Color(.secondarySystemGroupedBackground), in: .rect(cornerRadius: 20))
+        .accessibilityLabel(L10n.text("Иллюстрация движения, созданная ИИ.", locale: locale))
+      Text(L10n.text("Иллюстрация движения создана ИИ.", locale: locale))
+        .font(.caption).foregroundStyle(.secondary)
+    }
+  }
+}
+
 /// Visual-only presentation; workout data and technique text stay on their own screens.
 struct ExerciseMediaViewer: View {
   @Environment(\.dismiss) private var dismiss
   @Environment(\.locale) private var locale
+  @Environment(AppStore.self) private var store
   let exercise: Exercise
   @State private var photo = 0
-  private var entry: ExerciseLibraryEntry? { ExerciseLibrary.entry(for: exercise.id) }
+  private var entry: ExerciseLibraryEntry? {
+    ExerciseLibrary.entry(
+      for: PersonalExercises.catalogID(for: exercise.id, links: store.exerciseLinks))
+  }
 
   var body: some View {
     NavigationStack {
       Group {
         if let generated = entry?.generatedMedia {
           ExerciseAnimation(media: generated, fillsAvailableSpace: true).padding(12)
+        } else if let illustration = entry?.generatedIllustration {
+          ExerciseGeneratedIllustration(path: illustration, fillsAvailableSpace: true).padding(12)
         } else if let images = entry?.images, !images.isEmpty {
           VStack(spacing: 12) {
             TabView(selection: $photo) {
@@ -153,27 +196,30 @@ struct ExerciseMediaViewer: View {
                       L10n.exerciseName(exercise, locale: locale), locale: locale))
               }
             }.tabViewStyle(.page(indexDisplayMode: .never))
-            HStack {
-              Button {
-                photo = max(0, photo - 1)
-              } label: {
-                Image(systemName: "chevron.left").frame(width: 44, height: 44)
-              }.disabled(photo == 0)
-                .accessibilityLabel(L10n.text("Предыдущее фото", locale: locale))
-              Spacer()
-              Text(
-                L10n.format(
-                  "Положение %@ из %@", String(photo + 1), String(images.count), locale: locale)
-              )
-              .font(.caption).monospacedDigit()
-              Spacer()
-              Button {
-                photo = min(images.count - 1, photo + 1)
-              } label: {
-                Image(systemName: "chevron.right").frame(width: 44, height: 44)
-              }.disabled(photo == images.count - 1)
-                .accessibilityLabel(L10n.text("Следующее фото", locale: locale))
-            }.buttonStyle(.glass).padding(16)
+            if images.count > 1 {
+              HStack {
+                Button {
+                  photo = max(0, photo - 1)
+                } label: {
+                  Image(systemName: "chevron.left").frame(width: 44, height: 44)
+                }.disabled(photo == 0)
+                  .accessibilityLabel(L10n.text("Предыдущее фото", locale: locale))
+                Spacer()
+                Text(
+                  L10n.format(
+                    "Положение %@ из %@", String(photo + 1), String(images.count), locale: locale)
+                )
+                .font(.caption).monospacedDigit()
+                Spacer()
+                Button {
+                  photo = min(images.count - 1, photo + 1)
+                } label: {
+                  Image(systemName: "chevron.right").frame(width: 44, height: 44)
+                }.disabled(photo == images.count - 1)
+                  .accessibilityLabel(L10n.text("Следующее фото", locale: locale))
+              }.buttonStyle(.glass).padding(16)
+            }
+            if let credit = entry?.imageCredit { ExerciseImageCreditView(credit: credit) }
           }
         } else {
           ContentUnavailableView(

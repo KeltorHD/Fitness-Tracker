@@ -370,8 +370,9 @@ struct ActiveWorkoutView: View {
             row: row, index: index, unit: unit, completedOnly: false, showsThumbnail: false)
         }
         .buttonStyle(.plain).accessibilityIdentifier("openWorkoutExercise")
-        if let entry = ExerciseLibrary.entry(for: row.exercise.id),
-          entry.generatedMedia != nil || !entry.images.isEmpty
+        if let entry = ExerciseLibrary.entry(
+          for: PersonalExercises.catalogID(for: row.exercise.id, links: store.exerciseLinks)),
+          entry.generatedMedia != nil || entry.generatedIllustration != nil || !entry.images.isEmpty
         {
           Button {
             mediaExercise = row.exercise

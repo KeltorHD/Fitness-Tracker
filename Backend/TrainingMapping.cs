@@ -163,6 +163,12 @@ internal static class TrainingMapping
         Guid id, CancellationToken cancellationToken)
     {
         if (TrainingKinds.IsNutrition(kind)) return await NutritionStorage.ReadAsync(database, owner, kind, id, cancellationToken);
+        if (kind == TrainingKinds.ExerciseLink)
+        {
+            var value = await database.Set<TrainingExerciseLink>().AsNoTracking()
+                .SingleAsync(x => x.OwnerId == owner && x.Id == id, cancellationToken);
+            return TrainingJson.Element(new ExerciseLinkData { Id = value.Id, CatalogID = value.CatalogID });
+        }
         if (kind == TrainingKinds.BodyWeight)
         {
             var value = await database.BodyWeights.AsNoTracking().SingleAsync(x => x.OwnerId == owner && x.Id == id, cancellationToken);

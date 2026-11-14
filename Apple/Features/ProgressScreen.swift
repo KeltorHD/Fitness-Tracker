@@ -140,12 +140,15 @@ struct ProgressScreen: View {
         }
         .onChange(of: store.workouts, initial: true) { refresh() }
         .onChange(of: store.bodyWeights) { refresh() }
+        .onChange(of: store.exerciseLinks) { refresh() }
         .onChange(of: calendar) { refresh() }
         .onChange(of: phase) { if phase == .active { refresh() } }
     }
     .id(navigationResetID)
   }
   private func refresh() {
-    model.refresh(workouts: store.workouts, calendar: calendar, bodyWeights: store.bodyWeights)
+    model.refresh(
+      workouts: store.workouts, calendar: calendar, bodyWeights: store.bodyWeights,
+      links: store.exerciseLinks)
   }
 }

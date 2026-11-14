@@ -1,0 +1,65 @@
+{
+  "FitLife_Triceps_Pushdown_One_Arm_Overhand": {
+    "path": "FitLife_Triceps_Pushdown_One_Arm_Overhand/ai-still.png",
+    "generator": "built-in image_gen",
+    "description": "One-arm cable triceps pushdown, D handle, overhand grip.",
+    "bytes": 1899663,
+    "sha256": "f26d0279779c193685a13861470d91799a50c271b201a0df924772e3707f8962"
+  },
+  "FitLife_Triceps_Pushdown_EZ_Bar": {
+    "path": "FitLife_Triceps_Pushdown_EZ_Bar/ai-still.png",
+    "generator": "built-in image_gen",
+    "description": "Cable triceps pushdown with an EZ-bar handle and overhand grip.",
+    "bytes": 1753867,
+    "sha256": "b0cf3ee6d6068611983909e41791f24d1bc160897faf129d882a07487e0580c6"
+  },
+  "FitLife_Single_Leg_Squat_To_High_Box": {
+    "path": "FitLife_Single_Leg_Squat_To_High_Box/ai-still.png",
+    "generator": "built-in image_gen",
+    "description": "Single-leg squat to a high box behind the hips.",
+    "bytes": 1916210,
+    "sha256": "e06ea6ebfebd1c52fcc60ae3a5b92db271d420aa2b4c1f5f63b5e0a366379c05"
+  },
+  "Power_Partials": {
+    "path": "Power_Partials/ai-still.png",
+    "generator": "built-in image_gen",
+    "description": "Partial dumbbell lateral raises, bottom portion of range.",
+    "bytes": 1772328,
+    "sha256": "5d989ba15845252bf25af303edab9a2d1556fac5e3baec561bbbfbe59dd88b76"
+  },
+  "Elevated_Cable_Rows": {
+    "path": "Elevated_Cable_Rows/ai-still.png",
+    "generator": "built-in image_gen",
+    "description": "Seated cable row on a platform raised above the bench seat.",
+    "bytes": 1959128,
+    "sha256": "7f9f9f930ca5fbe0702e2d2163a0d3cb704e965fda7e7aff881434b7b286a5ed"
+  },
+  "Decline_EZ_Bar_Triceps_Extension": {
+    "path": "Decline_EZ_Bar_Triceps_Extension/ai-still.png",
+    "generator": "built-in image_gen",
+    "description": "Decline lying triceps extension using an EZ bar.",
+    "bytes": 1982937,
+    "sha256": "97570434ce7033b7f19f667017406ae4591378201c0855b39aff4efed4789d44"
+  },
+  "Wide-Grip_Decline_Barbell_Pullover": {
+    "path": "Wide-Grip_Decline_Barbell_Pullover/ai-still.png",
+    "generator": "built-in image_gen",
+    "description": "Wide-grip straight barbell pullover on a decline bench.",
+    "bytes": 1782645,
+    "sha256": "a769aecc138921ab59e9cae0ff12d473010cb4395b2a46a8c969ead83572222f"
+  },
+  "One_Arm_Chin-Up": {
+    "path": "One_Arm_Chin-Up/ai-still.png",
+    "generator": "built-in image_gen",
+    "description": "One-arm chin-up with underhand grip, free hand away from the bar.",
+    "bytes": 1715128,
+    "sha256": "5f8306f0930fcbfdc7551ceee8244fa74c1796b01e96f3e1f05db777d8566093"
+  },
+  "Gironda_Sternum_Chins": {
+    "path": "Gironda_Sternum_Chins/ai-still.png",
+    "generator": "built-in image_gen",
+    "description": "Gironda sternum chin-up, underhand grip, leaning back with the chest to the bar.",
+    "bytes": 1773758,
+    "sha256": "90ed49a369334970bde76324f472d0bde9b1f78b5a4173116f8a9a270da59181"
+  }
+}

@@ -139,6 +139,7 @@ enum WorkoutExerciseAdvance { case stay, moved, finished }
   }
   private(set) var previousValues: PreviousWorkoutValues?
   @ObservationIgnored private var history: [Workout] = []
+  @ObservationIgnored private var links: [ExerciseLink] = []
   @ObservationIgnored private var pendingCompletionID: UUID?
   let unit: WeightUnit
   private let locale: Locale
@@ -146,12 +147,13 @@ enum WorkoutExerciseAdvance { case stay, moved, finished }
 
   init(
     workout: Workout, exerciseID: UUID, unit: WeightUnit, locale: Locale, history: [Workout] = [],
-    draftStore: WorkoutExerciseDraftStore? = nil
+    draftStore: WorkoutExerciseDraftStore? = nil, links: [ExerciseLink] = []
   ) {
     self.exerciseID = exerciseID
     self.unit = unit
     self.locale = locale
     self.history = history
+    self.links = links
     workoutID = workout.id
     if let draftStore, draftStore.workoutID == workout.id, draftStore.unit == unit {
       self.draftStore = draftStore
@@ -231,9 +233,10 @@ enum WorkoutExerciseAdvance { case stay, moved, finished }
     }
     return values
   }
-  func updateHistory(_ history: [Workout], for workout: Workout) {
+  func updateHistory(_ history: [Workout], for workout: Workout, links: [ExerciseLink] = []) {
     guard workout.id == workoutID else { return }
     self.history = history
+    self.links = links
     refresh(workout)
   }
   private func focusPendingSuperset(in workout: Workout) {
@@ -267,12 +270,14 @@ enum WorkoutExerciseAdvance { case stay, moved, finished }
       selectedSetID = next.setID
       selectedStageID = nil
     }
-    previousValues = PreviousWorkoutValues(exerciseRowID: exerciseID, in: workout, history: history)
+    previousValues = PreviousWorkoutValues(
+      exerciseRowID: exerciseID, in: workout, history: history, links: links)
     let pending = workout.exercises.flatMap(\.sets).flatMap(\.stages)
     let ids = Set(pending.map(\.id))
     drafts = drafts.filter { ids.contains($0.key) }
     for row in workout.exercises {
-      let previous = PreviousWorkoutValues(exerciseRowID: row.id, in: workout, history: history)
+      let previous = PreviousWorkoutValues(
+        exerciseRowID: row.id, in: workout, history: history, links: links)
       for stage in row.sets.flatMap(\.stages) {
         let set = WorkoutSet(
           id: stage.id, repetitions: stage.repetitions, weightKG: stage.weightKG,

@@ -22,6 +22,14 @@ struct ExerciseLibraryView: View {
     List {
       Section {
         NavigationLink {
+          PersonalExercisesView(onSelect: onSelect)
+        } label: {
+          Label(L10n.text("Мои упражнения", locale: locale), systemImage: "person.text.rectangle")
+        }
+        .accessibilityIdentifier("personalExercises")
+      }
+      Section {
+        NavigationLink {
           MuscleSelectionView(selection: $model.muscleSelection, showsDoneButton: true)
         } label: {
           Label(
@@ -120,7 +128,9 @@ struct ExerciseLibraryView: View {
       ExerciseDetailView(exercise: entry.exercise, onSelect: onSelect)
     } label: {
       HStack(spacing: 12) {
-        if let path = entry.generatedMedia?.poster ?? entry.images.first {
+        if let path = entry.generatedMedia?.poster ?? entry.generatedIllustration
+          ?? entry.images.first
+        {
           ExercisePhoto(path: path).frame(width: 76, height: 60)
             .clipShape(.rect(cornerRadius: 12)).accessibilityHidden(true)
         } else {
@@ -142,12 +152,13 @@ struct ExerciseLibraryView: View {
 struct ExerciseDetailView: View {
   @Environment(\.fitnessColorTheme) private var colorTheme
   @Environment(\.locale) private var locale
+  @Environment(AppStore.self) private var store
   let exercise: Exercise
   var onSelect: ((Exercise) -> Void)? = nil
   @State private var photo = 0
   private var entry: ExerciseLibraryEntry? {
     ExerciseLibrary.entry(
-      for: exercise.id,
+      for: PersonalExercises.catalogID(for: exercise.id, links: store.exerciseLinks),
       language: AppLanguage.system.resolved(preferredLanguages: [locale.identifier]))
   }
 
@@ -157,6 +168,8 @@ struct ExerciseDetailView: View {
         if let entry {
           if let generated = entry.generatedMedia {
             ExerciseAnimation(media: generated)
+          } else if let illustration = entry.generatedIllustration {
+            ExerciseGeneratedIllustration(path: illustration)
           }
           if !entry.images.isEmpty {
             VStack(spacing: 8) {
@@ -172,26 +185,31 @@ struct ExerciseDetailView: View {
               }
               .tabViewStyle(.page(indexDisplayMode: .never)).frame(height: 270)
               .background(Color(.secondarySystemGroupedBackground), in: .rect(cornerRadius: 20))
-              HStack {
-                Button(L10n.text("Предыдущее фото", locale: locale), systemImage: "chevron.left") {
-                  photo = max(0, photo - 1)
-                }
-                .labelStyle(.iconOnly).disabled(photo == 0)
-                Spacer()
-                Text(
-                  L10n.format(
-                    "Положение %@ из %@", String(photo + 1),
-                    String(entry.images.count), locale: locale)
-                ).font(.caption)
-                  .foregroundStyle(.secondary)
-                Spacer()
-                Button(L10n.text("Следующее фото", locale: locale), systemImage: "chevron.right") {
-                  photo = min(entry.images.count - 1, photo + 1)
-                }
-                .labelStyle(.iconOnly).disabled(photo == entry.images.count - 1)
-              }.buttonStyle(.glass)
+              if entry.images.count > 1 {
+                HStack {
+                  Button(L10n.text("Предыдущее фото", locale: locale), systemImage: "chevron.left")
+                  {
+                    photo = max(0, photo - 1)
+                  }
+                  .labelStyle(.iconOnly).disabled(photo == 0)
+                  Spacer()
+                  Text(
+                    L10n.format(
+                      "Положение %@ из %@", String(photo + 1),
+                      String(entry.images.count), locale: locale)
+                  ).font(.caption)
+                    .foregroundStyle(.secondary)
+                  Spacer()
+                  Button(L10n.text("Следующее фото", locale: locale), systemImage: "chevron.right")
+                  {
+                    photo = min(entry.images.count - 1, photo + 1)
+                  }
+                  .labelStyle(.iconOnly).disabled(photo == entry.images.count - 1)
+                }.buttonStyle(.glass)
+              }
+              if let credit = entry.imageCredit { ExerciseImageCreditView(credit: credit) }
             }
-          } else if entry.generatedMedia == nil {
+          } else if entry.generatedMedia == nil && entry.generatedIllustration == nil {
             Text(L10n.text("Фотографии пока недоступны.", locale: locale))
               .foregroundStyle(.secondary)
           }

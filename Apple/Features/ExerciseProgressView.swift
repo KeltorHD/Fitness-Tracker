@@ -236,7 +236,8 @@ struct ExerciseProgressScreen: View {
 
   var body: some View {
     let language = AppLanguage.system.resolved(preferredLanguages: [locale.identifier])
-    let variants = ExerciseLibrary.variants(for: exercise.id, language: language)
+    let catalogID = PersonalExercises.catalogID(for: exercise.id, links: store.exerciseLinks)
+    let variants = ExerciseLibrary.variants(for: catalogID, language: language)
     ScrollView {
       LazyVStack(alignment: .leading, spacing: 20) {
         if variants.count > 1 {
@@ -298,11 +299,14 @@ struct ExerciseProgressScreen: View {
     .navigationBarTitleDisplayMode(.inline)
     .accessibilityIdentifier("exerciseProgressScreen")
     .onChange(of: store.workouts, initial: true) { refresh() }
+    .onChange(of: store.exerciseLinks) { refresh() }
     .onChange(of: calendar) { refresh() }
     .onChange(of: phase) { if phase == .active { refresh() } }
   }
 
-  private func refresh() { model.refresh(workouts: store.workouts, calendar: calendar) }
+  private func refresh() {
+    model.refresh(workouts: store.workouts, calendar: calendar, links: store.exerciseLinks)
+  }
 }
 
 private enum ExerciseHistorySection: Hashable { case history, charts }

@@ -135,6 +135,14 @@ public sealed class TrainingStorage(BackupDbContext database, ILogger<TrainingSt
         }
         switch (kind)
         {
+            case TrainingKinds.ExerciseLink:
+                var link = TrainingJson.Read<ExerciseLinkData>(value);
+                var existingLink = await database.Set<TrainingExerciseLink>()
+                    .SingleOrDefaultAsync(x => x.OwnerId == owner && x.Id == id, cancellationToken);
+                if (existingLink is null)
+                    database.Add(new TrainingExerciseLink { OwnerId = owner, Id = id, CatalogID = link.CatalogID });
+                else existingLink.CatalogID = link.CatalogID;
+                break;
             case TrainingKinds.Workout:
                 var workout = TrainingJson.Read<WorkoutData>(value);
                 var workoutRow = TrainingMapping.Workout(owner, workout);
@@ -200,6 +208,10 @@ public sealed class TrainingStorage(BackupDbContext database, ILogger<TrainingSt
         }
         switch (kind)
         {
+            case TrainingKinds.ExerciseLink:
+                await database.Set<TrainingExerciseLink>().Where(x => x.OwnerId == owner && x.Id == id)
+                    .ExecuteDeleteAsync(cancellationToken);
+                break;
             case TrainingKinds.Workout:
                 var heart = await database.TrainingRecords.SingleOrDefaultAsync(
                     x => x.OwnerId == owner && x.Kind == TrainingKinds.HeartRate && x.Id == id, cancellationToken);

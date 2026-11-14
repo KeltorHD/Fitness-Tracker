@@ -16,9 +16,17 @@ import Foundation
   func deleteBodyWeight(id: UUID, updating workout: Workout?) throws
   /// Validate the complete archive, then add new records in a single transaction or change nothing.
   func importArchive(_ archive: WorkoutArchive) throws -> ArchiveImportSummary
+  func exerciseLinks() throws -> [ExerciseLink]
+  func saveExerciseLink(_ link: ExerciseLink) throws
+  func deleteExerciseLink(id: UUID) throws
 }
 
 extension WorkoutRepository {
+  public func exerciseLinks() throws -> [ExerciseLink] { [] }
+  public func saveExerciseLink(_ link: ExerciseLink) throws {
+    throw TrainingSyncError.unsupportedStore
+  }
+  public func deleteExerciseLink(id: UUID) throws { throw TrainingSyncError.unsupportedStore }
   public func saveBodyWeight(_ entry: BodyWeightEntry, updating workout: Workout?) throws {
     // A repository without multi-record transactions must reject before making the first write.
     guard workout == nil else { throw TrainingError.invalidState }
@@ -43,6 +51,7 @@ extension WorkoutRepository {
   private var nutrition = MemoryNutritionRepository()
   private var accountNutrition: [String: MemoryNutritionRepository] = [:]
   private var measurements: [UUID: BodyWeightEntry] = [:]
+  private var links: [UUID: ExerciseLink] = [:]
   public init() {}
 
   public func activateTrainingAccount(_ namespace: String) throws {
@@ -60,7 +69,7 @@ extension WorkoutRepository {
       accountNutrition[previous] = nutrition
       accountJournals[previous] = TrainingJournalSnapshot(
         workouts: Array(sessions.values), templates: Array(routines.values),
-        bodyWeights: Array(measurements.values))
+        bodyWeights: Array(measurements.values), exerciseLinks: Array(links.values))
     }
     let journal =
       accountJournals[namespace]
@@ -69,18 +78,29 @@ extension WorkoutRepository {
     sessions = Dictionary(uniqueKeysWithValues: journal.workouts.map { ($0.id, $0) })
     routines = Dictionary(uniqueKeysWithValues: journal.templates.map { ($0.id, $0) })
     measurements = Dictionary(uniqueKeysWithValues: journal.bodyWeights.map { ($0.id, $0) })
+    links = Dictionary(uniqueKeysWithValues: journal.exerciseLinks.map { ($0.id, $0) })
     trainingAccountSelection.currentAccountID = namespace
   }
 
   public func applyTrainingChanges(_ changes: [TrainingChange]) throws {
     let next = try TrainingJournalSnapshot(
-      workouts: workouts(), templates: templates(), bodyWeights: bodyWeights()
+      workouts: workouts(), templates: templates(), bodyWeights: bodyWeights(),
+      exerciseLinks: exerciseLinks()
     ).applying(changes)
     try nutrition.applyTrainingChanges(changes.filter { $0.key.kind.isNutrition })
     sessions = Dictionary(uniqueKeysWithValues: next.workouts.map { ($0.id, $0) })
     routines = Dictionary(uniqueKeysWithValues: next.templates.map { ($0.id, $0) })
     measurements = Dictionary(uniqueKeysWithValues: next.bodyWeights.map { ($0.id, $0) })
+    links = Dictionary(uniqueKeysWithValues: next.exerciseLinks.map { ($0.id, $0) })
   }
+  public func exerciseLinks() throws -> [ExerciseLink] {
+    links.values.sorted { $0.id.uuidString < $1.id.uuidString }
+  }
+  public func saveExerciseLink(_ link: ExerciseLink) throws {
+    try link.validate()
+    links[link.id] = link
+  }
+  public func deleteExerciseLink(id: UUID) throws { links[id] = nil }
   public func workouts() throws -> [Workout] {
     sessions.values.sorted { $0.startedAt > $1.startedAt }
   }
