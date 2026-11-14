@@ -121,11 +121,12 @@
     ]
   },
   "chest-supported-dumbbell-rear-fly": {
-    "ru": "Разведение гантелей лёжа грудью на наклонной скамье",
-    "en": "Chest-supported incline dumbbell rear fly",
+    "ru": "Разведение гантелей с опорой грудью на скамью",
+    "en": "Chest-supported dumbbell rear fly",
     "members": [
       "Dumbbell_Lying_Rear_Lateral_Raise",
-      "Dumbbell_Lying_One-Arm_Rear_Lateral_Raise"
+      "Dumbbell_Lying_One-Arm_Rear_Lateral_Raise",
+      "Lying_Rear_Delt_Raise"
     ]
   },
   "standing-dumbbell-upright-row": {
@@ -301,6 +302,14 @@
     "members": [
       "Cable_Lying_Triceps_Extension",
       "Low_Cable_Triceps_Extension"
+    ]
+  },
+  "lying-dumbbell-triceps-extension": {
+    "ru": "Разгибание рук с гантелями лёжа на плоской скамье",
+    "en": "Flat dumbbell lying triceps extension",
+    "members": [
+      "Lying_Dumbbell_Tricep_Extension",
+      "Dumbbell_Tricep_Extension_-Pronated_Grip"
     ]
   }
 }

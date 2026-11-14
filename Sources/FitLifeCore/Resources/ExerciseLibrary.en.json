@@ -10867,7 +10867,7 @@
       "translationAutomatic": false,
       "variantGroup": {
         "id": "chest-supported-dumbbell-rear-fly",
-        "title": "Chest-supported incline dumbbell rear fly"
+        "title": "Chest-supported dumbbell rear fly"
       },
       "techniqueVideoURL": "https://www.youtube.com/watch?v=WtC-HSDKPHM"
     },
@@ -10941,7 +10941,7 @@
       "translationAutomatic": false,
       "variantGroup": {
         "id": "chest-supported-dumbbell-rear-fly",
-        "title": "Chest-supported incline dumbbell rear fly"
+        "title": "Chest-supported dumbbell rear fly"
       }
     },
     {
@@ -11360,7 +11360,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "lying-dumbbell-triceps-extension",
+        "title": "Flat dumbbell lying triceps extension"
+      }
     },
     {
       "id": "b2ab579e-41fa-51d6-ab97-7fbb04ce0f51",
@@ -17942,8 +17946,8 @@
       "name": "Lying Crossover",
       "englishName": "Lying Crossover",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Растяжка с приведением согнутой ноги через корпус с партнёром",
+        "Lying Crossover"
       ],
       "group": "legs",
       "equipment": "body only",
@@ -17974,8 +17978,8 @@
       "name": "Lying Dumbbell Tricep Extension",
       "englishName": "Lying Dumbbell Tricep Extension",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Французский жим гантелей лёжа ладонями друг к другу",
+        "Lying Dumbbell Tricep Extension"
       ],
       "group": "arms",
       "equipment": "dumbbell",
@@ -18005,7 +18009,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "lying-dumbbell-triceps-extension",
+        "title": "Flat dumbbell lying triceps extension"
+      }
     },
     {
       "id": "6797c4ab-e02c-550c-b0ad-abf9674ce6ad",
@@ -18013,8 +18021,8 @@
       "name": "Lying Face Down Plate Neck Resistance",
       "englishName": "Lying Face Down Plate Neck Resistance",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подъём головы с диском на затылке лёжа",
+        "Lying Face Down Plate Neck Resistance"
       ],
       "group": "shoulders",
       "equipment": "other",
@@ -18045,8 +18053,8 @@
       "name": "Lying Face Up Plate Neck Resistance",
       "englishName": "Lying Face Up Plate Neck Resistance",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подъём головы с диском на лбу лёжа",
+        "Lying Face Up Plate Neck Resistance"
       ],
       "group": "shoulders",
       "equipment": "other",
@@ -18077,8 +18085,8 @@
       "name": "Lying Glute",
       "englishName": "Lying Glute",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Растяжка ягодичной мышцы с согнутой ногой и помощью партнёра",
+        "Lying Glute"
       ],
       "group": "legs",
       "equipment": "body only",
@@ -18111,8 +18119,8 @@
       "name": "Lying Hamstring",
       "englishName": "Lying Hamstring",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Растяжка поднятой ноги лёжа с помощью партнёра",
+        "Lying Hamstring"
       ],
       "group": "legs",
       "equipment": "other",
@@ -18144,8 +18152,8 @@
       "name": "Lying High Bench Barbell Curl",
       "englishName": "Lying High Bench Barbell Curl",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подъём штанги на бицепс с опорой грудью на скамью",
+        "Lying High Bench Barbell Curl"
       ],
       "group": "arms",
       "equipment": "barbell",
@@ -18252,8 +18260,8 @@
       "name": "Lying Prone Quadriceps",
       "englishName": "Lying Prone Quadriceps",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Растяжка передней поверхности бедра с помощью партнёра",
+        "Lying Prone Quadriceps"
       ],
       "group": "legs",
       "equipment": "body only",
@@ -18284,8 +18292,8 @@
       "name": "Lying Rear Delt Raise",
       "englishName": "Lying Rear Delt Raise",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Разведение рук на задние дельты с опорой грудью",
+        "Lying Rear Delt Raise"
       ],
       "group": "shoulders",
       "equipment": "dumbbell",
@@ -18311,7 +18319,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "chest-supported-dumbbell-rear-fly",
+        "title": "Chest-supported dumbbell rear fly"
+      }
     },
     {
       "id": "9fbca41c-334d-585e-b3ba-35f156a4a4fc",
@@ -18319,8 +18331,8 @@
       "name": "Lying Supine Dumbbell Curl",
       "englishName": "Lying Supine Dumbbell Curl",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подъём гантелей на бицепс лёжа с поворотом кистей",
+        "Lying Supine Dumbbell Curl"
       ],
       "group": "arms",
       "equipment": "dumbbell",
@@ -18355,8 +18367,8 @@
       "name": "Lying T-Bar Row",
       "englishName": "Lying T-Bar Row",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Тяга Т-грифа лёжа в тренажёре",
+        "Lying T-Bar Row"
       ],
       "group": "back",
       "equipment": "machine",
@@ -18386,7 +18398,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=w0KnlQ-b7jw"
     },
     {
       "id": "5b358099-70ab-570b-b460-e78091a5f098",

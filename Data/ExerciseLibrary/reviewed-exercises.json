@@ -565,5 +565,18 @@
   "Lying_Cambered_Barbell_Row": {
     "equipment": "e-z curl bar"
   },
-  "Lying_Close-Grip_Barbell_Triceps_Extension_Behind_The_Head": {}
+  "Lying_Close-Grip_Barbell_Triceps_Extension_Behind_The_Head": {},
+  "Lying_Crossover": {},
+  "Lying_Dumbbell_Tricep_Extension": {},
+  "Lying_Face_Down_Plate_Neck_Resistance": {},
+  "Lying_Face_Up_Plate_Neck_Resistance": {},
+  "Lying_Glute": {},
+  "Lying_Hamstring": {},
+  "Lying_High_Bench_Barbell_Curl": {},
+  "Lying_Prone_Quadriceps": {},
+  "Lying_Rear_Delt_Raise": {},
+  "Lying_Supine_Dumbbell_Curl": {},
+  "Lying_T-Bar_Row": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=w0KnlQ-b7jw"
+  }
 }
