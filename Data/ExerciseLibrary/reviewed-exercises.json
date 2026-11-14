@@ -215,5 +215,23 @@
     "techniqueVideoURL": "https://www.youtube.com/watch?v=_ZX_zTOBgp8"
   },
   "Chin_To_Chest_Stretch": {},
-  "Clean_Shrug": {}
+  "Clean_Shrug": {},
+  "Close-Grip_Dumbbell_Press": {},
+  "Close-Grip_EZ-Bar_Press": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=sUJSWbLCMok"
+  },
+  "Close-Grip_EZ_Bar_Curl": {
+    "equipment": "e-z curl bar",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=QzIA4DU0jtM"
+  },
+  "Close-Grip_Standing_Barbell_Curl": {},
+  "Cocoons": {},
+  "Cross-Body_Crunch": {},
+  "Cross_Body_Hammer_Curl": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=buP9fSqWcw4"
+  },
+  "Cross_Over_-_With_Bands": {},
+  "Crossover_Reverse_Lunge": {
+    "equipment": "body only"
+  }
 }

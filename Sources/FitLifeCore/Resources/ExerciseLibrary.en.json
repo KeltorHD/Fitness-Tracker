@@ -9041,8 +9041,8 @@
       "name": "Close-Grip Dumbbell Press",
       "englishName": "Close-Grip Dumbbell Press",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Жим гантели узким хватом поперёк скамьи",
+        "Close-Grip Dumbbell Press"
       ],
       "group": "arms",
       "equipment": "dumbbell",
@@ -9115,8 +9115,8 @@
       "name": "Close-Grip EZ-Bar Press",
       "englishName": "Close-Grip EZ-Bar Press",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Жим EZ-штанги узким хватом",
+        "Close-Grip EZ-Bar Press"
       ],
       "group": "arms",
       "equipment": "e-z curl bar",
@@ -9143,7 +9143,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=sUJSWbLCMok"
     },
     {
       "id": "831decb4-2ec7-538d-8f0c-f8b462924d76",
@@ -9151,11 +9152,11 @@
       "name": "Close-Grip EZ Bar Curl",
       "englishName": "Close-Grip EZ Bar Curl",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подъём EZ-грифа на бицепс узким хватом",
+        "Close-Grip EZ Bar Curl"
       ],
       "group": "arms",
-      "equipment": "barbell",
+      "equipment": "e-z curl bar",
       "level": "beginner",
       "primaryMuscles": [
         "biceps"
@@ -9181,7 +9182,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-close-grip-curl",
+        "title": "Standing close-grip curl"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=QzIA4DU0jtM"
     },
     {
       "id": "708fe506-5359-52b8-b362-22abbad4a02c",
@@ -9189,8 +9195,8 @@
       "name": "Close-Grip Push-Up off of a Dumbbell",
       "englishName": "Close-Grip Push-Up off of a Dumbbell",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Отжимания от вертикальной гантели",
+        "Close-Grip Push-Up off of a Dumbbell"
       ],
       "group": "arms",
       "equipment": "body only",
@@ -9225,8 +9231,8 @@
       "name": "Close-Grip Standing Barbell Curl",
       "englishName": "Close-Grip Standing Barbell Curl",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подъём штанги на бицепс узким хватом",
+        "Close-Grip Standing Barbell Curl"
       ],
       "group": "arms",
       "equipment": "barbell",
@@ -9255,7 +9261,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-close-grip-curl",
+        "title": "Standing close-grip curl"
+      }
     },
     {
       "id": "e690b424-d009-5f54-94d6-10b6254442cc",
@@ -9263,8 +9273,8 @@
       "name": "Cocoons",
       "englishName": "Cocoons",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Скручивания с одновременным подтягиванием коленей лёжа",
+        "Cocoons"
       ],
       "group": "core",
       "equipment": "body only",
@@ -9335,8 +9345,8 @@
       "name": "Cross-Body Crunch",
       "englishName": "Cross-Body Crunch",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Скручивания с подтягиванием противоположного колена",
+        "Cross-Body Crunch"
       ],
       "group": "core",
       "equipment": "body only",
@@ -9370,8 +9380,9 @@
       "name": "Cross Body Hammer Curl",
       "englishName": "Cross Body Hammer Curl",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Попеременный молоток к противоположному плечу",
+        "Cross Body Hammer Curl",
+        "Pinwheel Curl"
       ],
       "group": "arms",
       "equipment": "dumbbell",
@@ -9399,7 +9410,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=buP9fSqWcw4"
     },
     {
       "id": "cec4d85a-0636-519f-b7f5-81d6c49f5611",
@@ -9407,8 +9419,9 @@
       "name": "Cross Over - With Bands",
       "englishName": "Cross Over - With Bands",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Сведение рук с резиновой лентой стоя",
+        "Band Crossover",
+        "Cross Over With Bands"
       ],
       "group": "chest",
       "equipment": "bands",
@@ -9444,11 +9457,11 @@
       "name": "Crossover Reverse Lunge",
       "englishName": "Crossover Reverse Lunge",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Выпад назад с вращением корпуса",
+        "Crossover Reverse Lunge"
       ],
       "group": "back",
-      "equipment": "unspecified",
+      "equipment": "body only",
       "level": "intermediate",
       "primaryMuscles": [
         "lower back"

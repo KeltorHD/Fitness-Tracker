@@ -326,6 +326,18 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   }
 }
 
+@Test func closeGripCurlVariantsDistinguishEzBarFromStraightBar() throws {
+  let ezCurl = try #require(
+    ExerciseLibrary.entries.first { $0.sourceID == "Close-Grip_EZ_Bar_Curl" })
+  let variants = ExerciseLibrary.variants(for: ezCurl.id, language: .russian)
+  #expect(ezCurl.equipment == .ezBar)
+  #expect(Set(variants.map(\.sourceID)) == [
+    "Close-Grip_EZ_Bar_Curl", "Close-Grip_Standing_Barbell_Curl",
+  ])
+  #expect(Set(variants.map(\.id)).count == 2)
+  #expect(Set(variants.map(\.equipment)) == [.ezBar, .barbell])
+}
+
 @Test func multipleEquipmentFiltersUseUnionAndIntersectWithMuscleAndSearch() {
   let equipment: Set<ExerciseEquipment> = [.barbell, .dumbbell]
   let combined = ExerciseLibrary.search(equipment: equipment)

@@ -80,5 +80,13 @@
       "Cable_Shoulder_Press",
       "Alternating_Cable_Shoulder_Press"
     ]
+  },
+  "standing-close-grip-curl": {
+    "ru": "Сгибание рук стоя узким хватом",
+    "en": "Standing close-grip curl",
+    "members": [
+      "Close-Grip_Standing_Barbell_Curl",
+      "Close-Grip_EZ_Bar_Curl"
+    ]
   }
 }
