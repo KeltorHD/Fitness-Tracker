@@ -559,7 +559,8 @@
       "Decline_Barbell_Bench_Press",
       "Wide-Grip_Decline_Barbell_Bench_Press",
       "Decline_Smith_Press",
-      "Smith_Machine_Decline_Press"
+      "Smith_Machine_Decline_Press",
+      "Decline_Dumbbell_Bench_Press"
     ]
   },
   "zottman-curl": {
@@ -626,6 +627,61 @@
       "V-Bar_Pullup",
       "Side_To_Side_Chins",
       "Rocky_Pull-Ups_Pulldowns"
+    ]
+  },
+  "lat-pulldown": {
+    "ru": "Тяга верхнего блока к груди и за голову",
+    "en": "Lat pulldown",
+    "members": [
+      "Wide-Grip_Lat_Pulldown",
+      "Close-Grip_Front_Lat_Pulldown",
+      "Underhand_Cable_Pulldowns",
+      "V-Bar_Pulldown",
+      "Wide-Grip_Pulldown_Behind_The_Neck"
+    ]
+  },
+  "seated-cable-row": {
+    "ru": "Тяга нижнего блока сидя",
+    "en": "Seated cable row",
+    "members": [
+      "Seated_Cable_Rows",
+      "Seated_One-arm_Cable_Pulley_Rows"
+    ]
+  },
+  "straight-arm-pulldown": {
+    "ru": "Тяга верхнего блока прямыми руками",
+    "en": "Straight-arm cable pulldown",
+    "members": [
+      "Straight-Arm_Pulldown",
+      "Rope_Straight-Arm_Pulldown"
+    ]
+  },
+  "dumbbell-bench-fly": {
+    "ru": "Разведение гантелей лёжа на скамье",
+    "en": "Dumbbell bench fly",
+    "members": [
+      "Dumbbell_Flyes",
+      "One-Arm_Flat_Bench_Dumbbell_Flye",
+      "Incline_Dumbbell_Flyes",
+      "Incline_Dumbbell_Flyes_-_With_A_Twist",
+      "Decline_Dumbbell_Flyes"
+    ]
+  },
+  "incline-barbell-bench-press": {
+    "ru": "Жим штанги лёжа на наклонной скамье",
+    "en": "Incline barbell bench press",
+    "members": [
+      "Barbell_Incline_Bench_Press_-_Medium_Grip",
+      "Smith_Machine_Incline_Bench_Press"
+    ]
+  },
+  "standing-shrug": {
+    "ru": "Шраги стоя",
+    "en": "Standing shrug",
+    "members": [
+      "Barbell_Shrug",
+      "Dumbbell_Shrug",
+      "Smith_Machine_Behind_the_Back_Shrug"
     ]
   }
 }

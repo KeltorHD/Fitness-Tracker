@@ -1217,5 +1217,22 @@
   "Seated_Calf_Raise": {},
   "Calf_Press_On_The_Leg_Press_Machine": {},
   "Chin-Up": {},
-  "Wide-Grip_Lat_Pulldown": {}
+  "Wide-Grip_Lat_Pulldown": {},
+  "Close-Grip_Front_Lat_Pulldown": {},
+  "Underhand_Cable_Pulldowns": {},
+  "Seated_Cable_Rows": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=xQNrFHEMhI4"
+  },
+  "One-Arm_Dumbbell_Row": {},
+  "Bent_Over_Two-Dumbbell_Row": {},
+  "Dumbbell_Incline_Row": {},
+  "T-Bar_Row_with_Handle": {},
+  "Straight-Arm_Pulldown": {},
+  "Hyperextensions_Back_Extensions": {},
+  "Barbell_Shrug": {},
+  "Dumbbell_Shrug": {},
+  "Barbell_Incline_Bench_Press_-_Medium_Grip": {},
+  "Decline_Dumbbell_Bench_Press": {},
+  "Dumbbell_Flyes": {},
+  "Incline_Dumbbell_Flyes": {}
 }

@@ -1497,14 +1497,21 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "lat-pulldown",
+        "title": "Тяга верхнего блока к груди и за голову"
+      }
     },
     {
       "id": "c6221067-76d0-588e-aca1-5876cf3f5dc8",
       "sourceID": "Close-Grip_Front_Lat_Pulldown",
-      "name": "Тяга верхнего блока узким хватом",
+      "name": "Тяга верхнего блока к груди узким хватом сверху",
       "englishName": "Close-Grip Front Lat Pulldown",
       "aliases": [
+        "Вертикальная тяга узким прямым хватом",
+        "Close-grip front lat pulldown",
+        "Тяга верхнего блока узким хватом",
         "Узкая вертикальная тяга"
       ],
       "group": "back",
@@ -1520,9 +1527,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "Сядьте в тренажёр, зафиксируйте бёдра и возьмитесь за верхнюю рукоять узким прямым хватом.",
-        "Плавно потяните рукоять к верхней части груди, опуская локти и сохраняя положение корпуса.",
-        "После короткой паузы верните рукоять вверх и контролируйте выпрямление рук."
+        "Сядьте в тренажёр верхнего блока и закрепите бёдра под упорами.",
+        "Возьмитесь за прямую рукоятку узким хватом сверху и потяните её к груди.",
+        "Плавно выпрямите руки, возвращая рукоятку вверх."
       ],
       "images": [
         "Close-Grip_Front_Lat_Pulldown/0.jpg",
@@ -1531,15 +1538,21 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "lat-pulldown",
+        "title": "Тяга верхнего блока к груди и за голову"
+      }
     },
     {
       "id": "537e6599-4ef1-545a-b31d-891526416088",
       "sourceID": "Underhand_Cable_Pulldowns",
-      "name": "Тяга верхнего блока обратным хватом",
+      "name": "Тяга верхнего блока к груди узким хватом снизу",
       "englishName": "Underhand Cable Pulldowns",
       "aliases": [
-        "Вертикальная тяга обратным хватом"
+        "Вертикальная тяга обратным хватом",
+        "Underhand lat pulldown",
+        "Тяга верхнего блока обратным хватом"
       ],
       "group": "back",
       "equipment": "cable",
@@ -1554,9 +1567,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "Зафиксируйте бёдра в тренажёре и возьмитесь за рукоять обратным хватом, ладонями к себе.",
-        "Тяните рукоять к верхней части груди, направляя локти вниз и назад без рывка корпуса.",
-        "На мгновение сведите лопатки и плавно верните руки в исходное верхнее положение."
+        "Сядьте в тренажёр верхнего блока и закрепите бёдра под упорами.",
+        "Возьмитесь за рукоятку хватом снизу уже плеч и потяните её к груди.",
+        "Плавно выпрямите руки, возвращая рукоятку вверх."
       ],
       "images": [
         "Underhand_Cable_Pulldowns/0.jpg",
@@ -1565,14 +1578,21 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "lat-pulldown",
+        "title": "Тяга верхнего блока к груди и за голову"
+      }
     },
     {
       "id": "cf73d3b0-1291-565b-bcb3-37b52071d5da",
       "sourceID": "Seated_Cable_Rows",
-      "name": "Тяга горизонтального блока",
+      "name": "Тяга нижнего блока к поясу сидя с V-рукояткой",
       "englishName": "Seated Cable Rows",
       "aliases": [
+        "Горизонтальная тяга блока сидя",
+        "Seated cable row",
+        "Тяга горизонтального блока",
         "Горизонтальная тяга сидя"
       ],
       "group": "back",
@@ -1590,9 +1610,9 @@
         "trapeziusMiddle"
       ],
       "steps": [
-        "Сядьте перед нижним блоком, поставьте стопы на упоры и возьмитесь за рукоять, слегка согнув колени.",
-        "С ровной спиной подтяните рукоять к поясу, направляя локти назад и сводя лопатки.",
-        "Плавно выпрямите руки. Не округляйте спину и не превращайте движение в раскачивание корпуса."
+        "Сядьте в тренажёр нижнего блока и упритесь стопами в платформу, слегка согнув колени.",
+        "Возьмитесь за V-рукоятку и потяните её к поясу, направляя локти назад.",
+        "Плавно выпрямите руки, удерживая корпус устойчивым."
       ],
       "images": [
         "Seated_Cable_Rows/0.jpg",
@@ -1601,14 +1621,22 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "seated-cable-row",
+        "title": "Тяга нижнего блока сидя"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=xQNrFHEMhI4"
     },
     {
       "id": "09b8d89d-34d3-5a3d-8e6b-b04cb3807bb7",
       "sourceID": "One-Arm_Dumbbell_Row",
-      "name": "Тяга гантели одной рукой",
+      "name": "Тяга гантели к поясу одной рукой с опорой на скамью",
       "englishName": "One-Arm Dumbbell Row",
       "aliases": [
+        "Тяга гантели в наклоне одной рукой",
+        "One-arm dumbbell row",
+        "Тяга гантели одной рукой",
         "Тяга гантели к поясу"
       ],
       "group": "back",
@@ -1626,9 +1654,9 @@
         "trapeziusMiddle"
       ],
       "steps": [
-        "Обопритесь одной рукой и коленом на скамью. В свободной руке держите гантель под плечом.",
-        "Не разворачивая корпус, подтяните гантель к поясу и направьте локоть назад.",
-        "Медленно опустите гантель, сохраняя ровную спину. После подхода смените сторону."
+        "Поставьте колено и одноимённую руку на плоскую скамью, другой рукой возьмите гантель.",
+        "Удерживая спину устойчивой, подтяните гантель к поясу, направляя локоть назад.",
+        "Плавно опустите гантель и повторите другой рукой."
       ],
       "images": [
         "One-Arm_Dumbbell_Row/0.jpg",
@@ -1642,9 +1670,12 @@
     {
       "id": "a23a71eb-91df-5f3c-84e4-4dbf1624678a",
       "sourceID": "Bent_Over_Two-Dumbbell_Row",
-      "name": "Тяга двух гантелей в наклоне",
+      "name": "Тяга двух гантелей к поясу в наклоне",
       "englishName": "Bent Over Two-Dumbbell Row",
       "aliases": [
+        "Тяга гантелей в наклоне",
+        "Bent-over dumbbell row",
+        "Тяга двух гантелей в наклоне",
         "Тяга гантелей к поясу"
       ],
       "group": "back",
@@ -1662,9 +1693,9 @@
         "trapeziusMiddle"
       ],
       "steps": [
-        "Возьмите гантели, слегка согните колени и наклоните корпус с ровной спиной. Руки опустите вниз.",
-        "Плавно подтяните обе гантели к поясу, направляя локти назад и сохраняя наклон корпуса.",
-        "После короткой паузы опустите гантели и выпрямите руки без раскачивания."
+        "Встаньте с гантелями, слегка согните ноги и наклонитесь вперёд с ровной спиной.",
+        "Подтяните гантели к поясу, направляя локти назад.",
+        "Плавно опустите гантели, сохраняя наклон корпуса."
       ],
       "images": [
         "Bent_Over_Two-Dumbbell_Row/0.jpg",
@@ -1678,9 +1709,12 @@
     {
       "id": "4f98c5cf-83a1-5ffa-bae5-fd96e0039b2c",
       "sourceID": "Dumbbell_Incline_Row",
-      "name": "Тяга гантелей с опорой грудью",
+      "name": "Тяга гантелей к поясу с опорой грудью на наклонную скамью",
       "englishName": "Dumbbell Incline Row",
       "aliases": [
+        "Тяга гантелей лёжа на наклонной скамье",
+        "Incline dumbbell row",
+        "Тяга гантелей с опорой грудью",
         "Тяга на наклонной скамье"
       ],
       "group": "back",
@@ -1699,9 +1733,9 @@
         "trapeziusMiddle"
       ],
       "steps": [
-        "Лягте грудью на наклонную скамью, устойчиво поставьте стопы и опустите руки с гантелями.",
-        "Подтяните гантели к бокам корпуса, сгибая локти и сводя лопатки, не отрывая грудь от опоры.",
-        "Коротко задержитесь и плавно опустите гантели до исходного положения."
+        "Лягте грудью на наклонную скамью и возьмите гантели нейтральным хватом.",
+        "Сведите лопатки и подтяните гантели к бокам.",
+        "Плавно выпрямите руки, опуская гантели."
       ],
       "images": [
         "Dumbbell_Incline_Row/0.jpg",
@@ -1715,9 +1749,12 @@
     {
       "id": "3efa47cf-4d76-5133-8686-ba128078829f",
       "sourceID": "T-Bar_Row_with_Handle",
-      "name": "Тяга Т-грифа",
+      "name": "Тяга Т-грифа в наклоне с V-рукояткой",
       "englishName": "T-Bar Row with Handle",
       "aliases": [
+        "Тяга Т-штанги с V-рукояткой",
+        "T-bar row",
+        "Тяга Т-грифа",
         "Тяга т-грифа к поясу"
       ],
       "group": "back",
@@ -1734,9 +1771,9 @@
         "trapeziusMiddle"
       ],
       "steps": [
-        "Закрепите один конец грифа, встаньте над ним и возьмитесь за установленную под грифом рукоять.",
-        "Слегка согните колени, наклонитесь с ровной спиной и подтяните рукоять к корпусу.",
-        "Сведите лопатки и медленно опустите вес, сохраняя устойчивый наклон корпуса."
+        "Закрепите один конец штанги и установите V-рукоятку под свободным концом грифа.",
+        "Встаньте над грифом, слегка согните ноги и наклонитесь с ровной спиной.",
+        "Подтяните гриф к корпусу и плавно опустите."
       ],
       "images": [
         "T-Bar_Row_with_Handle/0.jpg",
@@ -1750,9 +1787,12 @@
     {
       "id": "43c5d9b4-9d40-5375-ba81-6be4873632fa",
       "sourceID": "Straight-Arm_Pulldown",
-      "name": "Тяга верхнего блока прямыми руками",
+      "name": "Тяга верхнего блока прямыми руками с прямой рукояткой",
       "englishName": "Straight-Arm Pulldown",
       "aliases": [
+        "Пуловер на блоке с прямой рукояткой",
+        "Straight-arm pulldown",
+        "Тяга верхнего блока прямыми руками",
         "Пуловер на блоке"
       ],
       "group": "back",
@@ -1764,9 +1804,9 @@
       "secondaryMuscles": [],
       "trainingRegions": [],
       "steps": [
-        "Встаньте перед верхним блоком, возьмитесь за прямую рукоять и слегка наклоните корпус.",
-        "Почти прямыми руками опустите рукоять по дуге к бёдрам, сохраняя небольшой сгиб локтей.",
-        "Плавно верните рукоять вверх, не раскачивая корпус и не меняя положение поясницы."
+        "Возьмитесь за прямую рукоятку верхнего блока хватом сверху и немного наклонитесь вперёд.",
+        "Удерживая руки почти прямыми, потяните рукоятку вниз к бёдрам.",
+        "Плавно верните руки вверх, сохраняя устойчивое положение корпуса."
       ],
       "images": [
         "Straight-Arm_Pulldown/0.jpg",
@@ -1775,14 +1815,21 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "straight-arm-pulldown",
+        "title": "Тяга верхнего блока прямыми руками"
+      }
     },
     {
       "id": "225fb098-7905-5995-867e-09d8512d70fd",
       "sourceID": "Hyperextensions_Back_Extensions",
-      "name": "Гиперэкстензия",
+      "name": "Гиперэкстензия на наклонной скамье",
       "englishName": "Hyperextensions (Back Extensions)",
       "aliases": [
+        "Разгибание спины на скамье",
+        "Hyperextension",
+        "Гиперэкстензия",
         "Разгибание спины"
       ],
       "group": "back",
@@ -1797,9 +1844,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "Настройте опору под бёдра и зафиксируйте стопы в тренажёре. Сложите руки перед грудью.",
-        "Плавно наклоняйте корпус вперёд за счёт тазобедренных суставов в доступной амплитуде.",
-        "Поднимите корпус до одной линии с ногами. Не переразгибайте спину в верхней точке."
+        "Расположитесь лицом вниз на скамье для гиперэкстензии и закрепите голени под валиками.",
+        "Плавно наклоните корпус, сгибаясь в тазобедренных суставах.",
+        "Поднимите корпус до одной линии с ногами, не переразгибая спину."
       ],
       "images": [
         "Hyperextensions_Back_Extensions/0.jpg",
@@ -1813,9 +1860,12 @@
     {
       "id": "5c71cd1c-0595-516e-b7bc-79c91466ef38",
       "sourceID": "Barbell_Shrug",
-      "name": "Шраги со штангой",
+      "name": "Шраги со штангой перед собой стоя",
       "englishName": "Barbell Shrug",
       "aliases": [
+        "Подъём плеч со штангой стоя",
+        "Barbell shrug",
+        "Шраги со штангой",
         "Подъём плеч со штангой"
       ],
       "group": "back",
@@ -1829,9 +1879,9 @@
         "trapeziusUpper"
       ],
       "steps": [
-        "Встаньте прямо и держите штангу перед бёдрами прямым хватом. Руки оставляйте выпрямленными.",
-        "Поднимите плечи вверх, сохраняя корпус неподвижным и не сгибая локти.",
-        "Коротко задержитесь и плавно опустите плечи. Не вращайте ими и не помогайте рывком ног."
+        "Встаньте прямо и держите штангу перед бёдрами хватом сверху.",
+        "Поднимите плечи вверх, удерживая руки прямыми.",
+        "Плавно опустите плечи и повторите."
       ],
       "images": [
         "Barbell_Shrug/0.jpg",
@@ -1840,14 +1890,21 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-shrug",
+        "title": "Шраги стоя"
+      }
     },
     {
       "id": "a27dbdf1-867c-5e63-b7c1-11fa230aa47f",
       "sourceID": "Dumbbell_Shrug",
-      "name": "Шраги с гантелями",
+      "name": "Шраги с гантелями стоя",
       "englishName": "Dumbbell Shrug",
       "aliases": [
+        "Подъём плеч с гантелями стоя",
+        "Dumbbell shrug",
+        "Шраги с гантелями",
         "Подъём плеч с гантелями"
       ],
       "group": "back",
@@ -1861,9 +1918,9 @@
         "trapeziusUpper"
       ],
       "steps": [
-        "Встаньте прямо с гантелями по бокам, ладони направьте к корпусу и выпрямите руки.",
-        "Поднимите плечи вверх, не сгибая локти и не меняя положение головы и корпуса.",
-        "После короткой паузы плавно опустите плечи и повторите без вращения плечами."
+        "Встаньте прямо с гантелями в опущенных руках по сторонам.",
+        "Поднимите плечи вверх, удерживая руки прямыми.",
+        "Плавно опустите плечи и повторите."
       ],
       "images": [
         "Dumbbell_Shrug/0.jpg",
@@ -1872,7 +1929,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-shrug",
+        "title": "Шраги стоя"
+      }
     },
     {
       "id": "df15f938-2c8b-505f-9bd4-e45783def49b",
@@ -1919,9 +1980,11 @@
     {
       "id": "afd0d1c7-849d-5faa-85e7-765757ad8759",
       "sourceID": "Barbell_Incline_Bench_Press_-_Medium_Grip",
-      "name": "Жим штанги на наклонной скамье",
+      "name": "Жим штанги лёжа на наклонной скамье обычным хватом",
       "englishName": "Barbell Incline Bench Press - Medium Grip",
       "aliases": [
+        "Жим штанги на наклонной скамье",
+        "Incline barbell bench press",
         "Наклонный жим штанги"
       ],
       "group": "chest",
@@ -1938,9 +2001,9 @@
         "chestUpper"
       ],
       "steps": [
-        "Лягте на наклонную скамью, поставьте стопы на пол и снимите штангу средним хватом.",
-        "Плавно опускайте гриф к верхней части груди, сохраняя спину и лопатки на опоре.",
-        "Выжмите штангу вверх. После подхода верните её на стойки; при необходимости используйте страховку."
+        "Лягте на наклонную скамью и возьмитесь за штангу хватом сверху примерно на ширине плеч.",
+        "Снимите штангу со стоек и плавно опустите к верхней части груди.",
+        "Выжмите штангу вверх и после подхода верните на стойки."
       ],
       "images": [
         "Barbell_Incline_Bench_Press_-_Medium_Grip/0.jpg",
@@ -1949,7 +2012,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "incline-barbell-bench-press",
+        "title": "Жим штанги лёжа на наклонной скамье"
+      }
     },
     {
       "id": "e8bc138e-2642-570b-aee7-07ec627b5e97",
@@ -2035,9 +2102,12 @@
     {
       "id": "211142bc-4f62-5a01-b894-0609979a67e7",
       "sourceID": "Decline_Dumbbell_Bench_Press",
-      "name": "Жим гантелей на скамье с наклоном вниз",
+      "name": "Жим гантелей лёжа на скамье с отрицательным наклоном",
       "englishName": "Decline Dumbbell Bench Press",
       "aliases": [
+        "Жим гантелей вниз головой",
+        "Decline dumbbell bench press",
+        "Жим гантелей на скамье с наклоном вниз",
         "Нижний жим гантелей"
       ],
       "group": "chest",
@@ -2054,9 +2124,9 @@
         "chestLower"
       ],
       "steps": [
-        "Зафиксируйте ноги на скамье с наклоном вниз и безопасно выведите гантели над грудью.",
-        "Плавно опускайте гантели к бокам груди, сгибая локти и сохраняя положение плеч.",
-        "Выжмите гантели вверх по той же траектории; для завершения подхода при необходимости попросите помощь."
+        "Лягте на скамью с отрицательным наклоном и закрепите ноги на опорах.",
+        "Поднимите гантели над грудью, затем плавно опустите их к сторонам груди.",
+        "Выжмите гантели вверх и повторите."
       ],
       "images": [
         "Decline_Dumbbell_Bench_Press/0.jpg",
@@ -2065,14 +2135,21 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "decline-bench-press",
+        "title": "Жим лёжа на скамье с отрицательным наклоном"
+      }
     },
     {
       "id": "e99de1f3-c80d-5d18-86df-f1fd3959c2d2",
       "sourceID": "Dumbbell_Flyes",
-      "name": "Разведение гантелей лёжа",
+      "name": "Разведение гантелей лёжа на плоской скамье",
       "englishName": "Dumbbell Flyes",
       "aliases": [
+        "Разводка гантелей лёжа",
+        "Flat dumbbell fly",
+        "Разведение гантелей лёжа",
         "Разводка гантелей"
       ],
       "group": "chest",
@@ -2086,9 +2163,9 @@
         "chestMiddle"
       ],
       "steps": [
-        "Лягте на горизонтальную скамью и держите гантели над грудью ладонями друг к другу.",
-        "Слегка согните локти и разводите руки по широкой дуге до комфортного растяжения груди.",
-        "Сведите руки над грудью по той же дуге, сохраняя угол в локтях и не ударяя гантели."
+        "Лягте на плоскую скамью и поднимите гантели над грудью ладонями друг к другу.",
+        "Слегка согнув локти, плавно разведите руки в стороны до комфортного растяжения.",
+        "Сведите руки над грудью по той же дуге."
       ],
       "images": [
         "Dumbbell_Flyes/0.jpg",
@@ -2097,14 +2174,21 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "dumbbell-bench-fly",
+        "title": "Разведение гантелей лёжа на скамье"
+      }
     },
     {
       "id": "66dc7b09-9ad5-59af-9769-f2a5dc8e1d2c",
       "sourceID": "Incline_Dumbbell_Flyes",
-      "name": "Разведение гантелей на наклонной скамье",
+      "name": "Разведение гантелей лёжа на наклонной скамье",
       "englishName": "Incline Dumbbell Flyes",
       "aliases": [
+        "Разводка гантелей на наклонной скамье",
+        "Incline dumbbell fly",
+        "Разведение гантелей на наклонной скамье",
         "Наклонная разводка"
       ],
       "group": "chest",
@@ -2120,9 +2204,9 @@
         "chestUpper"
       ],
       "steps": [
-        "Лягте на наклонную скамью и удерживайте гантели над грудью ладонями друг к другу.",
-        "С небольшим постоянным сгибом локтей разводите руки в стороны до комфортной нижней точки.",
-        "Плавно сведите гантели над грудью по той же дуге, не превращая движение в жим."
+        "Лягте на наклонную скамью и поднимите гантели над грудью.",
+        "Слегка согнув локти, плавно разведите руки в стороны до комфортного растяжения.",
+        "Сведите руки над грудью по той же дуге."
       ],
       "images": [
         "Incline_Dumbbell_Flyes/0.jpg",
@@ -2131,7 +2215,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "dumbbell-bench-fly",
+        "title": "Разведение гантелей лёжа на скамье"
+      }
     },
     {
       "id": "0dee0627-e8c5-5372-b47f-89adcf61dfa8",
@@ -9746,7 +9834,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "dumbbell-bench-fly",
+        "title": "Разведение гантелей лёжа на скамье"
+      }
     },
     {
       "id": "5ce60abe-15ce-57a6-9824-9f9159303b12",
@@ -14125,7 +14217,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "dumbbell-bench-fly",
+        "title": "Разведение гантелей лёжа на скамье"
+      }
     },
     {
       "id": "2651e8c8-e5b9-534e-8e51-856cdd8d05e5",
@@ -19158,7 +19254,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "dumbbell-bench-fly",
+        "title": "Разведение гантелей лёжа на скамье"
+      }
     },
     {
       "id": "c12d0335-c9ef-5d12-83f8-4ee18252a7f9",
@@ -23716,7 +23816,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "straight-arm-pulldown",
+        "title": "Тяга верхнего блока прямыми руками"
+      }
     },
     {
       "id": "71d5e054-9aab-5d96-b3ae-368012d444a2",
@@ -24993,7 +25097,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "seated-cable-row",
+        "title": "Тяга нижнего блока сидя"
+      }
     },
     {
       "id": "89f7f1ee-8ecf-5b69-980a-ac973714c400",
@@ -26640,7 +26748,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-shrug",
+        "title": "Шраги стоя"
+      }
     },
     {
       "id": "b632f300-e593-54ad-9177-9e36c26a2016",
@@ -26961,7 +27073,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "incline-barbell-bench-press",
+        "title": "Жим штанги лёжа на наклонной скамье"
+      }
     },
     {
       "id": "a68bf353-e5c2-5ae0-b715-daea85f8dfed",
@@ -31619,6 +31735,10 @@
       "imagesUnavailable": false,
       "generatedMedia": null,
       "translationAutomatic": false,
+      "variantGroup": {
+        "id": "lat-pulldown",
+        "title": "Тяга верхнего блока к груди и за голову"
+      },
       "techniqueVideoURL": "https://www.youtube.com/watch?v=IjoFCmLX7z0"
     },
     {
@@ -32231,7 +32351,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "lat-pulldown",
+        "title": "Тяга верхнего блока к груди и за голову"
+      }
     },
     {
       "id": "c8074236-0d91-5641-8ccc-35f87ba62c20",

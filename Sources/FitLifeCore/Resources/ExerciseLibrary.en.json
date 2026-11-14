@@ -1539,7 +1539,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "lat-pulldown",
+        "title": "Lat pulldown"
+      }
     },
     {
       "id": "c6221067-76d0-588e-aca1-5876cf3f5dc8",
@@ -1547,6 +1551,9 @@
       "name": "Close-Grip Front Lat Pulldown",
       "englishName": "Close-Grip Front Lat Pulldown",
       "aliases": [
+        "Вертикальная тяга узким прямым хватом",
+        "Close-grip front lat pulldown",
+        "Тяга верхнего блока узким хватом",
         "Узкая вертикальная тяга"
       ],
       "group": "back",
@@ -1576,7 +1583,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "lat-pulldown",
+        "title": "Lat pulldown"
+      }
     },
     {
       "id": "537e6599-4ef1-545a-b31d-891526416088",
@@ -1584,7 +1595,9 @@
       "name": "Underhand Cable Pulldowns",
       "englishName": "Underhand Cable Pulldowns",
       "aliases": [
-        "Вертикальная тяга обратным хватом"
+        "Вертикальная тяга обратным хватом",
+        "Underhand lat pulldown",
+        "Тяга верхнего блока обратным хватом"
       ],
       "group": "back",
       "equipment": "cable",
@@ -1613,7 +1626,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "lat-pulldown",
+        "title": "Lat pulldown"
+      }
     },
     {
       "id": "cf73d3b0-1291-565b-bcb3-37b52071d5da",
@@ -1621,6 +1638,9 @@
       "name": "Seated Cable Rows",
       "englishName": "Seated Cable Rows",
       "aliases": [
+        "Горизонтальная тяга блока сидя",
+        "Seated cable row",
+        "Тяга горизонтального блока",
         "Горизонтальная тяга сидя"
       ],
       "group": "back",
@@ -1651,7 +1671,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "seated-cable-row",
+        "title": "Seated cable row"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=xQNrFHEMhI4"
     },
     {
       "id": "09b8d89d-34d3-5a3d-8e6b-b04cb3807bb7",
@@ -1659,6 +1684,9 @@
       "name": "One-Arm Dumbbell Row",
       "englishName": "One-Arm Dumbbell Row",
       "aliases": [
+        "Тяга гантели в наклоне одной рукой",
+        "One-arm dumbbell row",
+        "Тяга гантели одной рукой",
         "Тяга гантели к поясу"
       ],
       "group": "back",
@@ -1699,6 +1727,9 @@
       "name": "Bent Over Two-Dumbbell Row",
       "englishName": "Bent Over Two-Dumbbell Row",
       "aliases": [
+        "Тяга гантелей в наклоне",
+        "Bent-over dumbbell row",
+        "Тяга двух гантелей в наклоне",
         "Тяга гантелей к поясу"
       ],
       "group": "back",
@@ -1736,6 +1767,9 @@
       "name": "Dumbbell Incline Row",
       "englishName": "Dumbbell Incline Row",
       "aliases": [
+        "Тяга гантелей лёжа на наклонной скамье",
+        "Incline dumbbell row",
+        "Тяга гантелей с опорой грудью",
         "Тяга на наклонной скамье"
       ],
       "group": "back",
@@ -1774,6 +1808,9 @@
       "name": "T-Bar Row with Handle",
       "englishName": "T-Bar Row with Handle",
       "aliases": [
+        "Тяга Т-штанги с V-рукояткой",
+        "T-bar row",
+        "Тяга Т-грифа",
         "Тяга т-грифа к поясу"
       ],
       "group": "back",
@@ -1811,6 +1848,9 @@
       "name": "Straight-Arm Pulldown",
       "englishName": "Straight-Arm Pulldown",
       "aliases": [
+        "Пуловер на блоке с прямой рукояткой",
+        "Straight-arm pulldown",
+        "Тяга верхнего блока прямыми руками",
         "Пуловер на блоке"
       ],
       "group": "back",
@@ -1835,7 +1875,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "straight-arm-pulldown",
+        "title": "Straight-arm cable pulldown"
+      }
     },
     {
       "id": "225fb098-7905-5995-867e-09d8512d70fd",
@@ -1843,6 +1887,9 @@
       "name": "Hyperextensions (Back Extensions)",
       "englishName": "Hyperextensions (Back Extensions)",
       "aliases": [
+        "Разгибание спины на скамье",
+        "Hyperextension",
+        "Гиперэкстензия",
         "Разгибание спины"
       ],
       "group": "back",
@@ -1879,6 +1926,9 @@
       "name": "Barbell Shrug",
       "englishName": "Barbell Shrug",
       "aliases": [
+        "Подъём плеч со штангой стоя",
+        "Barbell shrug",
+        "Шраги со штангой",
         "Подъём плеч со штангой"
       ],
       "group": "back",
@@ -1904,7 +1954,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-shrug",
+        "title": "Standing shrug"
+      }
     },
     {
       "id": "a27dbdf1-867c-5e63-b7c1-11fa230aa47f",
@@ -1912,6 +1966,9 @@
       "name": "Dumbbell Shrug",
       "englishName": "Dumbbell Shrug",
       "aliases": [
+        "Подъём плеч с гантелями стоя",
+        "Dumbbell shrug",
+        "Шраги с гантелями",
         "Подъём плеч с гантелями"
       ],
       "group": "back",
@@ -1937,7 +1994,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-shrug",
+        "title": "Standing shrug"
+      }
     },
     {
       "id": "df15f938-2c8b-505f-9bd4-e45783def49b",
@@ -1989,6 +2050,8 @@
       "name": "Barbell Incline Bench Press - Medium Grip",
       "englishName": "Barbell Incline Bench Press - Medium Grip",
       "aliases": [
+        "Жим штанги на наклонной скамье",
+        "Incline barbell bench press",
         "Наклонный жим штанги"
       ],
       "group": "chest",
@@ -2018,7 +2081,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "incline-barbell-bench-press",
+        "title": "Incline barbell bench press"
+      }
     },
     {
       "id": "e8bc138e-2642-570b-aee7-07ec627b5e97",
@@ -2114,6 +2181,9 @@
       "name": "Decline Dumbbell Bench Press",
       "englishName": "Decline Dumbbell Bench Press",
       "aliases": [
+        "Жим гантелей вниз головой",
+        "Decline dumbbell bench press",
+        "Жим гантелей на скамье с наклоном вниз",
         "Нижний жим гантелей"
       ],
       "group": "chest",
@@ -2144,7 +2214,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "decline-bench-press",
+        "title": "Decline bench press"
+      }
     },
     {
       "id": "e99de1f3-c80d-5d18-86df-f1fd3959c2d2",
@@ -2152,6 +2226,9 @@
       "name": "Dumbbell Flyes",
       "englishName": "Dumbbell Flyes",
       "aliases": [
+        "Разводка гантелей лёжа",
+        "Flat dumbbell fly",
+        "Разведение гантелей лёжа",
         "Разводка гантелей"
       ],
       "group": "chest",
@@ -2178,7 +2255,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "dumbbell-bench-fly",
+        "title": "Dumbbell bench fly"
+      }
     },
     {
       "id": "66dc7b09-9ad5-59af-9769-f2a5dc8e1d2c",
@@ -2186,6 +2267,9 @@
       "name": "Incline Dumbbell Flyes",
       "englishName": "Incline Dumbbell Flyes",
       "aliases": [
+        "Разводка гантелей на наклонной скамье",
+        "Incline dumbbell fly",
+        "Разведение гантелей на наклонной скамье",
         "Наклонная разводка"
       ],
       "group": "chest",
@@ -2215,7 +2299,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "dumbbell-bench-fly",
+        "title": "Dumbbell bench fly"
+      }
     },
     {
       "id": "0dee0627-e8c5-5372-b47f-89adcf61dfa8",
@@ -10064,7 +10152,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "dumbbell-bench-fly",
+        "title": "Dumbbell bench fly"
+      }
     },
     {
       "id": "5ce60abe-15ce-57a6-9824-9f9159303b12",
@@ -14544,7 +14636,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "dumbbell-bench-fly",
+        "title": "Dumbbell bench fly"
+      }
     },
     {
       "id": "2651e8c8-e5b9-534e-8e51-856cdd8d05e5",
@@ -19674,7 +19770,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "dumbbell-bench-fly",
+        "title": "Dumbbell bench fly"
+      }
     },
     {
       "id": "c12d0335-c9ef-5d12-83f8-4ee18252a7f9",
@@ -24387,7 +24487,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "straight-arm-pulldown",
+        "title": "Straight-arm cable pulldown"
+      }
     },
     {
       "id": "71d5e054-9aab-5d96-b3ae-368012d444a2",
@@ -25707,7 +25811,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "seated-cable-row",
+        "title": "Seated cable row"
+      }
     },
     {
       "id": "89f7f1ee-8ecf-5b69-980a-ac973714c400",
@@ -27376,7 +27484,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-shrug",
+        "title": "Standing shrug"
+      }
     },
     {
       "id": "b632f300-e593-54ad-9177-9e36c26a2016",
@@ -27714,7 +27826,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "incline-barbell-bench-press",
+        "title": "Incline barbell bench press"
+      }
     },
     {
       "id": "a68bf353-e5c2-5ae0-b715-daea85f8dfed",
@@ -32498,6 +32614,10 @@
       "imagesUnavailable": false,
       "generatedMedia": null,
       "translationAutomatic": false,
+      "variantGroup": {
+        "id": "lat-pulldown",
+        "title": "Lat pulldown"
+      },
       "techniqueVideoURL": "https://www.youtube.com/watch?v=IjoFCmLX7z0"
     },
     {
@@ -33131,7 +33251,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "lat-pulldown",
+        "title": "Lat pulldown"
+      }
     },
     {
       "id": "c8074236-0d91-5641-8ccc-35f87ba62c20",
