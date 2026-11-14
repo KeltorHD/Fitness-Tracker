@@ -554,7 +554,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     ],
     ["Push_Press", "Push_Press_-_Behind_the_Neck"],
     ["Rack_Pulls", "Rack_Pull_with_Bands"],
-    ["Parallel_Bar_Dip", "Ring_Dips", "Dips_-_Chest_Version"],
+    ["Parallel_Bar_Dip", "Ring_Dips", "Dips_-_Chest_Version", "Dips_-_Triceps_Version"],
     ["Romanian_Deadlift", "Romanian_Deadlift_from_Deficit"],
     ["Sled_Push", "Prowler_Sprint"],
     [
@@ -582,6 +582,9 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     ["Zottman_Curl", "Zottman_Preacher_Curl"],
     ["Cable_Crossover", "Single-Arm_Cable_Crossover"],
     ["Seated_Dumbbell_Press", "Arnold_Dumbbell_Press"],
+    ["Bench_Dips", "Weighted_Bench_Dip"],
+    ["Russian_Twist", "Plate_Twist"],
+    ["Barbell_Side_Bend", "Dumbbell_Side_Bend", "One-Arm_High-Pulley_Cable_Side_Bends"],
     ["Leg_Press", "Narrow_Stance_Leg_Press", "Smith_Machine_Leg_Press"],
     ["Barbell_Lunge", "Dumbbell_Lunges", "Dumbbell_Rear_Lunge"],
     ["Split_Squat_with_Dumbbells", "One_Leg_Barbell_Squat", "Smith_Single-Leg_Split_Squat"],
@@ -668,7 +671,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
 
 @Test func plateExercisesUseEquipmentMatchingTheirPhotos() throws {
   for language in [AppLanguage.russian, .english] {
-    for sourceID in ["Weighted_Crunches", "Weighted_Sissy_Squat"] {
+    for sourceID in ["Weighted_Crunches", "Weighted_Sissy_Squat", "Russian_Twist"] {
       let entry = try #require(
         ExerciseLibrary.entries(language: language).first { $0.sourceID == sourceID })
       #expect(entry.equipment == .other)

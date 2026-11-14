@@ -438,7 +438,8 @@
     "members": [
       "Parallel_Bar_Dip",
       "Ring_Dips",
-      "Dips_-_Chest_Version"
+      "Dips_-_Chest_Version",
+      "Dips_-_Triceps_Version"
     ]
   },
   "romanian-deadlift": {
@@ -721,6 +722,31 @@
       "One-Arm_Side_Laterals",
       "One-Arm_Incline_Lateral_Raise",
       "Standing_Low-Pulley_Deltoid_Raise"
+    ]
+  },
+  "bench-dip": {
+    "ru": "Обратные отжимания от скамьи",
+    "en": "Bench dip",
+    "members": [
+      "Bench_Dips",
+      "Weighted_Bench_Dip"
+    ]
+  },
+  "russian-twist": {
+    "ru": "Русский твист с блином",
+    "en": "Weighted Russian twist",
+    "members": [
+      "Russian_Twist",
+      "Plate_Twist"
+    ]
+  },
+  "standing-side-bend": {
+    "ru": "Наклоны корпуса в сторону стоя",
+    "en": "Standing side bend",
+    "members": [
+      "Barbell_Side_Bend",
+      "Dumbbell_Side_Bend",
+      "One-Arm_High-Pulley_Cable_Side_Bends"
     ]
   }
 }

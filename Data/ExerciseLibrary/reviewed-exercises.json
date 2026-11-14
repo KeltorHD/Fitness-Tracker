@@ -1266,5 +1266,27 @@
   "EZ-Bar_Skullcrusher": {
     "techniqueVideoURL": "https://www.youtube.com/watch?v=ea4fGqPJicA"
   },
-  "Seated_Triceps_Press": {}
+  "Seated_Triceps_Press": {},
+  "Dips_-_Triceps_Version": {},
+  "Bench_Dips": {},
+  "Air_Bike": {},
+  "Reverse_Crunch": {},
+  "Flat_Bench_Lying_Leg_Raise": {},
+  "Russian_Twist": {
+    "equipment": "other",
+    "englishSteps": [
+      "Sit on the floor with knees bent and feet secured, holding a weight plate with both hands in front of you.",
+      "Lean back slightly and turn your torso and the plate to one side.",
+      "Turn under control to the other side and continue alternating."
+    ],
+    "instructionSourceURL": "https://www.ddxfitness.ru/blog/training/russkiy-tvist/",
+    "instructionCorrectionReason": "The source name is generic and the photos show a weight plate, which is omitted from the source equipment and instructions."
+  },
+  "Dead_Bug": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=bxn9FBrt4-A"
+  },
+  "Alternate_Heel_Touchers": {},
+  "Ab_Roller": {},
+  "Barbell_Side_Bend": {},
+  "Dumbbell_Side_Bend": {}
 }
