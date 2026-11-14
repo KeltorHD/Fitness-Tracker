@@ -72,5 +72,13 @@
       "Band_Hip_Adductions",
       "Cable_Hip_Adduction"
     ]
+  },
+  "standing-cable-shoulder-press": {
+    "ru": "Жим над головой на нижних блоках",
+    "en": "Standing cable shoulder press",
+    "members": [
+      "Cable_Shoulder_Press",
+      "Alternating_Cable_Shoulder_Press"
+    ]
   }
 }

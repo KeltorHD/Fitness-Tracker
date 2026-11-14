@@ -4064,6 +4064,10 @@
       "imagesUnavailable": false,
       "generatedMedia": null,
       "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-cable-shoulder-press",
+        "title": "Standing cable shoulder press"
+      },
       "techniqueVideoURL": "https://www.youtube.com/watch?v=RoLdoKk-FkM"
     },
     {
@@ -7447,8 +7451,8 @@
       "name": "Cable Rear Delt Fly",
       "englishName": "Cable Rear Delt Fly",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Разведение рук на верхних блоках",
+        "Cable Rear Delt Fly"
       ],
       "group": "shoulders",
       "equipment": "cable",
@@ -7473,7 +7477,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=ATSjVXoOgVg"
     },
     {
       "id": "ad5d9574-093d-5eba-a78e-aa934ae361ef",
@@ -7481,8 +7486,8 @@
       "name": "Cable Reverse Crunch",
       "englishName": "Cable Reverse Crunch",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Обратные скручивания с нижним блоком",
+        "Cable Reverse Crunch"
       ],
       "group": "core",
       "equipment": "cable",
@@ -7557,8 +7562,8 @@
       "name": "Cable Russian Twists",
       "englishName": "Cable Russian Twists",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Повороты корпуса на фитболе с блоком",
+        "Cable Russian Twists"
       ],
       "group": "core",
       "equipment": "cable",
@@ -7586,7 +7591,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=M3qA79xn4VE"
     },
     {
       "id": "e4e5b4a3-f9b4-551a-bdcf-2295503448c8",
@@ -7594,8 +7600,8 @@
       "name": "Cable Seated Crunch",
       "englishName": "Cable Seated Crunch",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Скручивания на скамье с канатной рукоятью",
+        "Cable Seated Crunch"
       ],
       "group": "core",
       "equipment": "cable",
@@ -7630,8 +7636,8 @@
       "name": "Cable Seated Lateral Raise",
       "englishName": "Cable Seated Lateral Raise",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Разведение рук на задние дельты сидя в кроссовере",
+        "Cable Seated Lateral Raise"
       ],
       "group": "shoulders",
       "equipment": "cable",
@@ -7662,7 +7668,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=eozOiJMU2f8"
     },
     {
       "id": "d70d354c-cb1e-5626-9e98-ccdfb8ee0198",
@@ -7670,8 +7677,8 @@
       "name": "Cable Shoulder Press",
       "englishName": "Cable Shoulder Press",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Жим над головой с нижними блоками",
+        "Cable Shoulder Press"
       ],
       "group": "shoulders",
       "equipment": "cable",
@@ -7699,7 +7706,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-cable-shoulder-press",
+        "title": "Standing cable shoulder press"
+      }
     },
     {
       "id": "7b0dab07-ee8f-5a73-89cb-1d5f3c925011",
@@ -7707,8 +7718,8 @@
       "name": "Cable Shrugs",
       "englishName": "Cable Shrugs",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Шраги с нижним блоком",
+        "Cable Shrugs"
       ],
       "group": "back",
       "equipment": "cable",
@@ -7742,8 +7753,8 @@
       "name": "Cable Wrist Curl",
       "englishName": "Cable Wrist Curl",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Сгибание запястий на блоке сидя",
+        "Cable Wrist Curl"
       ],
       "group": "arms",
       "equipment": "cable",
@@ -7768,7 +7779,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=SocQpoy56pQ"
     },
     {
       "id": "e636f70f-6102-5bb9-9788-b6be422a474f",
@@ -7776,8 +7788,8 @@
       "name": "Calf-Machine Shoulder Shrug",
       "englishName": "Calf-Machine Shoulder Shrug",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подъём плеч в тренажёре для икроножных",
+        "Calf Machine Shoulder Shrug"
       ],
       "group": "back",
       "equipment": "machine",
@@ -7802,7 +7814,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=B2pVOQwM4es"
     },
     {
       "id": "eaccd28f-098d-5fc3-82f9-3b5c9ab4a33f",

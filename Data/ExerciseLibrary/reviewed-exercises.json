@@ -172,5 +172,24 @@
   "Cable_Iron_Cross": {},
   "Cable_Lying_Triceps_Extension": {
     "techniqueVideoURL": "https://www.youtube.com/watch?v=xeA2l-CP6wU"
+  },
+  "Cable_Rear_Delt_Fly": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=ATSjVXoOgVg"
+  },
+  "Cable_Reverse_Crunch": {},
+  "Cable_Russian_Twists": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=M3qA79xn4VE"
+  },
+  "Cable_Seated_Crunch": {},
+  "Cable_Seated_Lateral_Raise": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=eozOiJMU2f8"
+  },
+  "Cable_Shoulder_Press": {},
+  "Cable_Shrugs": {},
+  "Cable_Wrist_Curl": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=SocQpoy56pQ"
+  },
+  "Calf-Machine_Shoulder_Shrug": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=B2pVOQwM4es"
   }
 }
