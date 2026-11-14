@@ -136,5 +136,21 @@
   "Bent_Press": {},
   "Bicycling_Stationary": {},
   "Board_Press": {},
-  "Body-Up": {}
+  "Body-Up": {},
+  "Body_Tricep_Press": {},
+  "Bodyweight_Flyes": {},
+  "Bodyweight_Mid_Row": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=UC1fA33s_6E"
+  },
+  "Bodyweight_Walking_Lunge": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=K0RiO0TsMbE",
+    "equipment": "body only"
+  },
+  "Bosu_Ball_Cable_Crunch_With_Side_Bends": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=ghrP6z8spxo"
+  },
+  "Bottoms_Up": {},
+  "Box_Jump_Multiple_Response": {},
+  "Box_Skip": {},
+  "Box_Squat": {}
 }

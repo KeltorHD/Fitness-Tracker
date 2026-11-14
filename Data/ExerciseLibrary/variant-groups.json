@@ -46,5 +46,21 @@
       "Bent_Over_One-Arm_Long_Bar_Row",
       "Bent_Over_Two-Arm_Long_Bar_Row"
     ]
+  },
+  "walking-lunge": {
+    "ru": "Выпады в ходьбе",
+    "en": "Walking lunge",
+    "members": [
+      "Bodyweight_Walking_Lunge",
+      "Barbell_Walking_Lunge"
+    ]
+  },
+  "barbell-box-squat": {
+    "ru": "Приседания со штангой к опоре",
+    "en": "Barbell squat to a box",
+    "members": [
+      "Box_Squat",
+      "Barbell_Squat_To_A_Bench"
+    ]
   }
 }

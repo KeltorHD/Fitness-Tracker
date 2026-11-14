@@ -171,16 +171,16 @@ Bicycling	Езда на велосипеде	Кардио;cardio
 Bicycling_Stationary	Езда на велотренажёре	Стационарный велосипед;Bicycling Stationary
 Board_Press	Жим штанги лёжа с бруском на груди	Жим штанги лёжа до доски;Board Press
 Body-Up	Боди-ап	Разгибание рук из планки на предплечьях;Body Up
-Body_Tricep_Press	Жим на трицепс для тела	Силовые упражнения;strength
-Bodyweight_Flyes	Полеты с собственным весом	Силовые упражнения;strength
-Bodyweight_Mid_Row	Горизонтальная тяга с собственным весом	Силовые упражнения;strength
-Bodyweight_Walking_Lunge	Ходьба с выпадами с собственным весом	Силовые упражнения;strength
-Bosu_Ball_Cable_Crunch_With_Side_Bends	Bosu Ball Crunch с боковыми изгибами	Силовые упражнения;strength
+Body_Tricep_Press	Разгибание рук с опорой на гриф стоя	Разгибание рук на трицепс с собственным весом;Body Tricep Press
+Bodyweight_Flyes	Разведение рук в упоре лёжа на двух EZ-грифах	Разведение рук с собственным весом на грифах;Bodyweight Flyes
+Bodyweight_Mid_Row	Тяга корпуса к перекладине в перевёрнутом висе	Горизонтальная тяга в перевёрнутом висе;Bodyweight Mid Row
+Bodyweight_Walking_Lunge	Выпады в ходьбе с собственным весом	Ходьба выпадами без отягощения;Bodyweight Walking Lunge
+Bosu_Ball_Cable_Crunch_With_Side_Bends	Скручивания на BOSU с блоками и боковыми наклонами	Скручивания с блоками и наклоны на полусфере;Bosu Ball Cable Crunch With Side Bends
 Bottoms-Up_Clean_From_The_Hang_Position	Подъём снизу вверх из виса	Силовые упражнения;strength
-Bottoms_Up	снизу вверх	Силовые упражнения;strength
-Box_Jump_Multiple_Response	Прыжок в коробку (множественный ответ)	Плиометрика;plyometrics
-Box_Skip	Пропустить коробку	Плиометрика;plyometrics
-Box_Squat	Приседания на ящик	Пауэрлифтинг;powerlifting
+Bottoms_Up	Подъём таза и ног лёжа с подтягиванием коленей	Подъём таза лёжа с разгибанием ног;Bottoms Up
+Box_Jump_Multiple_Response	Повторные прыжки на тумбу с двух ног	Серийные запрыгивания на тумбу;Box Jump Multiple Response
+Box_Skip	Прыжки с одной ноги через ряд тумб	Прыжки с отталкиванием от тумбы;Box Skip
+Box_Squat	Приседания со штангой на ящик	Приседания на ящик;Box Squat
 Box_Squat_with_Bands	Приседания на ящик с лентами	Пауэрлифтинг;powerlifting
 Box_Squat_with_Chains	Приседания на ящик с цепями	Силовые упражнения;strength
 Brachialis-SMR	Брахиалис-СМР	Растяжка;stretching

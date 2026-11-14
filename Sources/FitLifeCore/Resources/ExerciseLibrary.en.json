@@ -5549,7 +5549,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-box-squat",
+        "title": "Barbell squat to a box"
+      }
     },
     {
       "id": "b43d419a-1737-5ad5-9620-97b078ce8190",
@@ -5621,7 +5625,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "walking-lunge",
+        "title": "Walking lunge"
+      }
     },
     {
       "id": "adbf44de-e24c-5571-a4d2-2d97e9fa41b7",
@@ -6427,8 +6435,8 @@
       "name": "Body Tricep Press",
       "englishName": "Body Tricep Press",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Разгибание рук на трицепс с собственным весом",
+        "Body Tricep Press"
       ],
       "group": "arms",
       "equipment": "body only",
@@ -6464,8 +6472,8 @@
       "name": "Bodyweight Flyes",
       "englishName": "Bodyweight Flyes",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Разведение рук с собственным весом на грифах",
+        "Bodyweight Flyes"
       ],
       "group": "chest",
       "equipment": "e-z curl bar",
@@ -6503,8 +6511,8 @@
       "name": "Bodyweight Mid Row",
       "englishName": "Bodyweight Mid Row",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Горизонтальная тяга в перевёрнутом висе",
+        "Bodyweight Mid Row"
       ],
       "group": "back",
       "equipment": "other",
@@ -6531,7 +6539,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=UC1fA33s_6E"
     },
     {
       "id": "8e070641-1d38-5bee-9c26-196244cb26a4",
@@ -6539,11 +6548,11 @@
       "name": "Bodyweight Walking Lunge",
       "englishName": "Bodyweight Walking Lunge",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Ходьба выпадами без отягощения",
+        "Bodyweight Walking Lunge"
       ],
       "group": "legs",
-      "equipment": "unspecified",
+      "equipment": "body only",
       "level": "beginner",
       "primaryMuscles": [
         "quadriceps"
@@ -6567,7 +6576,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "walking-lunge",
+        "title": "Walking lunge"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=K0RiO0TsMbE"
     },
     {
       "id": "a4180946-5293-5048-a720-7f10c60779fc",
@@ -6575,8 +6589,8 @@
       "name": "Bosu Ball Cable Crunch With Side Bends",
       "englishName": "Bosu Ball Cable Crunch With Side Bends",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Скручивания с блоками и наклоны на полусфере",
+        "Bosu Ball Cable Crunch With Side Bends"
       ],
       "group": "core",
       "equipment": "cable",
@@ -6607,7 +6621,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=ghrP6z8spxo"
     },
     {
       "id": "72ebe493-2975-5dbd-a9da-a2d6f2e48fe5",
@@ -6648,8 +6663,8 @@
       "name": "Bottoms Up",
       "englishName": "Bottoms Up",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подъём таза лёжа с разгибанием ног",
+        "Bottoms Up"
       ],
       "group": "core",
       "equipment": "body only",
@@ -6679,8 +6694,8 @@
       "name": "Box Jump (Multiple Response)",
       "englishName": "Box Jump (Multiple Response)",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Серийные запрыгивания на тумбу",
+        "Box Jump Multiple Response"
       ],
       "group": "legs",
       "equipment": "other",
@@ -6716,8 +6731,8 @@
       "name": "Box Skip",
       "englishName": "Box Skip",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Прыжки с отталкиванием от тумбы",
+        "Box Skip"
       ],
       "group": "legs",
       "equipment": "other",
@@ -6755,8 +6770,8 @@
       "name": "Box Squat",
       "englishName": "Box Squat",
       "aliases": [
-        "Пауэрлифтинг",
-        "powerlifting"
+        "Приседания на ящик",
+        "Box Squat"
       ],
       "group": "legs",
       "equipment": "barbell",
@@ -6785,7 +6800,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-box-squat",
+        "title": "Barbell squat to a box"
+      }
     },
     {
       "id": "ddd43c13-c17f-5ed5-8aec-9da69590d8e9",
