@@ -123,9 +123,11 @@ def generate():
         steps = translations[source_id]
         authored_english_steps = reviewed.get(source_id, {}).get('englishSteps')
         if authored_english_steps is not None:
-            assert not item['instructions'] and len(authored_english_steps) >= 3, source_id
+            assert len(authored_english_steps) >= 3, source_id
             assert all(isinstance(step, str) and len(step.strip()) >= 5 for step in authored_english_steps), source_id
             assert re.fullmatch(r'https://[^\s]+', reviewed[source_id].get('instructionSourceURL', '')), source_id
+            if item['instructions']:
+                assert reviewed[source_id].get('instructionCorrectionReason', '').strip(), source_id
         assert bool(steps) == bool(item['instructions'] or authored_english_steps), source_id
         assert not steps or len(steps) >= 3, source_id
         assert all(len(s) >= 5 and re.search('[А-Яа-яЁё]', s) for s in steps), source_id

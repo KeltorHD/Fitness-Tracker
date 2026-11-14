@@ -32,8 +32,10 @@ for ru, en in zip(document['entries'], english['entries']):
     assert en['name'] == original['name']
     assert en['steps'] == (authored if authored is not None else [s for s in original['instructions'] if s.strip()])
     if authored is not None:
-        assert not original['instructions'] and len(authored) >= 3
+        assert len(authored) >= 3
         assert re.fullmatch(r'https://[^\s]+', reviewed[en['sourceID']]['instructionSourceURL'])
+        if original['instructions']:
+            assert reviewed[en['sourceID']].get('instructionCorrectionReason', '').strip()
 assert len(manifest['images']) == 1746
 assert len([entry for entry in document['entries'] if entry['imagesUnavailable']]) == 3
 assert len([entry for entry in document['entries'] if entry['techniqueUnavailable']]) == 4

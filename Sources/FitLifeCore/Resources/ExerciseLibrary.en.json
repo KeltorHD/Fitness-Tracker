@@ -3949,7 +3949,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "kettlebell-windmill",
+        "title": "Kettlebell windmill"
+      }
     },
     {
       "id": "ff0fe49e-e1a7-5fb0-b1a6-f81e69e900d4",
@@ -4960,12 +4964,9 @@
       "secondaryMuscles": [],
       "trainingRegions": [],
       "steps": [
-        "Anchor a band around a solid post or other object.",
-        "Stand with your left side to the post, and put your right foot through the band, getting it around the ankle.",
-        "Stand up straight and hold onto the post if needed. This will be your starting position.",
-        "Keeping the knee straight, raise your right legs out to the side as far as you can.",
-        "Return to the starting position and repeat for the desired rep count.",
-        "Switch sides."
+        "Anchor a resistance band low and loop it around the ankle nearest the anchor.",
+        "Stand upright and hold a support if needed; keep the working knee straight.",
+        "Draw the working leg toward the midline against the band, then return slowly and repeat on the other side."
       ],
       "images": [
         "Band_Hip_Adductions/0.jpg",
@@ -10478,6 +10479,10 @@
       "imagesUnavailable": false,
       "generatedMedia": null,
       "translationAutomatic": false,
+      "variantGroup": {
+        "id": "kettlebell-windmill",
+        "title": "Kettlebell windmill"
+      },
       "techniqueVideoURL": "https://www.youtube.com/watch?v=TOkKFoo6XjI"
     },
     {
@@ -15711,8 +15716,8 @@
       "name": "Kettlebell Pirate Ships",
       "englishName": "Kettlebell Pirate Ships",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Махи гирей из стороны в сторону с поворотом корпуса",
+        "Kettlebell Pirate Ships"
       ],
       "group": "shoulders",
       "equipment": "kettlebells",
@@ -15745,8 +15750,8 @@
       "name": "Kettlebell Pistol Squat",
       "englishName": "Kettlebell Pistol Squat",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Приседание на одной ноге с гирей перед собой",
+        "Kettlebell Pistol Squat"
       ],
       "group": "legs",
       "equipment": "kettlebells",
@@ -15782,8 +15787,8 @@
       "name": "Kettlebell Seated Press",
       "englishName": "Kettlebell Seated Press",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Жим гири одной рукой сидя на полу",
+        "Kettlebell Seated Press"
       ],
       "group": "shoulders",
       "equipment": "kettlebells",
@@ -15815,8 +15820,8 @@
       "name": "Kettlebell Seesaw Press",
       "englishName": "Kettlebell Seesaw Press",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Жим гирь попеременно от плеч стоя",
+        "Kettlebell Seesaw Press"
       ],
       "group": "shoulders",
       "equipment": "kettlebells",
@@ -15848,8 +15853,8 @@
       "name": "Kettlebell Sumo High Pull",
       "englishName": "Kettlebell Sumo High Pull",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Высокая тяга гири двумя руками в широкой стойке",
+        "Kettlebell Sumo High Pull"
       ],
       "group": "back",
       "equipment": "kettlebells",
@@ -15992,8 +15997,8 @@
       "name": "Kettlebell Windmill",
       "englishName": "Kettlebell Windmill",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Наклон с гирей над головой и касанием пола свободной рукой",
+        "Kettlebell Windmill"
       ],
       "group": "core",
       "equipment": "kettlebells",
@@ -16022,7 +16027,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "kettlebell-windmill",
+        "title": "Kettlebell windmill"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=81H6MOcRpmc"
     },
     {
       "id": "a4f8bd63-5398-53bb-9d5b-8fbc2b590bd0",
@@ -16071,11 +16081,11 @@
       "name": "Knee Across The Body",
       "englishName": "Knee Across The Body",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Поворот таза лёжа с согнутой ногой",
+        "Knee Across The Body"
       ],
       "group": "legs",
-      "equipment": "unspecified",
+      "equipment": "body only",
       "level": "beginner",
       "primaryMuscles": [
         "glutes"
@@ -16138,8 +16148,8 @@
       "name": "Knee/Hip Raise On Parallel Bars",
       "englishName": "Knee/Hip Raise On Parallel Bars",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подъём согнутых ног в упоре на брусьях",
+        "Knee Hip Raise On Parallel Bars"
       ],
       "group": "core",
       "equipment": "other",
@@ -16153,11 +16163,9 @@
         "rectusAbdominisLower"
       ],
       "steps": [
-        "Position your body on the vertical leg raise bench so that your forearms are resting on the pads next to the torso and holding on to the handles. Your arms will be bent at a 90 degree angle.",
-        "The torso should be straight with the lower back pressed against the pad of the machine and the legs extended pointing towards the floor. This will be your starting position.",
-        "Now as you breathe out, lift your legs up as you keep them extended. Continue this movement until your legs are roughly parallel to the floor and then hold the contraction for a second. Tip: Do not use any momentum or swinging as you perform this exercise.",
-        "Slowly go back to the starting position as you breathe in.",
-        "Repeat for the recommended amount of repetitions."
+        "Rest your forearms on the pads and hold the handles, keeping your back against the support.",
+        "Raise your bent knees in front of you without swinging.",
+        "Lower your legs under control to the starting position."
       ],
       "images": [
         "Knee_Hip_Raise_On_Parallel_Bars/0.jpg",
@@ -16211,11 +16219,11 @@
       "name": "Kneeling Arm Drill",
       "englishName": "Kneeling Arm Drill",
       "aliases": [
-        "Плиометрика",
-        "plyometrics"
+        "Имитация работы рук при беге в выпаде на колене",
+        "Kneeling Arm Drill"
       ],
       "group": "shoulders",
-      "equipment": "unspecified",
+      "equipment": "body only",
       "level": "beginner",
       "primaryMuscles": [
         "shoulders"

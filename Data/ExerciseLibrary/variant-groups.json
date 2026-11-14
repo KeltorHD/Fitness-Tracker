@@ -258,5 +258,14 @@
       "Dumbbell_One-Arm_Triceps_Extension",
       "Kettlebell_Overhead_Triceps_Extension"
     ]
+  },
+  "kettlebell-windmill": {
+    "ru": "Мельница с гирей",
+    "en": "Kettlebell windmill",
+    "members": [
+      "Kettlebell_Windmill",
+      "Double_Kettlebell_Windmill",
+      "Advanced_Kettlebell_Windmill"
+    ]
   }
 }

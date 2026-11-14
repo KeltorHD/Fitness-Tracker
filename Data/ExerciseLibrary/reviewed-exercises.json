@@ -72,7 +72,14 @@
   "Band_Good_Morning": {},
   "Band_Good_Morning_Pull_Through": {},
   "Band_Hip_Adductions": {
-    "techniqueVideoURL": "https://www.youtube.com/watch?v=lUI8App_XdY"
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=lUI8App_XdY",
+    "englishSteps": [
+      "Anchor a resistance band low and loop it around the ankle nearest the anchor.",
+      "Stand upright and hold a support if needed; keep the working knee straight.",
+      "Draw the working leg toward the midline against the band, then return slowly and repeat on the other side."
+    ],
+    "instructionSourceURL": "https://www.catalystathletics.com/exercise/779/Standing-Banded-Hip-Adduction/",
+    "instructionCorrectionReason": "Original name and photos indicate hip adduction, but upstream instructions describe abduction; user chose the original name."
   },
   "Band_Pull_Apart": {},
   "Band_Skull_Crusher": {},
@@ -453,5 +460,28 @@
     "techniqueVideoURL": "https://www.youtube.com/watch?v=CIJrBjSxlyQ"
   },
   "Kettlebell_One-Legged_Deadlift": {},
-  "Kettlebell_Overhead_Triceps_Extension": {}
+  "Kettlebell_Overhead_Triceps_Extension": {},
+  "Kettlebell_Pirate_Ships": {},
+  "Kettlebell_Pistol_Squat": {},
+  "Kettlebell_Seated_Press": {},
+  "Kettlebell_Seesaw_Press": {},
+  "Kettlebell_Sumo_High_Pull": {},
+  "Kettlebell_Windmill": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=81H6MOcRpmc"
+  },
+  "Knee_Across_The_Body": {
+    "equipment": "body only"
+  },
+  "Knee_Hip_Raise_On_Parallel_Bars": {
+    "englishSteps": [
+      "Rest your forearms on the pads and hold the handles, keeping your back against the support.",
+      "Raise your bent knees in front of you without swinging.",
+      "Lower your legs under control to the starting position."
+    ],
+    "instructionSourceURL": "https://www.fcr-mm.org/wp-content/uploads/2025/09/Exercises.pdf",
+    "instructionCorrectionReason": "Original name and photos show a bent-knee raise; upstream steps describe raising straight legs."
+  },
+  "Kneeling_Arm_Drill": {
+    "equipment": "body only"
+  }
 }

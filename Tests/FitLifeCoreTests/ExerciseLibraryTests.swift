@@ -263,6 +263,10 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   #expect(entry.primaryMuscleIDs == [.adductors])
   #expect(entry.steps.contains { $0.contains("к средней линии") })
   #expect(ExerciseLibrary.search("приведение бедра с эспандером").contains { $0.id == entry.id })
+  let english = try #require(
+    ExerciseLibrary.entries(language: .english).first { $0.sourceID == "Band_Hip_Adductions" })
+  #expect(english.steps.contains { $0.contains("toward the midline") })
+  #expect(!english.steps.contains { $0.contains("out to the side as far as you can") })
 }
 
 @Test func rolloutVariantsShareOneGroupButKeepSeparateIDs() throws {
@@ -489,6 +493,30 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     "Kettlebell_Overhead_Triceps_Extension", "Dumbbell_One-Arm_Triceps_Extension",
   ])
   #expect(Set(variants.map(\.id)).count == 2)
+}
+
+@Test func kneeRaiseInstructionsMatchTheSourceNameAndPhotosInBothLanguages() throws {
+  let russian = try #require(
+    ExerciseLibrary.entries(language: .russian).first {
+      $0.sourceID == "Knee_Hip_Raise_On_Parallel_Bars"
+    })
+  let english = try #require(
+    ExerciseLibrary.entries(language: .english).first {
+      $0.sourceID == "Knee_Hip_Raise_On_Parallel_Bars"
+    })
+  #expect(russian.steps.contains { $0.contains("согнутые колени") })
+  #expect(english.steps.contains { $0.contains("bent knees") })
+  #expect(russian.id == english.id)
+}
+
+@Test func kettlebellWindmillVariantsKeepSeparateIDs() throws {
+  let entry = try #require(
+    ExerciseLibrary.entries.first { $0.sourceID == "Kettlebell_Windmill" })
+  let variants = ExerciseLibrary.variants(for: entry.id, language: .russian)
+  #expect(Set(variants.map(\.sourceID)) == [
+    "Kettlebell_Windmill", "Double_Kettlebell_Windmill", "Advanced_Kettlebell_Windmill",
+  ])
+  #expect(Set(variants.map(\.id)).count == 3)
 }
 
 @Test func multipleEquipmentFiltersUseUnionAndIntersectWithMuscleAndSearch() {
