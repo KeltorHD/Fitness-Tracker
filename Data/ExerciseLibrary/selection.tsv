@@ -584,21 +584,21 @@ Plie_Dumbbell_Squat	Приседания плие с гантелью	Присе
 Plyo_Kettlebell_Pushups	Плиометрические отжимания с переносом рук через гирю	Взрывные отжимания с гирей;Плио отжимания с гирями;Силовые упражнения;strength
 Plyo_Push-up	Плиометрические отжимания от пола	Взрывные отжимания;Plyometric push-up;Плио отжимания;Плиометрика;plyometrics
 Posterior_Tibialis_Stretch	Растяжка задней большеберцовой мышцы с лентой сидя	Растяжка внутренней поверхности голени;Растяжка задней большеберцовой мышцы;Растяжка;stretching
-Power_Clean	Взятие штанги на грудь в полуприсед	Силовые упражнения;strength
+Power_Clean	Взятие штанги на грудь в стойку	Подъём штанги на грудь в полуприсед;Power clean;Взятие штанги на грудь в полуприсед;Силовые упражнения;strength
 Power_Clean_from_Blocks	Взятие штанги на грудь в полуприсед с плинтов	Тяжёлая атлетика;olympic weightlifting
-Power_Jerk	Мощность рывок	Тяжёлая атлетика;olympic weightlifting
+Power_Jerk	Толчок штанги в стойку от груди	Толчок штанги с подседом;Power jerk;Мощность рывок;Тяжёлая атлетика;olympic weightlifting
 Power_Partials	Части мощности	Силовые упражнения;strength
-Power_Snatch	Мощный рывок	Тяжёлая атлетика;olympic weightlifting
+Power_Snatch	Рывок штанги в стойку с пола	Силовой рывок штанги;Power snatch;Мощный рывок;Тяжёлая атлетика;olympic weightlifting
 Power_Snatch_from_Blocks	Выхват мощности из блоков	Тяжёлая атлетика;olympic weightlifting
-Power_Stairs	Лестницы с электроприводом	Силовой экстрим;strongman
-Preacher_Hammer_Dumbbell_Curl	Молотковые сгибания с гантелями на скамье Скотта	Силовые упражнения;strength
+Power_Stairs	Подъём отягощения на силовую платформу	Силовая лестница;Power stairs;Лестницы с электроприводом;Силовой экстрим;strongman
+Preacher_Hammer_Dumbbell_Curl	Молотковые сгибания рук с гантелями на скамье Скотта	Молотки на скамье Скотта;Preacher hammer dumbbell curl;Молотковые сгибания с гантелями на скамье Скотта;Силовые упражнения;strength
 Press_Sit-Up	Жим приседаниями	Силовые упражнения;strength
-Prone_Manual_Hamstring	Ручное подколенное сухожилие лежа	Силовые упражнения;strength
-Prowler_Sprint	Проулер Спринт	Кардио;cardio
-Pull_Through	Вытащить через	Силовые упражнения;strength
-Push-Up_Wide	Пуш-ап широкий	Силовые упражнения;strength
-Push-Ups_-_Close_Triceps_Position	Отжимания – закрытая позиция трицепса	Силовые упражнения;strength
-Push-Ups_With_Feet_On_An_Exercise_Ball	Отжимания с ногами на гимнастическом мяче	Силовые упражнения;strength
+Prone_Manual_Hamstring	Сгибание ноги лёжа с сопротивлением партнёра	Сгибание ноги на бицепс бедра с партнёром;Ручное подколенное сухожилие лежа;Силовые упражнения;strength
+Prowler_Sprint	Толкание саней с ускорением	Спринт с санями;Prowler sprint;Проулер Спринт;Кардио;cardio
+Pull_Through	Тяга нижнего блока между ног	Пул-тру на блоке;Cable pull-through;Вытащить через;Силовые упражнения;strength
+Push-Up_Wide	Отжимания от пола с широкой постановкой рук	Широкие отжимания;Wide push-up;Пуш-ап широкий;Силовые упражнения;strength
+Push-Ups_-_Close_Triceps_Position	Отжимания от пола с узкой постановкой рук	Узкие отжимания на трицепс;Close-grip push-up;Отжимания – закрытая позиция трицепса;Силовые упражнения;strength
+Push-Ups_With_Feet_On_An_Exercise_Ball	Отжимания от пола с ногами на фитболе	Отжимания с ногами на фитболе;Отжимания с ногами на гимнастическом мяче;Силовые упражнения;strength
 Push_Press	Нажмите Пресс	Тяжёлая атлетика;olympic weightlifting
 Push_Press_-_Behind_the_Neck	Толкающий пресс – из-за шеи	Тяжёлая атлетика;olympic weightlifting
 Push_Up_to_Side_Plank	Отжимание до боковой планки	Силовые упражнения;strength

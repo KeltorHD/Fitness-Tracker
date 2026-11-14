@@ -506,6 +506,9 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     ],
     ["Overhead_Squat", "One-Arm_Overhead_Kettlebell_Squats"],
     ["Plyo_Push-up", "Plyo_Kettlebell_Pushups"],
+    [
+      "Push-Up_Wide", "Push-Ups_-_Close_Triceps_Position", "Push-Ups_With_Feet_On_An_Exercise_Ball",
+    ],
   ] {
     for language in [AppLanguage.russian, .english] {
       let entry = try #require(

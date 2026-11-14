@@ -21956,6 +21956,9 @@
       "name": "Power Clean",
       "englishName": "Power Clean",
       "aliases": [
+        "Подъём штанги на грудь в полуприсед",
+        "Power clean",
+        "Взятие штанги на грудь в полуприсед",
         "Силовые упражнения",
         "strength"
       ],
@@ -22053,6 +22056,9 @@
       "name": "Power Jerk",
       "englishName": "Power Jerk",
       "aliases": [
+        "Толчок штанги с подседом",
+        "Power jerk",
+        "Мощность рывок",
         "Тяжёлая атлетика",
         "olympic weightlifting"
       ],
@@ -22128,6 +22134,9 @@
       "name": "Power Snatch",
       "englishName": "Power Snatch",
       "aliases": [
+        "Силовой рывок штанги",
+        "Power snatch",
+        "Мощный рывок",
         "Тяжёлая атлетика",
         "olympic weightlifting"
       ],
@@ -22211,6 +22220,9 @@
       "name": "Power Stairs",
       "englishName": "Power Stairs",
       "aliases": [
+        "Силовая лестница",
+        "Power stairs",
+        "Лестницы с электроприводом",
         "Силовой экстрим",
         "strongman"
       ],
@@ -22251,6 +22263,9 @@
       "name": "Preacher Hammer Dumbbell Curl",
       "englishName": "Preacher Hammer Dumbbell Curl",
       "aliases": [
+        "Молотки на скамье Скотта",
+        "Preacher hammer dumbbell curl",
+        "Молотковые сгибания с гантелями на скамье Скотта",
         "Силовые упражнения",
         "strength"
       ],
@@ -22280,7 +22295,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "hammer-curl",
+        "title": "Hammer curl"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=-MPHGPjtiOk"
     },
     {
       "id": "24dc80d1-bff0-5082-b61f-1e5d0d9c670d",
@@ -22327,11 +22347,13 @@
       "name": "Prone Manual Hamstring",
       "englishName": "Prone Manual Hamstring",
       "aliases": [
+        "Сгибание ноги на бицепс бедра с партнёром",
+        "Ручное подколенное сухожилие лежа",
         "Силовые упражнения",
         "strength"
       ],
       "group": "legs",
-      "equipment": "unspecified",
+      "equipment": "body only",
       "level": "beginner",
       "primaryMuscles": [
         "hamstrings"
@@ -22362,6 +22384,9 @@
       "name": "Prowler Sprint",
       "englishName": "Prowler Sprint",
       "aliases": [
+        "Спринт с санями",
+        "Prowler sprint",
+        "Проулер Спринт",
         "Кардио",
         "cardio"
       ],
@@ -22399,6 +22424,9 @@
       "name": "Pull Through",
       "englishName": "Pull Through",
       "aliases": [
+        "Пул-тру на блоке",
+        "Cable pull-through",
+        "Вытащить через",
         "Силовые упражнения",
         "strength"
       ],
@@ -22434,6 +22462,9 @@
       "name": "Push-Up Wide",
       "englishName": "Push-Up Wide",
       "aliases": [
+        "Широкие отжимания",
+        "Wide push-up",
+        "Пуш-ап широкий",
         "Силовые упражнения",
         "strength"
       ],
@@ -22464,7 +22495,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "floor-push-up",
+        "title": "Floor push-up"
+      }
     },
     {
       "id": "91bc54e0-5a7e-5cd7-8897-2c9b75c9a034",
@@ -22472,6 +22507,9 @@
       "name": "Push-Ups - Close Triceps Position",
       "englishName": "Push-Ups - Close Triceps Position",
       "aliases": [
+        "Узкие отжимания на трицепс",
+        "Close-grip push-up",
+        "Отжимания – закрытая позиция трицепса",
         "Силовые упражнения",
         "strength"
       ],
@@ -22499,7 +22537,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "floor-push-up",
+        "title": "Floor push-up"
+      }
     },
     {
       "id": "43ad27fa-ddf7-54b1-be60-d13e2036473b",
@@ -22507,6 +22549,8 @@
       "name": "Push-Ups With Feet On An Exercise Ball",
       "englishName": "Push-Ups With Feet On An Exercise Ball",
       "aliases": [
+        "Отжимания с ногами на фитболе",
+        "Отжимания с ногами на гимнастическом мяче",
         "Силовые упражнения",
         "strength"
       ],
@@ -22537,7 +22581,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "floor-push-up",
+        "title": "Floor push-up"
+      }
     },
     {
       "id": "5b3c9620-85ce-5a33-82d7-c7b91d80fb94",

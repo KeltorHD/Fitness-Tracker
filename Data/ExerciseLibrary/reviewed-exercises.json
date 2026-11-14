@@ -683,5 +683,20 @@
   "Plie_Dumbbell_Squat": {},
   "Plyo_Kettlebell_Pushups": {},
   "Plyo_Push-up": {},
-  "Posterior_Tibialis_Stretch": {}
+  "Posterior_Tibialis_Stretch": {},
+  "Power_Clean": {},
+  "Power_Jerk": {},
+  "Power_Snatch": {},
+  "Power_Stairs": {},
+  "Preacher_Hammer_Dumbbell_Curl": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=-MPHGPjtiOk"
+  },
+  "Prone_Manual_Hamstring": {
+    "equipment": "body only"
+  },
+  "Prowler_Sprint": {},
+  "Pull_Through": {},
+  "Push-Up_Wide": {},
+  "Push-Ups_-_Close_Triceps_Position": {},
+  "Push-Ups_With_Feet_On_An_Exercise_Ball": {}
 }

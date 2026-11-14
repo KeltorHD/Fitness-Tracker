@@ -204,7 +204,8 @@
       "Hammer_Curls",
       "Cross_Body_Hammer_Curl",
       "Cable_Hammer_Curls_-_Rope_Attachment",
-      "Incline_Hammer_Curls"
+      "Incline_Hammer_Curls",
+      "Preacher_Hammer_Dumbbell_Curl"
     ]
   },
   "hip-extension": {
@@ -360,6 +361,15 @@
     "members": [
       "Plyo_Push-up",
       "Plyo_Kettlebell_Pushups"
+    ]
+  },
+  "floor-push-up": {
+    "ru": "Отжимания от пола",
+    "en": "Floor push-up",
+    "members": [
+      "Push-Up_Wide",
+      "Push-Ups_-_Close_Triceps_Position",
+      "Push-Ups_With_Feet_On_An_Exercise_Ball"
     ]
   }
 }
