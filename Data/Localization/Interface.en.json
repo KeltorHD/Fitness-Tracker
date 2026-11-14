@@ -589,7 +589,6 @@
   "Фитбол": "Exercise ball",
   "Массажный ролик": "Foam roller",
   "Не указан": "Not specified",
-  "В исходном каталоге нет изображений этого упражнения.": "The source catalog has no images for this exercise.",
   "В исходном каталоге нет подробной техники этого упражнения.": "The source catalog has no detailed instructions for this exercise.",
   "Описание переведено автоматически из открытого источника.": "The description was automatically translated from the open source dataset.",
   "Иллюстрация движения, созданная ИИ.": "AI-generated movement illustration.",
@@ -604,7 +603,6 @@
   "Выбрать на схеме тела": "Choose on body map",
   "Нажмите на область тела, чтобы выбрать группу мышц.": "Tap an area of the body to select a muscle group.",
   "Сбросить": "Reset",
-  "876 упражнений и 1746 фотографий, встроенных в приложение.": "876 exercises and 1746 photos included in the app.",
   "Каталог переведён на русский язык. Новые описания преимущественно переведены автоматически; такие карточки отмечены.": "The catalog is translated into Russian. Most new descriptions are machine-translated and marked accordingly.",
   "%@ уд/мин": "%@ bpm",
   "Нет свежих данных пульса": "No recent heart rate data",
@@ -1413,5 +1411,12 @@
   "Разрешить уведомления": "Allow notifications",
   "Настройки уведомлений": "Notification settings",
   "Войдите для автоматической синхронизации тренировок и питания между устройствами.": "Sign in to automatically sync workouts and nutrition between devices.",
-  "Тренировки, планы, вес, сохранённый пульс, питание с фотографиями, вода, цели, избранные продукты, добавки и расписания автоматически передаются в ваш аккаунт. Изменения офлайн отправятся при подключении. Источники здоровья подключаются отдельно.": "Workouts, plans, weight, saved heart rate, food and photos, water, goals, favorite foods, supplements and schedules sync automatically with your account. Offline changes upload when connected. Health sources are connected separately."
+  "Тренировки, планы, вес, сохранённый пульс, питание с фотографиями, вода, цели, избранные продукты, добавки и расписания автоматически передаются в ваш аккаунт. Изменения офлайн отправятся при подключении. Источники здоровья подключаются отдельно.": "Workouts, plans, weight, saved heart rate, food and photos, water, goals, favorite foods, supplements and schedules sync automatically with your account. Offline changes upload when connected. Health sources are connected separately.",
+  "Вариант упражнения": "Exercise variation",
+  "Видео техники на YouTube": "Exercise technique on YouTube",
+  "Другие варианты": "Other variations",
+  "История и графики": "History and charts",
+  "Передняя большеберцовая мышца": "Tibialis anterior",
+  "Упражнений в каталоге: %@. Доступные фотографии встроены в приложение.": "%@ exercises are in the catalog. Available photos are included in the app.",
+  "Фотографии пока недоступны.": "Photos are not available yet."
 }

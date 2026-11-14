@@ -6,7 +6,7 @@ import Testing
 @Test func bundledLibraryLoadsAndHasRussianContent() throws {
   #expect(ExerciseLibrary.loadingError == nil)
   let document = try #require(ExerciseLibrary.document)
-  #expect(document.entries.count == 876)
+  #expect(document.entries.count == 878)
   #expect(document.locale == "ru")
   #expect(document.source.licenseName == "Unlicense")
   #expect(document.source.revision.count == 40)
@@ -24,8 +24,8 @@ import Testing
 }
 
 @Test func expandedCatalogPreservesLegacyIDsAndTemplateExercises() {
-  #expect(ExerciseCatalog.all.count == 876)
-  #expect(Set(ExerciseCatalog.all.map(\.id)).count == 876)
+  #expect(ExerciseCatalog.all.count == 878)
+  #expect(Set(ExerciseCatalog.all.map(\.id)).count == 878)
   let expected = (1...8).map {
     UUID(uuidString: String(format: "10000000-0000-0000-0000-%012d", $0))!
   }
@@ -57,7 +57,7 @@ import Testing
   let cableLegs = ExerciseLibrary.search(group: .legs, equipment: .cable)
   #expect(cableLegs.contains { $0.sourceID == "Cable_Hip_Adduction" })
   #expect(cableLegs.allSatisfy { $0.group == .legs && $0.equipment == .cable })
-  #expect(ExerciseLibrary.search("  ").count == 876)
+  #expect(ExerciseLibrary.search("  ").count == 878)
 }
 
 @Test func everyLibraryMetadataLabelIsLocalized() {
@@ -118,6 +118,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
       "Kettlebell_Overhead_Triceps_Extension", "Power_Partials",
       "Seated_Palm-Up_Barbell_Wrist_Curl", "Seated_Palms-Down_Barbell_Wrist_Curl",
       "Decline_EZ_Bar_Triceps_Extension", "Wide-Grip_Decline_Barbell_Pullover",
+      "FitLife_Triceps_Pushdown_EZ_Bar", "FitLife_Triceps_Pushdown_One_Arm_Overhand",
     ])
   #expect(ExerciseLibrary.entries.allSatisfy { $0.techniqueUnavailable == false })
 }
@@ -153,9 +154,10 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     let variants = ExerciseLibrary.variants(for: entry.id, language: language)
     #expect(entry.equipment == .ezBar)
     #expect(entry.images.isEmpty && entry.imagesUnavailable == true)
-    #expect(Set(variants.map(\.sourceID)) == [
-      "Decline_Dumbbell_Triceps_Extension", "Decline_EZ_Bar_Triceps_Extension",
-    ])
+    #expect(
+      Set(variants.map(\.sourceID)) == [
+        "Decline_Dumbbell_Triceps_Extension", "Decline_EZ_Bar_Triceps_Extension",
+      ])
     #expect(Set(variants.map(\.id)).count == 2)
   }
 }
@@ -233,7 +235,10 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
 @Test func originalLibraryWithoutOptionalMetadataStillDecodes() throws {
   let data = try JSONEncoder().encode(try #require(ExerciseLibrary.document))
   var object = try #require(JSONSerialization.jsonObject(with: data) as? [String: Any])
-  var entries = Array(try #require(object["entries"] as? [[String: Any]]).prefix(100))
+  let entriesWithPhotos = try #require(object["entries"] as? [[String: Any]]).filter {
+    ($0["images"] as? [String])?.count == 2
+  }
+  var entries = Array(entriesWithPhotos.prefix(100))
   for index in entries.indices {
     for key in [
       "techniqueUnavailable", "imagesUnavailable", "generatedMedia", "translationAutomatic",
@@ -277,7 +282,8 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   let partial = try #require(ExerciseLibrary.entries.first { $0.sourceID == "3_4_Sit-Up" })
   #expect(full.name == "Подъём корпуса лёжа на полу")
   #expect(partial.name == "Подъём корпуса лёжа с неполным опусканием")
-  #expect(!ExerciseLibrary.search("приседания").contains { $0.id == full.id || $0.id == partial.id })
+  #expect(
+    !ExerciseLibrary.search("приседания").contains { $0.id == full.id || $0.id == partial.id })
   #expect(ExerciseLibrary.search("подъём корпуса").contains { $0.id == full.id })
   #expect(ExerciseLibrary.search("3/4 Sit-Up").contains { $0.id == partial.id })
 }
@@ -309,28 +315,51 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     "Triceps_Pushdown", "Triceps_Pushdown_-_Rope_Attachment",
     "Triceps_Pushdown_-_V-Bar_Attachment", "Reverse_Grip_Triceps_Pushdown",
     "Cable_One_Arm_Tricep_Extension",
+    "FitLife_Triceps_Pushdown_EZ_Bar", "FitLife_Triceps_Pushdown_One_Arm_Overhand",
   ]
   #expect(Set(russian.map(\.sourceID)) == expected)
   #expect(Set(russian.map(\.id)).count == expected.count)
   #expect(russian.map(\.id) == english.map(\.id))
   #expect(russian.allSatisfy { $0.variantGroup?.title == "Разгибание рук на верхнем блоке" })
   #expect(english.allSatisfy { $0.variantGroup?.title == "Cable triceps pushdown" })
-  #expect(russian.allSatisfy { $0.equipment == .cable && $0.images.count == 2 })
-  #expect(russian.allSatisfy { ExerciseLibrary.variants(for: $0.id, language: .russian) == russian })
+  #expect(russian.allSatisfy { $0.equipment == .cable })
+  #expect(
+    russian.filter { $0.sourceID.hasPrefix("FitLife_") }.allSatisfy {
+      $0.imagesUnavailable == true && $0.steps.count >= 3 && $0.techniqueVideoURL != nil
+    })
+  #expect(russian.filter { !$0.sourceID.hasPrefix("FitLife_") }.allSatisfy { $0.images.count == 2 })
+  #expect(
+    russian.allSatisfy { ExerciseLibrary.variants(for: $0.id, language: .russian) == russian })
   #expect(ExerciseLibrary.variants(for: UUID(), language: .russian).isEmpty)
+}
+
+@Test func addedCableVariantsKeepStableIDsAndSearchAliases() throws {
+  for (sourceID, rawID, query) in [
+    ("FitLife_Triceps_Pushdown_EZ_Bar", "11a58a74-892b-576c-8cc2-b0ac5ff5ce1f", "EZ-рукоятью"),
+    (
+      "FitLife_Triceps_Pushdown_One_Arm_Overhand", "6c559b7d-fd54-5c0b-9509-0bbd708454f5",
+      "D-рукоятью"
+    ),
+  ] {
+    let entry = try #require(ExerciseLibrary.entries.first { $0.sourceID == sourceID })
+    #expect(entry.id == UUID(uuidString: rawID))
+    #expect(entry.primaryMuscleIDs == [.triceps])
+    #expect(ExerciseLibrary.search(query).contains { $0.id == entry.id })
+  }
 }
 
 @Test func benchPressGripVariantsAreGrouped() throws {
   let bench = try #require(
     ExerciseLibrary.entries.first { $0.sourceID == "Barbell_Bench_Press_-_Medium_Grip" })
   let variants = ExerciseLibrary.variants(for: bench.id, language: .russian)
-  #expect(Set(variants.map(\.sourceID)) == [
-    "Barbell_Bench_Press_-_Medium_Grip", "Close-Grip_Barbell_Bench_Press",
-    "Wide-Grip_Barbell_Bench_Press", "Bench_Press_-_Powerlifting",
-    "Bench_Press_with_Chains", "Board_Press", "Reverse_Band_Bench_Press",
-    "Reverse_Triceps_Bench_Press", "Smith_Machine_Bench_Press",
-    "Smith_Machine_Close-Grip_Bench_Press",
-  ])
+  #expect(
+    Set(variants.map(\.sourceID)) == [
+      "Barbell_Bench_Press_-_Medium_Grip", "Close-Grip_Barbell_Bench_Press",
+      "Wide-Grip_Barbell_Bench_Press", "Bench_Press_-_Powerlifting",
+      "Bench_Press_with_Chains", "Board_Press", "Reverse_Band_Bench_Press",
+      "Reverse_Triceps_Bench_Press", "Smith_Machine_Bench_Press",
+      "Smith_Machine_Close-Grip_Bench_Press",
+    ])
 }
 
 @Test func bandBenchPressDoesNotBecomeABarbellExercise() throws {
@@ -369,9 +398,10 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   let entry = try #require(
     ExerciseLibrary.entries.first { $0.sourceID == "Barbell_Ab_Rollout" })
   let variants = ExerciseLibrary.variants(for: entry.id, language: .russian)
-  #expect(Set(variants.map(\.sourceID)) == [
-    "Barbell_Ab_Rollout", "Barbell_Ab_Rollout_-_On_Knees", "Barbell_Rollout_from_Bench",
-  ])
+  #expect(
+    Set(variants.map(\.sourceID)) == [
+      "Barbell_Ab_Rollout", "Barbell_Ab_Rollout_-_On_Knees", "Barbell_Rollout_from_Bench",
+    ])
   #expect(Set(variants.map(\.id)).count == 3)
 }
 
@@ -422,9 +452,10 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   let entry = try #require(
     ExerciseLibrary.entries.first { $0.sourceID == "Cable_Shoulder_Press" })
   let variants = ExerciseLibrary.variants(for: entry.id, language: .russian)
-  #expect(Set(variants.map(\.sourceID)) == [
-    "Cable_Shoulder_Press", "Alternating_Cable_Shoulder_Press",
-  ])
+  #expect(
+    Set(variants.map(\.sourceID)) == [
+      "Cable_Shoulder_Press", "Alternating_Cable_Shoulder_Press",
+    ])
   #expect(Set(variants.map(\.id)).count == 2)
 }
 
@@ -433,9 +464,10 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     let entry = try #require(
       ExerciseLibrary.entries(language: language).first { $0.sourceID == "Car_Drivers" })
     #expect(entry.equipment == .other)
-    #expect(!ExerciseLibrary.search(equipment: [.barbell], language: language).contains {
-      $0.id == entry.id
-    })
+    #expect(
+      !ExerciseLibrary.search(equipment: [.barbell], language: language).contains {
+        $0.id == entry.id
+      })
   }
 }
 
@@ -444,12 +476,13 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     ExerciseLibrary.entries.first { $0.sourceID == "Close-Grip_EZ_Bar_Curl" })
   let variants = ExerciseLibrary.variants(for: ezCurl.id, language: .russian)
   #expect(ezCurl.equipment == .ezBar)
-  #expect(Set(variants.map(\.sourceID)) == [
-    "Close-Grip_EZ_Bar_Curl", "Close-Grip_Standing_Barbell_Curl",
-    "Barbell_Curl", "EZ-Bar_Curl", "Reverse_Barbell_Curl", "Wide-Grip_Standing_Barbell_Curl",
-    "Standing_Biceps_Cable_Curl", "Reverse_Cable_Curl", "Standing_One-Arm_Cable_Curl",
-    "Close-Grip_EZ-Bar_Curl_with_Band",
-  ])
+  #expect(
+    Set(variants.map(\.sourceID)) == [
+      "Close-Grip_EZ_Bar_Curl", "Close-Grip_Standing_Barbell_Curl",
+      "Barbell_Curl", "EZ-Bar_Curl", "Reverse_Barbell_Curl", "Wide-Grip_Standing_Barbell_Curl",
+      "Standing_Biceps_Cable_Curl", "Reverse_Cable_Curl", "Standing_One-Arm_Cable_Curl",
+      "Close-Grip_EZ-Bar_Curl_with_Band",
+    ])
   #expect(Set(variants.map(\.id)).count == 10)
   #expect(Set(variants.map(\.equipment)) == [.ezBar, .barbell, .cable])
 }
@@ -458,10 +491,11 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   let entry = try #require(
     ExerciseLibrary.entries.first { $0.sourceID == "Barbell_Deadlift" })
   let variants = ExerciseLibrary.variants(for: entry.id, language: .russian)
-  #expect(Set(variants.map(\.sourceID)) == [
-    "Barbell_Deadlift", "Deadlift_with_Bands", "Deadlift_with_Chains", "Deficit_Deadlift",
-    "Reverse_Band_Deadlift",
-  ])
+  #expect(
+    Set(variants.map(\.sourceID)) == [
+      "Barbell_Deadlift", "Deadlift_with_Bands", "Deadlift_with_Chains", "Deficit_Deadlift",
+      "Reverse_Band_Deadlift",
+    ])
   #expect(Set(variants.map(\.id)).count == 5)
   #expect(ExerciseLibrary.search("Становая тяга").contains { $0.id == entry.id })
 }
@@ -470,9 +504,10 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   let entry = try #require(
     ExerciseLibrary.entries.first { $0.sourceID == "Alternating_Hang_Clean" })
   let variants = ExerciseLibrary.variants(for: entry.id, language: .russian)
-  #expect(Set(variants.map(\.sourceID)) == [
-    "Alternating_Hang_Clean", "Double_Kettlebell_Alternating_Hang_Clean",
-  ])
+  #expect(
+    Set(variants.map(\.sourceID)) == [
+      "Alternating_Hang_Clean", "Double_Kettlebell_Alternating_Hang_Clean",
+    ])
   #expect(Set(variants.map(\.id)).count == 2)
 }
 
@@ -480,10 +515,11 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   let entry = try #require(
     ExerciseLibrary.entries.first { $0.sourceID == "Dumbbell_Bench_Press" })
   let variants = ExerciseLibrary.variants(for: entry.id, language: .russian)
-  #expect(Set(variants.map(\.sourceID)) == [
-    "Dumbbell_Bench_Press", "Dumbbell_Bench_Press_with_Neutral_Grip",
-    "One_Arm_Dumbbell_Bench_Press",
-  ])
+  #expect(
+    Set(variants.map(\.sourceID)) == [
+      "Dumbbell_Bench_Press", "Dumbbell_Bench_Press_with_Neutral_Grip",
+      "One_Arm_Dumbbell_Bench_Press",
+    ])
   #expect(Set(variants.map(\.id)).count == 3)
   #expect(ExerciseLibrary.search("Жим гантелей лёжа").contains { $0.id == entry.id })
 }
@@ -492,9 +528,10 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   let entry = try #require(
     ExerciseLibrary.entries.first { $0.sourceID == "Exercise_Ball_Crunch" })
   let variants = ExerciseLibrary.variants(for: entry.id, language: .russian)
-  #expect(Set(variants.map(\.sourceID)) == [
-    "Exercise_Ball_Crunch", "Crunch_-_Legs_On_Exercise_Ball",
-  ])
+  #expect(
+    Set(variants.map(\.sourceID)) == [
+      "Exercise_Ball_Crunch", "Crunch_-_Legs_On_Exercise_Ball",
+    ])
   #expect(Set(variants.map(\.id)).count == 2)
   #expect(variants.allSatisfy { $0.equipment == .exerciseBall })
 }
@@ -503,9 +540,10 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   let entry = try #require(
     ExerciseLibrary.entries.first { $0.sourceID == "External_Rotation" })
   let variants = ExerciseLibrary.variants(for: entry.id, language: .russian)
-  #expect(Set(variants.map(\.sourceID)) == [
-    "External_Rotation", "External_Rotation_with_Band", "External_Rotation_with_Cable",
-  ])
+  #expect(
+    Set(variants.map(\.sourceID)) == [
+      "External_Rotation", "External_Rotation_with_Band", "External_Rotation_with_Cable",
+    ])
   #expect(Set(variants.map(\.equipment)) == [.dumbbell, .bands, .cable])
   #expect(Set(variants.map(\.id)).count == 3)
 }
@@ -628,10 +666,11 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
         $0.sourceID == "One-Arm_Kettlebell_Military_Press_To_The_Side"
       })
     let variants = ExerciseLibrary.variants(for: entry.id, language: language)
-    #expect(Set(variants.map(\.sourceID)) == [
-      "One-Arm_Kettlebell_Military_Press_To_The_Side", "Two-Arm_Kettlebell_Military_Press",
-      "One-Arm_Kettlebell_Para_Press",
-    ])
+    #expect(
+      Set(variants.map(\.sourceID)) == [
+        "One-Arm_Kettlebell_Military_Press_To_The_Side", "Two-Arm_Kettlebell_Military_Press",
+        "One-Arm_Kettlebell_Para_Press",
+      ])
     #expect(Set(variants.map(\.id)).count == 3)
   }
 }
@@ -642,20 +681,22 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   let variants = ExerciseLibrary.variants(for: alternating.id, language: .russian)
   #expect(variants.contains { $0.sourceID == "Front_Two-Dumbbell_Raise" })
   #expect(Set(variants.map(\.id)).count == variants.count)
-  #expect(ExerciseLibrary.search("Подъёмы гантелей перед собой").contains {
-    $0.id == alternating.id
-  })
+  #expect(
+    ExerciseLibrary.search("Подъёмы гантелей перед собой").contains {
+      $0.id == alternating.id
+    })
 }
 
 @Test func goodMorningVariantsIncludeBarbellAndBands() throws {
   let entry = try #require(
     ExerciseLibrary.entries.first { $0.sourceID == "Good_Morning" })
   let variants = ExerciseLibrary.variants(for: entry.id, language: .russian)
-  #expect(Set(variants.map(\.sourceID)) == [
-    "Good_Morning", "Good_Morning_off_Pins", "Band_Good_Morning",
-    "Band_Good_Morning_Pull_Through", "Hanging_Bar_Good_Morning", "Seated_Good_Mornings",
-    "Stiff_Leg_Barbell_Good_Morning",
-  ])
+  #expect(
+    Set(variants.map(\.sourceID)) == [
+      "Good_Morning", "Good_Morning_off_Pins", "Band_Good_Morning",
+      "Band_Good_Morning_Pull_Through", "Hanging_Bar_Good_Morning", "Seated_Good_Mornings",
+      "Stiff_Leg_Barbell_Good_Morning",
+    ])
   #expect(Set(variants.map(\.id)).count == 7)
   #expect(Set(variants.map(\.equipment)) == [.barbell, .bands])
 }
@@ -664,10 +705,11 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   let entry = try #require(
     ExerciseLibrary.entries.first { $0.sourceID == "Barbell_Glute_Bridge" })
   let variants = ExerciseLibrary.variants(for: entry.id, language: .russian)
-  #expect(Set(variants.map(\.sourceID)) == [
-    "Barbell_Glute_Bridge", "Hip_Lift_with_Band", "Pelvic_Tilt_Into_Bridge",
-    "Butt_Lift_Bridge", "Single_Leg_Glute_Bridge",
-  ])
+  #expect(
+    Set(variants.map(\.sourceID)) == [
+      "Barbell_Glute_Bridge", "Hip_Lift_with_Band", "Pelvic_Tilt_Into_Bridge",
+      "Butt_Lift_Bridge", "Single_Leg_Glute_Bridge",
+    ])
   #expect(Set(variants.map(\.equipment)) == [.barbell, .bands, .bodyWeight])
   #expect(Set(variants.map(\.id)).count == 5)
   #expect(ExerciseLibrary.search("Ягодичный мост со штангой").contains { $0.id == entry.id })
@@ -893,13 +935,15 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   let entry = try #require(
     ExerciseLibrary.entries.first { $0.sourceID == "Incline_Dumbbell_Press" })
   let variants = ExerciseLibrary.variants(for: entry.id, language: .russian)
-  #expect(Set(variants.map(\.sourceID)) == [
-    "Incline_Dumbbell_Press", "Hammer_Grip_Incline_DB_Bench_Press",
-  ])
+  #expect(
+    Set(variants.map(\.sourceID)) == [
+      "Incline_Dumbbell_Press", "Hammer_Grip_Incline_DB_Bench_Press",
+    ])
   #expect(Set(variants.map(\.id)).count == 2)
-  #expect(ExerciseLibrary.search("Жим гантелей на наклонной скамье").contains {
-    $0.id == entry.id
-  })
+  #expect(
+    ExerciseLibrary.search("Жим гантелей на наклонной скамье").contains {
+      $0.id == entry.id
+    })
 }
 
 @Test func groinStretchUsesAdductorsInBothLanguages() throws {
@@ -919,13 +963,15 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   let variants = ExerciseLibrary.variants(for: entry.id, language: .russian)
   #expect(entry.imagesUnavailable == true)
   #expect(entry.generatedMedia != nil)
-  #expect(Set(variants.map(\.sourceID)) == [
-    "Kettlebell_Overhead_Triceps_Extension", "Dumbbell_One-Arm_Triceps_Extension",
-    "Speed_Band_Overhead_Triceps", "Standing_Dumbbell_Triceps_Extension",
-    "Standing_Low-Pulley_One-Arm_Triceps_Extension", "Standing_Overhead_Barbell_Triceps_Extension",
-    "Standing_Towel_Triceps_Extension",
-    "Triceps_Overhead_Extension_with_Rope",
-  ])
+  #expect(
+    Set(variants.map(\.sourceID)) == [
+      "Kettlebell_Overhead_Triceps_Extension", "Dumbbell_One-Arm_Triceps_Extension",
+      "Speed_Band_Overhead_Triceps", "Standing_Dumbbell_Triceps_Extension",
+      "Standing_Low-Pulley_One-Arm_Triceps_Extension",
+      "Standing_Overhead_Barbell_Triceps_Extension",
+      "Standing_Towel_Triceps_Extension",
+      "Triceps_Overhead_Extension_with_Rope",
+    ])
   #expect(Set(variants.map(\.id)).count == 8)
 }
 
@@ -947,9 +993,10 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   let entry = try #require(
     ExerciseLibrary.entries.first { $0.sourceID == "Kettlebell_Windmill" })
   let variants = ExerciseLibrary.variants(for: entry.id, language: .russian)
-  #expect(Set(variants.map(\.sourceID)) == [
-    "Kettlebell_Windmill", "Double_Kettlebell_Windmill", "Advanced_Kettlebell_Windmill",
-  ])
+  #expect(
+    Set(variants.map(\.sourceID)) == [
+      "Kettlebell_Windmill", "Double_Kettlebell_Windmill", "Advanced_Kettlebell_Windmill",
+    ])
   #expect(Set(variants.map(\.id)).count == 3)
 }
 
@@ -957,9 +1004,10 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   let entry = try #require(
     ExerciseLibrary.entries.first { $0.sourceID == "Kneeling_High_Pulley_Row" })
   let variants = ExerciseLibrary.variants(for: entry.id, language: .russian)
-  #expect(Set(variants.map(\.sourceID)) == [
-    "Kneeling_High_Pulley_Row", "Kneeling_Single-Arm_High_Pulley_Row",
-  ])
+  #expect(
+    Set(variants.map(\.sourceID)) == [
+      "Kneeling_High_Pulley_Row", "Kneeling_Single-Arm_High_Pulley_Row",
+    ])
   #expect(Set(variants.map(\.id)).count == 2)
 }
 
@@ -986,9 +1034,10 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   let entry = try #require(
     ExerciseLibrary.entries.first { $0.sourceID == "Leverage_Chest_Press" })
   let variants = ExerciseLibrary.variants(for: entry.id, language: .russian)
-  #expect(Set(variants.map(\.sourceID)) == [
-    "Leverage_Chest_Press", "Leverage_Decline_Chest_Press", "Leverage_Incline_Chest_Press",
-  ])
+  #expect(
+    Set(variants.map(\.sourceID)) == [
+      "Leverage_Chest_Press", "Leverage_Decline_Chest_Press", "Leverage_Incline_Chest_Press",
+    ])
   #expect(Set(variants.map(\.id)).count == 3)
   #expect(variants.allSatisfy { $0.equipment == .machine })
 }
@@ -997,9 +1046,10 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   let entry = try #require(
     ExerciseLibrary.entries.first { $0.sourceID == "Cable_Lying_Triceps_Extension" })
   let variants = ExerciseLibrary.variants(for: entry.id, language: .russian)
-  #expect(Set(variants.map(\.sourceID)) == [
-    "Cable_Lying_Triceps_Extension", "Low_Cable_Triceps_Extension",
-  ])
+  #expect(
+    Set(variants.map(\.sourceID)) == [
+      "Cable_Lying_Triceps_Extension", "Low_Cable_Triceps_Extension",
+    ])
   #expect(Set(variants.map(\.id)).count == 2)
   #expect(variants.contains { $0.name.contains("прямой рукоятью") })
   #expect(variants.contains { $0.name.contains("канатом") })
@@ -1017,12 +1067,13 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   let entry = try #require(
     ExerciseLibrary.entries.first { $0.sourceID == "Lying_Dumbbell_Tricep_Extension" })
   let variants = ExerciseLibrary.variants(for: entry.id, language: .russian)
-  #expect(Set(variants.map(\.sourceID)) == [
-    "Lying_Dumbbell_Tricep_Extension", "Dumbbell_Tricep_Extension_-Pronated_Grip",
-    "One_Arm_Pronated_Dumbbell_Triceps_Extension",
-    "One_Arm_Supinated_Dumbbell_Triceps_Extension",
-    "EZ-Bar_Skullcrusher", "Lying_Close-Grip_Barbell_Triceps_Press_To_Chin",
-  ])
+  #expect(
+    Set(variants.map(\.sourceID)) == [
+      "Lying_Dumbbell_Tricep_Extension", "Dumbbell_Tricep_Extension_-Pronated_Grip",
+      "One_Arm_Pronated_Dumbbell_Triceps_Extension",
+      "One_Arm_Supinated_Dumbbell_Triceps_Extension",
+      "EZ-Bar_Skullcrusher", "Lying_Close-Grip_Barbell_Triceps_Press_To_Chin",
+    ])
   #expect(Set(variants.map(\.id)).count == 6)
 }
 

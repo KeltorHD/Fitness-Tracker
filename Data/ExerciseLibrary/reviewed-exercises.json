@@ -1555,5 +1555,11 @@
   },
   "Weighted_Sit-Ups_-_With_Bands": {
     "equipment": "bands"
+  },
+  "FitLife_Triceps_Pushdown_EZ_Bar": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=KqWAO0bi2PY"
+  },
+  "FitLife_Triceps_Pushdown_One_Arm_Overhand": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=g_s1BHCR3qc"
   }
 }

@@ -545,23 +545,6 @@
         }
       }
     },
-    "876 упражнений и 1746 фотографий, встроенных в приложение.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "876 упражнений и 1746 фотографий, встроенных в приложение."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "876 exercises and 1746 photos included in the app."
-          }
-        }
-      }
-    },
     "Apple Watch на связи": {
       "extractionState": "manual",
       "localizations": {
@@ -2211,23 +2194,6 @@
         }
       }
     },
-    "В исходном каталоге нет изображений этого упражнения.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "В исходном каталоге нет изображений этого упражнения."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The source catalog has no images for this exercise."
-          }
-        }
-      }
-    },
     "В исходном каталоге нет подробной техники этого упражнения.": {
       "extractionState": "manual",
       "localizations": {
@@ -2479,6 +2445,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Variation %@"
+          }
+        }
+      }
+    },
+    "Вариант упражнения": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вариант упражнения"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exercise variation"
           }
         }
       }
@@ -3108,6 +3091,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Body view"
+          }
+        }
+      }
+    },
+    "Видео техники на YouTube": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Видео техники на YouTube"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exercise technique on YouTube"
           }
         }
       }
@@ -6614,6 +6614,23 @@
         }
       }
     },
+    "Другие варианты": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Другие варианты"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Other variations"
+          }
+        }
+      }
+    },
     "Другие шаблоны": {
       "extractionState": "manual",
       "localizations": {
@@ -8293,6 +8310,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Weight history"
+          }
+        }
+      }
+    },
+    "История и графики": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "История и графики"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "History and charts"
           }
         }
       }
@@ -22407,6 +22441,23 @@
         }
       }
     },
+    "Упражнений в каталоге: %@. Доступные фотографии встроены в приложение.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Упражнений в каталоге: %@. Доступные фотографии встроены в приложение."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ exercises are in the catalog. Available photos are included in the app."
+          }
+        }
+      }
+    },
     "Упражнения": {
       "extractionState": "manual",
       "localizations": {
@@ -22896,6 +22947,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Your photo stays in your diary and is not sent to the food database. Enter nutrition using ingredients or packaging."
+          }
+        }
+      }
+    },
+    "Фотографии пока недоступны.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Фотографии пока недоступны."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photos are not available yet."
           }
         }
       }
@@ -24069,70 +24137,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "#%@"
-          }
-        }
-      }
-    },
-    "Видео техники на YouTube": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Exercise technique on YouTube"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Видео техники на YouTube"
-          }
-        }
-      }
-    },
-    "Другие варианты": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Other variations"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Другие варианты"
-          }
-        }
-      }
-    },
-    "История и графики": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "History and charts"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "История и графики"
-          }
-        }
-      }
-    },
-    "Вариант упражнения": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Exercise variation"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Вариант упражнения"
           }
         }
       }

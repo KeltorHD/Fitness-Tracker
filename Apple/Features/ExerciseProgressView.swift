@@ -240,7 +240,9 @@ struct ExerciseProgressScreen: View {
     ScrollView {
       LazyVStack(alignment: .leading, spacing: 20) {
         if variants.count > 1 {
-          Picker(L10n.text("Вариант упражнения", locale: locale), selection: $model.selectedExerciseID) {
+          Picker(
+            L10n.text("Вариант упражнения", locale: locale), selection: $model.selectedExerciseID
+          ) {
             ForEach(variants) { variant in
               Text(variant.name).tag(Optional(variant.id))
             }
@@ -291,7 +293,8 @@ struct ExerciseProgressScreen: View {
     }
     .navigationTitle(
       variants.first(where: { $0.id == model.selectedExerciseID })?.name
-        ?? L10n.exerciseName(exercise, locale: locale))
+        ?? L10n.exerciseName(exercise, locale: locale)
+    )
     .navigationBarTitleDisplayMode(.inline)
     .accessibilityIdentifier("exerciseProgressScreen")
     .onChange(of: store.workouts, initial: true) { refresh() }

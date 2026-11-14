@@ -50,6 +50,16 @@ def selection():
     assert len({row[0] for row in rows}) == len(rows)
     return rows
 
+def custom_exercises():
+    path = ROOT / 'Data/ExerciseLibrary/custom-exercises.json'
+    items = json.loads(path.read_text()) if path.exists() else []
+    assert len({item['id'] for item in items}) == len(items)
+    for item in items:
+        assert re.fullmatch(r'FitLife_[A-Za-z0-9_]+', item['id'])
+        assert re.fullmatch(r'https://[^\s]+', item['referenceURL'])
+        assert item['images'] == [] and len(item['instructions']) >= 3
+    return {item['id']: item for item in items}
+
 def fetch(relative):
     with urllib.request.urlopen(BASE + relative, timeout=45) as response:
         return response.read()
@@ -57,7 +67,8 @@ def fetch(relative):
 def download():
     source = json.loads(fetch('dist/exercises.json'))
     by_id = {item['id']: item for item in source}
-    selected = [by_id[row[0]] for row in selection()]
+    custom = custom_exercises()
+    selected = [by_id[row[0]] for row in selection() if row[0] not in custom]
     VENDOR.mkdir(parents=True, exist_ok=True)
     write_json(VENDOR / 'exercises.selected.json', selected)
     (VENDOR / 'LICENSE.md').write_bytes(fetch('LICENSE.md'))
@@ -87,6 +98,9 @@ def download():
 
 def generate():
     source = {item['id']: item for item in json.loads((VENDOR / 'exercises.selected.json').read_text())}
+    custom = custom_exercises()
+    assert not set(source) & set(custom)
+    source.update(custom)
     regions = {}
     for line in (ROOT / 'Data/ExerciseLibrary/muscle-regions.tsv').read_text().splitlines()[1:]:
         source_id, values = line.split('\t')
@@ -138,7 +152,9 @@ def generate():
         assert bool(steps) == bool(item['instructions'] or authored_english_steps), source_id
         assert not steps or len(steps) >= 3, source_id
         assert all(len(s) >= 5 and re.search('[А-Яа-яЁё]', s) for s in steps), source_id
-        stable_id = LEGACY_IDS.get(source_id) or str(uuid.uuid5(uuid.NAMESPACE_URL, 'https://github.com/yuhonas/free-exercise-db/' + source_id))
+        identity = ('urn:fitlife:exercise:' if source_id in custom else
+                    'https://github.com/yuhonas/free-exercise-db/') + source_id
+        stable_id = LEGACY_IDS.get(source_id) or str(uuid.uuid5(uuid.NAMESPACE_URL, identity))
         group_id = group_by_member.get(source_id)
         entries.append({'id': stable_id, 'sourceID': source_id, 'name': name,
                         'englishName': item['name'], 'aliases': aliases.split(';'),

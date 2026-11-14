@@ -27584,10 +27584,7 @@
         "Передняя большеберцовая мышца"
       ],
       "secondaryMuscles": [],
-      "trainingRegions": [
-        "gastrocnemius",
-        "soleus"
-      ],
+      "trainingRegions": [],
       "steps": [
         "Установите гриф тренажёра Смита на плечи и поставьте пятки на устойчивую платформу, оставив носки за её краем.",
         "Поднимите переднюю часть стоп, удерживая пятки на опоре и колени неподвижными.",
@@ -33253,6 +33250,72 @@
         "id": "zottman-curl",
         "title": "Сгибания Зоттмана"
       }
+    },
+    {
+      "id": "11a58a74-892b-576c-8cc2-b0ac5ff5ce1f",
+      "sourceID": "FitLife_Triceps_Pushdown_EZ_Bar",
+      "name": "Разгибание рук на верхнем блоке с EZ-рукоятью",
+      "englishName": "Cable Triceps Pushdown with EZ-Bar Attachment",
+      "aliases": [
+        "Разгибание рук на блоке с изогнутой рукоятью",
+        "EZ Bar Triceps Pushdown"
+      ],
+      "group": "arms",
+      "equipment": "cable",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Трицепс"
+      ],
+      "secondaryMuscles": [],
+      "trainingRegions": [],
+      "steps": [
+        "Прикрепите EZ-рукоять к верхнему блоку и возьмитесь за неё прямым хватом.",
+        "Встаньте лицом к тренажёру, прижмите плечи к корпусу и согните локти.",
+        "Разогните руки, опуская рукоять вниз, затем плавно верните её вверх."
+      ],
+      "images": [],
+      "techniqueUnavailable": false,
+      "imagesUnavailable": true,
+      "generatedMedia": null,
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "cable-triceps-pushdown",
+        "title": "Разгибание рук на верхнем блоке"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=KqWAO0bi2PY"
+    },
+    {
+      "id": "6c559b7d-fd54-5c0b-9509-0bbd708454f5",
+      "sourceID": "FitLife_Triceps_Pushdown_One_Arm_Overhand",
+      "name": "Разгибание одной руки на верхнем блоке прямым хватом",
+      "englishName": "One-Arm Cable Triceps Pushdown with Overhand Grip",
+      "aliases": [
+        "Разгибание руки с D-рукоятью хватом сверху",
+        "One-Arm Cable Triceps Pushdown Overhand"
+      ],
+      "group": "arms",
+      "equipment": "cable",
+      "level": "beginner",
+      "primaryMuscles": [
+        "Трицепс"
+      ],
+      "secondaryMuscles": [],
+      "trainingRegions": [],
+      "steps": [
+        "Прикрепите одиночную рукоять к верхнему блоку и возьмите её одной рукой прямым хватом.",
+        "Встаньте лицом к тренажёру и удерживайте плечо рабочей руки у корпуса.",
+        "Разогните руку, опуская рукоять вниз, затем плавно верните её вверх и повторите другой рукой."
+      ],
+      "images": [],
+      "techniqueUnavailable": false,
+      "imagesUnavailable": true,
+      "generatedMedia": null,
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "cable-triceps-pushdown",
+        "title": "Разгибание рук на верхнем блоке"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=g_s1BHCR3qc"
     }
   ]
 }

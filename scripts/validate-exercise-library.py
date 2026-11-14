@@ -15,13 +15,20 @@ document = json.loads((root / 'Sources/FitLifeCore/Resources/ExerciseLibrary.ru.
 english_resource = root / 'Sources/FitLifeCore/Resources/ExerciseLibrary.en.json'
 english = json.loads(english_resource.read_text())
 source = {item['id']: item for item in json.loads((vendor / 'exercises.selected.json').read_text())}
+custom_items = json.loads((root / 'Data/ExerciseLibrary/custom-exercises.json').read_text())
+custom = {item['id']: item for item in custom_items}
+assert len(custom) == len(custom_items) and not set(source) & set(custom)
+assert all(item['id'].startswith('FitLife_') and re.fullmatch(r'https://[^\s]+', item['referenceURL'])
+           for item in custom_items)
+source.update(custom)
 reviewed = json.loads((root / 'Data/ExerciseLibrary/reviewed-exercises.json').read_text())
 assert hashlib.sha256((vendor / 'exercises.selected.json').read_bytes()).hexdigest() == manifest['selectedDataSHA256']
 assert hashlib.sha256((vendor / 'LICENSE.md').read_bytes()).hexdigest() == manifest['licenseSHA256']
 assert document['source']['revision'] == manifest['revision']
 assert document['source']['licenseText'] == (vendor / 'LICENSE.md').read_text()
-assert len(document['entries']) == manifest['selectedExerciseCount'] == manifest['upstreamExerciseCount'] == 876
-assert english['locale'] == 'en' and len(english['entries']) == 876
+assert manifest['selectedExerciseCount'] == manifest['upstreamExerciseCount'] == 876
+assert len(document['entries']) == manifest['selectedExerciseCount'] + len(custom)
+assert english['locale'] == 'en' and len(english['entries']) == len(document['entries'])
 assert english['source'] == document['source']
 for ru, en in zip(document['entries'], english['entries']):
     original = source[en['sourceID']]
@@ -96,4 +103,4 @@ original_english = english_resource.read_bytes()
 subprocess.run([sys.executable, str(root / 'scripts/import-exercise-library.py')], check=True, stdout=subprocess.DEVNULL)
 assert resource.read_bytes() == original, 'Generated resource differs from checked-in Russian translations'
 assert english_resource.read_bytes() == original_english, 'English resource differs from pinned source'
-print(f'Exercise library: 876 Russian entries, 1746 original JPEGs, {len(generated)} generated animations, preserved IDs, SHA-256 and reproducible offline generation: OK.')
+print(f'Exercise library: {len(document["entries"])} Russian entries, 1746 original JPEGs, {len(generated)} generated animations, preserved IDs, SHA-256 and reproducible offline generation: OK.')

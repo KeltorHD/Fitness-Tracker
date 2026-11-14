@@ -192,7 +192,7 @@ struct ExerciseDetailView: View {
               }.buttonStyle(.glass)
             }
           } else if entry.generatedMedia == nil {
-            Text(L10n.text("В исходном каталоге нет изображений этого упражнения.", locale: locale))
+            Text(L10n.text("Фотографии пока недоступны.", locale: locale))
               .foregroundStyle(.secondary)
           }
           HStack(alignment: .top, spacing: 12) {
@@ -307,8 +307,9 @@ struct ExerciseCreditsView: View {
     List {
       Section(L10n.text("Библиотека FitLife", locale: locale)) {
         Text(
-          L10n.text(
-            "876 упражнений и 1746 фотографий, встроенных в приложение.", locale: locale))
+          L10n.format(
+            "Упражнений в каталоге: %@. Доступные фотографии встроены в приложение.",
+            String(ExerciseLibrary.document?.entries.count ?? 0), locale: locale))
         Text(
           L10n.text(
             "Каталог переведён на русский язык. Новые описания преимущественно переведены автоматически; такие карточки отмечены.",

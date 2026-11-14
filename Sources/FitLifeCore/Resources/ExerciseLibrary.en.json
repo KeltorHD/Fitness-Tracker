@@ -28402,10 +28402,7 @@
         "tibialis anterior"
       ],
       "secondaryMuscles": [],
-      "trainingRegions": [
-        "gastrocnemius",
-        "soleus"
-      ],
+      "trainingRegions": [],
       "steps": [
         "Place the Smith machine bar across your shoulders and position your heels on a stable platform with the forefeet extending beyond its edge.",
         "Raise the forefeet while keeping the heels supported and the knees still.",
@@ -34232,6 +34229,72 @@
         "id": "zottman-curl",
         "title": "Zottman curl"
       }
+    },
+    {
+      "id": "11a58a74-892b-576c-8cc2-b0ac5ff5ce1f",
+      "sourceID": "FitLife_Triceps_Pushdown_EZ_Bar",
+      "name": "Cable Triceps Pushdown with EZ-Bar Attachment",
+      "englishName": "Cable Triceps Pushdown with EZ-Bar Attachment",
+      "aliases": [
+        "Разгибание рук на блоке с изогнутой рукоятью",
+        "EZ Bar Triceps Pushdown"
+      ],
+      "group": "arms",
+      "equipment": "cable",
+      "level": "beginner",
+      "primaryMuscles": [
+        "triceps"
+      ],
+      "secondaryMuscles": [],
+      "trainingRegions": [],
+      "steps": [
+        "Attach an EZ-bar handle to a high pulley and grasp it with an overhand grip.",
+        "Stand facing the machine with your upper arms close to your sides and elbows bent.",
+        "Extend your elbows to press the handle down, then return slowly without moving your upper arms."
+      ],
+      "images": [],
+      "techniqueUnavailable": false,
+      "imagesUnavailable": true,
+      "generatedMedia": null,
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "cable-triceps-pushdown",
+        "title": "Cable triceps pushdown"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=KqWAO0bi2PY"
+    },
+    {
+      "id": "6c559b7d-fd54-5c0b-9509-0bbd708454f5",
+      "sourceID": "FitLife_Triceps_Pushdown_One_Arm_Overhand",
+      "name": "One-Arm Cable Triceps Pushdown with Overhand Grip",
+      "englishName": "One-Arm Cable Triceps Pushdown with Overhand Grip",
+      "aliases": [
+        "Разгибание руки с D-рукоятью хватом сверху",
+        "One-Arm Cable Triceps Pushdown Overhand"
+      ],
+      "group": "arms",
+      "equipment": "cable",
+      "level": "beginner",
+      "primaryMuscles": [
+        "triceps"
+      ],
+      "secondaryMuscles": [],
+      "trainingRegions": [],
+      "steps": [
+        "Attach a single handle to a high pulley and grasp it with one hand using an overhand grip.",
+        "Stand facing the machine and keep the working upper arm close to your side.",
+        "Extend the elbow to press the handle down, then return slowly and repeat on the other side."
+      ],
+      "images": [],
+      "techniqueUnavailable": false,
+      "imagesUnavailable": true,
+      "generatedMedia": null,
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "cable-triceps-pushdown",
+        "title": "Cable triceps pushdown"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=g_s1BHCR3qc"
     }
   ]
 }

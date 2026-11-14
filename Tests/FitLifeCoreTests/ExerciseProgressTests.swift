@@ -120,6 +120,8 @@ private func progressWorkout(_ date: Date, sets: [WorkoutSet], exercise: Exercis
     ExerciseLibrary.entries.first { $0.sourceID == "Triceps_Pushdown" })
   let rope = try #require(
     ExerciseLibrary.entries.first { $0.sourceID == "Triceps_Pushdown_-_Rope_Attachment" })
+  let ezBar = try #require(
+    ExerciseLibrary.entries.first { $0.sourceID == "FitLife_Triceps_Pushdown_EZ_Bar" })
   var workout = try progressWorkout(
     date, sets: [WorkoutSet(repetitions: 8, weightKG: 40, completedAt: date)],
     exercise: straight.exercise)
@@ -127,9 +129,14 @@ private func progressWorkout(_ date: Date, sets: [WorkoutSet], exercise: Exercis
     WorkoutExercise(
       exercise: rope.exercise,
       sets: [WorkoutSet(repetitions: 10, weightKG: 20, completedAt: date)]))
+  workout.exercises.append(
+    WorkoutExercise(
+      exercise: ezBar.exercise,
+      sets: [WorkoutSet(repetitions: 6, weightKG: 30, completedAt: date)]))
   let histories = ExerciseProgressReport(workouts: [workout], now: date).exercises
   #expect(histories.first { $0.id == straight.id }?.points.first?.volume == 320)
   #expect(histories.first { $0.id == rope.id }?.points.first?.volume == 200)
+  #expect(histories.first { $0.id == ezBar.id }?.points.first?.volume == 180)
 }
 
 @Test func exerciseProgressSortingIsStableForSessionsWithTheSameTimestamp() throws {

@@ -191,13 +191,15 @@ public enum ExerciseLibrary {
         else { throw ExerciseLibraryError.invalidDocument }
       }
       if let video = entry.techniqueVideoURL {
-        guard video.range(
-          of: #"^https://www\.youtube\.com/watch\?v=[A-Za-z0-9_-]{11}$"#,
-          options: .regularExpression) != nil
+        guard
+          video.range(
+            of: #"^https://www\.youtube\.com/watch\?v=[A-Za-z0-9_-]{11}$"#,
+            options: .regularExpression) != nil
         else { throw ExerciseLibraryError.invalidDocument }
       }
       if let group = entry.variantGroup {
-        guard !group.id.isEmpty, !group.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        guard !group.id.isEmpty,
+          !group.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         else { throw ExerciseLibraryError.invalidDocument }
       }
     }
