@@ -2491,7 +2491,10 @@
       "name": "Front Dumbbell Raise",
       "englishName": "Front Dumbbell Raise",
       "aliases": [
-        "Передние махи"
+        "Подъёмы гантелей перед собой",
+        "Передние махи",
+        "Попеременные махи гантелями вперёд",
+        "Front Dumbbell Raise"
       ],
       "group": "shoulders",
       "equipment": "dumbbell",
@@ -2516,7 +2519,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "front-raise",
+        "title": "Front raise"
+      }
     },
     {
       "id": "db28531e-fe10-5e1b-b377-f5eae9db95a9",
@@ -12290,7 +12297,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "front-squat",
+        "title": "Front squat"
+      }
     },
     {
       "id": "ebc0a961-fcfc-51dd-80d2-cdb0e0f23196",
@@ -12298,8 +12309,8 @@
       "name": "Freehand Jump Squat",
       "englishName": "Freehand Jump Squat",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Выпрыгивания из приседа без отягощения",
+        "Freehand Jump Squat"
       ],
       "group": "legs",
       "equipment": "body only",
@@ -12370,8 +12381,8 @@
       "name": "Frog Sit-Ups",
       "englishName": "Frog Sit-Ups",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Скручивания лёжа с соединёнными стопами и разведёнными коленями",
+        "Frog Sit-Ups"
       ],
       "group": "core",
       "equipment": "body only",
@@ -12408,8 +12419,8 @@
       "name": "Front Barbell Squat To A Bench",
       "englishName": "Front Barbell Squat To A Bench",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Приседания со штангой на груди к скамье",
+        "Front Barbell Squat To A Bench"
       ],
       "group": "legs",
       "equipment": "barbell",
@@ -12438,7 +12449,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-box-squat",
+        "title": "Squat to a box"
+      }
     },
     {
       "id": "725345ce-0096-54fa-a711-0df056880264",
@@ -12484,8 +12499,8 @@
       "name": "Front Cable Raise",
       "englishName": "Front Cable Raise",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Мах одной рукой вперёд на нижнем блоке",
+        "Front Cable Raise"
       ],
       "group": "shoulders",
       "equipment": "cable",
@@ -12511,7 +12526,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "front-raise",
+        "title": "Front raise"
+      }
     },
     {
       "id": "403f7dd8-6bd6-5699-9b4a-54480d62c1be",
@@ -12558,8 +12577,8 @@
       "name": "Front Incline Dumbbell Raise",
       "englishName": "Front Incline Dumbbell Raise",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Фронтальные махи гантелями сидя с опорой спиной",
+        "Front Incline Dumbbell Raise"
       ],
       "group": "shoulders",
       "equipment": "dumbbell",
@@ -12585,7 +12604,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "front-raise",
+        "title": "Front raise"
+      }
     },
     {
       "id": "14b0ea37-d501-5b44-9b51-aeebcd3d66bb",
@@ -12593,8 +12616,8 @@
       "name": "Front Leg Raises",
       "englishName": "Front Leg Raises",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Динамическая растяжка задней поверхности бедра с опорой",
+        "Front Leg Raises"
       ],
       "group": "legs",
       "equipment": "body only",
@@ -12623,8 +12646,8 @@
       "name": "Front Plate Raise",
       "englishName": "Front Plate Raise",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Мах блином перед собой",
+        "Front Plate Raise"
       ],
       "group": "shoulders",
       "equipment": "other",
@@ -12649,7 +12672,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "front-raise",
+        "title": "Front raise"
+      }
     },
     {
       "id": "c40885e5-a08c-5dad-ac73-6499f97355d8",
@@ -12657,8 +12684,8 @@
       "name": "Front Raise And Pullover",
       "englishName": "Front Raise And Pullover",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Пуловер со штангой от бёдер лёжа",
+        "Front Raise And Pullover"
       ],
       "group": "chest",
       "equipment": "barbell",
@@ -12694,8 +12721,8 @@
       "name": "Front Squat (Clean Grip)",
       "englishName": "Front Squat (Clean Grip)",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Приседания со штангой на груди толчковым хватом",
+        "Front Squat Clean Grip"
       ],
       "group": "legs",
       "equipment": "barbell",
@@ -12722,7 +12749,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "front-squat",
+        "title": "Front squat"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=sVdNmIdaYWM"
     },
     {
       "id": "2facb881-a82c-539e-90af-86c8ccfd3fef",
@@ -12730,8 +12762,8 @@
       "name": "Front Squats With Two Kettlebells",
       "englishName": "Front Squats With Two Kettlebells",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Приседания с двумя гирями у плеч",
+        "Front Squats With Two Kettlebells"
       ],
       "group": "legs",
       "equipment": "kettlebells",
@@ -12756,7 +12788,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "front-squat",
+        "title": "Front squat"
+      }
     },
     {
       "id": "4591b96a-f055-56c9-85d2-2c8b91b73be2",
@@ -12764,8 +12800,8 @@
       "name": "Front Two-Dumbbell Raise",
       "englishName": "Front Two-Dumbbell Raise",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Одновременные махи гантелями вперёд",
+        "Front Two-Dumbbell Raise"
       ],
       "group": "shoulders",
       "equipment": "dumbbell",
@@ -12790,7 +12826,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "front-raise",
+        "title": "Front raise"
+      }
     },
     {
       "id": "95591473-051a-5107-9cea-0268d34f947a",
@@ -12798,8 +12838,8 @@
       "name": "Full Range-Of-Motion Lat Pulldown",
       "englishName": "Full Range-Of-Motion Lat Pulldown",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Тяга перекрещённых рукоятей верхних блоков",
+        "Full Range-Of-Motion Lat Pulldown"
       ],
       "group": "back",
       "equipment": "cable",

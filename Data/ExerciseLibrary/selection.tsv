@@ -63,7 +63,7 @@ Arnold_Dumbbell_Press	Жим Арнольда	Жим гантелей с раз�
 Standing_Dumbbell_Press	Жим гантелей стоя	Жим над головой с гантелями
 Side_Lateral_Raise	Подъёмы гантелей через стороны	Махи в стороны
 Seated_Side_Lateral_Raise	Подъёмы гантелей через стороны сидя	Махи в стороны сидя
-Front_Dumbbell_Raise	Подъёмы гантелей перед собой	Передние махи
+Front_Dumbbell_Raise	Попеременный подъём гантелей перед собой стоя	Подъёмы гантелей перед собой;Передние махи;Попеременные махи гантелями вперёд;Front Dumbbell Raise
 Seated_Bent-Over_Rear_Delt_Raise	Разведение гантелей в наклоне сидя	Задняя дельта
 Reverse_Machine_Flyes	Обратное разведение в тренажёре	Обратная бабочка
 Face_Pull	Тяга каната к лицу	Фейс-пул
@@ -329,21 +329,21 @@ Flutter_Kicks	Попеременные подъёмы прямых ног лёж
 Foot-SMR	Фут-SMR	Растяжка;stretching
 Forward_Drag_with_Press	Тяга саней вперёд с жимом рукоятей	Ходьба с санями и жимом вперёд;Forward Drag with Press
 Frankenstein_Squat	Приседания Франкенштейна	Фронтальные приседания со штангой на плечах и вытянутыми руками;Frankenstein Squat
-Freehand_Jump_Squat	Приседания с прыжком от руки	Силовые упражнения;strength
+Freehand_Jump_Squat	Приседания с выпрыгиванием и руками на груди	Выпрыгивания из приседа без отягощения;Freehand Jump Squat
 Frog_Hops	Прыжки лягушкой	Растяжка;stretching
-Frog_Sit-Ups	Приседания с лягушкой	Силовые упражнения;strength
-Front_Barbell_Squat_To_A_Bench	Приседания со штангой спереди на скамье	Силовые упражнения;strength
+Frog_Sit-Ups	Скручивания «лягушка» лёжа	Скручивания лёжа с соединёнными стопами и разведёнными коленями;Frog Sit-Ups
+Front_Barbell_Squat_To_A_Bench	Фронтальные приседания со штангой до касания скамьи	Приседания со штангой на груди к скамье;Front Barbell Squat To A Bench
 Front_Box_Jump	Передний прыжок с ящика	Плиометрика;plyometrics
-Front_Cable_Raise	Подъем переднего троса	Силовые упражнения;strength
+Front_Cable_Raise	Подъём одной руки перед собой с нижним блоком стоя	Мах одной рукой вперёд на нижнем блоке;Front Cable Raise
 Front_Cone_Hops_or_hurdle_hops	Передний конусный хмель (или прыжки с препятствиями)	Плиометрика;plyometrics
-Front_Incline_Dumbbell_Raise	Подъем гантели вперед на наклонной скамье	Силовые упражнения;strength
-Front_Leg_Raises	Подъемы передних ног	Растяжка;stretching
-Front_Plate_Raise	Подъем передней пластины	Силовые упражнения;strength
-Front_Raise_And_Pullover	Подъем спереди и пуловер	Силовые упражнения;strength
-Front_Squat_Clean_Grip	Фронтальные приседания (чистый хват)	Силовые упражнения;strength
-Front_Squats_With_Two_Kettlebells	Фронтальные приседания с двумя гирями	Силовые упражнения;strength
-Front_Two-Dumbbell_Raise	Подъем двух гантелей спереди	Силовые упражнения;strength
-Full_Range-Of-Motion_Lat_Pulldown	Полный диапазон движений. Тяга широчайших мышц вниз	Силовые упражнения;strength
+Front_Incline_Dumbbell_Raise	Подъём гантелей перед собой сидя на наклонной скамье	Фронтальные махи гантелями сидя с опорой спиной;Front Incline Dumbbell Raise
+Front_Leg_Raises	Махи прямой ногой вперёд и назад стоя	Динамическая растяжка задней поверхности бедра с опорой;Front Leg Raises
+Front_Plate_Raise	Подъём диска перед собой стоя	Мах блином перед собой;Front Plate Raise
+Front_Raise_And_Pullover	Подъём и пуловер со штангой лёжа на плоской скамье	Пуловер со штангой от бёдер лёжа;Front Raise And Pullover
+Front_Squat_Clean_Grip	Фронтальные приседания со штангой толчковым хватом	Приседания со штангой на груди толчковым хватом;Front Squat Clean Grip
+Front_Squats_With_Two_Kettlebells	Фронтальные приседания с двумя гирями на груди	Приседания с двумя гирями у плеч;Front Squats With Two Kettlebells
+Front_Two-Dumbbell_Raise	Одновременный подъём двух гантелей перед собой стоя	Одновременные махи гантелями вперёд;Front Two-Dumbbell Raise
+Full_Range-Of-Motion_Lat_Pulldown	Тяга верхних блоков перекрёстным хватом с поворотом кистей	Тяга перекрещённых рукоятей верхних блоков;Full Range-Of-Motion Lat Pulldown
 Gironda_Sternum_Chins	Жиронда Грудина Подбородки	Силовые упражнения;strength
 Glute_Ham_Raise	Подъем ягодичной ветчины	Пауэрлифтинг;powerlifting
 Glute_Kickback	Отдача ягодиц	Силовые упражнения;strength

@@ -63,7 +63,8 @@
       "Barbell_Squat_To_A_Bench",
       "Box_Squat_with_Bands",
       "Box_Squat_with_Chains",
-      "Dumbbell_Squat_To_A_Bench"
+      "Dumbbell_Squat_To_A_Bench",
+      "Front_Barbell_Squat_To_A_Bench"
     ]
   },
   "standing-hip-adduction": {
@@ -157,6 +158,26 @@
       "Floor_Press_with_Chains",
       "Dumbbell_Floor_Press",
       "Extended_Range_One-Arm_Kettlebell_Floor_Press"
+    ]
+  },
+  "front-raise": {
+    "ru": "Подъём рук перед собой",
+    "en": "Front raise",
+    "members": [
+      "Front_Dumbbell_Raise",
+      "Front_Two-Dumbbell_Raise",
+      "Front_Incline_Dumbbell_Raise",
+      "Front_Cable_Raise",
+      "Front_Plate_Raise"
+    ]
+  },
+  "front-squat": {
+    "ru": "Фронтальные приседания",
+    "en": "Front squat",
+    "members": [
+      "Front_Squat_Clean_Grip",
+      "Front_Squats_With_Two_Kettlebells",
+      "Frankenstein_Squat"
     ]
   }
 }

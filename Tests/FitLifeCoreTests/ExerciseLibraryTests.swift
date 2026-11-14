@@ -392,6 +392,17 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   #expect(Set(variants.map(\.id)).count == 3)
 }
 
+@Test func alternatingAndSimultaneousFrontRaisesAreSeparateVariants() throws {
+  let alternating = try #require(
+    ExerciseLibrary.entries.first { $0.sourceID == "Front_Dumbbell_Raise" })
+  let variants = ExerciseLibrary.variants(for: alternating.id, language: .russian)
+  #expect(variants.contains { $0.sourceID == "Front_Two-Dumbbell_Raise" })
+  #expect(Set(variants.map(\.id)).count == variants.count)
+  #expect(ExerciseLibrary.search("Подъёмы гантелей перед собой").contains {
+    $0.id == alternating.id
+  })
+}
+
 @Test func multipleEquipmentFiltersUseUnionAndIntersectWithMuscleAndSearch() {
   let equipment: Set<ExerciseEquipment> = [.barbell, .dumbbell]
   let combined = ExerciseLibrary.search(equipment: equipment)
