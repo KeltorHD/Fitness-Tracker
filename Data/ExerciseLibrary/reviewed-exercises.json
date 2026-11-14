@@ -1139,5 +1139,64 @@
     "techniqueVideoURL": "https://www.youtube.com/watch?v=_fXBhqQWj64"
   },
   "Zottman_Curl": {},
-  "Zottman_Preacher_Curl": {}
+  "Zottman_Preacher_Curl": {},
+  "Bent_Over_Barbell_Row": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=bm0_q9bR_HA"
+  },
+  "Standing_Military_Press": {},
+  "Pullups": {},
+  "Dumbbell_Bicep_Curl": {},
+  "Crunches": {},
+  "Bodyweight_Squat": {},
+  "Front_Barbell_Squat": {
+    "englishSteps": [
+      "Rest the bar across the fronts of your shoulders and hold it with crossed arms.",
+      "Unrack the bar and descend into a controlled squat with a stable torso.",
+      "Extend your legs and return to standing."
+    ],
+    "instructionSourceURL": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4262933/",
+    "instructionCorrectionReason": "The upstream text asserts that any knee travel beyond the toes is necessarily harmful; that blanket claim is unsupported."
+  },
+  "Goblet_Squat": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=MWHIs0zxkCU"
+  },
+  "Dumbbell_Squat": {
+    "englishSteps": [
+      "Stand upright holding a dumbbell in each hand at your sides.",
+      "Bend your knees and hips to descend into a controlled squat.",
+      "Drive through your feet and extend your legs to stand up."
+    ],
+    "instructionSourceURL": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4262933/",
+    "instructionCorrectionReason": "The upstream text asserts that any knee travel beyond the toes is necessarily harmful; that blanket claim is unsupported."
+  },
+  "Barbell_Lunge": {
+    "englishSteps": [
+      "Place the bar across your upper back and lift it from the rack.",
+      "Step forward with one leg and bend both knees to lower into a lunge.",
+      "Push through your front foot to return to standing, then repeat on the other side."
+    ],
+    "instructionSourceURL": "https://synergysportsmedicine.com/should-we-squat-and-lunge-with-our-knees-over-our-toes/",
+    "instructionCorrectionReason": "The upstream text asserts that any knee travel beyond the toes is necessarily harmful; that blanket claim is unsupported."
+  },
+  "Dumbbell_Lunges": {
+    "englishSteps": [
+      "Stand upright holding dumbbells at your sides.",
+      "Step forward with one leg and bend both knees to lower into a lunge.",
+      "Push through your front foot to return to standing, then repeat on the other side."
+    ],
+    "instructionSourceURL": "https://synergysportsmedicine.com/should-we-squat-and-lunge-with-our-knees-over-our-toes/",
+    "instructionCorrectionReason": "The upstream text asserts that any knee travel beyond the toes is necessarily harmful; that blanket claim is unsupported."
+  },
+  "Dumbbell_Rear_Lunge": {
+    "englishSteps": [
+      "Stand upright holding dumbbells at your sides.",
+      "Step backward with one leg and bend both knees to lower into a lunge.",
+      "Push through your front foot to return to standing, then repeat on the other side."
+    ],
+    "instructionSourceURL": "https://synergysportsmedicine.com/should-we-squat-and-lunge-with-our-knees-over-our-toes/",
+    "instructionCorrectionReason": "The upstream text asserts that any knee travel beyond the toes is necessarily harmful; that blanket claim is unsupported."
+  },
+  "Split_Squat_with_Dumbbells": {},
+  "Dumbbell_Step_Ups": {},
+  "Leg_Press": {}
 }

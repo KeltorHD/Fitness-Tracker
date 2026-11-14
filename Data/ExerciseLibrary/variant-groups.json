@@ -206,7 +206,8 @@
     "members": [
       "Front_Squat_Clean_Grip",
       "Front_Squats_With_Two_Kettlebells",
-      "Frankenstein_Squat"
+      "Frankenstein_Squat",
+      "Front_Barbell_Squat"
     ]
   },
   "glute-ham-raise": {
@@ -563,6 +564,33 @@
     "members": [
       "Zottman_Curl",
       "Zottman_Preacher_Curl"
+    ]
+  },
+  "leg-press": {
+    "ru": "Жим ногами",
+    "en": "Leg press",
+    "members": [
+      "Leg_Press",
+      "Narrow_Stance_Leg_Press",
+      "Smith_Machine_Leg_Press"
+    ]
+  },
+  "stationary-lunge": {
+    "ru": "Выпады с возвращением на место",
+    "en": "Stationary return lunge",
+    "members": [
+      "Barbell_Lunge",
+      "Dumbbell_Lunges",
+      "Dumbbell_Rear_Lunge"
+    ]
+  },
+  "bulgarian-split-squat": {
+    "ru": "Болгарские сплит-приседания",
+    "en": "Bulgarian split squat",
+    "members": [
+      "Split_Squat_with_Dumbbells",
+      "One_Leg_Barbell_Squat",
+      "Smith_Single-Leg_Split_Squat"
     ]
   }
 }
