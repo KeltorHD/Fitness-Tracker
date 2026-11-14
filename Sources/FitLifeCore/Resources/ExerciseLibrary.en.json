@@ -4052,8 +4052,8 @@
       "name": "Alternating Deltoid Raise",
       "englishName": "Alternating Deltoid Raise",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Попеременный подъём гантелей вперёд и в стороны",
+        "Alternating Deltoid Raise"
       ],
       "group": "shoulders",
       "equipment": "dumbbell",
@@ -4077,7 +4077,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=zg8BvNfsVek"
     },
     {
       "id": "eba78a0f-3e7b-5640-a7a1-d038b541c00e",
@@ -4085,8 +4086,8 @@
       "name": "Alternating Floor Press",
       "englishName": "Alternating Floor Press",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Попеременный жим гирь с пола",
+        "Alternating Floor Press"
       ],
       "group": "chest",
       "equipment": "kettlebells",
@@ -4123,8 +4124,8 @@
       "name": "Alternating Hang Clean",
       "englishName": "Alternating Hang Clean",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Попеременное взятие гирь на грудь",
+        "Alternating Hang Clean"
       ],
       "group": "legs",
       "equipment": "kettlebells",
@@ -4161,8 +4162,8 @@
       "name": "Alternating Kettlebell Press",
       "englishName": "Alternating Kettlebell Press",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Попеременный жим гири",
+        "Alternating Kettlebell Press"
       ],
       "group": "shoulders",
       "equipment": "kettlebells",
@@ -4197,8 +4198,9 @@
       "name": "Alternating Kettlebell Row",
       "englishName": "Alternating Kettlebell Row",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Поочередная тяга гири",
+        "Попеременная тяга гирь к поясу",
+        "Alternating Kettlebell Row"
       ],
       "group": "back",
       "equipment": "kettlebells",
@@ -4233,8 +4235,9 @@
       "name": "Alternating Renegade Row",
       "englishName": "Alternating Renegade Row",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Тяга гирь в планке",
+        "Renegade Row с гирями",
+        "Alternating Renegade Row"
       ],
       "group": "back",
       "equipment": "kettlebells",
@@ -4264,7 +4267,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=lUbi7_YOmOo"
     },
     {
       "id": "1f81df50-b66b-5235-b2a3-46ef01734205",
@@ -4272,8 +4276,8 @@
       "name": "Ankle Circles",
       "englishName": "Ankle Circles",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Круговые движения стопой",
+        "Ankle Circles"
       ],
       "group": "legs",
       "equipment": "unspecified",
@@ -4303,8 +4307,8 @@
       "name": "Ankle On The Knee",
       "englishName": "Ankle On The Knee",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Растяжка ягодиц лёжа нога на колене",
+        "Ankle On The Knee"
       ],
       "group": "legs",
       "equipment": "unspecified",
@@ -4364,8 +4368,8 @@
       "name": "Anti-Gravity Press",
       "englishName": "Anti-Gravity Press",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Жим штанги лёжа лицом вниз на наклонной скамье",
+        "Anti-Gravity Press"
       ],
       "group": "shoulders",
       "equipment": "barbell",
@@ -4400,8 +4404,9 @@
       "name": "Arm Circles",
       "englishName": "Arm Circles",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Круговые движения руками стоя",
+        "Круги руками",
+        "Arm Circles"
       ],
       "group": "shoulders",
       "equipment": "unspecified",
@@ -4433,8 +4438,8 @@
       "name": "Around The Worlds",
       "englishName": "Around The Worlds",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Дуговое движение гантелями лёжа на плоской скамье",
+        "Around The Worlds"
       ],
       "group": "chest",
       "equipment": "dumbbell",
@@ -4466,8 +4471,8 @@
       "name": "Atlas Stone Trainer",
       "englishName": "Atlas Stone Trainer",
       "aliases": [
-        "Силовой экстрим",
-        "strongman"
+        "Подъём имитатора камня Атласа",
+        "Atlas Stone Trainer"
       ],
       "group": "back",
       "equipment": "other",
@@ -4504,8 +4509,9 @@
       "name": "Atlas Stones",
       "englishName": "Atlas Stones",
       "aliases": [
-        "Силовой экстрим",
-        "strongman"
+        "Камни Атласа",
+        "Подъём камня на платформу",
+        "Atlas Stones"
       ],
       "group": "back",
       "equipment": "other",
@@ -4547,8 +4553,8 @@
       "name": "Axle Deadlift",
       "englishName": "Axle Deadlift",
       "aliases": [
-        "Силовой экстрим",
-        "strongman"
+        "Становая тяга с акселем",
+        "Axle Deadlift"
       ],
       "group": "back",
       "equipment": "other",

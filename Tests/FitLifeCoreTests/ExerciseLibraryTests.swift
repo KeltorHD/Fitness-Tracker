@@ -183,6 +183,15 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   }
 }
 
+@Test func renegadeRowUsesKettlebellsRatherThanDumbbells() throws {
+  let row = try #require(
+    ExerciseLibrary.entries.first { $0.sourceID == "Alternating_Renegade_Row" })
+  #expect(row.name == "Попеременная тяга гирь в упоре лёжа")
+  #expect(row.equipment == .kettlebell)
+  #expect(ExerciseLibrary.search("тяга гирь в планке").contains { $0.id == row.id })
+  #expect(!ExerciseLibrary.search("тяга гантелей в упоре лёжа").contains { $0.id == row.id })
+}
+
 @Test func multipleEquipmentFiltersUseUnionAndIntersectWithMuscleAndSearch() {
   let equipment: Set<ExerciseEquipment> = [.barbell, .dumbbell]
   let combined = ExerciseLibrary.search(equipment: equipment)
