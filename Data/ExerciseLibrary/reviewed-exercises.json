@@ -856,5 +856,25 @@
   "Single-Leg_Lateral_Hop": {},
   "Single-Leg_Leg_Extension": {},
   "Single_Dumbbell_Raise": {},
-  "Single_Leg_Butt_Kick": {}
+  "Single_Leg_Butt_Kick": {},
+  "Single_Leg_Push-off": {},
+  "Sit_Squats": {
+    "equipment": "body only"
+  },
+  "Skating": {},
+  "Sled_Drag_-_Harness": {},
+  "Sled_Overhead_Backward_Walk": {},
+  "Sled_Overhead_Triceps_Extension": {},
+  "Sled_Push": {},
+  "Sled_Reverse_Flye": {},
+  "Sled_Row": {},
+  "Sledgehammer_Swings": {},
+  "Smith_Incline_Shoulder_Raise": {
+    "equipment": "machine"
+  },
+  "Smith_Machine_Behind_the_Back_Shrug": {},
+  "Smith_Machine_Bench_Press": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=7FyJdsXeta8"
+  },
+  "Smith_Machine_Bent_Over_Row": {}
 }

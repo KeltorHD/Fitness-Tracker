@@ -22426,7 +22426,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "sled-push",
+        "title": "Sled push"
+      }
     },
     {
       "id": "19ad9384-38b7-5e95-a768-6c9bac3f0cf6",
@@ -26696,6 +26700,9 @@
       "name": "Single Leg Push-off",
       "englishName": "Single Leg Push-off",
       "aliases": [
+        "Отталкивание от платформы одной ногой",
+        "Single-leg push-off",
+        "Отталкивание на одной ноге",
         "Плиометрика",
         "plyometrics"
       ],
@@ -26766,11 +26773,14 @@
       "name": "Sit Squats",
       "englishName": "Sit Squats",
       "aliases": [
+        "Частичные приседания",
+        "Sit squats",
+        "Сидячие приседания",
         "Растяжка",
         "stretching"
       ],
       "group": "legs",
-      "equipment": "unspecified",
+      "equipment": "body only",
       "level": "beginner",
       "primaryMuscles": [
         "quadriceps"
@@ -26801,6 +26811,9 @@
       "name": "Skating",
       "englishName": "Skating",
       "aliases": [
+        "Роликовые коньки",
+        "Roller skating",
+        "Катание на коньках",
         "Кардио",
         "cardio"
       ],
@@ -26837,6 +26850,9 @@
       "name": "Sled Drag - Harness",
       "englishName": "Sled Drag - Harness",
       "aliases": [
+        "Перетаскивание саней в упряжи",
+        "Harness sled drag",
+        "Sled Drag - Упряжь",
         "Силовой экстрим",
         "strongman"
       ],
@@ -26871,6 +26887,8 @@
       "name": "Sled Overhead Backward Walk",
       "englishName": "Sled Overhead Backward Walk",
       "aliases": [
+        "Ходьба назад с тягой саней над головой",
+        "Ходьба назад над головой на санях",
         "Силовые упражнения",
         "strength"
       ],
@@ -26906,6 +26924,8 @@
       "name": "Sled Overhead Triceps Extension",
       "englishName": "Sled Overhead Triceps Extension",
       "aliases": [
+        "Французский жим с санями стоя",
+        "Разгибание трицепса над головой на санях",
         "Силовые упражнения",
         "strength"
       ],
@@ -26942,6 +26962,9 @@
       "name": "Sled Push",
       "englishName": "Sled Push",
       "aliases": [
+        "Толкание саней",
+        "Sled push",
+        "Санный толчок",
         "Силовой экстрим",
         "strongman"
       ],
@@ -26970,7 +26993,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "sled-push",
+        "title": "Sled push"
+      }
     },
     {
       "id": "5e1034ec-0351-5310-91ab-f55e56088c9b",
@@ -26978,6 +27005,9 @@
       "name": "Sled Reverse Flye",
       "englishName": "Sled Reverse Flye",
       "aliases": [
+        "Обратные разведения с санями",
+        "Sled reverse fly",
+        "Сани Реверс Флай",
         "Силовые упражнения",
         "strength"
       ],
@@ -27012,6 +27042,9 @@
       "name": "Sled Row",
       "englishName": "Sled Row",
       "aliases": [
+        "Горизонтальная тяга саней",
+        "Sled row",
+        "Тяга саней к себе",
         "Силовые упражнения",
         "strength"
       ],
@@ -27049,6 +27082,9 @@
       "name": "Sledgehammer Swings",
       "englishName": "Sledgehammer Swings",
       "aliases": [
+        "Махи кувалдой",
+        "Sledgehammer swings",
+        "Качели с кувалдой",
         "Плиометрика",
         "plyometrics"
       ],
@@ -27087,11 +27123,14 @@
       "name": "Smith Incline Shoulder Raise",
       "englishName": "Smith Incline Shoulder Raise",
       "aliases": [
+        "Подъём плеч в Смите на наклонной скамье",
+        "Smith incline shoulder raise",
+        "Подъем плеч Смита на наклонной скамье",
         "Силовые упражнения",
         "strength"
       ],
       "group": "shoulders",
-      "equipment": "barbell",
+      "equipment": "machine",
       "level": "beginner",
       "primaryMuscles": [
         "shoulders"
@@ -27123,6 +27162,9 @@
       "name": "Smith Machine Behind the Back Shrug",
       "englishName": "Smith Machine Behind the Back Shrug",
       "aliases": [
+        "Подъём плеч в Смите с грифом сзади",
+        "Smith behind-the-back shrug",
+        "Шраги за спиной в машине Смита",
         "Силовые упражнения",
         "strength"
       ],
@@ -27160,6 +27202,9 @@
       "name": "Smith Machine Bench Press",
       "englishName": "Smith Machine Bench Press",
       "aliases": [
+        "Жим штанги в Смите лёжа",
+        "Smith machine bench press",
+        "Жим лежа в машине Смита",
         "Силовые упражнения",
         "strength"
       ],
@@ -27190,7 +27235,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-flat-bench-press",
+        "title": "Barbell bench press"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=7FyJdsXeta8"
     },
     {
       "id": "abe62ad9-b72d-5847-8ad9-0d33252dab41",
@@ -27198,6 +27248,9 @@
       "name": "Smith Machine Bent Over Row",
       "englishName": "Smith Machine Bent Over Row",
       "aliases": [
+        "Тяга в наклоне в тренажёре Смита",
+        "Smith machine bent-over row",
+        "Тяга в наклоне в тренажере Смита",
         "Силовые упражнения",
         "strength"
       ],

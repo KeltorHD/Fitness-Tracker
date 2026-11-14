@@ -288,7 +288,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     "Barbell_Bench_Press_-_Medium_Grip", "Close-Grip_Barbell_Bench_Press",
     "Wide-Grip_Barbell_Bench_Press", "Bench_Press_-_Powerlifting",
     "Bench_Press_with_Chains", "Board_Press", "Reverse_Band_Bench_Press",
-    "Reverse_Triceps_Bench_Press",
+    "Reverse_Triceps_Bench_Press", "Smith_Machine_Bench_Press",
   ])
 }
 
@@ -550,6 +550,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     ["Rack_Pulls", "Rack_Pull_with_Bands"],
     ["Parallel_Bar_Dip", "Ring_Dips"],
     ["Romanian_Deadlift", "Romanian_Deadlift_from_Deficit"],
+    ["Sled_Push", "Prowler_Sprint"],
     [
       "Seated_Bent-Over_One-Arm_Dumbbell_Triceps_Extension",
       "Seated_Bent-Over_Two-Arm_Dumbbell_Triceps_Extension",
@@ -579,6 +580,16 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
       })
     #expect(entry.equipment == .bands)
     #expect(entry.primaryMuscleIDs == [.hamstrings])
+  }
+}
+
+@Test func inclineShoulderRaiseUsesSmithMachineInBothLanguages() throws {
+  for language in [AppLanguage.russian, .english] {
+    let entry = try #require(
+      ExerciseLibrary.entries(language: language).first {
+        $0.sourceID == "Smith_Incline_Shoulder_Raise"
+      })
+    #expect(entry.equipment == .machine)
   }
 }
 

@@ -21,7 +21,8 @@
       "Bench_Press_with_Chains",
       "Board_Press",
       "Reverse_Band_Bench_Press",
-      "Reverse_Triceps_Bench_Press"
+      "Reverse_Triceps_Bench_Press",
+      "Smith_Machine_Bench_Press"
     ]
   },
   "barbell-ab-rollout": {
@@ -439,6 +440,14 @@
       "Seated_Dumbbell_Palms-Up_Wrist_Curl",
       "Seated_One-Arm_Dumbbell_Palms-Down_Wrist_Curl",
       "Seated_One-Arm_Dumbbell_Palms-Up_Wrist_Curl"
+    ]
+  },
+  "sled-push": {
+    "ru": "Толкание тренировочных саней",
+    "en": "Sled push",
+    "members": [
+      "Sled_Push",
+      "Prowler_Sprint"
     ]
   }
 }

@@ -704,21 +704,21 @@ Single-Leg_Leg_Extension	Разгибание одной ноги в трена�
 Single-Leg_Stride_Jump	Прыжок с шагом на одной ноге	Плиометрика;plyometrics
 Single_Dumbbell_Raise	Подъём одной гантели перед собой двумя руками	Фронтальный подъём одной гантели;Single dumbbell front raise;Одиночный подъем гантели;Силовые упражнения;strength
 Single_Leg_Butt_Kick	Прыжки на одной ноге с захлёстом голени	Прыжок с пяткой к ягодице на одной ноге;Single-leg butt kick;Удар ногой одной ногой;Плиометрика;plyometrics
-Single_Leg_Push-off	Отталкивание на одной ноге	Плиометрика;plyometrics
+Single_Leg_Push-off	Прыжок вверх с отталкиванием одной ногой от платформы	Отталкивание от платформы одной ногой;Single-leg push-off;Отталкивание на одной ноге;Плиометрика;plyometrics
 Sit-Up	Подъём корпуса лёжа на полу	Подъём туловища лёжа;Sit-Up
-Sit_Squats	Сидячие приседания	Растяжка;stretching
-Skating	Катание на коньках	Кардио;cardio
-Sled_Drag_-_Harness	Sled Drag - Упряжь	Силовой экстрим;strongman
-Sled_Overhead_Backward_Walk	Ходьба назад над головой на санях	Силовые упражнения;strength
-Sled_Overhead_Triceps_Extension	Разгибание трицепса над головой на санях	Силовые упражнения;strength
-Sled_Push	Санный толчок	Силовой экстрим;strongman
-Sled_Reverse_Flye	Сани Реверс Флай	Силовые упражнения;strength
-Sled_Row	Тяга саней к себе	Силовые упражнения;strength
-Sledgehammer_Swings	Качели с кувалдой	Плиометрика;plyometrics
-Smith_Incline_Shoulder_Raise	Подъем плеч Смита на наклонной скамье	Силовые упражнения;strength
-Smith_Machine_Behind_the_Back_Shrug	Шраги за спиной в машине Смита	Силовые упражнения;strength
-Smith_Machine_Bench_Press	Жим лежа в машине Смита	Силовые упражнения;strength
-Smith_Machine_Bent_Over_Row	Тяга в наклоне в тренажере Смита	Силовые упражнения;strength
+Sit_Squats	Неполные приседания без отягощения	Частичные приседания;Sit squats;Сидячие приседания;Растяжка;stretching
+Skating	Катание на роликовых коньках	Роликовые коньки;Roller skating;Катание на коньках;Кардио;cardio
+Sled_Drag_-_Harness	Тяга саней за пояс или упряжь	Перетаскивание саней в упряжи;Harness sled drag;Sled Drag - Упряжь;Силовой экстрим;strongman
+Sled_Overhead_Backward_Walk	Тяга саней шагами назад с руками над головой	Ходьба назад с тягой саней над головой;Ходьба назад над головой на санях;Силовые упражнения;strength
+Sled_Overhead_Triceps_Extension	Разгибание рук из-за головы с тягой саней	Французский жим с санями стоя;Разгибание трицепса над головой на санях;Силовые упражнения;strength
+Sled_Push	Толкание тренировочных саней	Толкание саней;Sled push;Санный толчок;Силовой экстрим;strongman
+Sled_Reverse_Flye	Разведение рук с тягой саней стоя	Обратные разведения с санями;Sled reverse fly;Сани Реверс Флай;Силовые упражнения;strength
+Sled_Row	Тяга саней к корпусу стоя	Горизонтальная тяга саней;Sled row;Тяга саней к себе;Силовые упражнения;strength
+Sledgehammer_Swings	Удары кувалдой по покрышке	Махи кувалдой;Sledgehammer swings;Качели с кувалдой;Плиометрика;plyometrics
+Smith_Incline_Shoulder_Raise	Подъём плеч с грифом Смита лёжа на наклонной скамье	Подъём плеч в Смите на наклонной скамье;Smith incline shoulder raise;Подъем плеч Смита на наклонной скамье;Силовые упражнения;strength
+Smith_Machine_Behind_the_Back_Shrug	Шраги в тренажёре Смита с грифом за спиной	Подъём плеч в Смите с грифом сзади;Smith behind-the-back shrug;Шраги за спиной в машине Смита;Силовые упражнения;strength
+Smith_Machine_Bench_Press	Жим в тренажёре Смита лёжа на плоской скамье	Жим штанги в Смите лёжа;Smith machine bench press;Жим лежа в машине Смита;Силовые упражнения;strength
+Smith_Machine_Bent_Over_Row	Тяга грифа Смита к поясу в наклоне	Тяга в наклоне в тренажёре Смита;Smith machine bent-over row;Тяга в наклоне в тренажере Смита;Силовые упражнения;strength
 Smith_Machine_Calf_Raise	Подъем на носки в машине Смита	Силовые упражнения;strength
 Smith_Machine_Close-Grip_Bench_Press	Жим лежа узким хватом в машине Смита	Силовые упражнения;strength
 Smith_Machine_Decline_Press	Жим наклона машины Смита	Силовые упражнения;strength
