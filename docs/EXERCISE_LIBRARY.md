@@ -146,3 +146,5 @@ python3 scripts/import-exercise-library.py --download-only
 Название «Жим Брэдфорда» сверено с [описанием упражнения](https://app.inhouse.center/zhim-bredforda-stoya/). Видео разгибания рук с гантелью найдено по названию и описанию без просмотра. В английской инструкции растяжки `Standing_Elevated_Quad_Stretch` убрано безусловное ограничение движения колена на основании [обзора техники](https://pmc.ncbi.nlm.nih.gov/articles/PMC4262933/).
 
 Вариант разгибания руки на блоке сверён с [описанием упражнения](https://www.flexxp.com/triceps-videos); видео разгибания рук со штангой найдено по названию и описанию без просмотра. `Standing_One-Arm_Dumbbell_Triceps_Extension` и `Dumbbell_One-Arm_Triceps_Extension` описывают один и тот же стоячий вариант: идентификаторы сохранены до решения о возможном объединении истории.
+
+Разгибание рук с полотенцем сверено с [описанием сопротивления партнёра](https://www.allinahealth.org/healthysetgo/move/partner-exercises-get-in-shape-together). Видео этого упражнения и скручиваний с канатом найдены по названию и описанию без просмотра.

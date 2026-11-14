@@ -44,7 +44,8 @@
       "Good_Morning",
       "Good_Morning_off_Pins",
       "Hanging_Bar_Good_Morning",
-      "Seated_Good_Mornings"
+      "Seated_Good_Mornings",
+      "Stiff_Leg_Barbell_Good_Morning"
     ]
   },
   "long-bar-row": {
@@ -190,7 +191,8 @@
       "Front_Plate_Raise",
       "Single_Dumbbell_Raise",
       "Standing_Dumbbell_Straight-Arm_Front_Delt_Raise_Above_Head",
-      "Standing_Front_Barbell_Raise_Over_Head"
+      "Standing_Front_Barbell_Raise_Over_Head",
+      "Straight_Raises_on_Incline_Bench"
     ]
   },
   "front-squat": {
@@ -285,7 +287,8 @@
       "Speed_Band_Overhead_Triceps",
       "Standing_Dumbbell_Triceps_Extension",
       "Standing_Low-Pulley_One-Arm_Triceps_Extension",
-      "Standing_Overhead_Barbell_Triceps_Extension"
+      "Standing_Overhead_Barbell_Triceps_Extension",
+      "Standing_Towel_Triceps_Extension"
     ]
   },
   "kettlebell-windmill": {
@@ -509,6 +512,22 @@
       "Standing_Alternating_Dumbbell_Press",
       "Standing_Palm-In_One-Arm_Dumbbell_Press",
       "Standing_Palms-In_Dumbbell_Press"
+    ]
+  },
+  "stiff-leg-deadlift": {
+    "ru": "Становая тяга на прямых ногах",
+    "en": "Stiff-legged deadlift",
+    "members": [
+      "Stiff-Legged_Barbell_Deadlift",
+      "Smith_Machine_Stiff-Legged_Deadlift"
+    ]
+  },
+  "sumo-deadlift": {
+    "ru": "Становая тяга сумо со штангой",
+    "en": "Barbell sumo deadlift",
+    "members": [
+      "Sumo_Deadlift_with_Bands",
+      "Reverse_Band_Sumo_Deadlift"
     ]
   }
 }

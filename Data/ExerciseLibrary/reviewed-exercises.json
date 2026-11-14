@@ -1008,5 +1008,25 @@
   "Standing_Palms-Up_Barbell_Behind_The_Back_Wrist_Curl": {},
   "Standing_Pelvic_Tilt": {
     "equipment": "body only"
-  }
+  },
+  "Standing_Rope_Crunch": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=DrQxmuqkfV8"
+  },
+  "Standing_Soleus_And_Achilles_Stretch": {},
+  "Standing_Toe_Touches": {},
+  "Standing_Towel_Triceps_Extension": {
+    "equipment": "other",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=fpmhCrrnP0M"
+  },
+  "Standing_Two-Arm_Overhead_Throw": {},
+  "Star_Jump": {},
+  "Step-up_with_Knee_Raise": {},
+  "Step_Mill": {},
+  "Stiff-Legged_Barbell_Deadlift": {},
+  "Stiff_Leg_Barbell_Good_Morning": {},
+  "Stomach_Vacuum": {},
+  "Straight_Bar_Bench_Mid_Rows": {},
+  "Straight_Raises_on_Incline_Bench": {},
+  "Stride_Jump_Crossover": {},
+  "Sumo_Deadlift_with_Bands": {}
 }

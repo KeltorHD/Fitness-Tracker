@@ -485,8 +485,9 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   #expect(Set(variants.map(\.sourceID)) == [
     "Good_Morning", "Good_Morning_off_Pins", "Band_Good_Morning",
     "Band_Good_Morning_Pull_Through", "Hanging_Bar_Good_Morning", "Seated_Good_Mornings",
+    "Stiff_Leg_Barbell_Good_Morning",
   ])
-  #expect(Set(variants.map(\.id)).count == 6)
+  #expect(Set(variants.map(\.id)).count == 7)
   #expect(Set(variants.map(\.equipment)) == [.barbell, .bands])
 }
 
@@ -554,6 +555,8 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     ["Sled_Push", "Prowler_Sprint"],
     ["Smith_Machine_Upright_Row", "Smith_Machine_One-Arm_Upright_Row"],
     ["Standing_Cable_Lift", "Standing_Cable_Wood_Chop"],
+    ["Stiff-Legged_Barbell_Deadlift", "Smith_Machine_Stiff-Legged_Deadlift"],
+    ["Sumo_Deadlift_with_Bands", "Reverse_Band_Sumo_Deadlift"],
     [
       "Standing_Alternating_Dumbbell_Press", "Standing_Palm-In_One-Arm_Dumbbell_Press",
       "Standing_Palms-In_Dumbbell_Press",
@@ -675,8 +678,9 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     "Kettlebell_Overhead_Triceps_Extension", "Dumbbell_One-Arm_Triceps_Extension",
     "Speed_Band_Overhead_Triceps", "Standing_Dumbbell_Triceps_Extension",
     "Standing_Low-Pulley_One-Arm_Triceps_Extension", "Standing_Overhead_Barbell_Triceps_Extension",
+    "Standing_Towel_Triceps_Extension",
   ])
-  #expect(Set(variants.map(\.id)).count == 6)
+  #expect(Set(variants.map(\.id)).count == 7)
 }
 
 @Test func kneeRaiseInstructionsMatchTheSourceNameAndPhotosInBothLanguages() throws {

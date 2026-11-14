@@ -23372,7 +23372,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "sumo-deadlift",
+        "title": "Barbell sumo deadlift"
+      }
     },
     {
       "id": "5a04ff48-d725-5659-ab18-ec8ce8d476bb",
@@ -27817,7 +27821,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "stiff-leg-deadlift",
+        "title": "Stiff-legged deadlift"
+      }
     },
     {
       "id": "f9939a73-a5c7-54be-b812-84d9d6a18ecb",
@@ -30346,6 +30354,9 @@
       "name": "Standing Rope Crunch",
       "englishName": "Standing Rope Crunch",
       "aliases": [
+        "Скручивания с канатом стоя",
+        "Standing rope crunch",
+        "Скручивание веревки стоя",
         "Силовые упражнения",
         "strength"
       ],
@@ -30373,7 +30384,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=DrQxmuqkfV8"
     },
     {
       "id": "f75a1bd8-b882-5f92-85bf-0366a43b64cf",
@@ -30381,6 +30393,8 @@
       "name": "Standing Soleus And Achilles Stretch",
       "englishName": "Standing Soleus And Achilles Stretch",
       "aliases": [
+        "Растяжка камбаловидной мышцы стоя",
+        "Растяжка камбаловидной мышцы и ахилла стоя",
         "Растяжка",
         "stretching"
       ],
@@ -30411,6 +30425,8 @@
       "name": "Standing Toe Touches",
       "englishName": "Standing Toe Touches",
       "aliases": [
+        "Растяжка задней поверхности бедра стоя",
+        "Прикосновения пальцев ног стоя",
         "Растяжка",
         "stretching"
       ],
@@ -30443,11 +30459,13 @@
       "name": "Standing Towel Triceps Extension",
       "englishName": "Standing Towel Triceps Extension",
       "aliases": [
+        "Французский жим с полотенцем и сопротивлением партнёра",
+        "Разгибание трицепса стоя на полотенце",
         "Силовые упражнения",
         "strength"
       ],
       "group": "arms",
-      "equipment": "body only",
+      "equipment": "other",
       "level": "beginner",
       "primaryMuscles": [
         "triceps"
@@ -30471,7 +30489,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-overhead-triceps-extension",
+        "title": "Standing overhead triceps extension"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=fpmhCrrnP0M"
     },
     {
       "id": "0c48fdff-5bab-5678-b2b3-7570bcbdfc23",
@@ -30479,6 +30502,9 @@
       "name": "Standing Two-Arm Overhead Throw",
       "englishName": "Standing Two-Arm Overhead Throw",
       "aliases": [
+        "Передача медбола из-за головы",
+        "Two-arm overhead medicine ball throw",
+        "Бросок двумя руками через голову стоя",
         "Плиометрика",
         "plyometrics"
       ],
@@ -30513,6 +30539,9 @@
       "name": "Star Jump",
       "englishName": "Star Jump",
       "aliases": [
+        "Прыжок вверх с разведением рук и ног",
+        "Star jump",
+        "Звездный прыжок",
         "Плиометрика",
         "plyometrics"
       ],
@@ -30549,6 +30578,9 @@
       "name": "Step-up with Knee Raise",
       "englishName": "Step-up with Knee Raise",
       "aliases": [
+        "Зашагивания с подъёмом колена",
+        "Step-up with knee raise",
+        "Шаг вперед с подъемом колена",
         "Силовые упражнения",
         "strength"
       ],
@@ -30585,6 +30617,9 @@
       "name": "Step Mill",
       "englishName": "Step Mill",
       "aliases": [
+        "Степмилл",
+        "Step mill",
+        "Шаг Мельница",
         "Кардио",
         "cardio"
       ],
@@ -30619,6 +30654,9 @@
       "name": "Stiff-Legged Barbell Deadlift",
       "englishName": "Stiff-Legged Barbell Deadlift",
       "aliases": [
+        "Тяга штанги на прямых ногах",
+        "Stiff-legged barbell deadlift",
+        "Становая тяга со штангой на прямых ногах",
         "Силовые упражнения",
         "strength"
       ],
@@ -30647,7 +30685,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "stiff-leg-deadlift",
+        "title": "Stiff-legged deadlift"
+      }
     },
     {
       "id": "2c92d7d4-7bee-5c57-b268-9b82abed783b",
@@ -30655,6 +30697,9 @@
       "name": "Stiff Leg Barbell Good Morning",
       "englishName": "Stiff Leg Barbell Good Morning",
       "aliases": [
+        "Наклоны со штангой на спине с прямыми ногами",
+        "Stiff-leg good morning",
+        "Штанга с жесткими ногами, доброе утро",
         "Силовые упражнения",
         "strength"
       ],
@@ -30684,7 +30729,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "band-good-morning",
+        "title": "Good morning"
+      }
     },
     {
       "id": "70ab7fc6-b32f-5502-ab36-a3c2bc658626",
@@ -30692,6 +30741,9 @@
       "name": "Stomach Vacuum",
       "englishName": "Stomach Vacuum",
       "aliases": [
+        "Втягивание живота стоя",
+        "Stomach vacuum",
+        "Желудочный вакуум",
         "Растяжка",
         "stretching"
       ],
@@ -30727,6 +30779,9 @@
       "name": "Straight Bar Bench Mid Rows",
       "englishName": "Straight Bar Bench Mid Rows",
       "aliases": [
+        "Тяга штанги к корпусу с возвышения",
+        "Straight bar bench row",
+        "Тяга штанги в наклоне стоя на скамье",
         "Силовые упражнения",
         "strength"
       ],
@@ -30763,6 +30818,8 @@
       "name": "Straight Raises on Incline Bench",
       "englishName": "Straight Raises on Incline Bench",
       "aliases": [
+        "Фронтальный подъём штанги с опорой на наклонную скамью",
+        "Прямые подъемы на наклонной скамье",
         "Силовые упражнения",
         "strength"
       ],
@@ -30789,7 +30846,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "front-raise",
+        "title": "Front raise"
+      }
     },
     {
       "id": "49cae65a-94dd-58d9-80c7-b51382958648",
@@ -30797,6 +30858,9 @@
       "name": "Stride Jump Crossover",
       "englishName": "Stride Jump Crossover",
       "aliases": [
+        "Прыжки с переносом ноги через платформу",
+        "Stride jump crossover",
+        "Страйд-джамп-кроссовер",
         "Плиометрика",
         "plyometrics"
       ],
@@ -30834,6 +30898,9 @@
       "name": "Sumo Deadlift with Bands",
       "englishName": "Sumo Deadlift with Bands",
       "aliases": [
+        "Тяга сумо со штангой и резинками",
+        "Banded sumo deadlift",
+        "Становая тяга сумо с лентами",
         "Пауэрлифтинг",
         "powerlifting"
       ],
@@ -30867,7 +30934,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "sumo-deadlift",
+        "title": "Barbell sumo deadlift"
+      }
     },
     {
       "id": "ab774b5f-e139-5365-a3fd-4187a2b15d47",
