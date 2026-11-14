@@ -224,20 +224,20 @@ Chain_Press	Жим цепей лёжа на плоской скамье	Жим �
 Chair_Leg_Extended_Stretch	Растяжка ноги с отведением сидя на стуле	Растяжка задней поверхности бедра сидя на стуле;Chair Leg Extended Stretch
 Chair_Lower_Back_Stretch	Боковая растяжка спины сидя на стуле	Наклон в сторону сидя на стуле;Chair Lower Back Stretch
 Chair_Squat	Приседания в тренажёре Смита с ногами впереди	Приседания стул в тренажёре Смита;Chair Squat;Smith Chair Squat
-Chair_Upper_Body_Stretch	Растяжка верхней части тела стула	Растяжка;stretching
+Chair_Upper_Body_Stretch	Растяжка плеч и груди сидя на стуле	Растяжка верхней части тела сидя на стуле;Chair Upper Body Stretch
 Chest_And_Front_Of_Shoulder_Stretch	Растяжка груди и передней части плеч	Растяжка;stretching
 Chest_Push_from_3_point_stance	Толчок грудью из трехточечной позиции	Плиометрика;plyometrics
 Chest_Push_multiple_response	Толчок от груди (множественный ответ)	Плиометрика;plyometrics
 Chest_Push_single_response	Толчок от груди (один ответ)	Плиометрика;plyometrics
 Chest_Push_with_Run_Release	Толчок от груди с разбегом	Плиометрика;plyometrics
-Chest_Stretch_on_Stability_Ball	Растяжка груди на мяче для стабилизации	Растяжка;stretching
-Childs_Pose	Детская поза	Растяжка;stretching
-Chin_To_Chest_Stretch	Растяжка подбородка к груди	Растяжка;stretching
+Chest_Stretch_on_Stability_Ball	Растяжка грудных мышц с опорой на фитбол	Растяжка груди на фитболе;Chest Stretch on Stability Ball
+Childs_Pose	Поза ребёнка	Баласана;Растяжка спины на коленях с опусканием на пятки;Child’s Pose;Child's Pose
+Chin_To_Chest_Stretch	Растяжка задней поверхности шеи сидя	Наклон головы к груди сидя;Chin To Chest Stretch
 Circus_Bell	Цирковой колокол	Силовой экстрим;strongman
 Clean	Взятие штанги на грудь в сед	Тяжёлая атлетика;olympic weightlifting
 Clean_Deadlift	Становая тяга толчковым хватом	Тяжёлая атлетика;olympic weightlifting
 Clean_Pull	Толчковая тяга	Тяжёлая атлетика;olympic weightlifting
-Clean_Shrug	Толчковые шраги со штангой	Тяжёлая атлетика;olympic weightlifting
+Clean_Shrug	Шраги со штангой толчковым хватом	Толчковые шраги со штангой;Clean Shrug
 Clean_and_Jerk	Взятие штанги на грудь и толчок	Тяжёлая атлетика;olympic weightlifting
 Clean_and_Press	Очистите и нажмите	Силовые упражнения;strength
 Clean_from_Blocks	Очистить от блоков	Тяжёлая атлетика;olympic weightlifting

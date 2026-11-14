@@ -8377,8 +8377,8 @@
       "name": "Chair Upper Body Stretch",
       "englishName": "Chair Upper Body Stretch",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Растяжка верхней части тела сидя на стуле",
+        "Chair Upper Body Stretch"
       ],
       "group": "shoulders",
       "equipment": "other",
@@ -8584,8 +8584,8 @@
       "name": "Chest Stretch on Stability Ball",
       "englishName": "Chest Stretch on Stability Ball",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Растяжка груди на фитболе",
+        "Chest Stretch on Stability Ball"
       ],
       "group": "chest",
       "equipment": "exercise ball",
@@ -8615,8 +8615,10 @@
       "name": "Child's Pose",
       "englishName": "Child's Pose",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Баласана",
+        "Растяжка спины на коленях с опусканием на пятки",
+        "Child’s Pose",
+        "Child's Pose"
       ],
       "group": "back",
       "equipment": "unspecified",
@@ -8641,7 +8643,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=_ZX_zTOBgp8"
     },
     {
       "id": "f3b5e3ba-2aa0-567d-9977-fb0a3d11397b",
@@ -8649,8 +8652,8 @@
       "name": "Chin To Chest Stretch",
       "englishName": "Chin To Chest Stretch",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Наклон головы к груди сидя",
+        "Chin To Chest Stretch"
       ],
       "group": "shoulders",
       "equipment": "unspecified",
@@ -8836,8 +8839,8 @@
       "name": "Clean Shrug",
       "englishName": "Clean Shrug",
       "aliases": [
-        "Тяжёлая атлетика",
-        "olympic weightlifting"
+        "Толчковые шраги со штангой",
+        "Clean Shrug"
       ],
       "group": "back",
       "equipment": "barbell",

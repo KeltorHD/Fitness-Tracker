@@ -8059,11 +8059,11 @@
     {
       "id": "71aa0e45-5928-54be-9c76-1ebef5009a5f",
       "sourceID": "Chair_Upper_Body_Stretch",
-      "name": "Растяжка верхней части тела стула",
+      "name": "Растяжка плеч и груди сидя на стуле",
       "englishName": "Chair Upper Body Stretch",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Растяжка верхней части тела сидя на стуле",
+        "Chair Upper Body Stretch"
       ],
       "group": "shoulders",
       "equipment": "other",
@@ -8077,9 +8077,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "Сядьте на край стула, взявшись за его спинку.",
-        "Выпрямите руки, сохраняя спину прямой, и потяните верхнюю часть тела вперед, чтобы почувствовать растяжение.",
-        "Удерживайте 20-30 секунд."
+        "Сядьте на край стула и возьмитесь руками за его спинку позади себя.",
+        "Выпрямите руки и подайте корпус вперёд до ощущения растяжения.",
+        "Удерживайте положение 20–30 секунд, затем плавно расслабьтесь."
       ],
       "images": [
         "Chair_Upper_Body_Stretch/0.jpg",
@@ -8088,7 +8088,7 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false
     },
     {
       "id": "740401f5-186d-5dc2-9a17-fb5f5869007f",
@@ -8267,11 +8267,11 @@
     {
       "id": "7faeb364-2a6c-586b-9521-29ea025a1dd2",
       "sourceID": "Chest_Stretch_on_Stability_Ball",
-      "name": "Растяжка груди на мяче для стабилизации",
+      "name": "Растяжка грудных мышц с опорой на фитбол",
       "englishName": "Chest Stretch on Stability Ball",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Растяжка груди на фитболе",
+        "Chest Stretch on Stability Ball"
       ],
       "group": "chest",
       "equipment": "exercise ball",
@@ -8282,9 +8282,9 @@
       "secondaryMuscles": [],
       "trainingRegions": [],
       "steps": [
-        "Встаньте на четвереньки рядом с мячом для упражнений.",
-        "Положите локти на мяч, держа руку в сторону. Это будет ваша исходная позиция.",
-        "Опустите туловище к полу, удерживая локоть на мяче. Удерживайте растяжку 20–30 секунд и повторите то же самое с другой рукой."
+        "Встаньте на четвереньки рядом с фитболом и положите локоть одной руки на мяч, отведя руку в сторону.",
+        "Плавно опустите корпус к полу, сохраняя локоть на мяче.",
+        "Удерживайте растяжку 20–30 секунд и повторите другой рукой."
       ],
       "images": [
         "Chest_Stretch_on_Stability_Ball/0.jpg",
@@ -8293,16 +8293,18 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false
     },
     {
       "id": "96256bc8-5505-5866-ae69-032d5c4b0ef5",
       "sourceID": "Childs_Pose",
-      "name": "Детская поза",
+      "name": "Поза ребёнка",
       "englishName": "Child's Pose",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Баласана",
+        "Растяжка спины на коленях с опусканием на пятки",
+        "Child’s Pose",
+        "Child's Pose"
       ],
       "group": "back",
       "equipment": "unspecified",
@@ -8316,9 +8318,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "Встаньте на четвереньки, вытяните руки перед собой.",
-        "Опустите ягодицы вниз, чтобы сесть на пятки. Позвольте рукам скользить по полу, пока вы сидите, растягивая весь позвоночник.",
-        "Как только вы сядете на пятки, поднесите руки к ногам и расслабьтесь. «дышать» в спину. Положите лоб на пол. Избегайте этой позиции, если у вас проблемы с коленями."
+        "Встаньте на четвереньки и вытяните руки вперёд по полу.",
+        "Опустите таз к пяткам и приблизьте лоб к полу.",
+        "Расслабьтесь и ровно дышите; руки можно оставить впереди или расположить вдоль тела."
       ],
       "images": [
         "Childs_Pose/0.jpg",
@@ -8327,16 +8329,17 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=_ZX_zTOBgp8"
     },
     {
       "id": "f3b5e3ba-2aa0-567d-9977-fb0a3d11397b",
       "sourceID": "Chin_To_Chest_Stretch",
-      "name": "Растяжка подбородка к груди",
+      "name": "Растяжка задней поверхности шеи сидя",
       "englishName": "Chin To Chest Stretch",
       "aliases": [
-        "Растяжка",
-        "stretching"
+        "Наклон головы к груди сидя",
+        "Chin To Chest Stretch"
       ],
       "group": "shoulders",
       "equipment": "unspecified",
@@ -8349,10 +8352,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "Сядьте на пол.",
-        "Положите обе руки на затылок, сцепив пальцы, большие пальцы направлены вниз, а локти — прямо вперед.",
-        "Медленно опустите голову к груди.",
-        "Удерживайте 20-30 секунд."
+        "Сядьте на пол, сохраняя устойчивое положение корпуса.",
+        "Положите руки на затылок и плавно опустите подбородок к груди без рывков.",
+        "Удерживайте растяжку 20–30 секунд, затем медленно поднимите голову."
       ],
       "images": [
         "Chin_To_Chest_Stretch/0.jpg",
@@ -8361,7 +8363,7 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false
     },
     {
       "id": "a5ce7c00-ede3-53b9-b712-0bf65c157765",
@@ -8521,11 +8523,11 @@
     {
       "id": "1ec3f9e1-6d86-5aff-a080-8f51e6f7776a",
       "sourceID": "Clean_Shrug",
-      "name": "Толчковые шраги со штангой",
+      "name": "Шраги со штангой толчковым хватом",
       "englishName": "Clean Shrug",
       "aliases": [
-        "Тяжёлая атлетика",
-        "olympic weightlifting"
+        "Толчковые шраги со штангой",
+        "Clean Shrug"
       ],
       "group": "back",
       "equipment": "barbell",
@@ -8541,10 +8543,9 @@
         "trapeziusUpper"
       ],
       "steps": [
-        "Начните с ширины плеч, двойным хватом сверху или крюком, при этом штанга висит на середине бедра.",
-        "Спина должна быть прямой и слегка наклоненной вперед.",
-        "Пожмите плечами к ушам.",
-        "Хотя в этом упражнении обычно можно использовать более тяжелый вес, чем в подъеме на грудь, избегайте перегрузки до такой степени, что выполнение замедляется."
+        "Возьмите штангу прямым или замковым хватом примерно на ширине плеч и удерживайте её у середины бёдер.",
+        "Слегка наклоните корпус вперёд, сохраняя спину устойчивой.",
+        "Поднимите плечи к ушам, затем подконтрольно опустите их."
       ],
       "images": [
         "Clean_Shrug/0.jpg",
@@ -8553,7 +8554,7 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": true
+      "translationAutomatic": false
     },
     {
       "id": "51733edf-e527-52bc-96f1-43d2a61d03db",
