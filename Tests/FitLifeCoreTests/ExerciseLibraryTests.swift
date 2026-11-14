@@ -554,6 +554,14 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     ["Sled_Push", "Prowler_Sprint"],
     ["Smith_Machine_Upright_Row", "Smith_Machine_One-Arm_Upright_Row"],
     [
+      "Barbell_Squat", "Narrow_Stance_Squats", "Speed_Squats", "Squat_with_Bands",
+      "Squat_with_Chains",
+    ],
+    [
+      "Standing_Bent-Over_One-Arm_Dumbbell_Triceps_Extension",
+      "Standing_Bent-Over_Two-Arm_Dumbbell_Triceps_Extension",
+    ],
+    [
       "Seated_Bent-Over_One-Arm_Dumbbell_Triceps_Extension",
       "Seated_Bent-Over_Two-Arm_Dumbbell_Triceps_Extension",
     ],
@@ -603,6 +611,16 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   #expect(entry.steps.count >= 3)
   #expect(!entry.steps.joined().contains("knee is past"))
   #expect(entry.equipment == .machine)
+}
+
+@Test func barbellSquatKeepsLegacySearchAndCorrectedEnglishTechnique() throws {
+  let russian = try #require(
+    ExerciseLibrary.entries(language: .russian).first { $0.sourceID == "Barbell_Squat" })
+  let english = try #require(
+    ExerciseLibrary.entries(language: .english).first { $0.sourceID == "Barbell_Squat" })
+  #expect(russian.id == english.id)
+  #expect(ExerciseLibrary.search("Приседания").contains { $0.id == russian.id })
+  #expect(!english.steps.joined().contains("knees are past"))
 }
 
 @Test func spiderCurlUsesTheDumbbellsShownInItsPhotos() throws {

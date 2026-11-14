@@ -932,5 +932,39 @@
   },
   "Spinal_Stretch": {},
   "Split_Clean": {},
-  "Split_Jerk": {}
+  "Split_Jerk": {},
+  "Split_Jump": {},
+  "Split_Snatch": {
+    "secondaryMuscles": [
+      "calves",
+      "forearms",
+      "glutes",
+      "lower back",
+      "quadriceps",
+      "shoulders",
+      "traps",
+      "triceps"
+    ]
+  },
+  "Squat_Jerk": {},
+  "Barbell_Squat": {
+    "englishSteps": [
+      "Position the bar across your upper back and lift it from the rack.",
+      "Bend your knees and hips to descend into a controlled squat.",
+      "Drive through your feet and extend your legs to stand up."
+    ],
+    "instructionSourceURL": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4262933/",
+    "instructionCorrectionReason": "The source incorrectly asserts that any forward knee travel beyond the toes makes the squat harmful."
+  },
+  "Squat_with_Bands": {},
+  "Squat_with_Chains": {},
+  "Squat_with_Plate_Movers": {},
+  "Squats_-_With_Bands": {},
+  "Stairmaster": {},
+  "Standing_Alternating_Dumbbell_Press": {},
+  "Standing_Barbell_Calf_Raise": {},
+  "Standing_Barbell_Press_Behind_Neck": {},
+  "Standing_Bent-Over_One-Arm_Dumbbell_Triceps_Extension": {},
+  "Standing_Bent-Over_Two-Arm_Dumbbell_Triceps_Extension": {},
+  "Standing_Biceps_Stretch": {}
 }

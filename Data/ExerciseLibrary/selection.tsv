@@ -1,4 +1,4 @@
-Barbell_Squat	Приседания	Присед со штангой;Приседания со штангой
+Barbell_Squat	Приседания со штангой на спине	Приседания;Присед со штангой;Приседания со штангой;Barbell back squat
 Barbell_Bench_Press_-_Medium_Grip	Жим штанги лёжа обычным хватом	Жим лёжа;Жим штанги лёжа;Жим лежа;Жим штанги лёжа средним хватом
 Bent_Over_Barbell_Row	Тяга в наклоне	Тяга штанги к поясу
 Standing_Military_Press	Жим над головой	Армейский жим;Жим штанги стоя
@@ -749,21 +749,21 @@ Spider_Curl	Паучьи сгибания рук с гантелями	Сгиб�
 Spinal_Stretch	Растяжка спины с поворотом корпуса сидя	Повороты и наклоны корпуса сидя;Растяжка позвоночника;Растяжка;stretching
 Split_Clean	Взятие штанги на грудь в ножницы	Взятие штанги на грудь в разножку;Split clean;Тяжёлая атлетика;olympic weightlifting
 Split_Jerk	Толчок штанги в ножницы от груди	Толчок штанги в разножку;Split jerk;Сплит-рывок;Тяжёлая атлетика;olympic weightlifting
-Split_Jump	Сплит-прыжок	Плиометрика;plyometrics
-Split_Snatch	Сплит-рывок	Тяжёлая атлетика;olympic weightlifting
+Split_Jump	Прыжок из выпада без смены ног	Прыжки в разножке без смены ног;Split jump;Сплит-прыжок;Плиометрика;plyometrics
+Split_Snatch	Рывок штанги в ножницы	Рывок штанги в разножку;Split snatch;Сплит-рывок;Тяжёлая атлетика;olympic weightlifting
 Split_Squats	Сплит-приседания	Растяжка;stretching
-Squat_Jerk	Приседания с толчком	Силовые упражнения;strength
-Squat_with_Bands	Приседания с лентами	Пауэрлифтинг;powerlifting
-Squat_with_Chains	Приседания с цепями	Пауэрлифтинг;powerlifting
-Squat_with_Plate_Movers	Приседания с движениями тарелок	Силовые упражнения;strength
-Squats_-_With_Bands	Приседания – с лентами	Силовые упражнения;strength
-Stairmaster	Лестничный мастер	Кардио;cardio
-Standing_Alternating_Dumbbell_Press	Попеременный жим гантелей стоя	Силовые упражнения;strength
-Standing_Barbell_Calf_Raise	Подъем штанги на носки стоя	Силовые упражнения;strength
-Standing_Barbell_Press_Behind_Neck	Жим штанги стоя из-за шеи	Силовые упражнения;strength
-Standing_Bent-Over_One-Arm_Dumbbell_Triceps_Extension	Разгибание одной руки с гантелью на трицепс в наклоне стоя	Силовые упражнения;strength
-Standing_Bent-Over_Two-Arm_Dumbbell_Triceps_Extension	Разгибание трицепса с гантелью двумя руками стоя в наклоне	Силовые упражнения;strength
-Standing_Biceps_Stretch	Растяжка бицепса стоя	Растяжка;stretching
+Squat_Jerk	Толчок штанги в сед от груди	Толчок штанги с приёмом в глубокий присед;Squat jerk;Приседания с толчком;Силовые упражнения;strength
+Squat_with_Bands	Приседания со штангой на спине с резинками снизу	Приседания со штангой и резинками;Banded barbell squat;Приседания с лентами;Пауэрлифтинг;powerlifting
+Squat_with_Chains	Приседания со штангой на спине с цепями	Приседания со штангой и цепями;Barbell squat with chains;Приседания с цепями;Пауэрлифтинг;powerlifting
+Squat_with_Plate_Movers	Приседания со штангой с боковым перемещением блина	Приседания с перемещением блина ногой;Squat with plate movers;Приседания с движениями тарелок;Силовые упражнения;strength
+Squats_-_With_Bands	Приседания с резинкой стоя	Приседания с эспандером;Band squat;Приседания – с лентами;Силовые упражнения;strength
+Stairmaster	Ходьба на лестничном тренажёре	Степпер;Stair climber;Лестничный мастер;Кардио;cardio
+Standing_Alternating_Dumbbell_Press	Попеременный жим гантелей от плеч стоя	Попеременный жим гантелей над головой стоя;Попеременный жим гантелей стоя;Силовые упражнения;strength
+Standing_Barbell_Calf_Raise	Подъём на носки стоя со штангой на спине	Подъём на икры со штангой стоя;Standing barbell calf raise;Подъем штанги на носки стоя;Силовые упражнения;strength
+Standing_Barbell_Press_Behind_Neck	Жим штанги из-за головы стоя	Жим штанги стоя из-за головы;Behind-the-neck barbell press;Жим штанги стоя из-за шеи;Силовые упражнения;strength
+Standing_Bent-Over_One-Arm_Dumbbell_Triceps_Extension	Разгибание руки с гантелью в наклоне стоя	Кикбэк с гантелью одной рукой стоя;Standing one-arm dumbbell kickback;Разгибание одной руки с гантелью на трицепс в наклоне стоя;Силовые упражнения;strength
+Standing_Bent-Over_Two-Arm_Dumbbell_Triceps_Extension	Разгибание рук с гантелями в наклоне стоя	Кикбэк с двумя гантелями стоя;Standing two-arm dumbbell kickback;Разгибание трицепса с гантелью двумя руками стоя в наклоне;Силовые упражнения;strength
+Standing_Biceps_Stretch	Растяжка бицепсов стоя с руками за спиной	Растяжка бицепсов с соединёнными руками за спиной;Растяжка бицепса стоя;Растяжка;stretching
 Standing_Bradford_Press	Стэндинг Брэдфорд Пресс	Силовые упражнения;strength
 Standing_Cable_Chest_Press	Жим от груди стоя на тросе	Силовые упражнения;strength
 Standing_Cable_Lift	Диагональная тяга нижнего блока стоя	Силовые упражнения;strength

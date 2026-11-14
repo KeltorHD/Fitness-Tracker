@@ -15,8 +15,10 @@
       "name": "Barbell Squat",
       "englishName": "Barbell Squat",
       "aliases": [
+        "Приседания",
         "Присед со штангой",
-        "Приседания со штангой"
+        "Приседания со штангой",
+        "Barbell back squat"
       ],
       "group": "legs",
       "equipment": "barbell",
@@ -32,12 +34,9 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "This exercise is best performed inside a squat rack for safety purposes. To begin, first set the bar on a rack to just below shoulder level. Once the correct height is chosen and the bar is loaded, step under the bar and place the back of your shoulders (slightly below the neck) across it.",
-        "Hold on to the bar using both arms at each side and lift it off the rack by first pushing with your legs and at the same time straightening your torso.",
-        "Step away from the rack and position your legs using a shoulder width medium stance with the toes slightly pointed out. Keep your head up at all times and also maintain a straight back. This will be your starting position. (Note: For the purposes of this discussion we will use the medium stance described above which targets overall development; however you can choose any of the three stances discussed in the foot stances section).",
-        "Begin to slowly lower the bar by bending the knees and hips as you maintain a straight posture with the head up. Continue down until the angle between the upper leg and the calves becomes slightly less than 90-degrees. Inhale as you perform this portion of the movement. Tip: If you performed the exercise correctly, the front of the knees should make an imaginary straight line with the toes that is perpendicular to the front. If your knees are past that imaginary line (if they are past your toes) then you are placing undue stress on the knee and the exercise has been performed incorrectly.",
-        "Begin to raise the bar as you exhale by pushing the floor with the heel of your foot as you straighten the legs again and go back to the starting position.",
-        "Repeat for the recommended amount of repetitions."
+        "Position the bar across your upper back and lift it from the rack.",
+        "Bend your knees and hips to descend into a controlled squat.",
+        "Drive through your feet and extend your legs to stand up."
       ],
       "images": [
         "Barbell_Squat/0.jpg",
@@ -60,7 +59,11 @@
         ],
         "frameDuration": 0.25
       },
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-back-squat",
+        "title": "Barbell back squat"
+      }
     },
     {
       "id": "10000000-0000-0000-0000-000000000002",
@@ -19181,7 +19184,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-back-squat",
+        "title": "Barbell back squat"
+      }
     },
     {
       "id": "e0e07f38-f437-58f3-9d93-1472bc0de4e1",
@@ -28278,7 +28285,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-back-squat",
+        "title": "Barbell back squat"
+      }
     },
     {
       "id": "dc63cb26-1b2f-543f-8160-848b97aee31f",
@@ -28522,6 +28533,9 @@
       "name": "Split Jump",
       "englishName": "Split Jump",
       "aliases": [
+        "Прыжки в разножке без смены ног",
+        "Split jump",
+        "Сплит-прыжок",
         "Плиометрика",
         "plyometrics"
       ],
@@ -28559,6 +28573,9 @@
       "name": "Split Snatch",
       "englishName": "Split Snatch",
       "aliases": [
+        "Рывок штанги в разножку",
+        "Split snatch",
+        "Сплит-рывок",
         "Тяжёлая атлетика",
         "olympic weightlifting"
       ],
@@ -28572,7 +28589,6 @@
         "calves",
         "forearms",
         "glutes",
-        "hamstrings",
         "lower back",
         "quadriceps",
         "shoulders",
@@ -28637,6 +28653,9 @@
       "name": "Squat Jerk",
       "englishName": "Squat Jerk",
       "aliases": [
+        "Толчок штанги с приёмом в глубокий присед",
+        "Squat jerk",
+        "Приседания с толчком",
         "Силовые упражнения",
         "strength"
       ],
@@ -28674,6 +28693,9 @@
       "name": "Squat with Bands",
       "englishName": "Squat with Bands",
       "aliases": [
+        "Приседания со штангой и резинками",
+        "Banded barbell squat",
+        "Приседания с лентами",
         "Пауэрлифтинг",
         "powerlifting"
       ],
@@ -28704,7 +28726,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-back-squat",
+        "title": "Barbell back squat"
+      }
     },
     {
       "id": "930a0069-9fe0-5d12-bab1-e5e3aa43614f",
@@ -28712,6 +28738,9 @@
       "name": "Squat with Chains",
       "englishName": "Squat with Chains",
       "aliases": [
+        "Приседания со штангой и цепями",
+        "Barbell squat with chains",
+        "Приседания с цепями",
         "Пауэрлифтинг",
         "powerlifting"
       ],
@@ -28742,7 +28771,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "barbell-back-squat",
+        "title": "Barbell back squat"
+      }
     },
     {
       "id": "ee4d2697-6f74-5e90-b569-82573f26af83",
@@ -28750,6 +28783,9 @@
       "name": "Squat with Plate Movers",
       "englishName": "Squat with Plate Movers",
       "aliases": [
+        "Приседания с перемещением блина ногой",
+        "Squat with plate movers",
+        "Приседания с движениями тарелок",
         "Силовые упражнения",
         "strength"
       ],
@@ -28792,6 +28828,9 @@
       "name": "Squats - With Bands",
       "englishName": "Squats - With Bands",
       "aliases": [
+        "Приседания с эспандером",
+        "Band squat",
+        "Приседания – с лентами",
         "Силовые упражнения",
         "strength"
       ],
@@ -28830,6 +28869,9 @@
       "name": "Stairmaster",
       "englishName": "Stairmaster",
       "aliases": [
+        "Степпер",
+        "Stair climber",
+        "Лестничный мастер",
         "Кардио",
         "cardio"
       ],
@@ -28865,6 +28907,8 @@
       "name": "Standing Alternating Dumbbell Press",
       "englishName": "Standing Alternating Dumbbell Press",
       "aliases": [
+        "Попеременный жим гантелей над головой стоя",
+        "Попеременный жим гантелей стоя",
         "Силовые упражнения",
         "strength"
       ],
@@ -28902,6 +28946,9 @@
       "name": "Standing Barbell Calf Raise",
       "englishName": "Standing Barbell Calf Raise",
       "aliases": [
+        "Подъём на икры со штангой стоя",
+        "Standing barbell calf raise",
+        "Подъем штанги на носки стоя",
         "Силовые упражнения",
         "strength"
       ],
@@ -28939,6 +28986,9 @@
       "name": "Standing Barbell Press Behind Neck",
       "englishName": "Standing Barbell Press Behind Neck",
       "aliases": [
+        "Жим штанги стоя из-за головы",
+        "Behind-the-neck barbell press",
+        "Жим штанги стоя из-за шеи",
         "Силовые упражнения",
         "strength"
       ],
@@ -28978,6 +29028,9 @@
       "name": "Standing Bent-Over One-Arm Dumbbell Triceps Extension",
       "englishName": "Standing Bent-Over One-Arm Dumbbell Triceps Extension",
       "aliases": [
+        "Кикбэк с гантелью одной рукой стоя",
+        "Standing one-arm dumbbell kickback",
+        "Разгибание одной руки с гантелью на трицепс в наклоне стоя",
         "Силовые упражнения",
         "strength"
       ],
@@ -29010,7 +29063,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-dumbbell-kickback",
+        "title": "Standing bent-over dumbbell triceps kickback"
+      }
     },
     {
       "id": "503d099c-6c7e-5508-949b-a9324e70af02",
@@ -29018,6 +29075,9 @@
       "name": "Standing Bent-Over Two-Arm Dumbbell Triceps Extension",
       "englishName": "Standing Bent-Over Two-Arm Dumbbell Triceps Extension",
       "aliases": [
+        "Кикбэк с двумя гантелями стоя",
+        "Standing two-arm dumbbell kickback",
+        "Разгибание трицепса с гантелью двумя руками стоя в наклоне",
         "Силовые упражнения",
         "strength"
       ],
@@ -29046,7 +29106,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-dumbbell-kickback",
+        "title": "Standing bent-over dumbbell triceps kickback"
+      }
     },
     {
       "id": "5d805d6d-335d-535f-bd77-dbed3be55827",
@@ -29054,6 +29118,8 @@
       "name": "Standing Biceps Stretch",
       "englishName": "Standing Biceps Stretch",
       "aliases": [
+        "Растяжка бицепсов с соединёнными руками за спиной",
+        "Растяжка бицепса стоя",
         "Растяжка",
         "stretching"
       ],

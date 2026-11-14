@@ -468,5 +468,24 @@
       "Snatch_Deadlift",
       "Snatch_Pull"
     ]
+  },
+  "barbell-back-squat": {
+    "ru": "Приседания со штангой на спине",
+    "en": "Barbell back squat",
+    "members": [
+      "Barbell_Squat",
+      "Narrow_Stance_Squats",
+      "Speed_Squats",
+      "Squat_with_Bands",
+      "Squat_with_Chains"
+    ]
+  },
+  "standing-dumbbell-kickback": {
+    "ru": "Разгибание рук с гантелями в наклоне стоя",
+    "en": "Standing bent-over dumbbell triceps kickback",
+    "members": [
+      "Standing_Bent-Over_One-Arm_Dumbbell_Triceps_Extension",
+      "Standing_Bent-Over_Two-Arm_Dumbbell_Triceps_Extension"
+    ]
   }
 }
