@@ -796,5 +796,50 @@
     "techniqueVideoURL": "https://www.youtube.com/watch?v=Q7dTbE4kRUY"
   },
   "Seated_One-arm_Cable_Pulley_Rows": {},
-  "Seated_Overhead_Stretch": {}
+  "Seated_Overhead_Stretch": {},
+  "Seated_Two-Arm_Palms-Up_Low-Pulley_Wrist_Curl": {},
+  "See-Saw_Press_Alternating_Side_Press": {},
+  "Shotgun_Row": {},
+  "Shoulder_Circles": {},
+  "Shoulder_Press_-_With_Bands": {},
+  "Shoulder_Raise": {},
+  "Shoulder_Stretch": {},
+  "Side-Lying_Floor_Stretch": {},
+  "Side_Bridge": {
+    "englishSteps": [
+      "Lie on your side with your forearm on the floor and your legs extended.",
+      "Raise your hips until your body forms a straight line from shoulders to feet.",
+      "Lower your hips with control and repeat, then switch sides."
+    ],
+    "instructionSourceURL": "https://www.catalystathletics.com/exercise/499/Side-Plank-Lift/"
+  },
+  "Side_Hop-Sprint": {},
+  "Side_Jackknife": {
+    "englishSteps": [
+      "Lie on your side with your legs extended and your top hand behind your head.",
+      "Raise your top leg and curl your upper body toward it at the same time.",
+      "Lower under control and repeat, then switch sides."
+    ],
+    "instructionSourceURL": "https://www.skimble.com/exercises/21818-side-jackknife-how-to-do-exercise"
+  },
+  "Side_Laterals_to_Front_Raise": {
+    "englishSteps": [
+      "Stand upright with a dumbbell in each hand at your sides.",
+      "Raise your slightly bent arms out to the sides to shoulder height.",
+      "Move the dumbbells forward at shoulder height, then lower them under control."
+    ],
+    "instructionSourceURL": "https://www.dynperformance.com/en/exercises/fedb-side-laterals-to-front-raise",
+    "instructionCorrectionReason": "The original title specifies a lateral-to-front raise, but the first raise in the upstream instructions incorrectly says to raise forward.",
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=bzI-XoUgQMU"
+  },
+  "Side_Leg_Raises": {
+    "primaryMuscles": [
+      "abductors"
+    ],
+    "secondaryMuscles": [
+      "glutes"
+    ]
+  },
+  "Side_Lying_Groin_Stretch": {},
+  "Side_Neck_Stretch": {}
 }

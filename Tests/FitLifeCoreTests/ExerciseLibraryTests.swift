@@ -117,10 +117,31 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
       "Kettlebell_Halo", "Kettlebell_Halo_With_Overhead_Extension",
       "Kettlebell_Overhead_Triceps_Extension",
     ])
-  #expect(
-    Set(ExerciseLibrary.entries.filter { $0.techniqueUnavailable == true }.map(\.sourceID)) == [
-      "Side_Bridge", "Side_Jackknife",
-    ])
+  #expect(ExerciseLibrary.entries.allSatisfy { $0.techniqueUnavailable == false })
+}
+
+@Test func sideExercisesHaveTechniqueAndCorrectMuscleMapping() throws {
+  for language in [AppLanguage.russian, .english] {
+    for sourceID in ["Side_Bridge", "Side_Jackknife"] {
+      let entry = try #require(
+        ExerciseLibrary.entries(language: language).first { $0.sourceID == sourceID })
+      #expect(entry.steps.count >= 3)
+      #expect(entry.techniqueUnavailable == false)
+    }
+    let legRaise = try #require(
+      ExerciseLibrary.entries(language: language).first { $0.sourceID == "Side_Leg_Raises" })
+    #expect(legRaise.primaryMuscleIDs == [.abductors])
+  }
+  let russian = try #require(
+    ExerciseLibrary.entries(language: .russian).first {
+      $0.sourceID == "Side_Laterals_to_Front_Raise"
+    })
+  let english = try #require(
+    ExerciseLibrary.entries(language: .english).first {
+      $0.sourceID == "Side_Laterals_to_Front_Raise"
+    })
+  #expect(russian.steps.contains { $0.contains("через стороны") })
+  #expect(english.steps.contains { $0.contains("out to the sides") })
 }
 
 @Test func oneArmKettlebellSwingHasTechniqueInBothLanguages() throws {

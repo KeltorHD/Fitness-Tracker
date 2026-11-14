@@ -25571,6 +25571,8 @@
       "name": "Seated Two-Arm Palms-Up Low-Pulley Wrist Curl",
       "englishName": "Seated Two-Arm Palms-Up Low-Pulley Wrist Curl",
       "aliases": [
+        "Сгибание запястий на нижнем блоке сидя",
+        "Сгибание запястий двумя руками вверх с низким блоком сидя",
         "Силовые упражнения",
         "strength"
       ],
@@ -25608,6 +25610,9 @@
       "name": "See-Saw Press (Alternating Side Press)",
       "englishName": "See-Saw Press (Alternating Side Press)",
       "aliases": [
+        "Жим гантелей «качели»",
+        "See-saw press",
+        "See-Saw Press (попеременный боковой пресс)",
         "Силовые упражнения",
         "strength"
       ],
@@ -25644,6 +25649,9 @@
       "name": "Shotgun Row",
       "englishName": "Shotgun Row",
       "aliases": [
+        "Тяга блока одной рукой стоя",
+        "Shotgun row",
+        "Дробовик Роу",
         "Силовые упражнения",
         "strength"
       ],
@@ -25679,6 +25687,9 @@
       "name": "Shoulder Circles",
       "englishName": "Shoulder Circles",
       "aliases": [
+        "Вращение плечами",
+        "Shoulder circles",
+        "Плечевые круги",
         "Растяжка",
         "stretching"
       ],
@@ -25711,6 +25722,9 @@
       "name": "Shoulder Press - With Bands",
       "englishName": "Shoulder Press - With Bands",
       "aliases": [
+        "Жим резинки над головой стоя",
+        "Band shoulder press",
+        "Жим от плеч – с лентами",
         "Силовые упражнения",
         "strength"
       ],
@@ -25747,6 +25761,9 @@
       "name": "Shoulder Raise",
       "englishName": "Shoulder Raise",
       "aliases": [
+        "Шраги без веса",
+        "Shoulder raise",
+        "Поднятие плеч",
         "Растяжка",
         "stretching"
       ],
@@ -25778,6 +25795,8 @@
       "name": "Shoulder Stretch",
       "englishName": "Shoulder Stretch",
       "aliases": [
+        "Растяжка задней части плеча",
+        "Растяжка плеч",
         "Растяжка",
         "stretching"
       ],
@@ -25807,6 +25826,8 @@
       "name": "Side-Lying Floor Stretch",
       "englishName": "Side-Lying Floor Stretch",
       "aliases": [
+        "Боковая растяжка лёжа",
+        "Растяжка на полу лежа на боку",
         "Растяжка",
         "stretching"
       ],
@@ -25837,6 +25858,9 @@
       "name": "Side Bridge",
       "englishName": "Side Bridge",
       "aliases": [
+        "Боковой мост",
+        "Side bridge",
+        "Side plank lift",
         "Силовые упражнения",
         "strength"
       ],
@@ -25853,12 +25877,16 @@
         "obliques",
         "transversusAbdominis"
       ],
-      "steps": [],
+      "steps": [
+        "Lie on your side with your forearm on the floor and your legs extended.",
+        "Raise your hips until your body forms a straight line from shoulders to feet.",
+        "Lower your hips with control and repeat, then switch sides."
+      ],
       "images": [
         "Side_Bridge/0.jpg",
         "Side_Bridge/1.jpg"
       ],
-      "techniqueUnavailable": true,
+      "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
       "translationAutomatic": false
@@ -25869,6 +25897,9 @@
       "name": "Side Hop-Sprint",
       "englishName": "Side Hop-Sprint",
       "aliases": [
+        "Прыжки в сторону с последующим спринтом",
+        "Side hop-sprint",
+        "Боковой прыжок-спринт",
         "Плиометрика",
         "plyometrics"
       ],
@@ -25905,6 +25936,8 @@
       "name": "Side Jackknife",
       "englishName": "Side Jackknife",
       "aliases": [
+        "Боковой складной нож",
+        "Side jackknife",
         "Силовые упражнения",
         "strength"
       ],
@@ -25918,12 +25951,16 @@
       "trainingRegions": [
         "obliques"
       ],
-      "steps": [],
+      "steps": [
+        "Lie on your side with your legs extended and your top hand behind your head.",
+        "Raise your top leg and curl your upper body toward it at the same time.",
+        "Lower under control and repeat, then switch sides."
+      ],
       "images": [
         "Side_Jackknife/0.jpg",
         "Side_Jackknife/1.jpg"
       ],
-      "techniqueUnavailable": true,
+      "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
       "translationAutomatic": false
@@ -25934,6 +25971,9 @@
       "name": "Side Laterals to Front Raise",
       "englishName": "Side Laterals to Front Raise",
       "aliases": [
+        "Махи гантелями в стороны с переводом вперёд",
+        "Lateral to front raise",
+        "Боковые повороты к переднему подъему",
         "Силовые упражнения",
         "strength"
       ],
@@ -25950,12 +25990,9 @@
         "deltoidLateral"
       ],
       "steps": [
-        "In a standing position, hold a pair of dumbbells at your side. This will be your starting position.",
-        "Keeping your elbows slightly bent, raise the weights directly in front of you to shoulder height, avoiding any swinging or cheating.",
-        "At the top of the exercise move the weights out in front of you, keeping your arms extended.",
-        "Lower the weights with a controlled motion.",
-        "On the next repetition, raise the weights in front of you to shoulder height before moving the weights laterally to your sides.",
-        "Lower the weights to the starting position."
+        "Stand upright with a dumbbell in each hand at your sides.",
+        "Raise your slightly bent arms out to the sides to shoulder height.",
+        "Move the dumbbells forward at shoulder height, then lower them under control."
       ],
       "images": [
         "Side_Laterals_to_Front_Raise/0.jpg",
@@ -25964,7 +26001,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=bzI-XoUgQMU"
     },
     {
       "id": "048446ad-886f-5f13-874e-973774e6cbed",
@@ -25972,6 +26010,9 @@
       "name": "Side Leg Raises",
       "englishName": "Side Leg Raises",
       "aliases": [
+        "Отведение ноги в сторону стоя",
+        "Standing side leg raise",
+        "Боковые подъемы ног",
         "Растяжка",
         "stretching"
       ],
@@ -25979,9 +26020,11 @@
       "equipment": "body only",
       "level": "beginner",
       "primaryMuscles": [
-        "adductors"
+        "abductors"
       ],
-      "secondaryMuscles": [],
+      "secondaryMuscles": [
+        "glutes"
+      ],
       "trainingRegions": [],
       "steps": [
         "Stand next to a chair, which you may hold onto as a support. Stand on one leg. This will be your starting position.",
@@ -26003,6 +26046,8 @@
       "name": "Side Lying Groin Stretch",
       "englishName": "Side Lying Groin Stretch",
       "aliases": [
+        "Растяжка приводящих мышц лёжа на боку",
+        "Растяжка паха на боку лежа",
         "Растяжка",
         "stretching"
       ],
@@ -26036,6 +26081,8 @@
       "name": "Side Neck Stretch",
       "englishName": "Side Neck Stretch",
       "aliases": [
+        "Наклон головы к плечу для растяжки шеи",
+        "Боковая растяжка шеи",
         "Растяжка",
         "stretching"
       ],
