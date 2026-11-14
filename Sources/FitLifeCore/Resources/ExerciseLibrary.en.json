@@ -29153,6 +29153,9 @@
       "name": "Standing Bradford Press",
       "englishName": "Standing Bradford Press",
       "aliases": [
+        "Попеременный жим штанги перед головой и из-за головы",
+        "Bradford press",
+        "Стэндинг Брэдфорд Пресс",
         "Силовые упражнения",
         "strength"
       ],
@@ -29189,6 +29192,9 @@
       "name": "Standing Cable Chest Press",
       "englishName": "Standing Cable Chest Press",
       "aliases": [
+        "Жим в кроссовере от груди стоя",
+        "Standing cable chest press",
+        "Жим от груди стоя на тросе",
         "Силовые упражнения",
         "strength"
       ],
@@ -29226,6 +29232,9 @@
       "name": "Standing Cable Lift",
       "englishName": "Standing Cable Lift",
       "aliases": [
+        "Подъём рукоятки блока по диагонали",
+        "Standing cable lift",
+        "Диагональная тяга нижнего блока стоя",
         "Силовые упражнения",
         "strength"
       ],
@@ -29256,7 +29265,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "cable-wood-chop",
+        "title": "Standing cable diagonal lift and chop"
+      }
     },
     {
       "id": "224024dd-7173-598e-a830-e7c174369913",
@@ -29264,6 +29277,9 @@
       "name": "Standing Cable Wood Chop",
       "englishName": "Standing Cable Wood Chop",
       "aliases": [
+        "Диагональная тяга верхнего блока сверху вниз",
+        "Cable wood chop",
+        "Дровосек с верхним блоком стоя",
         "Силовые упражнения",
         "strength"
       ],
@@ -29296,7 +29312,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "cable-wood-chop",
+        "title": "Standing cable diagonal lift and chop"
+      }
     },
     {
       "id": "b192ff61-cd87-5b96-b0ea-32e17b6974db",
@@ -29304,6 +29324,8 @@
       "name": "Standing Concentration Curl",
       "englishName": "Standing Concentration Curl",
       "aliases": [
+        "Концентрированный подъём гантели на бицепс стоя",
+        "Концентрированное сгибание рук стоя",
         "Силовые упражнения",
         "strength"
       ],
@@ -29341,6 +29363,9 @@
       "name": "Standing Dumbbell Calf Raise",
       "englishName": "Standing Dumbbell Calf Raise",
       "aliases": [
+        "Подъём на икры с гантелями стоя",
+        "Standing dumbbell calf raise",
+        "Подъем гантели на носки стоя",
         "Силовые упражнения",
         "strength"
       ],
@@ -29376,6 +29401,9 @@
       "name": "Standing Dumbbell Reverse Curl",
       "englishName": "Standing Dumbbell Reverse Curl",
       "aliases": [
+        "Обратные сгибания с гантелями стоя",
+        "Dumbbell reverse curl",
+        "Обратное сгибание рук с гантелью стоя",
         "Силовые упражнения",
         "strength"
       ],
@@ -29413,6 +29441,8 @@
       "name": "Standing Dumbbell Straight-Arm Front Delt Raise Above Head",
       "englishName": "Standing Dumbbell Straight-Arm Front Delt Raise Above Head",
       "aliases": [
+        "Фронтальный подъём гантелей над головой",
+        "Гантель стоя, подъем передних дельт над головой",
         "Силовые упражнения",
         "strength"
       ],
@@ -29440,7 +29470,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "front-raise",
+        "title": "Front raise"
+      }
     },
     {
       "id": "b9175790-cb1e-57a8-9929-20ab1960a439",
@@ -29448,6 +29482,8 @@
       "name": "Standing Dumbbell Triceps Extension",
       "englishName": "Standing Dumbbell Triceps Extension",
       "aliases": [
+        "Французский жим гантели двумя руками стоя",
+        "Разгибание трицепса с гантелью стоя",
         "Силовые упражнения",
         "strength"
       ],
@@ -29477,7 +29513,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-overhead-triceps-extension",
+        "title": "Standing overhead triceps extension"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=7h3lG2WnLXg"
     },
     {
       "id": "922ae66f-70f0-5b52-a26a-7b096a80cab9",
@@ -29485,6 +29526,9 @@
       "name": "Standing Dumbbell Upright Row",
       "englishName": "Standing Dumbbell Upright Row",
       "aliases": [
+        "Тяга гантелей вдоль корпуса к подбородку",
+        "Dumbbell upright row",
+        "Тяга гантелей в вертикальном положении стоя",
         "Силовые упражнения",
         "strength"
       ],
@@ -29512,7 +29556,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "standing-dumbbell-upright-row",
+        "title": "Standing dumbbell upright row"
+      }
     },
     {
       "id": "62499929-1959-50bc-8843-aa573f7bb941",
@@ -29520,6 +29568,8 @@
       "name": "Standing Elevated Quad Stretch",
       "englishName": "Standing Elevated Quad Stretch",
       "aliases": [
+        "Растяжка квадрицепса стоя с задней ногой на скамье",
+        "Растяжка квадрицепсов стоя",
         "Растяжка",
         "stretching"
       ],
@@ -29532,9 +29582,9 @@
       "secondaryMuscles": [],
       "trainingRegions": [],
       "steps": [
-        "Start by standing with your back about two to three feet away from a bench or step.",
-        "Lift one leg behind you and rest your foot on the step,either on your instep or the ball of your foot, whichever you find most comfortable.",
-        "Keep your supporting knee slightly bent and avoid letting that knee extend out beyond your toes. Switch sides."
+        "Stand with your back to a stable bench and rest one foot on it behind you.",
+        "Keep the supporting knee slightly bent and your torso upright.",
+        "Hold a comfortable stretch in the front of the raised leg, then switch sides."
       ],
       "images": [
         "Standing_Elevated_Quad_Stretch/0.jpg",
@@ -29551,6 +29601,8 @@
       "name": "Standing Front Barbell Raise Over Head",
       "englishName": "Standing Front Barbell Raise Over Head",
       "aliases": [
+        "Фронтальный подъём штанги над головой",
+        "Подъем штанги спереди стоя над головой",
         "Силовые упражнения",
         "strength"
       ],
@@ -29578,7 +29630,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "front-raise",
+        "title": "Front raise"
+      }
     },
     {
       "id": "f8f2471f-473c-549e-9b84-97817d3b4c6b",
@@ -29586,6 +29642,8 @@
       "name": "Standing Gastrocnemius Calf Stretch",
       "englishName": "Standing Gastrocnemius Calf Stretch",
       "aliases": [
+        "Растяжка икроножной мышцы с прямой ногой на платформе",
+        "Растяжка икроножных мышц стоя",
         "Растяжка",
         "stretching"
       ],
@@ -29619,6 +29677,8 @@
       "name": "Standing Hamstring and Calf Stretch",
       "englishName": "Standing Hamstring and Calf Stretch",
       "aliases": [
+        "Растяжка ноги стоя с лентой",
+        "Растяжка подколенных сухожилий и икр стоя",
         "Растяжка",
         "stretching"
       ],
@@ -29650,6 +29710,9 @@
       "name": "Standing Hip Circles",
       "englishName": "Standing Hip Circles",
       "aliases": [
+        "Вращение бедром стоя с опорой",
+        "Standing hip circles",
+        "Круги бедрами стоя",
         "Растяжка",
         "stretching"
       ],

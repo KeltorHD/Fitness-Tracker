@@ -553,6 +553,7 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
     ["Romanian_Deadlift", "Romanian_Deadlift_from_Deficit"],
     ["Sled_Push", "Prowler_Sprint"],
     ["Smith_Machine_Upright_Row", "Smith_Machine_One-Arm_Upright_Row"],
+    ["Standing_Cable_Lift", "Standing_Cable_Wood_Chop"],
     [
       "Barbell_Squat", "Narrow_Stance_Squats", "Speed_Squats", "Squat_with_Bands",
       "Squat_with_Chains",
@@ -668,9 +669,9 @@ func malformedImportedLibraryIsRejected(_ mutation: String) throws {
   #expect(entry.generatedMedia != nil)
   #expect(Set(variants.map(\.sourceID)) == [
     "Kettlebell_Overhead_Triceps_Extension", "Dumbbell_One-Arm_Triceps_Extension",
-    "Speed_Band_Overhead_Triceps",
+    "Speed_Band_Overhead_Triceps", "Standing_Dumbbell_Triceps_Extension",
   ])
-  #expect(Set(variants.map(\.id)).count == 3)
+  #expect(Set(variants.map(\.id)).count == 4)
 }
 
 @Test func kneeRaiseInstructionsMatchTheSourceNameAndPhotosInBothLanguages() throws {

@@ -145,7 +145,8 @@
     "en": "Standing dumbbell upright row",
     "members": [
       "Dumbbell_Raise",
-      "Dumbbell_One-Arm_Upright_Row"
+      "Dumbbell_One-Arm_Upright_Row",
+      "Standing_Dumbbell_Upright_Row"
     ]
   },
   "exercise-ball-crunch": {
@@ -187,7 +188,9 @@
       "Front_Incline_Dumbbell_Raise",
       "Front_Cable_Raise",
       "Front_Plate_Raise",
-      "Single_Dumbbell_Raise"
+      "Single_Dumbbell_Raise",
+      "Standing_Dumbbell_Straight-Arm_Front_Delt_Raise_Above_Head",
+      "Standing_Front_Barbell_Raise_Over_Head"
     ]
   },
   "front-squat": {
@@ -279,7 +282,8 @@
     "members": [
       "Dumbbell_One-Arm_Triceps_Extension",
       "Kettlebell_Overhead_Triceps_Extension",
-      "Speed_Band_Overhead_Triceps"
+      "Speed_Band_Overhead_Triceps",
+      "Standing_Dumbbell_Triceps_Extension"
     ]
   },
   "kettlebell-windmill": {
@@ -486,6 +490,14 @@
     "members": [
       "Standing_Bent-Over_One-Arm_Dumbbell_Triceps_Extension",
       "Standing_Bent-Over_Two-Arm_Dumbbell_Triceps_Extension"
+    ]
+  },
+  "cable-wood-chop": {
+    "ru": "Диагональная тяга блока стоя",
+    "en": "Standing cable diagonal lift and chop",
+    "members": [
+      "Standing_Cable_Lift",
+      "Standing_Cable_Wood_Chop"
     ]
   }
 }

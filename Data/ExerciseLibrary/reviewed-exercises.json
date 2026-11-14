@@ -966,5 +966,30 @@
   "Standing_Barbell_Press_Behind_Neck": {},
   "Standing_Bent-Over_One-Arm_Dumbbell_Triceps_Extension": {},
   "Standing_Bent-Over_Two-Arm_Dumbbell_Triceps_Extension": {},
-  "Standing_Biceps_Stretch": {}
+  "Standing_Biceps_Stretch": {},
+  "Standing_Bradford_Press": {},
+  "Standing_Cable_Chest_Press": {},
+  "Standing_Cable_Lift": {},
+  "Standing_Cable_Wood_Chop": {},
+  "Standing_Concentration_Curl": {},
+  "Standing_Dumbbell_Calf_Raise": {},
+  "Standing_Dumbbell_Reverse_Curl": {},
+  "Standing_Dumbbell_Straight-Arm_Front_Delt_Raise_Above_Head": {},
+  "Standing_Dumbbell_Triceps_Extension": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=7h3lG2WnLXg"
+  },
+  "Standing_Dumbbell_Upright_Row": {},
+  "Standing_Elevated_Quad_Stretch": {
+    "englishSteps": [
+      "Stand with your back to a stable bench and rest one foot on it behind you.",
+      "Keep the supporting knee slightly bent and your torso upright.",
+      "Hold a comfortable stretch in the front of the raised leg, then switch sides."
+    ],
+    "instructionSourceURL": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4262933/",
+    "instructionCorrectionReason": "The source gives an absolute instruction to prevent the knee moving beyond the toes; forward knee travel is not inherently incorrect."
+  },
+  "Standing_Front_Barbell_Raise_Over_Head": {},
+  "Standing_Gastrocnemius_Calf_Stretch": {},
+  "Standing_Hamstring_and_Calf_Stretch": {},
+  "Standing_Hip_Circles": {}
 }
