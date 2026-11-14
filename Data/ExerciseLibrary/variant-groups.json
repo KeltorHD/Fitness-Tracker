@@ -786,5 +786,21 @@
       "Front_Box_Jump",
       "Box_Jump_Multiple_Response"
     ]
+  },
+  "kettlebell-halo": {
+    "ru": "Гало с гирей",
+    "en": "Kettlebell halo",
+    "members": [
+      "Kettlebell_Halo",
+      "Kettlebell_Halo_With_Overhead_Extension"
+    ]
+  },
+  "turkish-get-up": {
+    "ru": "Турецкий подъём с гирей",
+    "en": "Kettlebell Turkish get-up",
+    "members": [
+      "Kettlebell_Turkish_Get-Up_Lunge_style",
+      "Kettlebell_Turkish_Get-Up_Squat_style"
+    ]
   }
 }

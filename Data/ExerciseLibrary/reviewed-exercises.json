@@ -1390,5 +1390,31 @@
     ],
     "techniqueVideoURL": "https://www.youtube.com/watch?v=-bnJGikRGsM"
   },
-  "Double_Leg_Butt_Kick": {}
+  "Double_Leg_Butt_Kick": {},
+  "Kettlebell_Halo": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=lFLg0nPSP8k"
+  },
+  "Kettlebell_Halo_With_Overhead_Extension": {},
+  "Kettlebell_Hang_Clean": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=lliRf_d6MDc"
+  },
+  "Kettlebell_Pass_Between_The_Legs": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=xpHWMC2_e3c"
+  },
+  "Kettlebell_Thruster": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=L-JGYn4xUF8"
+  },
+  "Kettlebell_Turkish_Get-Up_Lunge_style": {
+    "techniqueVideoURL": "https://www.youtube.com/watch?v=0bWRPC49-KI"
+  },
+  "Kettlebell_Turkish_Get-Up_Squat_style": {
+    "englishSteps": [
+      "Lie on your back, hold the kettlebell above your shoulder with a straight arm and bend the knee on the same side.",
+      "Use your free hand to raise your torso, transfer your weight to your feet and move into a squat.",
+      "Stand up from the squat while keeping the kettlebell above your shoulder.",
+      "Reverse the sequence to return to the floor and repeat on the other side."
+    ],
+    "instructionSourceURL": "https://fitwill.app/ru/exercise/11497/kettlebell-turkish-get-up-squat-style/",
+    "instructionCorrectionReason": "The original squat-style name specifies a squat, but the original instructions incorrectly call for a lunge."
+  }
 }

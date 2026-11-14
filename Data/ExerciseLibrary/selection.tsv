@@ -413,20 +413,20 @@ Keg_Load	Загрузка бочонка	Силовой экстрим;strongman
 Kettlebell_Arnold_Press	Жим Арнольда одной гирей стоя	Жим гири над головой с поворотом кисти;Kettlebell Arnold Press
 Kettlebell_Dead_Clean	Взятие гири на грудь с пола	Подъём гири с пола к плечу;Kettlebell Dead Clean
 Kettlebell_Figure_8	Восьмёрка с гирей	Передача гири вокруг ног по траектории восьмёрки;Kettlebell Figure 8
-Kettlebell_Halo	Гиря Гало	Силовые упражнения;strength
-Kettlebell_Halo_With_Overhead_Extension	Гиря Halo с разгибанием над головой	Силовые упражнения;strength
-Kettlebell_Hang_Clean	Гири висят на чистоте	Силовые упражнения;strength
+Kettlebell_Halo	Гало с гирей	Вращение гири вокруг головы;Kettlebell Halo
+Kettlebell_Halo_With_Overhead_Extension	Гало с гирей и разгибанием рук из-за головы	Вращение гири вокруг головы с разгибанием рук;Kettlebell Halo With Overhead Extension
+Kettlebell_Hang_Clean	Взятие гири на грудь с виса	Подъём гири к плечу с виса;Kettlebell Hang Clean
 Kettlebell_One-Legged_Deadlift	Становая тяга с гирей на одной ноге	Наклон с гирей стоя на одной ноге;Kettlebell One-Legged Deadlift
 Kettlebell_Overhead_Triceps_Extension	Разгибание рук с гирей из-за головы стоя	Французский жим гири двумя руками стоя;Kettlebell Overhead Triceps Extension
-Kettlebell_Pass_Between_The_Legs	Передача гири между ног	Силовые упражнения;strength
+Kettlebell_Pass_Between_The_Legs	Восьмёрка с гирей	Передача гири между ног по восьмёрке;Kettlebell Pass Between The Legs
 Kettlebell_Pirate_Ships	Пиратский корабль с гирей	Махи гирей из стороны в сторону с поворотом корпуса;Kettlebell Pirate Ships
 Kettlebell_Pistol_Squat	Приседание «пистолетик» с гирей	Приседание на одной ноге с гирей перед собой;Kettlebell Pistol Squat
 Kettlebell_Seated_Press	Жим одной гири над головой сидя на полу	Жим гири одной рукой сидя на полу;Kettlebell Seated Press
 Kettlebell_Seesaw_Press	Попеременный жим двух гирь над головой стоя	Жим гирь попеременно от плеч стоя;Kettlebell Seesaw Press
 Kettlebell_Sumo_High_Pull	Тяга гири к подбородку из стойки сумо	Высокая тяга гири двумя руками в широкой стойке;Kettlebell Sumo High Pull
-Kettlebell_Thruster	Гиря подруливающего устройства	Силовые упражнения;strength
-Kettlebell_Turkish_Get-Up_Lunge_style	Турецкий подъем с гирями (стиль выпадов)	Силовые упражнения;strength
-Kettlebell_Turkish_Get-Up_Squat_style	Турецкие подъемы с гирями (стиль приседаний)	Силовые упражнения;strength
+Kettlebell_Thruster	Трастеры с двумя гирями	Приседание с жимом двух гирь над головой;Kettlebell Thruster
+Kettlebell_Turkish_Get-Up_Lunge_style	Турецкий подъём с гирей через выпад	Подъём с пола с гирей через выпад;Turkish Get-Up Lunge Style
+Kettlebell_Turkish_Get-Up_Squat_style	Турецкий подъём с гирей через присед	Подъём с пола с гирей через присед;Turkish Get-Up Squat Style
 Kettlebell_Windmill	Мельница с гирей	Наклон с гирей над головой и касанием пола свободной рукой;Kettlebell Windmill
 Kipping_Muscle_Up	Поднятие мышц вверх	Силовые упражнения;strength
 Knee_Across_The_Body	Растяжка ягодиц лёжа с приведением колена через корпус	Поворот таза лёжа с согнутой ногой;Knee Across The Body

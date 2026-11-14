@@ -15940,8 +15940,8 @@
       "name": "Kettlebell Halo",
       "englishName": "Kettlebell Halo",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Вращение гири вокруг головы",
+        "Kettlebell Halo"
       ],
       "group": "shoulders",
       "equipment": "kettlebells",
@@ -15981,7 +15981,12 @@
         ],
         "frameDuration": 0.25
       },
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "kettlebell-halo",
+        "title": "Kettlebell halo"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=lFLg0nPSP8k"
     },
     {
       "id": "ee7114e8-ab1c-5328-a41c-21230df9b1b8",
@@ -15989,8 +15994,8 @@
       "name": "Kettlebell Halo with Overhead Extension",
       "englishName": "Kettlebell Halo with Overhead Extension",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Вращение гири вокруг головы с разгибанием рук",
+        "Kettlebell Halo With Overhead Extension"
       ],
       "group": "shoulders",
       "equipment": "kettlebells",
@@ -16031,7 +16036,11 @@
         ],
         "frameDuration": 0.25
       },
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "kettlebell-halo",
+        "title": "Kettlebell halo"
+      }
     },
     {
       "id": "ea8319fb-89fd-5f3a-a8bb-058c30025b18",
@@ -16039,8 +16048,8 @@
       "name": "Kettlebell Hang Clean",
       "englishName": "Kettlebell Hang Clean",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подъём гири к плечу с виса",
+        "Kettlebell Hang Clean"
       ],
       "group": "legs",
       "equipment": "kettlebells",
@@ -16068,7 +16077,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=lliRf_d6MDc"
     },
     {
       "id": "541588dd-1446-5484-a3ed-35be94ab8e30",
@@ -16165,8 +16175,8 @@
       "name": "Kettlebell Pass Between The Legs",
       "englishName": "Kettlebell Pass Between The Legs",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Передача гири между ног по восьмёрке",
+        "Kettlebell Pass Between The Legs"
       ],
       "group": "core",
       "equipment": "kettlebells",
@@ -16191,7 +16201,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=xpHWMC2_e3c"
     },
     {
       "id": "4f0532f6-bd37-54bd-8d53-bc3bc4f5ec11",
@@ -16372,8 +16383,8 @@
       "name": "Kettlebell Thruster",
       "englishName": "Kettlebell Thruster",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Приседание с жимом двух гирь над головой",
+        "Kettlebell Thruster"
       ],
       "group": "shoulders",
       "equipment": "kettlebells",
@@ -16399,7 +16410,8 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=L-JGYn4xUF8"
     },
     {
       "id": "cac53236-a238-59af-b51a-22ed61cb5456",
@@ -16407,8 +16419,8 @@
       "name": "Kettlebell Turkish Get-Up (Lunge style)",
       "englishName": "Kettlebell Turkish Get-Up (Lunge style)",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подъём с пола с гирей через выпад",
+        "Turkish Get-Up Lunge Style"
       ],
       "group": "shoulders",
       "equipment": "kettlebells",
@@ -16435,7 +16447,12 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "turkish-get-up",
+        "title": "Kettlebell Turkish get-up"
+      },
+      "techniqueVideoURL": "https://www.youtube.com/watch?v=0bWRPC49-KI"
     },
     {
       "id": "32ee47a7-604b-5ba5-85ab-f83f4fca771c",
@@ -16443,8 +16460,8 @@
       "name": "Kettlebell Turkish Get-Up (Squat style)",
       "englishName": "Kettlebell Turkish Get-Up (Squat style)",
       "aliases": [
-        "Силовые упражнения",
-        "strength"
+        "Подъём с пола с гирей через присед",
+        "Turkish Get-Up Squat Style"
       ],
       "group": "shoulders",
       "equipment": "kettlebells",
@@ -16461,9 +16478,10 @@
       ],
       "trainingRegions": [],
       "steps": [
-        "Lie on your back on the floor and press a kettlebell to the top position by extending the elbow. Bend the knee on the same side as the kettlebell.",
-        "Keeping the kettlebell locked out at all times, pivot to the opposite side and use your non- working arm to assist you in driving forward to the lunge position.",
-        "Using your free hand, push yourself to a seated position, then progressing to your feet. While looking up at the kettlebell, slowly stand up. Reverse the motion back to the starting position and repeat."
+        "Lie on your back, hold the kettlebell above your shoulder with a straight arm and bend the knee on the same side.",
+        "Use your free hand to raise your torso, transfer your weight to your feet and move into a squat.",
+        "Stand up from the squat while keeping the kettlebell above your shoulder.",
+        "Reverse the sequence to return to the floor and repeat on the other side."
       ],
       "images": [
         "Kettlebell_Turkish_Get-Up_Squat_style/0.jpg",
@@ -16472,7 +16490,11 @@
       "techniqueUnavailable": false,
       "imagesUnavailable": false,
       "generatedMedia": null,
-      "translationAutomatic": false
+      "translationAutomatic": false,
+      "variantGroup": {
+        "id": "turkish-get-up",
+        "title": "Kettlebell Turkish get-up"
+      }
     },
     {
       "id": "fb0fbfb5-9e38-550c-993b-19ff162e0f54",
